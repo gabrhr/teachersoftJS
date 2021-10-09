@@ -20,7 +20,8 @@ import fotoUsuario from '../assets/images/profile-photo.png'
 
 const useStyles = makeStyles({
   appMain: {
-    paddingLeft: '320px',
+    paddingTop: '200px',
+    paddingLeft: '200px',
     width: '100%'
   }
 })
@@ -30,7 +31,6 @@ function App() {
   return (
     //<React.Fragment>
     <ThemeProvider theme={theme}>
-      <Header />
       <HeaderUser
             nombre="New Employee"
             rol="Form design with validation"

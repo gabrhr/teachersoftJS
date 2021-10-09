@@ -13,14 +13,15 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /* override the existing MUI style */
-export default function Header() {
+export default function Header(sx) {
     const classes = useStyles();
     return (
-         <AppBar position="static" 
+         <AppBar position="relative" 
             sx={{
                 bgcolor: 'primary',
                 boxShadow: 1,
-                transform: 'translateZ(0)'
+                transform: 'translateZ(0)',
+                zIndex:  (theme) => theme.zIndex.drawer + 1
             }}>
             <Toolbar>
                 <Grid container
