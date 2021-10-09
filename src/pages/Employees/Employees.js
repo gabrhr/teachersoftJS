@@ -24,7 +24,7 @@ export default function Employees() {
                 subtitle="Form design with validation"
                 icon={<AdbIcon fontSize="large"/>}
                 />
-            <Paper className={classes.pageContent}>
+            <Paper className={classes.pageContent} sx={{borderRadius: '20px'}}>
                 <EmployeeForm />
             </Paper>
         </>

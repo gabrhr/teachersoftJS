@@ -144,7 +144,7 @@ const HeaderUser = ({ nombre, rol, foto }) => {
           transform: "translateZ(0)",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
-        position="absolute"
+        position="fixed"
       >
         <Toolbar>
           <Grid
