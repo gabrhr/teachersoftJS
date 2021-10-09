@@ -18,6 +18,9 @@ const theme = createTheme({
         default: "#f4f5fd"
       }
     },
+    typography: {
+      fontFamily: '"Quicksand","Arial","sans-serif"'
+    },
     shape: {
       borderRadius: '4px'
     },
@@ -37,7 +40,7 @@ const theme = createTheme({
         MuiButton: {
           styleOverrides: {
             root: {
-              textTransform: 'none',
+              // textTransform: 'none',
               margin: '4px'
             }
           },

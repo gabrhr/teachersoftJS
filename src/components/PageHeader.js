@@ -2,25 +2,30 @@ import React from 'react'
 import { Paper, Card, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles(themex => ({
+const useStyles = makeStyles(theme => ({
     root: {
         backgroundColor: '#fdfdff'
     },
     pageHeader: {
-        padding: themex.spacing(4),
+        padding: theme.spacing(4),
         display: 'flex',
-        marginBottom: themex.spacing(2)
+        marginBottom: theme.spacing(2)
     },
     pageIcon: {
         display: 'inline-block',
-        padding: themex.spacing(2),
-        color: '#3c44b1'
+        padding: theme.spacing(2),
+        // No hace nada
+        // color: '#3c44b1'
     },
     pageTitle: {
-        paddingLeft: themex.spacing(4),
+        paddingLeft: theme.spacing(4),
         '& .MuiTypography-body1': {
             opacity: '0.6'
         }
+    },
+    pageContent: {
+        margin: theme.spacing(5),
+        padding: theme.spacing(3),
     }
 }))
 
@@ -29,9 +34,9 @@ export default function PageHeader(props) {
     const {title, subtitle, icon} = props;
 
     return (
-        <Paper elevation={0} square className={classes.root}>
+        <Paper elevation={0} square className={classes.pageContent}>
             <div>
-                <Card className={classes.pageIcon}>
+                <Card classes={{root:classes.pageIcon}}>
                     {icon}
                 </Card>
                 <div className={classes.pageIcon}>

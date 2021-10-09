@@ -22,23 +22,7 @@ export default function Button(props) {
     let {text, size, color, variant, onClick, ...other} = props
 
     /* opciones super sercretas */
-    if (variant == "asdf") {
-        // return (
-        //     <MuiButton
-        //         variant={variant || "contained"}
-        //         size={size || "large"}
-        //         color={color || "primary"}
-        //         onClick={onClick}
-        //         {...other}
-        //         // classes={{root: classes.root}}
-        //         // sx={{
-        //         //     margin: '4px',
-        //         //     textTransform: 'none'
-        //         // }}
-        //         >
-        //         ":)"
-        //     </MuiButton>
-        // )
+    if (variant === "asdf") {
         variant=null
         text = ":)"
     }
@@ -51,6 +35,11 @@ export default function Button(props) {
             onClick={onClick}
             {...other}
             // classes={{root: classes.root}}
+            /* FIXME: Combinar con sx pasada como propiedad.  O utilizar 
+             *        CSS classes / rules */
+            sx={{
+                borderRadius: '8px'
+            }}
             >
             {text}
         </MuiButton>

@@ -72,7 +72,7 @@ export default function HeaderUser(props) {
         <Box sx={{ display: 'flex' }}>
             <AppBar position="static" 
                 sx={{
-                    bgcolor: '#fff',
+                    backgroundColor: '#fff',
                     boxShadow: 1,
                     transform: 'translateZ(0)'
                 }}>

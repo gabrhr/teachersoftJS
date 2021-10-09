@@ -17,11 +17,13 @@ export default function Employees() {
 
     return (
         <>
-            <PageHeader
-            title="New Employee"
-            subtitle="Form design with validation"
-            icon={<AdbIcon fontSize="large"/>}
-            />
+            <PageHeader 
+                // USELESS,  needs to be passed down or something
+                // className={classes.pageContent}
+                title="New Employee"
+                subtitle="Form design with validation"
+                icon={<AdbIcon fontSize="large"/>}
+                />
             <Paper className={classes.pageContent}>
                 <EmployeeForm />
             </Paper>
