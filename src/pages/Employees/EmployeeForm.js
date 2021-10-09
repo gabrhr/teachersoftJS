@@ -4,6 +4,7 @@ import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const genderItems = [
     {id: 'male', title: 'Male'},
@@ -93,15 +94,16 @@ export default function EmployeeForm() {
                             // size="large"
                             text="Submit"
                             type="submit"   // html property (not component)
+                            endIcon={<ErrorOutlineIcon />}
                             />
                         <Controls.Button
                             // disabled={true}
-                            variant="asdf"
+                            variant="disabled"
                             text="Reset"
-                            sx={{
-                                backgroundColor:"#00ff00",
-                                color:"#0000ff"
-                            }}
+                            // sx={{
+                            //     backgroundColor:"#00ff00",
+                            //     color:"#0000ff"
+                            // }}
                             />
                     </div>
                 </Grid>

@@ -39,7 +39,7 @@ export default function PageHeader(props) {
                 <Card classes={{root:classes.pageIcon}}>
                     {icon}
                 </Card>
-                <div className={classes.pageIcon}>
+                <div classes={{root:classes.root}}>
                     <Typography variant="h6" component="div">
                         {title}
                     </Typography>
