@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Grid, IconButton, Toolbar, Badge } from '@mui/material'
+import { AppBar, Grid, Toolbar } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import LogoPucp from '../../assets/images/LogoPUCP.png'
