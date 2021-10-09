@@ -14,6 +14,11 @@ const theme = createTheme({
         main: "#41b9e4",
         light: "#0089b2"
       },
+      disabled: {
+        dark: "#D4D9EC",
+        main: "#E9ECF8",
+        light: "#F0F0F0"
+      },
       background: {
         default: "#f4f5fd"
       }
@@ -22,7 +27,7 @@ const theme = createTheme({
       fontFamily: '"Quicksand","Arial","sans-serif"'
     },
     shape: {
-      borderRadius: '4px'
+      borderRadius: 4
     },
     // Cual es la diferencia entre props: y components:
     props: {

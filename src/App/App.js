@@ -10,8 +10,9 @@ import React from 'react'
 import './App.css';
 import { makeStyles } from '@mui/styles';
 import { CssBaseline } from '@mui/material';
-import {  List,ListItemIcon ,ListItemText, ListItemButton, Collapse, Paper } from '@mui/material'
+/* PAGES */
 import Employees from "../pages/Employees/Employees";
+import Showcase from '../pages/Showcase/Showcase'
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
