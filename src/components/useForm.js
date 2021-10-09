@@ -5,7 +5,7 @@ export function useForm(initialFieldValues) {
     const [values, setValues] = useState(initialFieldValues);
 
     const handleInputChange = e => {
-        /* retrieve values from event */
+        /* retrieve values from "Default" event */
         const { name, value } = e.target
         setValues({
             /* use current value of other properties */
