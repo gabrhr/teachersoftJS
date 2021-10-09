@@ -21,13 +21,7 @@ const theme = createTheme({
     shape: {
       borderRadius: '4px'
     },
-    overrides: {
-      MuiAppBar: {
-        root: {
-          transform:'translateZ(0)'
-        }
-      }
-    },
+    // Cual es la diferencia entre props: y components:
     props: {
       MuiIconButton: {
         disableRipple: true
@@ -44,6 +38,7 @@ const theme = createTheme({
           styleOverrides: {
             root: {
               textTransform: 'none',
+              margin: '4px'
             }
           },
         },

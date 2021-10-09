@@ -35,22 +35,34 @@ export default function EmployeeForm() {
             <Grid container>
                 <Grid item xs={6}>
                     <Controls.Input 
-                        label="Full Name" 
                         name="fullName"
+                        label="Full Name" 
                         value={values.fullName} 
                         onChange = {handleInputChange}
                         />
                     <Controls.Input 
-                        label="Email" 
                         name="email"
+                        label="Email" 
                         value={values.email} 
+                        onChange = {handleInputChange}
+                        />
+                    <Controls.Input 
+                        name="mobile"
+                        label="Mobile" 
+                        value={values.mobile} 
+                        onChange = {handleInputChange}
+                        />
+                    <Controls.Input 
+                        name="city"
+                        label="City" 
+                        value={values.city} 
                         onChange = {handleInputChange}
                         />
                 </Grid>
                 <Grid item xs={6}>
                     <Controls.RadioGroup
-                        label="Gender"
                         name="gender"
+                        label="Gender"
                         value={values.gender}
                         onChange={handleInputChange}
                         items={genderItems}
@@ -62,6 +74,36 @@ export default function EmployeeForm() {
                         onChange={handleInputChange}
                         options={employeeService.getDepartmentCollection()}
                         />
+                    <Controls.DatePicker type="date"
+                        name="hireDate"
+                        label="Hire Date"
+                        value={values.hireDate}
+                        onChange={handleInputChange}
+                        />
+                    <Controls.Checkbox
+                        name="isPermanent"
+                        label="Permanent Employee"
+                        value={values.isPermanent}
+                        onChange={handleInputChange}
+                        />
+                    <div>   
+                        <Controls.Button
+                            // variant="contained"
+                            // color="primary"
+                            // size="large"
+                            text="Submit"
+                            type="submit"   // html property (not component)
+                            />
+                        <Controls.Button
+                            // disabled={true}
+                            variant="asdf"
+                            text="Reset"
+                            sx={{
+                                backgroundColor:"#00ff00",
+                                color:"#0000ff"
+                            }}
+                            />
+                    </div>
                 </Grid>
             </Grid>
         </Form>
