@@ -27,7 +27,7 @@ const theme = createTheme({
       fontFamily: '"Quicksand","Arial","sans-serif"'
     },
     shape: {
-      borderRadius: '4px'
+      borderRadius: 4
     },
     // Cual es la diferencia entre props: y components:
     props: {

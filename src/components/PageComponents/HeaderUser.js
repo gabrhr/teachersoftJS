@@ -5,7 +5,6 @@ import { Typography, List, ListItem,ListItemIcon ,Box,Drawer } from '@mui/materi
 import MuiDrawer from '@mui/material/Drawer'
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import SearchIcon from '@mui/icons-material/Search';
-import DTButton from '../GeneralComponents/DTButton';
 import logout from '../../assets/images/log-out.png'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -87,7 +86,7 @@ export default function HeaderUser(props) {
                                 <DehazeIcon fontSize="medium" />
                             </IconButton>
                         </Grid>
-                        <Divider orientation="vertical" flexItem component="line" />
+                        {/* <Divider orientation="vertical" flexItem component="line" /> */}
                         <Grid item pl={2} >
                             <Avatar className={classes.pageIcon}>
                             <img className="userImage" src= {foto} alt=""></img>
