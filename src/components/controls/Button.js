@@ -19,12 +19,26 @@ import { Button as MuiButton } from '@mui/material'
  */
 export default function Button(props) {
     /* "strasdkjfls? syntax from JS" */
-    let {text, size, color, variant, onClick, ...other} = props
+    let {text, size, color, variant, onClick, sx, ...other} = props
 
     /* opciones super sercretas */
     if (variant === "asdf") {
-        variant=null
+        variant="disabled"
         text = ":)"
+    }
+
+    /* Variantes DreamTeam */
+    if (variant === "normal") {
+        variant="contained"
+    } else if (variant === "disabled") {
+        variant="contained"
+        color="disabled"
+        other={
+            ...other,
+            disabled:true
+        }
+    } else if (variant === "white") {
+        variant="text"
     }
 
     return (
@@ -38,7 +52,8 @@ export default function Button(props) {
             /* FIXME: Combinar con sx pasada como propiedad.  O utilizar 
              *        CSS classes / rules */
             sx={{
-                borderRadius: '8px'
+                ...sx,
+                borderRadius: '12px'
             }}
             >
             {text}

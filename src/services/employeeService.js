@@ -3,4 +3,6 @@ export const getDepartmentCollection = () => ([
     { id: '2', title: 'Marketing' },
     { id: '3', title: 'Accounting' },
     { id: '4', title: 'HR' },
+    { id: '5', title: 'Ventas' },
+    { id: '6', title: 'Gerencia' }
 ])

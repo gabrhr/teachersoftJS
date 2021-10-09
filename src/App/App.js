@@ -10,7 +10,9 @@ import SideMenu from '../components/SideMenu';
 import { makeStyles } from '@mui/styles';
 import Header from '../components/PageComponents/Header';
 import { CssBaseline } from '@mui/material';
+/* PAGES */
 import Employees from "../pages/Employees/Employees";
+import Showcase from '../pages/Showcase/Showcase'
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import { AppBar, Grid, IconButton, Button, Toolbar, Badge } from '@mui/material'
@@ -32,12 +34,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <Header />
       <HeaderUser
-            nombre="New Employee"
-            rol="Form design with validation"
-            foto={fotoUsuario}
+        nombre="New Employee"
+        rol="Form design with validation"
+        foto={fotoUsuario}
       />
       <div className={classes.appMain}>
-        <Employees />
+        {/* <Employees /> */}
+        <Showcase />
       </div>
       <CssBaseline />
     </ThemeProvider>

@@ -14,6 +14,7 @@ export default function Select(props) {
                 name={name}
                 value={value}
                 onChange={onChange}
+                defaultValue=""
                 >
                 <MenuItem value="">None</MenuItem>
                 {
