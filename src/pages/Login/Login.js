@@ -5,7 +5,6 @@ import { Paper, Container, Grid, Typography } from '@mui/material';
 import { Box, height } from '@mui/system'
 import Figurita from '../../assets/images/VectorLogin.svg'
 import LogoPucp from '../../assets/images/LogoPUCP.png'
-import { Grid3x3 } from '@mui/icons-material';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -63,7 +62,7 @@ export default function Login() {
                         >
                         TeacherSoft
                     </Typography>
-                
+                    <img src="assets/img/kiwi.svg" alt="kiwi on an oval" />
                 </Grid>
             </Grid>
         </>
