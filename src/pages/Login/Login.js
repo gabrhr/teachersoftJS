@@ -3,8 +3,10 @@ import { makeStyles } from '@mui/styles';
 import Header from '../../components/PageComponents/Header'
 import { Paper, Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system'
-import Figurita from '../../assets/images/VectorLogin.svg'
+// import Figurita from '../../assets/images/VectorLogin.svg'
+import Figurita from '../../assets/images/kiwi.svg'
 import LogoPucp from '../../assets/images/LogoPUCP.png'
+import YT from './YT'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,6 +16,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
     const classes = useStyles()
+
+    if (false)
+        return (
+            <YT />
+        )
 
     return (
         <>
@@ -43,20 +50,23 @@ export default function Login() {
 
                 </Paper>
             </Container>
-            <Container maxWidth="sm">
+            <Container maxWidth="sm" 
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems:'center',
+                    overflow: 'hidden',
+                    backgroundColor: '#00ff00'
+                    // backgroundImage: 'url("assets/img/kiwi.svg")'
+                }}
+                >
                 <Typography
                     variant="h1"
                     component="div"
                     >
                     TeacherSoft
                 </Typography>
-                <img 
-                    src={Figurita}
-                    alt="Kiwi standing on oval"
-                    width="100%"
-                    height="100%"
-                    >
-                </img>
+                <img src="assets/img/kiwi.svg" alt="kiwi on an oval" />
             </Container>
             </Box>
         </>

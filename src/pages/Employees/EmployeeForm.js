@@ -25,14 +25,42 @@ const initialFieldValues = {
 }
 
 export default function EmployeeForm() {
+
+    const validate = () => {
+        let temp = {}
+        temp.fullName = values.fullName ? "" : "This field is required."
+        temp.email = (/$^|.+@.+\..+/).test(values.email) ? "" 
+            : "This email is not vaild."
+        temp.mobile = values.mobile.length===9 ? "" : "9 digits requiered."
+        temp.departmentId = values.departmentID.length!==0 ? "" : "This field is required."
+        setErrors({
+            ...temp
+        })
+
+        return Object.values(temp).every(x => x == "")
+        // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+    }
+
     const {
         values,
         setValues,
+        errors,
+        setErrors,
         handleInputChange
     } = useForm(initialFieldValues);
 
+    const handleSubmit = e => {
+        let tmp
+        /* e is a "default parameter" */
+        e.preventDefault()
+        if (tmp = validate())
+            window.alert('valid')
+        else
+            window.alert('invalid')
+    }
+
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
                     <Controls.Input 
@@ -40,18 +68,21 @@ export default function EmployeeForm() {
                         label="Full Name" 
                         value={values.fullName} 
                         onChange = {handleInputChange}
+                        error={errors.fullName}
                         />
                     <Controls.Input 
                         name="email"
                         label="Email" 
                         value={values.email} 
                         onChange = {handleInputChange}
+                        error={errors.email}
                         />
                     <Controls.Input 
                         name="mobile"
                         label="Mobile" 
                         value={values.mobile} 
                         onChange = {handleInputChange}
+                        error={errors.mobile}
                         />
                     <Controls.Input 
                         name="city"
@@ -69,9 +100,9 @@ export default function EmployeeForm() {
                         items={genderItems}
                         />
                     <Controls.Select
-                        name="departmentId"
+                        name="departmentID"
                         label="Department"
-                        value={values.departmentId}
+                        value={values.departmentID}
                         onChange={handleInputChange}
                         options={employeeService.getDepartmentCollection()}
                         />

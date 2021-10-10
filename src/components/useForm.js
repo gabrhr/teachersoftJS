@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 
 export function useForm(initialFieldValues) {
     const [values, setValues] = useState(initialFieldValues);
+    const [errors, setErrors] = useState({});
 
     const handleInputChange = e => {
         /* retrieve values from "Default" event */
@@ -18,6 +19,8 @@ export function useForm(initialFieldValues) {
     return {
         values,
         setValues,
+        errors,
+        setErrors,
         handleInputChange
     }
 }
@@ -33,9 +36,10 @@ const useStyles = makeStyles(theme => ({
 
 export function Form(props) {
     const classes = useStyles();
+    const {children, ...other} = props;
 
     return (
-        <form className={classes.root} autoComplete="off">
+        <form className={classes.root} autoComplete="off" {...other}>
             {props.children}
         </form>
     )
