@@ -1,10 +1,71 @@
 # Notitas generales
 
-## CSS
+VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
-Espacio final dentro de un `<Typography>`
+## React + Material UI
 
-```{JS}
+**Reusable components**
+
+Las reglas/clases de tipo `& .CSSclassaname` son aplicadas a todos los elementos
+hijos del elemento al que se le aplique la regla.
+
+MUI5:
+
+```
+import Slider from '@mui/material/Slider';
+import { alpha, styled } from '@mui/material/styles';
+
+const SuccessSlider = styled(Slider)(({ theme }) => ({
+  width: 300,
+  color: theme.palette.success.main,
+  '& .MuiSlider-thumb': {
+    '&:hover, &.Mui-focusVisible': {
+      boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+    '&.Mui-active': {
+      boxShadow: `0px 0px 0px 14px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+  },
+}));
+
+export default function StyledCustomization() {
+  return <SuccessSlider defaultValue={30} />;
+}
+```
+
+Ref: https://mui.com/customization/how-to-customize/#2-reusable-style-overrides
+
+MUI4 (legacy):
+
+```
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiFormControl-root, & .MuiButton-root' : {
+            width: '100%',      // left to right
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1)
+        }
+    }
+}))
+
+export function Form(props) {
+    const classes = useStyles();
+    const {children, ...other} = props;
+
+    return (
+        <form className={classes.root}> </form>
+    )
+}
+```
+
+
+## CSS dentro de React
+
+**Espacio final dentro de un `<Typography>`**
+
+```
 <Typography paragraph={true}> ¿No tienes una cuenta?
     {'\u00A0'}
     <Link href="#" >
@@ -14,6 +75,22 @@ Espacio final dentro de un `<Typography>`
 ```
 Ref: https://stackoverflow.com/questions/37909134/nbsp-jsx-not-working
 
+
+**Ajustar la anchura de un "Input"  (MuiTextField)**
+
+```
+<Box
+      sx={{
+        width: 500,
+        maxWidth: '100%',
+      }}
+    >
+      <TextField fullWidth label="fullWidth" id="fullWidth" />
+    </Box>
+  );
+```
+
+Ref: https://mui.com/components/text-fields/#full-width
 
 ## Links
 
@@ -25,7 +102,7 @@ React + Material UI:
 - [CodAffection](https://www.youtube.com/watch?v=bL-ZwwF6wTc&list=PLjC4UKOOcfDQtvkTBfjqeWP8EJKi_WaUn&index=1)
 
 CSS Properties:
-- [https](/developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
+- [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
 
 Authenication:
 - [20m tutorial](https://www.youtube.com/watch?v=MqczHS3Z2bc)
@@ -33,7 +110,7 @@ Authenication:
 - [React Google Login package](https://www.npmjs.com/package/react-google-login)
 
 Axios:
-- https://jasonwatmore.com/post/2020/07/17/react-axios-http-get-request-examples
+- [Blog jasonwatmore](https://jasonwatmore.com/post/2020/07/17/react-axios-http-get-request-examples)
 
 Git / GitHub:
 - [Syncing your branch](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/keeping-your-local-repository-in-sync-with-github/syncing-your-branch)

@@ -5,7 +5,7 @@ import { Typography, List, Box } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import logout from "../../assets/images/log-out.png";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import LogoPucp from "../../assets/images/LogoPUCP.png";
 import Menu from "./Menu";
 
@@ -160,7 +160,7 @@ const HeaderUser = ({ nombre, rol, foto }) => {
                 <DehazeIcon fontSize="medium" />
               </IconButton>
             </Grid>
-            <Divider orientation="vertical" flexItem component="line" />
+            <Divider orientation="vertical" flexItem/>
             <Grid item pl={2}>
               <Avatar className={classes.pageIcon}>
                 <img className="userImage" src={foto} alt=""></img>

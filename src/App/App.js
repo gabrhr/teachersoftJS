@@ -40,12 +40,10 @@ function App() {
   // ];
 
   /* PRUEBAS */
-  if (true) {
+  if (false) {
     return (
       <ThemeProvider theme={theme}>
-
         <Router>
-          
           <Switch>
             <Route path="/test">
               <Login />

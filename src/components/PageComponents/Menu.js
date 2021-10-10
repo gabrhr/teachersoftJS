@@ -24,9 +24,9 @@ const SubMenu = ({ open,item}) => {
         <ListItemButton 
             sx={{ pl: 3 }}
             key={item.text} 
-            onClick={() => history.push(item.path)}
-            className={location.pathname == item.path ? classes.active: null}
-            selected = {location.pathname == item.path ? console.log(" s true"): console.log(location.pathname)}
+            // onClick={() => history.push(item.path)}
+            className={location.pathname === item.path ? classes.active: null}
+            selected = {location.pathname === item.path ? console.log(" s true"): console.log(location.pathname)}
             onClick={item.subNav && showSubnav}
             >
             <ListItemIcon>{item.icon}</ListItemIcon>
@@ -41,7 +41,7 @@ const SubMenu = ({ open,item}) => {
                         <ListItemButton sx={{ pl: 6 }} 
                             key={item.text} 
                             onClick={() => history.push(item.path)}
-                            className={location.pathname == item.path ? classes.active: null}
+                            className={location.pathname === item.path ? classes.active: null}
                             >
                             <ListItemText primary={item.text} />
                         </ListItemButton>
