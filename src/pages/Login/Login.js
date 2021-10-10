@@ -25,7 +25,7 @@ export default function Login() {
     return (
         <>
             <Header />
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{}}>
                 <Grid item xs={6} >
                     <Typography
                         variant="h1"
@@ -44,6 +44,8 @@ export default function Login() {
                 <Grid  item xs={6} sx={{
                     textAlign: 'center',
                     position: 'relative',
+                    backgroundColor: '#000',
+                    backgroundImage: 'url("assets/img/VectorLogin.svg")'
                 }}
 
                 >
@@ -57,12 +59,14 @@ export default function Login() {
                             position: 'absolute',
                             top: '50%',
                             left: '50%',
-                            transform: "translate(-50%, -50%)"
+                            transform: "translate(-50%, -50%)",
+                            color: "#fff"
                         }}
                         >
                         TeacherSoft
                     </Typography>
-                    <img src="assets/img/kiwi.svg" alt="kiwi on an oval" />
+                    {/* <img src="assets/img/VectorLogin.svg" alt="kiwi on an oval" 
+                    sx={{objectFit: 'fill'}} /> */}
                 </Grid>
             </Grid>
         </>
