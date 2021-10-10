@@ -1,5 +1,5 @@
 import React from 'react'
-import EmployeeForm from './ControlForm'
+import ControlForm from './ControlForm'
 import PageHeader from '../../components/PageHeader'
 import AdbIcon from '@mui/icons-material/Adb';
 import { Paper } from '@mui/material';
@@ -25,7 +25,7 @@ export default function Employees() {
                 icon={<AdbIcon fontSize="large"/>}
                 /> */}
             <Paper className={classes.pageContent}>
-                <EmployeeForm />
+                <ControlForm />
             </Paper>
         </>
     )

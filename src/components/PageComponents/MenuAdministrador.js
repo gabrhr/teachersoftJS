@@ -31,9 +31,8 @@ export const MenuAdministrador = [
         iconOpened: <InboxIcon />
     },
     {
-
-        text: 'Controls Nuestro jeje',
-        path: '/administrador/pruebatwo',
+        text: 'Showcase of Components',
+        path: '/administrador/mantenimiento/showcase',
         icon: <InboxIcon />,
         iconClosed: <InboxIcon />,
         iconOpened: <InboxIcon />

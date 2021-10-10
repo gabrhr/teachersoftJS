@@ -19,12 +19,14 @@ import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
+import Login from '../pages/Login/Login';
 
 
 const useStyles = makeStyles({
   appMain: {
-    paddingTop: '60px',
-    paddingLeft: '30px',
+    // FIX:  A veces se mueve, no se por que.
+    paddingTop: '150px',
+    paddingLeft: '100px',
     width: '100%'
   }
 })
@@ -36,9 +38,29 @@ function App() {
       MenuAdministrador
     }
   ];
+
+  /* PRUEBAS */
+  if (false) {
+    return (
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Switch>
+            <Route path="/test">
+              <Login />
+            </Route> 
+          </Switch>
+        </Router>
+        <CssBaseline />
+      </ThemeProvider>
+    )
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        {/* PRUEBAS */}
+        <Switch>
+        </Switch>
         <HeaderUser
               nombre="New Employee"
               rol="Form design with validation"
@@ -47,14 +69,18 @@ function App() {
         <div className={classes.appMain}>
           <Switch>
               <Route exact path="/">
+                <Showcase />
               </Route>
               <Route path="/administrador/mantenimiento/employee">
-                <div className={classes.appMain}>
-                  <Employees />
-                </div>
+                <Employees />
               </Route>
               <Route path="/administrador/mantenimiento/departamento">
-                          
+              </Route> 
+              <Route path="/showcase">
+                <Showcase />
+              </Route> 
+              <Route path="/login">
+                <Login />
               </Route> 
           </Switch>
         </div>        

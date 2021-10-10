@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /* override the existing MUI style */
-export default function Header(sx) {
+export default function Header() {
     const classes = useStyles();
     return (
          <AppBar position="relative" 

@@ -23,7 +23,7 @@ const initialFieldValues = {
     isPermanent: false
 }
 
-export default function EmployeeForm() {
+export default function ControlForm() {
     const {
         values,
         setValues,
