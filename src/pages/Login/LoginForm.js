@@ -1,8 +1,5 @@
-import { Avatar, FormControlLabel, Grid, Paper, TextField, Typography } from '@mui/material'
+import { Typography } from '@mui/material';
 import React from 'react'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Checkbox from '../../components/controls/Checkbox';
-import Button from '../../components/controls/Button';
 import { Link } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
@@ -22,9 +19,6 @@ const Login=()=>{
         handleInputChange
     } = useForm(initialFieldValues);
 
-    // const paperStyle={padding :20,height:'70vh',width:280, margin:"20px auto"}
-    const paperStyle={padding :20}
-
     const handleSubmit = e => {
         e.preventDefault()
         console.log(values)
@@ -42,14 +36,14 @@ const Login=()=>{
                     label="Usuario"
                     value={values.username}
                     onChange={handleInputChange}
-                    fullWidth 
+                    fullWidth
                     />
                 <Controls.Input
                     name="password"
                     label="Contraseña"
                     value={values.password}
                     onChange={handleInputChange}
-                    fullWidth 
+                    fullWidth
                 />
                 <Controls.Checkbox
                     name="isPersistentLogin"
@@ -71,17 +65,15 @@ const Login=()=>{
                     text="Iniciar sesión con correo PUCP"
                 />
                 <Typography >
-                    <Link href="#" >
+                    <Link to="#" >
                         Recuperar contraseña
                     </Link>
                 </Typography>
                 <Typography paragraph={true}> ¿No tienes una cuenta?
-                    {'\u00A0'
-                    // Ref: https://stackoverflow.com/questions/37909134/nbsp-jsx-not-working
-                    }
-                    <Link href="#" >
+                    {'\u00A0'}
+                    <Link to="#" >
                         Regístrate
-                </Link>
+                    </Link>
                 </Typography>
             {/* </Grid> */}
         </Form>

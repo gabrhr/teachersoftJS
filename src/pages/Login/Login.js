@@ -77,9 +77,8 @@ export default function Login() {
                         >
                         <LoginForm />
                     </Paper>
-                    <Grid sm/>
                 </Grid>
-                <Grid  xs={6} wrap="nowrap" 
+                <Grid item xs={6}
                     sx={{
                         transform: 'translateZ(0)',
                         textAlign: 'center',
@@ -98,7 +97,6 @@ export default function Login() {
                         TeacherSoft
                     </Typography>
                 </Grid>
-               
             </Grid>
         </>
     )

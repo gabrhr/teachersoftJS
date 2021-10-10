@@ -2,10 +2,6 @@ import React from 'react'
 import { AppBar, Grid, Toolbar } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
-import LogoPucp from '../../assets/images/LogoPUCP.png'
-import { height } from '@mui/system'
-
-
 const useStyles = makeStyles(theme => ({
     menuImagen: {
         position: 'relative',
@@ -32,6 +28,7 @@ export default function Header() {
                     <Grid item sm>
                     </Grid>
                     <Grid item>
+                        {/* FIX:  bad scaling of image */}
                         <img 
                             className={classes.menuImagen} 
                             src="assets/img/LogoPUCP.png"
