@@ -31,7 +31,16 @@ import LoginForm from './LoginForm'
 // }))
 
 export default function Login() {
-    const paperStyle={padding :20,height:'70%',width:"80%", margin:"20px auto"}
+    const paperStyle={
+        padding: 40,
+        width:"80%", 
+        margin:"20px auto",
+
+        borderStyle: 'solid',
+        borderColor: 'black',
+        borderWidth: '1px',
+        borderRadius: '44px',
+    }
     const textStyle = {
         zIndex:2,
         color: "primary.main",  
@@ -45,20 +54,25 @@ export default function Login() {
     return (
         <>
             <Header />
-            <Grid container spacing={2} sx={{
-                width: "100%"
-            }}>
+            <Grid container 
+                spacing={0} 
+                sx={{
+                    width: "100%",
+                    height: "85vh"
+                }}
+            >
                 <Grid item xs={6} >
                     <Typography
                         variant="h4"
                         component="div"
-                        paddingTop="57px"
+                        paddingTop="50px"
+                        paddingBottom="40px"
+                        align="center"
                         >
                         Bienvenido
                     </Typography>
                     <Paper
                         elevation={0}
-                        color="#fff"
                         style={paperStyle}
                         >
                         <LoginForm />

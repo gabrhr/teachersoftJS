@@ -33,55 +33,56 @@ const Login=()=>{
     return(
         <Form onSubmit={handleSubmit}>
             {/* <Grid> */}
-                <Paper elevation={10} style={paperStyle}>
-                    {/* <Grid align='center'>
-                        <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
-                        <h2>Sign In</h2>
-                    </Grid> */}
-                    <Controls.Input
-                        name="username"
-                        label="Usuario"
-                        value={values.username}
-                        onChange={handleInputChange}
-                        fullWidth 
-                        />
-                    <Controls.Input
-                        name="password"
-                        label="Contraseña"
-                        value={values.password}
-                        onChange={handleInputChange}
-                        fullWidth 
+                {/* <Grid align='center'>
+                    <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
+                    <h2>Sign In</h2>
+                </Grid> */}
+                <Controls.Input
+                    name="username"
+                    label="Usuario"
+                    value={values.username}
+                    onChange={handleInputChange}
+                    fullWidth 
                     />
-                    <Controls.Checkbox
-                        name="isPersistentLogin"
-                        label="Recuérdame"
-                        value={values.isPersistentLogin}
-                        onChange={handleInputChange}
-                    />
-                    <Controls.Button 
-                        type='submit' 
-                        fullWidth 
-                        text="Sign In"
-                    />
-                    <Typography align="center">
-                        O
-                    </Typography>
-                    <Controls.Button 
-                        variant="outlined" 
-                        fullWidth 
-                        text="Iniciar sesión con correo PUCP"
-                    />
-                    <Typography >
-                        <Link href="#" >
-                            Recuperar contraseña
-                        </Link>
-                    </Typography>
-                    <Typography > ¿No tienes una cuenta?
-                        <Link href="#" >
-                            Regístrate
+                <Controls.Input
+                    name="password"
+                    label="Contraseña"
+                    value={values.password}
+                    onChange={handleInputChange}
+                    fullWidth 
+                />
+                <Controls.Checkbox
+                    name="isPersistentLogin"
+                    label="Recuérdame"
+                    value={values.isPersistentLogin}
+                    onChange={handleInputChange}
+                />
+                <Controls.Button 
+                    type='submit' 
+                    fullWidth 
+                    text="Sign In"
+                />
+                <Typography align="center">
+                    O
+                </Typography>
+                <Controls.Button 
+                    variant="outlined" 
+                    fullWidth 
+                    text="Iniciar sesión con correo PUCP"
+                />
+                <Typography >
+                    <Link href="#" >
+                        Recuperar contraseña
                     </Link>
-                    </Typography>
-                </Paper>
+                </Typography>
+                <Typography paragraph={true}> ¿No tienes una cuenta?
+                    {'\u00A0'
+                    // Ref: https://stackoverflow.com/questions/37909134/nbsp-jsx-not-working
+                    }
+                    <Link href="#" >
+                        Regístrate
+                </Link>
+                </Typography>
             {/* </Grid> */}
         </Form>
     )
