@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Paper } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 /* fake BackEnd */
@@ -37,23 +37,22 @@ export default function EmployeeForm() {
             ...temp
         })
 
-        return Object.values(temp).every(x => x == "")
+        return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
 
     const {
         values,
-        setValues,
+        // setValues,
         errors,
         setErrors,
         handleInputChange
     } = useForm(initialFieldValues);
 
     const handleSubmit = e => {
-        let tmp
         /* e is a "default parameter" */
         e.preventDefault()
-        if (tmp = validate())
+        if (validate())
             window.alert('valid')
         else
             window.alert('invalid')

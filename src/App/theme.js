@@ -1,6 +1,5 @@
 
 import { createTheme } from '@mui/material/styles';
-import { fontFamily } from '@mui/system';
 
 const theme = createTheme({
     palette: {

@@ -1,31 +1,17 @@
 import React from 'react'
-import { makeStyles } from '@mui/styles';
 import Header from '../../components/PageComponents/Header'
-import { Paper, Container, Grid, Typography } from '@mui/material';
-import { Box, height } from '@mui/system'
-import Figurita from '../../assets/images/VectorLogin.svg'
-import LogoPucp from '../../assets/images/LogoPUCP.png'
-
-const useStyles = makeStyles(theme => ({
-    root: {
-
-    },
-    imagen:{
-        position: 'absolute',
-        paddingLeft: "0px",
-        paddingTop:"0px",
-        zIndex: 1
-    }
-}))
+import { Paper, Grid, Typography } from '@mui/material';
+import LoginForm from './LoginForm'
 
 export default function Login() {
-    const classes = useStyles()
-    const paperStyle={padding :20,height:'70vh',width:280, margin:"20px auto"}
+    const paperStyle={padding :20,height:'70%',width:"80%", margin:"20px auto"}
 
     return (
         <>
             <Header />
-            <Grid container spacing={2} sx={{}}>
+            <Grid container spacing={2} sx={{
+                width: "100%"
+            }}>
                 <Grid item xs={6} >
                     <Typography
                         variant="h1"
@@ -38,14 +24,16 @@ export default function Login() {
                         color="#fff"
                         style={paperStyle}
                         >
-                        <div> hola mundo</div>
+                        <LoginForm />
                     </Paper>
                 </Grid>
                 <Grid  item xs={6} sx={{
                     textAlign: 'center',
                     position: 'relative',
-                    backgroundColor: '#000',
-                    backgroundImage: 'url("assets/img/VectorLogin.svg")'
+                    backgroundColor: 'secondary.main',
+                    backgroundImage: 'url("assets/img/VectorLogin.svg")',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center'
                 }}
 
                 >
@@ -56,7 +44,7 @@ export default function Login() {
                             position:'relative',
                             lineHeight: 10,
                             margin: '0',
-                            position: 'absolute',
+                            // position: 'absolute',
                             top: '50%',
                             left: '50%',
                             transform: "translate(-50%, -50%)",

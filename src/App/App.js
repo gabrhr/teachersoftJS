@@ -18,7 +18,7 @@ import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
-import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
+// import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 
 
@@ -33,11 +33,11 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-  const Hola = [
-    {
-      MenuAdministrador
-    }
-  ];
+  // const Hola = [
+  //   {
+  //     MenuAdministrador
+  //   }
+  // ];
 
   /* PRUEBAS */
   if (true) {
