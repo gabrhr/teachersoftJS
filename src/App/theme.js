@@ -23,7 +23,16 @@ const theme = createTheme({
       }
     },
     typography: {
-      fontFamily: '"Quicksand","Arial","sans-serif"'
+      fontFamily: '"Quicksand","Arial","sans-serif"',
+      h1:{
+        fontSize: '70px',
+      },
+      h4:{
+        fontFamily: 'NotoSerif',
+        fontStyle: 'SemiBold',
+        fontSize: '50px',
+        lineHeight: '65px',
+      }
     },
     shape: {
       borderRadius: 4

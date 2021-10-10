@@ -3,12 +3,14 @@ import { AppBar, Grid, Toolbar } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import LogoPucp from '../../assets/images/LogoPUCP.png'
+import { height } from '@mui/system'
 
 
 const useStyles = makeStyles(theme => ({
     menuImagen: {
         position: 'relative',
-        height: '40px'
+        height: '100px',
+        marginTop: theme.spacing(3),
     }
 }))
 
@@ -21,7 +23,8 @@ export default function Header() {
                 bgcolor: 'primary',
                 boxShadow: 1,
                 transform: 'translateZ(0)',
-                zIndex:  (theme) => theme.zIndex.drawer + 1
+                zIndex:  (theme) => theme.zIndex.drawer + 1,
+                height: "130px"
             }}>
             <Toolbar>
                 <Grid container
