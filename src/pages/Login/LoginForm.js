@@ -76,12 +76,10 @@ const Login=()=>{
                     </Link>
                 </Typography>
                 <Typography paragraph={true}> ¿No tienes una cuenta?
-                    {'\u00A0'
-                    // Ref: https://stackoverflow.com/questions/37909134/nbsp-jsx-not-working
-                    }
+                    {'\u00A0'}
                     <Link href="#" >
                         Regístrate
-                </Link>
+                    </Link>
                 </Typography>
             {/* </Grid> */}
         </Form>
