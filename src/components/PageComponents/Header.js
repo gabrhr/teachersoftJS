@@ -9,7 +9,7 @@ import { height } from '@mui/system'
 const useStyles = makeStyles(theme => ({
     menuImagen: {
         position: 'relative',
-        height: '100px',
+        height: '10vh',
         marginTop: theme.spacing(3),
     }
 }))
@@ -19,20 +19,24 @@ export default function Header() {
     const classes = useStyles();
     return (
          <AppBar position="relative" 
-            sx={{
-                bgcolor: 'primary',
-                boxShadow: 1,
-                transform: 'translateZ(0)',
-                zIndex:  (theme) => theme.zIndex.drawer + 1,
-                height: "130px"
-            }}>
+                sx={{
+                    bgcolor: 'primary',
+                    boxShadow: 1,
+                    transform: 'translateZ(0)',
+                    zIndex:  (theme) => theme.zIndex.drawer + 1,
+                    height: "15vh"
+                }}>
             <Toolbar>
                 <Grid container
                     alignItems="center">
                     <Grid item sm>
                     </Grid>
                     <Grid item>
-                    <img className={classes.menuImagen} src= {LogoPucp} alt=""></img>
+                        <img 
+                            className={classes.menuImagen} 
+                            src="assets/img/LogoPUCP.png"
+                            alt="LogoPUCP">
+                        </img>
                     </Grid>
                 </Grid>
             </Toolbar>

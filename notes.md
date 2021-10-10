@@ -1,10 +1,6 @@
-# FrontEnd de TeacherSoft
+# Notitas generales
 
-By Dreamteam
-
-## Notitas generales
-
-### CSS
+## CSS
 
 Espacio final dentro de un `<Typography>`
 
