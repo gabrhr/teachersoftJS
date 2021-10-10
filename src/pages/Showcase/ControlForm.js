@@ -72,24 +72,27 @@ export default function ControlForm() {
                 value={values.isPermanent}
                 onChange={handleInputChange}
                 />
-            <div>   
+            <div> 
+                {/* Boton Azul */}
                 <Controls.Button
-                    color="primary"
                     text="Submit"
                     type="submit"   // html property (not component)
-                    endIcon={<ErrorOutlineIcon />}
+                    endIcon={<ErrorOutlineIcon />} //Opcional con imagen
                     />
+                {/* Boton Desactivado Plomo */}
                 <Controls.Button
                     variant="contained"
                     disabled
                     text="Disabled"
                     size="medium"
                     />
+                {/* Boton Blanco */}
                 <Controls.Button
                     variant="outlined"
                     text="outlined"
                     size="small"
                     />
+                    
                 <IconButton 
                     aria-label="add"
                     color="secondary"
