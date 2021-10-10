@@ -1,58 +1,18 @@
 import React from 'react'
-import { makeStyles } from '@mui/styles';
 import Header from '../../components/PageComponents/Header'
-import { Paper, Container, Grid, Typography } from '@mui/material';
-import { Box, height } from '@mui/system'
-import Figurita from '../../assets/images/VectorLogin.svg'
-import LogoPucp from '../../assets/images/LogoPUCP.png'
-
-
-const useStyles = makeStyles(theme => ({
-    root: {
-
-    },
-    imagen:{
-        position: 'absolute',
-        paddingLeft: "0px",
-        paddingTop:"0px",
-        zIndex: 1
-    },
-    paperStyle:{
-        borderStyle: 'solid',
-        borderColor: 'black',
-        borderWidth: '1px',
-        borderRadius: '44px',
-        /* height:'50vh',
-        marginLeft: theme.spacing(30),
-        marginRight: theme.spacing(30),
-        marginTop:  theme.spacing(10),
-        marginButton:  theme.spacing(10),
-        padding: theme.spacing(3), */  
-        padding :20,height:'70vh', margin:"20px auto"
-    },
-    text:{
-        zIndex:2,
-        color: "primary.main",  
-        fontSize: "50px",
-        position: "absolute",
-        top: "50%",
-        width: "100%",
-        textAlign: "center",
-    }
-}))
+import { Paper, Grid, Typography } from '@mui/material';
+import LoginForm from './LoginForm'
 
 export default function Login() {
-    const classes = useStyles()
+    const paperStyle={padding :20,height:'70%',width:"80%", margin:"20px auto"}
 
     return (
         <>
             <Header />
-            <Grid container spacing={2} >
-                <Grid item xs={6} 
-                sx={{
-                    textAlign: 'center'
-                }} 
-                >
+            <Grid container spacing={2} sx={{
+                width: "100%"
+            }}>
+                <Grid item xs={6} >
                     <Typography
                         variant="h4"
                         component="div"
@@ -65,7 +25,7 @@ export default function Login() {
                         color="#fff"
                         className={classes.paperStyle}
                         >
-                        <div> hola mundo</div>
+                        <LoginForm />
                     </Paper>
                     <Grid sm/>
                 </Grid>
@@ -74,14 +34,25 @@ export default function Login() {
                     textAlign: 'center',
                     position: 'relative',
                     backgroundColor: 'secondary.main',
-                    backgroundImage: 'url("assets/img/VectorLogin.svg")'
+                    backgroundImage: 'url("assets/img/VectorLogin.svg")',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center'
                 }}
 
                 >
                     <Typography
                         variant="h1"
-                        component="div"
-                        className={classes.text}
+                        sx={{
+                            zIndex:2,
+                            position:'relative',
+                            lineHeight: 10,
+                            margin: '0',
+                            // position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: "translate(-50%, -50%)",
+                            color: "#fff"
+                        }}
                         >
                         TeacherSoft
                     </Typography>
