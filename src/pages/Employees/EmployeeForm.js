@@ -4,7 +4,9 @@ import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
+/* ICONS */
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { useTheme } from '@mui/material/styles'
 
 const genderItems = [
     {id: 'male', title: 'Male'},
@@ -25,6 +27,15 @@ const initialFieldValues = {
 }
 
 export default function EmployeeForm() {
+
+    const theme = useTheme();
+
+    const ColumnGridItemStyle = {
+        padding: theme.spacing(2)       // :D
+        // paddingTop: theme.spacing(2),
+        // paddingLeft: theme.spacing(1),
+        // paddingRight: theme.spacing(1)
+    }
 
     const validate = () => {
         let temp = {}
@@ -61,7 +72,7 @@ export default function EmployeeForm() {
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
-                <Grid item xs={6}>
+                <Grid item xs={6} style={ColumnGridItemStyle}>
                     <Controls.Input 
                         name="fullName"
                         label="Full Name" 
@@ -90,7 +101,7 @@ export default function EmployeeForm() {
                         onChange = {handleInputChange}
                         />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} style={ColumnGridItemStyle}>
                     <Controls.RadioGroup
                         name="gender"
                         label="Gender"

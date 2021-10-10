@@ -4,12 +4,37 @@ VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
 ## React + Material UI
 
+**Utilizando el `theme`**
+
+Los atributos de `theme` provistos por `ThemeProvider` en la raiz de del arbol
+de componentes.  Son accesibles desde:
+
+- Atributo `sx` de los componentes (CSS / JSS)
+- Atributos de los componentes de MUI
+- Dentro de las funciones raras que la gente crack usa para hacer 
+  **reusable components**
+
+Adicionalmente, para definir estilos simplecitos y bonitos usar:
+
+```
+import { useTheme } from '@mui/material/styles';
+
+export default function MyComponent() {
+  const theme = useTheme();
+
+  return <div>{`spacing ${theme.spacing}`}</div>;
+}
+```
+
+Ref: https://mui.com/styles/api/#usetheme-theme
+
+
 **Reusable components**
 
 Las reglas/clases de tipo `& .CSSclassaname` son aplicadas a todos los elementos
 hijos del elemento al que se le aplique la regla.
 
-MUI5:
+MUI5:  *Crear* un componente con los estilos
 
 ```
 import Slider from '@mui/material/Slider';
@@ -35,7 +60,7 @@ export default function StyledCustomization() {
 
 Ref: https://mui.com/customization/how-to-customize/#2-reusable-style-overrides
 
-MUI4 (legacy):
+MUI4 (legacy): Crear un objeto que contenga los estilos en CSS
 
 ```
 import { makeStyles } from '@mui/styles';

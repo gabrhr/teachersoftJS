@@ -53,6 +53,7 @@ const Login=()=>{
                 />
                 <Controls.Button 
                     type='submit' 
+                    color='DTButton'
                     fullWidth 
                     text="Sign In"
                 />
