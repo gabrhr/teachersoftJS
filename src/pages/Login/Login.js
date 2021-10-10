@@ -2,63 +2,70 @@ import React from 'react'
 import { makeStyles } from '@mui/styles';
 import Header from '../../components/PageComponents/Header'
 import { Paper, Container, Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system'
+import { Box, height } from '@mui/system'
 import Figurita from '../../assets/images/VectorLogin.svg'
 import LogoPucp from '../../assets/images/LogoPUCP.png'
+import { Grid3x3 } from '@mui/icons-material';
 
 const useStyles = makeStyles(theme => ({
     root: {
 
+    },
+    imagen:{
+        position: 'absolute',
+        paddingLeft: "0px",
+        paddingTop:"0px",
+        zIndex: 1
     }
 }))
 
 export default function Login() {
     const classes = useStyles()
+    const paperStyle={padding :20,height:'70vh',width:280, margin:"20px auto"}
 
     return (
         <>
             <Header />
-            <Box sx={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                // FIXME:  secondary color
-                backgroundColor: "#41B9E4",
-                width: "100%",
-                height: "600px"
+            <Grid container spacing={2}>
+                <Grid item xs={6} >
+                    <Typography
+                        variant="h1"
+                        component="div"
+                        >
+                        Bienvenido
+                    </Typography>
+                    <Paper
+                        elevation={10}
+                        color="#fff"
+                        style={paperStyle}
+                        >
+                        <div> hola mundo</div>
+                    </Paper>
+                </Grid>
+                <Grid  item xs={6} sx={{
+                    textAlign: 'center',
+                    position: 'relative',
                 }}
-                >
-            <Container maxWidth="sm"
-                alignItems="center"
-                // justifyContent="center"
-                >
-                <Typography
-                    variant="h1"
-                    component="div"
-                    >
-                    Bienvenido
-                </Typography>
-                <Paper
-                    color="#fff"
-                    >
 
-                </Paper>
-            </Container>
-            <Container maxWidth="sm">
-                <Typography
-                    variant="h1"
-                    component="div"
-                    >
-                    TeacherSoft
-                </Typography>
-                <img 
-                    src={Figurita}
-                    alt="Kiwi standing on oval"
-                    width="100%"
-                    height="100%"
-                    >
-                </img>
-            </Container>
-            </Box>
+                >
+                    <Typography
+                        variant="h1"
+                        sx={{
+                            zIndex:2,
+                            position:'relative',
+                            lineHeight: 10,
+                            margin: '0',
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: "translate(-50%, -50%)"
+                        }}
+                        >
+                        TeacherSoft
+                    </Typography>
+                
+                </Grid>
+            </Grid>
         </>
     )
 }
