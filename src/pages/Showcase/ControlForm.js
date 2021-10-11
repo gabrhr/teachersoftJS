@@ -101,6 +101,25 @@ export default function ControlForm() {
                     <AddIcon />
                 </IconButton>
             </div>
+            <div>
+                Recuerda h1 grande h4 pequeño
+                <Typography variant="h3"  component="div">
+                h3: SUBTITULOS DE ContentHeader
+                </Typography>
+                <Typography variant="h4"  component="div">
+                h4: Subtitulos de Tablas o Forms
+                </Typography>
+                <Typography >
+                  body: Hola mundo como estas
+                </Typography>
+                <Typography variant="h1"  component="div">
+                  body: Hola mundo como estas
+                </Typography>
+                <Typography variant="h2"  component="div">
+                  body: Hola mundo como estas
+                </Typography>
+
+            </div>
         </Form>
     )
 }
