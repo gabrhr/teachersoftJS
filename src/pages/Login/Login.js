@@ -36,11 +36,11 @@ export default function Login() {
                 spacing={0} 
                 sx={{
                     width: "100%",
-                    height: "82vh",
+                    height: "85vh",
                     gridTemplateColumns: "1fr 1fr",
                 }}
             >
-                <Grid item xs={6} sx={{height: '100%'}}>
+                <Grid item xs={6}>
                     <Typography
                         variant="h2"
                         component="div"
@@ -60,14 +60,13 @@ export default function Login() {
                 </Grid>
                 <Grid item xs={6}
                     sx={{
-                        /*transform: 'translateZ(0)',*/
+                        transform: 'translateZ(0)',
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
                         backgroundImage: 'url("assets/img/VectorLogin.svg")',
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
-                        height: '100%'
                     }}
                 >
                     <Typography

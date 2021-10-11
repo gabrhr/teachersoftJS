@@ -5,8 +5,7 @@ import { makeStyles } from '@mui/styles'
 const useStyles = makeStyles(theme => ({
     menuImagen: {
         position: 'relative',
-        height: '10vh',
-        marginTop: theme.spacing(3),
+        height: "40px",
     }
 }))
 
@@ -20,7 +19,7 @@ export default function Header() {
                     boxShadow: 1,
                     transform: 'translateZ(0)',
                     zIndex:  (theme) => theme.zIndex.drawer + 1,
-                    height: "8vh"
+                    height: "60px"
                 }}>
             <Toolbar sx = {{height: '100%'}}>
                 <Grid container
@@ -31,7 +30,6 @@ export default function Header() {
                         {/* FIX:  bad scaling of image */}
                         <img 
                             className={classes.menuImagen} 
-                            sx = {{height: '4px'}} 
                             src="assets/img/LogoPUCP.png"
                             alt="LogoPUCP"
                                
