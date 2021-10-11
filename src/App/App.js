@@ -40,8 +40,8 @@ function App() {
   const classes = useStyles();
   
 
-  /* PRUEBAS */
-  if (true) {
+  /* PRUEBAS (solo util para probarl login screen) */
+  if (false) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -58,21 +58,6 @@ function App() {
           <Switch>
             <Route path="/login">
               <Login />
-            </Route> 
-          </Switch>
-          <Switch>
-            <Route path="/employee">
-              <Employees />
-            </Route> 
-          </Switch>
-          <Switch>
-            <Route path="/showcase">
-              <Showcase />
-            </Route> 
-          </Switch>
-          <Switch>
-            <Route path="/AsistenteSeccion">
-              <AsistenteSeccion />
             </Route> 
           </Switch>
         </Router>

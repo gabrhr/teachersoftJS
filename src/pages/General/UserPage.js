@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 import Login from '../Login/LoginForm';
 import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
+import TestIndex from '../Dev/TestIndex';
+import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
 
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -18,13 +20,18 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   
 export default function UserPage() {
     return (
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" flexGrow={1} p={2} bgcolor="#ffffff"
+        overflow="auto"
+      >
         <DrawerHeader />
         <Switch>
               <Route exact path="/">
-                <Showcase />
+                <TestIndex />
               </Route>
-              <Route path="/administrador/mantenimiento/employee">
+              <Route exact path="/AsistenteSeccion">
+                <AsistenteSeccion />
+              </Route>
+              <Route path="/employee">
                 <Employees />
               </Route>
               <Route path="/administrador/mantenimiento/departamento">

@@ -3,11 +3,11 @@ import React from 'react'
 
 export default function Select(props) {
 
-    const {name, label, value, onChange, options} = props;
+    const {name, label, value, onChange, options, variant, ...other} = props;
     return (
         <FormControl
-            variant="outlined"
-            >
+            variant={variant || "outlined"}
+        >
             <InputLabel>{label}</InputLabel>
             <MuiSelect
                 label={label}
@@ -15,15 +15,13 @@ export default function Select(props) {
                 value={value}
                 onChange={onChange}
                 defaultValue=""
-                >
-                <MenuItem value="">None</MenuItem>
+                {...other}
+            >
+                {/* <MenuItem value="">None</MenuItem> */}
                 {
                     options.map(
                         item => (
-                            <MenuItem 
-                                key={item.id} 
-                                value={item.id}
-                                >
+                            <MenuItem key={item.id} value={item.id} >
                                 {item.title}
                             </MenuItem>
                         )
