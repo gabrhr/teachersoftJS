@@ -3,7 +3,7 @@ $ npm install
 $ npm install @mui/material @emotion/react @emotion/styled
 $ npm install @mui/styles
 $ npm install "@date-io/date-fns" "@mui/lab" "date-fns"
-$ npm install react-router-dom
+$ npm install react-router-dom react-markdown
  */
 
 import React from 'react'
@@ -21,6 +21,7 @@ import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import TestIndex from '../pages/Dev/TestIndex';
+import AsistenteSeccion from '../pages/AsistenteSeccion/AsistenteSeccion';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 
@@ -39,7 +40,7 @@ function App() {
   
 
   /* PRUEBAS */
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -59,13 +60,13 @@ function App() {
             </Route> 
           </Switch>
           <Switch>
-            <Route path="/test">
-              <TestIndex />
+            <Route path="/showcase">
+              <Showcase />
             </Route> 
           </Switch>
           <Switch>
-            <Route path="/showcase">
-              <Showcase />
+            <Route path="/AsistenteSeccion">
+              <AsistenteSeccion />
             </Route> 
           </Switch>
         </Router>
