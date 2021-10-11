@@ -2,42 +2,15 @@ import React from 'react'
 import Header from '../../components/PageComponents/Header'
 import { Paper, Grid, Typography } from '@mui/material';
 import LoginForm from './LoginForm'
-
-/* AXIOS */
-
-/* FIN AXIOS */
-
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//     },
-//     paperStyle:{
-//         borderStyle: 'solid',
-//         borderColor: 'black',
-//         borderWidth: '1px',
-//         borderRadius: '44px',
-//         /* height:'50vh',
-//         marginLeft: theme.spacing(30),
-//         marginRight: theme.spacing(30),
-//         marginTop:  theme.spacing(10),
-//         marginButton:  theme.spacing(10),
-//         padding: theme.spacing(3), */  
-//         padding :20,height:'70vh', margin:"20px auto"
-//     },
-//     text:{
-//         zIndex:2,
-//         color: "primary.main",  
-//         fontSize: "50px",
-//         position: "absolute",
-//         top: "50%",
-//         width: "100%",
-//         textAlign: "center",
-//     }
-// }))
+import Footer from '../../components/PageComponents/Footer';
 
 export default function Login() {
     const paperStyle={
-        padding: 40,
-        width:"80%", 
+        paddingLeft: 60,
+        paddingRight: 60,
+        paddingTop: 40,
+        paddingBottom: 40,
+        width:"60%", 
         margin:"20px auto",
 
         borderStyle: 'solid',
@@ -62,12 +35,12 @@ export default function Login() {
                 spacing={0} 
                 sx={{
                     width: "100%",
-                    height: "85vh"
+                    height: "82vh"
                 }}
             >
                 <Grid item xs={6} >
                     <Typography
-                        variant="h4"
+                        variant="h2"
                         component="div"
                         paddingTop="50px"
                         paddingBottom="40px"
@@ -102,6 +75,7 @@ export default function Login() {
                     </Typography>
                 </Grid>
             </Grid>
+            <Footer/>
         </>
     )
 }

@@ -21,6 +21,8 @@ import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import TestIndex from '../pages/Dev/TestIndex';
+//import ContentHeader from '../components/AppMain/ContentHeader';
+
 
 const useStyles = makeStyles({
   appMain: {
@@ -34,17 +36,23 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-  // const Hola = [
-  //   {
-  //     MenuAdministrador
-  //   }
-  // ];
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(!open);
+    console.log(true);
+  };
 
   /* PRUEBAS */
   if (false) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
+          <Switch>
+            <Route path="/index">
+              <TestIndex />
+            </Route> 
+          </Switch>
           <Switch>
             <Route path="/login">
               <Login />
@@ -82,7 +90,7 @@ function App() {
               rol="Form design with validation"
               foto={fotoUsuario}
         />
-        <div className={classes.appMain}>
+        {/* <div className={classes.appMain}>
           <Switch>
               <Route exact path="/">
                 <Showcase />
@@ -99,7 +107,7 @@ function App() {
                 <Login />
               </Route> 
           </Switch>
-        </div>        
+        </div>        */} 
         <CssBaseline />
         </Router>
     </ThemeProvider>

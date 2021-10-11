@@ -9,7 +9,9 @@ import { styled } from "@mui/material/styles";
 import LogoPucp from "../../assets/images/LogoPUCP.png";
 import Menu from "./Menu";
 
+
 import { MenuAdministrador } from "./MenuAdministrador";
+import UserPage from "../../pages/General/UserPage";
 
 const useStyles = makeStyles((themex) => ({
   root: {
@@ -104,6 +106,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+
 const HeaderUser = ({ nombre, rol, foto }) => {
   const classes = useStyles();
   const cls = pagina();
@@ -112,7 +115,7 @@ const HeaderUser = ({ nombre, rol, foto }) => {
   const handleDrawerOpen = () => {
     setOpen(!open);
     console.log(true);
-  };
+  }; 
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -193,7 +196,6 @@ const HeaderUser = ({ nombre, rol, foto }) => {
         </Toolbar>
       </AppBar>
       {/*SideBar*/}
-      <div className={cls.appMain}>
         <Drawer variant="permanent" elevation={1} open={open}>
           <DrawerHeader />
           <List>
@@ -202,7 +204,7 @@ const HeaderUser = ({ nombre, rol, foto }) => {
             })}
           </List>
         </Drawer>
-      </div>
+      <UserPage/>
     </Box>
   );
 };
