@@ -3,7 +3,7 @@ $ npm install
 $ npm install @mui/material @emotion/react @emotion/styled
 $ npm install @mui/styles
 $ npm install "@date-io/date-fns" "@mui/lab" "date-fns"
-$ npm install react-router-dom
+$ npm install react-router-dom react-markdown
  */
 
 import React from 'react'
