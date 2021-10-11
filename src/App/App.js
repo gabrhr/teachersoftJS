@@ -20,6 +20,7 @@ import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
+//import ContentHeader from '../components/AppMain/ContentHeader';
 
 
 const useStyles = makeStyles({
@@ -40,7 +41,7 @@ function App() {
   // ];
 
   /* PRUEBAS */
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -51,7 +52,9 @@ function App() {
           </Switch>
           <Switch>
             <Route path="/test">
-              <Login />
+              {/* <ContentHeader text="HOLA MUNDO " /> */}
+              {/* <Showcase/> */}
+               <Login/> 
             </Route> 
           </Switch>
           <Switch>

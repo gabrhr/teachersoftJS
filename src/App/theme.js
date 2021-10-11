@@ -30,14 +30,27 @@ const theme = createTheme({
     },
     typography: {
       fontFamily: '"Quicksand","Arial","sans-serif"',
+      fontStyle: "Regular",
       h1:{
         fontSize: '70px',
+      },
+      h2:{ //Login titulo grande
+         fontFamily: 'NotoSerif',
+        fontStyle: 'SemiBold',
+        fontSize: '50px',
+        lineHeight: '50px',
+      },
+      h3:{ //Encabezado
+        fontFamily: 'NotoSerif',
+        fontStyle: 'SemiBold',
+        fontSize: 30,
+        lineHeight: '50px',
       },
       h4:{
         fontFamily: 'NotoSerif',
         fontStyle: 'SemiBold',
-        fontSize: '50px',
-        lineHeight: '65px',
+        fontSize: 18,
+        lineHeight: '50px'
       }
     },
     shape: {

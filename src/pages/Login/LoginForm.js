@@ -55,17 +55,17 @@ const Login=()=>{
                     type='submit' 
                     color='DTButton'
                     fullWidth 
-                    text="Sign In"
+                    text="Iniciar Sesión"
                 />
                 <Typography align="center">
-                    O
+                    o
                 </Typography>
                 <Controls.Button 
                     variant="outlined" 
                     fullWidth 
                     text="Iniciar sesión con correo PUCP"
                 />
-                <Typography >
+                <Typography paddingTop="20px" >
                     <Link to="#" >
                         Recuperar contraseña
                     </Link>
