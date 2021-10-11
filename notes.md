@@ -4,14 +4,44 @@ VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
 ## React + Material UI
 
-**Reusable components**
+**Utilizando el `theme`**
+
+Los atributos de `theme` provistos por `ThemeProvider` en la raiz de del arbol
+de componentes.  Son accesibles desde:
+
+- Atributo `sx` de los componentes (CSS / JSS)
+  > Only the `Box`, `Stack`, `Typography`, and `Grid` components accept the
+  > system properties as props for the above reason. These components are
+  > designed to solve CSS problems, they are CSS component utilities.  
+  > [MUI system basics](https://mui.com/system/basics/#api-tradeoff)
+- Atributos de los componentes de MUI
+- Dentro de las funciones raras que la gente crack usa para hacer 
+  **reusable components**
+
+Adicionalmente, para definir estilos simplecitos y bonitos usar:
+
+```JS
+import { useTheme } from '@mui/material/styles';
+
+export default function MyComponent() {
+  const theme = useTheme();
+
+  return <div>{`spacing ${theme.spacing}`}</div>;
+}
+```
+
+Ref: https://mui.com/styles/api/#usetheme-theme
+
+
+**Reusable / custom components**
 
 Las reglas/clases de tipo `& .CSSclassaname` son aplicadas a todos los elementos
 hijos del elemento al que se le aplique la regla.
 
-MUI5:
+[styled-components's API](https://mui.com/system/basics/):  *Crear* un 
+componente con los estilos (MUI5 advocates for the use of *system* (i.e., the `sx` prop) instead of this to apply "one-off" styles)
 
-```
+```JS
 import Slider from '@mui/material/Slider';
 import { alpha, styled } from '@mui/material/styles';
 
@@ -35,9 +65,9 @@ export default function StyledCustomization() {
 
 Ref: https://mui.com/customization/how-to-customize/#2-reusable-style-overrides
 
-MUI4 (legacy):
+MUI4 (legacy): Crear un objeto que contenga los estilos en CSS
 
-```
+```JS
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -65,7 +95,7 @@ export function Form(props) {
 
 **Espacio final dentro de un `<Typography>`**
 
-```
+```JS
 <Typography paragraph={true}> ¿No tienes una cuenta?
     {'\u00A0'}
     <Link href="#" >
@@ -78,7 +108,7 @@ Ref: https://stackoverflow.com/questions/37909134/nbsp-jsx-not-working
 
 **Ajustar la anchura de un "Input"  (MuiTextField)**
 
-```
+```JS
 <Box
       sx={{
         width: 500,
@@ -101,8 +131,14 @@ React:
 React + Material UI:
 - [CodAffection](https://www.youtube.com/watch?v=bL-ZwwF6wTc&list=PLjC4UKOOcfDQtvkTBfjqeWP8EJKi_WaUn&index=1)
 
-CSS Properties:
-- [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
+CSS:
+- [units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+
+CSS, HTML and React components "properties":
+- [CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
+- [HTML attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes)
+- [MUI5 system props](https://mui.com/system/properties/)
+- [MUI5 customization guide](https://mui.com/customization/how-to-customize/#2-reusable-style-overrides)
 
 Authenication:
 - [20m tutorial](https://www.youtube.com/watch?v=MqczHS3Z2bc)

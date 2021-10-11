@@ -20,6 +20,7 @@ import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
+import TestIndex from '../pages/Dev/TestIndex';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 
@@ -27,7 +28,8 @@ const useStyles = makeStyles({
   appMain: {
     // FIX:  A veces se mueve, no se por que.
     paddingTop: '150px',
-    paddingLeft: '100px',
+    paddingLeft: '84px',
+    paddingRight: '10px',
     width: '100%'
   }
 })
@@ -42,10 +44,28 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
+            <Route path="/index">
+              <TestIndex />
+            </Route> 
+          </Switch>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route> 
+          </Switch>
+          <Switch>
+            <Route path="/employee">
+              <Employees />
+            </Route> 
+          </Switch>
+          <Switch>
             <Route path="/test">
-              {/* <ContentHeader text="HOLA MUNDO " /> */}
-              {/* <Showcase/> */}
-               <Login/> 
+              <TestIndex />
+            </Route> 
+          </Switch>
+          <Switch>
+            <Route path="/showcase">
+              <Showcase />
             </Route> 
           </Switch>
         </Router>

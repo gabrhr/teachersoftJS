@@ -44,6 +44,7 @@ const Login=()=>{
                     value={values.password}
                     onChange={handleInputChange}
                     fullWidth
+                    type="password"
                 />
                 <Controls.Checkbox
                     name="isPersistentLogin"
@@ -53,6 +54,7 @@ const Login=()=>{
                 />
                 <Controls.Button 
                     type='submit' 
+                    color='DTButton'
                     fullWidth 
                     text="Iniciar Sesión"
                 />

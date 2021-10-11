@@ -9,6 +9,12 @@ const theme = createTheme({
         main: "#042354",
         light: "#3b4a81"
       },
+      DTButton: {
+        dark:  "#00002b",
+        main:  "#3b4a81",
+        light: "#3b4a81",
+        contrastText: "#ffffff"
+      },
       secondary: {
         dark: "#7eebff",
         main: "#41b9e4",

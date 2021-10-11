@@ -15,3 +15,8 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// Animaciones
+// ScrollReveal().reveal('.showcase');
+// ScrollReveal().reveal('.news-cards', {delay: 500});
+// ScrollReveal().reveal('.cards-banner-one', {delay: 500});

@@ -4,7 +4,6 @@ import { Paper, Grid, Typography } from '@mui/material';
 import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
 
-
 export default function Login() {
     const paperStyle={
         paddingLeft: 60,
