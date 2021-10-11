@@ -33,6 +33,7 @@ export default function ContentHeader({text, cbo}) {
                         paddingTop="5px"
                         paddingBottom="4px"
                         align="center"
+                        color="primary"
                     >
                         {text}
                     </Typography>

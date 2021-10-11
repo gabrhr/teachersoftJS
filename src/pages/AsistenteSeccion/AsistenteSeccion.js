@@ -1,10 +1,11 @@
 import React from 'react'
 import ContentHeader from '../../components/AppMain/ContentHeader'
 import { Grid, Typography } from '@mui/material'
-import { Controls } from '../../components/controls/Controls'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { DT } from '../../components/DreamTeam/DT'
+import { Controls } from '../../components/controls/Controls'
+import HorarioCursos from './HorarioCursos'
 
 export default function AsistenteSeccion() {
     return (
@@ -32,9 +33,7 @@ export default function AsistenteSeccion() {
                 </Grid>
             </Grid>
             <DT.BorderBox>
-                <Typography variant="h4"> 
-                    Horario de Cursos
-                </Typography>
+                <HorarioCursos />
             </DT.BorderBox>
         </>
     )
