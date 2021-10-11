@@ -103,6 +103,12 @@ export default function ControlForm() {
             </div>
             <div>
                 Recuerda h1 grande h4 pequeño
+                <Typography variant="h1"  component="div">
+                  body: Hola mundo como estas
+                </Typography>
+                <Typography variant="h2"  component="div">
+                  body: Hola mundo como estas
+                </Typography>
                 <Typography variant="h3"  component="div">
                 h3: SUBTITULOS DE ContentHeader
                 </Typography>
@@ -112,13 +118,6 @@ export default function ControlForm() {
                 <Typography >
                   body: Hola mundo como estas
                 </Typography>
-                <Typography variant="h1"  component="div">
-                  body: Hola mundo como estas
-                </Typography>
-                <Typography variant="h2"  component="div">
-                  body: Hola mundo como estas
-                </Typography>
-
             </div>
         </Form>
     )

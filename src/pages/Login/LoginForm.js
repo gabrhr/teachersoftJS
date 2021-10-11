@@ -47,6 +47,7 @@ const Login=()=>{
                     type= 'password'
                     size = 'small'
                     fullWidth
+                    type="password"
                 />
                 <Controls.Checkbox
                     name="isPersistentLogin"

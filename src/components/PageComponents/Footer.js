@@ -12,6 +12,8 @@ export default function Footer() {
                     width: "100%",
                     height: "3vh",
                     backgroundColor:'primary.main', 
+                    position:"absolute",
+                    bottom: 0
                 }}
             />
         </div>
