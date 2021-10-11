@@ -20,7 +20,7 @@ import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
-
+import TestIndex from '../pages/Dev/TestIndex';
 
 const useStyles = makeStyles({
   appMain: {
@@ -41,10 +41,15 @@ function App() {
   // ];
 
   /* PRUEBAS */
-  if (true) {
+  if (false) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route> 
+          </Switch>
           <Switch>
             <Route path="/employee">
               <Employees />
@@ -52,7 +57,7 @@ function App() {
           </Switch>
           <Switch>
             <Route path="/test">
-              <Login />
+              <TestIndex />
             </Route> 
           </Switch>
           <Switch>
