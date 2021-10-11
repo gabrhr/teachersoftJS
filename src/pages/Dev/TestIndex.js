@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 
 const markdown = `# Index of testing pages in TeacherSoft
 
+- [Asistente De Seccion](${window.location.origin + '/AsistenteSeccion'})
 - [employee](${window.location.origin + '/employee'})
 - [login screen](${window.location.origin + '/login'})
 - [DreamTeam components showcase](${window.location.origin + '/showcase'})
