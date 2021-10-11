@@ -26,7 +26,8 @@ const useStyles = makeStyles({
   appMain: {
     // FIX:  A veces se mueve, no se por que.
     paddingTop: '150px',
-    paddingLeft: '100px',
+    paddingLeft: '84px',
+    paddingRight: '10px',
     width: '100%'
   }
 })
@@ -40,7 +41,7 @@ function App() {
   // ];
 
   /* PRUEBAS */
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>

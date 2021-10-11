@@ -37,7 +37,7 @@ const theme = createTheme({
         fontFamily: 'NotoSerif',
         fontStyle: 'SemiBold',
         fontSize: '50px',
-        lineHeight: '65px',
+        lineHeight: '65px'
       }
     },
     shape: {

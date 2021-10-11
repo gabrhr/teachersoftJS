@@ -44,6 +44,7 @@ const Login=()=>{
                     value={values.password}
                     onChange={handleInputChange}
                     fullWidth
+                    type="password"
                 />
                 <Controls.Checkbox
                     name="isPersistentLogin"
