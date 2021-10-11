@@ -1,4 +1,4 @@
-import { Grid, Paper } from '@mui/material'
+import { Container, Paper } from '@mui/material'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
@@ -21,10 +21,8 @@ console.log('hello world')
 /* Lists current testing pages */
 export default function TestIndex() {
     return (
-        <Grid m={4}>
-            <Paper sx={{p: 4, width: "calc(100% - 40px)"}}>
-                <ReactMarkdown children={markdown} />
-            </Paper>
-        </Grid>
+        <Paper sx={{p: 4}}>
+            <ReactMarkdown children={markdown} />
+        </Paper>
     )
 }

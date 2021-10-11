@@ -3,23 +3,23 @@ import InboxIcon from '@mui/icons-material/MoveToInbox'
 
 export const MenuAdministrador = [
     {
-    text: 'Mantenimientos',
-    path: '/administrador/mantenimiento',
+    text: 'Dev',
+    path: '/este/path/no/se/usa/creo',
     icon: <InboxIcon />,
     iconClosed: <InboxIcon />,
     iconOpened: <InboxIcon />,
     subNav: [
         {
-        text: 'Prueba',
-        path: '/administrador/mantenimiento/employee',
+        text: 'Index',
+        path: '/',
         },
         {
-        text: 'Departamento',
-        path: '/administrador/mantenimiento/departamento',
+        text: 'Formulario de prueba',
+        path: '/employee',
         },
         {
-        text: 'Seccion',
-        path: '/administrador/mantenimiento/seccion',
+        text: 'Showcase',
+        path: '/showcase',
         }
         ]
     },

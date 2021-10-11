@@ -133,6 +133,9 @@ React + Material UI:
 
 CSS:
 - [units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+- [flexbox A Complete Guide (Chung)](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+- [flexbox Cheatsheet (Chung)](https://yoksel.github.io/flex-cheatsheet/)
+- [grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
 
 CSS, HTML and React components "properties":
 - [CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
@@ -150,7 +153,3 @@ Axios:
 
 Git / GitHub:
 - [Syncing your branch](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/keeping-your-local-repository-in-sync-with-github/syncing-your-branch)
-
-CSS Flexbox (Chung):
-- [A Complete Guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
-- [Cheatsheet](https://yoksel.github.io/flex-cheatsheet/)
