@@ -41,11 +41,12 @@ export default function ContentHeader({text, cbo}) {
                 <Grid item sx={{marginRight: theme.spacing(3)}}>
                     <Box  sx={{width: "10vw", align: "Right"}}> 
                         <Controls.Select
-                        name="cicloId"
-                        label="Ciclo"
-                        value={values.departmentId}
-                        onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
+                            name="cicloId"
+                            label="Ciclo"
+                            value={values.departmentId}
+                            onChange={handleInputChange}
+                            options={employeeService.getDepartmentCollection()}
+                            type="contained"
                         />
                     </Box>
                 </Grid>
