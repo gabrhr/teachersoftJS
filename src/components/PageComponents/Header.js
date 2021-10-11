@@ -20,19 +20,22 @@ export default function Header() {
                     boxShadow: 1,
                     transform: 'translateZ(0)',
                     zIndex:  (theme) => theme.zIndex.drawer + 1,
-                    height: "15vh"
+                    height: "8vh"
                 }}>
-            <Toolbar>
+            <Toolbar sx = {{height: '100%'}}>
                 <Grid container
                     alignItems="center">
                     <Grid item sm>
                     </Grid>
-                    <Grid item>
+                    <Grid item sx = {{height: '100%'}}>
                         {/* FIX:  bad scaling of image */}
                         <img 
                             className={classes.menuImagen} 
+                            sx = {{height: '4px'}} 
                             src="assets/img/LogoPUCP.png"
-                            alt="LogoPUCP">
+                            alt="LogoPUCP"
+                               
+                        >
                         </img>
                     </Grid>
                 </Grid>

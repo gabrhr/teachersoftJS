@@ -25,6 +25,7 @@ export default function Checkbox(props) {
                         />
                 }
                 label = {label}
+                sx={{width: '40%'}}
                 >
 
             </FormControlLabel>

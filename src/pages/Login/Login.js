@@ -9,8 +9,8 @@ export default function Login() {
     const paperStyle={
         paddingLeft: 60,
         paddingRight: 60,
-        paddingTop: 40,
-        paddingBottom: 40,
+        paddingTop: 20,
+        paddingBottom: 20,
         width:"60%", 
         margin:"20px auto",
 
@@ -24,7 +24,7 @@ export default function Login() {
         color: "primary.main",  
         fontSize: "50px",
         position: "absolute",
-        top: "50%",
+        top: "45%",
         width: "100%",
         textAlign: "center"
     }
@@ -40,12 +40,12 @@ export default function Login() {
                     gridTemplateColumns: "1fr 1fr",
                 }}
             >
-                <Grid item xs={6} >
+                <Grid item xs={6} sx={{height: '100%'}}>
                     <Typography
                         variant="h2"
                         component="div"
                         paddingTop="50px"
-                        paddingBottom="40px"
+                        paddingBottom="20px"
                         align="center"
                         >
                         Bienvenido
@@ -53,19 +53,21 @@ export default function Login() {
                     <Paper
                         elevation={0}
                         style={paperStyle}
+
                         >
-                        <LoginForm />
+                        <LoginForm/>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}
                     sx={{
-                        transform: 'translateZ(0)',
+                        /*transform: 'translateZ(0)',*/
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
                         backgroundImage: 'url("assets/img/VectorLogin.svg")',
                         backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center'
+                        backgroundPosition: 'center',
+                        height: '100%'
                     }}
                 >
                     <Typography

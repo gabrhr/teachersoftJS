@@ -36,12 +36,15 @@ const Login=()=>{
                     value={values.username}
                     onChange={handleInputChange}
                     fullWidth
+                    size = 'small'
                     />
                 <Controls.Input
                     name="password"
                     label="Contraseña"
                     value={values.password}
                     onChange={handleInputChange}
+                    type= 'password'
+                    size = 'small'
                     fullWidth
                     type="password"
                 />
@@ -55,6 +58,7 @@ const Login=()=>{
                     type='submit' 
                     color='DTButton'
                     fullWidth 
+                    size = 'small'
                     text="Iniciar Sesión"
                 />
                 <Typography align="center">
@@ -62,6 +66,7 @@ const Login=()=>{
                 </Typography>
                 <Controls.Button 
                     variant="outlined" 
+                    size = 'small'
                     fullWidth 
                     text="Iniciar sesión con correo PUCP"
                 />
