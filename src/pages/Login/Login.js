@@ -4,6 +4,7 @@ import { Paper, Grid, Typography } from '@mui/material';
 import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
 
+
 export default function Login() {
     const paperStyle={
         paddingLeft: 60,
@@ -35,18 +36,17 @@ export default function Login() {
                 spacing={0} 
                 sx={{
                     width: "100%",
-                    height: "82vh",
-                    overflow:"auto"
+                    height: "85vh",
+                    gridTemplateColumns: "1fr 1fr",
                 }}
             >
-                <Grid item xs={6}  height= "100%">
+                <Grid item xs={6}>
                     <Typography
                         variant="h2"
                         component="div"
                         paddingTop="50px"
                         paddingBottom="20px"
                         align="center"
-                        
                         >
                         Bienvenido
                     </Typography>
@@ -59,16 +59,14 @@ export default function Login() {
                     </Paper>
                 </Grid>
                 <Grid item xs={6}
-                    height= "100%"
                     sx={{
-                        /*transform: 'translateZ(0)',*/
+                        transform: 'translateZ(0)',
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
                         backgroundImage: 'url("assets/img/VectorLogin.svg")',
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
-                        height: '100%'
                     }}
                 >
                     <Typography
@@ -79,8 +77,11 @@ export default function Login() {
                         TeacherSoft
                     </Typography>
                 </Grid>
+                <Grid item xs={12}>
+                    <Footer/>
+                </Grid>
+
             </Grid>
-            <Footer/>
         </>
     )
 }

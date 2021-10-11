@@ -204,6 +204,7 @@ const HeaderUser = ({ nombre, rol, foto }) => {
             })}
           </List>
         </Drawer>
+      {/* Route de Paginas */}
       <UserPage/>
     </Box>
   );
