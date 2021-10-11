@@ -36,12 +36,7 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(!open);
-    console.log(true);
-  };
+  
 
   /* PRUEBAS */
   if (false) {
@@ -82,32 +77,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        {/* PRUEBAS */}
-        <Switch>
-        </Switch>
         <HeaderUser
               nombre="New Employee"
               rol="Form design with validation"
               foto={fotoUsuario}
         />
-        {/* <div className={classes.appMain}>
-          <Switch>
-              <Route exact path="/">
-                <Showcase />
-              </Route>
-              <Route path="/administrador/mantenimiento/employee">
-                <Employees />
-              </Route>
-              <Route path="/administrador/mantenimiento/departamento">
-              </Route> 
-              <Route path="/showcase">
-                <Showcase />
-              </Route> 
-              <Route path="/login">
-                <Login />
-              </Route> 
-          </Switch>
-        </div>        */} 
         <CssBaseline />
         </Router>
     </ThemeProvider>

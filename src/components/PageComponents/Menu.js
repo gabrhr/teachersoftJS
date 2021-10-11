@@ -22,7 +22,14 @@ const SubMenu = ({ open,item}) => {
     return (
       <>
         <ListItemButton 
-            sx={{ pl: 3 }}
+            sx={{ 
+                pl: 3, 
+                color: "primary.main",
+                backgroundColor: "#fff" ,
+                '&:hover': {
+                    backgroundColor: 'itemlist.main'
+                },
+            }}
             key={item.text} 
             // onClick={() => history.push(item.path)}
             className={location.pathname === item.path ? classes.active: null}
@@ -38,7 +45,14 @@ const SubMenu = ({ open,item}) => {
             <List component="div" disablePadding>
                 {open && subnav && item.subNav.map((item, index) => {
                     return (
-                        <ListItemButton sx={{ pl: 6 }} 
+                        <ListItemButton sx={{ 
+                            pl: 6,
+                            backgroundColor: "#fff" ,
+                            '&:hover': {
+                                backgroundColor: 'itemlist.ligth'
+                            },
+                        
+                        }} 
                             key={item.text} 
                             onClick={() => history.push(item.path)}
                             className={location.pathname === item.path ? classes.active: null}

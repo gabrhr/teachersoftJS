@@ -1,5 +1,6 @@
 
 import { createTheme } from '@mui/material/styles';
+import { color } from '@mui/system';
 
 const theme = createTheme({
     palette: {
@@ -26,6 +27,11 @@ const theme = createTheme({
       },
       background: {
         default: "#f4f5fd"
+      },
+      itemlist:{
+        dark: "#3b4a81",
+        main: "#41b9e427",
+        light: "#3b4a8120"
       }
     },
     typography: {
@@ -67,16 +73,25 @@ const theme = createTheme({
           disableRipple: true, // No more ripple!
         },
       },
+      
     },
     components: {
-        MuiButton: {
-          styleOverrides: {
-            root: {
-              // textTransform: 'none',
-              margin: '4px'
-            }
-          },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            // textTransform: 'none',
+            margin: '4px'
+          }
         },
+      },
+      MuiListItemButton:{
+        styleOverrides:{
+          root:{
+            borderRadius: "0 50px 50px 0 ",
+          },
+          
+        },
+      }
     },
 
 })
