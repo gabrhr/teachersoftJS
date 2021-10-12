@@ -1,11 +1,12 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles';
-import { IconButton, Typography } from '@mui/material';
-import { Paper, Grid} from '@mui/material';
+import { IconButton} from '@mui/material';
+import { Paper} from '@mui/material';
 import { Controls } from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 import  ContentHeader from '../../components/AppMain/ContentHeader';
 import * as employeeService from '../../services/employeeService';
+import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -38,15 +39,21 @@ export default function Employees() {
                 text="Gestión de usuarios"
                 cbo= {false}
             />
-            <Grid container sx={{backgroundColor: 'white'}}>
-                
-                <Controls.Select
-                name="deparmetId"
-                label="Sección"
-                value={values.departmentId}
-                onChange={handleInputChange}
-                options={employeeService.getDepartmentCollection()}
-                />
+            <Grid container sx={{backgroundColor: 'white', width: '100%', gridTemplateColumns: "1fr 1fr"}}>
+                <Grid item xs={3}>
+                    <Stack direction = 'column' alignItems = 'left' px = {0}>
+                        <Controls.Select
+                        name="deparmetId"
+                        label="Sección"
+                        value={values.departmentId}
+                        onChange={handleInputChange}
+                        options={employeeService.getDepartmentCollection()}
+                        />
+                    </Stack>
+                </Grid>
+            </Grid>
+            <Grid container>
+                hola
             </Grid>
         </>
     )
