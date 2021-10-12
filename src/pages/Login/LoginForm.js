@@ -25,11 +25,6 @@ const Login=()=>{
     }
     return(
         <Form onSubmit={handleSubmit} >
-            {/* <Grid> */}
-                {/* <Grid align='center'>
-                    <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
-                    <h2>Sign In</h2>
-                </Grid> */}
                 <Controls.Input
                     name="username"
                     label="Usuario"

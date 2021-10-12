@@ -1,6 +1,6 @@
 
 import { createTheme } from '@mui/material/styles';
-import { color } from '@mui/system';
+import { color, fontFamily } from '@mui/system';
 
 const theme = createTheme({
     palette: {
@@ -80,7 +80,8 @@ const theme = createTheme({
         styleOverrides: {
           root: {
             // textTransform: 'none',
-            margin: '4px'
+            margin: '4px',
+            fontFamily: "NotoSans"
           }
         },
       },

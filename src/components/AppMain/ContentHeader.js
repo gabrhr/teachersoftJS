@@ -15,14 +15,35 @@ const initialFieldValues = {
     isPermanent: false
 }
 
-export default function ContentHeader({text, cbo}) {
+function CboCiclo(props) {
+    const cbo = props.cbo;
     const theme= useTheme();
     const {
         values,
         // setValues,
         handleInputChange
     } = useForm(initialFieldValues);
+    if (cbo) {
+        return (<Grid item sx={{marginRight: theme.spacing(3)}}>
+            <Box  sx={{width: "10vw", align: "Right"}}> 
+                <Controls.Select
+                    name="cicloId"
+                    label="Ciclo"
+                    value={values.departmentId}
+                    onChange={handleInputChange}
+                    options={employeeService.getDepartmentCollection()}
+                    type="contained"
+                />
+            </Box>
+        </Grid>
+        );
+    }else{
+        return null;
+    }
+}
 
+export default function ContentHeader({text, cbo}) {
+    
     return (
         <Form>
             <Grid container >
@@ -39,18 +60,7 @@ export default function ContentHeader({text, cbo}) {
                     </Typography>
                 </Grid>
                 <Grid item sm/>
-                <Grid item sx={{marginRight: theme.spacing(3)}}>
-                    <Box  sx={{width: "10vw", align: "Right"}}> 
-                        <Controls.Select
-                            name="cicloId"
-                            label="Ciclo"
-                            value={values.departmentId}
-                            onChange={handleInputChange}
-                            options={employeeService.getDepartmentCollection()}
-                            type="contained"
-                        />
-                    </Box>
-                </Grid>
+                <CboCiclo cbo={cbo}/>
             </Grid>
         </Form>
     )

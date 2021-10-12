@@ -12,6 +12,7 @@ export default function AsistenteSeccion() {
         <>
             <ContentHeader 
                 text="Gestión de la carga de cursos"
+                cbo= {true}
             />
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
