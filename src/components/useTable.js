@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Table, TableCell, TableHead, TablePagination, TableRow } from '@mui/material'
-// import { useTheme } from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
-const tableStyle = {
+const useStyles = makeStyles(tableStyle => ({
     table: {
         marginTop: 3,
         '& thead th': {
@@ -10,7 +10,9 @@ const tableStyle = {
             color: "primary.light"
         },
         '& tbody td': {
-            fontWeight: '300'
+            fontWeight: '300',
+            background: '#E9ECF8',
+            border: '15px'
         },
         '& tbody tr:hover': {
             backgroundColor: '#fffbf2',
@@ -18,16 +20,17 @@ const tableStyle = {
         }
     }
 }
+))
 
 export default function useTable(records, headers) {
-
+    const classes = useStyles()
     const pages = [5, 10, 25]
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(pages[page])
 
     const TblContainer = props => (
         // FIX:  no funciona style
-        <Table style={tableStyle}>
+        <Table className={classes.table}>
             {props.children}
         </Table>
     )
