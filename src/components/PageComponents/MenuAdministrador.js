@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 export const MenuAdministrador = [
     {
         text: 'Asignar Roles',
-        path: '/admin/asignaru',
+        path: '/admin/asignarRoles',
         icon: <PeopleAltOutlinedIcon />,
         indice: 0,
     },

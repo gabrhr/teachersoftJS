@@ -117,7 +117,14 @@ const theme = createTheme({
         },],
         
       },
-
+      MuiSelect:{
+        styleOverrides: {
+          root: {
+            // textTransform: 'none',
+            borderRadius: "50px"
+          }
+        },
+      }
     },
 
 })

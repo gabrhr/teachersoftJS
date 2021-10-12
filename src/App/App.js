@@ -34,7 +34,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router forceRefresh={false}>
+      <Router >
         <HeaderUser
               nombre="New Employee"
               rol="Administrador"

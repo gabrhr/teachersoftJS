@@ -126,7 +126,7 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
     listaMenu = MenuAsistenteSeccion
   }  
 
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const handleListItemClick = (e, indice) => {
       setSelectedIndex(indice);
   };
