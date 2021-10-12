@@ -19,15 +19,26 @@ export const MenuAdministrador = [
         indice: 1,
         subNav: [
             {
+            text: 'Usuario',
+            path: '/admin/mantenimiento/usr',
+            indice: 0,
+            },
+            {
             text: 'Departamento',
             path: '/admin/mantenimiento/dep',
-            indice: 0,
+            indice: 1,
             },
             {
             text: 'Sección',
             path: '/admin/mantenimiento/sec',
-            indice: 1,
+            indice: 2,
             }]
+    },
+    {
+        text: 'Employees',
+        path: '/admin/employees',
+        icon: <CloseIcon />,
+        indice: 2,
     },
     {
         text: 'Showcase of Components',

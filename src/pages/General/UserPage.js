@@ -7,13 +7,14 @@ import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
-import GestionDeUsuarios from '../Administrador/GestiónDeUsuarios/GestiónDeUsuarios';
+import GestionDeUsuarios from '../Administrador/GestiónDeUsuarios/GestiónUsuarios';
 import GestionDepartamento from '../Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
 import ProtectedRoute from './RouterProtected';
 import Vacio from '../Vacio'
 import { Assistant } from '@mui/icons-material';
+import GestionUsuarios from '../Administrador/GestiónDeUsuarios/GestiónUsuarios';
 
 const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
@@ -37,12 +38,13 @@ export default function UserPage() {
           <ProtectedRoute exact path="/admin/asignarRoles" idRoles={[1]}> 
             <Redirect to ="/admin/mantenimiento"/>
           </ProtectedRoute>
-          <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]} component={Employees} />
+          <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]} component={Vacio} />
+          <ProtectedRoute exact path="/admin/mantenimiento/usr" idRoles={[1]} component={GestionUsuarios} />
           <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={GestionDepartamento} />
           <ProtectedRoute exact path="/admin/mantenimiento/sec" idRoles={[1]} component={GestionSeccion} />
           <ProtectedRoute exact path="/admin/showcase" idRoles={[1]} component={Showcase} />
           <ProtectedRoute exact path="/admin/index" idRoles={[1]} component={TestIndex} />
-          <ProtectedRoute exact path="/admin/employee" idRoles={[1]} component={Employees} />
+          <ProtectedRoute exact path="/admin/employees" idRoles={[1]} component={Employees} />
           
           {/* as: asistente de seccion */}
           <ProtectedRoute exact path="/as/asignacionCarga" idRoles={[2]} component={AsistenteSeccion} />

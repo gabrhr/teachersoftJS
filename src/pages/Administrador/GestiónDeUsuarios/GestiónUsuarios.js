@@ -10,13 +10,7 @@ import * as employeeService from '../../../services/employeeService';
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 
-const useStyles = makeStyles(theme => ({
-    pageContent: {
-        // margin: theme.spacing(10),
-        // padding: theme.spacing(3),
-    }
-}))
-
+/* para que seleccione seccion */
 const initialFieldValues = {
     id: 0,
     text: '',
@@ -27,24 +21,68 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    {id: 'nombre', label: 'Nombre'},
-    {id: 'seccion', label: 'Sección'},
-    {id: 'DNI', label: 'Documento de Identidad'},
-    {id: 'correo', label: 'Correo'}
+  {
+    id: 'id',
+    label: 'EmployeeID',
+    numeric: true,
+    sortable: true
+  },
+  {
+    id: 'fullName',
+    label: 'Nombre Completo',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'seccion',
+    label: 'Sección',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'departamento',
+    label: 'Departamento',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'dni',
+    label: 'DNI',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'email',
+    label: 'Correo Electrónico',
+    numeric: false,
+    sortable: true
+  }
 ]
 
-const usuarios = [
-    {id: 0, Nombre: 'Hoddddla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
-    {id: 1, Nombre: 'Hosdfsdfdla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
-    {id: 2, Nombre: 'Hoppppla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
-    {id: 3, Nombre: 'H22222ola', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'}
+/* create labeled data */
+function createData(id, fullName, seccion, departamento, dni, email, ) {
+    return {
+        id,
+        fullName,
+        seccion,
+        departamento: seccion,
+        dni,
+        email
+    }
+}
+
+const usuarios2 = [
+    createData('Nombre1', '1', '1', '12345678', 'asdf@example.com'),
+    createData('Nombre2', '2', '1', '12345678', 'asdf@example.com'),
+    createData('Nombre3', '3', '2', '12345678', 'asdf@example.com'),
+    createData('Nombre4', '1', '2', '12345678', 'asdf@example.com'),
+    createData('Nombre5', '2', '2', '12345678', 'asdf@example.com'),
 ]
 
-export default function Employees() {
-
-    const classes = useStyles()
-
-    const [records, setRecords] = useState(usuarios)
+export default function GestionUsuarios() {
+    const [records, setRecords] = useState(usuarios2)
+    const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
+    const [openPopup, setOpenPopup] = useState(false)
 
     const {
         TblContainer,
