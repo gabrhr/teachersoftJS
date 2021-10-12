@@ -105,7 +105,7 @@ const theme = createTheme({
             style: {
               borderRadius: "0 50px 50px 0 ",
               "&.Mui-selected":{
-                boxShadow: "0px -2px 10px -5px #41b9e4 inset",
+                boxShadow: "0px 2px 10px -5px #41b9e4",
                 backgroundColor: "#fff" ,
                 color: "#41b9e4"
               },
@@ -120,8 +120,7 @@ const theme = createTheme({
       MuiSelect:{
         styleOverrides: {
           root: {
-            // textTransform: 'none',
-            borderRadius: "50px"
+            borderColor: "#042354"
           }
         },
       }

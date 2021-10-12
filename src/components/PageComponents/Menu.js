@@ -63,6 +63,7 @@ const SubMenu = (props) => {
                         
                       <ListItemButton variant="submenu" sx={{ 
                           pl: 6,
+                          mb:0.5,
                           backgroundColor: "#fff" ,
                           '&:hover': {
                               backgroundColor: 'itemlist.ligth'

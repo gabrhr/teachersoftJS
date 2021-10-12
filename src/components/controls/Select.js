@@ -16,6 +16,13 @@ export default function Select(props) {
                 value={value}
                 onChange={onChange}
                 defaultValue=""
+                sx={{
+                    borderRadius: "20px",
+                    boxShadow: "0px 2px 10px -5px rgba(0, 0, 0,50)",
+                    "&:hover":{
+                        borderStyle: "none",
+                    }
+                }}
                 {...other}
             >
                 <MenuItem value="">None</MenuItem>
