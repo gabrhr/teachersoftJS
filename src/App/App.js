@@ -22,6 +22,7 @@ import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 import Login from '../pages/Login/Login';
 import TestIndex from '../pages/Dev/TestIndex';
 import AsistenteSeccion from '../pages/AsistenteSeccion/AsistenteSeccion';
+import UserPage from '../pages/General/UserPage';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 
@@ -57,10 +58,11 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router forceRefresh={false}>
         <HeaderUser
               nombre="New Employee"
-              rol="Form design with validation"
+              rol="Administrador"
+              idRol= {1}
               foto={fotoUsuario}
         />
         <CssBaseline />

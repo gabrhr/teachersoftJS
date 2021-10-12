@@ -12,6 +12,7 @@ import Menu from "./Menu";
 
 import { MenuAdministrador } from "./MenuAdministrador";
 import UserPage from "../../pages/General/UserPage";
+import { MenuAsistenteSeccion } from "./MenuAsistenteSeccion";
 
 const useStyles = makeStyles((themex) => ({
   root: {
@@ -107,15 +108,25 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 
-const HeaderUser = ({ nombre, rol, foto }) => {
+const HeaderUser = ({ nombre, rol, idRol, foto }) => {
   const classes = useStyles();
-  const cls = pagina();
   const [open, setOpen] = React.useState(false);
-
+  let listaMenu=[];
+  console.log(idRol)
   const handleDrawerOpen = () => {
     setOpen(!open);
     console.log(true);
   }; 
+  
+  if(idRol==1){
+      listaMenu = [...MenuAdministrador]
+    }
+  if(idRol==2){
+    listaMenu = [...MenuAsistenteSeccion]
+  }
+  if(idRol==3){
+    listaMenu = [...MenuAsistenteSeccion]
+  }  
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -195,11 +206,12 @@ const HeaderUser = ({ nombre, rol, foto }) => {
           </Grid>
         </Toolbar>
       </AppBar>
+      
       {/*SideBar*/}
         <Drawer variant="permanent" elevation={1} open={open}>
           <DrawerHeader />
-          <List>
-            {MenuAdministrador.map((item, index) => {
+          <List >
+            {listaMenu.map((item, index) => {
               return <Menu open={open} item={item} key={index} />;
             })}
           </List>
