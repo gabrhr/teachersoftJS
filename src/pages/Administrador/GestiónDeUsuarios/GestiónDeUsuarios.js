@@ -2,13 +2,13 @@ import React, {useState} from 'react'
 import { makeStyles } from '@mui/styles';
 import { IconButton} from '@mui/material';
 import { Paper, TableBody, TableRow, TableCell } from '@mui/material';
-import { Controls } from '../../components/controls/Controls';
-import { useForm, Form } from '../../components/useForm';
-import  ContentHeader from '../../components/AppMain/ContentHeader';
-import useTable from "../../components/useTable"
-import * as employeeService from '../../services/employeeService';
+import { Controls } from '../../../components/controls/Controls';
+import { useForm, Form } from '../../../components/useForm';
+import  ContentHeader from '../../../components/AppMain/ContentHeader';
+import useTable from "../../../components/useTable"
+import * as employeeService from '../../../services/employeeService';
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
-import { DT } from '../../components/DreamTeam/DT'
+import { DT } from '../../../components/DreamTeam/DT'
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -66,7 +66,19 @@ export default function Employees() {
                 cbo= {false}
             />
             <Grid container sx={{backgroundColor: 'white', width: '100%', gridTemplateColumns: "1fr 1fr"}}>
-                <Grid item xs={3}>
+                <Grid item xs={3} mt={3}>
+                    <Stack direction = 'column' alignItems = 'left' px = {0}>
+                        <Controls.Select
+                        name="deparmetId"
+                        label="Sección"
+                        value={values.departmentId}
+                        onChange={handleInputChange}
+                        options={employeeService.getDepartmentCollection()}
+                        />
+                    </Stack>
+                </Grid>
+                <Grid sm/>
+                <Grid item xs={3} mt={3}>
                     <Stack direction = 'column' alignItems = 'left' px = {0}>
                         <Controls.Select
                         name="deparmetId"
@@ -81,7 +93,7 @@ export default function Employees() {
             <Grid container sx={{width: '100%', paddingTop: '30px'}}>
                 <Grid item xs={12}>
                     <DT.BorderBox>
-                        <TblContainer>
+                        {/* <TblContainer>
                             <TblHead />
                             <TableBody>
                                 {
@@ -95,7 +107,7 @@ export default function Employees() {
                                         ))
                                 }
                             </TableBody>
-                        </TblContainer>
+                        </TblContainer> */}
                         <TblPagination />
                     </DT.BorderBox>
                 </Grid>

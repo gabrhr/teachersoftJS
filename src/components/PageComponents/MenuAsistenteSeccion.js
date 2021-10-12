@@ -11,12 +11,12 @@ export const MenuAsistenteSeccion = [
         text: 'Asignación de Carga',
         path: '/as/asignacionCarga',
         icon: <CalendarTodayOutlinedIcon />,
-        indice: 1,
+        indice: 0,
         subNav: [
             {
             text: 'Registro de Cursos',
-            path: '/admin/asignacionCarga/registroCursos',
-            indice: 1,
+            path: '/as/asignacionCarga/registroCursos',
+            indice: 0,
             }
         ]
     },
@@ -24,18 +24,18 @@ export const MenuAsistenteSeccion = [
         text: 'Solicitud de Docencia',
         path: '/as/solicitudDocencia',
         icon: < PeopleAltOutlinedIcon/>,
-        indice: 2,
+        indice: 1,
     },
     {
         text: 'Docentes',
         path: '/as/docentes',
         icon: <CloseIcon />,
-        indice: 3,
+        indice: 2,
     },
     {
         text: 'Mesa de Partes',
         path: '/as/mesaPartes',
         icon: <AccountBoxOutlinedIcon />,
-        indice: 4,
+        indice: 3,
     }
 ];

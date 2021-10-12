@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useHistory, useRouteMatch } from 'react-router-dom'
 import { List, ListItemIcon, ListItemText, ListItemButton, Collapse } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -17,16 +17,16 @@ const SubMenu = (props) => {
     const [subnav, setSubnav] = useState(false)
     const [selectedIndexI, setSelectedIndexI] = React.useState(null);
     const history = useHistory()
+    let {pathNow} = useRouteMatch();
     
     const showSubnav = () => {
       setSubnav(!subnav);
     }
 
-    const handleClick = (e, indice) => {
+    const handleClick = (e, indice, nav) => {
         handleListItemClick(e, indice)
-        if(item.subNav) {
+        if(nav) {
             showSubnav();
-
         }
     }
     const handleListSubItemClick = (e, indice, path) => {
@@ -48,7 +48,7 @@ const SubMenu = (props) => {
                 }}
                 key={item.index} 
                 selected={isSelected}
-                onClick={(event) => handleClick(event, item.indice)}
+                onClick={(event) => handleClick(event, item.indice, item.subNav)}
                 >
                   
                 <ListItemIcon sx={{color: "primary.main"}}>{item.icon}</ListItemIcon>
@@ -61,19 +61,19 @@ const SubMenu = (props) => {
                 {open && subnav && item.subNav.map((item, index) => {
                     return (
                         
-                            <ListItemButton variant="submenu" sx={{ 
-                                pl: 6,
-                                backgroundColor: "#fff" ,
-                                '&:hover': {
-                                    backgroundColor: 'itemlist.ligth'
-                                },
-                            }}
-                                key={item.index} 
-                                selected={selectedIndexI === index}
-                                onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
-                                >
-                                <ListItemText  primary={item.text} sx={{pl:4 }}/>
-                            </ListItemButton>
+                      <ListItemButton variant="submenu" sx={{ 
+                          pl: 6,
+                          backgroundColor: "#fff" ,
+                          '&:hover': {
+                              backgroundColor: 'itemlist.ligth'
+                          },
+                      }}
+                          key={item.index} 
+                          selected={selectedIndexI === index}
+                          onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
+                          >
+                          <ListItemText  primary={item.text} sx={{pl:4 }}/>
+                      </ListItemButton>
                     );
                 })}
             </List>
