@@ -4,18 +4,45 @@ VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
 ## CSS
 
-Alignment
+**Alignment**
 ```
 align: {left, center, right}                    eje x
 alignItems: {flex-start, center, flex-end}      eje y
 justifyContent: {flex-start, center, flex-end}  eje x
 ```
 
-Stack
+**Stack**
 ```
 <Stack direction="row" align="left" spacing={0}> ... </Stack>
 ```
 [MUI flexbox](https://mui.com/system/flexbox/#align-content)
+
+**[Customizaciones locas](https://mui.com/customization/how-to-customize/)**
+> Al parecer `&` representa al "CSS class" de la regla que estamos definiendo.
+> I.e., un identificador que el MUI5 crea para aplicar el estilo a ese 
+> componente.  Los espacios separan las reglas, por tanto **son importantes.**
+```JS
+import * as React from 'react';
+import Slider from '@mui/material/Slider';
+import { alpha, styled } from '@mui/material/styles';
+
+const SuccessSlider = styled(Slider)(({ theme }) => ({
+  width: 300,
+  color: theme.palette.success.main,
+  '& .MuiSlider-thumb': {
+    '&:hover, &.Mui-focusVisible': {
+      boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+    '&.Mui-active': {
+      boxShadow: `0px 0px 0px 14px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+  },
+}));
+
+export default function StyledCustomization() {
+  return <SuccessSlider defaultValue={30} />;
+}
+```
 
 
 ## JS & React

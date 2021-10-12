@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 /* fake BackEnd */
@@ -173,20 +173,14 @@ export default function EmployeeForm() {
                             // color="primary"
                             // size="large"
                             text="Submit"
-                            type="submit"   // html property (not component)
+                            type="submit"
                             endIcon={<ErrorOutlineIcon />}
-                            // sx={{width: .2}}
                             />
                         <Controls.Button
                             // disabled={true}
                             variant="disabled"
                             text="Reset"
                             onClick={resetForm}
-                            // sx={{
-                            //     backgroundColor:"#00ff00",
-                            //     color:"#0000ff"
-                            // }}
-                            // sx={{maxWidth: .1}}
                             />
                     </div>
                 </Grid>

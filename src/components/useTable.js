@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 }
 ))
 
-export default function useTable(records, headers) {
+export default function useTable(records, headCells, filterFn) {
   const classes = useStyles()
   const pages = [5, 10, 25]
   const [page, setPage] = useState(0)
@@ -56,7 +56,7 @@ export default function useTable(records, headers) {
       <TableHead>
         <TableRow>
           {
-            headers.map(headCell => (
+            headCells.map(headCell => (
               <TableCell
                 key={headCell.id}
                 align={headCell.numeric ? 'right' : 'left'}
@@ -131,8 +131,14 @@ export default function useTable(records, headers) {
     return 0;
   }
 
+  // const recordsAfterPagingAndSorting = () => {
+  //   return stableSort(records, getComparator(order, orderBy))
+  //     .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+  // }
+
+  /* records after Filtering -> Sorting -> Paging */
   const recordsAfterPagingAndSorting = () => {
-    return stableSort(records, getComparator(order, orderBy))
+    return stableSort(filterFn.fn(records), getComparator(order, orderBy))
       .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
   }
 
