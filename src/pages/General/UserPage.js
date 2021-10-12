@@ -1,12 +1,13 @@
 import React from 'react'
 import { Box } from '@mui/system'
 import { styled } from "@mui/material/styles";
-import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
+import { BrowserRouter as  Route,Switch } from 'react-router-dom';
 import Login from '../Login/LoginForm';
 import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
+import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
 
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -30,6 +31,9 @@ export default function UserPage() {
               </Route>
               <Route exact path="/AsistenteSeccion">
                 <AsistenteSeccion />
+              </Route>
+              <Route exact path="/GestionUsuariosForm">
+                <GestionUsuariosForm />
               </Route>
               <Route path="/employee">
                 <Employees />

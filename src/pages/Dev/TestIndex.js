@@ -1,10 +1,11 @@
-import { Container, Paper } from '@mui/material'
+import {  Paper } from '@mui/material'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
 const markdown = `# Index of testing pages in TeacherSoft
 
 - [Asistente De Seccion](${window.location.origin + '/AsistenteSeccion'})
+- [Administrador](${window.location.origin + '/GestionUsuariosForm'})
 - [employee](${window.location.origin + '/employee'})
 - [login screen](${window.location.origin + '/login'})
 - [DreamTeam components showcase](${window.location.origin + '/showcase'})
