@@ -4,11 +4,15 @@ VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
 ## teachersoftJS dev (bugs, limitations, QA)
 
-- Controls.Button does not accept `xs` property.  Do this instead: 
+- Controls.Button does not accept `xs` property (bug).  Do this instead: 
 `<Box sx={buttonxs}><Controls.Button /></Box>`
 - Cual es la diferencia entre `<Box style={{flexGrow: 1}}>` y 
   `<Box xs={{flexGrow: 1}}>` (con `xs` no funciona)?  `style` es un prop de 
   MUI5 o se refiere al atributo de html?
+- Como agregar paginas al sidebar menu? 
+  1. Asignar `exact path` en pages/General/UserPage
+  2. Agregar iteam en el menu correspondiente (e.g.,
+     components/MenuAdministrador).  Agregar un indice unico.
 
 
 ## CSS

@@ -76,7 +76,6 @@ export default function Employees() {
   return (
     <>
       <PageHeader
-        // USELESS,  needs to be passed down or something
         title="New Employee"
         subtitle="Form design with validation"
         icon={<AdbIcon fontSize="large" />}
