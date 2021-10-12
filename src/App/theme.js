@@ -81,7 +81,6 @@ const theme = createTheme({
           root: {
             // textTransform: 'none',
             margin: '4px',
-            fontFamily: "NotoSans"
           }
         },
       },
