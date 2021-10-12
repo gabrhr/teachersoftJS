@@ -7,14 +7,13 @@ import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
-import GestionDeUsuarios from '../Administrador/GestiónDeUsuarios/GestiónUsuarios';
 import GestionDepartamento from '../Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
 import ProtectedRoute from './RouterProtected';
 import Vacio from '../Vacio'
 import { Assistant } from '@mui/icons-material';
-import GestionUsuarios from '../Administrador/GestiónDeUsuarios/GestiónUsuarios';
+import GestionUsuarios from '../Administrador/GestionUsuarios/GestionUsuarios';
 
 const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
