@@ -21,12 +21,12 @@ export const MenuAdministrador = [
             {
             text: 'Departamento',
             path: '/admin/mantenimiento/dep',
-            indice: 1,
+            indice: 0,
             },
             {
             text: 'Sección',
             path: '/admin/mantenimiento/sec',
-            indice: 2,
+            indice: 1,
             }]
     },
     {

@@ -32,7 +32,8 @@ const theme = createTheme({
         dark: "#3b4a81",
         main: "#41b9e427",
         light: "#3b4a8120"
-      }
+      },
+      
     },
     typography: {
       fontFamily: '"Quicksand","Arial","sans-serif"',
@@ -89,10 +90,34 @@ const theme = createTheme({
         styleOverrides:{
           root:{
             borderRadius: "0 50px 50px 0 ",
+            "&.Mui-selected":{
+              backgroundColor: "#41b9e427"
+            },
+            borderRadius: "0 50px 50px 0 ",
+            "&.Mui-selected:hover":{
+              backgroundColor: "#3b4a8130"
+            },
           },
-          
         },
-      }
+        variants:[
+          {
+            props: { variant: 'submenu' },
+            style: {
+              borderRadius: "0 50px 50px 0 ",
+              "&.Mui-selected":{
+                boxShadow: "0px -2px 10px -5px #41b9e4 inset",
+                backgroundColor: "#fff" ,
+                color: "#41b9e4"
+              },
+              "&.Mui-selected:hover":{
+                backgroundColor: "#41b9e410",
+                color:"#042354"
+              },
+            },
+        },],
+        
+      },
+
     },
 
 })

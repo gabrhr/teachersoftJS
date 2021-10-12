@@ -11,24 +11,28 @@ const useStyles = makeStyles(themex => ({
     }
 }))
 
+
 const SubMenu = (props) => {
     const { open, item, handleListItemClick, isSelected, ...other } = props
     const [subnav, setSubnav] = useState(false)
-    const classes= useStyles()
+    const [selectedIndexI, setSelectedIndexI] = React.useState(null);
+    const history = useHistory()
+    
+    const showSubnav = () => {
+      setSubnav(!subnav);
+    }
 
     const handleClick = (e, indice) => {
         handleListItemClick(e, indice)
         if(item.subNav) {
             showSubnav();
+
         }
     }
-
-    const showSubnav = () => {
-      setSubnav(!subnav);
-    }
-    const history = useHistory()
-    const location = useLocation()
-    var indic;
+    const handleListSubItemClick = (e, indice, path) => {
+      setSelectedIndexI(indice);
+      history.push(path);
+    };
 
     return (
       <>
@@ -40,15 +44,15 @@ const SubMenu = (props) => {
                     backgroundColor: "#fff" ,
                     '&:hover': {
                         backgroundColor: 'itemlist.main'
-                    },
+                    }
                 }}
                 key={item.index} 
                 selected={isSelected}
                 onClick={(event) => handleClick(event, item.indice)}
                 >
                   
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemIcon sx={{color: "primary.main"}}>{item.icon}</ListItemIcon>
+                <ListItemText sx={{color: "primary.main"}} primary={item.text} />
                 {!item.subNav? null: subnav? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
         </Link>
@@ -57,19 +61,18 @@ const SubMenu = (props) => {
                 {open && subnav && item.subNav.map((item, index) => {
                     return (
                         
-                            <ListItemButton sx={{ 
+                            <ListItemButton variant="submenu" sx={{ 
                                 pl: 6,
                                 backgroundColor: "#fff" ,
                                 '&:hover': {
                                     backgroundColor: 'itemlist.ligth'
                                 },
-                            
-                            }} 
+                            }}
                                 key={item.index} 
-                                onClick={() => history.push(item.path)}
-                                className={location.pathname === item.path ? classes.active: null}
+                                selected={selectedIndexI === index}
+                                onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
                                 >
-                                <ListItemText primary={item.text} />
+                                <ListItemText  primary={item.text} sx={{pl:4 }}/>
                             </ListItemButton>
                     );
                 })}
