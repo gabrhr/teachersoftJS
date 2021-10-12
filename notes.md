@@ -2,11 +2,22 @@
 
 VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
+## teachersoftJS dev (bugs, limitations, QA)
+
+- Controls.Button does not accept `xs` property.  Do this instead: 
+`<Box sx={buttonxs}><Controls.Button /></Box>`
+- Cual es la diferencia entre `<Box style={{flexGrow: 1}}>` y 
+  `<Box xs={{flexGrow: 1}}>` (con `xs` no funciona)?  `style` es un prop de 
+  MUI5 o se refiere al atributo de html?
+
+
 ## CSS
 
 **Alignment**
 ```
-align: {left, center, right}                    eje x
+align: {left, center, right, top, bottom}       eje xy,  a veces no funciona?
+
+display: "flex"                                 SIEMPRE FUNCIONA
 alignItems: {flex-start, center, flex-end}      eje y
 justifyContent: {flex-start, center, flex-end}  eje x
 ```
@@ -193,6 +204,7 @@ CSS:
 - [flexbox A Complete Guide (Chung)](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
 - [flexbox Cheatsheet (Chung)](https://yoksel.github.io/flex-cheatsheet/)
 - [grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+- [cookbook](https://developer.mozilla.org/en-US/docs/Web/CSS/Layout_cookbook)
 
 CSS, HTML and React components "properties":
 - [CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)

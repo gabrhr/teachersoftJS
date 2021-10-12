@@ -2,19 +2,14 @@ import React, { useState } from 'react'
 import PageHeader from '../../components/PageHeader'
 import AdbIcon from '@mui/icons-material/Adb';
 import { Paper, TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import useTable from "../../components/useTable"
 import * as employeeService from '../../services/employeeService'
 import { Controls } from "../../components/controls/Controls"
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-
-const useStyles = makeStyles(theme => ({
-  pageContent: {
-    // margin: theme.spacing(10),
-    // padding: theme.spacing(3),
-  }
-}))
+import { Box } from '@mui/system';
+import EmployeeForm from './EmployeeForm'
+import Popup from '../../components/util/Popup'
 
 const tableHeaders = [
   {
@@ -50,10 +45,10 @@ const tableHeaders = [
 ]
 
 export default function Employees() {
-  const classes = useStyles()
   const [records, setRecords] = useState(employeeService.getAllEmployees())
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
+  const [openPopup, setOpenPopup] = useState(false)
 
   const {
     TblContainer,
@@ -87,7 +82,6 @@ export default function Employees() {
         icon={<AdbIcon fontSize="large" />}
       />
       <Paper sx={{ borderRadius: '20px' }}>
-        {/* <EmployeeForm /> */}
         <Toolbar>
           <Controls.Input 
             label="Search Employees by Name"
@@ -102,18 +96,23 @@ export default function Employees() {
             onChange={handleSearch}
             type="search"
           />
-          <Controls.Button 
-            text="Add New"
-            variant="outlined"
-            startIcon={<AddIcon/>}
-            /* NO FUNCA */
-            // sx={{
-            //   position: 'absolute',
-            //   right: "10px",
-            //   width: .1,
-            //   m: 2
-            // }}
-          />
+          <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
+            <Controls.Button 
+              text="Add New"
+              variant="outlined"
+              startIcon={<AddIcon/>}
+              sx={{justifySelf:"flex-end"}}
+              /* NO FUNCA */
+              // sx={{
+              //   align:'right',
+              //   // position: 'absolute',
+              //   right: "10px",
+              //   width: .1,
+              //   m: 2
+              // }}
+              onClick = {() => setOpenPopup(true)}
+            />
+          </Box>
         </Toolbar>
         <TblContainer>
           <TblHead />
@@ -137,6 +136,13 @@ export default function Employees() {
         </TblContainer>
         <TblPagination />
       </Paper>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Add an Employee"
+      >
+        <EmployeeForm />
+      </Popup>
     </>
   )
 }
