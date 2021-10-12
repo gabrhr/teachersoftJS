@@ -34,10 +34,10 @@ const tableHeaders = [
 ]
 
 const usuarios = [
-    {Nombre: 'Hoddddla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
-    {Nombre: 'Hosdfsdfdla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
-    {Nombre: 'Hoppppla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
-    {Nombre: 'H22222ola', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'}
+    {id: 0, Nombre: 'Hoddddla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
+    {id: 1, Nombre: 'Hosdfsdfdla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
+    {id: 2, Nombre: 'Hoppppla', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'},
+    {id: 3, Nombre: 'H22222ola', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'}
 ]
 
 export default function Employees() {
