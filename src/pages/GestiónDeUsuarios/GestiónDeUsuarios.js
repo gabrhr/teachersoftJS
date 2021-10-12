@@ -9,6 +9,7 @@ import useTable from "../../components/useTable"
 import * as employeeService from '../../services/employeeService';
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
 import { DT } from '../../components/DreamTeam/DT'
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -77,6 +78,21 @@ export default function Employees() {
                         />
                     </Stack>
                 </Grid>
+                <Grid item xs={8}>
+                    <Typography alignContent= 'right' sx={{color: '#000000', paddingLeft: '86%', paddingTop: '1.3%', 
+                                fontWeight: 'bold'}}>
+                        Agregar usuario
+                    </Typography>
+                </Grid>
+                <Grid item xs={1} alignContent = 'right'>
+                    <IconButton 
+                        aria-label="add"
+                        color="secondary"
+                        size="large"
+                        >
+                        <AddIcon />
+                    </IconButton>
+                </Grid>
             </Grid>
             <Grid container sx={{width: '100%', paddingTop: '30px'}}>
                 <Grid item xs={12}>
@@ -86,7 +102,7 @@ export default function Employees() {
                             <TableBody>
                                 {
                                     recordsAfterPagingAndSorting().map(item => (
-                                            <TableRow key={item.id}>
+                                            <TableRow key={item.id} sx={{ '&:first-child td to &:last-child td': { border: 1 } }}>
                                                 <TableCell>{item.Nombre}</TableCell>
                                                 <TableCell>{item.seccion}</TableCell>
                                                 <TableCell>{item.DNI}</TableCell>

@@ -4,20 +4,21 @@ import {makeStyles} from '@mui/styles'
 
 const useStyles = makeStyles(tableStyle => ({
     table: {
-        marginTop: 3,
+        marginTop: 0,
         '& thead th': {
             fontWeight: '600',
             color: "primary.light"
         },
         '& tbody td': {
             fontWeight: '300',
-            background: '#E9ECF8',
-            border: '15px'
+            border: 32
         },
         '& tbody tr:hover': {
-            backgroundColor: '#fffbf2',
+            backgroundColor: '#DEEEFF',
             cursor: 'pointer'
-        }
+        },
+
+        '&:last-child td, &:last-child th': { border: 32 }
     }
 }
 ))
