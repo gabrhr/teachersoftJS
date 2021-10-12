@@ -9,6 +9,7 @@ import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
 import GestiónDeUsuarios from '../GestiónDeUsuarios/GestiónDeUsuarios';
 import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
+import ProtectedRoute from './RouterProtected';
 
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -27,29 +28,21 @@ export default function UserPage() {
       >
         <DrawerHeader />
         <Switch>
-              <Route exact path="/">
-                <TestIndex />
-              </Route>
-              <Route exact path="/AsistenteSeccion">
-                <AsistenteSeccion />
-              </Route>
-              <Route exact path="/GestionUsuariosForm">
-                <GestionUsuariosForm />
-              </Route>
-              <Route path="/employee">
-                <Employees />
-              </Route>
-              <Route path="/administrador/mantenimiento/departamento">
-              </Route> 
-              <Route path="/showcase">
-                <Showcase />
-              </Route> 
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/GestionDeUsuarios">
-                <GestiónDeUsuarios />
-              </Route>
+            {/* admin */}
+            <ProtectedRoute exact path="/admin/asignaru" idRoles={[1]} component={TestIndex} />
+            <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]} component={Employees} />
+            <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={Employees} />
+            <ProtectedRoute exact path="/admin/mantenimiento/sec" idRoles={[1]} component={Employees} />
+            <ProtectedRoute exact path="/admin/showcase" idRoles={[1]} component={Showcase} />
+            <ProtectedRoute exact path="/admin/index" idRoles={[1]} component={TestIndex} />
+            
+            {/* as: asistente de seccion */}
+            <ProtectedRoute exact path="/as/asignacionCarga" idRoles={[2]} component={TestIndex} />
+            <ProtectedRoute exact path="/as/asignacionCarga/registroCursos" idRoles={[2]} component={TestIndex} />
+            <ProtectedRoute exact path="/as/solicitudDocencia" idRoles={[2]} component={TestIndex} />
+            <ProtectedRoute exact path="/as/docentes" idRoles={[2]} component={TestIndex} />
+            <ProtectedRoute exact path="/as/mesaPartes" idRoles={[2]} component={TestIndex} />
+            
           </Switch>
       </Box>
     )

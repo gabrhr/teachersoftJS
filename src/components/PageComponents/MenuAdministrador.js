@@ -1,40 +1,44 @@
 import React from 'react';
 import InboxIcon from '@mui/icons-material/MoveToInbox' 
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 export const MenuAdministrador = [
     {
-    text: 'Dev',
-    path: '/este/path/no/se/usa/creo',
-    icon: <InboxIcon />,
-    iconClosed: <InboxIcon />,
-    iconOpened: <InboxIcon />,
-    subNav: [
-        {
-        text: 'Index',
-        path: '/',
-        },
-        {
-        text: 'Formulario de prueba',
-        path: '/employee',
-        },
-        {
-        text: 'Showcase',
-        path: '/showcase',
-        }
-        ]
+        text: 'Asignar Roles',
+        path: '/admin/asignaru',
+        icon: <PeopleAltOutlinedIcon />,
+        indice: 0,
     },
     {
-        text: 'Prueba 1',
-        path: '/administrador/prueba',
-        icon: <InboxIcon />,
-        iconClosed: <InboxIcon />,
-        iconOpened: <InboxIcon />
+    text: 'Mantenimientos',
+    path: '/admin/mantenimiento',
+    icon: <LibraryBooksIcon />,
+    indice: 1,
+    subNav: [
+        {
+        text: 'Departamento',
+        path: '/admin/mantenimiento/dep',
+        indice: 1,
+        },
+        {
+        text: 'Sección',
+        path: '/admin/mantenimiento/sec',
+        indice: 2,
+        }]
     },
     {
         text: 'Showcase of Components',
-        path: '/administrador/mantenimiento/showcase',
-        icon: <InboxIcon />,
-        iconClosed: <InboxIcon />,
-        iconOpened: <InboxIcon />
+        path: '/admin/showcase',
+        icon: <CloseIcon />,
+        indice: 2,
+    },
+    {
+        text: 'Index',
+        path: '/admin/index',
+        icon: <CloseIcon />,
+        indice: 3,
     }
 ];

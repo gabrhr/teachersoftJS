@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom' 
+import { Link, useHistory, useLocation, Route, Switch, useRouteMatch } from 'react-router-dom' 
 import {  List,ListItemIcon ,ListItemText, ListItemButton, Collapse } from '@mui/material'
 import { makeStyles } from '@mui/styles' 
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -19,46 +19,56 @@ const SubMenu = ({ open,item}) => {
     }
     const history = useHistory()
     const location = useLocation()
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    var indic;
+    const handleListItemClick = (event, index) => {
+        setSelectedIndex(index);
+        console.log(index)
+        if(item.subNav) {
+            showSubnav();
+        }
+    };
     return (
       <>
-        <ListItemButton 
-            sx={{ 
-                pl: 3, 
-                color: "primary.main",
-                backgroundColor: "#fff" ,
-                '&:hover': {
-                    backgroundColor: 'itemlist.main'
-                },
-            }}
-            key={item.text} 
-            // onClick={() => history.push(item.path)}
-            className={location.pathname === item.path ? classes.active: null}
-            selected = {location.pathname === item.path ? console.log(" s true"): console.log(location.pathname)}
-            onClick={item.subNav && showSubnav}
-            >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-            {!item.subNav? null: subnav? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-
+        <Link to={`${item.path}`} style={{ textDecoration: 'none' }}>
+            <ListItemButton 
+                sx={{ 
+                    pl: 3, 
+                    color: "primary.main",
+                    backgroundColor: "#fff" ,
+                    '&:hover': {
+                        backgroundColor: 'itemlist.main'
+                    },
+                }}
+                key={item.index} 
+                selected={selectedIndex === item.indice}
+                onClick={(event) => handleListItemClick(event, item.indice)}
+                >
+                  
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+                {!item.subNav? null: subnav? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+        </Link>
         <Collapse in={subnav} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
                 {open && subnav && item.subNav.map((item, index) => {
                     return (
-                        <ListItemButton sx={{ 
-                            pl: 6,
-                            backgroundColor: "#fff" ,
-                            '&:hover': {
-                                backgroundColor: 'itemlist.ligth'
-                            },
                         
-                        }} 
-                            key={item.text} 
-                            onClick={() => history.push(item.path)}
-                            className={location.pathname === item.path ? classes.active: null}
-                            >
-                            <ListItemText primary={item.text} />
-                        </ListItemButton>
+                            <ListItemButton sx={{ 
+                                pl: 6,
+                                backgroundColor: "#fff" ,
+                                '&:hover': {
+                                    backgroundColor: 'itemlist.ligth'
+                                },
+                            
+                            }} 
+                                key={item.index} 
+                                onClick={() => history.push(item.path)}
+                                className={location.pathname === item.path ? classes.active: null}
+                                >
+                                <ListItemText primary={item.text} />
+                            </ListItemButton>
                     );
                 })}
             </List>
