@@ -11,72 +11,76 @@ const useStyles = makeStyles(themex => ({
   }
 }))
 
+
 const SubMenu = (props) => {
-  const { open, item, handleListItemClick, isSelected } = props
-  const [subnav, setSubnav] = useState(false)
-  const classes = useStyles()
-
-  const handleClick = (e, indice) => {
-    handleListItemClick(e, indice)
-    if (item.subNav) {
-      showSubnav();
+    const { open, item, handleListItemClick, isSelected, ...other } = props
+    const [subnav, setSubnav] = useState(false)
+    const [selectedIndexI, setSelectedIndexI] = React.useState(null);
+    const history = useHistory()
+    
+    const showSubnav = () => {
+      setSubnav(!subnav);
     }
-  }
 
-  const showSubnav = () => {
-    setSubnav(!subnav);
-  }
-  const history = useHistory()
-  const location = useLocation()
+    const handleClick = (e, indice) => {
+        handleListItemClick(e, indice)
+        if(item.subNav) {
+            showSubnav();
 
-  return (
-    <>
-      <Link to={`${item.path}`} style={{ textDecoration: 'none' }}>
-        <ListItemButton
-          sx={{
-            pl: 3,
-            color: "primary.main",
-            backgroundColor: "#fff",
-            '&:hover': {
-              backgroundColor: 'itemlist.main'
-            },
-          }}
-          key={item.index}
-          selected={isSelected}
-          onClick={(event) => handleClick(event, item.indice)}
-        >
+        }
+    }
+    const handleListSubItemClick = (e, indice, path) => {
+      setSelectedIndexI(indice);
+      history.push(path);
+    };
 
-          <ListItemIcon>{item.icon}</ListItemIcon>
-          <ListItemText primary={item.text} />
-          {!item.subNav ? null : subnav ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-      </Link>
-      <Collapse in={subnav} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {open && subnav && item.subNav.map((item, index) => {
-            return (
-
-              <ListItemButton sx={{
-                pl: 6,
-                backgroundColor: "#fff",
-                '&:hover': {
-                  backgroundColor: 'itemlist.ligth'
-                },
-
-              }}
-                key={item.index}
-                onClick={() => history.push(item.path)}
-                className={location.pathname === item.path ? classes.active : null}
-              >
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            );
-          })}
-        </List>
-      </Collapse>
-
-    </>
-  );
-};
-
-export default SubMenu;
+    return (
+      <>
+        <Link to={`${item.path}`} style={{ textDecoration: 'none' }}>
+            <ListItemButton 
+                sx={{ 
+                    pl: 3, 
+                    color: "primary.main",
+                    backgroundColor: "#fff" ,
+                    '&:hover': {
+                        backgroundColor: 'itemlist.main'
+                    }
+                }}
+                key={item.index} 
+                selected={isSelected}
+                onClick={(event) => handleClick(event, item.indice)}
+                >
+                  
+                <ListItemIcon sx={{color: "primary.main"}}>{item.icon}</ListItemIcon>
+                <ListItemText sx={{color: "primary.main"}} primary={item.text} />
+                {!item.subNav? null: subnav? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+        </Link>
+        <Collapse in={subnav} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+                {open && subnav && item.subNav.map((item, index) => {
+                    return (
+                        
+                            <ListItemButton variant="submenu" sx={{ 
+                                pl: 6,
+                                backgroundColor: "#fff" ,
+                                '&:hover': {
+                                    backgroundColor: 'itemlist.ligth'
+                                },
+                            }}
+                                key={item.index} 
+                                selected={selectedIndexI === index}
+                                onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
+                                >
+                                <ListItemText  primary={item.text} sx={{pl:4 }}/>
+                            </ListItemButton>
+                    );
+                })}
+            </List>
+        </Collapse>
+                
+      </>
+    );
+  };
+  
+  export default SubMenu;
