@@ -1,11 +1,11 @@
 import React from 'react'
-import ContentHeader from '../../components/AppMain/ContentHeader'
+import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
-import { DT } from '../../components/DreamTeam/DT'
-import { Controls } from '../../components/controls/Controls'
-import { useForm } from '../../components/useForm';
+import { DT } from '../../../components/DreamTeam/DT'
+import { Controls } from '../../../components/controls/Controls'
+import { useForm } from '../../../components/useForm';
 /* fake BackEnd */
-import * as employeeService from '../../services/employeeService';
+import * as employeeService from '../../../services/employeeService';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
