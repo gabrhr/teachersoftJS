@@ -35,7 +35,7 @@ export default function Button(props) {
         color="disabled"
         other={
             ...other,
-            disabled:true
+            // disabled:true
         }
     } else if (variant === "white") {
         variant="text"
@@ -44,7 +44,7 @@ export default function Button(props) {
     return (
         <MuiButton
             variant={variant || "contained"}
-            size={size || "large"}
+            size={size || "medium"}
             color={color || "DTButton"}
             onClick={onClick}
             {...other}

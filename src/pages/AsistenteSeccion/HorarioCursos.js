@@ -25,7 +25,7 @@ export default function HorarioCursos() {
             </Typography>
             <Grid container>
                 <Grid item xs={8}>
-                    <Stack direction="row" alignContent="left" spacing={0}>
+                    <Stack direction="row" align="left" spacing={0}>
                         <Controls.Input
                             name="searchText"
                             label="codigo o nombre del curso"
@@ -47,7 +47,7 @@ export default function HorarioCursos() {
                     </Stack>
                 </Grid>
                 {/* FIX:  left align */}
-                <Grid item xs={4} alignContent="right">
+                <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
                     <Controls.IconButton 
                         aria-label="add"
