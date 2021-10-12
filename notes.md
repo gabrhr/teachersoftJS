@@ -2,6 +2,21 @@
 
 VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
+## CSS
+
+Alignment
+```
+align: {left, center, right}                    eje x
+alignItems: {flex-start, center, flex-end}      eje y
+justifyContent: {flex-start, center, flex-end}  eje x
+```
+
+Stack
+```
+<Stack direction="row" align="left" spacing={0}> ... </Stack>
+```
+[MUI flexbox](https://mui.com/system/flexbox/#align-content)
+
 ## React + Material UI
 
 **Utilizando el `theme`**
