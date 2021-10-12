@@ -112,21 +112,24 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   let listaMenu=[];
-  console.log(idRol)
   const handleDrawerOpen = () => {
     setOpen(!open);
-    console.log(true);
   }; 
   
   if(idRol==1){
-      listaMenu = [...MenuAdministrador]
-    }
+    listaMenu = MenuAdministrador
+  }
   if(idRol==2){
-    listaMenu = [...MenuAsistenteSeccion]
+    listaMenu = MenuAsistenteSeccion
   }
   if(idRol==3){
-    listaMenu = [...MenuAsistenteSeccion]
+    listaMenu = MenuAsistenteSeccion
   }  
+
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const handleListItemClick = (e, indice) => {
+      setSelectedIndex(indice);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -212,7 +215,10 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
           <DrawerHeader />
           <List >
             {listaMenu.map((item, index) => {
-              return <Menu open={open} item={item} key={index} />;
+              return <Menu open={open} item={item} key={index} 
+                  handleListItemClick={handleListItemClick}
+                  isSelected={selectedIndex === index}
+                />;
             })}
           </List>
         </Drawer>

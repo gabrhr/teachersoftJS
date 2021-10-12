@@ -13,21 +13,21 @@ export const MenuAdministrador = [
         indice: 0,
     },
     {
-    text: 'Mantenimientos',
-    path: '/admin/mantenimiento',
-    icon: <LibraryBooksIcon />,
-    indice: 1,
-    subNav: [
-        {
-        text: 'Departamento',
-        path: '/admin/mantenimiento/dep',
+        text: 'Mantenimientos',
+        path: '/admin/mantenimiento',
+        icon: <LibraryBooksIcon />,
         indice: 1,
-        },
-        {
-        text: 'Sección',
-        path: '/admin/mantenimiento/sec',
-        indice: 2,
-        }]
+        subNav: [
+            {
+            text: 'Departamento',
+            path: '/admin/mantenimiento/dep',
+            indice: 1,
+            },
+            {
+            text: 'Sección',
+            path: '/admin/mantenimiento/sec',
+            indice: 2,
+            }]
     },
     {
         text: 'Showcase of Components',

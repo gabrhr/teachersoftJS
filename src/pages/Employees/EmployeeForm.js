@@ -42,7 +42,8 @@ export default function EmployeeForm() {
     const validateOG = () => {
         let temp = {...errors}
         temp.fullName = values.fullName ? "" : "This field is required."
-        temp.email = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+        // FIX:  pepe1@asdf.com  should be valid and a@a.com.  not
+        temp.email = (/^$|[A-Za-z0-9_]+@([A-Za-z0-9_]+\.)+[A-Za-z_]+$/)
                 .test(values.email) ? "" 
                 : "This email is not vaild."
         // temp.mobile = values.mobile.length===9 ? "" : "Minimum 9 digits requiered."

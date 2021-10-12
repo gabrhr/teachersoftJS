@@ -11,23 +11,25 @@ const useStyles = makeStyles(themex => ({
     }
 }))
 
-const SubMenu = ({ open,item}) => {
+const SubMenu = (props) => {
+    const { open, item, handleListItemClick, isSelected, ...other } = props
     const [subnav, setSubnav] = useState(false)
     const classes= useStyles()
+
+    const handleClick = (e, indice) => {
+        handleListItemClick(e, indice)
+        if(item.subNav) {
+            showSubnav();
+        }
+    }
+
     const showSubnav = () => {
       setSubnav(!subnav);
     }
     const history = useHistory()
     const location = useLocation()
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
     var indic;
-    const handleListItemClick = (event, index) => {
-        setSelectedIndex(index);
-        console.log(index)
-        if(item.subNav) {
-            showSubnav();
-        }
-    };
+
     return (
       <>
         <Link to={`${item.path}`} style={{ textDecoration: 'none' }}>
@@ -41,8 +43,8 @@ const SubMenu = ({ open,item}) => {
                     },
                 }}
                 key={item.index} 
-                selected={selectedIndex === item.indice}
-                onClick={(event) => handleListItemClick(event, item.indice)}
+                selected={isSelected}
+                onClick={(event) => handleClick(event, item.indice)}
                 >
                   
                 <ListItemIcon>{item.icon}</ListItemIcon>
