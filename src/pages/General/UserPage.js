@@ -7,7 +7,7 @@ import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
-
+import GestiónDeUsuarios from '../GestiónDeUsuarios/GestiónDeUsuarios';
 
 const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
@@ -41,7 +41,10 @@ export default function UserPage() {
               </Route> 
               <Route path="/login">
                 <Login />
-              </Route> 
+              </Route>
+              <Route path="/GestionDeUsuarios">
+                <GestiónDeUsuarios />
+              </Route>
           </Switch>
       </Box>
     )

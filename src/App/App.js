@@ -22,7 +22,6 @@ import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
 import Login from '../pages/Login/Login';
 import TestIndex from '../pages/Dev/TestIndex';
 import AsistenteSeccion from '../pages/AsistenteSeccion/AsistenteSeccion';
-import GestiónDeUsuarios from '../pages/GestiónDeUsuarios/GestiónDeUsuarios';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 
@@ -50,11 +49,7 @@ function App() {
               <TestIndex />
             </Route> 
           </Switch>
-          <Switch>
-            <Route path="/GestionDeUsuarios">
-              <GestiónDeUsuarios />
-            </Route> 
-          </Switch>
+          
           <Switch>
             <Route path="/login">
               <Login />

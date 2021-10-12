@@ -9,6 +9,7 @@ const markdown = `# Index of testing pages in TeacherSoft
 - [login screen](${window.location.origin + '/login'})
 - [DreamTeam components showcase](${window.location.origin + '/showcase'})
 - [here](${window.location.href})
+- [Gestion Usuarios](${window.location.origin + '/GestionDeUsuarios'})
 
 ~~~JS
 console.log('hello world')

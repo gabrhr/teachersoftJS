@@ -1,9 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles';
-import HeaderUser from '../../components/PageComponents/HeaderUser';
-import fotoUsuario from '../../assets/images/profile-photo.png'
 import { IconButton, Typography } from '@mui/material';
 import { Paper, Grid} from '@mui/material';
+import { Controls } from '../../components/controls/Controls';
+import { useForm, Form } from '../../components/useForm';
+import  ContentHeader from '../../components/AppMain/ContentHeader';
+import * as employeeService from '../../services/employeeService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -12,21 +14,39 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+const initialFieldValues = {
+    id: 0,
+    text: '',
+    gender: 'male',
+    departmentID: '',
+    date: new Date(),
+    isPermanent: false
+}
+
 export default function Employees() {
+
     const classes = useStyles()
+    const {
+        values,
+        // setValues,
+        handleInputChange
+    } = useForm(initialFieldValues);
 
     return (
-        <>
-            <HeaderUser
-                nombre="New Employee"
-                rol="Form design with validation"
-                foto={fotoUsuario}
+        <> 
+            <ContentHeader 
+                text="Gestión de usuarios"
+                cbo= {false}
             />
-            <Grid container  marginY={0} sx={{backgroundColor: 'white',
-                                 width: '100%',
-                                 height: '60vh' }}
-            >
-                zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzhola
+            <Grid container sx={{backgroundColor: 'white'}}>
+                
+                <Controls.Select
+                name="deparmetId"
+                label="Sección"
+                value={values.departmentId}
+                onChange={handleInputChange}
+                options={employeeService.getDepartmentCollection()}
+                />
             </Grid>
         </>
     )
