@@ -17,7 +17,22 @@ Stack
 ```
 [MUI flexbox](https://mui.com/system/flexbox/#align-content)
 
-## React + Material UI
+
+## JS & React
+
+Condicional en el HTML dentro de React (JSX?)
+
+```JS
+<>
+  {orderBy === headCell.id ? (
+    <Box component="span" sx={visuallyHidden}>
+      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+    </Box>
+  ) : null}
+</>
+```
+
+## Material UI
 
 **Utilizando el `theme`**
 
