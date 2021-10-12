@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import EmployeeForm from './EmployeeForm'
 import PageHeader from '../../components/PageHeader'
 import AdbIcon from '@mui/icons-material/Adb';
 import { Paper, TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@mui/material';
@@ -8,6 +7,7 @@ import useTable from "../../components/useTable"
 import * as employeeService from '../../services/employeeService'
 import { Controls } from "../../components/controls/Controls"
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles(theme => ({
   pageContent: {
@@ -82,12 +82,11 @@ export default function Employees() {
     <>
       <PageHeader
         // USELESS,  needs to be passed down or something
-        // className={classes.pageContent}
         title="New Employee"
         subtitle="Form design with validation"
         icon={<AdbIcon fontSize="large" />}
       />
-      <Paper className={classes.pageContent} sx={{ borderRadius: '20px' }}>
+      <Paper sx={{ borderRadius: '20px' }}>
         {/* <EmployeeForm /> */}
         <Toolbar>
           <Controls.Input 
@@ -102,6 +101,18 @@ export default function Employees() {
             sx={{ width: .75 }}
             onChange={handleSearch}
             type="search"
+          />
+          <Controls.Button 
+            text="Add New"
+            variant="outlined"
+            startIcon={<AddIcon/>}
+            /* NO FUNCA */
+            // sx={{
+            //   position: 'absolute',
+            //   right: "10px",
+            //   width: .1,
+            //   m: 2
+            // }}
           />
         </Toolbar>
         <TblContainer>
