@@ -4,7 +4,8 @@ import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
-import { useForm } from '../../../components/useForm';
+import { useForm, Form } from '../../../components/useForm';
+import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
 
@@ -23,6 +24,12 @@ const initialFieldValues = {
 }
 
 export default function GestionUsuariosForm() {
+    const theme = useTheme();
+    const ColumnGridItemStyle = {
+        padding: theme.spacing(2),
+        align:"left",
+    }
+
     const {
         values,
         // setValues,
@@ -30,109 +37,98 @@ export default function GestionUsuariosForm() {
     } = useForm(initialFieldValues);
     return (
         <>
-            <ContentHeader 
-                text="Gestión de Usuario"
-                cbo= {false}
-            />
-            <DT.BorderBox>
-                <Grid container spacing={2} maxWidth={1}
-                    sx={{
-                        gridTemplateColumns: "1fr 1fr 1fr ",
-                    }}
+            <Form>
+                <Grid container 
+                 sx={{
+                    gridTemplateColumns: "1fr 1fr 1fr ",
+                }}
                 >
                     {/* Datos Personales */}
-                    <Grid item xs={4} marginY={3} >
-                        <Typography variant="h4" marginBottom={2} pl={9}>
+                    <Grid item xs={4} style ={ColumnGridItemStyle} >
+                        <Typography variant="h4" mb={2}>
                             DATOS PERSONALES
                         </Typography>
-                        <Stack direction="column" alignItems="top" spacing={3} px={9}>
-                            <Controls.Input 
+                        <Controls.Input 
                             name="nombres"   
                             label="Nombre"
                             value={values.nombres} 
                             onChange = {handleInputChange}
-                            />
-                            <Controls.Input 
+                        />
+                        <Controls.Input 
                             name="apellidoMaterno"  
                             label="Apellido Materno"  
                             value={values.apellidoMaterno} 
                             onChange = {handleInputChange}
-                            />
-                            <Controls.Input 
+                        />
+                        <Controls.Input 
                             name="apellidoPaterno"  
                             label="Apellido Paterno"  
                             value={values.apellidoPaterno} 
                             onChange = {handleInputChange}
-                            />
-                            <Controls.Input 
+                        />
+                        <Controls.Input 
                             name="DNI"   
                             label="Documento de Identidad"  
                             value={values.DNI}
                             onChange = {handleInputChange}
-                            />
-                            <Controls.Input 
+                        />
+                        <Controls.Input 
                             name="correo"   
                             label="Correo Electrónico"  
                             value={values.correo} 
                             onChange = {handleInputChange}
-                            />
-                        </Stack>
+                        />
                     </Grid>
-                    <Divider orientation="vertical" flexItem sx={{my: 5}} />
+                    <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, mx:1}} />
                     
                      {/* Restricciones */}
-                    <Grid item xs={4} align="left" marginY={3} >
-                        <Typography variant="h4" marginBottom={2} pl={9}>
+                    <Grid item xs={4} style={ColumnGridItemStyle} >
+                        <Typography variant="h4" marginBottom={2} >
                             RESTRICCIONES  
                         </Typography>
-                        <Stack direction="column" alignItems="top" spacing={3} px={9}>
-                            <Controls.Select
-                                name="rol"
-                                label="Rol del Usuario"
-                                value={values.rol}
-                                onChange={handleInputChange}
-                                options={employeeService.getDepartmentCollection()}
-                                />
-                            <Controls.Select
-                                name="departamento"
-                                label="Departamento"
-                                value={values.departamento}
-                                onChange={handleInputChange}
-                                options={employeeService.getDepartmentCollection()}
-                                />
-                            <Controls.Select
-                                name="seccion"
-                                label="Sección Principal"
-                                value={values.departamento}
-                                onChange={handleInputChange}
-                                options={employeeService.getDepartmentCollection()}
-                             />
-                        </Stack>
+                        <Controls.Select
+                            name="rol"
+                            label="Rol del Usuario"
+                            value={values.rol}
+                            onChange={handleInputChange}
+                            options={employeeService.getDepartmentCollection()}
+                        />
+                        <Controls.Select
+                            name="departamento"
+                            label="Departamento"
+                            value={values.departamento}
+                            onChange={handleInputChange}
+                            options={employeeService.getDepartmentCollection()}
+                        />
+                        <Controls.Select
+                            name="seccion"
+                            label="Sección Principal"
+                            value={values.departamento}
+                            onChange={handleInputChange}
+                            options={employeeService.getDepartmentCollection()}
+                        />
                     </Grid>
-                    <Divider orientation="vertical" flexItem sx={{my: 5}} />
+                    <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, mx:1}} />
 
                      {/* Foto del usuario */}
-                    <Grid item xs={3.9} align="center" marginY={3} >
-                        <Typography variant="h4" marginBottom={2}  pl={6} pr={3}>
+                    <Grid item xs={3.5} style={ColumnGridItemStyle} align="center" >
+                        <Typography variant="h4" marginBottom={2}>
                             FOTO REFERENCIAL
                         </Typography>
-                        <Stack direction="column" alignItems="center" spacing={3} pl={6} pr={3}>
-                            <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250}} />
-                            {/* <Avatar sx={{ width: 250, height: 250}}> 
-                                <img className="userImage" src="assets/img/profile-photo.png" alt="" />
-                            </Avatar> */}
-                            <Controls.Button
-                                text="Subir foto"
-                                type="submit"   // html property (not component)
-                                endIcon={<AddAPhotoIcon />} //Opcional con imagen
-                                size="medium"
-                                />
-                        </Stack>   
+                        <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250, mb:2}} />
+                        {/* <Avatar sx={{ width: 250, height: 250}}> 
+                            <img className="userImage" src="assets/img/profile-photo.png" alt="" />
+                        </Avatar> */}
+                        <Controls.Button
+                            text="Subir foto"
+                            type="submit"   // html property (not component)
+                            endIcon={<AddAPhotoIcon />} //Opcional con imagen
+                            size="medium"
+                            />
                     </Grid>                 
                 </Grid>
-            </DT.BorderBox>
             <Grid conteiner >
-                <Grid item align="right" marginY={3} >
+                <Grid item align="right" marginY={5} >
                     <Controls.Button
                         variant="outlined"
                         text="cancelar"
@@ -144,6 +140,7 @@ export default function GestionUsuariosForm() {
                         />
                 </Grid>
             </Grid>
+            </Form>
         </>
     )
 }

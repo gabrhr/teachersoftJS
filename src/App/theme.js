@@ -120,7 +120,7 @@ const theme = createTheme({
       MuiSelect:{
         styleOverrides: {
           root: {
-            borderColor: "#042354"
+
           }
         },
       }

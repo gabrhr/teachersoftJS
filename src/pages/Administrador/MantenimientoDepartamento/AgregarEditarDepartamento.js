@@ -86,23 +86,21 @@ export default function AgregarEditarDepartamento() {
                             error={errors.corre}
                         />
                 </Grid>
-                <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, mx:9}} />
-                <Grid item sx={6} style={ColumnGridItemStyle} align="center">
+                <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
+                <Grid item sx={5} style={ColumnGridItemStyle} align="center">
                     <Typography variant="h4" mb={2} >
-                            FOTO REFERENCIAL
+                        FOTO REFERENCIAL
                     </Typography>
-                    <Stack direction="column" alignItems="center" spacing={3}  pl={8} pr={8} >
-                        <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250}} />
+                    <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} />
                         {/* <Avatar sx={{ width: 250, height: 250}}> 
                             <img className="userImage" src="assets/img/profile-photo.png" alt="" />
                         </Avatar> */}
-                        <Controls.Button
-                            text="Subir foto"
-                            type="submit"   // html property (not component)
-                            endIcon={<AddAPhotoIcon />} //Opcional con imagen
-                            size="medium"
-                            />
-                    </Stack>   
+                    <Controls.Button
+                        text="Subir foto"
+                        type="submit"   // html property (not component)
+                        endIcon={<AddAPhotoIcon />} //Opcional con imagen
+                        size="medium"
+                    />
                 </Grid>
             </Grid>
             <Grid cointainer align="right" mt={5}>

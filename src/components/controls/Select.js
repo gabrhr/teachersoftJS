@@ -20,7 +20,6 @@ export default function Select(props) {
                     borderRadius: "20px",
                     boxShadow: "0px 2px 10px -5px rgba(0, 0, 0,50)",
                     "&:hover":{
-                        borderStyle: "none",
                     }
                 }}
                 {...other}

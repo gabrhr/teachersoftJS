@@ -36,8 +36,6 @@ export default function EmployeeForm() {
         // paddingLeft: theme.spacing(1),
         // paddingRight: theme.spacing(1)
     }
-
-
     /* for "onSubmit" validation */
     const validateOG = () => {
         let temp = {...errors}

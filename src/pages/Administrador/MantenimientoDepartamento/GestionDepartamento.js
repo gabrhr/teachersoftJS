@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
-import GestionUsuariosForm from '../GestiónDeUsuarios/GestionUsuariosForm'
+import GestionUsuariosForm from '../GestionUsuarios/GestionUsuariosForm'
 import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 
 
@@ -21,7 +21,8 @@ export default function GestionDepartamento() {
                 setOpenPopup={setOpenPopup}
                 title="Nuevo Departamentos"
             >
-                <GestionUsuariosForm />
+               <AgregarEditarDepartamento />
+              {/*  <GestionUsuariosForm/> */}
             </Popup>  
         </>
     )

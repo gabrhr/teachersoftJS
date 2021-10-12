@@ -80,8 +80,7 @@ export default function Employees() {
         subtitle="Form design with validation"
         icon={<AdbIcon fontSize="large" />}
       />
-      <Paper sx={{ borderRadius: '20px' }}>
-        <Toolbar>
+      <Toolbar mt={2}>
           <Controls.Input 
             label="Search Employees by Name"
             InputProps={{
@@ -112,7 +111,8 @@ export default function Employees() {
               onClick = {() => setOpenPopup(true)}
             />
           </Box>
-        </Toolbar>
+      </Toolbar>
+      <Paper sx={{ borderRadius: '20px', padding:5 }}>
         <TblContainer>
           <TblHead />
           <TableBody>

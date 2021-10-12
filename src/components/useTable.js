@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import { Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { PrecisionManufacturingRounded } from '@mui/icons-material'
 
 const useStyles = makeStyles(theme => ({
   table: {
     marginTop: 3,
+    borderColor:"primary.dark",
+   
     // '& .MuiTable-root': {
     '& .MuiTableCell-head': {
       fontWeight: '600',
       color: "primary.dark",
       backgroundColor: '#cfcfff',
-
+      borderColor: "primary.dark",
+      
     },
     /* All of these work to different degrees */
     // '& tbody td': {
@@ -19,7 +23,6 @@ const useStyles = makeStyles(theme => ({
     '& .MuiTableCell-body': {
       // fontWeight: '300',
       // backgroundColor: "#00ff00"
-      // border: '15px'
     },
     '& tbody tr:hover': {
       backgroundColor: '#E9ECF8',
