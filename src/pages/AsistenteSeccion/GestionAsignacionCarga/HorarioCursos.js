@@ -1,8 +1,8 @@
 import React from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
-import { DT } from '../../components/DreamTeam/DT'
-import { Controls } from '../../components/controls/Controls'
-import { useForm, Form } from '../../components/useForm';
+import { DT } from '../../../components/DreamTeam/DT'
+import { Controls } from '../../../components/controls/Controls'
+import { useForm, Form } from '../../../components/useForm';
 import SearchIcon from '@mui/icons-material/Search';
 
 const initialFieldValues = {

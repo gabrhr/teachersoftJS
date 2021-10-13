@@ -8,16 +8,10 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 
 export const MenuAdministrador = [
     {
-        text: 'Asignar Roles',
-        path: '/admin/asignarRoles',
-        icon: <PeopleAltOutlinedIcon />,
-        indice: 0,
-    },
-    {
         text: 'Mantenimientos',
         path: '/admin/mantenimiento',
         icon: <LibraryBooksIcon />,
-        indice: 1,
+        indice: 0,
         subNav: [
             {
             text: 'Usuario',
@@ -39,18 +33,18 @@ export const MenuAdministrador = [
         text: 'Employees',
         path: '/admin/employees',
         icon: <ConstructionIcon />,
-        indice: 2,
+        indice: 1,
     },
     {
         text: 'Showcase of Components',
         path: '/admin/showcase',
         icon: <ConstructionIcon />,
-        indice: 3,
+        indice: 2,
     },
     {
         text: 'Index',
         path: '/admin/index',
         icon: <ConstructionIcon />,
-        indice: 4,
+        indice: 3,
     }
 ];
