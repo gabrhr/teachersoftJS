@@ -15,18 +15,43 @@ VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
      components/MenuAdministrador).  Agregar un indice unico.
 
 
-## CSS
+## CSS notes
 
 **Alignment**
-```
-align: {left, center, right, top, bottom}     eje xy  (CSS?)
-                                              Funciona con <Grid>
-                                              Pero no con <Box>
+```JS
+align: {left, center, right, top, bottom}     /* eje xy  (CSS?)
+                                                 Funciona con <Grid>
+                                                 Pero no con <Box> */
 
-display: "flex"                                 SIEMPRE FUNCIONA
-alignItems: {flex-start, center, flex-end}      eje y
-justifyContent: {flex-start, center, flex-end}  eje x
+display: "flex"                               // SIEMPRE FUNCIONA
+alignItems: {flex-start, center, flex-end}    // eje y
+justifyContent: {flex-start, center, flex-end}// eje x
 ```
+
+**sensible fill remainder of screen**
+```JS
+/* flex is live */
+display="flex" 
+/* fill remainder of screen */
+position="absolute" 
+top="0px" 
+bottom="0px"
+width="100%"
+/* grow with the content */
+overflow="auto"
+```
+
+**sensible background**
+```JS
+backgroundColor='secondary.main',
+/* NECESARIO QUE HORRIBLEEEEE */
+sx={{backgroundImage:'url("assets/img/VectorLogin.svg")',
+  backgroundRepeat:'no-repeat',
+  backgroundPosition:'center'
+}}
+```
+
+## MUI5 notes
 
 **Stack**
 ```

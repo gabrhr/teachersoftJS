@@ -28,8 +28,26 @@ export default function UserPage() {
 
 
   return (
-    <Box component="main" flexGrow={1} p={2} bgcolor="#ffffff"
-      overflow="auto"
+    /* Content Body (aka. AppMain) (lo que tiene el fondito de la ardillita) */
+    <Box 
+      component="main" 
+      /* fill remainder of body */
+      width={1}
+      // flexGrow={1}   // unnecessary
+      // bottom="0px"
+      p={2} 
+      overflow="auto"   // grow with content
+      /* fondo y ardillita loca */
+      // transform='translateZ(0)'
+      sx={{
+        backgroundColor:"#ffffff",
+        // backgroundImage:'url("assets/img/ardillaloca.svg"), url("assets/img/rayaslocas.svg")',
+        backgroundImage:'url("assets/img/fondoDT.svg")',
+        backgroundRepeat:'no-repeat',
+        backgroundPosition:'bottom right',
+        // backgroundSize:'30%',
+        backgroundSize:'contain',
+      }}
     >
       <DrawerHeader />
       <Switch>
