@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles'
 import * as employeeService from '../../../services/employeeService';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { Box } from '@mui/system'
 
 const initialFieldValues = {
     id: 0,
@@ -27,7 +28,7 @@ export default function GestionUsuariosForm() {
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
-        align:"left",
+        // align:"left",
     }
 
     const {
@@ -111,7 +112,7 @@ export default function GestionUsuariosForm() {
                     <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, mx:1}} />
 
                      {/* Foto del usuario */}
-                    <Grid item xs={3.5} style={ColumnGridItemStyle} align="center" >
+                    <Grid item xs style={ColumnGridItemStyle} align="center" >
                         <Typography variant="h4" marginBottom={2}>
                             FOTO REFERENCIAL
                         </Typography>
@@ -127,8 +128,8 @@ export default function GestionUsuariosForm() {
                             />
                     </Grid>                 
                 </Grid>
-            <Grid conteiner >
-                <Grid item align="right" marginY={5} >
+                {/* <Grid align="right" marginY={5} > */}
+                <Box display="flex" justifyContent="flex-end" mt={5} width={1} >
                     <Controls.Button
                         variant="outlined"
                         text="cancelar"
@@ -138,8 +139,7 @@ export default function GestionUsuariosForm() {
                         text="guardar cambios"
                         type="submit"   
                         />
-                </Grid>
-            </Grid>
+                </Box>
             </Form>
         </>
     )

@@ -12,8 +12,13 @@ const markdown = `# Index of testing pages in TeacherSoft
 - [here](${window.location.href})
 - [Gestion Usuarios](${window.location.origin + '/GestionDeUsuarios'})
 
-~~~JS
-console.log('hello world')
+~~~C
+# include <stdio.h>
+
+int main() {
+    printf("hola mundo!\n");
+    return 0;
+}
 ~~~
 
 - [just a linnk](https://reactjs.com)
