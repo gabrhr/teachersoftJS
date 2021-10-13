@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Grid, Typography } from '@mui/material'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
@@ -6,8 +6,11 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
 import HorarioCursos from './HorarioCursos'
+import Popup from '../../../components/util/Popup'
+import ModalAsignacionCarga from './ModalAsignacionCarga';
 
 export default function AsistenteSeccion() {
+    const [openPopup, setOpenPopup] = useState(false)
     return (
         <>
             <ContentHeader 
@@ -23,12 +26,13 @@ export default function AsistenteSeccion() {
                 <Grid item xs={3} align="right" m={1}>
                     <Controls.Button
                         text="Importar"
-                        size="medium"
+                        size="large"
                         endIcon={<CloudUploadOutlinedIcon/>}
+                        onClick = {() => setOpenPopup(true)}
                     />
                     <Controls.Button
                         text="Exportar"
-                        size="medium"
+                        size="large"
                         endIcon={<CloudDownloadOutlinedIcon/>}
                     />
                 </Grid>
@@ -36,6 +40,13 @@ export default function AsistenteSeccion() {
             <DT.BorderBox>
                 <HorarioCursos />
             </DT.BorderBox>
+            <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                title="Carga Masiva de Cursos y Horarios"
+            >
+               < ModalAsignacionCarga/>
+            </Popup>  
         </>
     )
 }

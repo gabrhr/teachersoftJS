@@ -95,6 +95,8 @@ export default function GestionUsuarios() {
   const [records, setRecords] = useState(usuarios2)
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
+  const SubtitulosTable={display:"flex"}
+  const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, color:"primary.light", elevatio:0}
 
   const {
     TblContainer,
@@ -134,7 +136,7 @@ export default function GestionUsuarios() {
         cbo={false}
       />
       <Form>
-        <Box display="flex" width={.2}>
+        <Box display="flex" width={.2} mb={4}>
           <Controls.Select
             name="seccionID"
             label="Sección"
@@ -146,8 +148,11 @@ export default function GestionUsuarios() {
         </Box>
       </Form>
       {/* TABLA */}
-      <Paper sx={{ borderRadius: '20px', p:2 }}>
-        <div style={{display: "flex", padding: "5px"}}>
+      <Paper variant="outlined" sx={PaperStyle}>
+        <Typography variant="h4" style={SubtitulosTable}> 
+          Usuarios del Sistema
+        </Typography>
+        <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
         {/* <Toolbar> */}
           <Controls.Input
             label="Search Employees by Name"
@@ -163,19 +168,10 @@ export default function GestionUsuarios() {
             type="search"
           />
           <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-            <Controls.Button 
-              text="Add New"
-              variant="outlined"
+          <Controls.Button 
+              text="Nuevo Usuario"
+              variant="iconoTexto"
               startIcon={<AddIcon/>}
-              sx={{justifySelf:"flex-end"}}
-              /* NO FUNCA */
-              // sx={{
-              //   align:'right',
-              //   // position: 'absolute',
-              //   right: "10px",
-              //   width: .1,
-              //   m: 2
-              // }}
               onClick = {() => setOpenPopup(true)}
             />
           </Box>

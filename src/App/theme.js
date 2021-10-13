@@ -1,6 +1,6 @@
 
 import { createTheme } from '@mui/material/styles';
-import { color } from '@mui/system';
+import { borderRadius, color } from '@mui/system';
 // import { color, fontFamily } from '@mui/system';
 
 const theme = createTheme({
@@ -83,7 +83,8 @@ const theme = createTheme({
           root: {
             // textTransform: 'none',
             margin: '4px',
-            fontFamily: '"NotoSans", "Quicksand", "Arial", "sans-serif'
+            fontFamily: '"NotoSans", "Quicksand", "Arial", "sans-serif',
+            borderRadius:"24px"
           }
         },
       },
