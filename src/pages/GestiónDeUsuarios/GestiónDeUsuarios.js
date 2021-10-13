@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { makeStyles } from '@mui/styles';
 import { IconButton} from '@mui/material';
-import { Paper, TableBody, TableRow, TableCell } from '@mui/material';
+import {TableBody, TableRow, TableCell } from '@mui/material';
 import { Controls } from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 import  ContentHeader from '../../components/AppMain/ContentHeader';
@@ -41,7 +41,7 @@ const usuarios = [
     {Nombre: 'H22222ola', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'}
 ]
 
-export default function Employees() {
+export default function GestionUsuarios() {
 
     const classes = useStyles()
 
@@ -102,7 +102,7 @@ export default function Employees() {
                             <TableBody>
                                 {
                                     recordsAfterPagingAndSorting().map(item => (
-                                            <TableRow key={item.id} sx={{ '&:first-child td to &:last-child td': { border: 1 } }}>
+                                            <TableRow key={item.id}>
                                                 <TableCell>{item.Nombre}</TableCell>
                                                 <TableCell>{item.seccion}</TableCell>
                                                 <TableCell>{item.DNI}</TableCell>

@@ -9,6 +9,7 @@ import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
 import GestiónDeUsuarios from '../GestiónDeUsuarios/GestiónDeUsuarios';
 import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
+import GestionCargaCursos from '../AsistenteSeccion/GestiónCargaCursos';
 
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -49,6 +50,9 @@ export default function UserPage() {
               </Route>
               <Route path="/GestionDeUsuarios">
                 <GestiónDeUsuarios />
+              </Route>
+              <Route path="/GestionCargaCursos">
+                <GestionCargaCursos />
               </Route>
           </Switch>
       </Box>
