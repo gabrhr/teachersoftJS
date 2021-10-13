@@ -19,6 +19,13 @@ export function insertEmployee(data) {
     localStorage.setItem(KEYS.employees, JSON.stringify(employees))
 }
 
+export function updateEmployee(data) {
+    let employees = getAllEmployees();
+    let recordIndex = employees.findIndex(x => x.id == data.id)
+    employees[recordIndex] = {...data}
+    localStorage.setItem(KEYS.employees, JSON.stringify(employees))
+}
+
 export function generateEmployeeID() {
     if (localStorage.getItem(KEYS.employeeID) == null)
         localStorage.setItem(KEYS.employeeID, '0')

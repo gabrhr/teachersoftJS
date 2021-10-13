@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
@@ -26,7 +26,9 @@ const initialFieldValues = {
     isPermanent: false
 }
 
-export default function EmployeeForm() {
+export default function EmployeeForm(props) {
+
+    const { addOrEdit, recordForEdit } = props
 
     const theme = useTheme();
 
@@ -84,7 +86,7 @@ export default function EmployeeForm() {
 
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
@@ -94,14 +96,23 @@ export default function EmployeeForm() {
     const handleSubmit = e => {
         /* e is a "default parameter" */
         e.preventDefault()
+        // if (validate())
+        //     window.alert('valid')
+        // else
+        //     window.alert('invalid')
         if (validate())
-            window.alert('valid')
-        else
-            window.alert('invalid')
-        if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
+            addOrEdit(values, resetForm)
     }
+
+    /* "detect the change of recordForEdit inside this bottom component" */
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -133,7 +144,6 @@ export default function EmployeeForm() {
                         label="City" 
                         value={values.city} 
                         onChange = {handleInputChange}
-                        type="number"
                         />
                 </Grid>
                 <Grid item xs={6} style={ColumnGridItemStyle}>

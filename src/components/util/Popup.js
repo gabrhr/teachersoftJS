@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import React from 'react'
 import { Controls } from '../controls/Controls';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Popup(props) {
 
@@ -22,11 +23,12 @@ export default function Popup(props) {
           <Typography variant="h3" style={{flexGrow:1}}>
             {title}
           </Typography>
-          <Controls.Button
+          <Controls.ActionButton
             color="secondary"
-            text="X"
             onClick={() => setOpenPopup(false)}
-          />
+          >
+            <CloseIcon/>
+          </Controls.ActionButton>
         </div>
       </DialogTitle>
       <DialogContent dividers>

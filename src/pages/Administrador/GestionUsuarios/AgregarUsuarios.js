@@ -102,7 +102,7 @@ export default function AgregarUsuarios() {
                             <Controls.Select
                                 name="seccion"
                                 label="Sección Principal"
-                                value={values.departamento}
+                                value={values.seccion}
                                 onChange={handleInputChange}
                                 options={employeeService.getDepartmentCollection()}
                              />
