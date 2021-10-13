@@ -92,6 +92,8 @@ export default function GestionCargaCursos() {
                             value={values.text} 
                             onChange = {handleInputChange}
                             size= 'small'
+                            disabled
+                            /*variant = 'contained'*/
                         />
                         <Controls.Input 
                             name="horasLec"
