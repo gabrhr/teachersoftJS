@@ -21,7 +21,7 @@ const initialFieldValues = {
     seccion: '',
 }
 
-export default function GestionUsuariosForm() {
+export default function AgregarUsuarios() {
     const {
         values,
         // setValues,
@@ -102,7 +102,7 @@ export default function GestionUsuariosForm() {
                             <Controls.Select
                                 name="seccion"
                                 label="Sección Principal"
-                                value={values.departamento}
+                                value={values.seccion}
                                 onChange={handleInputChange}
                                 options={employeeService.getDepartmentCollection()}
                              />

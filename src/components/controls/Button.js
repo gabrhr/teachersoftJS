@@ -1,5 +1,8 @@
 import React from 'react'
-import { Button as MuiButton } from '@mui/material'
+import { Button as MuiButton, Typography } from '@mui/material'
+import IconButton from './IconButton'
+import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/system';
 
 /* FIX:  NO FUNCA.   Nos obliga a definirlo en theme.  */
 // const useStyles = makeStyles(theme => ({
@@ -39,6 +42,28 @@ export default function Button(props) {
         }
     } else if (variant === "white") {
         variant="text"
+    }else if (variant=="iconoTexto"){
+        return (
+            <Box display="flex" textAlign="center" > 
+            
+                <Typography pt={1.3}> {text} </Typography>
+                <IconButton 
+                    color="secondary"
+                    size="large"
+                    sx={{
+                        color: "#fff",
+                        backgroundColor: "primary.main",
+                        "&:hover" :{
+                            backgroundColor: "primary.light",
+                        }
+                    }}
+                >
+                <AddIcon />
+           </IconButton>
+            </Box>
+
+
+        );
     }
 
     return (

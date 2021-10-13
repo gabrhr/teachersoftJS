@@ -1,5 +1,5 @@
-import React from 'react'
-import { Grid, Stack } from '@mui/material';
+import React, { useEffect } from 'react'
+import { Grid } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 /* fake BackEnd */
@@ -26,7 +26,9 @@ const initialFieldValues = {
     isPermanent: false
 }
 
-export default function EmployeeForm() {
+export default function EmployeeForm(props) {
+
+    const { addOrEdit, recordForEdit } = props
 
     const theme = useTheme();
 
@@ -36,13 +38,12 @@ export default function EmployeeForm() {
         // paddingLeft: theme.spacing(1),
         // paddingRight: theme.spacing(1)
     }
-
-
     /* for "onSubmit" validation */
     const validateOG = () => {
         let temp = {...errors}
         temp.fullName = values.fullName ? "" : "This field is required."
-        temp.email = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+        // FIX:  pepe1@asdf.com  should be valid and a@a.com.  not
+        temp.email = (/^$|[A-Za-z0-9_]+@([A-Za-z0-9_]+\.)+[A-Za-z_]+$/)
                 .test(values.email) ? "" 
                 : "This email is not vaild."
         // temp.mobile = values.mobile.length===9 ? "" : "Minimum 9 digits requiered."
@@ -85,7 +86,7 @@ export default function EmployeeForm() {
 
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
@@ -95,15 +96,23 @@ export default function EmployeeForm() {
     const handleSubmit = e => {
         /* e is a "default parameter" */
         e.preventDefault()
+        // if (validate())
+        //     window.alert('valid')
+        // else
+        //     window.alert('invalid')
         if (validate())
-            window.alert('valid')
-        else
-            window.alert('invalid')
-        console.log(values)
-        if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
+            addOrEdit(values, resetForm)
     }
+
+    /* "detect the change of recordForEdit inside this bottom component" */
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -135,7 +144,6 @@ export default function EmployeeForm() {
                         label="City" 
                         value={values.city} 
                         onChange = {handleInputChange}
-                        type="number"
                         />
                 </Grid>
                 <Grid item xs={6} style={ColumnGridItemStyle}>
@@ -172,20 +180,14 @@ export default function EmployeeForm() {
                             // color="primary"
                             // size="large"
                             text="Submit"
-                            type="submit"   // html property (not component)
+                            type="submit"
                             endIcon={<ErrorOutlineIcon />}
-                            // sx={{width: .2}}
                             />
                         <Controls.Button
                             // disabled={true}
                             variant="disabled"
                             text="Reset"
                             onClick={resetForm}
-                            // sx={{
-                            //     backgroundColor:"#00ff00",
-                            //     color:"#0000ff"
-                            // }}
-                            // sx={{maxWidth: .1}}
                             />
                     </div>
                 </Grid>
