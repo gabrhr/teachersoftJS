@@ -72,31 +72,48 @@ export default function ControlForm() {
                 value={values.isPermanent}
                 onChange={handleInputChange}
                 />
-            <div>   
+            <div> 
+                {/* Boton Azul */}
                 <Controls.Button
-                    color="primary"
                     text="Submit"
                     type="submit"   // html property (not component)
-                    endIcon={<ErrorOutlineIcon />}
+                    endIcon={<ErrorOutlineIcon />} //Opcional con imagen
                     />
+                {/* Boton Desactivado Plomo */}
                 <Controls.Button
                     variant="contained"
                     disabled
                     text="Disabled"
                     size="medium"
                     />
+                {/* Boton Blanco */}
                 <Controls.Button
                     variant="outlined"
                     text="outlined"
                     size="small"
                     />
-                <IconButton 
-                    aria-label="add"
-                    color="secondary"
-                    size="large"
-                    >
-                    <AddIcon />
-                </IconButton>
+                <Controls.Button
+                    variant="iconoTexto"
+                    text="Hola mundo"
+                />
+            </div>
+            <div>
+                Recuerda h1 grande h4 pequeño
+                <Typography variant="h1"  component="div">
+                  body: Hola mundo como estas
+                </Typography>
+                <Typography variant="h2"  component="div">
+                  body: Hola mundo como estas
+                </Typography>
+                <Typography variant="h3"  component="div">
+                h3: SUBTITULOS DE ContentHeader
+                </Typography>
+                <Typography variant="h4"  component="div">
+                h4: Subtitulos de Tablas o Forms
+                </Typography>
+                <Typography >
+                  body: Hola mundo como estas
+                </Typography>
             </div>
         </Form>
     )

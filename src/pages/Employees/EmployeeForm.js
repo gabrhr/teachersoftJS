@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
@@ -26,7 +26,9 @@ const initialFieldValues = {
     isPermanent: false
 }
 
-export default function EmployeeForm() {
+export default function EmployeeForm(props) {
+
+    const { addOrEdit, recordForEdit } = props
 
     const theme = useTheme();
 
@@ -36,14 +38,19 @@ export default function EmployeeForm() {
         // paddingLeft: theme.spacing(1),
         // paddingRight: theme.spacing(1)
     }
-
-    const validate = () => {
-        let temp = {}
+    /* for "onSubmit" validation */
+    const validateOG = () => {
+        let temp = {...errors}
         temp.fullName = values.fullName ? "" : "This field is required."
-        temp.email = (/$^|.+@.+\..+/).test(values.email) ? "" 
-            : "This email is not vaild."
-        temp.mobile = values.mobile.length===9 ? "" : "9 digits requiered."
-        temp.departmentId = values.departmentID.length!==0 ? "" : "This field is required."
+        // FIX:  pepe1@asdf.com  should be valid and a@a.com.  not
+        temp.email = (/^$|[A-Za-z0-9_]+@([A-Za-z0-9_]+\.)+[A-Za-z_]+$/)
+                .test(values.email) ? "" 
+                : "This email is not vaild."
+        // temp.mobile = values.mobile.length===9 ? "" : "Minimum 9 digits requiered."
+        temp.mobile = (/^\d\d\d\d\d\d\d\d\d$/).test(values.mobile) ? "" 
+                : "Minimum 9 digits requiered."
+        temp.departmentID = values.departmentID.length!==0 ? "" 
+                : "This field is required."
         setErrors({
             ...temp
         })
@@ -52,22 +59,60 @@ export default function EmployeeForm() {
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
 
+    /* for "onChange" validation (real time validation) */
+    const validate = (fieldValues = values) => {
+        let temp = {...errors}
+        if ('fullName' in fieldValues)
+            temp.fullName = fieldValues.fullName ? "" : "This field is required."
+        if ('email' in fieldValues)
+            temp.email = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+                    .test(fieldValues.email) ? "" 
+                    : "This email is not vaild."
+        // temp.mobile = values.mobile.length===9 ? "" : "Minimum 9 digits requiered."
+        if ('mobile' in fieldValues)
+            temp.mobile = (/^\d\d\d\d\d\d\d\d\d$/).test(fieldValues.mobile) ? "" 
+                    : "Minimum 9 digits requiered."
+        if ('departmentID' in fieldValues)
+            temp.departmentID = fieldValues.departmentID.length!==0 ? "" 
+                    : "This field is required."
+        setErrors({
+            ...temp
+        })
+
+        if (fieldValues == values)
+            return Object.values(temp).every(x => x === "")
+        // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+    }
+
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
-        handleInputChange
-    } = useForm(initialFieldValues);
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues, true, validate);
 
     const handleSubmit = e => {
         /* e is a "default parameter" */
         e.preventDefault()
+        // if (validate())
+        //     window.alert('valid')
+        // else
+        //     window.alert('invalid')
         if (validate())
-            window.alert('valid')
-        else
-            window.alert('invalid')
+            addOrEdit(values, resetForm)
     }
+
+    /* "detect the change of recordForEdit inside this bottom component" */
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -115,6 +160,7 @@ export default function EmployeeForm() {
                         value={values.departmentID}
                         onChange={handleInputChange}
                         options={employeeService.getDepartmentCollection()}
+                        error={errors.departmentID}
                         />
                     <Controls.DatePicker type="date"
                         name="hireDate"
@@ -128,23 +174,20 @@ export default function EmployeeForm() {
                         value={values.isPermanent}
                         onChange={handleInputChange}
                         />
-                    <div>   
+                    <div>
                         <Controls.Button
                             // variant="contained"
                             // color="primary"
                             // size="large"
                             text="Submit"
-                            type="submit"   // html property (not component)
+                            type="submit"
                             endIcon={<ErrorOutlineIcon />}
                             />
                         <Controls.Button
                             // disabled={true}
                             variant="disabled"
                             text="Reset"
-                            // sx={{
-                            //     backgroundColor:"#00ff00",
-                            //     color:"#0000ff"
-                            // }}
+                            onClick={resetForm}
                             />
                     </div>
                 </Grid>

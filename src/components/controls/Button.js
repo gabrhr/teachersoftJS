@@ -1,5 +1,8 @@
 import React from 'react'
-import { Button as MuiButton } from '@mui/material'
+import { Button as MuiButton, Typography } from '@mui/material'
+import IconButton from './IconButton'
+import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/system';
 
 /* FIX:  NO FUNCA.   Nos obliga a definirlo en theme.  */
 // const useStyles = makeStyles(theme => ({
@@ -35,25 +38,51 @@ export default function Button(props) {
         color="disabled"
         other={
             ...other,
-            disabled:true
+            // disabled:true
         }
     } else if (variant === "white") {
         variant="text"
+    }else if (variant=="iconoTexto"){
+        return (
+            <Box display="inline" textAlign="center" > 
+            
+                <Typography pt={1.3}> {text} </Typography>
+                <IconButton 
+                    color="secondary"
+                    size="large"
+                    sx={{
+                        color: "#fff",
+                        backgroundColor: "primary.main",
+                      
+                        "&:hover" :{
+                            backgroundColor: "primary.light",
+                        }
+                    }}
+                    onClick={onClick}
+                    {
+                        ...other
+                    }
+                >
+                <AddIcon />
+           </IconButton>
+            </Box>
+        );
     }
 
     return (
         <MuiButton
             variant={variant || "contained"}
-            size={size || "large"}
+            size={size || "medium"}
             color={color || "DTButton"}
             onClick={onClick}
+            
             {...other}
             // classes={{root: classes.root}}
             /* FIXME: Combinar con sx pasada como propiedad.  O utilizar 
              *        CSS classes / rules */
             sx={{
                 ...sx,
-                borderRadius: '12px'
+                borderRadius :'15px'
             }}
             >
             {text}

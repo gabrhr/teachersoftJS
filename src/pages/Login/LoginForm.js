@@ -50,25 +50,24 @@ const Login=()=>{
   }
 
     return(
-        <Form onSubmit={handleSubmit}>
-            {/* <Grid> */}
-                {/* <Grid align='center'>
-                    <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
-                    <h2>Sign In</h2>
-                </Grid> */}
+        <Form onSubmit={handleSubmit} >
                 <Controls.Input
                     name="username"
                     label="Usuario"
                     value={values.username}
                     onChange={handleInputChange}
                     fullWidth
+                    size = 'small'
                     />
                 <Controls.Input
                     name="password"
                     label="Contraseña"
                     value={values.password}
                     onChange={handleInputChange}
+                    type= 'password'
+                    size = 'small'
                     fullWidth
+                    type="password"
                 />
                 <Controls.Checkbox
                     name="isPersistentLogin"
@@ -80,17 +79,19 @@ const Login=()=>{
                     type='submit' 
                     color='DTButton'
                     fullWidth 
-                    text="Sign In"
+                    size = 'small'
+                    text="Iniciar Sesión"
                 />
                 <Typography align="center">
-                    O
+                    o
                 </Typography>
                 <Controls.Button 
                     variant="outlined" 
+                    size = 'small'
                     fullWidth 
                     text="Iniciar sesión con correo PUCP"
                 />
-                <Typography >
+                <Typography paddingTop="20px" >
                     <Link to="#" >
                         Recuperar contraseña
                     </Link>

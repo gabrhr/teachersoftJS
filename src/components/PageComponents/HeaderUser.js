@@ -9,7 +9,10 @@ import { styled } from "@mui/material/styles";
 import LogoPucp from "../../assets/images/LogoPUCP.png";
 import Menu from "./Menu";
 
+
 import { MenuAdministrador } from "./MenuAdministrador";
+import UserPage from "../../pages/General/UserPage";
+import { MenuAsistenteSeccion } from "./MenuAsistenteSeccion";
 
 const useStyles = makeStyles((themex) => ({
   root: {
@@ -104,14 +107,28 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-const HeaderUser = ({ nombre, rol, foto }) => {
-  const classes = useStyles();
-  const cls = pagina();
-  const [open, setOpen] = React.useState(false);
 
+const HeaderUser = ({ nombre, rol, idRol, foto }) => {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  let listaMenu=[];
   const handleDrawerOpen = () => {
     setOpen(!open);
-    console.log(true);
+  }; 
+  
+  if(idRol==1){
+    listaMenu = MenuAdministrador
+  }
+  if(idRol==2){
+    listaMenu = MenuAsistenteSeccion
+  }
+  if(idRol==3){
+    listaMenu = MenuAsistenteSeccion
+  }  
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const handleListItemClick = (e, indice) => {
+      setSelectedIndex(indice);
   };
 
   return (
@@ -192,17 +209,21 @@ const HeaderUser = ({ nombre, rol, foto }) => {
           </Grid>
         </Toolbar>
       </AppBar>
+      
       {/*SideBar*/}
-      <div className={cls.appMain}>
         <Drawer variant="permanent" elevation={1} open={open}>
           <DrawerHeader />
-          <List>
-            {MenuAdministrador.map((item, index) => {
-              return <Menu open={open} item={item} key={index} />;
+          <List >
+            {listaMenu.map((item, index) => {
+              return <Menu open={open} item={item} key={index} 
+                  handleListItemClick={handleListItemClick}
+                  isSelected={selectedIndex === index}
+                />;
             })}
           </List>
         </Drawer>
-      </div>
+      {/* Route de Paginas */}
+      <UserPage/>
     </Box>
   );
 };

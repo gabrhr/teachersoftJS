@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@mui/styles';
 
-export function useForm(initialFieldValues) {
+export function useForm(initialFieldValues, validateOnChange=false, validate) {
     const [values, setValues] = useState(initialFieldValues);
     const [errors, setErrors] = useState({});
 
@@ -14,6 +14,14 @@ export function useForm(initialFieldValues) {
             /* only change the name property */
             [name]: value
         })
+        if (validateOnChange) {
+            validate({[name]: value})
+        }
+    }
+
+    const resetForm = () => {
+        setValues(initialFieldValues)
+        setErrors({})
     }
 
     return {
@@ -21,13 +29,14 @@ export function useForm(initialFieldValues) {
         setValues,
         errors,
         setErrors,
-        handleInputChange
+        handleInputChange,
+        resetForm
     }
 }
 
 const useStyles = makeStyles(theme => ({
     root: {
-        '& .MuiFormControl-root, & .MuiButton-root' : {
+        '& .MuiFormControl-root' : {
             width: '100%',      // left to right
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1)
