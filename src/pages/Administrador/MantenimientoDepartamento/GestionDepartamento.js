@@ -93,7 +93,9 @@ export default function GestionDepartamento() {
                 cbo={false}
             />
             <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}> Departamentos</Typography>
+                <Typography variant="h4" style={SubtitulosTable}>
+                   Departamentos
+                </Typography>
                 <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
                 {/* <Toolbar> */}
                 <Controls.Input

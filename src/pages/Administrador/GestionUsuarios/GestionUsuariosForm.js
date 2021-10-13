@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 // import ContentHeader from '../../../components/AppMain/ContentHeader'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Avatar, Divider, Grid, Input, Stack, Typography } from '@mui/material'
@@ -11,6 +11,8 @@ import * as employeeService from '../../../services/employeeService';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { Box } from '@mui/system'
+
+import MessageBoxOK from '../../../components/util/MessageBoxOK';
 
 const initialFieldValues = {
     id: 0,
@@ -26,9 +28,16 @@ const initialFieldValues = {
 
 export default function GestionUsuariosForm() {
     const theme = useTheme();
+    const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         // align:"left",
+    }
+    const onSubmit = id => {
+        setConfirmDialog({
+            ...confirmDialog ,
+            isOpen: false,
+        })
     }
 
     const {
@@ -141,10 +150,23 @@ export default function GestionUsuariosForm() {
                         
                     <Controls.Button
                         text="guardar cambios"
-                        type="submit"   
+                        type="submit"  
+                        onClick = {() => {
+                            setConfirmDialog({
+                                isOpen: true,
+                                title: 'Confirmacion',
+                                message: 'Se confirmó la adición',
+                                onConfirm: () => {onSubmit()}
+                                } )
+                            }
+                        } 
                         />
                 </Box>
             </Form>
+            <MessageBoxOK
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }

@@ -10,6 +10,7 @@ export default function Select(props) {
             {...(error && {error: true})}
         >
             <InputLabel>{label}</InputLabel>
+            
             <MuiSelect
                 label={label}
                 name={name}
