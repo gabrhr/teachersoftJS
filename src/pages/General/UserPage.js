@@ -6,8 +6,8 @@ import Login from '../Login/LoginForm';
 import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
-import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
-import GestionCargaCursos from '../AsistenteSeccion/GestiónCargaCursos';
+import AsistenteSeccion from '../AsistenteSeccion/GestionAsignacionCarga/AsistenteSeccion';
+import GestionCargaCursos from '../AsistenteSeccion/GestionAsignacionCarga/GestiónCargaCursos';
 import GestionDepartamento from '../Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
