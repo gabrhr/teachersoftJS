@@ -3,6 +3,10 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
+import AuthService from '../../services/authService';
+import { useState } from 'react';
+
+
 
 const initialFieldValues = {
     id: 0,
@@ -11,18 +15,39 @@ const initialFieldValues = {
     isPersistentLogin: false
 }
 
+/*CODIGO -  */
+
 const Login=()=>{
+  //MANEJO DE ESTADOS
+  const {
+      values,
+      // setValues,
+      handleInputChange
+  } = useForm(initialFieldValues);
+  const [login, setLogin] = useState();
 
-    const {
-        values,
-        // setValues,
-        handleInputChange
-    } = useForm(initialFieldValues);
-
-    const handleSubmit = e => {
-        e.preventDefault()
-        console.log(values)
+  //Manejo de usuario y contraseña correcto
+    /*
+    const passwordCorrect = user === null
+    ? false
+    : await 
+    if (!(user && passwordCorrect)) {
+        return response.status(401).json({
+            error:"Usuario inválido o contraseña incorrecta"
+        })
     }
+    */
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      const user = AuthService.login(values.user, values.password);
+      //DEPENDE DE LOS RESULTADOS SE MUESTRAS DISTINTA DATA.
+      setLogin(user); //cambio de estado.
+      <>
+        <p>"Se logro!"</p>
+      </>
+      console.log(values);
+  }
 
     return(
         <Form onSubmit={handleSubmit}>

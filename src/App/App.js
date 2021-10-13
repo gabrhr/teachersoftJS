@@ -40,7 +40,7 @@ function App() {
   // ];
 
   /* PRUEBAS */
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
