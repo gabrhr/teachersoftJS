@@ -36,7 +36,8 @@ const borrarDepartamento = async (id) => {
 }
 const updateDepartamento = async (newObject,{id}) => {
     try{
-        const request = await axios.put(`${url}/departamento/${id}`, id)
+        const request = await axios.put(`${url}/departamento/${id}`, id);
+        return request.then(response => response.data)
     } catch(exception){
         console.error(exception)
     }
