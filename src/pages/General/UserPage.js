@@ -6,7 +6,7 @@ import Login from '../Login/LoginForm';
 import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
-import AsistenteSeccion from '../AsistenteSeccion/AsistenteSeccion';
+import AsistenteSeccion from '../AsistenteSeccion/GestionAsignacionCarga/AsistenteSeccion';
 import GestionDepartamento from '../Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
@@ -52,10 +52,9 @@ export default function UserPage() {
       <DrawerHeader />
       <Switch>
         {/* admin */}
-        <ProtectedRoute exact path="/admin/asignarRoles" idRoles={[1]}>
-          <Redirect to="/admin/mantenimiento" />
+        <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]}>
+          <Redirect to="/admin/mantenimiento/usr" />
         </ProtectedRoute>
-        <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]} component={Vacio} />
         <ProtectedRoute exact path="/admin/mantenimiento/usr" idRoles={[1]} component={GestionUsuarios} />
         <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={GestionDepartamento} />
         <ProtectedRoute exact path="/admin/mantenimiento/sec" idRoles={[1]} component={GestionSeccion} />

@@ -1,5 +1,6 @@
 
 import { createTheme } from '@mui/material/styles';
+import { color } from '@mui/system';
 // import { color, fontFamily } from '@mui/system';
 
 const theme = createTheme({
@@ -57,7 +58,7 @@ const theme = createTheme({
         fontFamily: 'NotoSerif',
         fontStyle: 'SemiBold',
         fontSize: 18,
-        lineHeight: '50px'
+        lineHeight: '50px',
       }
     },
     shape: {
@@ -116,11 +117,9 @@ const theme = createTheme({
         },],
         
       },
-      MuiSelect:{
+      MuiPaper:{
         styleOverrides: {
-          root: {
 
-          }
         },
       }
     },

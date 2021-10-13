@@ -1,10 +1,10 @@
 import React from 'react'
-import ContentHeader from '../../components/AppMain/ContentHeader'
+import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Grid, Typography } from '@mui/material'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import { DT } from '../../components/DreamTeam/DT'
-import { Controls } from '../../components/controls/Controls'
+import { DT } from '../../../components/DreamTeam/DT'
+import { Controls } from '../../../components/controls/Controls'
 import HorarioCursos from './HorarioCursos'
 
 export default function AsistenteSeccion() {

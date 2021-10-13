@@ -44,7 +44,7 @@ export default function Button(props) {
         variant="text"
     }else if (variant=="iconoTexto"){
         return (
-            <Box display="flex" textAlign="center" > 
+            <Box display="ruby-base-container" textAlign="center" > 
             
                 <Typography pt={1.3}> {text} </Typography>
                 <IconButton 
@@ -57,12 +57,14 @@ export default function Button(props) {
                             backgroundColor: "primary.light",
                         }
                     }}
+                    onClick={onClick}
+                    {
+                        ...other
+                    }
                 >
                 <AddIcon />
            </IconButton>
             </Box>
-
-
         );
     }
 

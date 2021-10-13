@@ -5,15 +5,13 @@ import { PrecisionManufacturingRounded } from '@mui/icons-material'
 import { Box } from '@mui/system'
 
 const useStyles = makeStyles(theme => ({
-  table: {
-    borderColor:"primary.dark",
-   
+  table: {   
     // '& .MuiTable-root': {
     '& .MuiTableCell-head': {
       fontWeight: '600',
       color: "primary.dark",
       backgroundColor: '#cfcfff',
-      borderColor: "primary.dark",
+      borderColor: "primary.main",
       
     },
     /* All of these work to different degrees */
@@ -41,7 +39,7 @@ export default function useTable(records, headCells, filterFn) {
   const [orderBy, setOrderBy] = useState()
 
   const BoxTbl = props => (
-        <Box border={1} color="grey.300" borderRadius="20px" overflow="hidden">
+        <Box border={1} color="#D4D9EC" borderRadius="20px" overflow="hidden" mt={4}>
           {props.children}
         </Box>
   )
