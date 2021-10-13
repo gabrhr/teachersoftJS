@@ -46,13 +46,14 @@ export default function GestionCargaCursos() {
     const classes = useStyles()
 
     const [records, setRecords] = useState(sesiones)
+    const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
 
     const {
         TblContainer,
         TblHead,
         TblPagination,
         recordsAfterPagingAndSorting
-    } = useTable(records, tableHeaders);
+    } = useTable(records, tableHeaders, filterFn);
 
     const {
         values,
