@@ -111,7 +111,7 @@ export default function HorarioCursos() {
     return (
         <Form>
             <Typography variant="h4"
-                color="primary.light"
+                color="primary.light" style={SubtitulosTable}
             >
                 Horario de Cursos
             </Typography>
@@ -120,8 +120,8 @@ export default function HorarioCursos() {
                     <Stack direction="row" align="left" spacing={0}>
                         <Controls.Input
                             name="searchText"
-                            label="codigo o nombre del curso"
-                            onChange={handleInputChange}
+                            label="Buscar Cursos por el nombre"
+                            onChange={handleSearch}
                             type="search"
                             size="small"
                             sx = {{
@@ -143,7 +143,7 @@ export default function HorarioCursos() {
                     {/* FIX:  DT IconButton */}
                     <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
                         <Controls.Button 
-                            text="Nueva Sección"
+                            text="Nuevo Curso-Horario"
                             variant="iconoTexto"
                             startIcon={<AddIcon/>}
                             /*onClick = {() => setOpenPopup(true)}*/
