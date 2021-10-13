@@ -2,7 +2,79 @@
 
 VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
-## React + Material UI
+## teachersoftJS dev (bugs, limitations, QA)
+
+- Controls.Button does not accept `xs` property (bug).  Do this instead: 
+`<Box sx={buttonxs}><Controls.Button /></Box>`
+- Cual es la diferencia entre `<Box style={{flexGrow: 1}}>` y 
+  `<Box xs={{flexGrow: 1}}>` (con `xs` no funciona)?  `style` es un prop de 
+  MUI5 o se refiere al atributo de html?
+- Como agregar paginas al sidebar menu? 
+  1. Asignar `exact path` en pages/General/UserPage
+  2. Agregar iteam en el menu correspondiente (e.g.,
+     components/MenuAdministrador).  Agregar un indice unico.
+
+
+## CSS
+
+**Alignment**
+```
+align: {left, center, right, top, bottom}       eje xy,  a veces no funciona?
+
+display: "flex"                                 SIEMPRE FUNCIONA
+alignItems: {flex-start, center, flex-end}      eje y
+justifyContent: {flex-start, center, flex-end}  eje x
+```
+
+**Stack**
+```
+<Stack direction="row" align="left" spacing={0}> ... </Stack>
+```
+[MUI flexbox](https://mui.com/system/flexbox/#align-content)
+
+**[Customizaciones locas](https://mui.com/customization/how-to-customize/)**
+> Al parecer `&` representa al "CSS class" de la regla que estamos definiendo.
+> I.e., un identificador que el MUI5 crea para aplicar el estilo a ese 
+> componente.  Los espacios separan las reglas, por tanto **son importantes.**
+```JS
+import * as React from 'react';
+import Slider from '@mui/material/Slider';
+import { alpha, styled } from '@mui/material/styles';
+
+const SuccessSlider = styled(Slider)(({ theme }) => ({
+  width: 300,
+  color: theme.palette.success.main,
+  '& .MuiSlider-thumb': {
+    '&:hover, &.Mui-focusVisible': {
+      boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+    '&.Mui-active': {
+      boxShadow: `0px 0px 0px 14px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+  },
+}));
+
+export default function StyledCustomization() {
+  return <SuccessSlider defaultValue={30} />;
+}
+```
+
+
+## JS & React
+
+Condicional en el HTML dentro de React (JSX?)
+
+```JS
+<>
+  {orderBy === headCell.id ? (
+    <Box component="span" sx={visuallyHidden}>
+      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+    </Box>
+  ) : null}
+</>
+```
+
+## Material UI
 
 **Utilizando el `theme`**
 
@@ -133,6 +205,10 @@ React + Material UI:
 
 CSS:
 - [units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+- [flexbox A Complete Guide (Chung)](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+- [flexbox Cheatsheet (Chung)](https://yoksel.github.io/flex-cheatsheet/)
+- [grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+- [cookbook](https://developer.mozilla.org/en-US/docs/Web/CSS/Layout_cookbook)
 
 CSS, HTML and React components "properties":
 - [CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
@@ -150,7 +226,3 @@ Axios:
 
 Git / GitHub:
 - [Syncing your branch](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/keeping-your-local-repository-in-sync-with-github/syncing-your-branch)
-
-CSS Flexbox (Chung):
-- [A Complete Guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
-- [Cheatsheet](https://yoksel.github.io/flex-cheatsheet/)
