@@ -182,6 +182,7 @@ export default function GestionUsuarios() {
             onChange={handleSearch}
             type="search"
           />
+<<<<<<< Updated upstream
           <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
             <Controls.Button 
               text="Add New"
@@ -199,6 +200,15 @@ export default function GestionUsuarios() {
               onClick = {() => setOpenPopup(true)}
             />
           </Box>
+=======
+          <Controls.AddButton 
+            variant="iconoTexto"
+            title = "Agregar Nuevo Usuario"
+            onClick = {() => setOpenPopup(true)}
+          />
+
+          
+>>>>>>> Stashed changes
         {/* </Toolbar> */}
         </div>
         <TblContainer>

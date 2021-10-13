@@ -28,6 +28,13 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: '#E9ECF8',
       // cursor: 'pointer'
     }
+  },
+  typography: {
+    fontFamily: "Quicksand",
+    fontStyle: "normal",
+    fontWeight: '500',
+    fontSize: '20px',
+    lineHeight: "115%,"
   }
 }
 ))
@@ -40,6 +47,15 @@ export default function useTable(records, headCells, filterFn) {
   const [order, setOrder] = useState()
   const [orderBy, setOrderBy] = useState()
 
+<<<<<<< Updated upstream
+=======
+  const BoxTbl = props => (
+        <Box border={1} color="#D4D9EC" borderRadius="15px" overflow="hidden" mt={4}>
+          {props.children}
+        </Box>
+  )
+
+>>>>>>> Stashed changes
   const TblContainer = props => (
     // FIX:  no funciona style
     <Table className={classes.table}>
@@ -57,17 +73,17 @@ export default function useTable(records, headCells, filterFn) {
 
     return (
       <TableHead>
-        <TableRow>
+        <TableRow > 
           {
             headCells.map(headCell => (
-              <TableCell
+              <TableCell 
                 key={headCell.id}
                 align={headCell.numeric ? 'right' : 'left'}
                 sortDirection={orderBy === headCell.id
                   ? order : false}
               >
                 {headCell.sortable ?
-                  <TableSortLabel
+                  <TableSortLabel className={classes.typography}
                     active={orderBy === headCell.id}
                     direction={orderBy === headCell.id
                       ? order : 'asc'}
