@@ -29,6 +29,9 @@ const initialFieldValues = {
 export default function GestionUsuariosForm() {
     const theme = useTheme();
     const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
+    const [fotoPerfil, setFotoPerfil] = React.useState(null);
+    const [fileFoto, setFileFoto] = React.useState(null);
+    const [cambio, setCambio] = React.useState(false);
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         // align:"left",
@@ -124,13 +127,27 @@ export default function GestionUsuariosForm() {
                         <Typography variant="h4" marginBottom={2}>
                             FOTO REFERENCIAL
                         </Typography>
-                        <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250, mb:2}} />
-                        {/* <Avatar sx={{ width: 250, height: 250}}> 
-                            <img className="userImage" src="assets/img/profile-photo.png" alt="" />
-                        </Avatar> */}
+                        <Avatar src={fotoPerfil} sx={{ width: 250, height: 250, mb:2}} />
                         <label htmlFor="contained-button-file">
                             <Input accept="image/*" id="contained-button-file" 
-                                type="file" sx={{display: 'none'}} />
+                                type="file" sx={{display: 'none'}} 
+                                onChange={(event) => {
+                                    const files = event.target.files
+                                    //console.log(files[0]);
+
+                                    setFileFoto(files[0])
+                                    setCambio(true)
+
+                                    if (files && files[0]) {
+                                        var reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            setFotoPerfil(e.target.result)
+                                        };
+                                        reader.readAsDataURL(files[0]);
+
+                                    }
+                                }}    
+                            />
                             <Controls.Button
                                 text="Subir foto"
                                 // type="submit"   // html property (not component)

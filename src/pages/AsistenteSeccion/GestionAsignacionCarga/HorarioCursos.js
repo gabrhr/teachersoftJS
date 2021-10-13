@@ -145,7 +145,7 @@ export default function HorarioCursos() {
                         <Controls.Button 
                             text="Nuevo Curso-Horario"
                             variant="iconoTexto"
-                            startIcon={<AddIcon/>}
+
                             /*onClick = {() => setOpenPopup(true)}*/
                             />
                     </Box>
