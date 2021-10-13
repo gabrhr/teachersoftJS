@@ -10,6 +10,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
 import EmployeeForm from './EmployeeForm'
 import Popup from '../../components/util/Popup'
+/* ICONS */
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 const tableHeaders = [
   {
@@ -41,10 +44,17 @@ const tableHeaders = [
     label: 'Department',
     numeric: false,
     sortable: true
+  },
+  {
+    id: 'actions',
+    label: 'Actions',
+    numeric: false,
+    sortable: false
   }
 ]
 
 export default function Employees() {
+  const [recordForEdit, setRecordForEdit] = useState(null)
   const [records, setRecords] = useState(employeeService.getAllEmployees())
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
@@ -71,6 +81,23 @@ export default function Employees() {
               .includes(target.value))
       }
     })
+  }
+
+  const addOrEdit = (employee, resetForm) => {
+    if (employee.id == 0)
+      employeeService.insertEmployee(employee)
+    else
+      employeeService.updateEmployee(employee)
+    resetForm()
+    setRecordForEdit(null)
+    setOpenPopup(false)
+    setRecords(employeeService.getAllEmployees())
+  }
+
+  /* open object in a pop up (for edit) */
+  const openInPopup = item => {
+    setRecordForEdit(item)
+    setOpenPopup(true)
   }
 
   return (
@@ -108,7 +135,7 @@ export default function Employees() {
               //   width: .1,
               //   m: 2
               // }}
-              onClick = {() => setOpenPopup(true)}
+              onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
             />
           </Box>
       </Toolbar>
@@ -128,6 +155,18 @@ export default function Employees() {
                   <TableCell>{item.email}</TableCell>
                   <TableCell>{item.mobile}</TableCell>
                   <TableCell>{item.department}</TableCell>
+                  <TableCell>
+                    <Controls.ActionButton 
+                      color="warning"
+                      onClick={ () => {openInPopup(item)}}
+                    >
+                      <EditOutlinedIcon fontSize="small" />
+                    </Controls.ActionButton>
+                    <Controls.ActionButton 
+                      color="error">
+                      <CloseIcon fontSize="small" />
+                    </Controls.ActionButton>
+                  </TableCell>
                 </TableRow>
               ))
             }
@@ -140,7 +179,10 @@ export default function Employees() {
         setOpenPopup={setOpenPopup}
         title="Add an Employee"
       >
-        <EmployeeForm />
+        <EmployeeForm 
+          recordForEdit={recordForEdit}
+          addOrEdit={addOrEdit}
+        />
       </Popup>
     </>
   )

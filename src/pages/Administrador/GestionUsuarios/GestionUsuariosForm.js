@@ -1,7 +1,7 @@
 import React from 'react'
 // import ContentHeader from '../../../components/AppMain/ContentHeader'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
-import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
+import { Avatar, Divider, Grid, Input, Stack, Typography } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles'
 import * as employeeService from '../../../services/employeeService';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { Box } from '@mui/system'
 
 const initialFieldValues = {
     id: 0,
@@ -27,7 +28,7 @@ export default function GestionUsuariosForm() {
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
-        align:"left",
+        // align:"left",
     }
 
     const {
@@ -103,15 +104,14 @@ export default function GestionUsuariosForm() {
                         <Controls.Select
                             name="seccion"
                             label="Sección Principal"
-                            value={values.departamento}
+                            value={values.seccion}
                             onChange={handleInputChange}
                             options={employeeService.getDepartmentCollection()}
                         />
                     </Grid>
                     <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, mx:1}} />
-
                      {/* Foto del usuario */}
-                    <Grid item xs={3.5} style={ColumnGridItemStyle} align="center" >
+                    <Grid item xs style={ColumnGridItemStyle} align="center" >
                         <Typography variant="h4" marginBottom={2}>
                             FOTO REFERENCIAL
                         </Typography>
@@ -119,16 +119,21 @@ export default function GestionUsuariosForm() {
                         {/* <Avatar sx={{ width: 250, height: 250}}> 
                             <img className="userImage" src="assets/img/profile-photo.png" alt="" />
                         </Avatar> */}
-                        <Controls.Button
-                            text="Subir foto"
-                            type="submit"   // html property (not component)
-                            endIcon={<AddAPhotoIcon />} //Opcional con imagen
-                            size="medium"
-                            />
+                        <label htmlFor="contained-button-file">
+                            <Input accept="image/*" id="contained-button-file" 
+                                type="file" sx={{display: 'none'}} />
+                            <Controls.Button
+                                text="Subir foto"
+                                // type="submit"   // html property (not component)
+                                endIcon={<AddAPhotoIcon />} //Opcional con imagen
+                                size="medium"
+                                component="span"
+                                />
+                        </label>
                     </Grid>                 
                 </Grid>
-            <Grid conteiner >
-                <Grid item align="right" marginY={5} >
+                {/* <Grid align="right" marginY={5} > */}
+                <Box display="flex" justifyContent="flex-end" mt={5} width={1} >
                     <Controls.Button
                         variant="outlined"
                         text="cancelar"
@@ -138,8 +143,7 @@ export default function GestionUsuariosForm() {
                         text="guardar cambios"
                         type="submit"   
                         />
-                </Grid>
-            </Grid>
+                </Box>
             </Form>
         </>
     )

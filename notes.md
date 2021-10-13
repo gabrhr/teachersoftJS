@@ -19,7 +19,9 @@ VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
 **Alignment**
 ```
-align: {left, center, right, top, bottom}       eje xy,  a veces no funciona?
+align: {left, center, right, top, bottom}     eje xy  (CSS?)
+                                              Funciona con <Grid>
+                                              Pero no con <Box>
 
 display: "flex"                                 SIEMPRE FUNCIONA
 alignItems: {flex-start, center, flex-end}      eje y

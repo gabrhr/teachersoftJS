@@ -11,7 +11,7 @@ import GestionDepartamento from '../Administrador/MantenimientoDepartamento/Gest
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
 import ProtectedRoute from './RouterProtected';
-import Vacio from '../Vacio'
+import Vacio from '../Dev/Vacio'
 import { Assistant } from '@mui/icons-material';
 import GestionUsuarios from '../Administrador/GestionUsuarios/GestionUsuarios';
 

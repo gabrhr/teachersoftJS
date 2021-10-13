@@ -21,7 +21,6 @@ const Login=()=>{
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log(values)
     }
     return(
         <Form onSubmit={handleSubmit} >

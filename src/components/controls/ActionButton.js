@@ -1,39 +1,28 @@
 import React from 'react'
-import { Button } from '@mui/material';
-import { makeStyles } from '@mui/styles'
+import { IconButton } from '@mui/material';
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles( theme => ({
-    root: {
+/* Does not work :( */
+const StyledButton = styled(IconButton)(({ theme }) => ({
         minWidth: 0,
-        margin: 0.5,
-    },
-    secondary: {
+        margin: theme.spacing(0.5),
         backgroundColor: "secondary.light",
         '& .MuiButton-label': {
             color: "secondary.main"
         }
-    },
-    primary: {
-        backgroundColor: "primary.light",
-        '& .MuiButton-label': {
-            color: "secondary.main"
-        }
-    }
 }))
 
 export default function ActionButton(props) {
 
-    const { color, children, onClick } = props;
-    const classes = useStyles()
-
+    const { color, children, onClick, ...other } = props;
 
     return (
-        <Button
-            // "string interpolation"
-            className={`${classes.root} ${classes[color]}`}
+        <IconButton
             onClick={onClick}
+            color={color}
+            {...other}
         >
             {children}
-        </Button>
+        </IconButton>
     )
 }

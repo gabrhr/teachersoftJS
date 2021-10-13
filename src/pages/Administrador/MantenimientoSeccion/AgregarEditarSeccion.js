@@ -58,7 +58,6 @@ export default function AgregarEditarSeccion() {
             window.alert('valid')
         else
             window.alert('invalid')
-        console.log(values)
         if (validate())
             employeeService.insertEmployee(values)
             resetForm()
