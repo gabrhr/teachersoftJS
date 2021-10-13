@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { PrecisionManufacturingRounded } from '@mui/icons-material'
+import { Box } from '@mui/system'
 
 const useStyles = makeStyles(theme => ({
   table: {
-    marginTop: 3,
     borderColor:"primary.dark",
    
     // '& .MuiTable-root': {
@@ -34,11 +34,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function useTable(records, headCells, filterFn) {
   const classes = useStyles()
-  const pages = [5, 10, 25]
+  const pages = [5, 10, 25, 50]
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(pages[page])
   const [order, setOrder] = useState()
   const [orderBy, setOrderBy] = useState()
+
+  const BoxTbl = props => (
+        <Box border={1} color="grey.300" borderRadius="20px" overflow="hidden">
+          {props.children}
+        </Box>
+  )
 
   const TblContainer = props => (
     // FIX:  no funciona style
@@ -149,6 +155,7 @@ export default function useTable(records, headCells, filterFn) {
     TblContainer,
     TblHead,
     TblPagination,
-    recordsAfterPagingAndSorting
+    recordsAfterPagingAndSorting,
+    BoxTbl
   }
 }

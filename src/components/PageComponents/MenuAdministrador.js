@@ -4,6 +4,7 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 import CloseIcon from '@mui/icons-material/Close';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 export const MenuAdministrador = [
     {
@@ -37,19 +38,19 @@ export const MenuAdministrador = [
     {
         text: 'Employees',
         path: '/admin/employees',
-        icon: <CloseIcon />,
+        icon: <ConstructionIcon />,
         indice: 2,
     },
     {
         text: 'Showcase of Components',
         path: '/admin/showcase',
-        icon: <CloseIcon />,
-        indice: 2,
+        icon: <ConstructionIcon />,
+        indice: 3,
     },
     {
         text: 'Index',
         path: '/admin/index',
-        icon: <CloseIcon />,
-        indice: 3,
+        icon: <ConstructionIcon />,
+        indice: 4,
     }
 ];

@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Select(props) {
 
-    const {name, label, value, error=null, onChange, options, variant, ...other} = props;
+    const {name, label, value, error=null, onChange, options, variant, displayNoneOpt=false, ...other} = props;
     return (
         <FormControl
             variant={variant || "outlined"}
@@ -24,7 +24,7 @@ export default function Select(props) {
                 }}
                 {...other}
             >
-                <MenuItem value="">None</MenuItem>
+                {displayNoneOpt ? <MenuItem value="">None</MenuItem> : null}
                 {
                     options.map(
                         item => (

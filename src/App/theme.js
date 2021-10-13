@@ -93,7 +93,6 @@ const theme = createTheme({
             "&.Mui-selected":{
               backgroundColor: "#41b9e427"
             },
-            borderRadius: "0 50px 50px 0 ",
             "&.Mui-selected:hover":{
               backgroundColor: "#3b4a8130"
             },

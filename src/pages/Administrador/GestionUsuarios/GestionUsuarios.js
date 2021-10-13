@@ -15,14 +15,19 @@ import GestionUsuariosForm from './GestionUsuariosForm'
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 
+/* secciones hardcodeadas */
+const getSecciones = () => ([
+  { id: 1, title: 'Informatica'},
+  { id: 2, title: 'Telecomunicaciones'},
+  { id: 3, title: 'Industrial'},
+  { id: 4, title: 'Civil'},
+  { id: 5, title: 'Mecanica'},
+  { id: 6, title: 'Fisica'}
+])
+
 /* para que seleccione seccion */
 const initialFieldValues = {
-  id: 0,
-  text: '',
-  gender: 'male',
-  departmentID: '',
-  date: new Date(),
-  isPermanent: false
+  seccionID: '',
 }
 
 const tableHeaders = [
@@ -70,7 +75,7 @@ function createData(id, fullName, seccion, departamento, dni, email,) {
     id,
     fullName,
     seccion,
-    departamento: seccion,
+    departamento: departamento + ' ' + seccion,
     dni,
     email
   }
@@ -95,7 +100,8 @@ export default function GestionUsuarios() {
     TblContainer,
     TblHead,
     TblPagination,
-    recordsAfterPagingAndSorting
+    recordsAfterPagingAndSorting,
+    BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
   const handleSearch = e => {
@@ -127,45 +133,19 @@ export default function GestionUsuarios() {
         text="Gestión de usuarios"
         cbo={false}
       />
-      {/* Solo es necesario 1 para seleccionar seccion, creo */}
-      {/* <Grid container mb={2} sx={{ backgroundColor: 'white', width: '100%', gridTemplateColumns: "1fr 1fr" }}>
-        <Grid item xs={3} mt={3}>
-          <Stack direction='column' alignItems='left' px={0}>
-            <Controls.Select
-              name="deparmetID"
-              label="Sección"
-              value={values.departmentID}
-              onChange={handleInputChange}
-              options={employeeService.getDepartmentCollection()}
-            />
-          </Stack>
-        </Grid>
-        <Grid item sm />
-        <Grid item xs={3} mt={3}>
-          <Stack direction='column' alignItems='left' px={0}>
-            <Controls.Select
-              name="departmentID"
-              label="Sección"
-              value={values.departmentID}
-              onChange={handleInputChange}
-              options={employeeService.getDepartmentCollection()}
-            />
-          </Stack>
-        </Grid>
-      </Grid> */}
       <Form>
         <Box display="flex" width={.2}>
           <Controls.Select
-            name="deparmetID"
+            name="seccionID"
             label="Sección"
-            value={values.departmentID}
+            value={values.seccionID}
             onChange={handleInputChange}
-            options={employeeService.getDepartmentCollection()}
+            options={getSecciones()}
             size="medium"
           />
         </Box>
       </Form>
-      {/* <Grid container sx={{width: '100%', paddingTop: '30px'}}> */}
+      {/* TABLA */}
       <Paper sx={{ borderRadius: '20px', p:2 }}>
         <div style={{display: "flex", padding: "5px"}}>
         {/* <Toolbar> */}
@@ -201,33 +181,35 @@ export default function GestionUsuarios() {
           </Box>
         {/* </Toolbar> */}
         </div>
-        <TblContainer>
-          <TblHead />
-          <TableBody>
-            {
-              recordsAfterPagingAndSorting().map(item => (
-                <TableRow key={item.id}>
-                  <TableCell
-                    align="right"
-                  >
-                    {item.id}
-                  </TableCell>
-                  <TableCell>{item.fullName}</TableCell>
-                  <TableCell>{item.seccion}</TableCell>
-                  <TableCell>{item.departamento}</TableCell>
-                  <TableCell>{item.dni}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                </TableRow>
-              ))
-            }
-          </TableBody>
-        </TblContainer>
-        <TblPagination />
+        <BoxTbl>
+          <TblContainer>
+            <TblHead />
+            <TableBody>
+              {
+                recordsAfterPagingAndSorting().map(item => (
+                  <TableRow key={item.id}>
+                    <TableCell
+                      align="right"
+                    >
+                      {item.id}
+                    </TableCell>
+                    <TableCell>{item.fullName}</TableCell>
+                    <TableCell>{item.seccion}</TableCell>
+                    <TableCell>{item.departamento}</TableCell>
+                    <TableCell>{item.dni}</TableCell>
+                    <TableCell>{item.email}</TableCell>
+                  </TableRow>
+                ))
+              }
+            </TableBody>
+          </TblContainer>
+          <TblPagination />
+        </BoxTbl>
       </Paper>
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        title="Add an Employee"
+        title="Registrar nuevo usuario"
       >
         {/* <EmployeeForm /> */}
         <GestionUsuariosForm />
