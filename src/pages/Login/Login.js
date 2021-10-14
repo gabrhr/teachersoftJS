@@ -34,13 +34,16 @@ export default function Login() {
             <Header />
             <Grid container 
                 spacing={0} 
-                sx={{
-                    width: "100%",
-                    height: "calc(100vh - 80px)",
-                    gridTemplateColumns: "1fr 1fr",
-                }}
+                width= "100%"
+                height= "calc(100vh - 80px)"
+                gridTemplateColumns= "1fr 1fr"
+                alignContent="center"
+                // overflow= 'hidden'
             >
-                <Grid item xs={6}>
+                <Grid item xs={6} 
+                    height= "calc(100vh - 80px)"
+                    alignContent="center"
+                >
                     <Typography
                         variant="h2"
                         component="div"
@@ -60,6 +63,8 @@ export default function Login() {
                 <Grid item xs={6}
                     sx={{
                         // transform: 'translateZ(0)',
+                        height: "calc(100vh - 80px)",
+                        // height: '100vh',
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
