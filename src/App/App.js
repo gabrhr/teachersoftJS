@@ -22,6 +22,15 @@ import Employees from '../pages/Employees/Employees';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 function App() {
+  //const classes = useStyles();
+  // const Hola = [
+  //   {
+  //     MenuAdministrador
+  //   }
+  // ];
+
+  /* PRUEBAS */
+  //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
   if (false) {
     return (

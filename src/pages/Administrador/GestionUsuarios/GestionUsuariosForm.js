@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 // import ContentHeader from '../../../components/AppMain/ContentHeader'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Avatar, Divider, Grid, Input, Stack, Typography } from '@mui/material'
@@ -7,12 +7,10 @@ import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
 import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
-import * as employeeService from '../../../services/employeeService';
+import * as DTLocalServices from '../../../services/DTLocalServices';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { Box } from '@mui/system'
-
-import MessageBoxOK from '../../../components/util/MessageBoxOK';
 
 const initialFieldValues = {
     id: 0,
@@ -26,9 +24,12 @@ const initialFieldValues = {
     seccion: '',
 }
 
-export default function GestionUsuariosForm() {
+export default function GestionUsuariosForm(props) {
+
+    const { addOrEdit, recordForEdit } = props
+
     const theme = useTheme();
-    const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
+     const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
@@ -36,13 +37,12 @@ export default function GestionUsuariosForm() {
         padding: theme.spacing(2),
         // align:"left",
     }
-    const handleSubmit = e => {
-        e.preventDefault()
-        setConfirmDialog({
-            ...confirmDialog ,
-            isOpen: false,
-        })
-    }
+    // const onSubmit = id => {
+    //     setConfirmDialog({
+    //         ...confirmDialog ,
+    //         isOpen: false,
+    //     })
+    // }
 
     function onSubmit () {
         setConfirmDialog({
@@ -55,12 +55,33 @@ export default function GestionUsuariosForm() {
 
     const {
         values,
-        // setValues,
-        handleInputChange
+        setValues,
+        // errors,
+        // setErrors,
+        handleInputChange,
+        resetForm
     } = useForm(initialFieldValues);
+
+    const handleSubmit = e => {
+        /* e is a "default parameter" */
+        e.preventDefault()
+        // if (validate())
+            addOrEdit(values, resetForm)
+    }
+
+    /* "detect the change of recordForEdit inside this bottom component" */
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
+
     return (
         <>
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <Grid container 
                  sx={{
                     gridTemplateColumns: "1fr 1fr 1fr ",
@@ -114,21 +135,21 @@ export default function GestionUsuariosForm() {
                             label="Rol del Usuario"
                             value={values.rol}
                             onChange={handleInputChange}
-                            options={employeeService.getDepartmentCollection()}
+                            options={DTLocalServices.getAllRoles()}
                         />
                         <Controls.Select
                             name="departamento"
                             label="Departamento"
                             value={values.departamento}
                             onChange={handleInputChange}
-                            options={employeeService.getDepartmentCollection()}
+                            options={DTLocalServices.getAllDepartamentos()}
                         />
                         <Controls.Select
                             name="seccion"
                             label="Sección Principal"
                             value={values.seccion}
                             onChange={handleInputChange}
-                            options={employeeService.getDepartmentCollection()}
+                            options={DTLocalServices.getAllSecciones()}
                         />
                     </Grid>
                     <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, mx:1}} />
@@ -138,6 +159,7 @@ export default function GestionUsuariosForm() {
                             FOTO REFERENCIAL
                         </Typography>
                         <Avatar src={fotoPerfil} sx={{ width: 250, height: 250, mb:2}} />
+                        {/* Botoncito para subir imagen */}
                         <label htmlFor="contained-button-file">
                             <Input accept="image/*" id="contained-button-file" 
                                 type="file" sx={{display: 'none'}} 
@@ -177,22 +199,23 @@ export default function GestionUsuariosForm() {
                         
                     <Controls.Button 
                         text="guardar cambios"
-                        onClick = {() => {
-                            setConfirmDialog({
-                                isOpen: true,
-                                title: 'Confirmacion',
-                                message: 'Se confirmó la adición',
-                                onConfirm: () => {onSubmit()}
-                                } )
-                            }
-                        } 
+                        type="submit"  
+                        // onClick = {() => {
+                        //     setConfirmDialog({
+                        //         isOpen: true,
+                        //         title: 'Confirmacion',
+                        //         message: 'Se confirmó la adición',
+                        //         onConfirm: () => {onSubmit()}
+                        //         } )
+                        //     }
+                        // } 
                         />
                 </Box>
             </Form>
-            <MessageBoxOK
+            {/* <MessageBoxOK
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
-            />
+            /> */}
         </>
     )
 }

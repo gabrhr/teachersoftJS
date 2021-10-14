@@ -5,54 +5,30 @@ import { Box, Paper, TableBody, TableRow, TableCell } from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 import { useForm, Form } from '../../../components/useForm';
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import * as employeeService from '../../../services/employeeService';
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import GestionUsuariosForm from './GestionUsuariosForm'
 import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog'
+/* SERVICES */
+import * as personaService from '../../../services/personaService'
+import * as DTLocalServices from '../../../services/DTLocalServices';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
-/* secciones hardcodeadas */
-const getSecciones = () => ([
-  { id: 1, title: 'Informatica'},
-  { id: 2, title: 'Telecomunicaciones'},
-  { id: 3, title: 'Industrial'},
-  { id: 4, title: 'Civil'},
-  { id: 5, title: 'Mecanica'},
-  { id: 6, title: 'Fisica'}
-])
-
-/* para que seleccione seccion */
 const initialFieldValues = {
   seccionID: '',
 }
 
 const tableHeaders = [
   {
-    id: 'id',
-    label: 'EmployeeID',
-    numeric: true,
-    sortable: true
-  },
-  {
     id: 'fullName',
     label: 'Nombre Completo',
-    numeric: false,
-    sortable: true
-  },
-  {
-    id: 'seccion',
-    label: 'Sección',
-    numeric: false,
-    sortable: true
-  },
-  {
-    id: 'departamento',
-    label: 'Departamento',
     numeric: false,
     sortable: true
   },
@@ -64,40 +40,51 @@ const tableHeaders = [
   },
   {
     id: 'email',
-    label: 'Correo Electrónico',
+    label: 'Correo',
     numeric: false,
     sortable: true
+  },
+  {
+    id: 'rol',
+    label: 'rol',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'seccion',
+    label: 'Seccion',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'departamento',
+    label: 'Departamento',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'actions',
+    label: 'Actions',
+    numeric: false,
+    sortable: false
   }
-]
-
-/* create labeled data */
-function createData(id, fullName, seccion, departamento, dni, email,) {
-  return {
-    id,
-    fullName,
-    seccion,
-    departamento: departamento + ' ' + seccion,
-    dni,
-    email
-  }
-}
-
-const usuarios2 = [
-  createData('0', 'Nombre1', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
-  createData('1', 'Nombre2', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
-  createData('2', 'Nombre3', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
-  createData('3', 'Nombre4', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
-  createData('4', 'Nombre5', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
-  createData('5', 'Nombre6', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
-  createData('6', 'Nombre7', 'Ing. Informatica', 'FCI', '12345678', 'asdf@example.com'),
 ]
 
 export default function GestionUsuarios() {
-  const [records, setRecords] = useState(usuarios2)
+  /* COSAS PARA LA TABLITA 
+   * ===================== */
+
+  const [records, setRecords] = useState(DTLocalServices.getAllPersonas())
+  /* no filter function initially */
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
-  const SubtitulosTable={display:"flex",  textTransform: 'uppercase' }
-  const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, color:"primary.light", elevatio:0}
+  /* stores values of record to then edit in the Dialog/Popup */
+  const [recordForEdit, setRecordForEdit] = useState(null)
+  /* notification snackbar */
+  const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+  /* confirm dialog */
+  const [confirmDialog, setConfirmDialog] = useState(
+    { isOpen: false, title: '', subtitle: '' })
 
   const {
     TblContainer,
@@ -107,22 +94,70 @@ export default function GestionUsuarios() {
     BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
+  /* updates filter function inside `filterFn` object.  Which is used in 
+   * `useTable`'s `recordsAfterPagingAndSorting()`.  Because  */
   const handleSearch = e => {
     let target = e.target;
-    /* React "state object" (useState()) doens't allow functions, only
-     * objects.  Thus the function needs to be inside an object. */
     setFilterFn({
       fn: items => {
-        if (target.value == "")
+        if (target.value === "")
           /* no search text */
           return items
         else
-          return items.filter(x => x.fullName.toLowerCase()
-              .includes(target.value))
+          return items
+            .filter(x => x.fullName.toLowerCase()
+            .includes(target.value.toLowerCase()))
       }
     })
   }
 
+  const addOrEdit = (usuario, resetForm) => {
+    if (usuario.id == 0)
+      DTLocalServices.insertPersona(usuario)
+    else
+      DTLocalServices.updatePersona(usuario)
+    resetForm()
+    setRecordForEdit(null)
+    setOpenPopup(false)
+    setRecords(DTLocalServices.getAllPersonas())
+
+    setNotify({
+      isOpen: true,
+      message: 'Usuario añadido',
+      type: 'success'
+    })
+  }
+
+  /* open object in a pop up (for edit) */
+  const openInPopup = item => {
+    setRecordForEdit(item)
+    setOpenPopup(true)
+  }
+
+  const onDelete = id => {
+    // if (!window.confirm('Are you sure to delete this record?'))
+    //   return
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false
+    })
+
+    DTLocalServices.deletePersona(id)
+    setRecords(DTLocalServices.getAllPersonas())
+    setNotify({
+      isOpen: true,
+      message: 'Deleted Successfully',
+      type: 'error'
+    })
+  }
+
+  /* STYLES 
+   * ====== */
+  const SubtitulosTable = { display: "flex" }
+  const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
+
+  /* FORM 
+   * ==== */
   /* para seleccion de seccion */
   const {
     values,
@@ -143,7 +178,7 @@ export default function GestionUsuarios() {
             label="Sección"
             value={values.seccionID}
             onChange={handleInputChange}
-            options={getSecciones()}
+            options={DTLocalServices.getAllSecciones()}
             size="medium"
           />
         </Box>
@@ -153,10 +188,10 @@ export default function GestionUsuarios() {
         <Typography variant="h4" style={SubtitulosTable} > 
           Usuarios del Sistema
         </Typography>
-        <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-        {/* <Toolbar> */}
+        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+          {/* <Toolbar> */}
           <Controls.Input
-            label="Search Employees by Name"
+            label="Buscar usuarios por nombre"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -168,35 +203,53 @@ export default function GestionUsuarios() {
             onChange={handleSearch}
             type="search"
           />
- 
-          <Controls.AddButton 
-              title="Agregar Nuevo Usuario"
-              variant="iconoTexto"
-               
-              onClick = {() => setOpenPopup(true)}
-            />
-      
-        {/* </Toolbar> */}
+          <Controls.AddButton
+            title="Agregar Nuevo Usuario"
+            variant="iconoTexto"
+            onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+          />
+          {/* </Toolbar> */}
         </div>
         <BoxTbl>
           <TblContainer>
             <TblHead />
             <TableBody>
               {
-                recordsAfterPagingAndSorting().map(item => (
-                  <StyledTableRow key={item.id}>
-                    <StyledTableCell
-                      align="right"
-                    >
-                      {item.id}
-                    </StyledTableCell>
-                    <StyledTableCell>{item.fullName}</StyledTableCell>
-                    <StyledTableCell>{item.seccion}</StyledTableCell>
-                    <StyledTableCell>{item.departamento}</StyledTableCell>
-                    <StyledTableCell>{item.dni}</StyledTableCell>
-                    <StyledTableCell>{item.email}</StyledTableCell>
-                  </StyledTableRow>
-                ))
+               recordsAfterPagingAndSorting()
+                  .map(item => 
+                      (
+                        <StyledTableRow key={item.id}>
+                          <StyledTableCell>{item.fullName}</StyledTableCell>
+                          <StyledTableCell>{item.DNI}</StyledTableCell>
+                          <StyledTableCell>{item.correo}</StyledTableCell>
+                          <StyledTableCell>{item.rolName}</StyledTableCell>
+                          <StyledTableCell>{item.seccionName}</StyledTableCell>
+                          <StyledTableCell>{item.departamentoName}</StyledTableCell>
+                          <StyledTableCell>
+                            <Controls.ActionButton 
+                              color="warning"
+                              onClick={ () => {openInPopup(item)}}
+                            >
+                              <EditOutlinedIcon fontSize="small" />
+                            </Controls.ActionButton>
+                            <Controls.ActionButton 
+                              color="error"
+                              onClick={() => {
+                                // onDelete(item.id)
+                                setConfirmDialog({
+                                  isOpen: true,
+                                  title: '¿Eliminar usuario permanentemente?',
+                                  subTitle: 'No es posible deshacer esta accion',
+                                  onConfirm: () => {onDelete(item.id)}
+                                })
+                              }}
+                            >
+                              <CloseIcon fontSize="small" />
+                            </Controls.ActionButton>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      )
+                  )
               }
             </TableBody>
           </TblContainer>
@@ -209,9 +262,20 @@ export default function GestionUsuarios() {
         title="Registrar nuevo usuario"
       >
         {/* <EmployeeForm /> */}
-        <GestionUsuariosForm />
+        <GestionUsuariosForm 
+          recordForEdit={recordForEdit}
+          addOrEdit={addOrEdit}
+        />
       </Popup>
       {/* </Grid> */}
+      <Notification 
+        notify={notify}
+        setNotify={setNotify}
+      />
+      <ConfirmDialog 
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </>
   )
 }

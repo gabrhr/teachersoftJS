@@ -132,7 +132,17 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    /* Box principal de toda la aplicacion */
+    // <Box display="flex">
+    <Box 
+      /* flex is live */
+      display="flex" 
+      /* fill remainder of screen */
+      // position="absolute"  // messes with header
+      top="0px" 
+      bottom="0px"
+      width="100%"
+    >
       {/*Header Azul*/}
       <AppBar
         position="fixed"
