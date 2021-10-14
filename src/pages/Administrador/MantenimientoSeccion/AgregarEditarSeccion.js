@@ -6,7 +6,8 @@ import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
-
+import SeccionService from '../../../services/seccionService.js';
+import DepartamentoService from '../../../services/departamentoService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
@@ -23,6 +24,7 @@ export default function AgregarEditarSeccion() {
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
+    const [departamento, setDepartamentos] = React.useState([]);
     
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -41,7 +43,7 @@ export default function AgregarEditarSeccion() {
             ...temp
         })
 
-        if (fieldValues == values)
+        if (fieldValues === values)
             return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
@@ -56,25 +58,36 @@ export default function AgregarEditarSeccion() {
     } = useForm(initialFieldValues, true, validate);
 
     const handleSubmit = e => {
-        /* e is a "default parameter" */
         e.preventDefault()
-        if (validate())
+        //Definicio de validaciones
+        if (validate()){
             window.alert('valid')
+
+            //Pasamos a - ingresarlo a la BD
+            //const seccion ={
+  
+            //}
+            SeccionService.registerSeccion(values)
+            resetForm()
+        }
         else
             window.alert('invalid')
-        if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
+    }
+
+    const FillDepartamentos = () =>{
+      const dataDep = DepartamentoService.getDepartamentos();
+      const departamentos = []
+      console.log('aaaa');
+      if(dataDep) setDepartamentos(dataDep);
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
                            DATOS GENERALES  
                     </Typography>
-                    
                     <Controls.Input 
                         name="nombre"
                         label="Nombre" 
@@ -95,7 +108,7 @@ export default function AgregarEditarSeccion() {
                         label="Departamento"
                         value={values.departmentId}
                         onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
+                        options={departamento}
                     />                
                 </Grid>
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />

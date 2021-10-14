@@ -9,7 +9,7 @@ $ npm install xlsx
 
 import React from 'react'
 import './App.css';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, formLabelClasses } from '@mui/material';
 /* PAGES */
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
@@ -18,6 +18,7 @@ import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
+import { FamilyRestroomOutlined, FormatColorResetSharp } from '@mui/icons-material';
 import Employees from '../pages/Employees/Employees';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
@@ -32,11 +33,12 @@ function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
-          <Login />
+          <Route exact path="/" component={Login} />
+          <Route exact path="/ok" component={Employees} />
         </Router>
         <CssBaseline />
       </ThemeProvider>
@@ -57,7 +59,7 @@ function App() {
         />  
         <CssBaseline />
         </Router>
-    </ThemeProvider>
+    </ThemeProvider>  
   );
 }
 

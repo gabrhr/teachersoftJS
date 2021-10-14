@@ -4,7 +4,7 @@ import url from '../config.js';
 const getSecciones = async () => {
   try{
     const request = await axios.get(`${url}/seccion/`); //Todas las secciones
-    return request.then(response => response.data)
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
