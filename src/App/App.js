@@ -15,7 +15,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import Employees from '../pages/Employees/Employees';
@@ -46,15 +46,15 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router >
-        {/* <Route exact path="/" component={Login} />
-        <Route exact path="/ok" component={Employees} /> */}
+        <Route exact path="/" component={Login} />
+        <Route exact path="/ok" component={Employees} />
         
-         <HeaderUser
+         {/* <HeaderUser
               nombre="New Employee"
               rol="Administrador"
               idRol= {2}
               foto={fotoUsuario}
-        /> 
+        />  */}
         <CssBaseline />
         </Router>
     </ThemeProvider>
