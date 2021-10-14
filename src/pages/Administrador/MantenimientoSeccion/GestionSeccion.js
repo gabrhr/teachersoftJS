@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
@@ -9,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import AgregarEditarSeccion from './AgregarEditarSeccion'
+import SeccionService from '../../../services/seccionService.js';
 
 const tableHeaders = [
     {
@@ -42,6 +43,24 @@ const tableHeaders = [
         sortable: true
      },
 ]
+
+function getSecciones(){
+  const dataSecc = SeccionService.getSecciones(); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const secciones = [];
+  dataSecc.map(seccion => (
+    secciones.concat({
+      id: seccion.id,
+      nombre: seccion.nombre,
+      fechaFundacion: seccion.fecha_creacion,
+      fechaModificacion: seccion.fecha_modificacion,
+      nombreDepartamento: seccion.departamento.nombre,
+    })
+  ));
+  console.log(secciones);
+  return dataSecc;
+}
+/*
 function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDepartamento) {
     return {
         id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento,
@@ -53,14 +72,20 @@ const usuarios2 = [
     createData('1', 'Seccion Industrial',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
     createData('2', 'Seccion Electronica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
 ]
-
+*/
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(usuarios2)
+    const [seccion, setSeccion] = useState([])
+    const [records, setRecords] = useState(seccion)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
+
+    useEffect(() => {
+      setSeccion(oldSeccion => [...oldSeccion, getSecciones()]);
+    }, []);
+
     const {
         TblContainer,
         TblHead,
