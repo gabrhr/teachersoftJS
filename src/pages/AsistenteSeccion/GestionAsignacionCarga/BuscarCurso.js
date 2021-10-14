@@ -11,6 +11,7 @@ import { DT } from '../../../components/DreamTeam/DT';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import useTable from "../../../components/useTable"
+import GestionCargaCursos from './GestiónCargaCursos';
 
 const tableHeaders = [
     {
@@ -37,21 +38,30 @@ const cursos = [
     {
         clave: 'INF144',
         nombre: 'Técnicas de Programación',
-        credito: '3.5'
+        credito: '3.5',
+        horasLec: '5',
+        especialidad: 'Ing. Informática',
+        horario: '0781'
     },
     {
         clave: 'INF134',
         nombre: 'Técnicas...',
-        credito: '2.0'
+        credito: '2.0',
+        horasLec: '5',
+        especialidad: 'Ing. Informática',
+        horario: '0781'
     },
     {
         clave: 'INF156',
         nombre: 'Técnicas...',
-        credito: '3.5'
+        credito: '3.5',
+        horasLec: '5',
+        especialidad: 'Ing. Informática',
+        horario: '0781'
     }
 ]
 
-export default function BuscarCurso()  {
+export default function BuscarCurso(props)  {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [records, setRecords] = useState(cursos)
     const [selected, setSelected] = useState(false)
@@ -63,10 +73,6 @@ export default function BuscarCurso()  {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-
-    function _onRowSelection(key) {
-        console.log(key, this.state.data[key])
-    }
 
     const handleSearch = e => {
         let target = e.target;
@@ -103,10 +109,10 @@ export default function BuscarCurso()  {
                 <BoxTbl>
                     <TblContainer>
                         <TblHead />
-                        <TableBody onRowSelection = {_onRowSelection}>
+                        <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                            <TableRow key={item.id}>
+                            <TableRow key={item.id} onDoubleClick = {() => {props.getRow(item)}}>
                                 <TableCell>{item.clave}</TableCell>
                                 <TableCell>{item.nombre}</TableCell>
                                 <TableCell>{item.credito}</TableCell>
@@ -118,19 +124,6 @@ export default function BuscarCurso()  {
                     <TblPagination />
                 </BoxTbl>
             </DT.BorderBox>
-            <Grid conteiner >
-                <Grid item align="right" marginY={3} >
-                    <Controls.Button
-                        variant="outlined"
-                        text="cancelar"
-                        />
-                        
-                    <Controls.Button
-                        text="seleccionar"
-                        type="submit"  
-                        />
-                </Grid>
-            </Grid>
         </>
     );
 }

@@ -45,7 +45,15 @@ const sesiones = [
 
 export default function GestionCargaCursos() {
 
+    
     const [openPopup, setOpenPopup] = useState(false)
+
+    const [dValuNombre, setDefValueNombre] = useState('')
+    const [dValuCreditos, setDefValueCreditos] = useState('')
+    const [dValuHLectivas, setDefValueHLectivas] = useState('')
+    const [dValuEspecialidad, setDefValueEspecialidad] = useState('')
+    const [dValuHorario, setDefValueHorario] = useState('')
+    const [valueTipo, setValueTipo] = useState('')
 
     const classes = useStyles()
 
@@ -65,6 +73,24 @@ export default function GestionCargaCursos() {
         handleInputChange
     } = useForm(initialFieldValues);
 
+    function getRow ({...props}){
+        setOpenPopup(false)
+        setDefValueNombre(`${props.clave} - ${props.nombre}`)
+        setDefValueCreditos(`${props.credito}`)
+        setDefValueHLectivas(`${props.horasLec}`)
+        setDefValueEspecialidad(`${props.especialidad}`)
+        setDefValueHorario(`${props.horario}`)
+    }
+
+    function resetPage(){
+        setDefValueNombre(``)
+        setDefValueCreditos(``)
+        setDefValueHLectivas(``)
+        setDefValueEspecialidad(``)
+        setDefValueHorario(``)
+        setValueTipo('')
+    }
+
     return (
         <> 
             <ContentHeader 
@@ -76,11 +102,10 @@ export default function GestionCargaCursos() {
                     <Stack>
                         <Controls.Input 
                         name="curso"
-                        label="Curso"  
-                        value={values.text} 
+                        label="Curso"
                         onChange = {handleInputChange}
                         size= 'small'
-                        disabled
+                        value = {dValuNombre}
                         />
                     </Stack>
                 </Grid>
@@ -96,35 +121,31 @@ export default function GestionCargaCursos() {
                         <Controls.Input 
                             name="creditos"
                             label="Cantidad de créditos"  
-                            value={values.text} 
+                            value = {dValuCreditos}
                             onChange = {handleInputChange}
                             size= 'small'
-                            disabled
                             /*variant = 'contained'*/
                         />
                         <Controls.Input 
                             name="horasLec"
                             label="Cantidad de horas lectivas"  
-                            value={values.text} 
+                            value={dValuHLectivas} 
                             onChange = {handleInputChange}
                             size= 'small'
-                            disabled
                         />
                         <Controls.Input 
                             name="especialidad"
                             label="Especialidad del curso"  
-                            value={values.text} 
+                            value={dValuEspecialidad} 
                             onChange = {handleInputChange}
                             size= 'small'
-                            disabled
                         />
                         <Controls.Input 
                             name="horario"
                             label="Horario"  
-                            value={values.text} 
+                            value={dValuHorario} 
                             onChange = {handleInputChange}
                             size= 'small'
-                            disabled
                         />
                     </Stack>
                 </Grid>
@@ -133,9 +154,11 @@ export default function GestionCargaCursos() {
                         <Controls.Select
                         name="tipo"
                         label="Tipo"
-                        value={values.departmentId}
+                        value={values.tipo}
                         onChange={handleInputChange}
                         options={employeeService.getDepartmentCollection()}
+                        labelId = {3}
+                        displayEmpty
                         /> 
                         <Controls.Select
                         name="diaSesion"
@@ -177,6 +200,7 @@ export default function GestionCargaCursos() {
                         variant="outlined"
                         text="cancelar"
                         endIcon={<CloseIcon/>}
+                        onClick = {resetPage}
                         />
                         
                     <Controls.Button
@@ -191,7 +215,7 @@ export default function GestionCargaCursos() {
                 setOpenPopup={setOpenPopup}
                 title="Buscar Curso"
             >
-               <BuscarCurso />
+               <BuscarCurso getRow = {getRow}/>
             </Popup>  
         </>
     )
