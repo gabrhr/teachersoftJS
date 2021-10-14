@@ -46,15 +46,15 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router >
-        <Route exact path="/" component={Login} />
-        <Route exact path="/ok" component={Employees} />
+        {/* <Route exact path="/" component={Login} />
+        <Route exact path="/ok" component={Employees} /> */}
         
-         {/* <HeaderUser
+         <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {2}
+              idRol= {1}
               foto={fotoUsuario}
-        />  */}
+        /> 
         <CssBaseline />
         </Router>
     </ThemeProvider>

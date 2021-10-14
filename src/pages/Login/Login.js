@@ -36,7 +36,7 @@ export default function Login() {
                 spacing={0} 
                 sx={{
                     width: "100%",
-                    height: "85vh",
+                    height: "calc(100vh - 80px)",
                     gridTemplateColumns: "1fr 1fr",
                 }}
             >
@@ -53,7 +53,6 @@ export default function Login() {
                     <Paper
                         elevation={0}
                         style={paperStyle}
-
                         >
                         <LoginForm/>
                     </Paper>
@@ -77,12 +76,8 @@ export default function Login() {
                         TeacherSoft
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Footer/>
-                </Grid>
-
             </Grid>
-            
+            <Footer/>
         </>
     )
 }
