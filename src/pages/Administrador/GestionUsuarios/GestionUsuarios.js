@@ -96,7 +96,7 @@ export default function GestionUsuarios() {
   const [records, setRecords] = useState(usuarios2)
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
-  const SubtitulosTable={display:"flex"}
+  const SubtitulosTable={display:"flex",  textTransform: 'uppercase' }
   const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, color:"primary.light", elevatio:0}
 
   const {
@@ -150,7 +150,7 @@ export default function GestionUsuarios() {
       </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
-        <Typography variant="h4" style={SubtitulosTable}> 
+        <Typography variant="h4" style={SubtitulosTable} > 
           Usuarios del Sistema
         </Typography>
         <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
