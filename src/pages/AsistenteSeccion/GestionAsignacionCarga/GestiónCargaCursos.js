@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import BuscarCurso from './BuscarCurso'
 import Popup from '../../../components/util/Popup'
+import AddButton from '../../../components/controls/AddButton';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -38,15 +39,32 @@ const tableHeaders = [
     {id: 'horaSesion', label: 'Hora - Sesión'}
 ]
 
-const sesiones = [
-    {tipo: 'clase', diaSesion: 'Lunes', horaSesion: '15:00 - 17:00'},
-    {tipo: 'laboratorio', diaSesion: 'Miércoles', horaSesion: '15:00 - 17:00'}
+const tipo = [
+    { id: 'Clase', title: 'Clase' },
+    { id: 'Laboratorio', title: 'Laboratorio' },
+    { id: 'Práctica', title: 'Práctica' }
+]
+
+const diaSes = [
+    { id: 'Lunes', title: 'Lunes' },
+    { id: 'Martes', title: 'Martes' },
+    { id: 'Miércoles', title: 'Miércoles' }    
+]
+
+const horaSes = [
+    { id: '15:00 - 17:00', title: '15:00 - 17:00' },
+    { id: '17:00 - 19:00', title: '17:00 - 19:00' },
+    { id: '19:00 - 21:00', title: '19:00 - 21:00' }
 ]
 
 export default function GestionCargaCursos() {
 
     
     const [openPopup, setOpenPopup] = useState(false)
+
+    const [vTipo, setVTipo] = useState('')
+    const [vDiaSesion, setVDiaSesion] = useState('')
+    const [vHoraSesion, setVHoraSesion] = useState('')
 
     const [dValuNombre, setDefValueNombre] = useState('')
     const [dValuCreditos, setDefValueCreditos] = useState('')
@@ -57,7 +75,7 @@ export default function GestionCargaCursos() {
 
     const classes = useStyles()
 
-    const [records, setRecords] = useState(sesiones)
+    const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
 
     const {
@@ -90,6 +108,18 @@ export default function GestionCargaCursos() {
         setDefValueHorario(``)
         setValueTipo('')
     }
+
+    function addSession(){
+        setRecords(records => [...records, {
+                tipo: `${vTipo}`,
+                diaSesion: `${vDiaSesion}`,
+                horaSesion: `${vHoraSesion}`
+        }]);
+    }
+
+    const changeTipo = e => {setVTipo(e.target.value)}
+    const changeDiaSesion = e => {setVDiaSesion(e.target.value)}
+    const changeHoraSesion = e => {setVHoraSesion(e.target.value)}
 
     return (
         <> 
@@ -150,31 +180,33 @@ export default function GestionCargaCursos() {
                     </Stack>
                 </Grid>
                 <Grid item xs={7} sx={{paddingLeft:'20%'}}>
-                    <Stack direction="column" alignItems="top" spacing={3} px = {9}>
-                        <Controls.Select
-                        name="tipo"
-                        label="Tipo"
-                        value={values.tipo}
-                        onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
-                        labelId = {3}
-                        displayEmpty
-                        /> 
-                        <Controls.Select
-                        name="diaSesion"
-                        label="Día - Sesión"
-                        value={values.departmentId}
-                        onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
-                        /> 
-                        <Controls.Select
-                        name="horaSesion"
-                        label="Hora - Sesión"
-                        value={values.departmentId}
-                        onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
-                        />    
-                    </Stack>
+                    <DT.BorderBox>
+                        <Stack direction="column" alignItems="top" spacing={3} px = {9}>
+                            <AddButton onClick = {addSession}/>
+                            <Controls.Select
+                            name="tipo"
+                            label="Tipo"
+                            value={values.tipo}
+                            onChange={changeTipo}
+                            options={tipo}
+                            displayEmpty
+                            /> 
+                            <Controls.Select
+                            name="diaSesion"
+                            label="Día - Sesión"
+                            value={values.diaSesion}
+                            onChange={changeDiaSesion}
+                            options={diaSes}
+                            /> 
+                            <Controls.Select
+                            name="horaSesion"
+                            label="Hora - Sesión"
+                            value={values.horaSesion}
+                            onChange={changeHoraSesion}
+                            options={horaSes}
+                            />    
+                        </Stack>
+                    </DT.BorderBox>
                     <DT.BorderBox marginY={3}>
                         <TblContainer>
                             <TblHead />

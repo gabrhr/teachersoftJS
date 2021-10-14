@@ -243,7 +243,7 @@ export default function GestionUsuarios() {
             <TableBody>
               {
                 recordsAfterPagingAndSorting().map(item => (
-                  <TableRow key={item.id}>
+                  <StyledTableRow key={item.id}>
                     <StyledTableCell>{item.fullName}</StyledTableCell>
                     <StyledTableCell>{item.seccion}</StyledTableCell>
                     <StyledTableCell>{item.departamento}</StyledTableCell>
@@ -271,7 +271,7 @@ export default function GestionUsuarios() {
                         <CloseIcon fontSize="small" />
                       </Controls.ActionButton>
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 ))
               }
             </TableBody>
