@@ -6,6 +6,7 @@ import DatePicker from "./DatePicker";
 import Button from "./Button";
 import IconButton from "./IconButton";
 import ActionButton from "./ActionButton";
+import AddButton from "./AddButton";
 
 export const Controls = {
     Input,
@@ -15,5 +16,6 @@ export const Controls = {
     DatePicker,
     Button,
     IconButton,
-    ActionButton
+    ActionButton, 
+    AddButton
 }

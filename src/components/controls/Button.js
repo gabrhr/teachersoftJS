@@ -44,7 +44,7 @@ export default function Button(props) {
         variant="text"
     }else if (variant=="iconoTexto"){
         return (
-            <Box display="ruby-base-container" textAlign="center" > 
+            <Box display="inline" textAlign="center" > 
             
                 <Typography pt={1.3}> {text} </Typography>
                 <IconButton 
@@ -53,6 +53,7 @@ export default function Button(props) {
                     sx={{
                         color: "#fff",
                         backgroundColor: "primary.main",
+                      
                         "&:hover" :{
                             backgroundColor: "primary.light",
                         }
@@ -74,13 +75,14 @@ export default function Button(props) {
             size={size || "medium"}
             color={color || "DTButton"}
             onClick={onClick}
+            
             {...other}
             // classes={{root: classes.root}}
             /* FIXME: Combinar con sx pasada como propiedad.  O utilizar 
              *        CSS classes / rules */
             sx={{
                 ...sx,
-                borderRadius: '12px'
+                borderRadius :'15px'
             }}
             >
             {text}

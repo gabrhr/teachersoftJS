@@ -21,16 +21,22 @@ const SubMenu = (props) => {
     
     const showSubnav = () => {
       setSubnav(!subnav);
+      console.log("Este es el subnav:")
+      console.log(subnav)
     }
 
     const handleClick = (e, indice, nav) => {
         handleListItemClick(e, indice)
         if(nav) {
+
             showSubnav();
+        }else{
+            setSubnav(false)
         }
     }
     const handleListSubItemClick = (e, indice, path) => {
       setSelectedIndexI(indice);
+
       history.push(path);
     };
 
@@ -69,7 +75,7 @@ const SubMenu = (props) => {
                               backgroundColor: 'itemlist.ligth'
                           },
                       }}
-                          key={item.index} 
+                          key={index} 
                           selected={selectedIndexI === index}
                           onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
                           >

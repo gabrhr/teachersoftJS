@@ -107,14 +107,11 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                    <Controls.Button 
-                    text="Nueva Sección"
+                <Controls.AddButton 
+                    title="Agregar Nueva Sección"
                     variant="iconoTexto"
-                    startIcon={<AddIcon/>}
                     onClick = {() => setOpenPopup(true)}
-                    />
-                </Box>
+                />
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
