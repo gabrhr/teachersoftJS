@@ -36,12 +36,22 @@ export default function GestionUsuariosForm() {
         padding: theme.spacing(2),
         // align:"left",
     }
-    const onSubmit = id => {
+    const handleSubmit = e => {
+        e.preventDefault()
         setConfirmDialog({
             ...confirmDialog ,
             isOpen: false,
         })
     }
+
+    function onSubmit () {
+        setConfirmDialog({
+            ...confirmDialog ,
+            isOpen: false,
+        })
+    }
+
+ 
 
     const {
         values,
@@ -165,9 +175,8 @@ export default function GestionUsuariosForm() {
                         text="cancelar"
                         />
                         
-                    <Controls.Button
+                    <Controls.Button 
                         text="guardar cambios"
-                        type="submit"  
                         onClick = {() => {
                             setConfirmDialog({
                                 isOpen: true,

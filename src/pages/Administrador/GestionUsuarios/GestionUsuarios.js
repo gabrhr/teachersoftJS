@@ -11,6 +11,7 @@ import { DT } from '../../../components/DreamTeam/DT'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import GestionUsuariosForm from './GestionUsuariosForm'
+import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -95,7 +96,7 @@ export default function GestionUsuarios() {
   const [records, setRecords] = useState(usuarios2)
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
-  const SubtitulosTable={display:"flex"}
+  const SubtitulosTable={display:"flex",  textTransform: 'uppercase' }
   const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, color:"primary.light", elevatio:0}
 
   const {
@@ -149,7 +150,7 @@ export default function GestionUsuarios() {
       </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
-        <Typography variant="h4" style={SubtitulosTable}> 
+        <Typography variant="h4" style={SubtitulosTable} > 
           Usuarios del Sistema
         </Typography>
         <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
@@ -167,14 +168,14 @@ export default function GestionUsuarios() {
             onChange={handleSearch}
             type="search"
           />
-          <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-          <Controls.Button 
-              text="Nuevo Usuario"
+ 
+          <Controls.AddButton 
+              title="Agregar Nuevo Usuario"
               variant="iconoTexto"
-              startIcon={<AddIcon/>}
+               
               onClick = {() => setOpenPopup(true)}
             />
-          </Box>
+      
         {/* </Toolbar> */}
         </div>
         <BoxTbl>
@@ -183,18 +184,18 @@ export default function GestionUsuarios() {
             <TableBody>
               {
                 recordsAfterPagingAndSorting().map(item => (
-                  <TableRow key={item.id}>
-                    <TableCell
+                  <StyledTableRow key={item.id}>
+                    <StyledTableCell
                       align="right"
                     >
                       {item.id}
-                    </TableCell>
-                    <TableCell>{item.fullName}</TableCell>
-                    <TableCell>{item.seccion}</TableCell>
-                    <TableCell>{item.departamento}</TableCell>
-                    <TableCell>{item.dni}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                  </TableRow>
+                    </StyledTableCell>
+                    <StyledTableCell>{item.fullName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion}</StyledTableCell>
+                    <StyledTableCell>{item.departamento}</StyledTableCell>
+                    <StyledTableCell>{item.dni}</StyledTableCell>
+                    <StyledTableCell>{item.email}</StyledTableCell>
+                  </StyledTableRow>
                 ))
               }
             </TableBody>

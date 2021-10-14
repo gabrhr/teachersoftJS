@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom'
+import { Link,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
 import { List, ListItemIcon, ListItemText, ListItemButton, Collapse } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -17,6 +17,7 @@ const SubMenu = (props) => {
     const [subnav, setSubnav] = useState(false)
     const [selectedIndexI, setSelectedIndexI] = React.useState(null);
     const history = useHistory()
+    const location = useLocation()
     let {pathNow} = useRouteMatch();
     
     const showSubnav = () => {
@@ -25,8 +26,9 @@ const SubMenu = (props) => {
       console.log(subnav)
     }
 
-    const handleClick = (e, indice, nav) => {
+    const handleClick = (e, indice, nav, path) => {
         handleListItemClick(e, indice)
+        history.push(path);
         if(nav) {
 
             showSubnav();
@@ -53,8 +55,8 @@ const SubMenu = (props) => {
                     }
                 }}
                 key={item.index} 
-                selected={isSelected}
-                onClick={(event) => handleClick(event, item.indice, item.subNav)}
+                selected={location.pathname == item.path ? isSelected : false}
+                onClick={(event) => handleClick(event, item.indice, item.subNav, item.path)}
                 >
                   
                 <ListItemIcon sx={{color: "primary.main"}}>{item.icon}</ListItemIcon>
@@ -76,7 +78,7 @@ const SubMenu = (props) => {
                           },
                       }}
                           key={index} 
-                          selected={selectedIndexI === index}
+                          selected={location.pathname == item.path ? selectedIndexI === index : false}
                           onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
                           >
                           <ListItemText  primary={item.text} sx={{pl:4 }}/>
