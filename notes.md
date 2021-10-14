@@ -30,7 +30,7 @@ justifyContent: {flex-start, center, flex-end}// eje x
 
 **sensible fill remainder of screen**
 ```JS
-/* flex is live */
+/* flex is life */
 display="flex" 
 /* fill remainder of screen */
 position="absolute" 
@@ -39,6 +39,7 @@ bottom="0px"
 width="100%"
 /* grow with the content */
 overflow="auto"
+backgroundSize='contain'
 ```
 
 **sensible background**
@@ -229,6 +230,7 @@ React:
 
 React + Material UI:
 - [CodAffection](https://www.youtube.com/watch?v=bL-ZwwF6wTc&list=PLjC4UKOOcfDQtvkTBfjqeWP8EJKi_WaUn&index=1)
+- [Guide to the sx prop](https://smartdevpreneur.com/material-ui-sx-prop/)
 
 CSS:
 - [units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)

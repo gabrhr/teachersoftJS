@@ -111,14 +111,13 @@ export default function GestionDepartamento() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                    <Controls.Button 
-                    text="Nuevo Departamento"
+ 
+                <Controls.AddButton 
+                    title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
-                    startIcon={<AddIcon/>}
                     onClick = {() => setOpenPopup(true)}
-                    />
-                </Box>
+                />
+      
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
