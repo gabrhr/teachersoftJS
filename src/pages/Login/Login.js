@@ -3,6 +3,7 @@ import Header from '../../components/PageComponents/Header'
 import { Paper, Grid, Typography } from '@mui/material';
 import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
+import { Box } from '@mui/system';
 
 
 export default function Login({setUser}) {
@@ -30,7 +31,12 @@ export default function Login({setUser}) {
     }
 
     return (
-        <>
+        <Box 
+            position="absolute"
+            width="100%"
+            height="100vh"
+            zIndex={10000}
+        >
             <Header />
             <Grid container 
                 spacing={0} 
@@ -40,7 +46,9 @@ export default function Login({setUser}) {
                     gridTemplateColumns: "1fr 1fr",
                 }}
             >
-                <Grid item xs={6}>
+                <Grid item xs={6}
+                    backgroundColor="#fff"
+                >
                     <Typography
                         variant="h2"
                         component="div"
@@ -83,6 +91,6 @@ export default function Login({setUser}) {
 
             </Grid>
             
-        </>
+        </Box>
     )
 }

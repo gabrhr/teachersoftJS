@@ -136,7 +136,7 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
     /* Box principal de toda la aplicacion */
     // <Box display="flex">
     <Box 
-      /* flex is live */
+      /* flex is life */
       display="flex" 
       /* fill remainder of screen */
       // position="absolute"  // messes with header

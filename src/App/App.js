@@ -7,7 +7,7 @@ $ npm install react-router-dom react-markdown
 $ npm install xlsx
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import './App.css';
 import { CssBaseline, formLabelClasses } from '@mui/material';
 /* PAGES */
@@ -15,13 +15,14 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import { FamilyRestroomOutlined, FormatColorResetSharp } from '@mui/icons-material';
 import Employees from '../pages/Employees/Employees';
 import UserPage from '../pages/General/UserPage';
 //import ContentHeader from '../components/AppMain/ContentHeader';
+// import ProtectedRoute from './RouterProtected';
 
 function App() {
   //const classes = useStyles();
@@ -34,32 +35,31 @@ function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState({nombres: '', rol: ''});
+
+  useEffect(() => {
+    console.log('App: UseEffect:')
+    console.log(user)
+    // console.log(localStorage.getItem('loggedUser'))
+  }, [user])
+
   if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
-          <Route exact path="/">
-            <Login 
-              setUser={setUser}
-            />
-          </Route>
-          <Route exact path="/admin"> 
-            <HeaderUser
-                nombre={user}
-                rol="Administrador"
-                idRol= {1}
-                foto={fotoUsuario}
-            />
-          </Route>
-           <Route exact path="/as"> 
-            <HeaderUser
-                nombre="New Employee"
-                rol="Administrador"
-                idRol= {2}
-                foto={fotoUsuario}
-            />
-          </Route>
+          <Switch>
+            <Route exact path="/login">
+              <Login 
+                setUser={setUser}
+              />
+            </Route>
+          </Switch>
+          <HeaderUser
+              nombre="New Employee"
+              rol="Administrador"
+              idRol= {1}
+              foto={fotoUsuario}
+          />  
         </Router>
         <CssBaseline />
       </ThemeProvider>
@@ -68,18 +68,21 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router >
+      <Router>
         {/* <Route exact path="/" component={Login} />
         <Route exact path="/ok" component={Employees} /> */}
-        
+          {/* "HeaderderUser" (main)
+              > {Hpucp, H2user, sidebar, "UserPage" (content)}  
+                > {router (the thing that loads all other things)}
+          */}
           <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {2}
+              idRol= {1}
               foto={fotoUsuario}
         />  
         <CssBaseline />
-        </Router>
+      </Router>
     </ThemeProvider>  
   );
 }

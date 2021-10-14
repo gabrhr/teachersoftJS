@@ -26,8 +26,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function UserPage() {
-
-
   return (
     /* Content Body (aka. AppMain) (lo que tiene el fondito de la ardillita) */
     <Box 
@@ -50,10 +48,17 @@ export default function UserPage() {
         backgroundSize:'contain',
       }}
     >
-      <DrawerHeader />
+      {/* USER PAGE */}
+      <DrawerHeader />  {/* SOLAMENTE UN DIV PARA HACER MARGIN TOP, 
+                            codigo repetido en HeaderUser */}
       <Switch>
         
         {/* admin */}
+        <ProtectedRoute exact path="/login" idRoles={[1,2,3,4,5,6,7,8,9,10]}>
+          <Login/>
+        </ProtectedRoute>
+
+        {/* DUCKTAPE */}
         <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]}>
           <Redirect to="/admin/mantenimiento/usr" />
         </ProtectedRoute>

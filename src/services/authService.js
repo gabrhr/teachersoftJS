@@ -27,7 +27,7 @@ const login = async (userObject) => {
       return console.log("Authentication failed")
     console.log(response.data.user);
     tokenService.setToken(response.data); //Creamos el token
-    console.log("Todo bien");
+    // console.log("Todo bien");
     return response.data
   }catch(exception){
     console.error(exception);

@@ -20,10 +20,9 @@ const SubMenu = (props) => {
     const location = useLocation()
     let {pathNow} = useRouteMatch();
     
+    /* "ESTE ES EL SUBNAV" */
     const showSubnav = () => {
       setSubnav(!subnav);
-      console.log("Este es el subnav:")
-      console.log(subnav)
     }
 
     const handleClick = (e, indice, nav, path) => {
