@@ -11,7 +11,7 @@ export default function Login() {
         paddingRight: 60,
         paddingTop: 20,
         paddingBottom: 20,
-        width:"60%", 
+        width:"60%",
         margin:"20px auto",
 
         borderStyle: 'solid',
@@ -21,7 +21,7 @@ export default function Login() {
     }
     const textStyle = {
         zIndex:2,
-        color: "primary.main",  
+        color: "primary.main",
         fontSize: "50px",
         position: "absolute",
         top: "45%",
@@ -32,8 +32,8 @@ export default function Login() {
     return (
         <>
             <Header />
-            <Grid container 
-                spacing={0} 
+            <Grid container
+                spacing={0}
                 sx={{
                     width: "100%",
                     height: "85vh",
