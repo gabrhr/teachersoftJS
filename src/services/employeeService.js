@@ -26,6 +26,12 @@ export function updateEmployee(data) {
     localStorage.setItem(KEYS.employees, JSON.stringify(employees))
 }
 
+export function deleteEmployee(id) {
+    let employees = getAllEmployees();
+    employees = employees.filter(x => x.id != id)
+    localStorage.setItem(KEYS.employees, JSON.stringify(employees))
+}
+
 export function generateEmployeeID() {
     if (localStorage.getItem(KEYS.employeeID) == null)
         localStorage.setItem(KEYS.employeeID, '0')

@@ -138,7 +138,7 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
       /* flex is live */
       display="flex" 
       /* fill remainder of screen */
-      position="absolute" 
+      // position="absolute"  // messes with header
       top="0px" 
       bottom="0px"
       width="100%"
