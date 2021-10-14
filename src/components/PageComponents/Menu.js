@@ -27,24 +27,22 @@ const SubMenu = (props) => {
     }
 
     const handleClick = (e, indice, nav, path) => {
-        handleListItemClick(e, indice)
-        history.push(path);
-        if(nav) {
-
-            showSubnav();
-        }else{
-            setSubnav(false)
+      /*   history.push(path); */
+      if(nav) {
+        showSubnav();
+      }else{
+          handleListItemClick(e, indice)
+            history.push(path)
         }
     }
     const handleListSubItemClick = (e, indice, path) => {
       setSelectedIndexI(indice);
-
       history.push(path);
     };
 
     return (
       <>
-        <Link to={`${item.path}`} style={{ textDecoration: 'none' }}>
+        {/* <Link to={`${item.path}`} style={{ textDecoration: 'none' }}> */}
             <ListItemButton 
                 sx={{ 
                     pl: 3, 
@@ -63,7 +61,7 @@ const SubMenu = (props) => {
                 <ListItemText sx={{color: "primary.main"}} primary={item.text} />
                 {!item.subNav? null: subnav? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-        </Link>
+        {/* </Link> */}
         <Collapse in={subnav} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
                 {open && subnav && item.subNav.map((item, index) => {

@@ -40,7 +40,7 @@ const Login=()=>{
     const handleSubmit = async (e) => {
       e.preventDefault();
 
-      const user = AuthService.login(values.user, values.password);
+      const user = AuthService.login(values.username, values.password);
       //DEPENDE DE LOS RESULTADOS SE MUESTRAS DISTINTA DATA.
       setLogin(user); //cambio de estado.
       <>
