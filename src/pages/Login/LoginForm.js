@@ -1,8 +1,12 @@
 import { Typography } from '@mui/material';
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
+import AuthService from '../../services/authService';
+import { useState } from 'react';
+import tokens from '../../services/tokens';
+import { wait } from '@testing-library/dom';
 
 const initialFieldValues = {
     id: 0,
@@ -11,17 +15,39 @@ const initialFieldValues = {
     isPersistentLogin: false
 }
 
+/*CODIGO -  */
+
 const Login=()=>{
+  //MANEJO DE ESTADOS
+  //const [login, setLogin] = useState(null);
+  const history = useHistory();
 
-    const {
-        values,
-        // setValues,
-        handleInputChange
-    } = useForm(initialFieldValues);
+  const {
+      values,
+      // setValues,
+      handleInputChange
+  } = useForm(initialFieldValues);
 
-    const handleSubmit = e => {
-        e.preventDefault()
-    }
+  //window.localStorage.removeItem('loggedUser');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userObject = {
+      usuario: values.username, 
+      password: values.password,
+    };
+    const user = await AuthService.login(userObject);
+    //DEPENDE DE LOS RESULTADOS SE MUESTRAS DISTINTA DATA.
+    const loggedUser = (JSON.parse(
+      window.localStorage.getItem('loggedUser')));//Obtenemos el id del user almacenado
+    console.log(loggedUser.user.persona.nombres);
+    //debugger;
+    user ? 
+      history.push("/ok")
+    :
+      console.log("Usuario no identificado")
+  }
+
     return(
         <Form onSubmit={handleSubmit} >
                 <Controls.Input

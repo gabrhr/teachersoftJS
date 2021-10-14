@@ -8,81 +8,55 @@ $ npm install react-router-dom react-markdown
 
 import React from 'react'
 import './App.css';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, formLabelClasses } from '@mui/material';
 /* PAGES */
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
-import { Route, Switch } from "react-router-dom";
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
+import { FamilyRestroomOutlined, FormatColorResetSharp } from '@mui/icons-material';
+import Employees from '../pages/Employees/Employees';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 function App() {
+  //const classes = useStyles();
+  // const Hola = [
+  //   {
+  //     MenuAdministrador
+  //   }
+  // ];
+
+  /* PRUEBAS */
+  //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
-  if (true){
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
-          <Login />
+          <Route exact path="/" component={Login} />
+          <Route exact path="/ok" component={Employees} />
         </Router>
         <CssBaseline />
       </ThemeProvider>
     )
   }
+
   return (
     <ThemeProvider theme={theme}>
-      <Router forceRefresh={false}>
-        <div clasName = "classes.root" >
-          <Switch>
-            <Route
-              exact
-              path = "/"
-              idRoles = {[2, 5]}
-            />
-            <Route
-              exact
-              path = "/Administrador/mantenimiento"
-              idRoles = {[1, 3]}
-              //component = { (props) => gestionar({
-              //...props.location.state,
-              //}) }
-            />
-            <Route
-              exact
-              path = "activate/:token"
-              //component = {ActivateLogin}
-            />
-            <Router
-              exact
-              path = "/resetPassword/:email/:token"
-              //component = {ResetPassword}
-            />
-            <Route
-              exact
-              path = "/NoRoles"
-              //component = {NoRoles}
-            />
-            <Route exact path = "/" component = {Login}/>
-            <Route exact path = "/login/:thing?" component = {Login} />
-            <Route exact path = "/prueba/1"/>
-            <Route default component = {Login} />
-          </Switch>
-          /*
-          <HeaderUser
-            nombre="New Employee"
-            rol="Administrador"
-            idRol= {1}
-            foto={fotoUsuario}
-          />
-          */
-          <CssBaseline />
-        </div>
+      <Router >
+        <HeaderUser
+              nombre="New Employee"
+              rol="Administrador"
+              idRol= {1}
+              foto={fotoUsuario}
+        />
+        <CssBaseline />
         </Router>
-      </ThemeProvider>
-      );
+    </ThemeProvider>  
+  );
 }
 
 export default App;
