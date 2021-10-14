@@ -52,11 +52,12 @@ export default function UserPage() {
     >
       <DrawerHeader />
       <Switch>
-        <ProtectedRoute exact path="/" idRoles={[1]} component={Login} />
+        
         {/* admin */}
         <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]}>
           <Redirect to="/admin/mantenimiento/usr" />
         </ProtectedRoute>
+
         <ProtectedRoute exact path="/admin/mantenimiento/usr" idRoles={[1]} component={GestionUsuarios} />
         <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={GestionDepartamento} />
         <ProtectedRoute exact path="/admin/mantenimiento/sec" idRoles={[1]} component={GestionSeccion} />

@@ -20,6 +20,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from '../pages/Login/Login';
 import { FamilyRestroomOutlined, FormatColorResetSharp } from '@mui/icons-material';
 import Employees from '../pages/Employees/Employees';
+import UserPage from '../pages/General/UserPage';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 function App() {
@@ -33,12 +34,32 @@ function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
+  const [user, setUser] = React.useState();
   if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
-          <Route exact path="/" component={Login} />
-          <Route exact path="/ok" component={Employees} />
+          <Route exact path="/">
+            <Login 
+              setUser={setUser}
+            />
+          </Route>
+          <Route exact path="/admin"> 
+            <HeaderUser
+                nombre={user}
+                rol="Administrador"
+                idRol= {1}
+                foto={fotoUsuario}
+            />
+          </Route>
+           <Route exact path="/as"> 
+            <HeaderUser
+                nombre="New Employee"
+                rol="Administrador"
+                idRol= {2}
+                foto={fotoUsuario}
+            />
+          </Route>
         </Router>
         <CssBaseline />
       </ThemeProvider>

@@ -5,7 +5,7 @@ import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
 
 
-export default function Login() {
+export default function Login({setUser}) {
     const paperStyle={
         paddingLeft: 60,
         paddingRight: 60,
@@ -55,7 +55,7 @@ export default function Login() {
                         style={paperStyle}
 
                         >
-                        <LoginForm/>
+                        <LoginForm setUser={setUser}/>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}

@@ -6,7 +6,8 @@ import { useForm, Form } from '../../components/useForm';
 import AuthService from '../../services/authService';
 import { useState } from 'react';
 import tokens from '../../services/tokens';
-import { wait } from '@testing-library/dom';
+import HeaderUser from '../../components/PageComponents/HeaderUser';
+import Vacio from '../Dev/Vacio';
 
 const initialFieldValues = {
     id: 0,
@@ -17,7 +18,8 @@ const initialFieldValues = {
 
 /*CODIGO -  */
 
-const Login=()=>{
+const Login=({setUser})=>{
+    
   //MANEJO DE ESTADOS
   //const [login, setLogin] = useState(null);
   const history = useHistory();
@@ -41,11 +43,35 @@ const Login=()=>{
     const loggedUser = (JSON.parse(
       window.localStorage.getItem('loggedUser')));//Obtenemos el id del user almacenado
     console.log(loggedUser.user.persona.nombres);
+    console.log(loggedUser.user.persona.tipo_persona);
     //debugger;
-    user ? 
-      history.push("/ok")
-    :
-      console.log("Usuario no identificado")
+    if(user){
+        setUser(loggedUser.user.persona.nombre)
+        console.log(loggedUser.user.persona.nombres)
+        switch (loggedUser.user.persona.tipo_persona) {
+            case 0:
+              history.push("/admin");
+              break;
+            case 1:
+              history.push({
+                pathname: "/as",
+              });
+              break;
+            case 2:
+              history.push("/cs");
+              break;
+            case 3:
+              history.push("/jd");
+            case 4:
+              history.push("/ad");
+            case 5:
+              history.push("/sd");
+            default:
+              return history.push("/");
+          }
+    }else{
+        history.push("/")
+    }   
   }
 
     return(
