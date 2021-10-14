@@ -34,7 +34,6 @@ function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
-  const [user, setUser] = React.useState();
   if (true) {
     return (
       <ThemeProvider theme={theme}>
@@ -72,12 +71,12 @@ function App() {
         {/* <Route exact path="/" component={Login} />
         <Route exact path="/ok" component={Employees} /> */}
         
-          <HeaderUser
+         <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {2}
+              idRol= {1}
               foto={fotoUsuario}
-        />  
+        /> 
         <CssBaseline />
         </Router>
     </ThemeProvider>  
