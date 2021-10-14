@@ -4,14 +4,17 @@ import { makeStyles } from '@mui/styles'
 import { PrecisionManufacturingRounded } from '@mui/icons-material'
 import { Box } from '@mui/system'
 
+
 const useStyles = makeStyles(theme => ({
   table: {   
     // '& .MuiTable-root': {
     '& .MuiTableCell-head': {
       fontWeight: '600',
       color: "primary.dark",
-      backgroundColor: '#cfcfff',
+      backgroundColor: '#fff',
       borderColor: "primary.main",
+
+      
       
     },
     /* All of these work to different degrees */
@@ -23,9 +26,16 @@ const useStyles = makeStyles(theme => ({
       // backgroundColor: "#00ff00"
     },
     '& tbody tr:hover': {
-      backgroundColor: '#E9ECF8',
+      //backgroundColor: '#E9ECF8',
       // cursor: 'pointer'
     }
+  },
+  typography: {
+    fontFamily: "Quicksand",
+    fontStyle: "normal",
+    fontWeight: '500',
+    fontSize: '20px',
+    lineHeight: "115%,"
   }
 }
 ))
@@ -39,7 +49,7 @@ export default function useTable(records, headCells, filterFn) {
   const [orderBy, setOrderBy] = useState()
 
   const BoxTbl = props => (
-        <Box border={1} color="#D4D9EC" borderRadius="20px" overflow="hidden" mt={4}>
+        <Box border={1} color="#D4D9EC" borderRadius="15px" overflow="hidden" mt={4}>
           {props.children}
         </Box>
   )
@@ -61,17 +71,17 @@ export default function useTable(records, headCells, filterFn) {
 
     return (
       <TableHead>
-        <TableRow>
+        <TableRow > 
           {
             headCells.map(headCell => (
-              <TableCell
+              <TableCell 
                 key={headCell.id}
                 align={headCell.numeric ? 'right' : 'left'}
                 sortDirection={orderBy === headCell.id
                   ? order : false}
               >
                 {headCell.sortable ?
-                  <TableSortLabel
+                  <TableSortLabel className={classes.typography}
                     active={orderBy === headCell.id}
                     direction={orderBy === headCell.id
                       ? order : 'asc'}

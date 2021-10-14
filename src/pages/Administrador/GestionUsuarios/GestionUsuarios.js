@@ -10,6 +10,7 @@ import { DT } from '../../../components/DreamTeam/DT'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import GestionUsuariosForm from './GestionUsuariosForm'
+import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
 import Notification from '../../../components/util/Notification'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
 /* SERVICES */
@@ -184,7 +185,7 @@ export default function GestionUsuarios() {
       </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
-        <Typography variant="h4" style={SubtitulosTable}>
+        <Typography variant="h4" style={SubtitulosTable} > 
           Usuarios del Sistema
         </Typography>
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
@@ -214,41 +215,37 @@ export default function GestionUsuarios() {
             <TblHead />
             <TableBody>
               {
-                recordsAfterPagingAndSorting()
-                  .map(item => 
-                      (
-                        <TableRow key={item.id}>
-                          <TableCell>{item.fullName}</TableCell>
-                          <TableCell>{item.DNI}</TableCell>
-                          <TableCell>{item.correo}</TableCell>
-                          <TableCell>{item.rolName}</TableCell>
-                          <TableCell>{item.seccionName}</TableCell>
-                          <TableCell>{item.departamentoName}</TableCell>
-                          <TableCell>
-                            <Controls.ActionButton 
-                              color="warning"
-                              onClick={ () => {openInPopup(item)}}
-                            >
-                              <EditOutlinedIcon fontSize="small" />
-                            </Controls.ActionButton>
-                            <Controls.ActionButton 
-                              color="error"
-                              onClick={() => {
-                                // onDelete(item.id)
-                                setConfirmDialog({
-                                  isOpen: true,
-                                  title: '¿Eliminar usuario permanentemente?',
-                                  subTitle: 'No es posible deshacer esta accion',
-                                  onConfirm: () => {onDelete(item.id)}
-                                })
-                              }}
-                            >
-                              <CloseIcon fontSize="small" />
-                            </Controls.ActionButton>
-                          </TableCell>
-                        </TableRow>
-                      )
-                  )
+                recordsAfterPagingAndSorting().map(item => (
+                  <TableRow key={item.id}>
+                    <StyledTableCell>{item.fullName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion}</StyledTableCell>
+                    <StyledTableCell>{item.departamento}</StyledTableCell>
+                    <StyledTableCell>{item.dni}</StyledTableCell>
+                    <StyledTableCell>{item.email}</StyledTableCell>
+                    <StyledTableCell>
+                      <Controls.ActionButton 
+                        color="warning"
+                        onClick={ () => {openInPopup(item)}}
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </Controls.ActionButton>
+                      <Controls.ActionButton 
+                        color="error"
+                        onClick={() => {
+                          // onDelete(item.id)
+                          setConfirmDialog({
+                            isOpen: true,
+                            title: '¿Eliminar usuario permanentemente?',
+                            subTitle: 'No es posible deshacer esta accion',
+                            onConfirm: () => {onDelete(item.id)}
+                          })
+                        }}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </Controls.ActionButton>
+                    </StyledTableCell>
+                  </TableRow>
+                ))
               }
             </TableBody>
           </TblContainer>
