@@ -1,10 +1,13 @@
 import axios from 'axios';
 import url from '../config.js';
+import tokenService from './tokens.js';
 
 const getSecciones = async () => {
   try{
-    const request = await axios.get(`${url}/seccion/`); //Todas las secciones
-    return request.data;
+    //debugger;
+    const request= await axios.get(`${url}/seccion/`, tokenService.getToken()) //Todas las secciones
+   
+    return request.data;  
   }catch(exception){
     console.error(exception);
   }

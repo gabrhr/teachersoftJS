@@ -6,12 +6,24 @@ const setToken = (user) => {
 }
 
 const getToken = () => {
-  const newToken = JSON.parse(window.localStorage.getItem('loggedUser').token);//Obtenemos el id del user almacenado
-  console.log(newToken);
-  const headers = {
-    "Authorization": newToken,
+  const newToken = JSON.parse(window.localStorage.getItem('loggedUser'));
+
+  const config = {
+    headers: {
+    "Authorization" : `${newToken.token}`,
+    }
   };
-  return headers;
+
+  //console.log(config);
+  return config;
+  //return `Bearer ${newToken.token}`;  //Bearer si se utiliza dicha cabecera - de autenticacion
+}
+
+const getUser = () => {
+  const newUser = JSON.parse(window.localStorage.getItem('loggedUser').token);//Obtenemos el id del user almacenado
+  console.log(newUser.user);
+
+  return newUser.user;
   //return `Bearer ${newToken.token}`;  //Bearer si se utiliza dicha cabecera - de autenticacion
 }
 

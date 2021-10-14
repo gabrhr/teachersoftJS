@@ -32,7 +32,7 @@ function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
-  if (true) {
+  if (false) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
