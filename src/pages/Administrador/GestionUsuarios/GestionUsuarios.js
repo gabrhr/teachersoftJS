@@ -215,41 +215,37 @@ export default function GestionUsuarios() {
             <TblHead />
             <TableBody>
               {
-               recordsAfterPagingAndSorting()
-                  .map(item => 
-                      (
-                        <StyledTableRow key={item.id}>
-                          <StyledTableCell>{item.fullName}</StyledTableCell>
-                          <StyledTableCell>{item.DNI}</StyledTableCell>
-                          <StyledTableCell>{item.correo}</StyledTableCell>
-                          <StyledTableCell>{item.rolName}</StyledTableCell>
-                          <StyledTableCell>{item.seccionName}</StyledTableCell>
-                          <StyledTableCell>{item.departamentoName}</StyledTableCell>
-                          <StyledTableCell>
-                            <Controls.ActionButton 
-                              color="warning"
-                              onClick={ () => {openInPopup(item)}}
-                            >
-                              <EditOutlinedIcon fontSize="small" />
-                            </Controls.ActionButton>
-                            <Controls.ActionButton 
-                              color="error"
-                              onClick={() => {
-                                // onDelete(item.id)
-                                setConfirmDialog({
-                                  isOpen: true,
-                                  title: '¿Eliminar usuario permanentemente?',
-                                  subTitle: 'No es posible deshacer esta accion',
-                                  onConfirm: () => {onDelete(item.id)}
-                                })
-                              }}
-                            >
-                              <CloseIcon fontSize="small" />
-                            </Controls.ActionButton>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      )
-                  )
+                recordsAfterPagingAndSorting().map(item => (
+                  <TableRow key={item.id}>
+                    <StyledTableCell>{item.fullName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion}</StyledTableCell>
+                    <StyledTableCell>{item.departamento}</StyledTableCell>
+                    <StyledTableCell>{item.dni}</StyledTableCell>
+                    <StyledTableCell>{item.email}</StyledTableCell>
+                    <StyledTableCell>
+                      <Controls.ActionButton 
+                        color="warning"
+                        onClick={ () => {openInPopup(item)}}
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </Controls.ActionButton>
+                      <Controls.ActionButton 
+                        color="error"
+                        onClick={() => {
+                          // onDelete(item.id)
+                          setConfirmDialog({
+                            isOpen: true,
+                            title: '¿Eliminar usuario permanentemente?',
+                            subTitle: 'No es posible deshacer esta accion',
+                            onConfirm: () => {onDelete(item.id)}
+                          })
+                        }}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </Controls.ActionButton>
+                    </StyledTableCell>
+                  </TableRow>
+                ))
               }
             </TableBody>
           </TblContainer>
