@@ -15,15 +15,24 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import Employees from '../pages/Employees/Employees';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 function App() {
+  //const classes = useStyles();
+  // const Hola = [
+  //   {
+  //     MenuAdministrador
+  //   }
+  // ];
+
+  /* PRUEBAS */
+  //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -43,7 +52,7 @@ function App() {
          <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {2}
+              idRol= {1}
               foto={fotoUsuario}
         /> 
         <CssBaseline />

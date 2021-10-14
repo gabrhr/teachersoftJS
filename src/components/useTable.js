@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material'
+import { Typography, Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { PrecisionManufacturingRounded } from '@mui/icons-material'
 import { Box } from '@mui/system'
@@ -9,13 +9,15 @@ const useStyles = makeStyles(theme => ({
   table: {   
     // '& .MuiTable-root': {
     '& .MuiTableCell-head': {
-      fontWeight: '600',
-      color: "primary.dark",
-      backgroundColor: '#fff',
-      borderColor: "primary.main",
-
-      
-      
+      // fontWeight: '600',
+      // color: "primary.dark",
+      // backgroundColor: '#fff',
+      // borderColor: "primary.main",
+      fontFamily: "Quicksand",
+      fontStyle: "normal",
+      fontWeight: '500',
+      fontSize: '20px',
+      lineHeight: "115%,"
     },
     /* All of these work to different degrees */
     // '& tbody td': {
@@ -30,13 +32,13 @@ const useStyles = makeStyles(theme => ({
       // cursor: 'pointer'
     }
   },
-  typography: {
-    fontFamily: "Quicksand",
-    fontStyle: "normal",
-    fontWeight: '500',
-    fontSize: '20px',
-    lineHeight: "115%,"
-  }
+  // typography: {
+  //   fontFamily: "Quicksand",
+  //   fontStyle: "normal",
+  //   fontWeight: '500',
+  //   fontSize: '20px',
+  //   lineHeight: "115%,"
+  // }
 }
 ))
 
@@ -44,7 +46,7 @@ export default function useTable(records, headCells, filterFn) {
   const classes = useStyles()
   const pages = [5, 10, 25, 50]
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(pages[page])
+  const [rowsPerPage, setRowsPerPage] = useState(pages[0])
   const [order, setOrder] = useState()
   const [orderBy, setOrderBy] = useState()
 
@@ -80,17 +82,22 @@ export default function useTable(records, headCells, filterFn) {
                 sortDirection={orderBy === headCell.id
                   ? order : false}
               >
-                {headCell.sortable ?
-                  <TableSortLabel className={classes.typography}
-                    active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id
-                      ? order : 'asc'}
-                    onClick={() => {
-                      handleSortRequest(headCell.id)
-                    }}
-                  >
-                    {headCell.label}
-                  </TableSortLabel> : headCell.label}
+                {
+                  headCell.sortable
+                    ? <TableSortLabel 
+                        className={classes.typography}
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id
+                          ? order : 'asc'}
+                        onClick={() => {
+                          handleSortRequest(headCell.id)
+                        }}
+                      >
+                        {headCell.label}
+                      </TableSortLabel> 
+                    : 
+                      headCell.label
+                  }
               </TableCell>
             ))
           }
