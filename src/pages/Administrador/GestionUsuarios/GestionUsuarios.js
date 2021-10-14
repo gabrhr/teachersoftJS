@@ -11,6 +11,7 @@ import { DT } from '../../../components/DreamTeam/DT'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import GestionUsuariosForm from './GestionUsuariosForm'
+import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -183,18 +184,18 @@ export default function GestionUsuarios() {
             <TableBody>
               {
                 recordsAfterPagingAndSorting().map(item => (
-                  <TableRow key={item.id}>
-                    <TableCell
+                  <StyledTableRow key={item.id}>
+                    <StyledTableCell
                       align="right"
                     >
                       {item.id}
-                    </TableCell>
-                    <TableCell>{item.fullName}</TableCell>
-                    <TableCell>{item.seccion}</TableCell>
-                    <TableCell>{item.departamento}</TableCell>
-                    <TableCell>{item.dni}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                  </TableRow>
+                    </StyledTableCell>
+                    <StyledTableCell>{item.fullName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion}</StyledTableCell>
+                    <StyledTableCell>{item.departamento}</StyledTableCell>
+                    <StyledTableCell>{item.dni}</StyledTableCell>
+                    <StyledTableCell>{item.email}</StyledTableCell>
+                  </StyledTableRow>
                 ))
               }
             </TableBody>
