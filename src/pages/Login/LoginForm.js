@@ -96,12 +96,6 @@ const Login=()=>{
                         Recuperar contraseña
                     </Link>
                 </Typography>
-                <Typography paragraph={true}> ¿No tienes una cuenta?
-                    {'\u00A0'}
-                    <Link to="#" >
-                        Regístrate
-                    </Link>
-                </Typography>
             {/* </Grid> */}
         </Form>
     )
