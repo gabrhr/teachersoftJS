@@ -167,14 +167,14 @@ export default function GestionUsuarios() {
             onChange={handleSearch}
             type="search"
           />
-          <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-          <Controls.Button 
-              text="Nuevo Usuario"
+ 
+          <Controls.AddButton 
+              title="Agregar Nuevo Usuario"
               variant="iconoTexto"
-              startIcon={<AddIcon/>}
+               
               onClick = {() => setOpenPopup(true)}
             />
-          </Box>
+      
         {/* </Toolbar> */}
         </div>
         <BoxTbl>
