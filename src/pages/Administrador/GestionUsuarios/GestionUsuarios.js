@@ -13,6 +13,7 @@ import useTable from "../../../components/useTable"
 import GestionUsuariosForm from './GestionUsuariosForm'
 import Notification from '../../../components/util/Notification'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
+import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -208,7 +209,7 @@ export default function GestionUsuarios() {
       </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
-        <Typography variant="h4" style={SubtitulosTable}>
+        <Typography variant="h4" style={SubtitulosTable} > 
           Usuarios del Sistema
         </Typography>
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
@@ -243,12 +244,12 @@ export default function GestionUsuarios() {
               {
                 recordsAfterPagingAndSorting().map(item => (
                   <TableRow key={item.id}>
-                    <TableCell>{item.fullName}</TableCell>
-                    <TableCell>{item.seccion}</TableCell>
-                    <TableCell>{item.departamento}</TableCell>
-                    <TableCell>{item.dni}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                    <TableCell>
+                    <StyledTableCell>{item.fullName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion}</StyledTableCell>
+                    <StyledTableCell>{item.departamento}</StyledTableCell>
+                    <StyledTableCell>{item.dni}</StyledTableCell>
+                    <StyledTableCell>{item.email}</StyledTableCell>
+                    <StyledTableCell>
                       <Controls.ActionButton 
                         color="warning"
                         onClick={ () => {openInPopup(item)}}
@@ -269,7 +270,7 @@ export default function GestionUsuarios() {
                       >
                         <CloseIcon fontSize="small" />
                       </Controls.ActionButton>
-                    </TableCell>
+                    </StyledTableCell>
                   </TableRow>
                 ))
               }
