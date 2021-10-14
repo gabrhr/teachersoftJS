@@ -4,6 +4,7 @@ $ npm install @mui/material @emotion/react @emotion/styled
 $ npm install @mui/styles
 $ npm install "@date-io/date-fns" "@mui/lab" "date-fns"
 $ npm install react-router-dom react-markdown
+$ npm install xlsx
  */
 
 import React from 'react'
@@ -17,6 +18,7 @@ import fotoUsuario from '../assets/images/profile-photo.png'
 import { BrowserRouter as Router } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
+import Employees from '../pages/Employees/Employees';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
 function App() {
@@ -35,12 +37,15 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router >
-        <HeaderUser
+        {/* <Route exact path="/" component={Login} />
+        <Route exact path="/ok" component={Employees} /> */}
+        
+         <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {1}
+              idRol= {2}
               foto={fotoUsuario}
-        />
+        /> 
         <CssBaseline />
         </Router>
     </ThemeProvider>

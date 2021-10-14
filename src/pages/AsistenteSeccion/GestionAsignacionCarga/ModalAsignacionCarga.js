@@ -3,10 +3,12 @@ import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Box, Grid, Stack, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { Input, Grid, Stack, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import * as XLSX from 'xlsx'
 /* ICONS */
 import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const tableHeaders = [
     {
@@ -71,7 +73,15 @@ export default function ModalAsignacionCarga() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevatio:0}
+    color:"primary.light", elevatio:0, marginTop: 3}
+
+    const [columns, setColumns] = useState([]);
+    const [data, setData] = useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [usuarios, setUsuarios] = useState(null)
+    const [usuariosIncorrectos, setUsuariosIncorrectos] = useState(null)
+
+    
     const {
         TblContainer,
         TblHead,
@@ -80,28 +90,103 @@ export default function ModalAsignacionCarga() {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
     
-    /* const {
-        values,
-        // setValues,
-        errors,
-        setErrors,
-        handleInputChange,
-        resetForm
-    } = useForm(initialFieldValues, true, validate); */
+    const onInputClick = (event) => {
+        event.target.value = ''
+    }
 
-    {/* const handleSubmit = e => {
-        /* e is a "default parameter" 
-        e.preventDefault()
-        if (validate())
-            window.alert('valid')
-        else
-            window.alert('invalid')
-        if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
-    } */}
+
+    const processData = dataString => {
+        const dataStringLines = dataString.split(/\r\n|\n/);
+        const headers = dataStringLines[0].split(
+            /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+        );
+
+        let list = [];
+        for (let i = 1; i < dataStringLines.length; i++) {
+            const row = dataStringLines[i].split(
+                /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+            );
+            if (headers && row.length == headers.length) {
+                const obj = {};
+                for (let j = 0; j < headers.length; j++) {
+                    let d = row[j];
+                    if (d.length > 0) {
+                        if (d[0] == '"') d = d.substring(1, d.length - 1);
+                        if (d[d.length - 1] == '"') d = d.substring(d.length - 2, 1);
+                    }
+                    if (headers[j]) {
+                        obj[headers[j]] = d;
+                    }
+                }
+
+                // remove the blank rows
+                if (Object.values(obj).filter(x => x).length > 0) {
+                    list.push(obj);
+                }
+            }
+        }
+
+        // prepare columns list from headers
+        const columns = headers.map(c => ({
+            name: c,
+            selector: c
+        }));
+
+        //console.log(list)
+        setData(list);
+        setColumns(columns);
+
+        let listaCorrectos = []
+        let listaIncorrectos = []
+
+        for (let i = 0; i < list.length; i++) {
+            listaIncorrectos.push(list[i])
+        }
+
+        setRecords(listaIncorrectos)
+
+    };
+
+    const handleUploadFile = e => {
+        try {
+            const file = e.target.files[0];
+            //console.log(file)
+            const reader = new FileReader();
+            reader.onload = evt => {
+                /* Parse data */
+                const bstr = evt.target.result;
+                const wb = XLSX.read(bstr, { type: 'binary' });
+                /* Get first worksheet */
+                const wsname = wb.SheetNames[0];
+                const ws = wb.Sheets[wsname];
+                /* Convert array of arrays */
+                const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+                processData(data);
+            };
+            reader.readAsBinaryString(file);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
     return (
         <Form>
+            <Grid align="right">
+                <label htmlFor="contained-button-file" >
+                    <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
+                        type="file" sx={{display: 'none'}} 
+                        onChange={handleUploadFile}
+                        onClick={onInputClick}
+                    />
+                    <Controls.Button
+                        text="Subir archivo"
+                        endIcon={<AttachFileIcon />}
+                        size="medium"
+                        component="span"
+                        align="right"
+                    />
+                </label>
+            </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
                 <Typography variant="h4"
                     color="primary.light" style={SubtitulosTable}
@@ -148,7 +233,7 @@ export default function ModalAsignacionCarga() {
                         // size="large"
                         text="Cargar Datos"
                         type="submit"
-                        />
+                    />
                     
                 </div>
             </Grid>
