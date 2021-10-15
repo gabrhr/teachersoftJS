@@ -80,7 +80,7 @@ function App() {
               rol="Administrador"
               idRol= {1}
               foto={fotoUsuario}
-        />  
+        /> 
         <CssBaseline />
       </Router>
     </ThemeProvider>  

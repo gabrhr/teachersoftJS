@@ -40,14 +40,16 @@ export default function Login({setUser}) {
             <Header />
             <Grid container 
                 spacing={0} 
-                sx={{
-                    width: "100%",
-                    height: "85vh",
-                    gridTemplateColumns: "1fr 1fr",
-                }}
+                width= "100%"
+                height= "calc(100vh - 80px)"
+                gridTemplateColumns= "1fr 1fr"
+                alignContent="center"
+                // overflow= 'hidden'
             >
                 <Grid item xs={6}
                     backgroundColor="#fff"
+                    height= "calc(100vh - 80px)"
+                    alignContent="center"
                 >
                     <Typography
                         variant="h2"
@@ -61,7 +63,6 @@ export default function Login({setUser}) {
                     <Paper
                         elevation={0}
                         style={paperStyle}
-
                         >
                         <LoginForm setUser={setUser}/>
                     </Paper>
@@ -69,6 +70,8 @@ export default function Login({setUser}) {
                 <Grid item xs={6}
                     sx={{
                         // transform: 'translateZ(0)',
+                        height: "calc(100vh - 80px)",
+                        // height: '100vh',
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
@@ -85,12 +88,8 @@ export default function Login({setUser}) {
                         TeacherSoft
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Footer/>
-                </Grid>
-
             </Grid>
-            
+            <Footer/>
         </Box>
     )
 }

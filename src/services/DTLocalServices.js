@@ -1,8 +1,31 @@
 import { insertEmployee } from "./employeeService";
 
+/* Validaciones
+ * 
+ * Todas retornan mensaje de error.  Empty string means valid.
+ */
+
+export function validateEmail(email) {
+    return (/^$|^[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/).test(email)
+        ? ""
+        : "Correo electronico invalido"
+}
+
+/* nombre de persona (Peru) */
+export function validateName(name) {
+    return (/^$|^[A-Za-záéíóúñ -]+$/).test(name)
+        ? ""
+        : "Nombre invalido"
+}
+
+/* Returns error message,  */
+export function requiredField(s) {
+    return s.length !== 0 ? "" : "Campo requerido"
+}
+
 const KEYS = {
     personaID: 'personaID',        // highest assigned ID (to auto increment)
-                                    // (0 when empty)
+                                   // (0 when empty)
     personas: 'personas'           // array
 }
 
@@ -47,9 +70,9 @@ export function getAllPersonas() {
     let dptos = getAllDepartamentos();
     return personas.map( p => ({
         ...p,
-        rolName: roles.find(r => r.id === p.rol).title ?? '',
-        seccionName: secciones.find(s => s.id === p.seccion).title ?? '',
-        departamentoName: dptos.find(d => d.id === p.departamento).title ?? '',
+        rolName: roles.find(r => r.id === p.rol).title,
+        seccionName: secciones.find(s => s.id === p.seccion).title,
+        departamentoName: dptos.find(d => d.id === p.departamento).title,
         fullName: p.apellidoPaterno + ' ' + p.apellidoMaterno 
                   + ', ' + p.nombres
     }))

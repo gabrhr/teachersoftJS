@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@mui/styles';
 import { IconButton, InputAdornment, Toolbar } from '@mui/material';
 import { Box, Paper, TableBody, TableRow, TableCell } from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
@@ -215,13 +214,16 @@ export default function GestionUsuarios() {
             <TblHead />
             <TableBody>
               {
+                // API devuelve [].  map se cae.  Llamar 2 veces.
+                // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
                   <TableRow key={item.id}>
                     <StyledTableCell>{item.fullName}</StyledTableCell>
-                    <StyledTableCell>{item.seccion}</StyledTableCell>
-                    <StyledTableCell>{item.departamento}</StyledTableCell>
-                    <StyledTableCell>{item.dni}</StyledTableCell>
-                    <StyledTableCell>{item.email}</StyledTableCell>
+                    <StyledTableCell>{item.DNI}</StyledTableCell>
+                    <StyledTableCell>{item.correo}</StyledTableCell>
+                    <StyledTableCell>{item.rolName}</StyledTableCell>
+                    <StyledTableCell>{item.seccionName}</StyledTableCell>
+                    <StyledTableCell>{item.departamentoName}</StyledTableCell>
                     <StyledTableCell>
                       <Controls.ActionButton 
                         color="warning"
