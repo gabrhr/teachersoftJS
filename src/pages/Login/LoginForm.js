@@ -52,6 +52,28 @@ const Login = ({ setUser }) => {
           rol: loggedUser.user.persona.tipo_persona
         })
       // console.log(loggedUser.user.persona.nombres)
+      switch (loggedUser.user.persona.tipo_persona) {
+        case 0:
+          history.push("/admin");
+          break;
+        case 1:
+          history.push("/as")
+          //   {
+          //   pathname: "/as",
+          // });
+          break;
+        case 2:
+          history.push("/cs");
+          break;
+        case 3:
+          history.push("/jd");
+        case 4:
+          history.push("/ad");
+        case 5:
+          history.push("/sd");
+        default:
+          return history.push("/");
+      }
     } else {
       history.push("/")
     }
