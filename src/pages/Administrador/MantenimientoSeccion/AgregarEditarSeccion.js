@@ -80,7 +80,7 @@ export default function AgregarEditarSeccion() {
           resetForm()
 
           //Pasamos a - ingresarlo a la BD
-
+          
           //}
           //SeccionService.registerSeccion()
         }
