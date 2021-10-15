@@ -59,7 +59,7 @@ const getSecciones = async () => {
       nombreDepartamento: seccion.departamento.nombre,
     })
     ));
-  console.log(secciones);
+  //console.log(secciones);
   return secciones;
 }
 /*
@@ -84,16 +84,6 @@ export default function GestionSeccion() {
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
 
-    useEffect(() => {
-      getSecciones()
-      .then (newSeccion =>{
-        setRecords(prevRecords => prevRecords.concat(newSeccion));
-        
-        console.log(newSeccion);
-        
-        console.log(records);
-      });
-    }, [])
     //console.log(records);
     const {
         TblContainer,
@@ -118,6 +108,16 @@ export default function GestionSeccion() {
           }
         })
       }
+    useEffect(() => {
+      getSecciones()
+      .then (newSeccion =>{
+        setRecords(prevRecords => prevRecords.concat(newSeccion));
+        
+        //console.log(newSeccion);
+        
+        console.log(records);
+      });
+    }, [])
     return (
         <>
             <ContentHeader
