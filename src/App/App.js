@@ -55,9 +55,8 @@ function App() {
             </Route>
           </Switch>
           <HeaderUser
-              nombre="New Employee"
-              rol="Administrador"
-              idRol= {1}
+              nombre={user.nombres}
+              idRol= {user.rol}
               foto={fotoUsuario}
           />  
         </Router>
