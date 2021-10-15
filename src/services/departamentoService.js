@@ -12,7 +12,7 @@ const getDepartamentos = async () => {
 }
 const getDepartamento = async ({id}) => {
     try{
-        const request = await axios.get(`${url}/departamento/${id}`, tokenService.getToken(),id);
+        const request = await axios.get(`${url}/departamento/${id}`, id, tokenService.getToken());
         if(!request) 
           return request.data;
     } catch (except){

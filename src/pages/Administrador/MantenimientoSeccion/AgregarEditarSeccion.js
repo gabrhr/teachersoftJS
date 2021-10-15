@@ -62,21 +62,27 @@ export default function AgregarEditarSeccion() {
         //Definicio de validaciones
         if (validate()){
           window.alert('valid')
-          console.log(values);
 
-          const newDep = {
+          const newSecc = {
             nombre: values.nombre,
-            correo: values.correo
+            //correo: values.correo,
+            departamento: {
+              id: parseInt(values.departmentId),
+            } ,
+            foto: null,
+            fecha_fundacion: null
             //~~~foto: --queda pendiente 
           }
-
-          await DepartamentoService.registerDepartamento(newDep);
+          console.log(newSecc);
+          const rpta = await SeccionService.registerSeccion(newSecc);
+          console.log(rpta);
+          
+          resetForm()
 
           //Pasamos a - ingresarlo a la BD
 
           //}
           //SeccionService.registerSeccion()
-          resetForm()
         }
         else
             window.alert('invalid')
