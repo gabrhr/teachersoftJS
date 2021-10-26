@@ -92,14 +92,10 @@ export default function ControlForm() {
                     text="outlined"
                     size="small"
                     />
-                    
-                <IconButton 
-                    aria-label="add"
-                    color="secondary"
-                    size="large"
-                    >
-                    <AddIcon />
-                </IconButton>
+                <Controls.Button
+                    variant="iconoTexto"
+                    text="Hola mundo"
+                />
             </div>
             <div>
                 Recuerda h1 grande h4 pequeño

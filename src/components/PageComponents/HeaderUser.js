@@ -12,6 +12,7 @@ import Menu from "./Menu";
 
 import { MenuAdministrador } from "./MenuAdministrador";
 import UserPage from "../../pages/General/UserPage";
+import { MenuAsistenteSeccion } from "./MenuAsistenteSeccion";
 
 const useStyles = makeStyles((themex) => ({
   root: {
@@ -107,18 +108,41 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 
-const HeaderUser = ({ nombre, rol, foto }) => {
+const HeaderUser = ({ nombre, rol, idRol, foto }) => {
   const classes = useStyles();
-  const cls = pagina();
   const [open, setOpen] = React.useState(false);
-
+  let listaMenu=[];
   const handleDrawerOpen = () => {
     setOpen(!open);
-    console.log(true);
   }; 
+  
+  if(idRol==1){
+    listaMenu = MenuAdministrador
+  }
+  if(idRol==2){
+    listaMenu = MenuAsistenteSeccion
+  }
+  if(idRol==3){
+    listaMenu = MenuAsistenteSeccion
+  }  
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const handleListItemClick = (e, indice) => {
+      setSelectedIndex(indice);
+  };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    /* Box principal de toda la aplicacion */
+    // <Box display="flex">
+    <Box 
+      /* flex is live */
+      display="flex" 
+      /* fill remainder of screen */
+      // position="absolute"  // messes with header
+      top="0px" 
+      bottom="0px"
+      width="100%"
+    >
       {/*Header Azul*/}
       <AppBar
         position="fixed"
@@ -195,12 +219,16 @@ const HeaderUser = ({ nombre, rol, foto }) => {
           </Grid>
         </Toolbar>
       </AppBar>
+      
       {/*SideBar*/}
         <Drawer variant="permanent" elevation={1} open={open}>
           <DrawerHeader />
-          <List>
-            {MenuAdministrador.map((item, index) => {
-              return <Menu open={open} item={item} key={index} />;
+          <List >
+            {listaMenu.map((item, index) => {
+              return <Menu open={open} item={item} key={index} 
+                  handleListItemClick={handleListItemClick}
+                  isSelected={selectedIndex === index}
+                />;
             })}
           </List>
         </Drawer>

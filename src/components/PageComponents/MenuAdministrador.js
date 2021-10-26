@@ -1,40 +1,53 @@
 import React from 'react';
 import InboxIcon from '@mui/icons-material/MoveToInbox' 
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+
+import CloseIcon from '@mui/icons-material/Close';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 export const MenuAdministrador = [
     {
-    text: 'Dev',
-    path: '/este/path/no/se/usa/creo',
-    icon: <InboxIcon />,
-    iconClosed: <InboxIcon />,
-    iconOpened: <InboxIcon />,
-    subNav: [
-        {
-        text: 'Index',
-        path: '/',
-        },
-        {
-        text: 'Formulario de prueba',
-        path: '/employee',
-        },
-        {
-        text: 'Showcase',
-        path: '/showcase',
-        }
-        ]
+        text: 'Mantenimientos',
+        path: '',
+        icon: <LibraryBooksIcon />,
+        indice: 0,
+        subNav: [
+            {
+            text: 'Usuario',
+            path: '/admin/mantenimiento/usr',
+            indice: 0,
+            },
+            {
+            text: 'Departamento',
+            path: '/admin/mantenimiento/dep',
+            indice: 1,
+            },
+            {
+            text: 'Sección',
+            path: '/admin/mantenimiento/sec',
+            indice: 2,
+            }]
     },
     {
-        text: 'Prueba 1',
-        path: '/administrador/prueba',
-        icon: <InboxIcon />,
-        iconClosed: <InboxIcon />,
-        iconOpened: <InboxIcon />
+        text: 'Employees',
+        path: '/admin/employees',
+        icon: <ConstructionIcon />,
+        indice: 1,
+
     },
     {
         text: 'Showcase of Components',
-        path: '/administrador/mantenimiento/showcase',
-        icon: <InboxIcon />,
-        iconClosed: <InboxIcon />,
-        iconOpened: <InboxIcon />
+        path: '/admin/showcase',
+        icon: <ConstructionIcon />,
+        indice: 2,
+     
+    },
+    {
+        text: 'Index',
+        path: '/admin/index',
+        icon: <ConstructionIcon />,
+        indice: 3,
+   
     }
 ];

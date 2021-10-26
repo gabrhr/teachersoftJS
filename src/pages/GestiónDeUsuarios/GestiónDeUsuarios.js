@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { makeStyles } from '@mui/styles';
 import { IconButton} from '@mui/material';
-import { Paper, TableBody, TableRow, TableCell } from '@mui/material';
+import {TableBody, TableRow, TableCell } from '@mui/material';
 import { Controls } from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 import  ContentHeader from '../../components/AppMain/ContentHeader';
@@ -9,6 +9,7 @@ import useTable from "../../components/useTable"
 import * as employeeService from '../../services/employeeService';
 import { Avatar, Divider, Grid, Stack, Typography } from '@mui/material'
 import { DT } from '../../components/DreamTeam/DT'
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -40,7 +41,7 @@ const usuarios = [
     {Nombre: 'H22222ola', seccion: '2', DNI: '424243', correo: 'arroba@mailg.com'}
 ]
 
-export default function Employees() {
+export default function GestionUsuarios() {
 
     const classes = useStyles()
 
@@ -76,6 +77,21 @@ export default function Employees() {
                         options={employeeService.getDepartmentCollection()}
                         />
                     </Stack>
+                </Grid>
+                <Grid item xs={8}>
+                    <Typography alignContent= 'right' sx={{color: '#000000', paddingLeft: '86%', paddingTop: '1.3%', 
+                                fontWeight: 'bold'}}>
+                        Agregar usuario
+                    </Typography>
+                </Grid>
+                <Grid item xs={1} alignContent = 'right'>
+                    <IconButton 
+                        aria-label="add"
+                        color="secondary"
+                        size="large"
+                        >
+                        <AddIcon />
+                    </IconButton>
                 </Grid>
             </Grid>
             <Grid container sx={{width: '100%', paddingTop: '30px'}}>

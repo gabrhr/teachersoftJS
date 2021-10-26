@@ -11,9 +11,15 @@ const markdown = `# Index of testing pages in TeacherSoft
 - [DreamTeam components showcase](${window.location.origin + '/showcase'})
 - [here](${window.location.href})
 - [Gestion Usuarios](${window.location.origin + '/GestionDeUsuarios'})
+- [Gestión carga cursos](${window.location.origin + '/GestionCargaCursos'})
 
-~~~JS
-console.log('hello world')
+~~~C
+# include <stdio.h>
+
+int main() {
+    printf("hola mundo!\n");
+    return 0;
+}
 ~~~
 
 - [just a linnk](https://reactjs.com)

@@ -60,7 +60,7 @@ export default function Login() {
                 </Grid>
                 <Grid item xs={6}
                     sx={{
-                        transform: 'translateZ(0)',
+                        // transform: 'translateZ(0)',
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
@@ -82,6 +82,7 @@ export default function Login() {
                 </Grid>
 
             </Grid>
+            
         </>
     )
 }

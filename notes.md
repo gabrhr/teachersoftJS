@@ -2,22 +2,107 @@
 
 VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
-## CSS
+## teachersoftJS dev (bugs, limitations, QA)
 
-Alignment
-```
-align: {left, center, right}                    eje x
-alignItems: {flex-start, center, flex-end}      eje y
-justifyContent: {flex-start, center, flex-end}  eje x
+- Controls.Button does not accept `xs` property (bug).  Do this instead: 
+`<Box sx={buttonxs}><Controls.Button /></Box>`
+- Cual es la diferencia entre `<Box style={{flexGrow: 1}}>` y 
+  `<Box xs={{flexGrow: 1}}>` (con `xs` no funciona)?  `style` es un prop de 
+  MUI5 o se refiere al atributo de html?
+- Como agregar paginas al sidebar menu? 
+  1. Asignar `exact path` en pages/General/UserPage
+  2. Agregar iteam en el menu correspondiente (e.g.,
+     components/MenuAdministrador).  Agregar un indice unico.
+
+
+## CSS notes
+
+**Alignment**
+```JS
+align: {left, center, right, top, bottom}     /* eje xy  (CSS?)
+                                                 Funciona con <Grid>
+                                                 Pero no con <Box> */
+
+display: "flex"                               // SIEMPRE FUNCIONA
+alignItems: {flex-start, center, flex-end}    // eje y
+justifyContent: {flex-start, center, flex-end}// eje x
 ```
 
-Stack
+**sensible fill remainder of screen**
+```JS
+/* flex is life */
+display="flex" 
+/* fill remainder of screen */
+position="absolute" 
+top="0px" 
+bottom="0px"
+width="100%"
+/* grow with the content */
+overflow="auto"
+backgroundSize='contain'
+```
+
+**sensible background**
+```JS
+backgroundColor='secondary.main',
+/* NECESARIO QUE HORRIBLEEEEE */
+sx={{backgroundImage:'url("assets/img/VectorLogin.svg")',
+  backgroundRepeat:'no-repeat',
+  backgroundPosition:'center'
+}}
+```
+
+## MUI5 notes
+
+**Stack**
 ```
 <Stack direction="row" align="left" spacing={0}> ... </Stack>
 ```
 [MUI flexbox](https://mui.com/system/flexbox/#align-content)
 
-## React + Material UI
+**[Customizaciones locas](https://mui.com/customization/how-to-customize/)**
+> Al parecer `&` representa al "CSS class" de la regla que estamos definiendo.
+> I.e., un identificador que el MUI5 crea para aplicar el estilo a ese 
+> componente.  Los espacios separan las reglas, por tanto **son importantes.**
+```JS
+import * as React from 'react';
+import Slider from '@mui/material/Slider';
+import { alpha, styled } from '@mui/material/styles';
+
+const SuccessSlider = styled(Slider)(({ theme }) => ({
+  width: 300,
+  color: theme.palette.success.main,
+  '& .MuiSlider-thumb': {
+    '&:hover, &.Mui-focusVisible': {
+      boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+    '&.Mui-active': {
+      boxShadow: `0px 0px 0px 14px ${alpha(theme.palette.success.main, 0.16)}`,
+    },
+  },
+}));
+
+export default function StyledCustomization() {
+  return <SuccessSlider defaultValue={30} />;
+}
+```
+
+
+## JS & React
+
+Condicional en el HTML dentro de React (JSX?)
+
+```JS
+<>
+  {orderBy === headCell.id ? (
+    <Box component="span" sx={visuallyHidden}>
+      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+    </Box>
+  ) : null}
+</>
+```
+
+## Material UI
 
 **Utilizando el `theme`**
 
@@ -145,12 +230,14 @@ React:
 
 React + Material UI:
 - [CodAffection](https://www.youtube.com/watch?v=bL-ZwwF6wTc&list=PLjC4UKOOcfDQtvkTBfjqeWP8EJKi_WaUn&index=1)
+- [Guide to the sx prop](https://smartdevpreneur.com/material-ui-sx-prop/)
 
 CSS:
 - [units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
 - [flexbox A Complete Guide (Chung)](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
 - [flexbox Cheatsheet (Chung)](https://yoksel.github.io/flex-cheatsheet/)
 - [grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+- [cookbook](https://developer.mozilla.org/en-US/docs/Web/CSS/Layout_cookbook)
 
 CSS, HTML and React components "properties":
 - [CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)
