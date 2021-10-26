@@ -138,6 +138,7 @@ export default function Employees() {
         subtitle="List of employees with CRUD operations."
         icon={<AdbIcon fontSize="large" />}
       />
+      {/* SEARCH BAR */}
       <Toolbar mt={2}>
           <Controls.Input 
             label="Search Employees by Name"

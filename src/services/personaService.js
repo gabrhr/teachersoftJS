@@ -1,7 +1,7 @@
 import axios from 'axios';
 import url from '../config.js';
 
-const getPersonas = async () => {
+export const getPersonas = async () => {
   try{
     const request = await axios.get(`${url}/persona/`);
     return request.then(response => response.data) 
@@ -66,4 +66,4 @@ const deletePersona = async ({id}) => {
   }
 }
 
-export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona}
+// export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona}

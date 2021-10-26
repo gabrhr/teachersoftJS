@@ -9,7 +9,7 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 export const MenuAdministrador = [
     {
         text: 'Mantenimientos',
-        path: '/admin/mantenimiento',
+        path: '',
         icon: <LibraryBooksIcon />,
         indice: 0,
         subNav: [
@@ -34,17 +34,20 @@ export const MenuAdministrador = [
         path: '/admin/employees',
         icon: <ConstructionIcon />,
         indice: 1,
+
     },
     {
         text: 'Showcase of Components',
         path: '/admin/showcase',
         icon: <ConstructionIcon />,
         indice: 2,
+     
     },
     {
         text: 'Index',
         path: '/admin/index',
         icon: <ConstructionIcon />,
         indice: 3,
+   
     }
 ];

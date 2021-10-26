@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
-import { Grid, Typography } from '@mui/material'
+import { Grid, Typography, Paper} from '@mui/material'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { DT } from '../../../components/DreamTeam/DT'
@@ -11,6 +11,8 @@ import ModalAsignacionCarga from './ModalAsignacionCarga';
 
 export default function AsistenteSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    color:"primary.light", elevatio:0}
     return (
         <>
             <ContentHeader 
@@ -37,9 +39,9 @@ export default function AsistenteSeccion() {
                     />
                 </Grid>
             </Grid>
-            <DT.BorderBox>
+            <Paper variant="outlined" sx={PaperStyle}>
                 <HorarioCursos />
-            </DT.BorderBox>
+            </Paper>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}

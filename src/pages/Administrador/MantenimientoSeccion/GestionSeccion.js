@@ -8,6 +8,7 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
+import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
@@ -21,7 +22,7 @@ const tableHeaders = [
     },
     {
       id: 'nombre',
-      label: 'Nombre Completo',
+      label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
@@ -59,7 +60,7 @@ const getSecciones = async () => {
       nombreDepartamento: seccion.departamento.nombre,
     })
     ));
-  console.log(secciones);
+  //console.log(secciones);
   return secciones;
 }
 /*
@@ -84,16 +85,6 @@ export default function GestionSeccion() {
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
 
-    useEffect(() => {
-      getSecciones()
-      .then (newSeccion =>{
-        setRecords(prevRecords => prevRecords.concat(newSeccion));
-        
-        console.log(newSeccion);
-        
-        console.log(records);
-      });
-    }, [])
     //console.log(records);
     const {
         TblContainer,
@@ -118,6 +109,16 @@ export default function GestionSeccion() {
           }
         })
       }
+    useEffect(() => {
+      getSecciones()
+      .then (newSeccion =>{
+        setRecords(prevRecords => prevRecords.concat(newSeccion));
+        
+        //console.log(newSeccion);
+        
+        console.log(records);
+      });
+    }, [])
     return (
         <>
             <ContentHeader
@@ -141,11 +142,11 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Controls.AddButton 
+                {/* <Controls.AddButton 
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopup(true)}
-                />
+                /> */}
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
@@ -154,17 +155,17 @@ export default function GestionSeccion() {
                     <TableBody>
                     {
                         recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id}>
-                            <TableCell
+                        <StyledTableRow key={item.id}>
+                            <StyledTableCell
                             align="right"
                             >
                             {item.id}
-                            </TableCell>
-                            <TableCell>{item.nombre}</TableCell>
-                            <TableCell>{item.fechaFundacion}</TableCell>
-                            <TableCell>{item.fechaModificacion}</TableCell>
-                            <TableCell>{item.nombreDepartamento}</TableCell>
-                        </TableRow>
+                            </StyledTableCell>
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                        </StyledTableRow>
                         ))
                     }
                     </TableBody>

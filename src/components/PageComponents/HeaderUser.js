@@ -108,21 +108,25 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 
-const HeaderUser = ({ nombre, rol, idRol, foto }) => {
+const HeaderUser = ({ nombre, idRol, foto }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  let rol
   let listaMenu=[];
   const handleDrawerOpen = () => {
     setOpen(!open);
   }; 
   
-  if(idRol==1){
+  if(idRol==0){
+    rol="Administrador"
     listaMenu = MenuAdministrador
   }
-  if(idRol==2){
+  if(idRol==1){
+    rol="Asistente de Sección"
     listaMenu = MenuAsistenteSeccion
   }
-  if(idRol==3){
+  if(idRol==2){
+    rol="Coordinador de Sección"
     listaMenu = MenuAsistenteSeccion
   }  
 
@@ -135,7 +139,7 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
     /* Box principal de toda la aplicacion */
     // <Box display="flex">
     <Box 
-      /* flex is live */
+      /* flex is life */
       display="flex" 
       /* fill remainder of screen */
       // position="absolute"  // messes with header
@@ -203,7 +207,7 @@ const HeaderUser = ({ nombre, rol, idRol, foto }) => {
                   {nombre}
                 </Typography>
                 <Typography variant="body1" component="div">
-                  {rol}
+                  {rol }
                 </Typography>
               </div>
             </Grid>

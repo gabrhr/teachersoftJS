@@ -9,6 +9,7 @@ import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
+import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 
 const tableHeaders = [
     {
@@ -112,11 +113,11 @@ export default function GestionDepartamento() {
                     type="search"
                 />
  
-                <Controls.AddButton 
+                {/* <Controls.AddButton 
                     title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopup(true)}
-                />
+                /> */}
       
                 {/* </Toolbar> */}
                 </div>
@@ -126,17 +127,17 @@ export default function GestionDepartamento() {
                     <TableBody>
                     {
                         recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id}>
-                            <TableCell
+                        <StyledTableRow key={item.id}>
+                            <StyledTableCell
                             align="right"
                             >
                             {item.id}
-                            </TableCell>
-                            <TableCell>{item.nombre}</TableCell>
-                            <TableCell>{item.correo}</TableCell>
-                            <TableCell>{item.fechaFundacion}</TableCell>
-                            <TableCell>{item.fechaModificacion}</TableCell>
-                        </TableRow>
+                            </StyledTableCell>
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.correo}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                        </StyledTableRow>
                         ))
                     }
                     </TableBody>

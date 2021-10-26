@@ -57,29 +57,69 @@ export default function AgregarEditarSeccion() {
         resetForm
     } = useForm(initialFieldValues, true, validate);
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault()
         //Definicio de validaciones
         if (validate()){
-            window.alert('valid')
+          window.alert('valid')
 
-            //Pasamos a - ingresarlo a la BD
-            //const seccion ={
-  
-            //}
-            SeccionService.registerSeccion(values)
-            resetForm()
+          const newSecc = {
+            nombre: values.nombre,
+            //correo: values.correo,
+            departamento: {
+              id: parseInt(values.departmentId),
+            } ,
+            foto: null,
+            fecha_fundacion: null
+            //~~~foto: --queda pendiente 
+          }
+          console.log(newSecc);
+          const rpta = await SeccionService.registerSeccion(newSecc);
+          console.log(rpta);
+          
+          resetForm()
+
+          //Pasamos a - ingresarlo a la BD
+
+          //}
+          //SeccionService.registerSeccion()
         }
         else
             window.alert('invalid')
     }
 
-    const FillDepartamentos = () =>{
-      const dataDep = DepartamentoService.getDepartamentos();
+    const FillDepartamentos = async () =>{
+      const dataDep = await DepartamentoService.getDepartamentos();
       const departamentos = []
-      console.log('aaaa');
-      if(dataDep) setDepartamentos(dataDep);
+
+      //if(dataDep) setDepartamentos(dataDep);
+      dataDep.map(dep => (
+        departamentos.push({
+          id: dep.id.toString(),
+          title: dep.nombre,
+        })
+      ));
+      /*
+      values.map([id] => {
+        values.id = 
+      })
+      */
+      console.log(departamentos);
+      return departamentos;
     }
+
+
+    React.useEffect(() => {
+      FillDepartamentos()
+      .then (newDep =>{
+        setDepartamentos(prevDep => prevDep.concat(newDep));
+        
+        //console.log(newSeccion);
+        
+        console.log(departamento);
+      });
+    }, [])
+
 
     return (
       <Form onSubmit={handleSubmit}>
@@ -104,7 +144,7 @@ export default function AgregarEditarSeccion() {
                     />
 
                     <Controls.Select
-                        name="deparmetId"
+                        name="departmentId"
                         label="Departamento"
                         value={values.departmentId}
                         onChange={handleInputChange}

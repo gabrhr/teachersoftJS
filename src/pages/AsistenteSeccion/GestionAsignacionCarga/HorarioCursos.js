@@ -128,27 +128,24 @@ export default function HorarioCursos() {
                                 maxWidth: .7
                             }}
                         />
-                        <Controls.Button  
+                        {/* <Controls.Button  
                             text={<SearchIcon/>}
                             size="small"
                             sx = {{
                                 // display: "inline",
                                 maxWidth: .05
                             }}
-                        />
+                        /> */}
                     </Stack>
                 </Grid>
                 {/* FIX:  left align */}
                 <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
-                    <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                        <Controls.Button 
-                            text="Nuevo Curso-Horario"
-                            variant="iconoTexto"
-
-                            /*onClick = {() => setOpenPopup(true)}*/
-                            />
-                    </Box>
+                    <Controls.AddButton 
+                        title="Agregar Nuevo Horario"
+                        variant="iconoTexto"
+                        /* onClick = {() => setOpenPopup(true)} */
+                    />
                 </Grid>
             </Grid>
             <BoxTbl>
