@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { id } from 'date-fns/locale'
 import url from '../config'
 
-const getCiclos = async () => {
+const getDepartamentos = async () => {
     try{
         const request = await axios.get(`${url}/departamento/`);
-        return request.then(response => response.data)
+        return request
     } catch(except){
         console.error(except);
     }
@@ -13,6 +12,7 @@ const getCiclos = async () => {
 const getDepartamento = async ({id}) => {
     try{
         const request = await axios.get(`${url}/departamento/${id}`, id);
+        if(!request) 
         return request.then(response => response.data)
     } catch (except){
         console.error(except);
@@ -42,3 +42,5 @@ const updateDepartamento = async (newObject,{id}) => {
         console.error(exception)
     }
 }
+
+export default { getDepartamentos, getDepartamento, registerDepartamento, borrarDepartamento, updateDepartamento };

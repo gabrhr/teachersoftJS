@@ -3,9 +3,10 @@ import Header from '../../components/PageComponents/Header'
 import { Paper, Grid, Typography } from '@mui/material';
 import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
+import { Box } from '@mui/system';
 
 
-export default function Login() {
+export default function Login({setUser}) {
     const paperStyle={
         paddingLeft: 60,
         paddingRight: 60,
@@ -30,17 +31,26 @@ export default function Login() {
     }
 
     return (
-        <>
+        <Box 
+            position="absolute"
+            width="100%"
+            height="100vh"
+            zIndex={10000}
+        >
             <Header />
             <Grid container 
                 spacing={0} 
-                sx={{
-                    width: "100%",
-                    height: "85vh",
-                    gridTemplateColumns: "1fr 1fr",
-                }}
+                width= "100%"
+                height= "calc(100vh - 80px)"
+                gridTemplateColumns= "1fr 1fr"
+                alignContent="center"
+                // overflow= 'hidden'
             >
-                <Grid item xs={6}>
+                <Grid item xs={6}
+                    backgroundColor="#fff"
+                    height= "calc(100vh - 80px)"
+                    alignContent="center"
+                >
                     <Typography
                         variant="h2"
                         component="div"
@@ -53,14 +63,15 @@ export default function Login() {
                     <Paper
                         elevation={0}
                         style={paperStyle}
-
                         >
-                        <LoginForm/>
+                        <LoginForm setUser={setUser}/>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}
                     sx={{
                         // transform: 'translateZ(0)',
+                        height: "calc(100vh - 80px)",
+                        // height: '100vh',
                         textAlign: 'center',
                         position: 'relative',
                         backgroundColor: 'secondary.main',
@@ -77,12 +88,8 @@ export default function Login() {
                         TeacherSoft
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Footer/>
-                </Grid>
-
             </Grid>
-            
-        </>
+            <Footer/>
+        </Box>
     )
 }

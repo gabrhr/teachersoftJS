@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
@@ -10,39 +10,58 @@ import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
+import SeccionService from '../../../services/seccionService.js';
 
 const tableHeaders = [
-    {
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },
+    // {
+    //   id: 'id',
+    //   label: 'SeccionID',
+    //   numeric: true,
+    //   sortable: true
+    // },
     {
       id: 'nombre',
-      label: 'Nombre Completo',
+      label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
-    {
-      id: 'fechaFundacion',
-      label: 'Fecha de Fundación',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'fechaModificacion',
-      label: 'Última Modificación',
-      numeric: false,
-      sortable: true
-    },
-    {
-        id: 'nombreDepartamento',
-        label: 'Departamento',
-        numeric: false,
-        sortable: true
-     },
+    // {
+    //   id: 'fechaFundacion',
+    //   label: 'Fecha de Fundación',
+    //   numeric: false,
+    //   sortable: true
+    // },
+    // {
+    //   id: 'fechaModificacion',
+    //   label: 'Última Modificación',
+    //   numeric: false,
+    //   sortable: true
+    // },
+    // {
+    //     id: 'nombreDepartamento',
+    //     label: 'Departamento',
+    //     numeric: false,
+    //     sortable: true
+    //  },
 ]
+
+function getSecciones(){
+  const dataSecc = SeccionService.getSecciones(); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const secciones = [];
+  // dataSecc.map(seccion => (
+  //   secciones.concat({
+  //     id: seccion.id,
+  //     nombre: seccion.nombre,
+  //     fechaFundacion: seccion.fecha_creacion,
+  //     fechaModificacion: seccion.fecha_modificacion,
+  //     nombreDepartamento: seccion.departamento.nombre,
+  //   })
+  // ))
+  console.log(secciones);
+  return dataSecc;
+}
+/*
 function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDepartamento) {
     return {
         id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento,
@@ -54,14 +73,20 @@ const usuarios2 = [
     createData('1', 'Seccion Industrial',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
     createData('2', 'Seccion Electronica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
 ]
-
+*/
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(usuarios2)
+    const [seccion, setSeccion] = useState([])
+    const [records, setRecords] = useState(seccion)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
+
+    useEffect(() => {
+      setSeccion(oldSeccion => [...oldSeccion, getSecciones()]);
+    }, []);
+
     const {
         TblContainer,
         TblHead,
@@ -108,11 +133,11 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Controls.AddButton 
+                {/* <Controls.AddButton 
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopup(true)}
-                />
+                /> */}
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
@@ -128,9 +153,9 @@ export default function GestionSeccion() {
                             {item.id}
                             </StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            {/* <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell> */}
                         </StyledTableRow>
                         ))
                     }
