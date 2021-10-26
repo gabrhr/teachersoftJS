@@ -115,12 +115,16 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      <Controls.Button
-        variant="outlined"
-        size='small'
-        fullWidth
-        text="Iniciar sesión con correo PUCP"
-      />
+      <a  href="localhost:8080/oauth2/authorization/google"
+         style={{ textDecoration: "none" }}
+      >
+        <Controls.Button
+          variant="outlined"
+          size='small'
+          fullWidth
+          text="Iniciar sesión con correo PUCP"
+        />
+      </a>
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña
