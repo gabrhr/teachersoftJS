@@ -6,7 +6,8 @@ import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
-
+import SeccionService from '../../../services/seccionService.js';
+import DepartamentoService from '../../../services/departamentoService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
@@ -23,6 +24,7 @@ export default function AgregarEditarSeccion() {
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
+    const [departamento, setDepartamentos] = React.useState([]);
     
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -41,7 +43,7 @@ export default function AgregarEditarSeccion() {
             ...temp
         })
 
-        if (fieldValues == values)
+        if (fieldValues === values)
             return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
@@ -55,26 +57,77 @@ export default function AgregarEditarSeccion() {
         resetForm
     } = useForm(initialFieldValues, true, validate);
 
-    const handleSubmit = e => {
-        /* e is a "default parameter" */
+    const handleSubmit = async e => {
         e.preventDefault()
-        if (validate())
-            window.alert('valid')
+        //Definicio de validaciones
+        if (validate()){
+          window.alert('valid')
+
+          const newSecc = {
+            nombre: values.nombre,
+            //correo: values.correo,
+            departamento: {
+              id: parseInt(values.departmentId),
+            } ,
+            foto: null,
+            fecha_fundacion: null
+            //~~~foto: --queda pendiente 
+          }
+          console.log(newSecc);
+          const rpta = await SeccionService.registerSeccion(newSecc);
+          console.log(rpta);
+          
+          resetForm()
+
+          //Pasamos a - ingresarlo a la BD
+
+          //}
+          //SeccionService.registerSeccion()
+        }
         else
             window.alert('invalid')
-        if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
     }
 
+    const FillDepartamentos = async () =>{
+      const dataDep = await DepartamentoService.getDepartamentos();
+      const departamentos = []
+
+      //if(dataDep) setDepartamentos(dataDep);
+      dataDep.map(dep => (
+        departamentos.push({
+          id: dep.id.toString(),
+          title: dep.nombre,
+        })
+      ));
+      /*
+      values.map([id] => {
+        values.id = 
+      })
+      */
+      console.log(departamentos);
+      return departamentos;
+    }
+
+
+    React.useEffect(() => {
+      FillDepartamentos()
+      .then (newDep =>{
+        setDepartamentos(prevDep => prevDep.concat(newDep));
+        
+        //console.log(newSeccion);
+        
+        console.log(departamento);
+      });
+    }, [])
+
+
     return (
-        <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
                            DATOS GENERALES  
                     </Typography>
-                    
                     <Controls.Input 
                         name="nombre"
                         label="Nombre" 
@@ -91,11 +144,11 @@ export default function AgregarEditarSeccion() {
                     />
 
                     <Controls.Select
-                        name="deparmetId"
+                        name="departmentId"
                         label="Departamento"
                         value={values.departmentId}
                         onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
+                        options={departamento}
                     />                
                 </Grid>
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />

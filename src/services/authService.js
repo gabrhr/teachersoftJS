@@ -5,6 +5,7 @@ import tokenService from './tokens.js';
 const register = async ({username, password}) => {
   try{
     await axios.post(`${url}/usuario/`, {username, password})
+    console.log("Todo bien");
   }catch(exception){
     console.error(exception);
   }
@@ -19,23 +20,26 @@ const update = async () => {
   }
 }
 
-const login = async credentials => {
+const login = async (userObject) => {
   try{
-    const { data } = await axios.post(`${url}/usuario/login`, credentials)
-    //if()    -- Depende de la data que se devuelve
-    tokenService.setToken(data); //Creamos el token
-
-    return data
+    const  response  = await axios.post(`${url}/usuario/login`, userObject)
+    //console.log(response.data);
+    if(!response.data.token)
+      return console.log("Authentication failed")
+    console.log(response);
+    tokenService.setToken(response.data); //Creamos el token
+    // console.log("Todo bien");
+    return response.data
   }catch(exception){
     console.error(exception);
   }
 }
-
+/*
 const userAuth = async () =>{
-  try{
+  try{  //llamado a funcion authentication por token
     const response = await axios.get(`${url}/login`, {
       headers:{
-        "x-acces-auth": tokenService.getToken(),
+        "Authorization": tokenService.getToken(),
       }
     })
     return(response ? true : 
@@ -44,5 +48,5 @@ const userAuth = async () =>{
     console.error(exception);
   }
 }
-
-export default {login, userAuth, register, update};
+*/
+export default {login, register, update};

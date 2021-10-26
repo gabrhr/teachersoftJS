@@ -3,9 +3,10 @@ import Header from '../../components/PageComponents/Header'
 import { Paper, Grid, Typography } from '@mui/material';
 import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
+import { Box } from '@mui/system';
 
 
-export default function Login() {
+export default function Login({setUser}) {
     const paperStyle={
         paddingLeft: 60,
         paddingRight: 60,
@@ -30,7 +31,12 @@ export default function Login() {
     }
 
     return (
-        <>
+        <Box 
+            position="absolute"
+            width="100%"
+            height="100vh"
+            zIndex={10000}
+        >
             <Header />
             <Grid container 
                 spacing={0} 
@@ -40,7 +46,8 @@ export default function Login() {
                 alignContent="center"
                 // overflow= 'hidden'
             >
-                <Grid item xs={6} 
+                <Grid item xs={6}
+                    backgroundColor="#fff"
                     height= "calc(100vh - 80px)"
                     alignContent="center"
                 >
@@ -57,7 +64,7 @@ export default function Login() {
                         elevation={0}
                         style={paperStyle}
                         >
-                        <LoginForm/>
+                        <LoginForm setUser={setUser}/>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}
@@ -83,6 +90,6 @@ export default function Login() {
                 </Grid>
             </Grid>
             <Footer/>
-        </>
+        </Box>
     )
 }
