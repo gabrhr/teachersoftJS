@@ -34,7 +34,7 @@ export function requiredField(s) {
 
 const KEYS = {
     personaID: 'personaID',        // highest ID,  ID=0 means no data
-    personas: 'personas'           // array
+    personas: 'personas',           // array
     cursoID: 'cursoID',
     cursos: 'cursos'
 }
