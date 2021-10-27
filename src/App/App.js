@@ -44,7 +44,7 @@ function App() {
     // console.log(localStorage.getItem('loggedUser'))
   }, [user])
   
-  if (true) {
+  if (false) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -89,7 +89,7 @@ function App() {
           <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {1}
+              idRol= {0}
               foto={fotoUsuario}
         /> 
         <CssBaseline />
