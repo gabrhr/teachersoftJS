@@ -10,6 +10,23 @@ import Popup from '../../../components/util/Popup'
 import ModalAsignacionCarga from './ModalAsignacionCarga';
 
 export default function AsistenteSeccion() {
+
+    const [valueXlsx, setValueXlsx] = useState(null);
+    const [newFile, setNewFile] = useState(0); //0: No new file
+
+    let xlsx = '';
+
+    function getXlsx (input){
+        setOpenPopup(false)
+        xlsx = input
+        setValueXlsx(xlsx)
+        if (xlsx.length > 1){
+            setNewFile(1)
+        }
+        console.log(valueXlsx)
+        window.localStorage.setItem('xlsx', xlsx)
+    }
+
     const [openPopup, setOpenPopup] = useState(false)
     return (
         <>
@@ -38,14 +55,15 @@ export default function AsistenteSeccion() {
                 </Grid>
             </Grid>
             <DT.BorderBox>
-                <HorarioCursos />
+                <HorarioCursos xlsx = {valueXlsx} setXlsx={setValueXlsx} isNewFile = {newFile} />
             </DT.BorderBox>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title="Carga Masiva de Cursos y Horarios"
             >
-               < ModalAsignacionCarga/>
+               <ModalAsignacionCarga getXlsx = {getXlsx} >
+               </ModalAsignacionCarga>
             </Popup>  
         </>
     )
