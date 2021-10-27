@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DT } from '../../../components/DreamTeam/DT'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const tableHeaders = [
   // {
@@ -91,10 +92,12 @@ function GetRow({ ...props }) {
 
 export default function CargaDocente() {
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-  const SubtitulosTable = { display: "flex" }
   const [records, setRecords] = useState(DTLocalServices.getAllCursos())
+  const [horarios,setHorarios] = useState(false)
 
-  const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
+  const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevation: 0 }
+  const SubtitulosTable = { display: "flex" }
+
   const {
     values,
     // setValues,
@@ -125,14 +128,34 @@ export default function CargaDocente() {
     })
   }
   const theme = useTheme();
+
+  /* (No popups) After pressing on a row.  Hide "parent"(current) table and show
+   * "child" table */
+  const openInPopup = item => {
+      /* setRecordForEdit(item) */
+      setHorarios(true)
+  }
+
   return (
     <Form>
       <ContentHeader
         text="Registro de Carga Docente"
         cbo={true}
       />
+      {horarios? 
+          (
+              <Controls.Button
+              variant="outlined"
+              text="Regresar"
+              size="small"
+              startIcon={<ArrowBackIcon/>}
+              onClick={() => {setHorarios(false)}}
+              />
+          )
+          :(<> </>)
+      }
       {/* <Toolbar> */}
-      <Grid container sx={{ mb: 3 }}>
+      <Grid container sx={{mb:3}} display={horarios? "none": "unset"}>
         <Grid item xs={8} >
           <Controls.Input
             label="Buscar Cursos por Nombre o Clave"
@@ -164,6 +187,16 @@ export default function CargaDocente() {
         </Grid>
       </Grid>
       <Paper variant="outlined" sx={PaperStyle}>
+        {horarios? (
+          <>
+            <Typography variant="h4" style={SubtitulosTable}>
+                Lista de Horarios
+            </Typography>
+        
+        
+          </>
+        ): (   
+        <>
         <Typography variant="h4" style={SubtitulosTable}>
           Carga Docente por Cursos
         </Typography>
@@ -189,11 +222,11 @@ export default function CargaDocente() {
                       <DT.Etiqueta type="info" text={item.estado} />
                     </StyledTableCell>
                     <StyledTableCell>
-                      <Link to="/as/asignacionCarga/registroCarga/horarios">
-                        <IconButton size="small">
-                          <ArrowForwardIosIcon fontSize="small" />
-                        </IconButton>
-                      </Link>
+                      <IconButton size="small"
+                          onClick={ () => {openInPopup(item)}}
+                      >
+                          <ArrowForwardIosIcon fontSize="small"/>
+                      </IconButton>
                     </StyledTableCell>
 
                   </StyledTableRow>
@@ -203,6 +236,7 @@ export default function CargaDocente() {
           </TblContainer>
           <TblPagination />
         </BoxTbl>
+        </> }
       </Paper>
     </Form>
   )
