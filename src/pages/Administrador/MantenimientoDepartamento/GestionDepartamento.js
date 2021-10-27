@@ -59,7 +59,7 @@ const usuarios2 = [
 */
 
 const getDepartamento = async () => {
-
+  //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
   const dataDep = await DepartamentoService.getDepartamentos(); 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];

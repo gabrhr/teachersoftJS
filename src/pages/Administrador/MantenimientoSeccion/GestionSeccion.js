@@ -88,7 +88,7 @@ export default function GestionSeccion() {
          * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
+            if (target.value === "")
               /* no search text */
               return items
             else
