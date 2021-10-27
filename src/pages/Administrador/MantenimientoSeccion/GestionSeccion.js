@@ -14,36 +14,38 @@ import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
 
 const tableHeaders = [
-    // {
-    //   id: 'id',
-    //   label: 'SeccionID',
-    //   numeric: true,
-    //   sortable: true
-    // },
+    {
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
+      sortable: true
+    },
     {
       id: 'nombre',
       label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
-    // {
-    //   id: 'fechaFundacion',
-    //   label: 'Fecha de Fundación',
-    //   numeric: false,
-    //   sortable: true
-    // },
-    // {
-    //   id: 'fechaModificacion',
-    //   label: 'Última Modificación',
-    //   numeric: false,
-    //   sortable: true
-    // },
-    // {
-    //     id: 'nombreDepartamento',
-    //     label: 'Departamento',
-    //     numeric: false,
-    //     sortable: true
-    //  },
+    {
+      id: 'fechaFundacion',
+      label: 'Fecha de Fundación',
+      numeric: false,
+      sortable: true
+    },
+    {
+      id: 'fechaModificacion',
+      label: 'Última Modificación',
+      numeric: false,
+      sortable: true
+    },
+    {
+        id: 'nombreDepartamento',
+        label: 'Departamento',
+        numeric: false,
+        sortable: true
+     },
+
+
 ]
 
 const getSecciones = async () => {
