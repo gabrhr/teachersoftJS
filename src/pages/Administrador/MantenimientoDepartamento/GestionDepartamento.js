@@ -163,11 +163,11 @@ export default function GestionDepartamento() {
                     type="search"
                 />
  
-                <Controls.AddButton 
+                {/* <Controls.AddButton 
                     title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopup(true)}
-                />
+                /> */}
       
                 {/* </Toolbar> */}
                 </div>

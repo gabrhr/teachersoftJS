@@ -17,12 +17,12 @@ import * as employeeService from '../../../services/employeeService'
 
 
 const tableHeaders = [
-    // {
-    //   id: 'id',
-    //   label: 'SeccionID',
-    //   numeric: true,
-    //   sortable: true
-    // },
+    {
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
+      sortable: true
+    },
     {
       id: 'nombre',
       label: 'Nombre de la seccion',
@@ -53,17 +53,17 @@ function getSecciones(){
   const dataSecc = SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
-  // dataSecc.map(seccion => (
-  //   secciones.concat({
-  //     id: seccion.id,
-  //     nombre: seccion.nombre,
-  //     fechaFundacion: seccion.fecha_creacion,
-  //     fechaModificacion: seccion.fecha_modificacion,
-  //     nombreDepartamento: seccion.departamento.nombre,
-  //   })
-  // ))
-  console.log(secciones);
-  return dataSecc;
+  dataSecc.map(seccion => (
+    secciones.push({
+      id: seccion.id.toString(),
+      nombre: seccion.nombre,
+      fechaFundacion: seccion.fecha_fundacion,
+      fechaModificacion: seccion.fecha_modificacion,
+      nombreDepartamento: seccion.departamento.nombre,
+    })
+    ));
+  //console.log(secciones);
+  return secciones;
 }
 /*
 function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDepartamento) {
@@ -80,8 +80,8 @@ const usuarios2 = [
 */
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [seccion, setSeccion] = useState([])
-    const [records, setRecords] = useState(seccion)
+    //const [seccion, setSeccion] = useState([])
+    const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
@@ -89,10 +89,7 @@ export default function GestionSeccion() {
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
 
-    useEffect(() => {
-      setSeccion(oldSeccion => [...oldSeccion, getSecciones()]);
-    }, []);
-
+    //console.log(records);
     const {
         TblContainer,
         TblHead,
@@ -153,6 +150,17 @@ export default function GestionSeccion() {
         type: 'success'
       })
     }
+    useEffect(() => {
+      getSecciones()
+      .then (newSeccion =>{
+        setRecords(prevRecords => prevRecords.concat(newSeccion));
+
+        //console.log(newSeccion);
+
+        console.log(records);
+      });
+    }, [])
+
     return (
         <>
             <ContentHeader
@@ -196,7 +204,7 @@ export default function GestionSeccion() {
                             {item.id}
                             </StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            {/* <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
                             <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
