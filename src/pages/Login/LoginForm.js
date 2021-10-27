@@ -79,10 +79,7 @@ const Login = ({ setUser }) => {
           history.push("/admin");
           break;
         case 1:
-          history.push("/as")
-          //   {
-          //   pathname: "/as",
-          // });
+          history.push("/as") 
           break;
         case 2:
           history.push("/cs");

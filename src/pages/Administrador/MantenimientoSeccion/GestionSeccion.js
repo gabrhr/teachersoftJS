@@ -5,6 +5,7 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } from '@mui/material';
 /* ICONS */
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
@@ -12,6 +13,9 @@ import { StyledTableRow, StyledTableCell } from '../../../components/controls/St
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
+import * as employeeService from '../../../services/employeeService'
+
+
 
 const tableHeaders = [
     {
@@ -43,9 +47,13 @@ const tableHeaders = [
         label: 'Departamento',
         numeric: false,
         sortable: true
-     },
-
-
+    },
+    {
+      id: 'actions',
+      label: 'Acción',
+      numeric: false,
+      sortable: false
+    }
 ]
 
 const getSecciones = async () => {
@@ -71,6 +79,8 @@ export default function GestionSeccion() {
     //const [seccion, setSeccion] = useState([])
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [recordForEdit, setRecordForEdit] = useState(null)
+    const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -109,6 +119,44 @@ export default function GestionSeccion() {
         console.log(records);
       });
     }, [])
+    
+    const openInPopup = item => {
+      setRecordForEdit(item)
+      setOpenPopup(true)
+    }
+
+    /* const addOrEdit = (seccion, resetForm) => {
+      if (seccion.id == 0)
+        SeccionService.registerSeccion(seccion)
+      else
+        SeccionService.updateSeccion(seccion)
+      resetForm()
+      setRecordForEdit(null)
+      setOpenPopup(false)
+      setRecords(getSecciones.getAllEmployees())
+  
+      setNotify({
+        isOpen: true,
+        message: 'Submitted Successfully',
+        type: 'success'
+      })
+    } */
+    const addOrEdit = (employee, resetForm) => {
+      if (employee.id == 0)
+        employeeService.insertEmployee(employee)
+      else
+        employeeService.updateEmployee(employee)
+      resetForm()
+      setRecordForEdit(null)
+      setOpenPopup(false)
+      setRecords(employeeService.getAllEmployees())
+  
+      setNotify({
+        isOpen: true,
+        message: 'Submitted Successfully',
+        type: 'success'
+      })
+    }
     return (
         <>
             <ContentHeader
@@ -155,6 +203,15 @@ export default function GestionSeccion() {
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
                             <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell>
+                              {/* Accion editar */}
+                              <Controls.ActionButton 
+                                color="warning"
+                                onClick={ () => {openInPopup(item)}}
+                              >
+                                <EditOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                            </StyledTableCell>
                         </StyledTableRow>
                         ))
                     }
@@ -168,7 +225,10 @@ export default function GestionSeccion() {
                 setOpenPopup={setOpenPopup}
                 title="Nueva Sección"
             >
-               <AgregarEditarSeccion />
+              <AgregarEditarSeccion 
+                recordForEdit={recordForEdit}
+                addOrEdit={addOrEdit}
+              />
               {/*  <AgregarEditarSeccion/> */}
             </Popup>  
         </>
