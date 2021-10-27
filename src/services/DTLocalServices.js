@@ -1,4 +1,8 @@
 import { insertEmployee } from "./employeeService";
+import { data } from "./data/curso-horario"
+
+/* LIB
+ * ======================= */
 
 /* Validaciones
  * 
@@ -23,10 +27,16 @@ export function requiredField(s) {
     return s.length !== 0 ? "" : "Campo requerido"
 }
 
+/* LOCAL STORAGE SERVICES
+ * ====================== */
+
+/* An IDs start at 1.  ID=0 is a reserved value used for the empty record */
+
 const KEYS = {
-    personaID: 'personaID',        // highest assigned ID (to auto increment)
-                                   // (0 when empty)
+    personaID: 'personaID',        // highest ID,  ID=0 means no data
     personas: 'personas'           // array
+    cursoID: 'cursoID',
+    cursos: 'cursos'
 }
 
 /* persona CRUD operations */
@@ -63,8 +73,8 @@ export function getAllPersonas() {
     if (localStorage.getItem(KEYS.personas) == null)
         localStorage.setItem(KEYS.personas, JSON.stringify([]))
     let personas =  JSON.parse(localStorage.getItem(KEYS.personas));
-    /* Add names to ID only attributes.  Add calculated fields. */
-    /* Doing it here is more efficient (maybe) */
+    /* Do any data transformations here (e.g., lookup ID's create new attributes
+     * based on that) */
     let roles = getAllRoles();
     let secciones = getAllSecciones();
     let dptos = getAllDepartamentos();
@@ -106,4 +116,46 @@ export function getAllRoles() {
         { id: 4, title: 'Asistente de Departamento' },
         { id: 5, title: 'Coordinador de Departamento' },
     ])
+}
+
+/* curso CRUD operations */
+export function insertCurso(data) {
+    let cursos = getAllCursos();
+    data['id'] = generateCursoID()
+    cursos.push(data)
+    localStorage.setItem(KEYS.cursos, JSON.stringify(cursos))
+}
+
+export function updateCurso(data) {
+    let cursos = getAllCursos();
+    let recordIndex = cursos.findIndex(x => x.id == data.id)
+    cursos[recordIndex] = {...data}
+    localStorage.setItem(KEYS.cursos, JSON.stringify(cursos))
+}
+
+export function deleteCurso(id) {
+    let cursos = getAllCursos();
+    cursos = cursos.filter(x => x.id != id)
+    localStorage.setItem(KEYS.cursos, JSON.stringify(cursos))
+}
+
+export function generateCursoID() {
+    if (localStorage.getItem(KEYS.cursoID) == null)
+        localStorage.setItem(KEYS.cursoID, '0')
+    var id = parseInt(localStorage.getItem(KEYS.cursoID))
+    localStorage.setItem(KEYS.cursoID, (++id).toString())
+    return id;
+}
+
+export function getAllCursos() {
+    /* if empty insert empty array */
+    if (localStorage.getItem(KEYS.cursos) == null)
+        localStorage.setItem(KEYS.cursos, JSON.stringify([]))
+    let cursos =  JSON.parse(localStorage.getItem(KEYS.cursos));
+    /* Do any data transformations here (e.g., lookup ID's create new attributes
+     * based on that) */
+    return cursos
+    // return cursos.map( x => ({
+    //     ...x,
+    // }))
 }

@@ -1,0 +1,45 @@
+[
+    {
+        "id": 1,
+        "fecha_creacion": "2021-09-30T01:09:19.000+00:00",
+        "fecha_modificacion": "2021-09-30T01:09:19.000+00:00",
+        "tipo_persona": 0,
+        "codigo_pucp": "20172665",
+        "correo_pucp": "a20172665@pucp.edu.pe",
+        "nombres": "Christian Andre",
+        "apellido_paterno": "Carhuancho",
+        "apellido_materno": null,
+        "fechaNac": null,
+        "sexo": 0,
+        "tipo_documento": 0,
+        "numero_documento": null,
+        "telefono": null,
+        "foto": null,
+        "seccion": {
+            "id": 2,
+            "fecha_creacion": "2021-09-30T01:15:40.000+00:00",
+            "fecha_modificacion": "2021-09-30T01:15:40.000+00:00",
+            "departamento": {
+                "id": 1,
+                "fecha_creacion": "2021-09-30T01:14:32.000+00:00",
+                "fecha_modificacion": "2021-09-30T01:14:32.000+00:00",
+                "nombre": "Facultad De Ciencias e Ingeniería",
+                "correo": "fci@pucp.edu.pe",
+                "foto": null,
+                "fecha_fundacion": "2021-09-30T01:14:32.000+00:00"
+            },
+            "nombre": "Telecomunicaciones",
+            "foto": null,
+            "fecha_fundacion": "2021-09-30T01:15:40.000+00:00"
+        },
+        "departamento": {
+            "id": 1,
+            "fecha_creacion": "2021-09-30T01:14:32.000+00:00",
+            "fecha_modificacion": "2021-09-30T01:14:32.000+00:00",
+            "nombre": "Facultad De Ciencias e Ingeniería",
+            "correo": "fci@pucp.edu.pe",
+            "foto": null,
+            "fecha_fundacion": "2021-09-30T01:14:32.000+00:00"
+        }
+    }
+]
