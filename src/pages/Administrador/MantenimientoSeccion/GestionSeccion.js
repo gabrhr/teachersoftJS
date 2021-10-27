@@ -3,7 +3,7 @@ import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } from '@mui/material';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,82 +11,71 @@ import { Typography } from '@mui/material'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
+//import AuthService from '../../../services/authService.js';
 
 const tableHeaders = [
-    // {
-    //   id: 'id',
-    //   label: 'SeccionID',
-    //   numeric: true,
-    //   sortable: true
-    // },
+    {
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
+      sortable: true
+    },
     {
       id: 'nombre',
       label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
-    // {
-    //   id: 'fechaFundacion',
-    //   label: 'Fecha de Fundación',
-    //   numeric: false,
-    //   sortable: true
-    // },
-    // {
-    //   id: 'fechaModificacion',
-    //   label: 'Última Modificación',
-    //   numeric: false,
-    //   sortable: true
-    // },
-    // {
-    //     id: 'nombreDepartamento',
-    //     label: 'Departamento',
-    //     numeric: false,
-    //     sortable: true
-    //  },
+    {
+      id: 'fechaFundacion',
+      label: 'Fecha de Fundación',
+      numeric: false,
+      sortable: true
+    },
+    {
+      id: 'fechaModificacion',
+      label: 'Última Modificación',
+      numeric: false,
+      sortable: true
+    },
+    {
+        id: 'nombreDepartamento',
+        label: 'Departamento',
+        numeric: false,
+        sortable: true
+     },
+
+
 ]
 
-function getSecciones(){
-  const dataSecc = SeccionService.getSecciones(); 
+const getSecciones = async () => {
+
+  const dataSecc = await SeccionService.getSecciones(); 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
-  // dataSecc.map(seccion => (
-  //   secciones.concat({
-  //     id: seccion.id,
-  //     nombre: seccion.nombre,
-  //     fechaFundacion: seccion.fecha_creacion,
-  //     fechaModificacion: seccion.fecha_modificacion,
-  //     nombreDepartamento: seccion.departamento.nombre,
-  //   })
-  // ))
-  console.log(secciones);
-  return dataSecc;
+  dataSecc.map(seccion => (
+    secciones.push({
+      id: seccion.id.toString(),
+      nombre: seccion.nombre,
+      fechaFundacion: seccion.fecha_fundacion,
+      fechaModificacion: seccion.fecha_modificacion,
+      nombreDepartamento: seccion.departamento.nombre,
+    })
+    ));
+  //console.log(secciones);
+  return secciones;
 }
-/*
-function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDepartamento) {
-    return {
-        id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento,
-    }
-  }
-  
-const usuarios2 = [
-    createData('0', 'Seccion Informatica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-    createData('1', 'Seccion Industrial',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-    createData('2', 'Seccion Electronica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-]
-*/
+
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [seccion, setSeccion] = useState([])
-    const [records, setRecords] = useState(seccion)
+    //const [seccion, setSeccion] = useState([])
+    const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
 
-    useEffect(() => {
-      setSeccion(oldSeccion => [...oldSeccion, getSecciones()]);
-    }, []);
-
+    //console.log(records);
     const {
         TblContainer,
         TblHead,
@@ -101,7 +90,7 @@ export default function GestionSeccion() {
          * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
+            if (target.value === "")
               /* no search text */
               return items
             else
@@ -110,6 +99,16 @@ export default function GestionSeccion() {
           }
         })
       }
+    useEffect(() => {
+      getSecciones()
+      .then (newSeccion =>{
+        setRecords(prevRecords => prevRecords.concat(newSeccion));
+        
+        //console.log(newSeccion);
+        
+        console.log(records);
+      });
+    }, [])
     return (
         <>
             <ContentHeader
@@ -119,7 +118,7 @@ export default function GestionSeccion() {
             <Paper variant="outlined" sx={PaperStyle}>
                 <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
                 <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
+                <Toolbar>
                 <Controls.Input
                     label="Buscar Secciones por Nombre"
                     InputProps={{
@@ -133,12 +132,12 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                {/* <Controls.AddButton 
+                <Controls.AddButton 
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopup(true)}
-                /> */}
-                {/* </Toolbar> */}
+                />
+                </Toolbar>
                 </div>
                 <BoxTbl>
                 <TblContainer>
@@ -153,9 +152,9 @@ export default function GestionSeccion() {
                             {item.id}
                             </StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            {/* <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell> */}
+                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
                         </StyledTableRow>
                         ))
                     }

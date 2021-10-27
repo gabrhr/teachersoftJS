@@ -74,6 +74,28 @@ const Login = ({ setUser }) => {
         return history.push("/");
       }
       // console.log(loggedUser.user.persona.nombres)
+      switch (loggedUser.user.persona.tipo_persona) {
+        case 0:
+          history.push("/admin");
+          break;
+        case 1:
+          history.push("/as")
+          //   {
+          //   pathname: "/as",
+          // });
+          break;
+        case 2:
+          history.push("/cs");
+          break;
+        case 3:
+          history.push("/jd");
+        case 4:
+          history.push("/ad");
+        case 5:
+          history.push("/sd");
+        default:
+          return history.push("/");
+      }
     } else {
       history.push("/")
     }
@@ -115,12 +137,16 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      <Controls.Button
-        variant="outlined"
-        size='small'
-        fullWidth
-        text="Iniciar sesión con correo PUCP"
-      />
+      <a  href="localhost:8080/oauth2/authorization/google"
+         style={{ textDecoration: "none" }}
+      >
+        <Controls.Button
+          variant="outlined"
+          size='small'
+          fullWidth
+          text="Iniciar sesión con correo PUCP"
+        />
+      </a>
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña

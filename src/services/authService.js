@@ -5,6 +5,7 @@ import tokenService from './tokens.js';
 const register = async ({username, password}) => {
   try{
     await axios.post(`${url}/usuario/`, {username, password})
+    console.log("Todo bien");
   }catch(exception){
     console.error(exception);
   }
@@ -25,7 +26,7 @@ const login = async (userObject) => {
     //console.log(response.data);
     if(!response.data.token)
       return console.log("Authentication failed")
-    console.log(response.data.user);
+    console.log(response);
     tokenService.setToken(response.data); //Creamos el token
     // console.log("Todo bien");
     return response.data

@@ -9,6 +9,7 @@ import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
+import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 
 const tableHeaders = [
@@ -43,7 +44,7 @@ const tableHeaders = [
       sortable: true
     },
 ]
-  
+/*
 function createData(id, nombre, correo, fechaFundacion, fechaModificacion) {
     return {
         id, nombre, correo, fechaFundacion, fechaModificacion,
@@ -55,10 +56,29 @@ const usuarios2 = [
     createData('1', 'Departamento 2', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
     createData('2', 'Departamento 3', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
 ]
+*/
+
+const getDepartamento = async () => {
+  //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
+  const dataDep = await DepartamentoService.getDepartamentos(); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const departamentos = [];
+  dataDep.map(dep => (
+    departamentos.push({
+      id: dep.id.toString(),
+      nombre: dep.nombre,
+      correo: dep.correo,
+      fechaModificacion: dep.fecha_modificacion,
+      fechaFundacion: dep.fechaFundacion,
+    })
+    ));
+  //console.log(secciones);
+  return departamentos;
+}
 
 export default function GestionDepartamento() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(usuarios2)
+    const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -70,7 +90,7 @@ export default function GestionDepartamento() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-
+    
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -86,6 +106,17 @@ export default function GestionDepartamento() {
           }
         })
       }
+
+    React.useEffect(() => {
+      getDepartamento()
+      .then (newDep =>{
+        setRecords(prevRecords => prevRecords.concat(newDep));
+        
+        //console.log(newSeccion);
+        
+        console.log(records);
+      });
+    }, [])
 
     return (
         <>
