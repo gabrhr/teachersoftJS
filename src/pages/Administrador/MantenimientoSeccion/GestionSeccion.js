@@ -17,21 +17,15 @@ import * as employeeService from '../../../services/employeeService'
 
 
 const tableHeaders = [
-    {
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },
+    // {
+    //   id: 'id',
+    //   label: 'SeccionID',
+    //   numeric: true,
+    //   sortable: true
+    // },
     {
       id: 'nombre',
-      label: 'Nombre Completo',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'fechaFundacion',
-      label: 'Fecha de Fundación',
+      label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
@@ -56,18 +50,18 @@ const tableHeaders = [
 ]
 
 function getSecciones(){
-  const dataSecc = SeccionService.getSecciones(); 
+  const dataSecc = SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
-  dataSecc.map(seccion => (
-    secciones.concat({
-      id: seccion.id,
-      nombre: seccion.nombre,
-      fechaFundacion: seccion.fecha_creacion,
-      fechaModificacion: seccion.fecha_modificacion,
-      nombreDepartamento: seccion.departamento.nombre,
-    })
-  ));
+  // dataSecc.map(seccion => (
+  //   secciones.concat({
+  //     id: seccion.id,
+  //     nombre: seccion.nombre,
+  //     fechaFundacion: seccion.fecha_creacion,
+  //     fechaModificacion: seccion.fecha_modificacion,
+  //     nombreDepartamento: seccion.departamento.nombre,
+  //   })
+  // ))
   console.log(secciones);
   return dataSecc;
 }
@@ -77,7 +71,7 @@ function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDeparta
         id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento,
     }
   }
-  
+
 const usuarios2 = [
     createData('0', 'Seccion Informatica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
     createData('1', 'Seccion Industrial',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
@@ -92,7 +86,7 @@ export default function GestionSeccion() {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
 
     useEffect(() => {
@@ -136,7 +130,7 @@ export default function GestionSeccion() {
       setRecordForEdit(null)
       setOpenPopup(false)
       setRecords(getSecciones.getAllEmployees())
-  
+
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
@@ -152,7 +146,7 @@ export default function GestionSeccion() {
       setRecordForEdit(null)
       setOpenPopup(false)
       setRecords(employeeService.getAllEmployees())
-  
+
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
@@ -182,11 +176,11 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Controls.AddButton 
+                {/* <Controls.AddButton
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopup(true)}
-                />
+                /> */}
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
@@ -202,12 +196,12 @@ export default function GestionSeccion() {
                             {item.id}
                             </StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            {/* <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
                             <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
-                              <Controls.ActionButton 
+                              <Controls.ActionButton
                                 color="warning"
                                 onClick={ () => {openInPopup(item)}}
                               >
@@ -227,12 +221,12 @@ export default function GestionSeccion() {
                 setOpenPopup={setOpenPopup}
                 title="Nueva Sección"
             >
-              <AgregarEditarSeccion 
+              <AgregarEditarSeccion
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
               />
               {/*  <AgregarEditarSeccion/> */}
-            </Popup>  
+            </Popup>
         </>
     )
 }
