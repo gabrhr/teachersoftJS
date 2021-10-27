@@ -1,5 +1,7 @@
 # Notitas generales
 
+**THIS PAGE HAS BEEN MOVED TO NOTION/Wiki/Front**
+
 VSCode tiene visualizador de Markdown.  Shortcut:  `Ctrl + Shift + V`
 
 ## teachersoftJS dev (bugs, limitations, QA)
