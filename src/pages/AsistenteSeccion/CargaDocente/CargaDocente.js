@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CargaDocenteHorarios from './CargaDocenteHorarios';
 
 const tableHeaders = [
     {
@@ -74,7 +75,8 @@ const initialFieldValues = {
 export default function CargaDocente() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
-    const [records, setRecords] = useState(table)
+    const [recordsForEdit, setRecordForEdit] = useState()
+    const [records, setRecord] = useState(table)
     const [horarios,setHorarios] = useState(false)
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,color:"primary.light", elevatio:0}
     const {
@@ -109,7 +111,7 @@ export default function CargaDocente() {
     const theme= useTheme();
 
     const openInPopup = item => {
-        /* setRecordForEdit(item) */
+        setRecordForEdit(item)
         setHorarios(true)
     }
     
@@ -118,18 +120,26 @@ export default function CargaDocente() {
         <>
            <ContentHeader
                 text="Registro de Carga Docente"
-                cbo={true}
+                cbo={horarios? false:true}
                 
             />
             {horarios? 
-                (
-                    <Controls.Button
-                    variant="outlined"
-                    text="Regresar"
-                    size="small"
-                    startIcon={<ArrowBackIcon/>}
-                    onClick={() => {setHorarios(false)}}
-                    />
+                (   <>
+                        <Controls.Button
+                        variant="outlined"
+                        text="Regresar"
+                        size="small"
+                        startIcon={<ArrowBackIcon/>}
+                        onClick={() => {setHorarios(false)}}
+                        />
+                        <div style={{marginLeft:3,marginTop:20, marginBottom:20}}>
+                        <Controls.Input 
+                            label="Curso"  
+                            value = {`${recordsForEdit.clave} - ${recordsForEdit.nombre}`}
+                            disabled
+                        />
+                        </div>
+                    </>
                 )
                 :(<> </>)
             }
@@ -167,11 +177,10 @@ export default function CargaDocente() {
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
                 {horarios? (<>
-                    <Typography variant="h4" style={SubtitulosTable}>
-                        Lista de Horarios
-                    </Typography>
-                
-                
+                        <Typography variant="h4" style={SubtitulosTable}>
+                            Lista de Horarios
+                        </Typography>
+                        <CargaDocenteHorarios/>
                     </>):
                     (   <>
 

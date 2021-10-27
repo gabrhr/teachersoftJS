@@ -22,6 +22,11 @@ export const MenuAsistenteSeccion = [
                 text: 'Registrar Carga',
                 path: '/as/asignacionCarga/registroCarga',
                 indice: 1,
+            },
+            {
+                text: 'Deudas y Descarga',
+                path: '/as/asignacionCarga/deudaYDescarga',
+                indice: 2,
             }
         ]
     },
