@@ -14,6 +14,7 @@ import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const tableHeaders = [
     {
@@ -69,20 +70,12 @@ const initialFieldValues = {
     departmentID: 'Todos los estados',
 }
 
-function GetRow ({...props}){
-   /*  setOpenPopup(false) */
-    const history = useHistory()
-    history.push("/as/asignacionCarga/registroCarga/horarios")    
-    /* setDefValueNombre(`${props.clave} - ${props.nombre}`)
-    setDefValueCreditos(`${props.credito}`) */
-}
-
 
 export default function CargaDocente() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const [records, setRecords] = useState(table)
-
+    const [horarios,setHorarios] = useState(false)
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,color:"primary.light", elevatio:0}
     const {
         values,
@@ -114,14 +107,34 @@ export default function CargaDocente() {
         })
     }
     const theme= useTheme();
+
+    const openInPopup = item => {
+        /* setRecordForEdit(item) */
+        setHorarios(true)
+    }
+    
+
     return (
         <>
            <ContentHeader
                 text="Registro de Carga Docente"
                 cbo={true}
+                
             />
+            {horarios? 
+                (
+                    <Controls.Button
+                    variant="outlined"
+                    text="Regresar"
+                    size="small"
+                    startIcon={<ArrowBackIcon/>}
+                    onClick={() => {setHorarios(false)}}
+                    />
+                )
+                :(<> </>)
+            }
             {/* <Toolbar> */}
-            <Grid container sx={{mb:3}}>
+            <Grid container sx={{mb:3}} display={horarios? "none": "unset"}>
                 <Grid item xs={8} >
                     <Controls.Input
                         label="Buscar Cursos por Nombre o Clave"
@@ -153,45 +166,57 @@ export default function CargaDocente() {
                 </Grid>
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}>
-                   Carga Docente por Cursos
-                </Typography>
-                <BoxTbl>
-                    <TblContainer>
-                        <TblHead />
-                        <TableBody>
-                        {
-                            recordsAfterPagingAndSorting().map(item => (
-                                <StyledTableRow key={item.id}>
-                                    
-                                    <StyledTableCell
-                                    align="right"
-                                    >
-                                    {item.id}
-                                    </StyledTableCell>
-                                    <StyledTableCell>{item.clave}</StyledTableCell>
-                                    <StyledTableCell>{item.nombre}</StyledTableCell>
-                                    <StyledTableCell>{item.facultad}</StyledTableCell>
-                                    <StyledTableCell>{item.creditos}</StyledTableCell>
-                                    <StyledTableCell>
-                                        <Alert severity="info">Pendiente</Alert>
-                                    
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        <Link to = "/as/asignacionCarga/registroCarga/horarios">
-                                        <IconButton size="small">
-                                            <ArrowForwardIosIcon fontSize="small"/>
-                                        </IconButton>
-                                        </Link>
-                                    </StyledTableCell>
-                          
-                                </StyledTableRow>
-                            ))
-                        }
-                        </TableBody>
-                    </TblContainer>
-                    <TblPagination />
-                </BoxTbl>
+                {horarios? (<>
+                    <Typography variant="h4" style={SubtitulosTable}>
+                        Lista de Horarios
+                    </Typography>
+                
+                
+                    </>):
+                    (   <>
+
+                    <Typography variant="h4" style={SubtitulosTable}>
+                    Carga Docente por Cursos
+                    </Typography>
+                    <BoxTbl>
+                        <TblContainer>
+                            <TblHead />
+                            <TableBody>
+                            {
+                                recordsAfterPagingAndSorting().map(item => (
+                                    <StyledTableRow key={item.id}>
+                                        <StyledTableCell
+                                        align="right"
+                                        >
+                                        {item.id}
+                                        </StyledTableCell>
+                                        <StyledTableCell>{item.clave}</StyledTableCell>
+                                        <StyledTableCell>{item.nombre}</StyledTableCell>
+                                        <StyledTableCell>{item.facultad}</StyledTableCell>
+                                        <StyledTableCell>{item.creditos}</StyledTableCell>
+                                        <StyledTableCell>
+                                            <Alert severity="info">Pendiente</Alert>
+                                        
+                                        </StyledTableCell>
+                                        <StyledTableCell>
+                                            <IconButton size="small"
+                                                onClick={ () => {openInPopup(item)}}
+                                            >
+                                                <ArrowForwardIosIcon fontSize="small"/>
+                                                
+                                            </IconButton>
+                                        </StyledTableCell>
+                            
+                                    </StyledTableRow>
+                                ))
+                            }
+                            </TableBody>
+                        </TblContainer>
+                        <TblPagination />
+                    </BoxTbl>
+                    </>
+                    )
+                }
             </Paper>
         </>
     )
