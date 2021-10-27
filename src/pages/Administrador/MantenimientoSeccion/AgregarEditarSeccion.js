@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -19,7 +19,8 @@ const initialFieldValues = {
 }
 
    
-export default function AgregarEditarSeccion() {
+export default function AgregarEditarSeccion(props) {
+    const {addOrEdit, recordForEdit} = props
     const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
@@ -50,7 +51,7 @@ export default function AgregarEditarSeccion() {
     
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
@@ -65,12 +66,12 @@ export default function AgregarEditarSeccion() {
 
           const newSecc = {
             nombre: values.nombre,
-            //correo: values.correo,
+            correo: values.correo,
             departamento: {
               id: parseInt(values.departmentId),
-            } ,
-            foto: null,
-            fecha_fundacion: null
+            } 
+            //foto: null,
+            //fecha_fundacion: null
             //~~~foto: --queda pendiente 
           }
           console.log(newSecc);
@@ -79,13 +80,11 @@ export default function AgregarEditarSeccion() {
           
           resetForm()
 
-          //Pasamos a - ingresarlo a la BD
-          
-          //}
-          //SeccionService.registerSeccion()
         }
         else
             window.alert('invalid')
+        if (validate())
+            addOrEdit(values,resetForm)
     }
 
     const FillDepartamentos = async () =>{
@@ -108,7 +107,6 @@ export default function AgregarEditarSeccion() {
       return departamentos;
     }
 
-
     React.useEffect(() => {
       FillDepartamentos()
       .then (newDep =>{
@@ -118,8 +116,13 @@ export default function AgregarEditarSeccion() {
         
         console.log(departamento);
       });
-    }, [])
-
+      if (recordForEdit != null) {
+          /* object is not empty - esto que hace?*/
+          setValues({
+              ...recordForEdit
+          })
+      }
+    }, [recordForEdit])
 
     return (
       <Form onSubmit={handleSubmit}>
