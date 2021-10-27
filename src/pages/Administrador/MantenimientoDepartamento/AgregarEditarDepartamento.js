@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid , Input, Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -17,7 +17,8 @@ const initialFieldValues = {
     correo: '',
 }
 
-export default function AgregarEditarDepartamento() {
+export default function AgregarEditarDepartamento(props) {
+    const {addOrEdit, recordForEdit} = props
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
@@ -46,7 +47,7 @@ export default function AgregarEditarDepartamento() {
     
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
@@ -56,14 +57,22 @@ export default function AgregarEditarDepartamento() {
     const handleSubmit = e => {
         /* e is a "default parameter" */
         e.preventDefault()
-        if (validate())
+        /* if (validate())
             window.alert('valid')
         else
-            window.alert('invalid')
+            window.alert('invalid') */
         if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
+            addOrEdit(values,resetForm)
     }
+
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
 
     return (
         <Form onSubmit={handleSubmit}>
