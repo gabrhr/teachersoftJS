@@ -11,6 +11,7 @@ const markdown = `# Index of testing pages in TeacherSoft
 - [DreamTeam components showcase](${window.location.origin + '/showcase'})
 - [here](${window.location.href})
 - [Gestion Usuarios](${window.location.origin + '/GestionDeUsuarios'})
+- [Gestión carga cursos](${window.location.origin + '/GestionCargaCursos'})
 
 ~~~C
 # include <stdio.h>

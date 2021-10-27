@@ -1,18 +1,23 @@
 import React, { useState } from 'react'
-import { Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material'
+import { Typography, Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { PrecisionManufacturingRounded } from '@mui/icons-material'
 import { Box } from '@mui/system'
+
 
 const useStyles = makeStyles(theme => ({
   table: {   
     // '& .MuiTable-root': {
     '& .MuiTableCell-head': {
-      fontWeight: '600',
-      color: "primary.dark",
-      backgroundColor: '#cfcfff',
-      borderColor: "primary.main",
-      
+      // fontWeight: '600',
+      // color: "primary.dark",
+      // backgroundColor: '#fff',
+      // borderColor: "primary.main",
+      fontFamily: "Quicksand",
+      fontStyle: "normal",
+      fontWeight: '500',
+      fontSize: '20px',
+      lineHeight: "115%,"
     },
     /* All of these work to different degrees */
     // '& tbody td': {
@@ -23,10 +28,17 @@ const useStyles = makeStyles(theme => ({
       // backgroundColor: "#00ff00"
     },
     '& tbody tr:hover': {
-      backgroundColor: '#E9ECF8',
+      //backgroundColor: '#E9ECF8',
       // cursor: 'pointer'
     }
-  }
+  },
+  // typography: {
+  //   fontFamily: "Quicksand",
+  //   fontStyle: "normal",
+  //   fontWeight: '500',
+  //   fontSize: '20px',
+  //   lineHeight: "115%,"
+  // }
 }
 ))
 
@@ -34,12 +46,12 @@ export default function useTable(records, headCells, filterFn) {
   const classes = useStyles()
   const pages = [5, 10, 25, 50]
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(pages[page])
+  const [rowsPerPage, setRowsPerPage] = useState(pages[0])
   const [order, setOrder] = useState()
   const [orderBy, setOrderBy] = useState()
 
   const BoxTbl = props => (
-        <Box border={1} color="#D4D9EC" borderRadius="20px" overflow="hidden" mt={4}>
+        <Box border={1} color="#D4D9EC" borderRadius="15px" overflow="hidden" mt={4}>
           {props.children}
         </Box>
   )
@@ -61,26 +73,31 @@ export default function useTable(records, headCells, filterFn) {
 
     return (
       <TableHead>
-        <TableRow>
+        <TableRow > 
           {
             headCells.map(headCell => (
-              <TableCell
+              <TableCell 
                 key={headCell.id}
                 align={headCell.numeric ? 'right' : 'left'}
                 sortDirection={orderBy === headCell.id
                   ? order : false}
               >
-                {headCell.sortable ?
-                  <TableSortLabel
-                    active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id
-                      ? order : 'asc'}
-                    onClick={() => {
-                      handleSortRequest(headCell.id)
-                    }}
-                  >
-                    {headCell.label}
-                  </TableSortLabel> : headCell.label}
+                {
+                  headCell.sortable
+                    ? <TableSortLabel 
+                        className={classes.typography}
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id
+                          ? order : 'asc'}
+                        onClick={() => {
+                          handleSortRequest(headCell.id)
+                        }}
+                      >
+                        {headCell.label}
+                      </TableSortLabel> 
+                    : 
+                      headCell.label
+                  }
               </TableCell>
             ))
           }

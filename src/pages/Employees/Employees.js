@@ -10,6 +10,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
 import EmployeeForm from './EmployeeForm'
 import Popup from '../../components/util/Popup'
+import Notification from '../../components/util/Notification'
+import ConfirmDialog from '../../components/util/ConfirmDialog'
 /* ICONS */
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -54,11 +56,17 @@ const tableHeaders = [
 ]
 
 export default function Employees() {
-  const [recordForEdit, setRecordForEdit] = useState(null)
   const [records, setRecords] = useState(employeeService.getAllEmployees())
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
   const [openPopup, setOpenPopup] = useState(false)
+  /* stores values of record to then edit in the Dialog/Popup */
+  const [recordForEdit, setRecordForEdit] = useState(null)
+  /* notification snackbar */
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+  /* confirm dialog */
+  const [confirmDialog, setConfirmDialog] = useState(
+    { isOpen: false, title: '', subtitle: '' })
 
   const {
     TblContainer,
@@ -78,7 +86,7 @@ export default function Employees() {
           return items
         else
           return items.filter(x => x.fullName.toLowerCase()
-              .includes(target.value))
+              .includes(target.value.toLowerCase()))
       }
     })
   }
@@ -92,6 +100,12 @@ export default function Employees() {
     setRecordForEdit(null)
     setOpenPopup(false)
     setRecords(employeeService.getAllEmployees())
+
+    setNotify({
+      isOpen: true,
+      message: 'Submitted Successfully',
+      type: 'success'
+    })
   }
 
   /* open object in a pop up (for edit) */
@@ -100,13 +114,31 @@ export default function Employees() {
     setOpenPopup(true)
   }
 
+  const onDelete = id => {
+    // if (!window.confirm('Are you sure to delete this record?'))
+    //   return
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false
+    })
+
+    employeeService.deleteEmployee(id)
+    setRecords(employeeService.getAllEmployees())
+    setNotify({
+      isOpen: true,
+      message: 'Deleted Successfully',
+      type: 'error'
+    })
+  }
+
   return (
     <>
       <PageHeader
-        title="New Employee"
-        subtitle="Form design with validation"
+        title="All Employees"
+        subtitle="List of employees with CRUD operations."
         icon={<AdbIcon fontSize="large" />}
       />
+      {/* SEARCH BAR */}
       <Toolbar mt={2}>
           <Controls.Input 
             label="Search Employees by Name"
@@ -163,7 +195,17 @@ export default function Employees() {
                       <EditOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
                     <Controls.ActionButton 
-                      color="error">
+                      color="error"
+                      onClick={() => {
+                        // onDelete(item.id)
+                        setConfirmDialog({
+                          isOpen: true,
+                          title: 'Are you sure to delete this record?',
+                          subTitle: 'You can\'t undo this operation',
+                          onConfirm: () => {onDelete(item.id)}
+                        })
+                      }}
+                    >
                       <CloseIcon fontSize="small" />
                     </Controls.ActionButton>
                   </TableCell>
@@ -174,6 +216,7 @@ export default function Employees() {
         </TblContainer>
         <TblPagination />
       </Paper>
+      {/* POP UPS */}
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
@@ -184,6 +227,14 @@ export default function Employees() {
           addOrEdit={addOrEdit}
         />
       </Popup>
+      <Notification 
+        notify={notify}
+        setNotify={setNotify}
+      />
+      <ConfirmDialog 
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </>
   )
 }

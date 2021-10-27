@@ -22,7 +22,8 @@
     "react-markdown": "^7.0.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "xlsx": "^0.17.3"
   },
   "scripts": {
     "start": "react-scripts start",

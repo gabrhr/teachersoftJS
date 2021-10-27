@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import DepartamentoService from '../../../services/departamentoService.js';
+import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 
 const tableHeaders = [
     {
@@ -142,14 +143,13 @@ export default function GestionDepartamento() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                    <Controls.Button 
-                    text="Nuevo Departamento"
+ 
+                <Controls.AddButton 
+                    title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
-                    startIcon={<AddIcon/>}
                     onClick = {() => setOpenPopup(true)}
-                    />
-                </Box>
+                />
+      
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
@@ -158,17 +158,17 @@ export default function GestionDepartamento() {
                     <TableBody>
                     {
                         recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id}>
-                            <TableCell
+                        <StyledTableRow key={item.id}>
+                            <StyledTableCell
                             align="right"
                             >
                             {item.id}
-                            </TableCell>
-                            <TableCell>{item.nombre}</TableCell>
-                            <TableCell>{item.correo}</TableCell>
-                            <TableCell>{item.fechaFundacion}</TableCell>
-                            <TableCell>{item.fechaModificacion}</TableCell>
-                        </TableRow>
+                            </StyledTableCell>
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.correo}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                        </StyledTableRow>
                         ))
                     }
                     </TableBody>

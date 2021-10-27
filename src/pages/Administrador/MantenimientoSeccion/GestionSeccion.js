@@ -3,46 +3,47 @@ import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } from '@mui/material';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
+import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
 
 const tableHeaders = [
-    {
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },
+    // {
+    //   id: 'id',
+    //   label: 'SeccionID',
+    //   numeric: true,
+    //   sortable: true
+    // },
     {
       id: 'nombre',
-      label: 'Nombre Completo',
+      label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
-    {
-      id: 'fechaFundacion',
-      label: 'Fecha de Fundación',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'fechaModificacion',
-      label: 'Última Modificación',
-      numeric: false,
-      sortable: true
-    },
-    {
-        id: 'nombreDepartamento',
-        label: 'Departamento',
-        numeric: false,
-        sortable: true
-     },
+    // {
+    //   id: 'fechaFundacion',
+    //   label: 'Fecha de Fundación',
+    //   numeric: false,
+    //   sortable: true
+    // },
+    // {
+    //   id: 'fechaModificacion',
+    //   label: 'Última Modificación',
+    //   numeric: false,
+    //   sortable: true
+    // },
+    // {
+    //     id: 'nombreDepartamento',
+    //     label: 'Departamento',
+    //     numeric: false,
+    //     sortable: true
+    //  },
 ]
 
 const getSecciones = async () => {
@@ -62,19 +63,7 @@ const getSecciones = async () => {
   //console.log(secciones);
   return secciones;
 }
-/*
-function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDepartamento) {
-    return {
-        id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento,
-    }
-  }
-  
-const usuarios2 = [
-    createData('0', 'Seccion Informatica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-    createData('1', 'Seccion Industrial',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-    createData('2', 'Seccion Electronica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-]
-*/
+
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
@@ -127,7 +116,7 @@ export default function GestionSeccion() {
             <Paper variant="outlined" sx={PaperStyle}>
                 <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
                 <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
+                <Toolbar>
                 <Controls.Input
                     label="Buscar Secciones por Nombre"
                     InputProps={{
@@ -141,15 +130,12 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                    <Controls.Button 
-                    text="Nueva Sección"
+                <Controls.AddButton 
+                    title="Agregar Nueva Sección"
                     variant="iconoTexto"
-                    startIcon={<AddIcon/>}
                     onClick = {() => setOpenPopup(true)}
-                    />
-                </Box>
-                {/* </Toolbar> */}
+                />
+                </Toolbar>
                 </div>
                 <BoxTbl>
                 <TblContainer>
@@ -157,17 +143,17 @@ export default function GestionSeccion() {
                     <TableBody>
                     {
                         recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id}>
-                            <TableCell
+                        <StyledTableRow key={item.id}>
+                            <StyledTableCell
                             align="right"
                             >
                             {item.id}
-                            </TableCell>
-                            <TableCell>{item.nombre}</TableCell>
-                            <TableCell>{item.fechaFundacion}</TableCell>
-                            <TableCell>{item.fechaModificacion}</TableCell>
-                            <TableCell>{item.nombreDepartamento}</TableCell>
-                        </TableRow>
+                            </StyledTableCell>
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                        </StyledTableRow>
                         ))
                     }
                     </TableBody>

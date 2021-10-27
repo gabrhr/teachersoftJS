@@ -8,7 +8,7 @@ export default function Footer() {
                 spacing={0} 
                 sx={{
                     width: "100%",
-                    height: "3vh",
+                    height: "20px",
                     backgroundColor:'primary.main', 
                 }}
             />

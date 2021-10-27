@@ -7,6 +7,7 @@ import Employees from '../Employees/Employees';
 import Showcase from '../Showcase/Showcase'
 import TestIndex from '../Dev/TestIndex';
 import AsistenteSeccion from '../AsistenteSeccion/GestionAsignacionCarga/AsistenteSeccion';
+import GestionCargaCursos from '../AsistenteSeccion/GestionAsignacionCarga/GestiónCargaCursos';
 import GestionDepartamento from '../Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
@@ -25,18 +26,43 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function UserPage() {
-
-
   return (
-    <Box component="main" flexGrow={1} p={2} bgcolor="#ffffff"
-      overflow="auto"
+    /* Content Body (aka. AppMain) (lo que tiene el fondito de la ardillita) */
+    <Box 
+      component="main" 
+      /* fill remainder of body */
+      width={1}
+      // flexGrow={1}   // unnecessary
+      // bottom="0px"
+      p={2} 
+      overflow="auto"   // grow with content
+      /* fondo y ardillita loca */
+      // transform='translateZ(0)'
+      sx={{
+        backgroundColor:"#ffffff",
+        // backgroundImage:'url("assets/img/ardillaloca.svg"), url("assets/img/rayaslocas.svg")',
+        backgroundImage:'url("assets/img/fondoDT.svg")',
+        backgroundRepeat:'no-repeat',
+        backgroundPosition:'bottom right',
+        // backgroundSize:'30%',
+        backgroundSize:'contain',
+      }}
     >
-      <DrawerHeader />
+      {/* USER PAGE */}
+      <DrawerHeader />  {/* SOLAMENTE UN DIV PARA HACER MARGIN TOP, 
+                            codigo repetido en HeaderUser */}
       <Switch>
+        
         {/* admin */}
+        <ProtectedRoute exact path="/login" idRoles={[1,2,3,4,5,6,7,8,9,10]}>
+          <Login/>
+        </ProtectedRoute>
+
+        {/* DUCKTAPE */}
         <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]}>
           <Redirect to="/admin/mantenimiento/usr" />
         </ProtectedRoute>
+
         <ProtectedRoute exact path="/admin/mantenimiento/usr" idRoles={[1]} component={GestionUsuarios} />
         <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={GestionDepartamento} />
         <ProtectedRoute exact path="/admin/mantenimiento/sec" idRoles={[1]} component={GestionSeccion} />
@@ -47,6 +73,7 @@ export default function UserPage() {
         {/* as: asistente de seccion */}
         <ProtectedRoute exact path="/as/asignacionCarga" idRoles={[2]} component={AsistenteSeccion} />
         <ProtectedRoute exact path="/as/asignacionCarga/registroCursos" idRoles={[2]} component={AsistenteSeccion} />
+        <ProtectedRoute exact path="/as/asignacionCarga/cursos" idRoles={[2]} component={GestionCargaCursos} />
         <ProtectedRoute exact path="/as/solicitudDocencia" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/docentes" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/mesaPartes" idRoles={[2]} component={Vacio} />
