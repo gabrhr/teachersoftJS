@@ -188,6 +188,7 @@ export default function GestionDepartamento() {
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
                             <StyledTableCell>
+                              {/* Accion editar */}
                               <Controls.ActionButton 
                                 color="warning"
                                 onClick={ () => {openInPopup(item)}}
@@ -203,7 +204,7 @@ export default function GestionDepartamento() {
                 <TblPagination />
             </BoxTbl>
             </Paper>
-
+            {/* Modal */}
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}

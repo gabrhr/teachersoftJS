@@ -178,7 +178,7 @@ export default function GestionSeccion() {
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .75 }}
+                    sx={{ width: .1 }}
                     onChange={handleSearch}
                     type="search"
                 />

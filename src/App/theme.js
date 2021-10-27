@@ -1,6 +1,7 @@
 
 import { createTheme } from '@mui/material/styles';
 import { borderRadius, color } from '@mui/system';
+import { esES } from '@mui/material/locale';
 // import { color, fontFamily } from '@mui/system';
 
 const theme = createTheme({
@@ -124,8 +125,8 @@ const theme = createTheme({
         },
       }
     },
-
-})
+    
+},esES)
 
 export default theme;
   
