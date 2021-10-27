@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -19,7 +19,8 @@ const initialFieldValues = {
 }
 
    
-export default function AgregarEditarSeccion() {
+export default function AgregarEditarSeccion(props) {
+    const {addOrEdit, recordForEdit} = props
     const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
@@ -50,7 +51,7 @@ export default function AgregarEditarSeccion() {
     
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
@@ -67,8 +68,10 @@ export default function AgregarEditarSeccion() {
             //const seccion ={
   
             //}
-            SeccionService.registerSeccion(values)
-            resetForm()
+            /* SeccionService.registerSeccion(values)
+            resetForm() */
+            if (validate())
+                addOrEdit(values,resetForm)
         }
         else
             window.alert('invalid')
@@ -80,6 +83,15 @@ export default function AgregarEditarSeccion() {
       console.log('aaaa');
       if(dataDep) setDepartamentos(dataDep);
     }
+
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
 
     return (
       <Form onSubmit={handleSubmit}>
