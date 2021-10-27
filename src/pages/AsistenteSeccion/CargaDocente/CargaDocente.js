@@ -10,6 +10,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import * as employeeService from '../../../services/employeeService';
 import { useForm } from '../../../components/useForm';
 import { Box } from '@mui/system';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import IconButton from '../../../components/controls/IconButton';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const tableHeaders = [
     {
@@ -62,13 +66,17 @@ const table = [
 ]
 
 const initialFieldValues = {
-    id: 0,
-    text: '',
-    gender: 'male',
-    departmentID: '',
-    date: new Date(),
-    isPermanent: false
+    departmentID: 'Todos los estados',
 }
+
+function GetRow ({...props}){
+   /*  setOpenPopup(false) */
+    const history = useHistory()
+    history.push("/as/asignacionCarga/registroCarga/horarios")    
+    /* setDefValueNombre(`${props.clave} - ${props.nombre}`)
+    setDefValueCreditos(`${props.credito}`) */
+}
+
 
 export default function CargaDocente() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -113,8 +121,9 @@ export default function CargaDocente() {
                 cbo={true}
             />
             {/* <Toolbar> */}
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20, marginBottom:20}}>
-                <Controls.Input
+            <Grid container sx={{mb:3}}>
+                <Grid item xs={8} >
+                    <Controls.Input
                         label="Buscar Cursos por Nombre o Clave"
                         InputProps={{
                         startAdornment: (
@@ -126,21 +135,23 @@ export default function CargaDocente() {
                         sx={{ width: .3 }}
                         onChange={handleSearch}
                         type="search"
-                />
-
-            <Grid item sx={{marginRight: theme.spacing(3)}}>
-                <Box  sx={{width: "10vw", align: "Right"}}> 
-                    <Controls.Select
-                        name="cicloId"
-                        label="Ciclo"
-                        value={values.departmentId}
-                        onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
-                        type="contained"
                     />
-                </Box>
+                </Grid>
+                <Grid item xs={.3}/>
+                <Grid item xs ={3}sx={{marginRight: theme.spacing(3)}}>
+                    <Box  sx={{width: "10vw", align: "Right"}}> 
+                        <Controls.Select
+                            name="cicloId"
+                            label="Estados"
+                            value={values.departmentId}
+                            onChange={handleInputChange}
+                            options={employeeService.getDepartmentCollection()}
+                            type="contained"
+                            displayNoneOpt
+                        />
+                    </Box>
+                </Grid>
             </Grid>
-            </div>
             <Paper variant="outlined" sx={PaperStyle}>
                 <Typography variant="h4" style={SubtitulosTable}>
                    Carga Docente por Cursos
@@ -151,21 +162,30 @@ export default function CargaDocente() {
                         <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                            <StyledTableRow key={item.id}>
-                                <StyledTableCell
-                                align="right"
-                                >
-                                {item.id}
-                                </StyledTableCell>
-                                <StyledTableCell>{item.clave}</StyledTableCell>
-                                <StyledTableCell>{item.nombre}</StyledTableCell>
-                                <StyledTableCell>{item.facultad}</StyledTableCell>
-                                <StyledTableCell>{item.creditos}</StyledTableCell>
-                                <StyledTableCell>
-                                    <Alert severity="info">Pendiente</Alert>
-                                
-                                </StyledTableCell>
-                            </StyledTableRow>
+                                <StyledTableRow key={item.id}>
+                                    
+                                    <StyledTableCell
+                                    align="right"
+                                    >
+                                    {item.id}
+                                    </StyledTableCell>
+                                    <StyledTableCell>{item.clave}</StyledTableCell>
+                                    <StyledTableCell>{item.nombre}</StyledTableCell>
+                                    <StyledTableCell>{item.facultad}</StyledTableCell>
+                                    <StyledTableCell>{item.creditos}</StyledTableCell>
+                                    <StyledTableCell>
+                                        <Alert severity="info">Pendiente</Alert>
+                                    
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                        <Link to = "/as/asignacionCarga/registroCarga/horarios">
+                                        <IconButton size="small">
+                                            <ArrowForwardIosIcon fontSize="small"/>
+                                        </IconButton>
+                                        </Link>
+                                    </StyledTableCell>
+                          
+                                </StyledTableRow>
                             ))
                         }
                         </TableBody>
