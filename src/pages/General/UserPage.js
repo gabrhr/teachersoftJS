@@ -10,6 +10,7 @@ import AsistenteSeccion from '../AsistenteSeccion/GestionAsignacionCarga/Asisten
 import GestionCargaCursos from '../AsistenteSeccion/GestionAsignacionCarga/GestiónCargaCursos';
 import GestionDepartamento from '../Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../Administrador/MantenimientoSeccion/GestionSeccion'
+import CargaDocente from '../AsistenteSeccion/CargaDocente/CargaDocente';
 // import GestionUsuariosForm from '../Administrador/GestionUsuariosForm';
 import ProtectedRoute from './RouterProtected';
 import Vacio from '../Dev/Vacio'
@@ -74,6 +75,7 @@ export default function UserPage() {
         <ProtectedRoute exact path="/as/asignacionCarga" idRoles={[2]} component={AsistenteSeccion} />
         <ProtectedRoute exact path="/as/asignacionCarga/registroCursos" idRoles={[2]} component={AsistenteSeccion} />
         <ProtectedRoute exact path="/as/asignacionCarga/cursos" idRoles={[2]} component={GestionCargaCursos} />
+        <ProtectedRoute exact path="/as/asignacionCarga/registroCarga" idRoles={[2]} component={CargaDocente} />
         <ProtectedRoute exact path="/as/solicitudDocencia" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/docentes" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/mesaPartes" idRoles={[2]} component={Vacio} />

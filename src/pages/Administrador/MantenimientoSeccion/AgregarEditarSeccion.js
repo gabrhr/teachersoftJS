@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -18,14 +18,15 @@ const initialFieldValues = {
     departmentId:'',
 }
 
-   
-export default function AgregarEditarSeccion() {
+
+export default function AgregarEditarSeccion(props) {
+    const {addOrEdit, recordForEdit} = props
     const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [departamento, setDepartamentos] = React.useState([]);
-    
+
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         align:"left",
@@ -37,7 +38,7 @@ export default function AgregarEditarSeccion() {
             temp.nombre = fieldValues.nombre ? "" : "This field is required."
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
-                    .test(fieldValues.correo) ? "" 
+                    .test(fieldValues.correo) ? ""
                     : "This correo is not vaild."
         setErrors({
             ...temp
@@ -47,69 +48,118 @@ export default function AgregarEditarSeccion() {
             return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
-    
+
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues, true, validate);
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault()
         //Definicio de validaciones
         if (validate()){
-            window.alert('valid')
+          window.alert('valid')
 
-            //Pasamos a - ingresarlo a la BD
-            //const seccion ={
-  
-            //}
-            SeccionService.registerSeccion(values)
-            resetForm()
+          const newSecc = {
+            nombre: values.nombre,
+            //correo: values.correo,
+            departamento: {
+              id: parseInt(values.departmentId),
+            } ,
+            foto: null,
+            fecha_fundacion: null
+            //~~~foto: --queda pendiente
+          }
+          console.log(newSecc);
+          const rpta = await SeccionService.registerSeccion(newSecc);
+          console.log(rpta);
+
+          resetForm()
+
+          //Pasamos a - ingresarlo a la BD
+
+          //}
+          //SeccionService.registerSeccion()
         }
         else
             window.alert('invalid')
     }
 
-    const FillDepartamentos = () =>{
-      const dataDep = DepartamentoService.getDepartamentos();
+    const FillDepartamentos = async () =>{
+      const dataDep = await DepartamentoService.getDepartamentos();
       const departamentos = []
-      console.log('aaaa');
-      if(dataDep) setDepartamentos(dataDep);
+
+      //if(dataDep) setDepartamentos(dataDep);
+      dataDep.map(dep => (
+        departamentos.push({
+          id: dep.id.toString(),
+          title: dep.nombre,
+        })
+      ));
+      /*
+      values.map([id] => {
+        values.id =
+      })
+      */
+      console.log(departamentos);
+      return departamentos;
     }
+
+
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
+
+    /*React.useEffect(() => {
+      FillDepartamentos()
+      .then (newDep =>{
+        setDepartamentos(prevDep => prevDep.concat(newDep));
+
+        //console.log(newSeccion);
+
+        console.log(departamento);
+      });
+    }, [])*/
+
 
     return (
       <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
-                           DATOS GENERALES  
+                           DATOS GENERALES
                     </Typography>
-                    <Controls.Input 
+                    <Controls.Input
                         name="nombre"
-                        label="Nombre" 
-                        value={values.nombre} 
+                        label="Nombre"
+                        value={values.nombre}
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
-                    <Controls.Input 
+                    <Controls.Input
                         name="correo"
-                        label="Correo Electrónico" 
-                        value={values.correo} 
+                        label="Correo Electrónico"
+                        value={values.correo}
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
 
                     <Controls.Select
-                        name="deparmetId"
+                        name="departmentId"
                         label="Departamento"
                         value={values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
-                    />                
+                    />
                 </Grid>
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
                 <Grid item sx={5} style={ColumnGridItemStyle} align="center">
@@ -119,8 +169,8 @@ export default function AgregarEditarSeccion() {
                     {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> */}
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
                     <label htmlFor="contained-button-file">
-                        <Input accept="image/*" id="contained-button-file" 
-                            type="file" sx={{display: 'none'}} 
+                        <Input accept="image/*" id="contained-button-file"
+                            type="file" sx={{display: 'none'}}
                             onChange={(event) => {
                                 const files = event.target.files
                                 //console.log(files[0]);
@@ -136,7 +186,7 @@ export default function AgregarEditarSeccion() {
                                     reader.readAsDataURL(files[0]);
 
                                 }
-                            }}    
+                            }}
                         />
                         <Controls.Button
                             text="Subir foto"
@@ -160,7 +210,7 @@ export default function AgregarEditarSeccion() {
                         text="Guardar Cambios"
                         type="submit"
                     />
-                    
+
                 </div>
             </Grid>
         </Form>
