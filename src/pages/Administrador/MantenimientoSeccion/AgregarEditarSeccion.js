@@ -66,12 +66,12 @@ export default function AgregarEditarSeccion(props) {
 
           const newSecc = {
             nombre: values.nombre,
-            //correo: values.correo,
+            correo: values.correo,
             departamento: {
               id: parseInt(values.departmentId),
-            } ,
-            foto: null,
-            fecha_fundacion: null
+            } 
+            //foto: null,
+            //fecha_fundacion: null
             //~~~foto: --queda pendiente 
           }
           console.log(newSecc);
@@ -106,7 +106,7 @@ export default function AgregarEditarSeccion(props) {
       console.log(departamentos);
       return departamentos;
     }
-    
+
     React.useEffect(() => {
       FillDepartamentos()
       .then (newDep =>{

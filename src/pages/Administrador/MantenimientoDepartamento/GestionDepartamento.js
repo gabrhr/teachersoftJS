@@ -13,7 +13,7 @@ import { Typography } from '@mui/material'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import departamentoService from '../../../services/departamentoService';
-import * as employeeService from '../../../services/employeeService'
+//import * as employeeService from '../../../services/employeeService'
 
 const tableHeaders = [
     {
@@ -86,6 +86,7 @@ const getDepartamento = async () => {
 }
 
 export default function GestionDepartamento() {
+
     const [openPopup, setOpenPopup] = useState(false)
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -139,15 +140,16 @@ export default function GestionDepartamento() {
         type: 'success'
       })
     } */
-    const addOrEdit = (employee, resetForm) => {
-      if (employee.id == 0)
-        employeeService.insertEmployee(employee)
+    
+    const addOrEdit = (departamento, resetForm) => {
+      if (departamento.id === 0)
+        departamentoService.registerDepartamento(departamento)
       else
-        employeeService.updateEmployee(employee)
+        departamentoService.updateDepartamento(departamento)
       resetForm()
       setRecordForEdit(null)
       setOpenPopup(false)
-      setRecords(employeeService.getAllEmployees())
+      setRecords(prevRecords => prevRecords.concat(departamento))
   
       setNotify({
         isOpen: true,
@@ -197,7 +199,7 @@ export default function GestionDepartamento() {
                 <Controls.AddButton 
                     title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
-                    onClick = {() => setOpenPopup(true)}
+                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                 />
       
                 {/* </Toolbar> */}
@@ -238,7 +240,7 @@ export default function GestionDepartamento() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Nuevo Departamento"
+                title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
             >
               <AgregarEditarDepartamento 
                 recordForEdit={recordForEdit}

@@ -41,6 +41,7 @@ const registerSeccion = async newObject => {
 
 const updateSeccion = async (newObject, {id}) => {
   try{
+    console.log(newObject);
     const request = await axios.put(`${url}/seccion/${id}`, newObject, id);
     return request.data; //Es un valor de true o no
   }catch(exception){

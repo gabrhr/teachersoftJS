@@ -65,8 +65,7 @@ export default function AgregarEditarDepartamento(props) {
           const newDep = {
             nombre: values.nombre,
             correo: values.correo,
-            foto: null,
-            fecha_fundacion: null
+            //foto: null,
           }
           console.log(newDep);
           const rpta = await DepartamentoService.registerDepartamento(newDep);

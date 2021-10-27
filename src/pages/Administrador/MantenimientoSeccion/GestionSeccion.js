@@ -13,7 +13,7 @@ import { StyledTableRow, StyledTableCell } from '../../../components/controls/St
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
-import * as employeeService from '../../../services/employeeService'
+//import * as employeeService from '../../../services/employeeService'
 
 
 
@@ -61,6 +61,7 @@ const getSecciones = async () => {
   const dataSecc = await SeccionService.getSecciones(); 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
+  console.log(dataSecc);
   dataSecc.map(seccion => (
     secciones.push({
       id: seccion.id.toString(),
@@ -70,7 +71,6 @@ const getSecciones = async () => {
       nombreDepartamento: seccion.departamento.nombre,
     })
     ));
-  //console.log(secciones);
   return secciones;
 }
 
@@ -110,6 +110,7 @@ export default function GestionSeccion() {
         })
       }
     useEffect(() => {
+      //Obtenemos las secciones
       getSecciones()
       .then (newSeccion =>{
         setRecords(prevRecords => prevRecords.concat(newSeccion));
@@ -119,29 +120,29 @@ export default function GestionSeccion() {
         console.log(records);
       });
     }, [])
-    
+
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
     }
 
-    /* const addOrEdit = (seccion, resetForm) => {
-      if (seccion.id == 0)
+    const addOrEdit = (seccion, resetForm) => {
+      if (seccion.id === 0)
         SeccionService.registerSeccion(seccion)
       else
         SeccionService.updateSeccion(seccion)
       resetForm()
       setRecordForEdit(null)
       setOpenPopup(false)
-      setRecords(getSecciones.getAllEmployees())
+      setRecords(prevRecords => prevRecords.concat(seccion))
   
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
         type: 'success'
       })
-    } */
-    const addOrEdit = (employee, resetForm) => {
+    }
+    /*const addOrEdit = (employee, resetForm) => {
       if (employee.id == 0)
         employeeService.insertEmployee(employee)
       else
@@ -157,6 +158,7 @@ export default function GestionSeccion() {
         type: 'success'
       })
     }
+    */
     return (
         <>
             <ContentHeader
@@ -183,8 +185,9 @@ export default function GestionSeccion() {
                 <Controls.AddButton 
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
-                    onClick = {() => setOpenPopup(true)}
+                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                 />
+                
                 </Toolbar>
                 </div>
                 <BoxTbl>
@@ -223,7 +226,7 @@ export default function GestionSeccion() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Nueva Sección"
+                title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
               <AgregarEditarSeccion 
                 recordForEdit={recordForEdit}
