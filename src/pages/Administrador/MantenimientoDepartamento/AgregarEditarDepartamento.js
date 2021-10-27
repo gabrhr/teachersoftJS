@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid , Input, Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
-
+import DepartamentoService from '../../../services/departamentoService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
@@ -17,10 +17,13 @@ const initialFieldValues = {
     correo: '',
 }
 
-export default function AgregarEditarDepartamento() {
+export default function AgregarEditarDepartamento(props) {
+    const {addOrEdit, recordForEdit} = props
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
+    const [departamento, setDepartamentos] = React.useState([]);
+
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -46,24 +49,44 @@ export default function AgregarEditarDepartamento() {
     
     const {
         values,
-        // setValues,
+        setValues,
         errors,
         setErrors,
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues, true, validate);
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault()
-        if (validate())
-            window.alert('valid')
+        if (validate()){
+          window.alert('valid')
+
+          const newDep = {
+            nombre: values.nombre,
+            correo: values.correo,
+            //foto: null,
+          }
+          console.log(newDep);
+          const rpta = await DepartamentoService.registerDepartamento(newDep);
+          console.log(rpta);
+          
+          resetForm()
+        }
         else
             window.alert('invalid')
         if (validate())
-            employeeService.insertEmployee(values)
-            resetForm()
+            addOrEdit(values,resetForm)
     }
+
+    useEffect(() => {
+        if (recordForEdit != null) {
+            /* object is not empty */
+            setValues({
+                ...recordForEdit
+            })
+        }
+    }, [recordForEdit])
 
     return (
         <Form onSubmit={handleSubmit}>
