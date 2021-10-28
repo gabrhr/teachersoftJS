@@ -7,8 +7,9 @@ import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
 import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
-import * as DTLocalServices from '../../../services/DTLocalServices';
-
+import DTLocalServices from '../../../services/DTLocalServices';
+import departamentoService from '../../../services/departamentoService';
+import SeccionService from '../../../services/seccionService.js';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { Box } from '@mui/system'
 
@@ -20,7 +21,8 @@ const styles = {
 
 const initialFieldValues = {
   id: 0,
-  nombres: '',
+  idPersona: '',
+  nombre: '',
   apellidoMaterno: '',
   apellidoPaterno: '',
   DNI: '',
@@ -30,9 +32,53 @@ const initialFieldValues = {
   seccion: '',
 }
 
+const getDepartamento = async () => {
+  
+  const dataDep = await departamentoService.getDepartamentos(); 
+  
+  const departamentos = [];
+  dataDep.map(dep => (
+    departamentos.push({
+      id: dep.id.toString(),
+      nombre: dep.nombre,
+      correo: dep.correo,
+      fechaModificacion: dep.fecha_modificacion,
+      fechaFundacion: dep.fechaFundacion,
+    })
+    ));
+  
+  return departamentos;
+}
+
+const getSecciones = async () => {
+
+  const dataSecc = await SeccionService.getSecciones(); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const secciones = [];
+  dataSecc.map(seccion => (
+    secciones.push({
+      id: seccion.id.toString(),
+      nombre: seccion.nombre,
+      fechaFundacion: seccion.fecha_fundacion,
+      fechaModificacion: seccion.fecha_modificacion,
+      departamento:{
+        idDepartamento: seccion.departamento.id,
+        nombreDepartamento: seccion.departamento.nombre
+      },
+      correo: seccion.correo,
+      foto:seccion.foto
+    })
+    ));
+  //console.log(secciones);
+  window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
+  return secciones;
+}
+
 export default function GestionUsuariosForm(props) {
 
   const { addOrEdit, recordForEdit } = props
+  const [departamentos, setDepartamentos] = useState([])
+  const [secciones, setSecciones] = useState([])
 
   // const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
   const [fotoPerfil, setFotoPerfil] = React.useState(null);
@@ -50,11 +96,11 @@ export default function GestionUsuariosForm(props) {
   /* for "onChange" validation (real time validation) */
   const validate = (fieldValues = values) => {
     let temp = { ...errors }
-    if ('nombres' in fieldValues)
-      if (fieldValues.nombres.length === 0)
-        temp.nombres = "Campo requerido"
+    if ('nombre' in fieldValues)
+      if (fieldValues.nombre.length === 0)
+        temp.nombre = "Campo requerido"
       else
-        temp.nombres = DTLocalServices.validateName(fieldValues.nombres)
+        temp.nombre = DTLocalServices.validateName(fieldValues.nombre)
     if ('apellidoPaterno' in fieldValues)
       if (fieldValues.apellidoPaterno.length === 0)
         temp.apellidoPaterno = "Campo requerido"
@@ -93,11 +139,39 @@ export default function GestionUsuariosForm(props) {
     resetForm
   } = useForm(initialFieldValues, true, validate);
 
-  const handleSubmit = e => {
+  const _handleSubmit = e => {
     /* e is a "default parameter" */
     e.preventDefault()
-    if (validate())
-      addOrEdit(values, resetForm)
+    if (validate()){
+      window.alert('valid')
+
+    //Este pasa como la nueva seccion o la seccion editada
+      const newUsr = {
+        id: values.id,
+        persona: {
+          nombre: values.nombre,
+          apellidoPaterno: values.apellidoPaterno,
+          apellidoMaterno: values.apellidoMaterno,
+          correo: values.correo,
+          DNI: values.DNI,
+          rol: values.rol,
+          departamento: {
+            id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
+            nombre: recordForEdit ? parseInt(values.departamento.nombre) : null,
+          },
+          seccion: {
+            id: recordForEdit ? parseInt(values.seccion.idSeccion) : parseInt(values.seccionId) ,
+            nombre: recordForEdit ? parseInt(values.seccion.nombre) : null,
+          }, 
+        }
+        
+        //foto: fotoPerfil,
+        //~~~foto: --queda pendiente 
+      }
+      console.log(newUsr);
+      addOrEdit({...newUsr, image: fileFoto}, resetForm)
+    }
+      
   }
 
   /* "detect the change of recordForEdit inside this bottom component" */
@@ -110,9 +184,43 @@ export default function GestionUsuariosForm(props) {
     }
   }, [recordForEdit])
 
+  useEffect(() => {
+    getDepartamento()
+    .then (newDep =>{
+      setDepartamentos(prevRecords => prevRecords.concat(newDep));
+      
+      //console.log(newSeccion);
+      
+      console.log(departamentos);
+    });
+  }, [])
+
+  useEffect(() => {
+    getSecciones()
+    .then (newSecc =>{
+      setSecciones(prevRecords => prevRecords.concat(newSecc));
+      
+      //console.log(newSeccion);
+      
+      console.log(secciones);
+    });
+  }, [])
+  
+  /*useEffect(() => {
+    getSecciones()
+  }, [])
+
+  const getSecciones = () => {
+
+    DTLocalServices.getSecciones().then((response) => {
+          setSecciones(response.data)
+          console.log(response.data);
+      });
+  };*/
+
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={_handleSubmit}>
         <Grid container
           sx={{
             gridTemplateColumns: "1fr 1fr 1fr ",
@@ -124,11 +232,11 @@ export default function GestionUsuariosForm(props) {
               DATOS PERSONALES
             </Typography>
             <Controls.Input
-              name="nombres"
+              name="nombre"
               label="Nombre"
-              value={values.nombres}
+              value={values.nombre}
               onChange={handleInputChange}
-              error={errors.nombres}
+              error={errors.nombre}
             />
             <Controls.Input
               name="apellidoPaterno"
@@ -175,20 +283,25 @@ export default function GestionUsuariosForm(props) {
               error={errors.rol}
             />
             <Controls.Select
-              name="departamento"
-              label="Departamento"
-              value={values.departamento}
+              name="departmentId"
+              label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+              value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
               onChange={handleInputChange}
-              options={DTLocalServices.getAllDepartamentos()}
-              error={errors.departamento}
+              options={departamentos}
+              
             />
             <Controls.Select
-              name="seccion"
-              label="Sección Principal"
-              value={values.seccion}
+              name="seccionId"
+              label={recordForEdit? values.seccion.nombreSeccion : "Seccion Principal"}
+              value={recordForEdit? values.seccion.idSeccion: values.seccionId}
               onChange={handleInputChange}
-              options={DTLocalServices.getAllSecciones()}
-              error={errors.seccion}
+              options={secciones}
+              
+            />
+            <Controls.Input
+              name="idPersona"
+              type="hidden"
+              value={values.idPersona}
             />
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mt: 9, mb: 2, mx: 1 }} />
@@ -202,8 +315,10 @@ export default function GestionUsuariosForm(props) {
             <label htmlFor="contained-button-file">
               <Input accept="image/*" id="contained-button-file"
                 type="file" sx={{ display: 'none' }}
+                value = {values.fileFoto}
                 onChange={(event) => {
                   const files = event.target.files
+
                   //console.log(files[0]);
 
                   setFileFoto(files[0])
@@ -215,7 +330,6 @@ export default function GestionUsuariosForm(props) {
                       setFotoPerfil(e.target.result)
                     };
                     reader.readAsDataURL(files[0]);
-
                   }
                 }}
               />

@@ -66,4 +66,4 @@ const deletePersona = async ({id}) => {
   }
 }
 
-// export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona}
+export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona}
