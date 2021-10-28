@@ -7,6 +7,7 @@ import Button from "./Button";
 import IconButton from "./IconButton";
 import ActionButton from "./ActionButton";
 import AddButton from "./AddButton";
+import Divider from "./Divider"
 
 export const Controls = {
     Input,
@@ -17,5 +18,6 @@ export const Controls = {
     Button,
     IconButton,
     ActionButton, 
-    AddButton
+    AddButton,
+    Divider
 }

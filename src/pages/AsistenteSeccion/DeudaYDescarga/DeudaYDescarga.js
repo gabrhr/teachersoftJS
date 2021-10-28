@@ -93,7 +93,7 @@ export default function DeudaYDescarga() {
     return (
         <>
         <ContentHeader
-                text="Gestión de Deudas y Descargas"
+                text="Gestión de Deudas y Descargas Horarias"
                 cbo={false}
             />
         <Box sx={{ bgcolor: '#fff', marginTop:2}}>
