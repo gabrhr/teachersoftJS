@@ -1,6 +1,7 @@
 
 import { createTheme } from '@mui/material/styles';
 import { borderRadius, color } from '@mui/system';
+import { esES } from '@mui/material/locale';
 // import { color, fontFamily } from '@mui/system';
 
 const theme = createTheme({
@@ -43,19 +44,22 @@ const theme = createTheme({
         fontSize: '70px',
       },
       h2:{ //Login titulo grande
-         fontFamily: 'NotoSerif',
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: '50px',
         lineHeight: '50px',
       },
       h3:{ //Encabezado
-        fontFamily: 'NotoSerif',
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 30,
         lineHeight: '50px',
       },
       h4:{
-        fontFamily: 'NotoSerif',
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 18,
         lineHeight: '50px',
@@ -100,10 +104,12 @@ const theme = createTheme({
             },
           },
         },
+        // como es esto de variants, props, style? 
         variants:[
           {
             props: { variant: 'submenu' },
             style: {
+              
               borderRadius: "0 50px 50px 0 ",
               "&.Mui-selected":{
                 boxShadow: "0px 2px 10px -5px #41b9e4",
@@ -114,18 +120,19 @@ const theme = createTheme({
                 backgroundColor: "#41b9e410",
                 color:"#042354"
               },
+              typography:{
+                fontStyle: 'SemiBold',
+              }
             },
         },],
-        
       },
       MuiPaper:{
         styleOverrides: {
-
         },
-      }
+      },
     },
-
-})
+    
+},esES)
 
 export default theme;
   

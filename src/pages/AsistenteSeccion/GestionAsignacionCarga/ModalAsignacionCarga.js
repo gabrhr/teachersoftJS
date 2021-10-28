@@ -57,12 +57,13 @@ const tableHeaders = [
      },
 ]
 
-export default function ModalAsignacionCarga(props) {
+export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
 
     let auxHorario
     const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
-    const [records, setRecords] = useState([])
+    //const [records, setRecords] = useState([])
+    const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -81,7 +82,7 @@ export default function ModalAsignacionCarga(props) {
         TblPagination,
         recordsAfterPagingAndSorting,
         BoxTbl
-    } = useTable(records, tableHeaders, filterFn);
+    } = useTable(recordsX, tableHeaders, filterFn);
     
     const onInputClick = (event) => {
         event.target.value = ''
@@ -183,6 +184,8 @@ export default function ModalAsignacionCarga(props) {
         //Hacemos el paso de los datos a un objeto
         const horarios = datosHorarios(listaCorrectos)
         setRecords(prevRecords => prevRecords.concat(horarios));
+        setRecordsX(records)
+
     };
 
     const handleUploadFile = e => {
@@ -209,6 +212,16 @@ export default function ModalAsignacionCarga(props) {
             console.log(error);
         }
     };
+
+    const actualizarDatos = e => { 
+        //Cargar la tabla
+       /*  for (let i = 0; i < recordsX.length; i++) { */
+       /*      horariosService.insertHorario(recordsX[i] */
+       /*  } */
+         setOpenPopup(false) 
+       /*  setRecords(employeeService.getAllEmployees()) */
+        setRecords(recordsX)
+    }
     
     const handleSubmit = e => {
       e.preventDefault()
@@ -284,10 +297,9 @@ export default function ModalAsignacionCarga(props) {
                         // color="primary"
                         // size="large"
                         text="Cargar Datos"
-                        type="submit"
-                    >
-                       
-                    </Controls.Button>
+                        /* type="submit" */
+                        onClick={actualizarDatos}
+                    />
                     
                 </div>
             </Grid>

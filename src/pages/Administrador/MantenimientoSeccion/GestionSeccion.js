@@ -19,14 +19,14 @@ import SeccionService from '../../../services/seccionService.js';
 
 const tableHeaders = [
     {
-      id: 'nombre',
-      label: 'Nombre de la seccion',
-      numeric: false,
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
       sortable: true
     },
     {
-      id: 'fechaFundacion',
-      label: 'Fecha de Fundación',
+      id: 'nombre',
+      label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
@@ -50,9 +50,8 @@ const tableHeaders = [
     }
 ]
 
-const getSecciones = async () => {
-
-  const dataSecc = await SeccionService.getSecciones(); 
+function getSecciones(){
+  const dataSecc = SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -73,7 +72,6 @@ const getSecciones = async () => {
   window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
   return secciones;
 }
-
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
@@ -82,7 +80,7 @@ export default function GestionSeccion() {
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
 
     //console.log(records);
@@ -160,7 +158,7 @@ export default function GestionSeccion() {
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .75 }}
+                    sx={{ width: .1 }}
                     onChange={handleSearch}
                     type="search"
                 />
@@ -192,7 +190,7 @@ export default function GestionSeccion() {
                             <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
-                              <Controls.ActionButton 
+                              <Controls.ActionButton
                                 color="warning"
                                 onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
                               >
@@ -212,13 +210,13 @@ export default function GestionSeccion() {
                 setOpenPopup={setOpenPopup}
                 title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
-              <AgregarEditarSeccion 
+              <AgregarEditarSeccion
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 />
                 {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
-            </Popup>  
+            </Popup>
         </>
     )
 }
