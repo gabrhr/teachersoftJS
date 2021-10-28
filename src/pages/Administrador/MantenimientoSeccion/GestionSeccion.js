@@ -58,7 +58,7 @@ const tableHeaders = [
 
 const getSecciones = async () => {
 
-  const dataSecc = await SeccionService.getSecciones(); 
+  const dataSecc = await SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -88,7 +88,7 @@ export default function GestionSeccion() {
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
 
     //console.log(records);
@@ -120,25 +120,25 @@ export default function GestionSeccion() {
       getSecciones()
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
-        
+        console.log(newSeccion);
       });
-      
-    }, [recordForEdit])
-  
+
+    }, [recordForEdit,records])
+
     const addOrEdit = (seccion, resetForm) => {
 
-      recordForEdit 
-        ? SeccionService.updateSeccion(seccion, seccion.id) 
+      recordForEdit
+        ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
           .then(idSeccion => {
-            if(!recordForEdit)  
+            if(!recordForEdit)
               setRecordForEdit(idSeccion);
             else
               setRecordForEdit(null);
         })
       setOpenPopup(false)
       resetForm()
-  
+
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
@@ -169,13 +169,13 @@ export default function GestionSeccion() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Controls.AddButton 
+                <Controls.AddButton
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
                     onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                     //openInPopup();^
                 />
-                
+
                 </Toolbar>
                 </div>
                 <BoxTbl>
@@ -196,7 +196,7 @@ export default function GestionSeccion() {
                             <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
-                              <Controls.ActionButton 
+                              <Controls.ActionButton
                                 color="warning"
                                 onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
                               >
@@ -216,13 +216,13 @@ export default function GestionSeccion() {
                 setOpenPopup={setOpenPopup}
                 title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
-              <AgregarEditarSeccion 
+              <AgregarEditarSeccion
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 />
                 {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
-            </Popup>  
+            </Popup>
         </>
     )
 }
