@@ -110,7 +110,7 @@ const Drawer = styled(MuiDrawer, {
 
 const HeaderUser = ({ nombre, idRol, foto }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   let rol
   let listaMenu=[];
   const handleDrawerOpen = () => {

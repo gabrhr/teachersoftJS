@@ -89,7 +89,7 @@ function App() {
           <HeaderUser
               nombre="New Employee"
               rol="Administrador"
-              idRol= {0}
+              idRol= {1}
               foto={fotoUsuario}
         /> 
         <CssBaseline />

@@ -1,5 +1,7 @@
 import BorderBox from "./BorderBox"
+import Etiqueta from "./Etiqueta"
 
 export const DT = {
-    BorderBox
+    BorderBox,
+    Etiqueta
 }

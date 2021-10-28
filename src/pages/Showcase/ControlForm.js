@@ -1,5 +1,8 @@
+/* Author: Mitsuo
+ * Date: 2021-10-27
+ */
 import React from 'react'
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Typography, Box } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 /* fake BackEnd */
@@ -16,28 +19,39 @@ const radioGroupValues = [
 
 const initialFieldValues = {
     id: 0,
-    text: '',
+    text: 'Please input some text',
     gender: 'male',
-    departmentID: '',
+    departmentID: '2',
     date: new Date(),
     isPermanent: false
+}
+
+function printValues(values) {
+    let s = "values:\n"
+    for (let key in values) {
+        s += `- ${key}: ${values[key]}\n`
+    }
+    s += "\n"
+    return s
 }
 
 export default function ControlForm() {
     const {
         values,
-        // setValues,
-        handleInputChange
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
     } = useForm(initialFieldValues);
 
     return (
         <Form>
-            <Typography variant="h2" component="div">
-                Showcasing DreamTeam Components
-            </Typography>
-            <Typography variant="body" component="div" my={2} >
-                Values: 
-                - text: {values.text}
+            <Typography sx={{
+                fontFamily: "monospace",
+                whiteSpace: "pre"
+            }}>
+                {printValues(values)}
             </Typography>
             <Controls.Input 
                 name="text"   // name debe ser el mismo nombre de la propiedad 
@@ -45,75 +59,45 @@ export default function ControlForm() {
                 label="Text"  
                 value={values.text} 
                 onChange = {handleInputChange}
-                />
+            />
             <Controls.RadioGroup
-                name="radioGroupShowcase"
+                name="gender"
                 label="Radio Group"
-                value={values.radioGroupShowcase}
+                value={values.gender}
                 onChange={handleInputChange}
                 items={radioGroupValues}
-                />
+            />
             <Controls.Select
-                name="deparmetId"
-                label="Select"
-                value={values.departmentId}
+                name="departmentID"
+                label="Default value is Marketing"
+                value={values.departmentID}
                 onChange={handleInputChange}
                 options={employeeService.getDepartmentCollection()}
-                />
+            />
             <Controls.DatePicker
                 name="date"
                 label="Date Picker"
                 value={values.date}
                 onChange={handleInputChange}
-                />
+            />
             <Controls.Checkbox
                 name="isPermanent"
                 label="Permanent Employee"
                 value={values.isPermanent}
                 onChange={handleInputChange}
-                />
+            />
             <div> 
                 {/* Boton Azul */}
                 <Controls.Button
                     text="Submit"
-                    type="submit"   // html property (not component)
-                    endIcon={<ErrorOutlineIcon />} //Opcional con imagen
-                    />
-                {/* Boton Desactivado Plomo */}
-                <Controls.Button
-                    variant="contained"
-                    disabled
-                    text="Disabled"
-                    size="medium"
-                    />
-                {/* Boton Blanco */}
-                <Controls.Button
-                    variant="outlined"
-                    text="outlined"
-                    size="small"
-                    />
-                <Controls.Button
-                    variant="iconoTexto"
-                    text="Hola mundo"
+                    type="submit"
+                    endIcon={<ErrorOutlineIcon />}
                 />
-            </div>
-            <div>
-                Recuerda h1 grande h4 pequeño
-                <Typography variant="h1"  component="div">
-                  body: Hola mundo como estas
-                </Typography>
-                <Typography variant="h2"  component="div">
-                  body: Hola mundo como estas
-                </Typography>
-                <Typography variant="h3"  component="div">
-                h3: SUBTITULOS DE ContentHeader
-                </Typography>
-                <Typography variant="h4"  component="div">
-                h4: Subtitulos de Tablas o Forms
-                </Typography>
-                <Typography >
-                  body: Hola mundo como estas
-                </Typography>
+                <Controls.Button
+                    variant="disabled"
+                    text="Reset"
+                    onClick={resetForm}
+                />
             </div>
         </Form>
     )

@@ -8,6 +8,7 @@ import { useForm, Form } from '../../../components/useForm';
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
+import { useHistory } from 'react-router-dom'
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
@@ -73,6 +74,7 @@ export default function HorarioCursos(props) {
     const [data, setData] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -157,6 +159,9 @@ export default function HorarioCursos(props) {
           }
         })
       }
+    const handleClick = (e) => {
+        history.push("/as/asignacionCarga/cursos");
+    };
     return (
         <Form>            
             <Typography variant="h4"
@@ -193,7 +198,7 @@ export default function HorarioCursos(props) {
                     <Controls.AddButton 
                         title="Agregar Nuevo Horario"
                         variant="iconoTexto"
-                        /* onClick = {() => setOpenPopup(true)} */
+                        onClick = {(event) => handleClick(event)}
                     />
                 </Grid>
             </Grid>

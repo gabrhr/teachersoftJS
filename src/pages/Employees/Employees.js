@@ -65,8 +65,11 @@ export default function Employees() {
   /* notification snackbar */
   const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
   /* confirm dialog */
-  const [confirmDialog, setConfirmDialog] = useState(
-    { isOpen: false, title: '', subtitle: '' })
+  const [confirmDialog, setConfirmDialog] = useState({ 
+    isOpen: false, 
+    title: '', 
+    subtitle: '' 
+  })
 
   const {
     TblContainer,
