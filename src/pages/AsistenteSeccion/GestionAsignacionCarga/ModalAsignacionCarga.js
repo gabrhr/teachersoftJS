@@ -10,14 +10,15 @@ import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { set } from 'date-fns';
+import horarioService from '../../../services/horarioService';
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'SeccionID',
       numeric: true,
       sortable: true
-    },
+    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -55,22 +56,13 @@ const tableHeaders = [
         sortable: true
      },
 ]
-function createData(id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion) {
-    return {
-        id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion
-    }
-  }
-  
- 
 
 export default function ModalAsignacionCarga(props) {
 
     let auxHorario
     const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
-    const [records, setRecords] = useState(horario)
+    const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -94,6 +86,49 @@ export default function ModalAsignacionCarga(props) {
     const onInputClick = (event) => {
         event.target.value = ''
     }
+/*
+    const defragmentarSesiones = listHorarios =>{
+      const dataSesiones = {
+        "secuencia": 0,
+        "dia_semana": 1,
+        "hora_inicio": 12,
+        "media_hora_inicio": 0,
+        "hora_fin": 15,
+        "media_hora_fin": 1
+      }
+      
+      return dataSesiones;
+    }
+*/
+    const datosHorarios = listHorarios => {
+      //const dataSesiones = defragmentarSesiones(listHorarios);
+      const horarios = []
+      listHorarios.map(hor => (
+        horarios.push({
+        "codigo": hor.Horario,
+        "tipo": hor.Tipo, //Horas_semanales: cargaHoraria
+        //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
+        "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
+        ciclo:{
+          //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+        },
+        curso:{
+          "codigo": hor.Clave, //INF...
+          "nombre": hor.Nombre, //NOMBRE DEL CURSO
+          "creditos": hor.Creditos, //Creditos del Curso
+          "unidad": hor.Unidad, //Creditos del Curso
+          "carga": hor.Carga_Horario, //Creditos del Curso
+        },
+        "sesiones": hor.Hora_Sesion
+          //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
+        /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
+        //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
+      })
+      ));  
+      //horario = horarios;
+      //console.log(horario);
+      return horarios;
+    }
 
 
     const processData = dataString => {
@@ -102,19 +137,19 @@ export default function ModalAsignacionCarga(props) {
         const headers = dataStringLines[0].split(
             /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
         );
-
+          //PROCESAMIENTO DE LA DATA EN LA TABLA
         let list = [];
         for (let i = 1; i < dataStringLines.length; i++) {
             const row = dataStringLines[i].split(
                 /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
             );
-            if (headers && row.length == headers.length) {
+            if (headers && row.length === headers.length) {
                 const obj = {};
                 for (let j = 0; j < headers.length; j++) {
                     let d = row[j];
                     if (d.length > 0) {
-                        if (d[0] == '"') d = d.substring(1, d.length - 1);
-                        if (d[d.length - 1] == '"') d = d.substring(d.length - 2, 1);
+                        if (d[0] === '"') d = d.substring(1, d.length - 1);
+                        if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
                     }
                     if (headers[j]) {
                         obj[headers[j]] = d;
@@ -138,15 +173,16 @@ export default function ModalAsignacionCarga(props) {
         setData(list);
         setColumns(columns);
 
+        //let listaIncorrectos = []
         let listaCorrectos = []
-        let listaIncorrectos = []
 
         for (let i = 0; i < list.length; i++) {
-            listaIncorrectos.push(list[i])
+            listaCorrectos.push(list[i])
         }
 
-        setRecords(listaIncorrectos)
-
+        //Hacemos el paso de los datos a un objeto
+        const horarios = datosHorarios(listaCorrectos)
+        setRecords(prevRecords => prevRecords.concat(horarios));
     };
 
     const handleUploadFile = e => {
@@ -175,8 +211,10 @@ export default function ModalAsignacionCarga(props) {
     };
     
     const handleSubmit = e => {
-        /* e is a "default parameter" */
-        e.preventDefault()
+      e.preventDefault()
+        console.log(records);
+        //UNA VEZ SE SUBA - VAMOS A PROCEDER A REALIZAR LA INSERCION
+        horarioService.registerDepartamento(records);
         // if (validate())
         window.localStorage.setItem("listHorario", records);
         getHorario(records)
@@ -212,19 +250,19 @@ export default function ModalAsignacionCarga(props) {
                         <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                            <TableRow key={item.id}>
-                                <TableCell
+                            <TableRow>
+                                {/*<TableCell
                                 align="right"
                                 >
                              
                                 {item.id}
-                                </TableCell>
-                                <TableCell>{item.claveCurso}</TableCell>
-                                <TableCell>{item.nombreCurso}</TableCell>
-                                <TableCell>{item.cargaHoraria}</TableCell>
-                                <TableCell>{item.horario}</TableCell>
-                                <TableCell>{item.tipoSesion}</TableCell>
-                                <TableCell>{item.horaSesion}</TableCell>
+                                </TableCell>*/}
+                                <TableCell>{records ? item.curso.codigo : item.codigo}</TableCell>
+                                <TableCell>{records ? item.curso.nombre : item.codigo}</TableCell>
+                                <TableCell>{records ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                <TableCell>{records ? item.codigo : item.codigo}</TableCell>
+                                <TableCell>{records ? item.tipo : item.tipo}</TableCell>
+                                <TableCell>{records ? item.sesiones : item.sesiones}</TableCell>
                             </TableRow>
                             ))
                         }

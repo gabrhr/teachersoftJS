@@ -14,18 +14,19 @@ import { formatHorario, formatHorarioCursos } from '../../../components/auxFunct
 export default function AsistenteSeccion() {
 
     
-    const [hor, setHor] = useState([]);
+    const [horario, setHorario] = useState([]);
   
   /*  const [newFile, setNewFile] = useState(0); //0: No new file
     const [count, setCount] = useState(0);
 */
     const [openPopup, setOpenPopup] = useState(false)
+
     useEffect(() => {
         //Obtenemos las secciones
         
         getHorario();
   
-      }, [hor])
+      }, [horario])
     /*
     let xlsx = '';
 
@@ -40,14 +41,10 @@ export default function AsistenteSeccion() {
         window.localStorage.setItem('xlsx', xlsx)
     }*/
     
-
-
-
-
     function getHorario (input){
         setOpenPopup(false)
         listHorario = input
-        setHor(listHorario);
+        setHorario(listHorario);
         //setHorario(listHorario)
         //console.log(horario)
         //window.localStorage.setItem('listHorario', listHorario) 
@@ -63,9 +60,6 @@ export default function AsistenteSeccion() {
      
     //let listHorario = getHorario(-1);
   
-
-    
-
     return (
         <>
             <ContentHeader 

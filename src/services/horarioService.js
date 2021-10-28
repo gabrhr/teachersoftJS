@@ -3,20 +3,30 @@ import url from '../config.js';
 import tokenService from './tokens.js';
 import { formatHorario, formatHorarioCursos } from '../components/auxFunctions';
 
-export const getHorario = async ({id}) => {
+export const getHorarios = async () => {
+  try{
+    //debugger;
+    const request= await axios.get(`${url}/horario/`) //Todas las secciones
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
 
-    return   [
-      formatHorario('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-      formatHorario('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-      formatHorario('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    ]
-  
+export const getHorario = async ({id}) => {
+  try{
+    const request = await axios.get(`${url}/horario/${id}`,id);
+    return request.data;  //Es un dato.
+  }catch(exception){
+    console.error(exception);
+  }
 }
 
 const registerHorario = async newObject => {
-  try{
+  try{           
     const request = await axios.post(`${url}/horario/`, newObject);
-    return request.then(response => response.data) //Es un valor de true o no
+    console.log(request.data);
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
   }
@@ -24,8 +34,9 @@ const registerHorario = async newObject => {
 
 const updateHorario = async (newObject, {id}) => {
   try{
+    //console.log(newObject);
     const request = await axios.put(`${url}/horario/${id}`, newObject, id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
   }
@@ -34,11 +45,11 @@ const updateHorario = async (newObject, {id}) => {
 const deleteHorario = async ({id}) => {
   try{
     const request = await axios.delete(`${url}/horario/${id}`, id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
   }
 }
 
 
-export default {getHorario, registerHorario, updateHorario, deleteHorario}
+export default {getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}

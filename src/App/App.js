@@ -39,8 +39,8 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    console.log('App: UseEffect:')
-    console.log(user)
+    //console.log('App: UseEffect:')
+    //console.log(user)
     // console.log(localStorage.getItem('loggedUser'))
   }, [user])
   
