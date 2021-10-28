@@ -26,7 +26,7 @@ int main() {
 - [react-markdown](https://github.com/remarkjs/react-markdown)
 `
 
-/* Lists current testing pages */
+/* Index page for pages being develop */
 export default function TestIndex() {
     return (
         <Paper sx={{p: 4}}>

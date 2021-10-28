@@ -15,7 +15,7 @@ const useStyles = makeStyles(themex => ({
 const SubMenu = (props) => {
     const { open, item, handleListItemClick, isSelected, ...other } = props
     const [subnav, setSubnav] = useState(false)
-    const [selectedIndexI, setSelectedIndexI] = React.useState(null);
+    const [selectedIndexI, setSelectedIndexI] = React.useState(0);
     const history = useHistory()
     const location = useLocation()
     let {pathNow} = useRouteMatch();
@@ -74,7 +74,7 @@ const SubMenu = (props) => {
                           selected={location.pathname == item.path ? selectedIndexI === index : false}
                           onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
                           >
-                          <ListItemText  primary={item.text} sx={{pl:4 }}/>
+                          <ListItemText primary={item.text} sx={{pl:4}}/>
                       </ListItemButton>
                     );
                 })}
