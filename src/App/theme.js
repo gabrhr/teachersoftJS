@@ -44,19 +44,22 @@ const theme = createTheme({
         fontSize: '70px',
       },
       h2:{ //Login titulo grande
-         fontFamily: 'NotoSerif',
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: '50px',
         lineHeight: '50px',
       },
       h3:{ //Encabezado
-        fontFamily: 'NotoSerif',
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 30,
         lineHeight: '50px',
       },
       h4:{
-        fontFamily: 'NotoSerif',
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 18,
         lineHeight: '50px',
@@ -101,6 +104,7 @@ const theme = createTheme({
             },
           },
         },
+        // como es esto de variants, props, style? 
         variants:[
           {
             props: { variant: 'submenu' },
@@ -117,13 +121,22 @@ const theme = createTheme({
               },
             },
         },],
-        
       },
       MuiPaper:{
         styleOverrides: {
-
         },
-      }
+      },
+      MuiAccordionSummary: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled": {
+              backgroundColor: "#fff",
+              color: "#000",
+              opacity: 1
+            }
+          }
+        },
+      },
     },
     
 },esES)

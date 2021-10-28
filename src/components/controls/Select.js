@@ -25,7 +25,7 @@ export default function Select(props) {
                 }}
                 {...other}
             >
-                {displayNoneOpt ? <MenuItem value="">None</MenuItem> : null}
+                {displayNoneOpt ? <MenuItem value="">Seleccionar</MenuItem> : null}
                 {
                     options.map(
                         item => (
