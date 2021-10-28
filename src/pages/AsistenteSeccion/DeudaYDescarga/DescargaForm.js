@@ -73,7 +73,7 @@ export default function Descargaform() {
               /* no search text */
               return items
             else
-              return items.filter(x => x.nombre.toLowerCase()
+              return items.filter(x => x.asunto.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
@@ -112,7 +112,7 @@ export default function Descargaform() {
                     type="search"
                 />
             </div>
-            <Box border={1} color="#D4D9EC" overflow="hidden" mt={4}>
+            <BoxTbl>
                 <TblContainer>
                      {/* <TblHead />  */}
                     <TableBody>
@@ -124,7 +124,7 @@ export default function Descargaform() {
                     </TableBody>
                 </TblContainer>
                 <TblPagination />
-            </Box>
+            </BoxTbl>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
