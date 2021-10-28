@@ -24,13 +24,18 @@ const tableHeaders = [
       label: 'Carga Horaria',
       numeric: false,
       sortable: true
+    },{
+      id: 'deuda',
+      label: 'Deuda Horaria',
+      numeric: false,
+      sortable: true
     },
-    {
+    /* {
       id: 'bono',
       label: 'Bonos',
       numeric: false,
       sortable: false
-    }
+    } */
 ]
   
 function createData(id, nombre, apellido_paterno, apellido_materno, codigo, especialidad, correo, carga,deuda,bono) {
@@ -127,11 +132,13 @@ export default function DeudaForm() {
                                 <Typography display="inline" sx={{color:"#41B9E4"}}>
                                     {item.carga} horas
                                 </Typography>
-                                <div style={{color:"red"}}>
-                                    Deuda horaria: {item.deuda} horas
-                                </div>
                             </TableCell>
-                            <TableCell>{item.bono}</TableCell>
+                            <TableCell>
+                                <Typography style={{color:"red"}}>
+                                    Deuda horaria: {item.deuda} horas
+                                </Typography>
+                            </TableCell>
+                            {/* <TableCell>{item.bono}</TableCell> */}
                             
                         </TableRow>
                         ))
