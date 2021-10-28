@@ -59,7 +59,7 @@ function createData(id, nombre, correo, fechaFundacion, fechaModificacion) {
         id, nombre, correo, fechaFundacion, fechaModificacion,
     }
   }
-  
+
 const usuarios2 = [
     createData('0', 'Departamento 1', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
     createData('1', 'Departamento 2', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
@@ -69,9 +69,11 @@ const usuarios2 = [
 
 const getDepartamento = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  const dataDep = await DepartamentoService.getDepartamentos(); 
+  const dataDep = await DepartamentoService.getDepartamentos();
+  console.log(dataDep);
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];
+  console.log(departamentos);
   dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
@@ -93,7 +95,7 @@ export default function GestionDepartamento() {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
     const {
         TblContainer,
@@ -123,7 +125,7 @@ export default function GestionDepartamento() {
         }
       })
     }
-    
+
     /* const addOrEdit = (departamento, resetForm) => {
       if (departamento.id == 0)
         departamentoService.registerDepartamento(departamento)
@@ -133,14 +135,14 @@ export default function GestionDepartamento() {
       setRecordForEdit(null)
       setOpenPopup(false)
       setRecords(getDepartamentos.getAllEmployees())
-  
+
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
         type: 'success'
       })
     } */
-    
+
     const addOrEdit = (departamento, resetForm) => {
       if (departamento.id === 0)
         departamentoService.registerDepartamento(departamento)
@@ -150,7 +152,7 @@ export default function GestionDepartamento() {
       setRecordForEdit(null)
       setOpenPopup(false)
       setRecords(prevRecords => prevRecords.concat(departamento))
-  
+
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
@@ -163,9 +165,9 @@ export default function GestionDepartamento() {
       getDepartamento()
       .then (newDep =>{
         setRecords(prevRecords => prevRecords.concat(newDep));
-        
+
         //console.log(newSeccion);
-        
+
         console.log(records);
       });
     }, [])
@@ -195,13 +197,13 @@ export default function GestionDepartamento() {
                     onChange={handleSearch}
                     type="search"
                 />
- 
-                <Controls.AddButton 
+
+                <Controls.AddButton
                     title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
                     onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                 />
-      
+
                 {/* </Toolbar> */}
                 </div>
                 <BoxTbl>
@@ -221,7 +223,7 @@ export default function GestionDepartamento() {
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
                             <StyledTableCell>
-                              <Controls.ActionButton 
+                              <Controls.ActionButton
                                 color="warning"
                                 onClick={ () => {openInPopup(item)}}
                               >
@@ -242,12 +244,12 @@ export default function GestionDepartamento() {
                 setOpenPopup={setOpenPopup}
                 title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
             >
-              <AgregarEditarDepartamento 
+              <AgregarEditarDepartamento
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
               />
               {/*  <GestionUsuariosForm/> */}
-            </Popup>  
+            </Popup>
         </>
     )
 }
