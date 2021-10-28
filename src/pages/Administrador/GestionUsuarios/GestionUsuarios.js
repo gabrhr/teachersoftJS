@@ -158,7 +158,7 @@ export default function GestionUsuarios() {
       fecha_creacion: null,
       fecha_modificacion: null,
       password: null,
-      usuario: usuario.correo,
+      usuario: usuario.persona.correo,
       persona: {
         id: usuario.persona.id,
         nombres: usuario.persona.nombre,
