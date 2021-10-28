@@ -29,7 +29,9 @@ const initialFieldValues = {
   correo: '',
   rol: '',
   departamentId: '',
+  nombreDepartamento: '',
   seccionId: '',
+  nombreSeccion: '',
 }
 
 const getDepartamento = async () => {
@@ -62,8 +64,8 @@ const getSecciones = async () => {
       fechaFundacion: seccion.fecha_fundacion,
       fechaModificacion: seccion.fecha_modificacion,
       departamento:{
-        idDepartamento: seccion.departamento.id,
-        nombreDepartamento: seccion.departamento.nombre
+        id: seccion.departamento.id,
+        nombre: seccion.departamento.nombre
       },
       correo: seccion.correo,
       foto:seccion.foto
@@ -77,8 +79,8 @@ const getSecciones = async () => {
 export default function GestionUsuariosForm(props) {
 
   const { addOrEdit, recordForEdit } = props
-  const [departamentos, setDepartamentos] = useState([])
-  const [secciones, setSecciones] = useState([])
+  const [departamento, setDepartamentos] = useState([])
+  const [seccion, setSecciones] = useState([])
 
   // const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
   const [fotoPerfil, setFotoPerfil] = React.useState(null);
@@ -143,28 +145,25 @@ export default function GestionUsuariosForm(props) {
     /* e is a "default parameter" */
     e.preventDefault()
     if (validate()){
-      window.alert('valid')
 
     //Este pasa como la nueva seccion o la seccion editada
       const newUsr = {
         id: values.id,
-        persona: {
-          id: values.idPersona,
-          nombre: values.nombre,
-          apellidoPaterno: values.apellidoPaterno,
-          apellidoMaterno: values.apellidoMaterno,
-          correo: values.correo,
-          DNI: values.documento,
-          rol: values.rol,
-          departamento: {
-            id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
-            nombre: recordForEdit ? parseInt(values.departamento.nombre) : null,
-          },
-          seccion: {
-            id: recordForEdit ? parseInt(values.seccion.idSeccion) : parseInt(values.seccionId) ,
-            nombre: recordForEdit ? parseInt(values.seccion.nombre) : null,
-          }, 
-        }
+        idPersona: values.idPersona,
+        nombre: values.nombre,
+        apellidoPaterno: values.apellidoPaterno,
+        apellidoMaterno: values.apellidoMaterno,
+        correo: values.correo,
+        DNI: values.documento,
+        rol: values.rol,
+        departamento: {
+          id: recordForEdit ? parseInt(values.departamento.id) : parseInt(values.departmentId) ,
+          nombre: recordForEdit ? values.departamento.nombre : null,
+        },
+        seccion: {
+          id: recordForEdit ? parseInt(values.seccion.id) : parseInt(values.seccionId) ,
+          nombre: recordForEdit ? values.seccion.nombre : null,
+        } 
         
         //foto: fotoPerfil,
         //~~~foto: --queda pendiente 
@@ -192,9 +191,14 @@ export default function GestionUsuariosForm(props) {
       
       //console.log(newSeccion);
       
-      console.log(departamentos);
     });
-  }, [])
+    if (recordForEdit != null) {
+        /* object is not empty - esto que hace?*/
+        setValues({
+            ...recordForEdit
+        })
+    }
+  }, [recordForEdit])
 
   useEffect(() => {
     getSecciones()
@@ -203,9 +207,15 @@ export default function GestionUsuariosForm(props) {
       
       //console.log(newSeccion);
       
-      console.log(secciones);
+      
     });
-  }, [])
+    if (recordForEdit != null) {
+        /* object is not empty - esto que hace?*/
+        setValues({
+            ...recordForEdit
+        })
+    }
+  }, [recordForEdit])
   
   /*useEffect(() => {
     getSecciones()
@@ -283,20 +293,21 @@ export default function GestionUsuariosForm(props) {
               options={DTLocalServices.getAllRoles()}
               error={errors.rol}
             />
+            
             <Controls.Select
               name="departmentId"
-              label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
-              value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
+              label="Departamento"
+              value={values.departmentId}
               onChange={handleInputChange}
-              options={departamentos}
+              options={departamento}
               
             />
             <Controls.Select
               name="seccionId"
-              label={recordForEdit? values.seccion.nombreSeccion : "Seccion Principal"}
-              value={recordForEdit? values.seccion.idSeccion: values.seccionId}
+              label="Seccion Principal"
+              value={values.seccionId}
               onChange={handleInputChange}
-              options={secciones}
+              options={seccion}
               
             />
             <Controls.Input

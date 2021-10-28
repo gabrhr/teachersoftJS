@@ -73,6 +73,7 @@ const tableHeaders = [
 const getUsuario = async () => {
   
   const usuario = await userService.getUsuarios(); 
+
   var str
   let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
@@ -89,12 +90,12 @@ const getUsuario = async () => {
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
       rol: usr.persona.tipo_persona,
       departamento: {
-        idDepartamento: usr.persona.departamento.id,
-        nombreDepartamento: usr.persona.departamento.nombre
+        id: usr.persona.departamento.id,
+        nombre: usr.persona.departamento.nombre
       },
       seccion: {
-        idSeccion: usr.persona.seccion.id,
-        nombreSeccion: usr.persona.seccion.nombre
+        id: usr.persona.seccion.id,
+        nombre: usr.persona.seccion.nombre
       }
     })
     ));
@@ -158,21 +159,21 @@ export default function GestionUsuarios() {
       fecha_creacion: null,
       fecha_modificacion: null,
       password: null,
-      usuario: usuario.persona.correo,
+      usuario: usuario.correo,
       persona: {
-        id: usuario.persona.id,
-        nombres: usuario.persona.nombre,
-        apellidos: usuario.persona.apellidoPaterno + ' ' + usuario.persona.apellidoMaterno,
-        correo_pucp: usuario.persona.correo,
-        numero_documento: usuario.persona.DNI,
-        tipo_persona: usuario.persona.rol,
+        id: usuario.id,
+        nombres: usuario.nombre,
+        apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
+        correo_pucp: usuario.correo,
+        numero_documento: usuario.DNI,
+        tipo_persona: usuario.rol,
         seccion: {
-          id: usuario.persona.seccion.id,
-          nombre: usuario.persona.seccion.nombre
+          id: usuario.seccion.id,
+          nombre: usuario.seccion.nombre
         },
         departamento: {
-          id: usuario.persona.departamento.id,
-          nombre: usuario.persona.departamento.nombre
+          id: usuario.departamento.id,
+          nombre: usuario.departamento.nombre
         },
         foto_URL: null
       }
@@ -180,19 +181,19 @@ export default function GestionUsuarios() {
     }
     
     const dataPer = {
-      id: usuario.persona.id,
-      nombres: usuario.persona.nombre,
-      apellidos: usuario.persona.apellidoPaterno + ' ' + usuario.persona.apellidoMaterno,
-      correo_pucp: usuario.persona.correo,
-      numero_documento: usuario.persona.DNI,
-      tipo_persona: usuario.persona.rol,
+      id: usuario.id,
+      nombres: usuario.nombre,
+      apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
+      correo_pucp: usuario.correo,
+      numero_documento: usuario.DNI,
+      tipo_persona: usuario.rol,
       seccion: {
-        id: usuario.persona.seccion.id,
-        nombre: usuario.persona.seccion.nombre
+        id: usuario.seccion.id,
+        nombre: usuario.seccion.nombre
       },
       departamento: {
-        id: usuario.persona.departamento.id,
-        nombre: usuario.persona.departamento.nombre
+        id: usuario.departamento.id,
+        nombre: usuario.departamento.nombre
       },
       foto_URL: null
     }
@@ -200,11 +201,11 @@ export default function GestionUsuarios() {
     console.log(dataPer)
 
     /*recordForEdit 
-        ? personaService.updatePersona(dataPer, usuario.idPersona) 
-        : personaService.registerPersona(dataPer)
-          .then(idPersona => {
+        ? userService.updateUsuario(dataUsr, usuario.id) 
+        : userService.registerUsuario(dataUsr)
+          .then(idUsuario => {
             if(!recordForEdit)  
-              setRecordForEdit(idPersona);
+              setRecordForEdit(idUsuario);
             else
               setRecordForEdit(null);
         })
@@ -217,7 +218,6 @@ export default function GestionUsuarios() {
       userService.registerUsuario(dataUsr)
     }
     else{
-      personaService.updatePersona(dataPer,usuario.idPersona)
       userService.updateUsuario(dataUsr,usuario.id)
     }
     resetForm()
@@ -347,8 +347,8 @@ export default function GestionUsuarios() {
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>
-                    <StyledTableCell>{item.seccion.nombreSeccion}</StyledTableCell>
-                    <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
+                    <StyledTableCell>{item.seccion.nombre}</StyledTableCell>
+                    <StyledTableCell>{item.departamento.nombre}</StyledTableCell>
                     <StyledTableCell>
                       <Controls.ActionButton 
                         color="warning"
