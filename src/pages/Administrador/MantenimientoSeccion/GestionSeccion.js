@@ -19,12 +19,6 @@ import SeccionService from '../../../services/seccionService.js';
 
 const tableHeaders = [
     {
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },
-    {
       id: 'nombre',
       label: 'Nombre de la seccion',
       numeric: false,
@@ -115,7 +109,7 @@ export default function GestionSeccion() {
           }
         })
     }
-    
+
     useEffect(() => {
       //Obtenemos las secciones
       getSecciones()
@@ -156,7 +150,7 @@ export default function GestionSeccion() {
             <Paper variant="outlined" sx={PaperStyle}>
                 <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
                 <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                <Toolbar>
+                {/*<Toolbar>*/}
                 <Controls.Input
                     label="Buscar Secciones por Nombre"
                     InputProps={{
@@ -177,7 +171,7 @@ export default function GestionSeccion() {
                     //openInPopup();^
                 />
                 
-                </Toolbar>
+                {/*</Toolbar>*/}
                 </div>
                 <BoxTbl>
                 <TblContainer>
@@ -186,11 +180,12 @@ export default function GestionSeccion() {
                     {
                         recordsAfterPagingAndSorting().map(item => (
                         <StyledTableRow key={item.id}>
-                            <StyledTableCell
+                            {/*<StyledTableCell
                             align="right"
                             >
                             {item.id}
                             </StyledTableCell>
+                            */}
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
