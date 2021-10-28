@@ -126,6 +126,17 @@ const theme = createTheme({
         styleOverrides: {
         },
       },
+      MuiAccordionSummary: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled": {
+              backgroundColor: "#fff",
+              color: "#000",
+              opacity: 1
+            }
+          }
+        },
+      },
     },
     
 },esES)
