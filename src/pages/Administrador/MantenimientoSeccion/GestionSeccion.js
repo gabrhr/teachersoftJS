@@ -5,13 +5,16 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } from '@mui/material';
 /* ICONS */
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog';
 //import AuthService from '../../../services/authService.js';
 //import * as employeeService from '../../../services/employeeService'
 
@@ -81,6 +84,7 @@ export default function GestionSeccion() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -93,6 +97,31 @@ export default function GestionSeccion() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
+
+    
+    const openInPopup = item => {
+      setRecordForEdit(item)
+      setOpenPopup(true)
+    }
+
+    const onDelete = id => {
+      setConfirmDialog({
+          ...confirmDialog,
+          isOpen: false
+      })
+
+      //AGREGAR ELIMINACION DEL BACKEND Para Seccion
+      /*
+
+      */
+   
+      setNotify({
+          isOpen: true,
+          message: 'Sección eliminada de manera satisfactoria',
+          type: 'error'
+      })
+      
+    }
 
     const handleSearch = e => {
         let target = e.target;
@@ -198,6 +227,18 @@ export default function GestionSeccion() {
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
+                              <Controls.ActionButton
+                                color="error"
+                                onClick={() => {
+                                  setConfirmDialog({
+                                    isOpen: true,
+                                    title: '¿Eliminar Sección permanentemente?',
+                                    subTitle: 'No es posible deshacer esta accion',
+                                    onConfirm: () => { onDelete(item.id) }
+                                  })
+                                }}>
+                                <CloseIcon fontSize="small" />
+                              </Controls.ActionButton>
                             </StyledTableCell>
                         </StyledTableRow>
                         ))
@@ -219,6 +260,14 @@ export default function GestionSeccion() {
                 {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
             </Popup>  
+            <Notification 
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }
