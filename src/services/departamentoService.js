@@ -4,9 +4,9 @@ import tokenService from './tokens.js';
 
 const getDepartamentos = async () => {
     try{
-        const request = await axios.get(`${url}/departamento/`, tokenService.getToken());
+        const request = await axios.get(`${url}/departamento/`);
         if(request.data.nombre){
-            
+
         }
         return request.data;
     } catch(except){
@@ -16,7 +16,7 @@ const getDepartamentos = async () => {
 const getDepartamento = async ({id}) => {
     try{
         const request = await axios.get(`${url}/departamento/${id}`, id, tokenService.getToken());
-        if(!request) 
+        if(!request)
           return request.data;
     } catch (except){
         console.error(except);
