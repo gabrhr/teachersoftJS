@@ -18,12 +18,6 @@ const initialFieldValues = {
 
 const tableHeaders = [
     {
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },
-    {
       id: 'claveCurso',
       label: 'Clave',
       numeric: false,
@@ -160,11 +154,6 @@ export default function HorarioCursos({records,setRecords}) {
                     {
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
-                            <TableCell
-                            align="right"
-                            >
-                            {item.id}
-                            </TableCell>
                             <TableCell>{item.claveCurso}</TableCell>
                             <TableCell>{item.nombreCurso}</TableCell>
                             <TableCell>{item.cargaHoraria}</TableCell>

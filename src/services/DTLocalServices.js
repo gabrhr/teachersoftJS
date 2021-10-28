@@ -131,7 +131,7 @@ export function getAllRoles() {
 export function getAllCiclos() {
     let ciclos = []
     let i
-    const base = 2021-20
+    const base = 2021-20+1
     for (i = 0; i < 20; i++) {
         ciclos[2*i] = {id: (base + i)*10 + 1, title: `${base+i}-1`}
         ciclos[2*i+1] = {id: (base + i)*10 + 2, title: `${base+i}-2`}
