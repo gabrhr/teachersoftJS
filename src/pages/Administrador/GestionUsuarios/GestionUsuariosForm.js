@@ -28,8 +28,8 @@ const initialFieldValues = {
   DNI: '',
   correo: '',
   rol: '',
-  departamento: '',
-  seccion: '',
+  departamentId: '',
+  seccionId: '',
 }
 
 const getDepartamento = async () => {
@@ -110,8 +110,8 @@ export default function GestionUsuariosForm(props) {
       temp.apellidoMaterno = DTLocalServices.validateName(fieldValues.apellidoMaterno)
     if ('correo' in fieldValues)
       temp.correo = DTLocalServices.validateEmail(fieldValues.correo)
-    if ('DNI' in fieldValues)
-      temp.DNI = (/^\d\d\d\d\d\d\d\d$/).test(fieldValues.DNI) 
+    if ('documento' in fieldValues)
+      temp.documento = (/^\d\d\d\d\d\d\d\d$/).test(fieldValues.documento) 
         ? ""
         : "DNI necesita 8 digitos"
     if ('rol' in fieldValues)
@@ -139,7 +139,7 @@ export default function GestionUsuariosForm(props) {
     resetForm
   } = useForm(initialFieldValues, true, validate);
 
-  const _handleSubmit = e => {
+  const handleSubmit = e => {
     /* e is a "default parameter" */
     e.preventDefault()
     if (validate()){
@@ -149,11 +149,12 @@ export default function GestionUsuariosForm(props) {
       const newUsr = {
         id: values.id,
         persona: {
+          id: values.idPersona,
           nombre: values.nombre,
           apellidoPaterno: values.apellidoPaterno,
           apellidoMaterno: values.apellidoMaterno,
           correo: values.correo,
-          DNI: values.DNI,
+          DNI: values.documento,
           rol: values.rol,
           departamento: {
             id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
@@ -220,7 +221,7 @@ export default function GestionUsuariosForm(props) {
 
   return (
     <>
-      <Form onSubmit={_handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Grid container
           sx={{
             gridTemplateColumns: "1fr 1fr 1fr ",
@@ -253,11 +254,11 @@ export default function GestionUsuariosForm(props) {
               error={errors.apellidoMaterno}
             />
             <Controls.Input
-              name="DNI"
+              name="documento"
               label="Documento de Identidad"
-              value={values.DNI}
+              value={values.documento}
               onChange={handleInputChange}
-              error={errors.DNI}
+              error={errors.documento}
             />
             <Controls.Input
               name="correo"

@@ -73,16 +73,20 @@ const tableHeaders = [
 const getUsuario = async () => {
   
   const usuario = await userService.getUsuarios(); 
-  
+  var str
+  let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
   usuario.map(usr => (
+    str = usr.persona.apellidos.split(" "),
     usuarios.push({
       id: usr.id.toString(),
       idPersona: usr.persona.id.toString(),
       nombre: usr.persona.nombres,
-      apellidoPaterno: usr.persona.apellidos,
+      apellidoPaterno: str[0],
+      apellidoMaterno: str[1],
       documento: usr.persona.numero_documento,
       correo: usr.persona.correo_pucp,
+      rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
       rol: usr.persona.tipo_persona,
       departamento: {
         idDepartamento: usr.persona.departamento.id,
@@ -150,19 +154,25 @@ export default function GestionUsuarios() {
   const addOrEdit = (usuario, resetForm) => {
     
     const dataUsr = {
+      id: usuario.id,
       fecha_creacion: null,
       fecha_modificacion: null,
+      password: null,
+      usuario: usuario.correo,
       persona: {
-        nombre: usuario.nombre,
-        apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
-        correo_pucp: usuario.correo,
-        numero_documento: usuario.DNI,
-        tipo_persona: usuario.rol,
+        id: usuario.persona.id,
+        nombres: usuario.persona.nombre,
+        apellidos: usuario.persona.apellidoPaterno + ' ' + usuario.persona.apellidoMaterno,
+        correo_pucp: usuario.persona.correo,
+        numero_documento: usuario.persona.DNI,
+        tipo_persona: usuario.persona.rol,
         seccion: {
-          id: usuario.seccion
+          id: usuario.persona.seccion.id,
+          nombre: usuario.persona.seccion.nombre
         },
         departamento: {
-          id: usuario.departamento
+          id: usuario.persona.departamento.id,
+          nombre: usuario.persona.departamento.nombre
         },
         foto_URL: null
       }
@@ -170,23 +180,26 @@ export default function GestionUsuarios() {
     }
     
     const dataPer = {
-      nombre: usuario.nombre,
-      apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
-      correo_pucp: usuario.correo,
-      numero_documento: usuario.DNI,
-      tipo_persona: usuario.rol,
+      id: usuario.persona.id,
+      nombres: usuario.persona.nombre,
+      apellidos: usuario.persona.apellidoPaterno + ' ' + usuario.persona.apellidoMaterno,
+      correo_pucp: usuario.persona.correo,
+      numero_documento: usuario.persona.DNI,
+      tipo_persona: usuario.persona.rol,
       seccion: {
-        id: usuario.seccion
+        id: usuario.persona.seccion.id,
+        nombre: usuario.persona.seccion.nombre
       },
       departamento: {
-        id: usuario.departamento
+        id: usuario.persona.departamento.id,
+        nombre: usuario.persona.departamento.nombre
       },
       foto_URL: null
     }
     
     console.log(dataPer)
 
-    recordForEdit 
+    /*recordForEdit 
         ? personaService.updatePersona(dataPer, usuario.idPersona) 
         : personaService.registerPersona(dataPer)
           .then(idPersona => {
@@ -196,16 +209,17 @@ export default function GestionUsuarios() {
               setRecordForEdit(null);
         })
     setOpenPopup(false)
-    resetForm()
+    resetForm()*/
 
-    /*if (usuario.id == 0){
+    if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
       //DTLocalServices.postPersona(dataPer)
-      personaService.registerPersona(dataPer)
-      //userService.registerUsuario(dataUsr)
+      userService.registerUsuario(dataUsr)
     }
-    else
+    else{
       personaService.updatePersona(dataPer,usuario.idPersona)
+      userService.updateUsuario(dataUsr,usuario.id)
+    }
     resetForm()
     setRecordForEdit(null)
     setOpenPopup(false)
@@ -329,12 +343,12 @@ export default function GestionUsuarios() {
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
                   <TableRow key={item.id}>
-                    <StyledTableCell>{item.nombre} {item.apellidoPaterno} </StyledTableCell>
+                    <StyledTableCell>{item.nombre} {item.apellidoPaterno} {item.apellidoMaterno}</StyledTableCell>
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
-                    <StyledTableCell>{item.rol}</StyledTableCell>
-                    <StyledTableCell>{item.seccion}</StyledTableCell>
-                    <StyledTableCell>{item.departamento}</StyledTableCell>
+                    <StyledTableCell>{item.rolName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion.nombreSeccion}</StyledTableCell>
+                    <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
                     <StyledTableCell>
                       <Controls.ActionButton 
                         color="warning"
