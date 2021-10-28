@@ -69,14 +69,14 @@ function createData(id, claveCurso, nombreCurso, cargaHoraria,
   }
   
 const usuarios2 = [
-    createData('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
+    createData('10', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
+    createData('11', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
+    createData('12', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
 ]
 
-export default function HorarioCursos() {
+export default function HorarioCursos({records,setRecords}) {
     const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(usuarios2)
+    
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
