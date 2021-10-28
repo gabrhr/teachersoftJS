@@ -1,3 +1,10 @@
+/* Author: Mitsuo
+ *
+ * LocalStorage services for testing:
+ * - persona
+ * - curso
+ */
+
 import { insertEmployee } from "./employeeService";
 import { data } from "./data/curso-horario"
 
@@ -36,7 +43,9 @@ const KEYS = {
     personaID: 'personaID',        // highest ID,  ID=0 means no data
     personas: 'personas',           // array
     cursoID: 'cursoID',
-    cursos: 'cursos'
+    cursos: 'cursos',
+    cicloID: 'cicloID',
+    ciclos: 'ciclos'
 }
 
 /* persona CRUD operations */
@@ -116,6 +125,20 @@ export function getAllRoles() {
         { id: 4, title: 'Asistente de Departamento' },
         { id: 5, title: 'Coordinador de Departamento' },
     ])
+}
+
+/* ciclo CRUD operations */
+export function getAllCiclos() {
+    let ciclos = []
+    let i
+    const base = 2021-20
+    for (i = 0; i < 20; i++) {
+        ciclos[2*i] = {id: (base + i)*10 + 1, title: `${base+i}-1`}
+        ciclos[2*i+1] = {id: (base + i)*10 + 2, title: `${base+i}-2`}
+    }
+    // /* DEEP COPY */
+    // ciclos = JSON.parse(JSON.stringify(ciclos))
+    return ciclos.reverse()
 }
 
 /* curso CRUD operations */
