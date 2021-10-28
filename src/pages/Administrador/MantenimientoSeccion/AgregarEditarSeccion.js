@@ -17,10 +17,27 @@ const initialFieldValues = {
     correo: '',
     departmentId: '',
     nombreDepartamento: '',
-
+    foto: '',
 }
 
-   
+const convertirBase64 = (file) =>{
+  return new Promise((resolve, reject) =>{
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    }
+
+    //Si es error
+    fileReader.error = (error) => {
+      reject(error)
+    }
+
+  });
+}   
+
+
 export default function AgregarEditarSeccion(props) {
     const {addOrEdit, recordForEdit} = props
     const theme = useTheme();
@@ -64,6 +81,7 @@ export default function AgregarEditarSeccion(props) {
         e.preventDefault()
         //Definicio de validaciones
         if (validate()){
+
           window.alert('valid')
 
           //Este pasa como la nueva seccion o la seccion editada
@@ -75,10 +93,11 @@ export default function AgregarEditarSeccion(props) {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
             }, 
-            //foto: fotoPerfil,
+            foto: fotoPerfil,
             fecha_fundacion: null
             //~~~foto: --queda pendiente 
           }
+
           console.log(newSecc);
           //const rpta = await SeccionService.registerSeccion(newSecc);
           //console.log(rpta);
@@ -89,8 +108,6 @@ export default function AgregarEditarSeccion(props) {
         else
             window.alert('invalid')
     }
-
-    //console.log("La foto es: ", fotoPerfil)
 
     const FillDepartamentos = async () =>{
       const dataDep = await DepartamentoService.getDepartamentos();
@@ -168,14 +185,14 @@ export default function AgregarEditarSeccion(props) {
 
                                 setFileFoto(files[0])
                                 setCambio(true)
-
+                                
                                 if (files && files[0]) {
-                                    var reader = new FileReader();
-                                    reader.onload = function (e) {
-                                        setFotoPerfil(e.target.result)
-                                    };
-                                    reader.readAsDataURL(files[0]);
-
+                                  var reader = new FileReader();
+                                  reader.onload = function (e) {
+                                    setFotoPerfil(e.target.result)
+                                  };
+                                  reader.readAsDataURL(files[0]);
+                                
                                 }
                             }}    
                         />
