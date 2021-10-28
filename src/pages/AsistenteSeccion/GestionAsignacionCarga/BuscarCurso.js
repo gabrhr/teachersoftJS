@@ -41,6 +41,7 @@ export default function BuscarCurso(props)  {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [records, setRecords] = useState(cursos)
     const [selected, setSelected] = useState(false)
+    
 
     const {
         TblContainer,

@@ -8,6 +8,7 @@ import { Controls } from '../../../components/controls/Controls'
 import HorarioCursos from './HorarioCursos'
 import Popup from '../../../components/util/Popup'
 import ModalAsignacionCarga from './ModalAsignacionCarga';
+import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion) {
@@ -48,11 +49,8 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                    <Controls.Button
-                        text="Exportar"
-                        size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}
-                    />
+                     <ExportCSV csvData={records} fileName={'fileName'} text="Exportar" size="large"
+                        endIcon={<CloudDownloadOutlinedIcon/>}/>
                 </Grid>
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>

@@ -9,6 +9,8 @@ import * as XLSX from 'xlsx'
 import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const tableHeaders = [
     {
@@ -77,10 +79,16 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
-    const [open, setOpen] = React.useState(false);
     const [usuarios, setUsuarios] = useState(null)
     const [usuariosIncorrectos, setUsuariosIncorrectos] = useState(null)
-
+    
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+      setOpen(false);
+    }
+    const handleToggle = () => {
+      setOpen(!open);
+    }
     
     const {
         TblContainer,
@@ -170,6 +178,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
     };
 
     const actualizarDatos = e => { 
+        handleToggle()
         //Cargar la tabla
        /*  for (let i = 0; i < recordsX.length; i++) { */
        /*      horariosService.insertHorario(recordsX[i] */
@@ -177,6 +186,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
          setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
         setRecords(recordsX)
+        handleClose()
     }
     
     return (
@@ -248,6 +258,13 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
                     
                 </div>
             </Grid>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={open}
+                onClick={handleClose}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Form>
     )
 }
