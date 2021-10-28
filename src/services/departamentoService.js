@@ -4,10 +4,7 @@ import tokenService from './tokens.js';
 
 const getDepartamentos = async () => {
     try{
-        const request = await axios.get(`${url}/departamento/`, tokenService.getToken());
-        if(request.data.nombre){
-            
-        }
+        const request = await axios.get(`${url}/departamento/`);
         return request.data;
     } catch(except){
         console.error(except);
