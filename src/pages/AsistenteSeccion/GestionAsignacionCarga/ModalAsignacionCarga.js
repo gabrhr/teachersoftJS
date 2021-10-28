@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx'
 import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { set } from 'date-fns';
 
 const tableHeaders = [
     {
@@ -62,14 +63,14 @@ function createData(id, claveCurso, nombreCurso, cargaHoraria,
     }
   }
   
-const usuarios2 = [
-    createData('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
+ 
 
-export default function ModalAsignacionCarga() {
-    const [records, setRecords] = useState(usuarios2)
+export default function ModalAsignacionCarga(props) {
+
+    let auxHorario
+    const {horario, getHorario, isNewFile } = props
+    const [xFile, setXFile] = useState('');
+    const [records, setRecords] = useState(horario)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -96,6 +97,7 @@ export default function ModalAsignacionCarga() {
 
 
     const processData = dataString => {
+        
         const dataStringLines = dataString.split(/\r\n|\n/);
         const headers = dataStringLines[0].split(
             /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
@@ -161,16 +163,27 @@ export default function ModalAsignacionCarga() {
                 const ws = wb.Sheets[wsname];
                 /* Convert array of arrays */
                 const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+                 
+                
                 processData(data);
             };
             reader.readAsBinaryString(file);
+
         } catch (error) {
             console.log(error);
         }
     };
     
+    const handleSubmit = e => {
+        /* e is a "default parameter" */
+        e.preventDefault()
+        // if (validate())
+        window.localStorage.setItem("listHorario", records);
+        getHorario(records)
+    }
+    
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Grid align="right">
                 <label htmlFor="contained-button-file" >
                     <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
@@ -203,6 +216,7 @@ export default function ModalAsignacionCarga() {
                                 <TableCell
                                 align="right"
                                 >
+                             
                                 {item.id}
                                 </TableCell>
                                 <TableCell>{item.claveCurso}</TableCell>
@@ -233,7 +247,9 @@ export default function ModalAsignacionCarga() {
                         // size="large"
                         text="Cargar Datos"
                         type="submit"
-                    />
+                    >
+                       
+                    </Controls.Button>
                     
                 </div>
             </Grid>

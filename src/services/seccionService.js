@@ -1,6 +1,7 @@
 import axios from 'axios';
 import url from '../config.js';
 import tokenService from './tokens.js';
+import { formatHorario, formatHorarioCursos } from '../components/auxFunctions';
 
 const getSecciones = async () => {
   try{
@@ -58,7 +59,5 @@ const deleteSeccion = async ({id}) => {
     console.error(exception);
   }
 }
-
-//, tokenService.getToken()
 
 export default {getSecciones, getSeccionxDepartamento, getSeccion, registerSeccion, updateSeccion, deleteSeccion}
