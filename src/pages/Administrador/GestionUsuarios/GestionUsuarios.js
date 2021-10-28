@@ -153,7 +153,7 @@ export default function GestionUsuarios() {
   }, [recordForEdit])
 
   const addOrEdit = (usuario, resetForm) => {
-    
+    console.log(usuario.idPersona)
     const dataUsr = {
       id: usuario.id,
       fecha_creacion: null,
@@ -161,7 +161,7 @@ export default function GestionUsuarios() {
       password: null,
       usuario: usuario.correo,
       persona: {
-        id: usuario.id,
+        id: usuario.idPersona,
         nombres: usuario.nombre,
         apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
         correo_pucp: usuario.correo,
@@ -198,9 +198,10 @@ export default function GestionUsuarios() {
       foto_URL: null
     }
     
-    console.log(dataPer)
+    console.log(usuario.id)
+    console.log(dataUsr)
 
-    /*recordForEdit 
+    recordForEdit 
         ? userService.updateUsuario(dataUsr, usuario.id) 
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
@@ -210,9 +211,9 @@ export default function GestionUsuarios() {
               setRecordForEdit(null);
         })
     setOpenPopup(false)
-    resetForm()*/
+    resetForm()
 
-    if (usuario.id == 0){
+    /*if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
       //DTLocalServices.postPersona(dataPer)
       userService.registerUsuario(dataUsr)

@@ -72,13 +72,13 @@ const getSecciones = async () => {
     })
     ));
   //console.log(secciones);
-  window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
+  
   return secciones;
 }
 
 export default function GestionUsuariosForm(props) {
 
-  const { addOrEdit, recordForEdit } = props
+  const { recordForEdit,addOrEdit } = props
   const [departamento, setDepartamentos] = useState([])
   const [seccion, setSecciones] = useState([])
 
@@ -139,7 +139,7 @@ export default function GestionUsuariosForm(props) {
     setErrors,
     handleInputChange,
     resetForm
-  } = useForm(initialFieldValues, true, validate);
+  } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
   const handleSubmit = e => {
     /* e is a "default parameter" */
@@ -175,14 +175,14 @@ export default function GestionUsuariosForm(props) {
   }
 
   /* "detect the change of recordForEdit inside this bottom component" */
-  useEffect(() => {
+  /*useEffect(() => {
     if (recordForEdit != null) {
-      /* object is not empty */
+      // object is not empty
       setValues({
         ...recordForEdit
       })
     }
-  }, [recordForEdit])
+  }, [recordForEdit])*/
 
   useEffect(() => {
     getDepartamento()
@@ -193,28 +193,30 @@ export default function GestionUsuariosForm(props) {
       
     });
     if (recordForEdit != null) {
-        /* object is not empty - esto que hace?*/
-        setValues({
-            ...recordForEdit
-        })
+      /* object is not empty */
+      setValues({
+        ...recordForEdit
+      })
     }
+    
   }, [recordForEdit])
 
   useEffect(() => {
     getSecciones()
     .then (newSecc =>{
-      setSecciones(prevRecords => prevRecords.concat(newSecc));
+      setSecciones(prevSecc => prevSecc.concat(newSecc));
       
       //console.log(newSeccion);
       
       
     });
     if (recordForEdit != null) {
-        /* object is not empty - esto que hace?*/
-        setValues({
-            ...recordForEdit
-        })
+      /* object is not empty */
+      setValues({
+        ...recordForEdit
+      })
     }
+    
   }, [recordForEdit])
   
   /*useEffect(() => {
@@ -228,7 +230,7 @@ export default function GestionUsuariosForm(props) {
           console.log(response.data);
       });
   };*/
-
+  
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -296,25 +298,21 @@ export default function GestionUsuariosForm(props) {
             
             <Controls.Select
               name="departmentId"
-              label="Departamento"
-              value={values.departmentId}
+              label={recordForEdit? values.departamento.nombre : "Departamento"}
+              value={recordForEdit? values.departamento.id : values.departmentId}
               onChange={handleInputChange}
               options={departamento}
               
             />
             <Controls.Select
               name="seccionId"
-              label="Seccion Principal"
-              value={values.seccionId}
+              label={recordForEdit? values.seccion.nombre : "Seccion Principal"}
+              value={recordForEdit? values.seccion.id : values.seccionId}
               onChange={handleInputChange}
               options={seccion}
               
             />
-            <Controls.Input
-              name="idPersona"
-              type="hidden"
-              value={values.idPersona}
-            />
+            
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mt: 9, mb: 2, mx: 1 }} />
           {/* Foto del usuario */}
