@@ -11,7 +11,7 @@ export default function DTPage() {
                 Etiqueta.  Hay que hacerla mas pequeña
             </Typography>
             <DT.Etiqueta
-                type="info"       // error | info | success | warning
+                type="pendiente"       // error | info | success | warning | pendiente
                 text="Pendiente"
             />
 
