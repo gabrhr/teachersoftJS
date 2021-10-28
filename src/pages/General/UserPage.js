@@ -17,6 +17,7 @@ import Vacio from '../Dev/Vacio'
 import { Assistant } from '@mui/icons-material';
 import GestionUsuarios from '../Administrador/GestionUsuarios/GestionUsuarios';
 import CargaDocenteHorarios from '../AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
+import DeudaYDescarga from '../AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -77,7 +78,7 @@ export default function UserPage() {
         <ProtectedRoute exact path="/as/asignacionCarga/registroCursos" idRoles={[2]} component={AsistenteSeccion} />
         <ProtectedRoute exact path="/as/asignacionCarga/cursos" idRoles={[2]} component={GestionCargaCursos} />
         <ProtectedRoute exact path="/as/asignacionCarga/registroCarga" idRoles={[2]} component={CargaDocente} />
-        <ProtectedRoute exact path="/as/asignacionCarga/registroCarga/horarios" idRoles={[2]} component={CargaDocenteHorarios} />
+        <ProtectedRoute exact path="/as/asignacionCarga/deudaYDescarga" idRoles={[2]} component={DeudaYDescarga} />
 
         <ProtectedRoute exact path="/as/solicitudDocencia" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/docentes" idRoles={[2]} component={Vacio} />

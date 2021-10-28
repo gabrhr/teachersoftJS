@@ -1,3 +1,9 @@
+/*
+  Dudas o consultas:
+  - Gabriela (layout)
+  - Mitsuo (data, localService)
+ */
+
 import { Alert, Grid, InputAdornment, Paper, TableBody, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
@@ -16,6 +22,7 @@ import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DT } from '../../../components/DreamTeam/DT'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CargaDocenteHorarios from './CargaDocenteHorarios';
 
 const tableHeaders = [
   // {
@@ -53,18 +60,19 @@ const tableHeaders = [
     label: 'Estado',
     numeric: false,
     sortable: true
-  }
-]
-
-function createData(id, clave, nombre, facultad, creditos) {
-  return {
-    id, clave, nombre, facultad, creditos
-  }
-}
-
-const tableData = [
-  createData('0', 'INF123', 'Curso A', 'Ciencias e Ingenieria', '3.5'),
-  createData('1', 'INF123', 'Curso B', 'Ciencias e Ingenieria', '3.5'),
+  },
+  {
+    id: 'actions',
+    label: '',
+    numeric: false,
+    sortable: false
+  },
+  {
+    id: 'openrow',
+    label: '',
+    numeric: false,
+    sortable: false
+  },
 ]
 
 /* Form control (Select) */
@@ -76,9 +84,9 @@ const initialFieldValues = {
 
 /* FIXME: Esto debe ser un service? */
 const getEstadoCollection = () => ([
-  { id: '1', title: 'Todos los estados'},
-  { id: '2', title: 'Atendido'},
-  { id: '3', title: 'Pendiente'},
+  { id: '1', title: 'Todos los estados' },
+  { id: '2', title: 'Atendido' },
+  { id: '3', title: 'Pendiente' },
 ])
 
 function GetRow({ ...props }) {
@@ -92,12 +100,12 @@ function GetRow({ ...props }) {
 
 export default function CargaDocente() {
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-  const [records, setRecords] = useState(DTLocalServices.getAllCursos())
-  const [horarios,setHorarios] = useState(false)
-
-  const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevation: 0 }
   const SubtitulosTable = { display: "flex" }
-
+  const [recordsForEdit, setRecordForEdit] = useState()
+  const [records, setRecord] = useState(DTLocalServices.getAllCursos())
+  const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
+  // en lugar de la de cursos
+  const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
   const {
     values,
     // setValues,
@@ -129,33 +137,40 @@ export default function CargaDocente() {
   }
   const theme = useTheme();
 
-  /* (No popups) After pressing on a row.  Hide "parent"(current) table and show
-   * "child" table */
   const openInPopup = item => {
-      /* setRecordForEdit(item) */
-      setHorarios(true)
+    setRecordForEdit(item)
+    setHorarios(true)
   }
+
 
   return (
     <Form>
       <ContentHeader
         text="Registro de Carga Docente"
-        cbo={true}
+        cbo={horarios ? false : true}
       />
-      {horarios? 
-          (
-              <Controls.Button
-              variant="outlined"
-              text="Regresar"
-              size="small"
-              startIcon={<ArrowBackIcon/>}
-              onClick={() => {setHorarios(false)}}
-              />
-          )
-          :(<> </>)
+      {horarios ? (
+        <>
+          <Controls.Button
+            variant="outlined"
+            text="Regresar"
+            size="small"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => { setHorarios(false) }}
+          />
+          <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}>
+            <Controls.Input
+              label="Curso"
+              value={`${recordsForEdit.clave} - ${recordsForEdit.nombre}`}
+              disabled
+            />
+          </div>
+        </>
+      )
+        : (<> </>)
       }
       {/* <Toolbar> */}
-      <Grid container sx={{mb:3}} display={horarios? "none": "unset"}>
+      <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
           <Controls.Input
             label="Buscar Cursos por Nombre o Clave"
@@ -173,7 +188,7 @@ export default function CargaDocente() {
         </Grid>
         <Grid item xs={.3} />
         <Grid item xs={3} sx={{ marginRight: theme.spacing(3) }}>
-          <Box sx={{ width: "200px", align: "Right" }}>
+          <Box sx={{ width: "200px", align: "right" }}>
             <Controls.Select
               name="title"
               label="Estados"
@@ -181,62 +196,64 @@ export default function CargaDocente() {
               onChange={handleInputChange}
               options={getEstadoCollection()}
               type="contained"
-              // displayNoneOpt
+            // displayNoneOpt
             />
           </Box>
         </Grid>
       </Grid>
       <Paper variant="outlined" sx={PaperStyle}>
-        {horarios? (
+        {horarios ?
+          (
+            <>
+              <Typography variant="h4" style={SubtitulosTable}>
+                Lista de Horarios
+              </Typography>
+              <CargaDocenteHorarios />
+            </>
+          ) 
+          : (
           <>
             <Typography variant="h4" style={SubtitulosTable}>
-                Lista de Horarios
+              Carga Docente por Cursos
             </Typography>
-        
-        
+            <BoxTbl>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell
+                          align="right"
+                        >
+                          {item.id}
+                        </StyledTableCell>
+                        <StyledTableCell>{item.clave}</StyledTableCell>
+                        <StyledTableCell>{item.nombre}</StyledTableCell>
+                        <StyledTableCell>{item.facultad}</StyledTableCell>
+                        <StyledTableCell>{item.creditos}</StyledTableCell>
+                        <StyledTableCell>
+                          <DT.Etiqueta type={item.type} text={item.estado} />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <IconButton size="small"
+                            onClick={() => { openInPopup(item) }}
+                          >
+                            <ArrowForwardIosIcon fontSize="small" />
+
+                          </IconButton>
+                        </StyledTableCell>
+
+                      </StyledTableRow>
+                    ))
+                  }
+                </TableBody>
+              </TblContainer>
+              <TblPagination />
+            </BoxTbl>
           </>
-        ): (   
-        <>
-        <Typography variant="h4" style={SubtitulosTable}>
-          Carga Docente por Cursos
-        </Typography>
-        <BoxTbl>
-          <TblContainer>
-            <TblHead />
-            <TableBody>
-              {
-                recordsAfterPagingAndSorting().map(item => (
-                  <StyledTableRow key={item.id}>
-
-                    {/* <StyledTableCell
-                      align="right"
-                    >
-                      {item.id}
-                    </StyledTableCell> */}
-                    <StyledTableCell>{item.clave}</StyledTableCell>
-                    <StyledTableCell>{item.nombre}</StyledTableCell>
-                    <StyledTableCell>{item.facultad}</StyledTableCell>
-                    <StyledTableCell>{item.creditos}</StyledTableCell>
-                    <StyledTableCell>
-                      {/* <Alert severity="info">Pendiente</Alert> */}
-                      <DT.Etiqueta type="info" text={item.estado} />
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <IconButton size="small"
-                          onClick={ () => {openInPopup(item)}}
-                      >
-                          <ArrowForwardIosIcon fontSize="small"/>
-                      </IconButton>
-                    </StyledTableCell>
-
-                  </StyledTableRow>
-                ))
-              }
-            </TableBody>
-          </TblContainer>
-          <TblPagination />
-        </BoxTbl>
-        </> }
+          )
+        }
       </Paper>
     </Form>
   )
