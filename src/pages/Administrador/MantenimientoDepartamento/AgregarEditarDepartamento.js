@@ -36,7 +36,7 @@ export default function AgregarEditarDepartamento(props) {
             temp.nombre = fieldValues.nombre ? "" : "This field is required."
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
-                    .test(fieldValues.correo) ? "" 
+                    .test(fieldValues.correo) ? ""
                     : "This correo is not vaild."
         setErrors({
             ...temp
@@ -46,7 +46,7 @@ export default function AgregarEditarDepartamento(props) {
             return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
-    
+
     const {
         values,
         setValues,
@@ -54,7 +54,7 @@ export default function AgregarEditarDepartamento(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(initialFieldValues, true, validate);
+    } = useForm(recordForEdit? recordForEdit: initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
         /* e is a "default parameter" */
@@ -63,23 +63,25 @@ export default function AgregarEditarDepartamento(props) {
           window.alert('valid')
 
           const newDep = {
+            id:values.id,
             nombre: values.nombre,
             correo: values.correo,
             //foto: null,
           }
           console.log(newDep);
-          const rpta = await DepartamentoService.registerDepartamento(newDep);
-          console.log(rpta);
-          
-          resetForm()
+          //const rpta = await DepartamentoService.registerDepartamento(newDep);
+          //console.log(rpta);
+          addOrEdit(newDep,resetForm);
+          //resetForm()
         }
         else
             window.alert('invalid')
-        if (validate())
-            addOrEdit(values,resetForm)
+//        if (validate())
+//            addOrEdit(values,resetForm)
     }
 
     useEffect(() => {
+      //Llenar Departamentos??
         if (recordForEdit != null) {
             /* object is not empty */
             setValues({
@@ -93,20 +95,20 @@ export default function AgregarEditarDepartamento(props) {
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
-                           DATOS GENERALES  
+                           DATOS GENERALES
                     </Typography>
-                    
-                        <Controls.Input 
+
+                        <Controls.Input
                             name="nombre"
-                            label="Nombre" 
-                            value={values.nombre} 
+                            label="Nombre"
+                            value={values.nombre}
                             onChange = {handleInputChange}
                             error={errors.nombre}
                         />
-                        <Controls.Input 
+                        <Controls.Input
                             name="correo"
-                            label="Correo Electrónico" 
-                            value={values.correo} 
+                            label="Correo Electrónico"
+                            value={values.correo}
                             onChange = {handleInputChange}
                             error={errors.corre}
                         />
@@ -118,12 +120,12 @@ export default function AgregarEditarDepartamento(props) {
                     </Typography>
                     {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> */}
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
-                        {/* <Avatar sx={{ width: 250, height: 250}}> 
+                        {/* <Avatar sx={{ width: 250, height: 250}}>
                             <img className="userImage" src="assets/img/profile-photo.png" alt="" />
                         </Avatar> */}
                     <label htmlFor="contained-button-file">
-                            <Input accept="image/*" id="contained-button-file" 
-                                type="file" sx={{display: 'none'}} 
+                            <Input accept="image/*" id="contained-button-file"
+                                type="file" sx={{display: 'none'}}
                                 onChange={(event) => {
                                     const files = event.target.files
 
@@ -138,7 +140,7 @@ export default function AgregarEditarDepartamento(props) {
                                         reader.readAsDataURL(files[0]);
 
                                     }
-                                }}    
+                                }}
                             />
                             <Controls.Button
                                 text="Subir foto"
@@ -164,7 +166,7 @@ export default function AgregarEditarDepartamento(props) {
                         text="Guardar Cambios"
                         type="submit"
                         />
-                    
+
                 </div>
             </Grid>
         </Form>

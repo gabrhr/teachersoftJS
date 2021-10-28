@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
@@ -12,7 +12,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
-import departamentoService from '../../../services/departamentoService';
+//import AgregarEditarDepartamento from './AgregarEditarDepartamento'
+//import departamentoService from '../../../services/departamentoService';
 //import * as employeeService from '../../../services/employeeService'
 
 const tableHeaders = [
@@ -67,7 +68,7 @@ const usuarios2 = [
 ]
 */
 
-const getDepartamento = async () => {
+const getDepartamentos = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
   const dataDep = await DepartamentoService.getDepartamentos();
   console.log(dataDep);
@@ -84,6 +85,7 @@ const getDepartamento = async () => {
     })
     ));
   //console.log(secciones);
+  window.localStorage.setItem('listDeps',JSON.stringify(dataDep));
   return departamentos;
 }
 
@@ -104,12 +106,14 @@ export default function GestionDepartamento() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-
+    //Posible delete
+/*
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
     }
-
+    //Fin del delete
+*/
     const handleSearch = e => {
       let target = e.target;
       /* React "state object" (useState()) doens't allow functions, only
@@ -142,35 +146,37 @@ export default function GestionDepartamento() {
         type: 'success'
       })
     } */
+    useEffect(() => {
+      getDepartamentos()
+      .then (newDep =>{
+        setRecords(newDep);
+        console.log(newDep);
+      });
+    }, [recordForEdit,records])
+
 
     const addOrEdit = (departamento, resetForm) => {
-      if (departamento.id === 0)
-        departamentoService.registerDepartamento(departamento)
-      else
-        departamentoService.updateDepartamento(departamento)
-      resetForm()
-      setRecordForEdit(null)
+      recordForEdit
+      ? DepartamentoService.updateDepartamento(departamento,departamento.id)
+      : DepartamentoService.registerDepartamento(departamento)
+      .then(idDepartamento=> {
+        if(!recordForEdit)
+          setRecordForEdit(idDepartamento);
+        else {
+          setRecordForEdit(null);
+        }
+      })
+
       setOpenPopup(false)
-      setRecords(prevRecords => prevRecords.concat(departamento))
+      resetForm()
 
       setNotify({
         isOpen: true,
-        message: 'Submitted Successfully',
+        message: 'Registro Exitoso',
         type: 'success'
       })
     }
 
-
-    React.useEffect(() => {
-      getDepartamento()
-      .then (newDep =>{
-        setRecords(prevRecords => prevRecords.concat(newDep));
-
-        //console.log(newSeccion);
-
-        console.log(records);
-      });
-    }, [])
 
     return (
         <>
@@ -225,7 +231,7 @@ export default function GestionDepartamento() {
                             <StyledTableCell>
                               <Controls.ActionButton
                                 color="warning"
-                                onClick={ () => {openInPopup(item)}}
+                                onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
