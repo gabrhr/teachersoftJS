@@ -15,7 +15,9 @@ const initialFieldValues = {
     id: 0,
     nombre: '',
     correo: '',
-    departmentId:'',
+    departmentId: '',
+    nombreDepartamento: '',
+
 }
 
    
@@ -56,7 +58,7 @@ export default function AgregarEditarSeccion(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(initialFieldValues, true, validate);
+    } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -64,28 +66,31 @@ export default function AgregarEditarSeccion(props) {
         if (validate()){
           window.alert('valid')
 
+          //Este pasa como la nueva seccion o la seccion editada
           const newSecc = {
+            id: values.id,
             nombre: values.nombre,
             correo: values.correo,
             departamento: {
-              id: parseInt(values.departmentId),
-            } 
-            //foto: null,
-            //fecha_fundacion: null
+              id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
+              nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
+            }, 
+            //foto: fotoPerfil,
+            fecha_fundacion: null
             //~~~foto: --queda pendiente 
           }
           console.log(newSecc);
-          const rpta = await SeccionService.registerSeccion(newSecc);
-          console.log(rpta);
-          
-          resetForm()
+          //const rpta = await SeccionService.registerSeccion(newSecc);
+          //console.log(rpta);
+          addOrEdit(newSecc,resetForm)
+          //resetForm()
 
         }
         else
             window.alert('invalid')
-        if (validate())
-            addOrEdit(values,resetForm)
     }
+
+    //console.log("La foto es: ", fotoPerfil)
 
     const FillDepartamentos = async () =>{
       const dataDep = await DepartamentoService.getDepartamentos();
@@ -98,12 +103,8 @@ export default function AgregarEditarSeccion(props) {
           title: dep.nombre,
         })
       ));
-      /*
-      values.map([id] => {
-        values.id = 
-      })
-      */
-      console.log(departamentos);
+
+      //console.log(departamentos);
       return departamentos;
     }
 
@@ -111,10 +112,6 @@ export default function AgregarEditarSeccion(props) {
       FillDepartamentos()
       .then (newDep =>{
         setDepartamentos(prevDep => prevDep.concat(newDep));
-        
-        //console.log(newSeccion);
-        
-        console.log(departamento);
       });
       if (recordForEdit != null) {
           /* object is not empty - esto que hace?*/
@@ -126,6 +123,7 @@ export default function AgregarEditarSeccion(props) {
 
     return (
       <Form onSubmit={handleSubmit}>
+
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
@@ -148,8 +146,8 @@ export default function AgregarEditarSeccion(props) {
 
                     <Controls.Select
                         name="departmentId"
-                        label="Departamento"
-                        value={values.departmentId}
+                        label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+                        value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
                     />                
