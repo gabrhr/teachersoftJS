@@ -6,7 +6,7 @@
 import React from 'react'
 import { Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import { DT } from '../../components/DreamTeam/DT'
-import AccordionHorarioProfesor from '../AsistenteSeccion/DeudaYDescarga/AccordionHorarioProfesor'
+import AccordionHorarioProfesor from '../AsistenteSeccion/CargaDocente/AccordionHorarioProfesor'
 
 export default function TestPage() {
     return (

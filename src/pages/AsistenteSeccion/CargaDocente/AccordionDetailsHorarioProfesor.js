@@ -53,9 +53,9 @@ function generateRow(docente) {
 export default function AccordionDetailsHorarioProfesor(props) {
     const { docentes } = props
     return (
-        <Paper elevation={5} sx={{p: 1}}>
+        <Paper elevation={1} sx={{p: 1}}>
             <Typography
-                variant="h3"
+                variant="h4"
                 py="4px"
                 color="primary"
             >
@@ -63,7 +63,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
             </Typography>
             {docentes.clase.map(docente => generateRow(docente))}
             <Typography
-                variant="h3"
+                variant="h4"
                 py="4px"
                 color="primary"
             >
