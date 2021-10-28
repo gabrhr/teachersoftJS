@@ -59,4 +59,10 @@ const deleteCurso = async ({id}) => {
   }
 }
 
-export default {getCursosxCodigoNombre, getCursosxSeccionCodigoNombre, getCurso, registerCurso, updateCurso, deleteCurso}
+const getCursos = () => {
+  
+}
+
+
+
+export default {getCursos, getCursosxCodigoNombre, getCursosxSeccionCodigoNombre, getCurso, registerCurso, updateCurso, deleteCurso}
