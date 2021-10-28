@@ -13,6 +13,7 @@ import { Typography } from '@mui/material'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import departamentoService from '../../../services/departamentoService';
 import * as employeeService from '../../../services/employeeService'
+import { Form } from '../../../components/useForm'
 
 const tableHeaders = [
     {
@@ -158,7 +159,7 @@ export default function GestionDepartamento() {
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .75 }}
+                    sx={{ width: .75, visibility: "hidden" }}
                     onChange={handleSearch}
                     type="search"
                 />
