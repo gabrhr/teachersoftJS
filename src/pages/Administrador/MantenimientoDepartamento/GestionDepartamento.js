@@ -73,7 +73,7 @@ export default function GestionDepartamento() {
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevatio:0}
+    color:"primary.light", elevation:0}
     const {
         TblContainer,
         TblHead,

@@ -7,6 +7,7 @@ import { useTheme } from '@emotion/react';
 
 import DeudaForm from './DeudaForm'
 import DescargaForm from './DescargaForm'
+import ContentHeader from '../../../components/AppMain/ContentHeader';
 
 const StyledTabs = styled((props) => (
     <Tabs
@@ -91,8 +92,11 @@ export default function DeudaYDescarga() {
       };
     return (
         <>
-        
-        <Box sx={{ bgcolor: '#fff' }}>
+        <ContentHeader
+                text="Gestión de Deudas y Descargas"
+                cbo={false}
+            />
+        <Box sx={{ bgcolor: '#fff', marginTop:2}}>
             <StyledTabs
             value={value}
             onChange={handleChange}
