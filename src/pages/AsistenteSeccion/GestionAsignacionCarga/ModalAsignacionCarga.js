@@ -106,7 +106,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
       listHorarios.map(hor => (
         horarios.push({
         "codigo": hor.Horario,
-        "tipo": hor.Tipo, //Horas_semanales: cargaHoraria
+        "tipo": hor.Tipo == "Clase" ? 0 : 1, //Si es clase es 0 - si es laboratorio 1
         //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
         "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
         ciclo:{
@@ -119,7 +119,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
           "unidad": hor.Unidad, //Creditos del Curso
           "carga": hor.Carga_Horaria, //Creditos del Curso
         },
-        "sesiones": hor.Hora_Sesion
+        "sesiones_excel": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
         /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
         //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
@@ -216,7 +216,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
       console.log("Records X es: ", recordsX);
       //Servicio para cargar los horarios
       
-      
+
 
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       
