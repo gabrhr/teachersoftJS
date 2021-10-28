@@ -71,7 +71,7 @@ const sampleData = [
         id: '2',
         codigo: 'H0802',
         detalle: 'Clase: Mie 10:00 - 12 Sab 10:00 - 14:00',
-        estado: 'Sin Docente',
+        estado: 'Con Docente',
         docentes: {
             clase: [
                 {
@@ -100,6 +100,18 @@ const sampleData = [
                     cargaHoraria: 4,
                     deudaHoraria: 0
                 }
+            ]
+        }
+    },
+    {
+        id: '3',
+        codigo: 'H0803',
+        detalle: 'Clase: Lun 7:00 10:00\n Lab: Jue 07:00-10:00',
+        estado: 'Sin Docente',
+        docentes: {
+            clase: [
+            ],
+            lab: [
             ]
         }
     }
