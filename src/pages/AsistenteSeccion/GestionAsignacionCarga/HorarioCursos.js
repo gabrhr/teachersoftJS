@@ -19,12 +19,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'SeccionID',
       numeric: true,
       sortable: true
-    },
+    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -64,12 +64,12 @@ const tableHeaders = [
 ]
 
 
-export default function HorarioCursos(props) {
+export default function HorarioCursos({records}, {setRecords}) {
 
-    let hors = (window.localStorage.getItem('listHorario'))
-    const {getHorario, horario, setHorario, isNewFile } = props
-    const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(horario); //Se debe colocar el ID
+    //let hors = (window.localStorage.getItem('listHorario'))
+    //const {getHorario, horario, setHorario, isNewFile } = props
+    const [openPopup, setOpenPopup] = useState(false);
+    //const [recordsX, setRecordsX] = useState([]); //Se debe colocar el ID
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
     const [open, setOpen] = React.useState(false);
@@ -133,7 +133,6 @@ export default function HorarioCursos(props) {
         setData(list);
         setColumns(columns);
 
-        let listaCorrectos = []
         let listaIncorrectos = []
 
         for (let i = 0; i < list.length; i++) {
@@ -143,6 +142,7 @@ export default function HorarioCursos(props) {
     };
 
 
+  console.log(records);
 
     const handleSearch = e => {
         let target = e.target;
@@ -150,7 +150,7 @@ export default function HorarioCursos(props) {
          * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
+            if (target.value === "")
               /* no search text */
               return items
             else
@@ -210,17 +210,17 @@ export default function HorarioCursos(props) {
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
-                            <TableCell
+                            {/*<TableCell
                             align="right"
                             >
-                            {item.id}
-                            </TableCell>
-                            <TableCell>{item.claveCurso}</TableCell>
-                            <TableCell>{item.nombreCurso}</TableCell>
-                            <TableCell>{item.cargaHoraria}</TableCell>
-                            <TableCell>{item.horario}</TableCell>
-                            <TableCell>{item.tipoSesion}</TableCell>
-                            <TableCell>{item.horaSesion}</TableCell>
+                            {item.clave}
+                            </TableCell>*/}
+                            <TableCell>{item.curso.codigo}</TableCell>
+                            <TableCell>{item.curso.nombre}</TableCell>
+                            <TableCell>{item.curso.carga}</TableCell>
+                            <TableCell>{item.codigo}</TableCell>
+                            <TableCell>{item.tipo}</TableCell>
+                            <TableCell>{item.horas_semanales}</TableCell>
                         </TableRow>
                         ))
                         :   (

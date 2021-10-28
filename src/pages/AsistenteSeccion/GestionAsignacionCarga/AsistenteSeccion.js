@@ -8,7 +8,7 @@ import { Controls } from '../../../components/controls/Controls'
 import HorarioCursos from './HorarioCursos'
 import Popup from '../../../components/util/Popup'
 import ModalAsignacionCarga from './ModalAsignacionCarga';
-import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/seccionService';
+import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
@@ -75,7 +75,7 @@ export default function AsistenteSeccion() {
      
     //let listHorario = getHorario(-1);
       //LO DE GABRIELA
-    const [records, setRecords] = useState(usuarios2)
+    const [records, setRecords] = useState([])
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
     return (
@@ -104,10 +104,6 @@ export default function AsistenteSeccion() {
                     />
                 </Grid>
             </Grid>
-            <DT.BorderBox>
-               {/* <HorarioCursos horario = {horario} setHorario = {setHorario} isNewFile = {newFile} /> */}
-               <HorarioCursos horario = {listHorario} /> 
-            </DT.BorderBox>
             {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
                 <HorarioCursos records={records} setRecords={setRecords}/>

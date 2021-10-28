@@ -60,9 +60,8 @@ const tableHeaders = [
 export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
 
     let auxHorario
-    const {horario, getHorario, isNewFile } = props
+    //const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
-    //const [records, setRecords] = useState([])
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
@@ -118,7 +117,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
           "nombre": hor.Nombre, //NOMBRE DEL CURSO
           "creditos": hor.Creditos, //Creditos del Curso
           "unidad": hor.Unidad, //Creditos del Curso
-          "carga": hor.Carga_Horario, //Creditos del Curso
+          "carga": hor.Carga_Horaria, //Creditos del Curso
         },
         "sesiones": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
@@ -183,8 +182,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
 
         //Hacemos el paso de los datos a un objeto
         const horarios = datosHorarios(listaCorrectos)
-        setRecords(prevRecords => prevRecords.concat(horarios));
-        setRecordsX(records)
+        //setRecords(prevRecords => prevRecords.concat(horarios));
+        setRecordsX(prevRecords => prevRecords.concat(horarios));
 
     };
 
@@ -214,23 +213,27 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
     };
 
     const actualizarDatos = e => { 
-        //Cargar la tabla
-       /*  for (let i = 0; i < recordsX.length; i++) { */
-       /*      horariosService.insertHorario(recordsX[i] */
-       /*  } */
-         setOpenPopup(false) 
+      console.log("Records X es: ", recordsX);
+      //Servicio para cargar los horarios
+      
+      
+
+      //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
+      
+      setRecords(recordsX)
+      setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
-        setRecords(recordsX)
     }
     
     const handleSubmit = e => {
       e.preventDefault()
-        console.log(records);
         //UNA VEZ SE SUBA - VAMOS A PROCEDER A REALIZAR LA INSERCION
-        horarioService.registerDepartamento(records);
+        //horarioService.registerDepartamento(recordsX);
         // if (validate())
-        window.localStorage.setItem("listHorario", records);
-        getHorario(records)
+        //window.localStorage.setItem("listHorario", recordsX);
+        setRecords(recordsX)
+        setOpenPopup(false) 
+       /*  setRecords(employeeService.getAllEmployees()) */
     }
     
     return (
@@ -270,12 +273,12 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
                              
                                 {item.id}
                                 </TableCell>*/}
-                                <TableCell>{records ? item.curso.codigo : item.codigo}</TableCell>
-                                <TableCell>{records ? item.curso.nombre : item.codigo}</TableCell>
-                                <TableCell>{records ? item.horas_semanales : item.horas_semanales}</TableCell>
-                                <TableCell>{records ? item.codigo : item.codigo}</TableCell>
-                                <TableCell>{records ? item.tipo : item.tipo}</TableCell>
-                                <TableCell>{records ? item.sesiones : item.sesiones}</TableCell>
+                                <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.tipo : item.tipo}</TableCell>
+                                <TableCell>{recordsX ? item.sesiones : item.sesiones}</TableCell>
                             </TableRow>
                             ))
                         }
