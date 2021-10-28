@@ -5,9 +5,6 @@ import tokenService from './tokens.js';
 const getDepartamentos = async () => {
     try{
         const request = await axios.get(`${url}/departamento/`);
-        if(request.data.nombre){
-
-        }
         return request.data;
     } catch(except){
         console.error(except);

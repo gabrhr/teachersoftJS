@@ -61,16 +61,22 @@ const getSecciones = async () => {
   const dataSecc = await SeccionService.getSecciones(); 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
-  console.log(dataSecc);
   dataSecc.map(seccion => (
     secciones.push({
       id: seccion.id.toString(),
       nombre: seccion.nombre,
       fechaFundacion: seccion.fecha_fundacion,
       fechaModificacion: seccion.fecha_modificacion,
-      nombreDepartamento: seccion.departamento.nombre,
+      departamento:{
+        idDepartamento: seccion.departamento.id,
+        nombreDepartamento: seccion.departamento.nombre
+      },
+      correo: seccion.correo,
+      foto:seccion.foto
     })
     ));
+  //console.log(secciones);
+  window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
   return secciones;
 }
 
@@ -79,7 +85,7 @@ export default function GestionSeccion() {
     //const [seccion, setSeccion] = useState([])
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [recordForEdit, setRecordForEdit] = useState(null)
+    const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -108,33 +114,30 @@ export default function GestionSeccion() {
                   .includes(target.value.toLowerCase()))
           }
         })
-      }
+    }
     useEffect(() => {
       //Obtenemos las secciones
       getSecciones()
       .then (newSeccion =>{
-        setRecords(prevRecords => prevRecords.concat(newSeccion));
+        setRecords(newSeccion); //Se quiere actualizar todo
         
-        //console.log(newSeccion);
-        
-        console.log(records);
       });
-    }, [])
-
-    const openInPopup = item => {
-      setRecordForEdit(item)
-      setOpenPopup(true)
-    }
-
+      
+    }, [recordForEdit])
+  
     const addOrEdit = (seccion, resetForm) => {
-      if (seccion.id === 0)
-        SeccionService.registerSeccion(seccion)
-      else
-        SeccionService.updateSeccion(seccion)
-      resetForm()
-      setRecordForEdit(null)
+
+      recordForEdit 
+        ? SeccionService.updateSeccion(seccion, seccion.id) 
+        : SeccionService.registerSeccion(seccion)
+          .then(idSeccion => {
+            if(!recordForEdit)  
+              setRecordForEdit(idSeccion);
+            else
+              setRecordForEdit(null);
+        })
       setOpenPopup(false)
-      setRecords(prevRecords => prevRecords.concat(seccion))
+      resetForm()
   
       setNotify({
         isOpen: true,
@@ -142,23 +145,7 @@ export default function GestionSeccion() {
         type: 'success'
       })
     }
-    /*const addOrEdit = (employee, resetForm) => {
-      if (employee.id == 0)
-        employeeService.insertEmployee(employee)
-      else
-        employeeService.updateEmployee(employee)
-      resetForm()
-      setRecordForEdit(null)
-      setOpenPopup(false)
-      setRecords(employeeService.getAllEmployees())
-  
-      setNotify({
-        isOpen: true,
-        message: 'Submitted Successfully',
-        type: 'success'
-      })
-    }
-    */
+
     return (
         <>
             <ContentHeader
@@ -186,6 +173,7 @@ export default function GestionSeccion() {
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
                     onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                    //openInPopup();^
                 />
                 
                 </Toolbar>
@@ -205,12 +193,12 @@ export default function GestionSeccion() {
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
                               <Controls.ActionButton 
                                 color="warning"
-                                onClick={ () => {openInPopup(item)}}
+                                onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
@@ -231,7 +219,8 @@ export default function GestionSeccion() {
               <AgregarEditarSeccion 
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
-              />
+                />
+                {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
             </Popup>  
         </>
