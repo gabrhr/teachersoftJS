@@ -62,6 +62,10 @@ export default function UserPage() {
         </ProtectedRoute>
 
         {/* DUCKTAPE */}
+        <ProtectedRoute exact path="/admin" idRoles={[1]}>
+          <Redirect to="/admin/mantenimiento/usr" />
+        </ProtectedRoute>
+
         <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]}>
           <Redirect to="/admin/mantenimiento/usr" />
         </ProtectedRoute>
@@ -74,7 +78,10 @@ export default function UserPage() {
         <ProtectedRoute exact path="/admin/employees" idRoles={[1]} component={Employees} />
 
         {/* as: asistente de seccion */}
-        <ProtectedRoute exact path="/as/asignacionCarga" idRoles={[2]} component={AsistenteSeccion} />
+        <ProtectedRoute exact path="/as" idRoles={[1]}>
+          <Redirect to="/as/asignacionCarga/registroCursos" />
+        </ProtectedRoute>
+
         <ProtectedRoute exact path="/as/asignacionCarga/registroCursos" idRoles={[2]} component={AsistenteSeccion} />
         <ProtectedRoute exact path="/as/asignacionCarga/cursos" idRoles={[2]} component={GestionCargaCursos} />
         <ProtectedRoute exact path="/as/asignacionCarga/registroCarga" idRoles={[2]} component={CargaDocente} />

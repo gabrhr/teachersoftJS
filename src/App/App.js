@@ -87,9 +87,9 @@ function App() {
                 > {router (the thing that loads all other things)}
           */}
           <HeaderUser
-              nombre="New Employee"
+              nombre="Pedro Picapiedra"
               rol="Administrador"
-              idRol= {1}
+              idRol= {0} //admin:0 as:1
               foto={fotoUsuario}
         /> 
         <CssBaseline />

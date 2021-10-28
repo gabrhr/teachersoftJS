@@ -7,6 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
+import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
     { id: '1', title: 'Horarios' },

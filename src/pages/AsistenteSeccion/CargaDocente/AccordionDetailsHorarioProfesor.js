@@ -8,10 +8,12 @@ import { Grid, Divider, Avatar } from '@mui/material'
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import { styled } from '@mui/material/styles';
+import { Controls } from '../../../components/controls/Controls'
 
 function generateRow(docente) {
     return (
         <>
+            <Controls.Divider/>
             <Grid container>
                 <Grid item xs={1}>
                     <Avatar>
@@ -62,6 +64,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
                 Lista de Docentes de Clases
             </Typography>
             {docentes.clase.map(docente => generateRow(docente))}
+            <Controls.Divider/>
             <Typography
                 variant="h4"
                 py="4px"
