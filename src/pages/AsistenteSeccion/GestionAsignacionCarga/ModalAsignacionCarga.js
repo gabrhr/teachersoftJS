@@ -63,17 +63,14 @@ function createData(id, claveCurso, nombreCurso, cargaHoraria,
     }
   }
   
-const usuarios2 = [
-    createData('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
+ 
 
 export default function ModalAsignacionCarga(props) {
 
-    const { getXlsx } = props;
+    let auxHorario
+    const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
-    const [records, setRecords] = useState(usuarios2)
+    const [records, setRecords] = useState(horario)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -166,7 +163,8 @@ export default function ModalAsignacionCarga(props) {
                 const ws = wb.Sheets[wsname];
                 /* Convert array of arrays */
                 const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-                setXFile(data);
+                 
+                
                 processData(data);
             };
             reader.readAsBinaryString(file);
@@ -180,7 +178,8 @@ export default function ModalAsignacionCarga(props) {
         /* e is a "default parameter" */
         e.preventDefault()
         // if (validate())
-        getXlsx(xFile);
+        window.localStorage.setItem("listHorario", records);
+        getHorario(records)
     }
     
     return (

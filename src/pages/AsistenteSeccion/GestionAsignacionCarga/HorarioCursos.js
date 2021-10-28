@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
 import { DT } from '../../../components/DreamTeam/DT'
+import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/seccionService';
+import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
 import Popup from '../../../components/util/Popup'
@@ -60,27 +62,13 @@ const tableHeaders = [
      },
 ]
 
- 
-function createData(id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion) {
-    return {
-        id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion
-    }
-  }
-  
-const usuarios2 = [
-    createData('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
 
 export default function HorarioCursos(props) {
 
-    const { xlsx, setXlsx, isNewFile } = props
-    const datosXlsx = window.localStorage.getItem('xlsx')
+    let hors = (window.localStorage.getItem('listHorario'))
+    const {getHorario, horario, setHorario, isNewFile } = props
     const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(window.localStorage.getItem('xlsx') ? window.localStorage.getItem('xlsx')  : usuarios2 )
+    const [records, setRecords] = useState(horario); //Se debe colocar el ID
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
     const [open, setOpen] = React.useState(false);
@@ -149,9 +137,7 @@ export default function HorarioCursos(props) {
         for (let i = 0; i < list.length; i++) {
             listaIncorrectos.push(list[i])
         }
-
         setRecords(listaIncorrectos)
-
     };
 
 
@@ -172,8 +158,7 @@ export default function HorarioCursos(props) {
         })
       }
     return (
-        <Form >
-            console.log(datosXlsx)
+        <Form>            
             <Typography variant="h4"
                 color="primary.light" style={SubtitulosTable}
             >
@@ -220,7 +205,7 @@ export default function HorarioCursos(props) {
                     <TblHead />
                     <TableBody>
                     
-                    {
+                    {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
                             <TableCell
@@ -236,6 +221,11 @@ export default function HorarioCursos(props) {
                             <TableCell>{item.horaSesion}</TableCell>
                         </TableRow>
                         ))
+                        :   (
+                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
+                                No hay elementos en la tabla. 
+                            </Typography>  
+                            )
                     }
                     </TableBody>
                 </TblContainer>
