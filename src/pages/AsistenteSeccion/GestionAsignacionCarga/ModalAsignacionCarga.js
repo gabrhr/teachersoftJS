@@ -68,8 +68,8 @@ const usuarios2 = [
     createData('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
 ]
 
-export default function ModalAsignacionCarga() {
-    const [records, setRecords] = useState(usuarios2)
+export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
+    const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -88,7 +88,7 @@ export default function ModalAsignacionCarga() {
         TblPagination,
         recordsAfterPagingAndSorting,
         BoxTbl
-    } = useTable(records, tableHeaders, filterFn);
+    } = useTable(recordsX, tableHeaders, filterFn);
     
     const onInputClick = (event) => {
         event.target.value = ''
@@ -143,7 +143,7 @@ export default function ModalAsignacionCarga() {
             listaIncorrectos.push(list[i])
         }
 
-        setRecords(listaIncorrectos)
+        setRecordsX(listaIncorrectos)
 
     };
 
@@ -168,6 +168,16 @@ export default function ModalAsignacionCarga() {
             console.log(error);
         }
     };
+
+    const actualizarDatos = e => { 
+        //Cargar la tabla
+       /*  for (let i = 0; i < recordsX.length; i++) { */
+       /*      horariosService.insertHorario(recordsX[i] */
+       /*  } */
+         setOpenPopup(false) 
+       /*  setRecords(employeeService.getAllEmployees()) */
+        setRecords(recordsX)
+    }
     
     return (
         <Form>
@@ -232,7 +242,8 @@ export default function ModalAsignacionCarga() {
                         // color="primary"
                         // size="large"
                         text="Cargar Datos"
-                        type="submit"
+                        /* type="submit" */
+                        onClick={actualizarDatos}
                     />
                     
                 </div>
