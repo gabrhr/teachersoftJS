@@ -75,7 +75,7 @@ export default function AgregarEditarSeccion(props) {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
             }, 
-            foto: fotoPerfil,
+            //foto: fotoPerfil,
             fecha_fundacion: null
             //~~~foto: --queda pendiente 
           }
@@ -90,7 +90,7 @@ export default function AgregarEditarSeccion(props) {
             window.alert('invalid')
     }
 
-    console.log("La foto es: ", fotoPerfil)
+    //console.log("La foto es: ", fotoPerfil)
 
     const FillDepartamentos = async () =>{
       const dataDep = await DepartamentoService.getDepartamentos();
