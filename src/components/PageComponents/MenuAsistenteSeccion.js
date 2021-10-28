@@ -3,7 +3,7 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
-
+import InboxIcon from '@mui/icons-material/Inbox';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const MenuAsistenteSeccion = [
@@ -30,22 +30,17 @@ export const MenuAsistenteSeccion = [
             }
         ]
     },
-    {
-        text: 'Solicitud de Docencia',
-        path: '/as/solicitudDocencia',
-        icon: < PeopleAltOutlinedIcon/>,
-        indice: 1,
-    },
+    
     {
         text: 'Docentes',
         path: '/as/docentes',
-        icon: <CloseIcon />,
-        indice: 2,
+        icon: <AccountBoxOutlinedIcon />,
+        indice: 1,
     },
     {
         text: 'Mesa de Partes',
         path: '/as/mesaPartes',
-        icon: <AccountBoxOutlinedIcon />,
-        indice: 3,
+        icon: <InboxOutlinedIcon />,
+        indice: 2,
     }
 ];
