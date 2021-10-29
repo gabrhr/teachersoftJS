@@ -15,8 +15,27 @@ const initialFieldValues = {
     id: 0,
     nombre: '',
     correo: '',
-    departmentId:'',
+    departmentId: '',
+    nombreDepartamento: '',
+    foto: '',
 }
+
+const convertirBase64 = (file) =>{
+  return new Promise((resolve, reject) =>{
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    }
+
+    //Si es error
+    fileReader.error = (error) => {
+      reject(error)
+    }
+
+  });
+}   
 
 
 export default function AgregarEditarSeccion(props) {
@@ -56,7 +75,7 @@ export default function AgregarEditarSeccion(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(initialFieldValues, true, validate);
+    } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -64,26 +83,26 @@ export default function AgregarEditarSeccion(props) {
         if (validate()){
           window.alert('valid')
 
+          //Este pasa como la nueva seccion o la seccion editada
           const newSecc = {
+            id: values.id,
             nombre: values.nombre,
-            //correo: values.correo,
+            correo: values.correo,
             departamento: {
-              id: parseInt(values.departmentId),
-            } ,
-            foto: null,
+              id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
+              nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
+            }, 
+            foto: fotoPerfil,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
+
           console.log(newSecc);
-          const rpta = await SeccionService.registerSeccion(newSecc);
-          console.log(rpta);
+          //const rpta = await SeccionService.registerSeccion(newSecc);
+          //console.log(rpta);
+          addOrEdit(newSecc,resetForm)
+          //resetForm()
 
-          resetForm()
-
-          //Pasamos a - ingresarlo a la BD
-
-          //}
-          //SeccionService.registerSeccion()
         }
         else
             window.alert('invalid')
@@ -100,39 +119,27 @@ export default function AgregarEditarSeccion(props) {
           title: dep.nombre,
         })
       ));
-      /*
-      values.map([id] => {
-        values.id =
-      })
-      */
-      console.log(departamentos);
+
+      //console.log(departamentos);
       return departamentos;
     }
 
-
-    useEffect(() => {
-        if (recordForEdit != null) {
-            /* object is not empty */
-            setValues({
-                ...recordForEdit
-            })
-        }
-    }, [recordForEdit])
-
-    /*React.useEffect(() => {
+    React.useEffect(() => {
       FillDepartamentos()
       .then (newDep =>{
         setDepartamentos(prevDep => prevDep.concat(newDep));
-
-        //console.log(newSeccion);
-
-        console.log(departamento);
       });
-    }, [])*/
-
+      if (recordForEdit != null) {
+          /* object is not empty - esto que hace?*/
+          setValues({
+              ...recordForEdit
+          })
+      }
+    }, [recordForEdit])
 
     return (
       <Form onSubmit={handleSubmit}>
+
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
@@ -155,8 +162,8 @@ export default function AgregarEditarSeccion(props) {
 
                     <Controls.Select
                         name="departmentId"
-                        label="Departamento"
-                        value={values.departmentId}
+                        label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+                        value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
                     />
@@ -177,14 +184,14 @@ export default function AgregarEditarSeccion(props) {
 
                                 setFileFoto(files[0])
                                 setCambio(true)
-
+                                
                                 if (files && files[0]) {
-                                    var reader = new FileReader();
-                                    reader.onload = function (e) {
-                                        setFotoPerfil(e.target.result)
-                                    };
-                                    reader.readAsDataURL(files[0]);
-
+                                  var reader = new FileReader();
+                                  reader.onload = function (e) {
+                                    setFotoPerfil(e.target.result)
+                                  };
+                                  reader.readAsDataURL(files[0]);
+                                
                                 }
                             }}
                         />
