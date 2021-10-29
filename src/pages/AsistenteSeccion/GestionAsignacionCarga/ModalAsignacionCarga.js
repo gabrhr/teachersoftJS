@@ -59,7 +59,7 @@ const tableHeaders = [
      },
 ]
 
-export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
+export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
 
     let auxHorario
     //const {horario, getHorario, isNewFile } = props
@@ -226,16 +226,28 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
        /*  for (let i = 0; i < recordsX.length; i++) { */
        /*      horariosService.insertHorario(recordsX[i] */
        /*  } */
-         setOpenPopup(false) 
-      console.log("Records X es: ", recordsX);
-      //Servicio para cargar los horarios
+        //setOpenPopup(false) 
+        console.log(recordsX)
+        let hors = recordsX.map(carga => ({
+            Clave: carga.curso.codigo,
+            Nombre: carga.curso.nombre,
+            Carga_Horaria: carga.horas_semanales,
+            Horario: carga.codigo,
+            Tipo: carga.tipo,
+            Hora_Sesion: carga.sesiones
+        }))
+
+        console.log("Records X es: ", hors);
+        setCargaH(hors)
+
+        //Servicio para cargar los horarios
       
       
 
-      //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
+        //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       
-      setRecords(recordsX)
-      setOpenPopup(false) 
+        setRecords(recordsX)
+        setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }
     
@@ -324,7 +336,6 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={open}
-                onClick={handleClose}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>

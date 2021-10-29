@@ -79,6 +79,8 @@ export default function AsistenteSeccion() {
     const [records, setRecords] = useState([])
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
+    const [cargaH, setCargaH] = useState([])
+
     return (
         <>
             <ContentHeader 
@@ -98,7 +100,7 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                     <ExportCSV csvData={records} fileName={'fileName'} text="Exportar" size="large"
+                     <ExportCSV csvData={cargaH} fileName={'fileName'} text="Exportar" size="large"
                         endIcon={<CloudDownloadOutlinedIcon/>}/>
                 </Grid>
             </Grid>
@@ -115,7 +117,8 @@ export default function AsistenteSeccion() {
 
                </ModalAsignacionCarga>*/}
               
-               < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords}/>
+               < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                cargaH = {cargaH}/>
             </Popup>  
         </>
     )
