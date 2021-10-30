@@ -47,7 +47,7 @@ function CboCiclo(props) {
     }, [])
 
     React.useEffect(()=>{
-      window.localStorage.setItem('ciclo', JSON.stringify(values.id))
+      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
     },[values])
     
     //console.log(values);

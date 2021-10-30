@@ -217,10 +217,10 @@ export default function HorarioCursos({records}, {setRecords}) {
                             </TableCell>*/}
                             <TableCell>{item.curso.codigo}</TableCell>
                             <TableCell>{item.curso.nombre}</TableCell>
-                            <TableCell>{item.curso.carga}</TableCell>
-                            <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.tipo}</TableCell>
                             <TableCell>{item.horas_semanales}</TableCell>
+                            <TableCell>{item.codigo}</TableCell>
+                            <TableCell>{item.tipo ? "Clase":"Laboratorio"}</TableCell>
+                            <TableCell>{item.sesiones_excel}</TableCell>
                         </TableRow>
                         ))
                         :   (
