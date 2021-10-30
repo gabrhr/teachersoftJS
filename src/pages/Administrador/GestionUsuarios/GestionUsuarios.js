@@ -25,12 +25,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-  {
+  /*{
     id: 'fullName',
     label: 'Nombre Completo',
     numeric: false,
     sortable: true
-  },
+  },*/
   {
     id: 'dni',
     label: 'DNI',

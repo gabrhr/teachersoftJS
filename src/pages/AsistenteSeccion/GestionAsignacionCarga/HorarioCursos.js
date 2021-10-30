@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
 import { DT } from '../../../components/DreamTeam/DT'
+import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/seccionService';
+import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
 import Popup from '../../../components/util/Popup'
@@ -17,12 +19,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'SeccionID',
       numeric: true,
       sortable: true
-    },
+    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -60,23 +62,17 @@ const tableHeaders = [
         sortable: true
      },
 ]
-function createData(id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion) {
-    return {
-        id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion
-    }
-  }
-  
-const usuarios2 = [
-    createData('10', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('11', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('12', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
 
-export default function HorarioCursos({records,setRecords}) {
-    const [openPopup, setOpenPopup] = useState(false)
-    
+
+export default function HorarioCursos({records}, {setRecords}) {
+
+    //let hors = (window.localStorage.getItem('listHorario'))
+    //const {getHorario, horario, setHorario, isNewFile } = props
+    const [openPopup, setOpenPopup] = useState(false);
+    //const [recordsX, setRecordsX] = useState([]); //Se debe colocar el ID
+    const [columns, setColumns] = useState([]);
+    const [data, setData] = useState([]);
+    const [open, setOpen] = React.useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
@@ -95,13 +91,66 @@ export default function HorarioCursos({records,setRecords}) {
         handleInputChange
     } = useForm(initialFieldValues);
     
+    const processData = dataString => {
+        
+        const dataStringLines = dataString.split(/\r\n|\n/);
+        const headers = dataStringLines[0].split(
+            /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+        );
+
+        let list = [];
+        for (let i = 1; i < dataStringLines.length; i++) {
+            const row = dataStringLines[i].split(
+                /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+            );
+            if (headers && row.length == headers.length) {
+                const obj = {};
+                for (let j = 0; j < headers.length; j++) {
+                    let d = row[j];
+                    if (d.length > 0) {
+                        if (d[0] == '"') d = d.substring(1, d.length - 1);
+                        if (d[d.length - 1] == '"') d = d.substring(d.length - 2, 1);
+                    }
+                    if (headers[j]) {
+                        obj[headers[j]] = d;
+                    }
+                }
+
+                // remove the blank rows
+                if (Object.values(obj).filter(x => x).length > 0) {
+                    list.push(obj);
+                }
+            }
+        }
+
+        // prepare columns list from headers
+        const columns = headers.map(c => ({
+            name: c,
+            selector: c
+        }));
+
+        //console.log(list)
+        setData(list);
+        setColumns(columns);
+
+        let listaIncorrectos = []
+
+        for (let i = 0; i < list.length; i++) {
+            listaIncorrectos.push(list[i])
+        }
+        setRecords(listaIncorrectos)
+    };
+
+
+  console.log(records);
+
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
          * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
+            if (target.value === "")
               /* no search text */
               return items
             else
@@ -114,7 +163,7 @@ export default function HorarioCursos({records,setRecords}) {
         history.push("/as/asignacionCarga/cursos");
     };
     return (
-        <Form>
+        <Form>            
             <Typography variant="h4"
                 color="primary.light" style={SubtitulosTable}
             >
@@ -157,22 +206,28 @@ export default function HorarioCursos({records,setRecords}) {
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    {
+                    
+                    {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
-                            <TableCell
+                            {/*<TableCell
                             align="right"
                             >
-                            {item.id}
-                            </TableCell>
-                            <TableCell>{item.claveCurso}</TableCell>
-                            <TableCell>{item.nombreCurso}</TableCell>
-                            <TableCell>{item.cargaHoraria}</TableCell>
-                            <TableCell>{item.horario}</TableCell>
-                            <TableCell>{item.tipoSesion}</TableCell>
-                            <TableCell>{item.horaSesion}</TableCell>
+                            {item.clave}
+                            </TableCell>*/}
+                            <TableCell>{item.curso.codigo}</TableCell>
+                            <TableCell>{item.curso.nombre}</TableCell>
+                            <TableCell>{item.horas_semanales}</TableCell>
+                            <TableCell>{item.codigo}</TableCell>
+                            <TableCell>{item.tipo ? "Clase":"Laboratorio"}</TableCell>
+                            <TableCell>{item.sesiones_excel}</TableCell>
                         </TableRow>
                         ))
+                        :   (
+                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
+                                No hay elementos en la tabla. 
+                            </Typography>  
+                            )
                     }
                     </TableBody>
                 </TblContainer>

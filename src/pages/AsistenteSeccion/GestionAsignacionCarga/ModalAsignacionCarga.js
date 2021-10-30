@@ -9,14 +9,17 @@ import * as XLSX from 'xlsx'
 import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { set } from 'date-fns';
+import horarioService from '../../../services/horarioService';
+import cursoService from '../../../services/cursoService';
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'SeccionID',
       numeric: true,
       sortable: true
-    },
+    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -54,21 +57,12 @@ const tableHeaders = [
         sortable: true
      },
 ]
-function createData(id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion) {
-    return {
-        id, claveCurso, nombreCurso, cargaHoraria,
-     horario, tipoSesion, horaSesion
-    }
-  }
-  
-const usuarios2 = [
-    createData('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-    createData('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
 
 export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
+
+    let auxHorario
+    //const {horario, getHorario, isNewFile } = props
+    const [xFile, setXFile] = useState('');
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
@@ -93,26 +87,71 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
     const onInputClick = (event) => {
         event.target.value = ''
     }
+/*
+    const defragmentarSesiones = listHorarios =>{
+      const dataSesiones = {
+        "secuencia": 0,
+        "dia_semana": 1,
+        "hora_inicio": 12,
+        "media_hora_inicio": 0,
+        "hora_fin": 15,
+        "media_hora_fin": 1
+      }
+      
+      return dataSesiones;
+    }
+*/
+    const datosHorarios = listHorarios => {
+      //const dataSesiones = defragmentarSesiones(listHorarios);
+      const horarios = []
+      listHorarios.map(hor => (
+        horarios.push({
+        "codigo": hor.Horario,
+        "tipo": hor.Tipo === "Clase" ? 0 : 1, //Si es clase es 0 - si es laboratorio 1
+        //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
+        "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
+        ciclo:{
+          //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+          id: parseInt(window.localStorage.getItem('ciclo')),
+        },
+        curso:{
+          "codigo": hor.Clave, //INF...
+          "nombre": hor.Nombre, //NOMBRE DEL CURSO
+          "creditos": hor.Creditos, //Creditos del Curso
+          "unidad": hor.Unidad, //Creditos del Curso
+          "carga": hor.Carga_Horaria, //Creditos del Curso
+        },
+        "sesiones_excel": hor.Hora_Sesion
+          //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
+        /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
+        //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
+      })
+      ));  
+      //horario = horarios;
+      console.log(horarios);
+      return horarios;
+    }
 
 
     const processData = dataString => {
+        
         const dataStringLines = dataString.split(/\r\n|\n/);
         const headers = dataStringLines[0].split(
             /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
         );
-
+          //PROCESAMIENTO DE LA DATA EN LA TABLA
         let list = [];
         for (let i = 1; i < dataStringLines.length; i++) {
             const row = dataStringLines[i].split(
                 /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
             );
-            if (headers && row.length == headers.length) {
+            if (headers && row.length === headers.length) {
                 const obj = {};
                 for (let j = 0; j < headers.length; j++) {
                     let d = row[j];
                     if (d.length > 0) {
-                        if (d[0] == '"') d = d.substring(1, d.length - 1);
-                        if (d[d.length - 1] == '"') d = d.substring(d.length - 2, 1);
+                        if (d[0] === '"') d = d.substring(1, d.length - 1);
+                        if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
                     }
                     if (headers[j]) {
                         obj[headers[j]] = d;
@@ -136,14 +175,17 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
         setData(list);
         setColumns(columns);
 
+        //let listaIncorrectos = []
         let listaCorrectos = []
-        let listaIncorrectos = []
 
         for (let i = 0; i < list.length; i++) {
-            listaIncorrectos.push(list[i])
+            listaCorrectos.push(list[i])
         }
 
-        setRecordsX(listaIncorrectos)
+        //Hacemos el paso de los datos a un objeto
+        const horarios = datosHorarios(listaCorrectos)
+        //setRecords(prevRecords => prevRecords.concat(horarios));
+        setRecordsX(prevRecords => prevRecords.concat(horarios));
 
     };
 
@@ -161,26 +203,62 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
                 const ws = wb.Sheets[wsname];
                 /* Convert array of arrays */
                 const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+                 
+                
                 processData(data);
             };
             reader.readAsBinaryString(file);
+
         } catch (error) {
             console.log(error);
         }
     };
 
-    const actualizarDatos = e => { 
-        //Cargar la tabla
-       /*  for (let i = 0; i < recordsX.length; i++) { */
-       /*      horariosService.insertHorario(recordsX[i] */
-       /*  } */
-         setOpenPopup(false) 
+    const actualizarDatos = async e => { 
+      console.log("Records X es: ", recordsX);
+      const request = await cursoService.getCursosxSeccionCodigoNombre(0,"INF144");
+      console.log("EL request es: ", request);
+      //Servicio para cargar los horarios
+      recordsX.map(hor => {
+        const postHorario = {
+          "codigo": hor.codigo,
+          "tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
+          //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
+          "horas_semanales": parseInt(hor.horas_semanales), //Horas_semanales: cargaHoraria
+          ciclo:{
+            //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+            "id": hor.ciclo.id,
+          },
+          curso:{
+            "id": "nada"
+          },
+          "sesiones_excel": hor.sesiones_excel
+        }
+        console.log(postHorario);
+        horarioService.registerHorario(postHorario);
+      })
+
+
+      //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
+      
+      setRecords(recordsX)
+      setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
+    }
+    
+    const handleSubmit = e => {
+      e.preventDefault()
+        //UNA VEZ SE SUBA - VAMOS A PROCEDER A REALIZAR LA INSERCION
+        //horarioService.registerDepartamento(recordsX);
+        // if (validate())
+        //window.localStorage.setItem("listHorario", recordsX);
         setRecords(recordsX)
+        setOpenPopup(false) 
+       /*  setRecords(employeeService.getAllEmployees()) */
     }
     
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Grid align="right">
                 <label htmlFor="contained-button-file" >
                     <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
@@ -209,18 +287,19 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
                         <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                            <TableRow key={item.id}>
-                                <TableCell
+                            <TableRow>
+                                {/*<TableCell
                                 align="right"
                                 >
+                             
                                 {item.id}
-                                </TableCell>
-                                <TableCell>{item.claveCurso}</TableCell>
-                                <TableCell>{item.nombreCurso}</TableCell>
-                                <TableCell>{item.cargaHoraria}</TableCell>
-                                <TableCell>{item.horario}</TableCell>
-                                <TableCell>{item.tipoSesion}</TableCell>
-                                <TableCell>{item.horaSesion}</TableCell>
+                                </TableCell>*/}
+                                <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
+                                <TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>
                             </TableRow>
                             ))
                         }
