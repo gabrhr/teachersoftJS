@@ -50,7 +50,7 @@ const registerPersona = async newObject => {
 const updatePersona = async (newObject, {id}) => {
   try{
     const request = await axios.put(`${url}/persona/${id}`, newObject, id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data //Es un valor de true o no
   }catch(exception){
     console.error(exception);
   }

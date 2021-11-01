@@ -153,7 +153,7 @@ export default function GestionUsuarios() {
   }, [recordForEdit])
 
   const addOrEdit = (usuario, resetForm) => {
-    console.log(usuario.idPersona)
+    
     const dataUsr = {
       id: usuario.id,
       fecha_creacion: null,
@@ -181,7 +181,7 @@ export default function GestionUsuarios() {
     }
     
     const dataPer = {
-      id: usuario.id,
+      id: usuario.idPersona,
       nombres: usuario.nombre,
       apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
       correo_pucp: usuario.correo,
@@ -197,12 +197,9 @@ export default function GestionUsuarios() {
       },
       foto_URL: null
     }
-    
-    console.log(usuario.id)
-    console.log(dataUsr)
 
     recordForEdit 
-        ? userService.updateUsuario(dataUsr, usuario.id) 
+        ? personaService.updatePersona(dataPer, usuario.idPersona) 
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
             if(!recordForEdit)  
@@ -226,12 +223,12 @@ export default function GestionUsuarios() {
     setOpenPopup(false)
     setRecords(prevRecords => prevRecords.concat(usuario))
     //setRecords(DTLocalServices.getAllPersonas())*/
-
     setNotify({
       isOpen: true,
       message: 'Usuario añadido',
       type: 'success'
     })
+    
   }
 
   /* open object in a pop up (for edit) */
@@ -250,11 +247,12 @@ export default function GestionUsuarios() {
 
     personaService.deletePersona(idPersona)
     userService.borrarUsuario(id)
-    DTLocalServices.getUsers().then((response) => {
+    /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
-    });
+    });*/
     //setRecords(DTLocalServices.getAllPersonas())
+    
     setNotify({
       isOpen: true,
       message: 'Deleted Successfully',

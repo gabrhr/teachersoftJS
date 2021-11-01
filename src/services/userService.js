@@ -30,14 +30,14 @@ const registerUsuario = async newObject => {
 }
 const borrarUsuario = async (id) => {
     try{
-        const request = await axios.delete(`${url}/usuario/${id}`,tokenService.getToken(),id);
+        const request = await axios.delete(`${url}/usuario/${id}`,id);
         return request.data;
     } catch(exception) {
         console.error(exception);
     }
 }
 const updateUsuario = async (newObject, {id}) => {
-    console.log(`${url}/usuario/${id}`)
+    
     try{
         const request = await axios.put(`${url}/usuario/${id}`,newObject,id);
         return request.data;
