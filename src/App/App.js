@@ -25,13 +25,6 @@ import UserPage from '../pages/General/UserPage';
 // import ProtectedRoute from './RouterProtected';
 
 function App() {
-  //const classes = useStyles();
-  // const Hola = [
-  //   {
-  //     MenuAdministrador
-  //   }
-  // ];
-
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
@@ -44,7 +37,7 @@ function App() {
     // console.log(localStorage.getItem('loggedUser'))
   }, [user])
   
-  if (false) {
+  if (true) {
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -87,7 +80,7 @@ function App() {
                 > {router (the thing that loads all other things)}
           */}
           <HeaderUser
-              nombre="New Employee"
+              nombre="Pedro Picapiedra"
               rol="Administrador"
               idRol= {1}      // admin: 0, as: 1
               foto={fotoUsuario}

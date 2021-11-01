@@ -29,4 +29,5 @@ export const MenuAdministrador = [
             indice: 2,
             }]
     },
+    
 ];

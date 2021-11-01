@@ -19,7 +19,12 @@ const initialFieldValues = {
 /*CODIGO -  */
 
 const Login = ({ setUser }) => {
+  const abrirGoogle= e =>{
+    var left = (window.screen.width/2)-(500/2);
+    var top = (window.screen.height/2)-(700/2);
+    window.open("http://back.teachersoft.solutions:8080/oauth2/authorization/google", "logueoGmail", "width=500,height=600, top="+top+", left="+left);
 
+  }
   //MANEJO DE ESTADOS
   //const [login, setLogin] = useState(null);
   const history = useHistory();
@@ -134,16 +139,17 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      <a  href="localhost:8080/oauth2/authorization/google"
+      {/* <a  href="localhost:8080/oauth2/authorization/google"
          style={{ textDecoration: "none" }}
-      >
+      > */}
         <Controls.Button
           variant="outlined"
           size='small'
           fullWidth
           text="Iniciar sesión con correo PUCP"
+          onClick={abrirGoogle}
         />
-      </a>
+      {/* </a> */}
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña
