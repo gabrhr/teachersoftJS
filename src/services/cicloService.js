@@ -4,7 +4,7 @@ import url from '../config.js';
 const getCiclos = async () => {
   try{
     const request = await axios.get(`${url}/ciclo/`);
-    return request.data;  
+    return request ? request.data : [];  
   }catch(exception){
     console.error(exception);
   }
@@ -13,7 +13,7 @@ const getCiclos = async () => {
 const getCiclo = async ({id}) => {
   try{
     const request = await axios.get(`${url}/ciclo/${id}`, id);
-    return request.data; 
+    return request ? request.data : [];
   }catch(exception){
     console.error(exception);
   }

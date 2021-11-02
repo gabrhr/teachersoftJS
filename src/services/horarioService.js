@@ -42,7 +42,7 @@ const updateHorario = async (newObject, {id}) => {
   }
 }
 
-const deleteHorario = async ({id}) => {
+const deleteHorario = async (id) => {
   try{
     const request = await axios.delete(`${url}/horario/${id}`, id);
     return request.data; //Es un valor de true o no
@@ -51,5 +51,93 @@ const deleteHorario = async ({id}) => {
   }
 }
 
+//FUNCIONES ADICIONALES PARA RECUPERAR LAS SESIONES
 
-export default {getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}
+const convertStringtoSesion = (sesion) => {
+  const dataSes = []; 
+  let substring = "";
+  //let firstCharac = "";
+  sesion.split("").forEach(character => {
+    if(character === " "){
+      /* RECUPERAMOS EL DIA */
+      if(substring.toString()[0] >= "A" && substring.toString()[0] <= "z"){
+        console.log("Es dia: ", substring.toString().toLowerCase());
+        switch(substring.toString().toLowerCase()){
+          case "lunes":
+            dataSes[0] = 0;
+            break
+          case "martes":
+            dataSes[0] = 1;
+            break
+          case "miércoles" || "miercoles":
+            dataSes[0] = 2;
+            break
+          case "jueves":
+            dataSes[0] = 3;
+            break
+          case "viernes":
+            dataSes[0] = 4;
+            break
+          case "sábado" || "sabado":
+            dataSes[0] = 5;
+            break
+          default:
+            console.error("No se puede leer el día")
+            break
+        }
+      }
+      /*RECUPERAMOS LA HORA DE INICIO*/
+      else if(substring.toString()[0] >= "0" && substring.toString()[0] <= "9"){
+        console.log("Es numero: ", substring.toString().toLowerCase());
+        dataSes[1] = parseInt(substring.substring(0,2));
+        dataSes[2] = parseInt(substring.substring(3,5)) ? 1 : 0;
+      }
+      substring = "";
+      return;
+    }
+    substring = substring + character;
+  })
+  /*RECUPERAMOS EL ULTIMO SUBSTRING - PARA HORA-FIN */
+  substring = substring.toString().toLowerCase();
+  console.log("Es numero: ", substring.toString().toLowerCase());
+  dataSes[3] = parseInt(substring.substring(0,2));
+  dataSes[4] = parseInt(substring.substring(3,5)) ? 1 : 0;
+
+
+
+  console.log(dataSes);
+  return dataSes;
+}
+
+const convertSesiontoString = (dia_semana, hora_ini, media_horaini, hora_fin, media_horafin) => {
+  let str = "";
+  switch(dia_semana){
+    case 0:
+      str = str + "Lunes "
+      break
+    case 1:
+      str = str + "Martes "
+      break
+    case 2:
+      str = str + "Miércoles "
+      break
+    case 3:
+      str = str + "Jueves "
+      break
+    case 4:
+      str = str + "Viernes "
+      break
+    case 5:
+      str = str + "Sábado "
+      break
+    default:
+      break
+  }
+  //console.log(str);
+  str = str.concat(hora_ini.toString() , ":" , media_horaini ? "30 - " : "00 - " , 
+  hora_fin.toString() , ":" , media_horafin ? "30" : "00");
+  //console.log(str);
+  return str;
+}
+
+export default {convertSesiontoString, convertStringtoSesion, getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}

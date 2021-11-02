@@ -21,7 +21,7 @@ export default function AddButton(props) {
               <Box  x={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
                 <Button
                   variant= {variant}
-                  startIcon={<AddIcon/>}
+                  text={<AddIcon/>}
                   onClick = {onClick}
                 />
               </Box>

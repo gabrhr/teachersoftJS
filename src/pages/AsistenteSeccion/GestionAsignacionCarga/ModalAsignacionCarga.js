@@ -9,6 +9,8 @@ import * as XLSX from 'xlsx'
 import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
 import horarioService from '../../../services/horarioService';
 import cursoService from '../../../services/cursoService';
@@ -33,12 +35,6 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'cargaHoraria',
-      label: 'Carga Horaria',
-      numeric: false,
-      sortable: true
-    },
-    {
         id: 'horario',
         label: 'Horario',
         numeric: false,
@@ -50,6 +46,12 @@ const tableHeaders = [
         numeric: false,
         sortable: true
      },
+    {
+      id: 'cargaHoraria',
+      label: 'Carga Horaria',
+      numeric: false,
+      sortable: true
+    },
      {
         id: 'horaSesion',
         label: 'Hora-Sesion',
@@ -58,8 +60,63 @@ const tableHeaders = [
      },
 ]
 
-export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
+async function llenarDatosHorarios (otroHorario, postHorario, hor) {
+  if(otroHorario === 1){  //Si otorHorario = 1 - entonces si es nuevo horario
+    const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
 
+    await cursoService.getCursosxCodigoNombre(hor.curso.codigo)
+      .then(request => {
+        console.log(request);
+        postHorario = {
+          "codigo": hor.codigo,
+          //"tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
+          //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
+          "horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
+          ciclo:{
+            //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+            "id": hor.ciclo.id,
+          },
+          curso:{
+            "id": request[0].id,
+          },
+          /*
+          unidad:{
+            "id": request_uni[0].id,
+          }
+          */
+          //"sesiones_excel": hor.sesiones_excel,
+          sesiones:[{
+            "secuencia": hor.tipo,
+            "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
+            "hora_inicio": dataSes[1],
+            "media_hora_inicio": dataSes[2],
+            "hora_fin": dataSes[3],
+            "media_hora_fin": dataSes[4],
+          }]
+        }
+        //Analizamos si el siguiente item es el mismo horario pero otro tipo
+        otroHorario = 0; // Entonces cambiamos el valor a 0 - para continuar en la siguiente i
+        //horarioService.registerHorario(postHorario);
+      })
+  }
+  
+  else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
+    const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
+
+    postHorario.sesiones.push({
+      "secuencia": hor.tipo,
+      "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
+      "hora_inicio": dataSes[1],
+      "media_hora_inicio": dataSes[2],
+      "hora_fin": dataSes[3],
+      "media_hora_fin": dataSes[4],
+    })
+    otroHorario = 1;  //El siguiente item a leer si será otro Horario
+  }
+  return [otroHorario, postHorario];
+}
+
+export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
     let auxHorario
     //const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
@@ -71,10 +128,16 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
-    const [open, setOpen] = React.useState(false);
     const [usuarios, setUsuarios] = useState(null)
     const [usuariosIncorrectos, setUsuariosIncorrectos] = useState(null)
-
+    
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+      setOpen(false);
+    }
+    const handleToggle = () => {
+      setOpen(!open);
+    }
     
     const {
         TblContainer,
@@ -112,7 +175,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
         "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
         ciclo:{
           //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
-          id: parseInt(window.localStorage.getItem('ciclo')),
+          "id": parseInt(window.localStorage.getItem('ciclo')),
         },
         curso:{
           "codigo": hor.Clave, //INF...
@@ -121,6 +184,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
           "unidad": hor.Unidad, //Creditos del Curso
           "carga": hor.Carga_Horaria, //Creditos del Curso
         },
+        //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos: 
+        profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
         "sesiones_excel": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
         /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
@@ -128,7 +193,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
       })
       ));  
       //horario = horarios;
-      console.log(horarios);
+      //console.log(horarios);
       return horarios;
     }
 
@@ -184,9 +249,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
 
         //Hacemos el paso de los datos a un objeto
         const horarios = datosHorarios(listaCorrectos)
-        //setRecords(prevRecords => prevRecords.concat(horarios));
-        setRecordsX(prevRecords => prevRecords.concat(horarios));
 
+        setRecordsX(prevRecords => prevRecords.concat(horarios));
     };
 
     const handleUploadFile = e => {
@@ -215,32 +279,24 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
     };
 
     const actualizarDatos = async e => { 
-      console.log("Records X es: ", recordsX);
-      const request = await cursoService.getCursosxSeccionCodigoNombre(0,"INF144");
-      console.log("EL request es: ", request);
+      let otroHorario = 1;
+
+      let postHorario = {}; //Para poder usar el horario en una segunda vuelta
+      const horariosTotales = [];
       //Servicio para cargar los horarios
-      recordsX.map(hor => {
-        const postHorario = {
-          "codigo": hor.codigo,
-          "tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
-          //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
-          "horas_semanales": parseInt(hor.horas_semanales), //Horas_semanales: cargaHoraria
-          ciclo:{
-            //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
-            "id": hor.ciclo.id,
-          },
-          curso:{
-            "id": "nada"
-          },
-          "sesiones_excel": hor.sesiones_excel
+      for (let hor of recordsX) {
+        const resultArray = await llenarDatosHorarios(otroHorario, postHorario, hor);
+        otroHorario = resultArray[0];
+        postHorario = resultArray[1];
+        //Loop finished
+        
+        if(otroHorario === 1)  {
+          horarioService.registerHorario(postHorario);
+          horariosTotales.push(postHorario);
         }
-        console.log(postHorario);
-        horarioService.registerHorario(postHorario);
-      })
-
-
+      };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
-      
+      console.log(horariosTotales);
       setRecords(recordsX)
       setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
@@ -253,6 +309,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
         // if (validate())
         //window.localStorage.setItem("listHorario", recordsX);
         setRecords(recordsX)
+        handleClose()
         setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }
@@ -327,6 +384,12 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
                     
                 </div>
             </Grid>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={open}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Form>
     )
 }
