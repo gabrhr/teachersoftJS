@@ -97,11 +97,11 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                    <Controls.Button
+                    {/* <Controls.Button
                         text="Exportar"
                         size="large"
                         endIcon={<CloudDownloadOutlinedIcon/>}
-                    />
+                    /> */}
                 </Grid>
             </Grid>
             {/*LO DE GABRIELA*/}
