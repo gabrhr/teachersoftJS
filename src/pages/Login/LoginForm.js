@@ -20,10 +20,16 @@ const initialFieldValues = {
 
 const Login = ({ setUser }) => {
   const abrirGoogle= e =>{
+    var windowObjectReference;
     var left = (window.screen.width/2)-(500/2);
     var top = (window.screen.height/2)-(700/2);
-    window.open("http://back.teachersoft.solutions:8080/oauth2/authorization/google", "logueoGmail", "width=500,height=600, top="+top+", left="+left);
-
+    windowObjectReference = window.open("http://localhost:8080/oauth2/authorization/google", "logueoGmail", "width=500,height=600, top="+top+", left="+left);
+    console.log(windowObjectReference.close);
+    console.log(windowObjectReference.document);
+    console.log(windowObjectReference.frames);
+    console.log(windowObjectReference.location);
+    console.log(windowObjectReference.postMessage);
+    //windowObjectReference.close();
   }
   //MANEJO DE ESTADOS
   //const [login, setLogin] = useState(null);
