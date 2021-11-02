@@ -51,7 +51,7 @@ export default function GestionCargaCursos() {
     const [dValuNombre, setDefValueNombre] = useState('')
     const [dValuCreditos, setDefValueCreditos] = useState('')
     const [dValuHLectivas, setDefValueHLectivas] = useState('')
-    const [dValuEspecialidad, setDefValueEspecialidad] = useState('')
+    const [dValuUnidad, setDefValueUnidad] = useState('')
     const [dValuHorario, setDefValueHorario] = useState('')
     const [valueTipo, setValueTipo] = useState('')
 
@@ -75,10 +75,10 @@ export default function GestionCargaCursos() {
 
     function getRow ({...props}){
         setOpenPopup(false)
-        setDefValueNombre(`${props.clave} - ${props.nombre}`)
-        setDefValueCreditos(`${props.credito}`)
+        setDefValueNombre(`${props.codigo} - ${props.nombre}`)
+        setDefValueCreditos(`${props.creditos}`)
         setDefValueHLectivas(`${props.horasLec}`)
-        setDefValueEspecialidad(`${props.especialidad}`)
+        setDefValueUnidad(`${props.especialidad}`)
         setDefValueHorario(`${props.horario}`)
     }
 
@@ -86,7 +86,7 @@ export default function GestionCargaCursos() {
         setDefValueNombre(``)
         setDefValueCreditos(``)
         setDefValueHLectivas(``)
-        setDefValueEspecialidad(``)
+        setDefValueUnidad(``)
         setDefValueHorario(``)
         setValueTipo('')
     }
@@ -135,8 +135,8 @@ export default function GestionCargaCursos() {
                         />
                         <Controls.Input 
                             name="especialidad"
-                            label="Especialidad del curso"  
-                            value={dValuEspecialidad} 
+                            label="Unidad correspondiente"  
+                            value={dValuUnidad} 
                             onChange = {handleInputChange}
                             size= 'small'
                         />

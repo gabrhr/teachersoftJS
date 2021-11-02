@@ -51,5 +51,62 @@ const deleteHorario = async ({id}) => {
   }
 }
 
+//FUNCIONES ADICIONALES PARA RECUPERAR LAS SESIONES
 
-export default {getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}
+const convertStringtoSesion = (sesion) => {
+  const dataSes = []; 
+  let substring = "";
+  //let firstCharac = "";
+  sesion.split("").forEach(character => {
+    if(character === " "){
+      /* RECUPERAMOS EL DIA */
+      if(substring.toString()[0] >= "A" && substring.toString()[0] <= "z"){
+        console.log("Es dia: ", substring.toString().toLowerCase());
+        switch(substring.toString().toLowerCase()){
+          case "lunes":
+            dataSes[0] = 0;
+            break
+          case "martes":
+            dataSes[0] = 1;
+            break
+          case "miercoles" || "miércoles":
+            dataSes[0] = 2;
+            break
+          case "jueves":
+            dataSes[0] = 3;
+            break
+          case "viernes":
+            dataSes[0] = 4;
+            break
+          case "sábado" || "sabado":
+            dataSes[0] = 5;
+            break
+          default:
+            console.error("No se puede leer el día")
+            break
+        }
+      }
+      /*RECUPERAMOS LA HORA DE INICIO*/
+      else if(substring.toString()[0] >= "0" && substring.toString()[0] <= "9"){
+        console.log("Es numero: ", substring.toString().toLowerCase());
+        dataSes[1] = parseInt(substring.substring(0,2));
+        dataSes[2] = parseInt(substring.substring(3,5)) ? 1 : 0;
+      }
+      substring = "";
+      return;
+    }
+    substring = substring + character;
+  })
+  /*RECUPERAMOS EL ULTIMO SUBSTRING - PARA HORA-FIN */
+  substring = substring.toString().toLowerCase();
+  console.log("Es numero: ", substring.toString().toLowerCase());
+  dataSes[3] = parseInt(substring.substring(0,2));
+  dataSes[4] = parseInt(substring.substring(3,5)) ? 1 : 0;
+
+
+
+  console.log(dataSes);
+  return dataSes;
+}
+
+export default {convertStringtoSesion, getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}

@@ -12,6 +12,7 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/
 import SearchIcon from '@mui/icons-material/Search';
 import useTable from "../../../components/useTable"
 import GestionCargaCursos from './GestiónCargaCursos';
+import CursoService from '../../../services/cursoService';
 
 const tableHeaders = [
     {
@@ -34,36 +35,25 @@ const tableHeaders = [
     },
 ]
 
-const cursos = [
-    {
-        clave: 'INF144',
-        nombre: 'Técnicas de Programación',
-        credito: '3.5',
-        horasLec: '5',
-        especialidad: 'Ing. Informática',
-        horario: '0781'
-    },
-    {
-        clave: 'INF134',
-        nombre: 'Técnicas...',
-        credito: '2.0',
-        horasLec: '5',
-        especialidad: 'Ing. Informática',
-        horario: '0781'
-    },
-    {
-        clave: 'INF156',
-        nombre: 'Técnicas...',
-        credito: '3.5',
-        horasLec: '5',
-        especialidad: 'Ing. Informática',
-        horario: '0781'
-    }
-]
+const fillCursos = async () => {
+  const dataCur = await CursoService.getCursos(); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const cursos = [];
+  dataCur.map(cur => (
+    cursos.push({
+      id: cur.id.toString(),
+      nombre: cur.nombre,
+      codigo: cur.codigo,
+      creditos: cur.creditos,
+    })
+    ));
+  //console.log(cursos);
+  return cursos;
+}
 
 export default function BuscarCurso(props)  {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [records, setRecords] = useState(cursos)
+    const [records, setRecords] = useState([])
     const [selected, setSelected] = useState(false)
 
     const {
@@ -73,6 +63,17 @@ export default function BuscarCurso(props)  {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
+
+   React.useEffect(() => {
+      fillCursos()
+      .then (newCurs =>{
+        setRecords(prevRecords => prevRecords.concat(newCurs));
+        
+        //console.log(newSeccion);
+        
+        //console.log(records);
+      });
+    }, [])
 
     const handleSearch = e => {
         let target = e.target;
@@ -113,9 +114,9 @@ export default function BuscarCurso(props)  {
                         {
                             recordsAfterPagingAndSorting().map(item => (
                             <TableRow key={item.id} onDoubleClick = {() => {props.getRow(item)}}>
-                                <TableCell>{item.clave}</TableCell>
+                                <TableCell>{item.codigo}</TableCell>
                                 <TableCell>{item.nombre}</TableCell>
-                                <TableCell>{item.credito}</TableCell>
+                                <TableCell>{item.creditos}</TableCell>
                             </TableRow>
                             ))
                         }
