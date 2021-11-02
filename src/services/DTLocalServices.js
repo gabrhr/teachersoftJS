@@ -2,11 +2,11 @@ import axios from "axios";
 import { insertEmployee } from "./employeeService";
 import tokenService from './tokens.js';
 
-const POST_PERSONA_URL = 'http://localhost:8080/persona/';
-const POST_USER_URL = 'http://localhost:8080/usuario/';
-const GET_USER_URL = 'http://localhost:8080/usuario/';
-const GET_DEPARTAMENTO_URL = 'http://localhost:8080/departamento/';
-const GET_SECCION_URL = 'http://localhost:8080/seccion/porDepartamento=';
+const POST_PERSONA_URL = 'http://3.227.216.157:8080/persona/';
+const POST_USER_URL = 'http://3.227.216.157:8080/usuario/';
+const GET_USER_URL = 'http://3.227.216.157:8080/usuario/';
+const GET_DEPARTAMENTO_URL = 'http://3.227.216.157:8080/departamento/';
+const GET_SECCION_URL = 'http://3.227.216.157:8080/seccion/porDepartamento=';
 
 /* Validaciones
  * 
@@ -165,7 +165,8 @@ class DTLocalServices {
             { id: 4, nombre: 'Asistente de Departamento' },
             { id: 5, nombre: 'Coordinador de Departamento' },
             { id: 6, nombre: 'Secretario de Departamento' },
-            { id: 7, nombre: 'Externo' }
+            { id: 7, nombre: 'Externo' },
+            { id: 8, nombre: 'Nuevo Usuario' }
         ])
     }
 

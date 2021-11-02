@@ -90,15 +90,17 @@ const getUsuario = async () => {
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
       rol: usr.persona.tipo_persona,
       departamento: {
-        id: usr.persona.departamento.id,
-        nombre: usr.persona.departamento.nombre
+        id: usr.persona.departamento ? usr.persona.departamento.id : '',
+        nombre: usr.persona.departamento ? usr.persona.departamento.nombre : ''
       },
       seccion: {
-        id: usr.persona.seccion.id,
-        nombre: usr.persona.seccion.nombre
-      }
+        id: usr.persona.seccion ? usr.persona.seccion.id : '',
+        nombre: usr.persona.seccion ? usr.persona.seccion.nombre : ''
+      },
+      foto_URL: usr.persona.foto_URL
     })
     ));
+  console.log(usuarios)
   window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
   return usuarios;
 }
@@ -175,7 +177,7 @@ export default function GestionUsuarios() {
           id: usuario.departamento.id,
           nombre: usuario.departamento.nombre
         },
-        foto_URL: null
+        foto_URL: usuario.foto
       }
 
     }
@@ -195,20 +197,11 @@ export default function GestionUsuarios() {
         id: usuario.departamento.id,
         nombre: usuario.departamento.nombre
       },
-      foto_URL: null
+      foto_URL: usuario.foto
     }
-<<<<<<< Updated upstream
 
     recordForEdit 
         ? personaService.updatePersona(dataPer, usuario.idPersona) 
-=======
-
-    console.log(usuario.id)
-    console.log(dataUsr)
-
-    recordForEdit
-        ? personaService.updatePersona(dataPer, usuario.idPersona)
->>>>>>> Stashed changes
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
             if(!recordForEdit)

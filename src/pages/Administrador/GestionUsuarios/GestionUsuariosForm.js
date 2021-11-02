@@ -163,9 +163,9 @@ export default function GestionUsuariosForm(props) {
         seccion: {
           id: recordForEdit ? parseInt(values.seccion.id) : parseInt(values.seccionId) ,
           nombre: recordForEdit ? values.seccion.nombre : null,
-        } 
+        }, 
         
-        //foto: fotoPerfil,
+        foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //~~~foto: --queda pendiente 
       }
       console.log(newUsr);
@@ -320,7 +320,7 @@ export default function GestionUsuariosForm(props) {
             <Typography variant="h4" marginBottom={2}>
               FOTO REFERENCIAL
             </Typography>
-            <Avatar src={fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
+            <Avatar src={values.foto_URL ? values.foto_URL : fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
             {/* Botoncito para subir imagen */}
             <label htmlFor="contained-button-file">
               <Input accept="image/*" id="contained-button-file"
@@ -330,12 +330,12 @@ export default function GestionUsuariosForm(props) {
                   const files = event.target.files
 
                   //console.log(files[0]);
-
                   setFileFoto(files[0])
                   setCambio(true)
 
                   if (files && files[0]) {
                     var reader = new FileReader();
+                    
                     reader.onload = function (e) {
                       setFotoPerfil(e.target.result)
                     };
