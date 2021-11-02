@@ -152,7 +152,7 @@ export default function GestionUsuarios() {
       setRecords(newUsr);
 
     });
-  }, [recordForEdit,records])
+  }, [recordForEdit])
 
   const addOrEdit = (usuario, resetForm) => {
     

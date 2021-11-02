@@ -145,7 +145,7 @@ export default function GestionUsuariosForm(props) {
     /* e is a "default parameter" */
     e.preventDefault()
     if (validate()){
-
+      
     //Este pasa como la nueva seccion o la seccion editada
       const newUsr = {
         id: values.id,
@@ -338,6 +338,7 @@ export default function GestionUsuariosForm(props) {
                     
                     reader.onload = function (e) {
                       setFotoPerfil(e.target.result)
+                      console.log(e.target.result)
                     };
                     reader.readAsDataURL(files[0]);
                   }
