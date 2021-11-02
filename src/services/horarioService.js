@@ -69,7 +69,7 @@ const convertStringtoSesion = (sesion) => {
           case "martes":
             dataSes[0] = 1;
             break
-          case "miercoles" || "miércoles":
+          case "miércoles" || "miercoles":
             dataSes[0] = 2;
             break
           case "jueves":
@@ -109,4 +109,34 @@ const convertStringtoSesion = (sesion) => {
   return dataSes;
 }
 
-export default {convertStringtoSesion, getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}
+const convertSesiontoString = (dia_semana, hora_ini, media_horaini, hora_fin, media_horafin) => {
+  let str = "";
+
+  switch(dia_semana){
+    case 0:
+      str = str + "Lunes "
+      break
+    case 1:
+      str = str + "Martes "
+      break
+    case 2:
+      str = str + "Miércoles "
+      break
+    case 3:
+      str = str + "Jueves "
+      break
+    case 4:
+      str = str + "Viernes "
+      break
+    case 5:
+      str = str + "Sábado "
+      break
+    default:
+      break
+  }
+  str = str + hora_ini.toString() + ":" + media_horaini ? "30 - " : "00 - " + 
+            hora_fin.toString() + ":" + media_horafin ? "30" : "00";
+  return str;
+}
+
+export default {convertSesiontoString, convertStringtoSesion, getHorarios, getHorario, registerHorario, updateHorario, deleteHorario}
