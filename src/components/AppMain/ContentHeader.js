@@ -5,34 +5,84 @@ import { Controls } from '../controls/Controls';
 import * as employeeService from '../../services/employeeService';
 import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
+import cicloService from "../../services/cicloService";
+import {useState, useEffect} from 'react'
+
+const fillCiclos = async () => {
+  const dataCic = await cicloService.getCiclos();
+  let cicloActual = {};
+  //console.log("Este es el dataCiclo: ", dataCic);
+
+  const ciclos = [];
+  if(!dataCic) {
+    console.error("No se pudo regresar la data del backend para Ciclos");
+    return [];
+  }
+
+  dataCic.map(cic => {
+    ciclos.push({
+      id: cic.id.toString(),
+      title: cic.anho + '-' +cic.periodo
+    })
+    if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
+      cicloActual = {
+        id: cic.id.toString(),
+        title: cic.anho + '-' +cic.periodo
+      }
+    }
+    //console.log(cicloActual)
+  });
+  return [ciclos,cicloActual];
+}
 
 const initialFieldValues = {
-    id: 0,
-    text: '',
-    gender: 'male',
-    departmentID: '',
-    date: new Date(),
-    isPermanent: false
+    id: '',
+    title: ''
 }
 
 function CboCiclo(props) {
+    const [ciclos, setCiclos] = useState([]);
+    const [cicloActual, setCicloActual] = useState();
     const cbo = props.cbo;
     const theme= useTheme();
+
     const {
-        values,
-        // setValues,
-        handleInputChange
+      values,
+      setValues,
+      handleInputChange
     } = useForm(initialFieldValues);
+    //console.log(values);
+
+    React.useEffect(() => {
+      fillCiclos()
+      .then (newCiclo => {
+        setCiclos(newCiclo[0]);
+        setCicloActual(newCiclo[1]);
+        setValues(newCiclo[1]); //Si aca no lo hacemos directo - se muere porque no prometemos antes el CicloActual
+        //console.log("Ciclo: ",cicloActual);
+        //console.log("Values: ", values);
+      });
+    }, [])
+    //console.log("Values: ", values);
+    /*UNA VEZ ACTUALIZAMOS LOS DATOS DE VALUES - LE PASAMOS EL CICLOACTUAL PARA QUE SEA EL DEFAULT */
+
+    React.useEffect(()=>{
+      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
+    },[values])
+    
+    //console.log(values);
     if (cbo) {
+
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
             <Box  sx={{width: "10vw", align: "Right"}}> 
                 <Controls.Select
-                    name="cicloId"
-                    label="Ciclo"
-                    value={values.departmentId}
+                    name="id"
+                    label={"Ciclos"}
+                    value={values.id}
                     onChange={handleInputChange}
-                    options={employeeService.getDepartmentCollection()}
+                    options={ciclos}
                     type="contained"
+
                 />
             </Box>
         </Grid>

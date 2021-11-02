@@ -5,16 +5,13 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } from '@mui/material';
 /* ICONS */
-import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
-import Notification from '../../../components/util/Notification'
-import ConfirmDialog from '../../../components/util/ConfirmDialog';
 //import AuthService from '../../../services/authService.js';
 //import * as employeeService from '../../../services/employeeService'
 
@@ -22,14 +19,14 @@ import ConfirmDialog from '../../../components/util/ConfirmDialog';
 
 const tableHeaders = [
     {
-      id: 'nombre',
-      label: 'Nombre de la seccion',
-      numeric: false,
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
       sortable: true
     },
     {
-      id: 'fechaFundacion',
-      label: 'Fecha de Fundación',
+      id: 'nombre',
+      label: 'Nombre de la seccion',
       numeric: false,
       sortable: true
     },
@@ -53,9 +50,8 @@ const tableHeaders = [
     }
 ]
 
-const getSecciones = async () => {
-
-  const dataSecc = await SeccionService.getSecciones(); 
+function getSecciones(){
+  const dataSecc = SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -76,7 +72,6 @@ const getSecciones = async () => {
   window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
   return secciones;
 }
-
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
@@ -84,9 +79,8 @@ export default function GestionSeccion() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
-    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
 
     //console.log(records);
@@ -97,31 +91,6 @@ export default function GestionSeccion() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-
-    
-    const openInPopup = item => {
-      setRecordForEdit(item)
-      setOpenPopup(true)
-    }
-
-    const onDelete = id => {
-      setConfirmDialog({
-          ...confirmDialog,
-          isOpen: false
-      })
-
-      //AGREGAR ELIMINACION DEL BACKEND Para Seccion
-      /*
-
-      */
-   
-      setNotify({
-          isOpen: true,
-          message: 'Sección eliminada de manera satisfactoria',
-          type: 'error'
-      })
-      
-    }
 
     const handleSearch = e => {
         let target = e.target;
@@ -189,7 +158,7 @@ export default function GestionSeccion() {
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .75 }}
+                    sx={{ width: .1 }}
                     onChange={handleSearch}
                     type="search"
                 />
@@ -221,23 +190,11 @@ export default function GestionSeccion() {
                             <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
-                              <Controls.ActionButton 
+                              <Controls.ActionButton
                                 color="warning"
                                 onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
                               >
                                 <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              <Controls.ActionButton
-                                color="error"
-                                onClick={() => {
-                                  setConfirmDialog({
-                                    isOpen: true,
-                                    title: '¿Eliminar Sección permanentemente?',
-                                    subTitle: 'No es posible deshacer esta accion',
-                                    onConfirm: () => { onDelete(item.id) }
-                                  })
-                                }}>
-                                <CloseIcon fontSize="small" />
                               </Controls.ActionButton>
                             </StyledTableCell>
                         </StyledTableRow>
@@ -253,21 +210,13 @@ export default function GestionSeccion() {
                 setOpenPopup={setOpenPopup}
                 title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
-              <AgregarEditarSeccion 
+              <AgregarEditarSeccion
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 />
                 {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
-            </Popup>  
-            <Notification 
-              notify={notify}
-              setNotify={setNotify}
-            />
-            <ConfirmDialog
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-            />
+            </Popup>
         </>
     )
 }

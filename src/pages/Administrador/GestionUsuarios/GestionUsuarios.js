@@ -217,7 +217,7 @@ export default function GestionUsuarios() {
                 // API devuelve [].  map se cae.  Llamar 2 veces.
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
-                  <TableRow key={item.id}>
+                  <StyledTableRow key={item.id}>
                     <StyledTableCell>{item.fullName}</StyledTableCell>
                     <StyledTableCell>{item.DNI}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
@@ -233,7 +233,7 @@ export default function GestionUsuarios() {
                       </Controls.ActionButton>
 
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 ))
               }
             </TableBody>
