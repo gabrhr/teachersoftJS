@@ -13,10 +13,11 @@ const fillCiclos = async () => {
 
   const ciclos = [];
   dataCic.map(cic => {
-    ciclos.push({
+    return(ciclos.push({
       id: cic.id.toString(),
       title: cic.anho + '-' +cic.periodo
-    })
+    }));
+    
   });
   return ciclos;
 }
