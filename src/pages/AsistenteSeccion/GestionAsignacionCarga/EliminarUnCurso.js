@@ -6,6 +6,8 @@ export default function EliminarUnCurso({setOpenOnePopup, eliminarCurso}){
         <>
         < Typography variant="h4" mb={2} >
             ¿Está seguro de eliminar el curso?
+            <div/>
+            <address>Recuerde que se eliminará tanto la Clase como el Horario</address> 
         </Typography>
         <Controls.Button
             text="Sí"

@@ -80,8 +80,7 @@ const fillHorarios = async () => {
     console.error("No se puede traer la data del servidor de los horarios")
     return [];
   }
-
-  dataHor.map(hor => (
+  for (let hor of dataHor){
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
@@ -98,10 +97,35 @@ const fillHorarios = async () => {
         "unidad": hor.curso.unidad,
         "carga": hor.curso.carga
       },
-      "sesiones_excel": hor.sesiones_excel
+      "hora_sesion": HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
+        hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
+        hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin)
     })
-    ));
-  console.log(horarios);
+    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
+    if(hor.sesiones[1]){
+      horarios.push({
+        "id": hor.id,
+        "codigo": hor.codigo,
+        "tipo": hor.tipo,
+        "horas_semanales": hor.horas_semanales,
+        ciclo:{
+          "id": hor.ciclo.id,
+        },
+        curso:{
+          "id": hor.curso.id,
+          "codigo": hor.curso.codigo,
+          "nombre": hor.curso.nombre,
+          "creditos": hor.curso.creditos,
+          "unidad": hor.curso.unidad,
+          "carga": hor.curso.carga
+        },
+        "hora_sesion": HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana, 
+          hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio, 
+          hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin)
+      })
+    }
+  }
+  //console.log(horarios);
 
   return horarios;
 
@@ -119,7 +143,7 @@ export default function HorarioCursos({records, setRecords}) {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openOnePopup, setOpenOnePopup] = useState(false)
     const [openAllPopup, setOpenAllPopup] = useState(false)
-    const [indexDelete, setIndexDelete] = useState(-1)
+    const [indexDelete, setIndexDelete] = useState(0)
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -150,7 +174,7 @@ export default function HorarioCursos({records, setRecords}) {
     }, [])
   
     //console.log(records);
-
+    //console.log(indexDelete);
 
     const handleSearch = e => {
         let target = e.target;
@@ -171,18 +195,29 @@ export default function HorarioCursos({records, setRecords}) {
         history.push("/as/asignacionCarga/cursos");
     };
 
-    const guardarIndex = ({index}) => {
-      setIndexDelete(index)
+    const guardarIndex = item => {
+      setIndexDelete(item.id)
       setOpenOnePopup(true)
     }
 
     const eliminarCursos = () =>{
+      records.map(item => {
+        HorarioService.deleteHorario(item.id);
+      })
       setRecords([])
       setOpenAllPopup(false)
     }
 
     const eliminarCurso = () =>{
-      
+      //Funcion para elimianr el Curso seleccionado
+      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      records.splice(pos,1);
+      pos = 0;
+      //De nuevo, solo para comprobar que existen ambos campos en pantalla - solo en pantalla.
+      pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      records.splice(pos,1);
+      //setRecords(); 
+      //HorarioService.deleteHorario(indexDelete);
       setOpenOnePopup(false)
     }
 
@@ -248,12 +283,12 @@ export default function HorarioCursos({records, setRecords}) {
                             <TableCell>{item.codigo}</TableCell>
                             <TableCell>{item.tipo ? "Clase":"Laboratorio"}</TableCell>
                             <TableCell>{item.horas_semanales}</TableCell>
-                            <TableCell>{item.sesiones_excel}</TableCell>
+                            <TableCell>{item.hora_sesion}</TableCell>
                             <TableCell>
                               {/* Accion eliminar */}
                               <Controls.ActionButton
                                 color="warning"
-                                onClick={ () => {guardarIndex(records.indexOf(item))}}
+                                onClick={ () => {guardarIndex(item)}}
                               >
                                 <DeleteOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>

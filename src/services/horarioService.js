@@ -42,7 +42,7 @@ const updateHorario = async (newObject, {id}) => {
   }
 }
 
-const deleteHorario = async ({id}) => {
+const deleteHorario = async (id) => {
   try{
     const request = await axios.delete(`${url}/horario/${id}`, id);
     return request.data; //Es un valor de true o no
@@ -111,7 +111,6 @@ const convertStringtoSesion = (sesion) => {
 
 const convertSesiontoString = (dia_semana, hora_ini, media_horaini, hora_fin, media_horafin) => {
   let str = "";
-
   switch(dia_semana){
     case 0:
       str = str + "Lunes "
@@ -134,8 +133,10 @@ const convertSesiontoString = (dia_semana, hora_ini, media_horaini, hora_fin, me
     default:
       break
   }
-  str = str + hora_ini.toString() + ":" + media_horaini ? "30 - " : "00 - " + 
-            hora_fin.toString() + ":" + media_horafin ? "30" : "00";
+  //console.log(str);
+  str = str.concat(hora_ini.toString() , ":" , media_horaini ? "30 - " : "00 - " , 
+  hora_fin.toString() , ":" , media_horafin ? "30" : "00");
+  //console.log(str);
   return str;
 }
 
