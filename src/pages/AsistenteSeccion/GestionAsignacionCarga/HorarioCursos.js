@@ -13,6 +13,9 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EliminarUnCurso from './EliminarUnCurso'
+import EliminarTodosLosCursos from './EliminarTodosLosCursos'
 
 const initialFieldValues = {
     searchText: ''
@@ -61,6 +64,12 @@ const tableHeaders = [
         numeric: false,
         sortable: true
      },
+     {
+      id: 'actions',
+      label: 'Acción',
+      numeric: false,
+      sortable: false
+    }
 ]
 
 const fillHorarios = async () => {
@@ -108,6 +117,9 @@ export default function HorarioCursos({records, setRecords}) {
     //const [data, setData] = useState([]);
     //const [open, setOpen] = React.useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [openOnePopup, setOpenOnePopup] = useState(false)
+    const [openAllPopup, setOpenAllPopup] = useState(false)
+    const [indexDelete, setIndexDelete] = useState(-1)
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -158,6 +170,22 @@ export default function HorarioCursos({records, setRecords}) {
     const handleClick = (e) => {
         history.push("/as/asignacionCarga/cursos");
     };
+
+    const guardarIndex = ({index}) => {
+      setIndexDelete(index)
+      setOpenOnePopup(true)
+    }
+
+    const eliminarCursos = () =>{
+      setRecords([])
+      setOpenAllPopup(false)
+    }
+
+    const eliminarCurso = () =>{
+      
+      setOpenOnePopup(false)
+    }
+
     return (
         <Form>            
             <Typography variant="h4"
@@ -196,6 +224,10 @@ export default function HorarioCursos({records, setRecords}) {
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
                     />
+                    <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
+                      <DeleteOutlinedIcon fontSize="large"/>
+                      Eliminar todos los cursos
+                    </Controls.ActionButton>
                 </Grid>
             </Grid>
             <BoxTbl>
@@ -217,6 +249,15 @@ export default function HorarioCursos({records, setRecords}) {
                             <TableCell>{item.tipo ? "Clase":"Laboratorio"}</TableCell>
                             <TableCell>{item.horas_semanales}</TableCell>
                             <TableCell>{item.sesiones_excel}</TableCell>
+                            <TableCell>
+                              {/* Accion eliminar */}
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {guardarIndex(records.indexOf(item))}}
+                              >
+                                <DeleteOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                            </TableCell>
                         </TableRow>
                         ))
                         :   (
@@ -229,6 +270,20 @@ export default function HorarioCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            <Popup
+                openPopup={openOnePopup}
+                setOpenPopup={setOpenOnePopup}
+                title="Eliminar curso"
+            >
+              <EliminarUnCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
+            </Popup>
+            <Popup
+                openPopup={openAllPopup}
+                setOpenPopup={setOpenAllPopup}
+                title="Eliminar cursos"
+            >
+              <EliminarTodosLosCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
+            </Popup>
         </Form>
     )
 }

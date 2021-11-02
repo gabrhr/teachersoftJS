@@ -11,6 +11,7 @@ import { DT } from '../../../components/DreamTeam/DT';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import useTable from "../../../components/useTable"
+import cursoService from '../../../services/cursoService';
 import GestionCargaCursos from './GestiónCargaCursos';
 import CursoService from '../../../services/cursoService';
 
@@ -55,6 +56,7 @@ export default function BuscarCurso(props)  {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [records, setRecords] = useState([])
     const [selected, setSelected] = useState(false)
+    
 
     const {
         TblContainer,

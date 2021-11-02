@@ -9,6 +9,8 @@ import * as XLSX from 'xlsx'
 import { Typography } from '@mui/material'
 import { useForm, Form } from '../../../components/useForm';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
 import horarioService from '../../../services/horarioService';
 import cursoService from '../../../services/cursoService';
@@ -77,8 +79,13 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           curso:{
             "id": request[0].id,
           },
+          /*
+          unidad:{
+            "id": request_uni[0].id,
+          }
+          */
           //"sesiones_excel": hor.sesiones_excel,
-          sesion:[{
+          sesiones:[{
             "secuencia": hor.tipo,
             "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
             "hora_inicio": dataSes[1],
@@ -96,7 +103,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
     const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
 
-    postHorario.sesion.push({
+    postHorario.sesiones.push({
       "secuencia": hor.tipo,
       "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
       "hora_inicio": dataSes[1],
@@ -109,9 +116,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   return [otroHorario, postHorario];
 }
 
-
-export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}) {
-
+export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
     let auxHorario
     //const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
@@ -123,10 +128,16 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
-    const [open, setOpen] = React.useState(false);
     const [usuarios, setUsuarios] = useState(null)
     const [usuariosIncorrectos, setUsuariosIncorrectos] = useState(null)
-
+    
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+      setOpen(false);
+    }
+    const handleToggle = () => {
+      setOpen(!open);
+    }
     
     const {
         TblContainer,
@@ -279,7 +290,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
         postHorario = resultArray[1];
         //Loop finished
         
-        if(otroHorario === 1)  horariosTotales.push(postHorario);
+        if(otroHorario === 1)  {
+          horarioService.registerHorario(postHorario);
+          horariosTotales.push(postHorario);
+        }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       console.log(horariosTotales);
@@ -295,6 +309,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
         // if (validate())
         //window.localStorage.setItem("listHorario", recordsX);
         setRecords(recordsX)
+        handleClose()
         setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }
@@ -369,6 +384,12 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords}
                     
                 </div>
             </Grid>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={open}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Form>
     )
 }

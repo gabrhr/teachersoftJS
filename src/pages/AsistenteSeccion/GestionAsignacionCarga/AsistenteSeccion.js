@@ -8,6 +8,7 @@ import { Controls } from '../../../components/controls/Controls'
 import HorarioCursos from './HorarioCursos'
 import Popup from '../../../components/util/Popup'
 import ModalAsignacionCarga from './ModalAsignacionCarga';
+import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 
@@ -78,6 +79,8 @@ export default function AsistenteSeccion() {
     const [records, setRecords] = useState([])
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
+    const [cargaH, setCargaH] = useState([])
+
     return (
         <>
             <ContentHeader 
@@ -97,11 +100,8 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                    <Controls.Button
-                        text="Exportar"
-                        size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}
-                    />
+                     <ExportCSV csvData={cargaH} fileName={'fileName'} text="Exportar" size="large"
+                        endIcon={<CloudDownloadOutlinedIcon/>}/>
                 </Grid>
             </Grid>
             {/*LO DE GABRIELA*/}
@@ -117,7 +117,8 @@ export default function AsistenteSeccion() {
 
                </ModalAsignacionCarga>*/}
               
-               < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords}/>
+               < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                cargaH = {cargaH}/>
             </Popup>  
         </>
     )
