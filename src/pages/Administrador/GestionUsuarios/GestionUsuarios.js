@@ -71,8 +71,8 @@ const tableHeaders = [
 ]
 
 const getUsuario = async () => {
-  
-  const usuario = await userService.getUsuarios(); 
+
+  const usuario = await userService.getUsuarios();
 
   var str
   let roles = DTLocalServices.getAllRoles();
@@ -104,7 +104,7 @@ const getUsuario = async () => {
 }
 
 export default function GestionUsuarios() {
-  /* COSAS PARA LA TABLITA 
+  /* COSAS PARA LA TABLITA
    * ===================== */
 
   const [records, setRecords] = useState([])
@@ -127,7 +127,7 @@ export default function GestionUsuarios() {
     BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
-  /* updates filter function inside `filterFn` object.  Which is used in 
+  /* updates filter function inside `filterFn` object.  Which is used in
    * `useTable`'s `recordsAfterPagingAndSorting()`.  Because  */
   const handleSearch = e => {
     let target = e.target;
@@ -148,9 +148,9 @@ export default function GestionUsuarios() {
     getUsuario()
     .then (newUsr =>{
       setRecords(newUsr);
-      
+
     });
-  }, [recordForEdit])
+  }, [recordForEdit,records])
 
   const addOrEdit = (usuario, resetForm) => {
     
@@ -179,7 +179,7 @@ export default function GestionUsuarios() {
       }
 
     }
-    
+
     const dataPer = {
       id: usuario.idPersona,
       nombres: usuario.nombre,
@@ -197,12 +197,21 @@ export default function GestionUsuarios() {
       },
       foto_URL: null
     }
+<<<<<<< Updated upstream
 
     recordForEdit 
         ? personaService.updatePersona(dataPer, usuario.idPersona) 
+=======
+
+    console.log(usuario.id)
+    console.log(dataUsr)
+
+    recordForEdit
+        ? personaService.updatePersona(dataPer, usuario.idPersona)
+>>>>>>> Stashed changes
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
-            if(!recordForEdit)  
+            if(!recordForEdit)
               setRecordForEdit(idUsuario);
             else
               setRecordForEdit(null);
@@ -225,7 +234,7 @@ export default function GestionUsuarios() {
     //setRecords(DTLocalServices.getAllPersonas())*/
     setNotify({
       isOpen: true,
-      message: 'Usuario añadido',
+      message: 'Cambios añadidos',
       type: 'success'
     })
     
@@ -255,17 +264,17 @@ export default function GestionUsuarios() {
     
     setNotify({
       isOpen: true,
-      message: 'Deleted Successfully',
+      message: 'Borrado Exitoso',
       type: 'error'
     })
   }
 
-  /* STYLES 
+  /* STYLES
    * ====== */
   const SubtitulosTable = { display: "flex" }
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
 
-  /* FORM 
+  /* FORM
    * ==== */
   /* para seleccion de seccion */
   const {
@@ -274,7 +283,7 @@ export default function GestionUsuarios() {
     handleInputChange
   } = useForm(initialFieldValues);
 
-  
+
 
   /*useEffect(() => {
     getUsers()
@@ -308,7 +317,7 @@ export default function GestionUsuarios() {
       </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
-        <Typography variant="h4" style={SubtitulosTable} > 
+        <Typography variant="h4" style={SubtitulosTable} >
           Usuarios del Sistema
         </Typography>
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
@@ -341,7 +350,7 @@ export default function GestionUsuarios() {
                 // API devuelve [].  map se cae.  Llamar 2 veces.
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
-                  <TableRow key={item.id}>
+                  <StyledTableRow key={item.id}>
                     <StyledTableCell>{item.nombre} {item.apellidoPaterno} {item.apellidoMaterno}</StyledTableCell>
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
@@ -349,28 +358,15 @@ export default function GestionUsuarios() {
                     <StyledTableCell>{item.seccion.nombre}</StyledTableCell>
                     <StyledTableCell>{item.departamento.nombre}</StyledTableCell>
                     <StyledTableCell>
-                      <Controls.ActionButton 
+                      <Controls.ActionButton
                         color="warning"
                         onClick={ () => {openInPopup(item)}}
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-                      <Controls.ActionButton 
-                        color="error"
-                        onClick={() => {
-                          // onDelete(item.id)
-                          setConfirmDialog({
-                            isOpen: true,
-                            title: '¿Eliminar usuario permanentemente?',
-                            subTitle: 'No es posible deshacer esta accion',
-                            onConfirm: () => {onDelete(item.idPersona,item.id)}
-                          })
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </Controls.ActionButton>
+
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 ))
               }
             </TableBody>
@@ -384,17 +380,17 @@ export default function GestionUsuarios() {
         title={recordForEdit ? "Editar Usuario": "Registrar Usuario"}
       >
         {/* <EmployeeForm /> */}
-        <GestionUsuariosForm 
+        <GestionUsuariosForm
           recordForEdit={recordForEdit}
           addOrEdit={addOrEdit}
         />
       </Popup>
       {/* </Grid> */}
-      <Notification 
+      <Notification
         notify={notify}
         setNotify={setNotify}
       />
-      <ConfirmDialog 
+      <ConfirmDialog
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />

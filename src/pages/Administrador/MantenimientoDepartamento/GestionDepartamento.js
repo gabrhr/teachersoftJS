@@ -172,7 +172,7 @@ export default function GestionDepartamento() {
 
       setNotify({
         isOpen: true,
-        message: 'Registro Exitoso',
+        message: 'Registro de Cambios Exitoso',
         type: 'success'
       })
     }

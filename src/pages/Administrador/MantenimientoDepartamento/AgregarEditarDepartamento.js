@@ -33,11 +33,11 @@ export default function AgregarEditarDepartamento(props) {
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('nombre' in fieldValues)
-            temp.nombre = fieldValues.nombre ? "" : "This field is required."
+            temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
                     .test(fieldValues.correo) ? ""
-                    : "This correo is not vaild."
+                    : "Este correo no es válido"
         setErrors({
             ...temp
         })

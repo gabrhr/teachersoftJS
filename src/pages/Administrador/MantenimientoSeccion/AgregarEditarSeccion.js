@@ -20,7 +20,7 @@ const initialFieldValues = {
 
 }
 
-   
+
 export default function AgregarEditarSeccion(props) {
     const {addOrEdit, recordForEdit} = props
     const theme = useTheme();
@@ -28,7 +28,7 @@ export default function AgregarEditarSeccion(props) {
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [departamento, setDepartamentos] = React.useState([]);
-    
+
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         align:"left",
@@ -37,11 +37,11 @@ export default function AgregarEditarSeccion(props) {
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('nombre' in fieldValues)
-            temp.nombre = fieldValues.nombre ? "" : "This field is required."
+            temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
-                    .test(fieldValues.correo) ? "" 
-                    : "This correo is not vaild."
+                    .test(fieldValues.correo) ? ""
+                    : "Este correo no es válido."
         setErrors({
             ...temp
         })
@@ -50,7 +50,7 @@ export default function AgregarEditarSeccion(props) {
             return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
-    
+
     const {
         values,
         setValues,
@@ -74,10 +74,10 @@ export default function AgregarEditarSeccion(props) {
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
-            }, 
+            },
             //foto: fotoPerfil,
             fecha_fundacion: null
-            //~~~foto: --queda pendiente 
+            //~~~foto: --queda pendiente
           }
           console.log(newSecc);
           //const rpta = await SeccionService.registerSeccion(newSecc);
@@ -127,19 +127,19 @@ export default function AgregarEditarSeccion(props) {
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     < Typography variant="h4" mb={2} >
-                           DATOS GENERALES  
+                           DATOS GENERALES
                     </Typography>
-                    <Controls.Input 
+                    <Controls.Input
                         name="nombre"
-                        label="Nombre" 
-                        value={values.nombre} 
+                        label="Nombre"
+                        value={values.nombre}
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
-                    <Controls.Input 
+                    <Controls.Input
                         name="correo"
-                        label="Correo Electrónico" 
-                        value={values.correo} 
+                        label="Correo Electrónico"
+                        value={values.correo}
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
@@ -150,7 +150,7 @@ export default function AgregarEditarSeccion(props) {
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
-                    />                
+                    />
                 </Grid>
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
                 <Grid item sx={5} style={ColumnGridItemStyle} align="center">
@@ -160,8 +160,8 @@ export default function AgregarEditarSeccion(props) {
                     {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> */}
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
                     <label htmlFor="contained-button-file">
-                        <Input accept="image/*" id="contained-button-file" 
-                            type="file" sx={{display: 'none'}} 
+                        <Input accept="image/*" id="contained-button-file"
+                            type="file" sx={{display: 'none'}}
                             onChange={(event) => {
                                 const files = event.target.files
                                 //console.log(files[0]);
@@ -177,7 +177,7 @@ export default function AgregarEditarSeccion(props) {
                                     reader.readAsDataURL(files[0]);
 
                                 }
-                            }}    
+                            }}
                         />
                         <Controls.Button
                             text="Subir foto"
@@ -201,7 +201,7 @@ export default function AgregarEditarSeccion(props) {
                         text="Guardar Cambios"
                         type="submit"
                     />
-                    
+
                 </div>
             </Grid>
         </Form>

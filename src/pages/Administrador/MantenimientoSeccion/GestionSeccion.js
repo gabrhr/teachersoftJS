@@ -141,11 +141,34 @@ export default function GestionSeccion() {
 
       setNotify({
         isOpen: true,
-        message: 'Submitted Successfully',
+        message: 'Registro de Cambios Exitoso',
         type: 'success'
       })
     }
 
+/*    const onDelete = (idSeccion,id) => {
+      // if (!window.confirm('Are you sure to delete this record?'))
+      //   return
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+
+      SeccionService.deleteSeccion(idSeccion)
+      //userService.borrarUsuario(id)
+      //DTLocalServices.getUsers().then((response) => {
+      SeccionService
+        setRecords(response.data)
+        console.log(response.data);
+      });
+      //setRecords(DTLocalServices.getAllPersonas())
+      setNotify({
+        isOpen: true,
+        message: 'Deleted Successfully',
+        type: 'error'
+      })
+    }
+*/
     return (
         <>
             <ContentHeader
@@ -202,6 +225,7 @@ export default function GestionSeccion() {
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
+
                             </StyledTableCell>
                         </StyledTableRow>
                         ))
