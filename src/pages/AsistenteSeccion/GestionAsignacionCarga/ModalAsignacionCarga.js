@@ -13,6 +13,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
 import horarioService from '../../../services/horarioService';
+import cursoService from '../../../services/cursoService';
 
 const tableHeaders = [
     /*{
@@ -34,12 +35,6 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'cargaHoraria',
-      label: 'Carga Horaria',
-      numeric: false,
-      sortable: true
-    },
-    {
         id: 'horario',
         label: 'Horario',
         numeric: false,
@@ -51,6 +46,12 @@ const tableHeaders = [
         numeric: false,
         sortable: true
      },
+    {
+      id: 'cargaHoraria',
+      label: 'Carga Horaria',
+      numeric: false,
+      sortable: true
+    },
      {
         id: 'horaSesion',
         label: 'Hora-Sesion',
@@ -114,11 +115,12 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       listHorarios.map(hor => (
         horarios.push({
         "codigo": hor.Horario,
-        "tipo": hor.Tipo == "Clase" ? 0 : 1, //Si es clase es 0 - si es laboratorio 1
+        "tipo": hor.Tipo === "Clase" ? 0 : 1, //Si es clase es 0 - si es laboratorio 1
         //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
         "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
         ciclo:{
           //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+          "id": parseInt(window.localStorage.getItem('ciclo')),
         },
         curso:{
           "codigo": hor.Clave, //INF...
@@ -127,6 +129,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
           "unidad": hor.Unidad, //Creditos del Curso
           "carga": hor.Carga_Horaria, //Creditos del Curso
         },
+        //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos: 
+        profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
         "sesiones_excel": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
         /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
@@ -134,7 +138,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       })
       ));  
       //horario = horarios;
-      //console.log(horario);
+      //console.log(horarios);
       return horarios;
     }
 
@@ -190,9 +194,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
 
         //Hacemos el paso de los datos a un objeto
         const horarios = datosHorarios(listaCorrectos)
-        //setRecords(prevRecords => prevRecords.concat(horarios));
-        setRecordsX(prevRecords => prevRecords.concat(horarios));
 
+        setRecordsX(prevRecords => prevRecords.concat(horarios));
     };
 
     const handleUploadFile = e => {
@@ -220,28 +223,40 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         }
     };
 
-    const actualizarDatos = e => { 
-        handleToggle()
-        //Cargar la tabla
-       /*  for (let i = 0; i < recordsX.length; i++) { */
-       /*      horariosService.insertHorario(recordsX[i] */
-       /*  } */
-        //setOpenPopup(false) 
-        console.log(recordsX)
-        let hors = recordsX.map(carga => ({
-            Clave: carga.curso.codigo,
-            Nombre: carga.curso.nombre,
-            Carga_Horaria: carga.horas_semanales,
-            Horario: carga.codigo,
-            Tipo: carga.tipo,
-            Hora_Sesion: carga.sesiones
-        }))
+    const actualizarDatos = async e => { 
+      //console.log("Records X es: ", recordsX);
 
-        console.log("Records X es: ", hors);
-        setCargaH(hors)
-
-        //Servicio para cargar los horarios
-      
+      //Servicio para cargar los horarios
+      recordsX.map(hor => {
+        const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
+        cursoService.getCursosxCodigoNombre(hor.curso.codigo)
+          .then(request => {
+            const postHorario = {
+              "codigo": hor.codigo,
+              "tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
+              //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
+              "horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
+              ciclo:{
+                //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+                "id": hor.ciclo.id,
+              },
+              curso:{
+                "id": request[0].id,
+              },
+              "sesiones_excel": hor.sesiones_excel,
+              sesion:{
+                "secuencia": hor.tipo,
+                "dia_semana": dataSes[0],
+                "hora_inicio": dataSes[1],
+                "media_hora_inicio": dataSes[2],
+                "hora_fin": dataSes[3],
+                "media_hora_fin": dataSes[4],
+              }
+            }
+            console.log(postHorario);
+            //horarioService.registerHorario(postHorario);
+          })
+      })
 
 
         //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
@@ -304,8 +319,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
-                                <TableCell>{recordsX ? item.tipo : item.tipo}</TableCell>
-                                <TableCell>{recordsX ? item.sesiones : item.sesiones}</TableCell>
+                                <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
+                                <TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>
                             </TableRow>
                             ))
                         }

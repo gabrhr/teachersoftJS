@@ -11,7 +11,14 @@ import {useState, useEffect} from 'react'
 const fillCiclos = async () => {
   const dataCic = await cicloService.getCiclos();
 
+  console.log("Este es el dataCiclo: ", dataCic);
+
   const ciclos = [];
+  if(!dataCic) {
+    console.error("No se pudo regresar la data del backend para Ciclos");
+    return [];
+  }
+
   dataCic.map(cic => {
     ciclos.push({
       id: cic.id.toString(),
@@ -47,7 +54,7 @@ function CboCiclo(props) {
     }, [])
 
     React.useEffect(()=>{
-      window.localStorage.setItem('ciclo', JSON.stringify(values.id))
+      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
     },[values])
     
     //console.log(values);

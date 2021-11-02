@@ -1,19 +1,32 @@
 import axios from 'axios';
 import url from '../config.js';
 
-const getCursosxCodigoNombre = async ({codigo_nombre}) => {
+const getCursosxCodigoNombre = async (codigo_nombre) => {
+  //console.log("EL codigo pasado es: ",codigo_nombre);
   try{
     const request = await axios.get(`${url}/curso/codigonombre=${codigo_nombre}`, codigo_nombre);  //Normalmente es un string
-    return request.then(response => response.data)
+    return request.data;  //Es un dato
   }catch(exception){
     console.error(exception);
   }
 }
 
-const getCursosxSeccionCodigoNombre = async ({id_seccion}, {codigo_nombre}) => {
+const getCursosxSeccionCodigoNombre = async (id_seccion, codigo_nombre) => {
+  console.log(id_seccion, "  ", codigo_nombre);
   try{
-    const request = await axios.get(`${url}/curso/seccion=${id_seccion}/codigonombre=${codigo_nombre}`, id_seccion, codigo_nombre);
-    return request.then(response => response.data)
+    if(id_seccion !== 0){
+      const request = await axios.get(`${url}/curso/seccion=${id_seccion}/codigonombre=${codigo_nombre}`, id_seccion, codigo_nombre);
+      return request.data;  //Es un dato
+    }
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const getCursos = async () => {
+  try{
+    const request = await axios.get(`${url}/curso/`);
+    return request.data;  //Es un dato
   }catch(exception){
     console.error(exception);
   }
@@ -22,7 +35,7 @@ const getCursosxSeccionCodigoNombre = async ({id_seccion}, {codigo_nombre}) => {
 const getCurso = async ({id}) => {
   try{
     const request = await axios.get(`${url}/curso/${id}`, id);
-    return request.then(response => response.data)  //Es un dato.
+    return request.data;  //Es un dato
   }catch(exception){
     console.error(exception);
   }
@@ -30,8 +43,8 @@ const getCurso = async ({id}) => {
 
 const registerCurso = async newObject => {
   try{
-    await axios.post(`${url}/curso/`, newObject);
-    return true;
+    const request = await axios.post(`${url}/curso/`, newObject);
+    return request.data;  //Es un dato
     //return request.then(response => response.data) //Es un valor de true o no
   }catch(exception){
     console.error(exception);
@@ -58,11 +71,5 @@ const deleteCurso = async ({id}) => {
     return false;
   }
 }
-
-const getCursos = () => {
-  
-}
-
-
 
 export default {getCursos, getCursosxCodigoNombre, getCursosxSeccionCodigoNombre, getCurso, registerCurso, updateCurso, deleteCurso}
