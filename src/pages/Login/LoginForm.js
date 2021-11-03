@@ -111,6 +111,7 @@ const Login = ({ setUser }) => {
   }
 
   const { signIn } = useGoogleAuth();
+  console.log(signIn)
   /* const responseGoogle = (response) => {
     console.log("aqui")
     console.log(response);

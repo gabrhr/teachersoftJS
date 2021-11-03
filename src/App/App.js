@@ -15,7 +15,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import { FamilyRestroomOutlined, FormatColorResetSharp } from '@mui/icons-material';
@@ -26,32 +26,31 @@ import UserPage from '../pages/General/UserPage';
 import ProtectedRoute from '../pages/General/RouterProtected';
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
 import PublicRouter from '../pages/General/RoutePublic';
+import PrivatePage from './prueba';
+
+import TestHeaderUser from '../pages/Dev/TestHeaderUser'
+import { useGoogleAuth } from '../pages/Login/googleAuth';
 
 function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
   const [user, setUser] = React.useState({nombres: '', rol: ''});
-
-  useEffect(() => {
-    console.log('App: UseEffect:')
-    console.log(user)
-    // console.log(localStorage.getItem('loggedUser'))
-  }, [user])
   
   if (true) {
     return (
       <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <PublicRouter exact path="/">
-              <Login 
-                setUser={setUser}
-              />
-              </PublicRouter>
-              <ProtectedRoute exact path="/admin" idRoles={[1]} component={GestionUsuarios} />
-          </BrowserRouter>
-          
-          
+          <Router>
+            <Switch>
+              <ProtectedRoute exact path="/admin" idRoles={[1]} component={() => <TestHeaderUser 
+                nombre= "hola"
+                rol="Administrador"
+                idRol= {1}      // admin: 0, as: 1
+                foto={fotoUsuario}              
+              />} />
+              <PublicRouter exact path="/" component={PrivatePage} />
+            </Switch>
+          </Router>
         <CssBaseline />
       </ThemeProvider>
     )

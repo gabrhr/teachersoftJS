@@ -35,7 +35,7 @@ const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
     <Route {...rest} render={props => (
       isSignedIn ?
       <Component {...props} />: 
-      <Redirect exact from="/admin" to="/"/>
+      <Redirect to="/"/>
   )} />
   </div>
   );
