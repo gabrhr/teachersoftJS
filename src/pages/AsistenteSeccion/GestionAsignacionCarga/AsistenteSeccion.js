@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Grid, Typography, Paper} from '@mui/material'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
@@ -8,6 +8,8 @@ import { Controls } from '../../../components/controls/Controls'
 import HorarioCursos from './HorarioCursos'
 import Popup from '../../../components/util/Popup'
 import ModalAsignacionCarga from './ModalAsignacionCarga';
+import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
+import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion) {
@@ -25,8 +27,55 @@ const usuarios2 = [
 
 
 export default function AsistenteSeccion() {
+
+    
+    const [horario, setHorario] = useState([]);
+  
+  /*  const [newFile, setNewFile] = useState(0); //0: No new file
+    const [count, setCount] = useState(0);
+*/
     const [openPopup, setOpenPopup] = useState(false)
-    const [records, setRecords] = useState(usuarios2)
+
+    useEffect(() => {
+        //Obtenemos las secciones
+        
+        getHorario();
+  
+      }, [horario])
+    /*
+    let xlsx = '';
+
+    function getHorario (input){
+        setOpenPopup(false)
+        xlsx = input
+        setValueXlsx(xlsx)
+        if (xlsx.length > 1){
+            setNewFile(1)
+        }
+        console.log(valueXlsx)
+        window.localStorage.setItem('xlsx', xlsx)
+    }*/
+    
+    function getHorario (input){
+        setOpenPopup(false)
+        listHorario = input
+        setHorario(listHorario);
+        //setHorario(listHorario)
+        //console.log(horario)
+        //window.localStorage.setItem('listHorario', listHorario) 
+    }
+    
+    /*FUNCION QUE LLAMA AL BACK (SERVICES)*/ 
+    let listHorario = [
+        formatHorario('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
+        formatHorario('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
+        formatHorario('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
+      ];
+    
+     
+    //let listHorario = getHorario(-1);
+      //LO DE GABRIELA
+    const [records, setRecords] = useState([])
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
     return (
@@ -48,13 +97,14 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                    <Controls.Button
+                    {/* <Controls.Button
                         text="Exportar"
                         size="large"
                         endIcon={<CloudDownloadOutlinedIcon/>}
-                    />
+                    /> */}
                 </Grid>
             </Grid>
+            {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
                 <HorarioCursos records={records} setRecords={setRecords}/>
             </Paper>
@@ -63,6 +113,10 @@ export default function AsistenteSeccion() {
                 setOpenPopup={setOpenPopup}
                 title="Carga Masiva de Cursos y Horarios"
             >
+               {/*<ModalAsignacionCarga horario = {listHorario} getHorario = {getHorario}>
+
+               </ModalAsignacionCarga>*/}
+              
                < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords}/>
             </Popup>  
         </>

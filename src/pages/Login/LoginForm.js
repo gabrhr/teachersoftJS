@@ -134,7 +134,7 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      <a  href="localhost:8080/oauth2/authorization/google"
+      <a href="http://back.teachersoft.solutions:8080/oauth2/authorization/google"
          style={{ textDecoration: "none" }}
       >
         <Controls.Button

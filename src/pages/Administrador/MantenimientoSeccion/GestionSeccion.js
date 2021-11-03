@@ -3,7 +3,7 @@ import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } from '@mui/material';
 /* ICONS */
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,7 +12,8 @@ import { Typography } from '@mui/material'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
-import * as employeeService from '../../../services/employeeService'
+//import AuthService from '../../../services/authService.js';
+//import * as employeeService from '../../../services/employeeService'
 
 
 
@@ -59,31 +60,24 @@ function getSecciones(){
       nombre: seccion.nombre,
       fechaFundacion: seccion.fecha_fundacion,
       fechaModificacion: seccion.fecha_modificacion,
-      nombreDepartamento: seccion.departamento.nombre,
+      departamento:{
+        idDepartamento: seccion.departamento.id,
+        nombreDepartamento: seccion.departamento.nombre
+      },
+      correo: seccion.correo,
+      foto:seccion.foto
     })
     ));
   //console.log(secciones);
+  window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
   return secciones;
 }
-/*
-function createData(id, nombre, fechaFundacion, fechaModificacion, nombreDepartamento) {
-    return {
-        id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento,
-    }
-  }
-
-const usuarios2 = [
-    createData('0', 'Seccion Informatica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-    createData('1', 'Seccion Industrial',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-    createData('2', 'Seccion Electronica',  '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm ', 'FACI'),
-]
-*/
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [recordForEdit, setRecordForEdit] = useState(null)
+    const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
@@ -99,67 +93,51 @@ export default function GestionSeccion() {
     } = useTable(records, tableHeaders, filterFn);
 
     const handleSearch = e => {
-      let target = e.target;
-      /* React "state object" (useState()) doens't allow functions, only
-        * objects.  Thus the function needs to be inside an object. */
-      setFilterFn({
-        fn: items => {
-          if (target.value == "")
-            /* no search text */
-            return items
-          else
-            return items.filter(x => x.nombre.toLowerCase()
-                .includes(target.value.toLowerCase()))
-        }
-      })
-    }
-    const openInPopup = item => {
-      setRecordForEdit(item)
-      setOpenPopup(true)
+        let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+         * objects.  Thus the function needs to be inside an object. */
+        setFilterFn({
+          fn: items => {
+            if (target.value === "")
+              /* no search text */
+              return items
+            else
+              return items.filter(x => x.nombre.toLowerCase()
+                  .includes(target.value.toLowerCase()))
+          }
+        })
     }
 
-    /* const addOrEdit = (seccion, resetForm) => {
-      if (seccion.id == 0)
-        SeccionService.registerSeccion(seccion)
-      else
-        SeccionService.updateSeccion(seccion)
-      resetForm()
-      setRecordForEdit(null)
-      setOpenPopup(false)
-      setRecords(getSecciones.getAllEmployees())
-
-      setNotify({
-        isOpen: true,
-        message: 'Submitted Successfully',
-        type: 'success'
-      })
-    } */
-    const addOrEdit = (employee, resetForm) => {
-      if (employee.id == 0)
-        employeeService.insertEmployee(employee)
-      else
-        employeeService.updateEmployee(employee)
-      resetForm()
-      setRecordForEdit(null)
-      setOpenPopup(false)
-      setRecords(employeeService.getAllEmployees())
-
-      setNotify({
-        isOpen: true,
-        message: 'Submitted Successfully',
-        type: 'success'
-      })
-    }
     useEffect(() => {
+      //Obtenemos las secciones
       getSecciones()
       .then (newSeccion =>{
-        setRecords(prevRecords => prevRecords.concat(newSeccion));
-
-        //console.log(newSeccion);
-
-        console.log(records);
+        setRecords(newSeccion); //Se quiere actualizar todo
+        
       });
-    }, [])
+      
+    }, [recordForEdit])
+  
+    const addOrEdit = (seccion, resetForm) => {
+
+      recordForEdit 
+        ? SeccionService.updateSeccion(seccion, seccion.id) 
+        : SeccionService.registerSeccion(seccion)
+          .then(idSeccion => {
+            if(!recordForEdit)  
+              setRecordForEdit(idSeccion);
+            else
+              setRecordForEdit(null);
+        })
+      setOpenPopup(false)
+      resetForm()
+  
+      setNotify({
+        isOpen: true,
+        message: 'Submitted Successfully',
+        type: 'success'
+      })
+    }
 
     return (
         <>
@@ -170,7 +148,7 @@ export default function GestionSeccion() {
             <Paper variant="outlined" sx={PaperStyle}>
                 <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
                 <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
+                {/*<Toolbar>*/}
                 <Controls.Input
                     label="Buscar Secciones por Nombre"
                     InputProps={{
@@ -180,16 +158,18 @@ export default function GestionSeccion() {
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .1 }}
+                    sx={{ width: .3, visibility: "hidden" }}
                     onChange={handleSearch}
                     type="search"
                 />
-                {/* <Controls.AddButton
+                <Controls.AddButton 
                     title="Agregar Nueva Sección"
                     variant="iconoTexto"
-                    onClick = {() => setOpenPopup(true)}
-                /> */}
-                {/* </Toolbar> */}
+                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                    //openInPopup();^
+                />
+                
+                {/*</Toolbar>*/}
                 </div>
                 <BoxTbl>
                 <TblContainer>
@@ -198,20 +178,21 @@ export default function GestionSeccion() {
                     {
                         recordsAfterPagingAndSorting().map(item => (
                         <StyledTableRow key={item.id}>
-                            <StyledTableCell
+                            {/*<StyledTableCell
                             align="right"
                             >
                             {item.id}
                             </StyledTableCell>
+                            */}
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
                               <Controls.ActionButton
                                 color="warning"
-                                onClick={ () => {openInPopup(item)}}
+                                onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
@@ -227,12 +208,13 @@ export default function GestionSeccion() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Nueva Sección"
+                title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
               <AgregarEditarSeccion
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
-              />
+                />
+                {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
         </>

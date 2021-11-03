@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
-
+import DepartamentoService from '../../../services/departamentoService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
@@ -22,6 +22,8 @@ export default function AgregarEditarDepartamento(props) {
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
+    const [departamento, setDepartamentos] = React.useState([]);
+
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -54,13 +56,25 @@ export default function AgregarEditarDepartamento(props) {
         resetForm
     } = useForm(initialFieldValues, true, validate);
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault()
-        /* if (validate())
-            window.alert('valid')
+        if (validate()){
+          window.alert('valid')
+
+          const newDep = {
+            nombre: values.nombre,
+            correo: values.correo,
+            //foto: null,
+          }
+          console.log(newDep);
+          const rpta = await DepartamentoService.registerDepartamento(newDep);
+          console.log(rpta);
+          
+          resetForm()
+        }
         else
-            window.alert('invalid') */
+            window.alert('invalid')
         if (validate())
             addOrEdit(values,resetForm)
     }

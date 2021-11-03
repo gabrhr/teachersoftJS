@@ -8,7 +8,7 @@ import { Controls } from "../../components/controls/Controls"
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import EmployeeForm from './EmployeeForm'
+import EmployeeForm from './PersonaForm'
 import Popup from '../../components/util/Popup'
 import Notification from '../../components/util/Notification'
 import ConfirmDialog from '../../components/util/ConfirmDialog'
@@ -56,7 +56,7 @@ const tableHeaders = [
   }
 ]
 
-export default function Employees() {
+export default function Persona() {
   const [records, setRecords] = useState(employeeService.getAllEmployees())
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({fn: items => { return items; }})

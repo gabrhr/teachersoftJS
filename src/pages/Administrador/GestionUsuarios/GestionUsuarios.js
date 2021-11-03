@@ -25,12 +25,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-  {
+  /*{
     id: 'fullName',
     label: 'Nombre Completo',
     numeric: false,
     sortable: true
-  },
+  },*/
   {
     id: 'dni',
     label: 'DNI',
@@ -198,7 +198,7 @@ export default function GestionUsuarios() {
                 </InputAdornment>
               )
             }}
-            sx={{ width: .75 }}
+            sx={{ width: .75, visibility: "hidden" }}
             onChange={handleSearch}
             type="search"
           />

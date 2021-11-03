@@ -1,4 +1,10 @@
 /* Author: Mitsuo
+ *
+ * Registro de Carga Docente (asignar docentes a los horarios)
+ * 
+ * Componente donde se muestran los horarios de un curso seleccionado.  Cada
+ * horario se puede expandir y mostrar la lista de docentes actualmente
+ * asignados.
  */
 import React from 'react'
 import { Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
@@ -7,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
+import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
     { id: '1', title: 'Horarios' },
@@ -71,7 +78,7 @@ const sampleData = [
         id: '2',
         codigo: 'H0802',
         detalle: 'Clase: Mie 10:00 - 12 Sab 10:00 - 14:00',
-        estado: 'Sin Docente',
+        estado: 'Con Docente',
         docentes: {
             clase: [
                 {
@@ -100,6 +107,18 @@ const sampleData = [
                     cargaHoraria: 4,
                     deudaHoraria: 0
                 }
+            ]
+        }
+    },
+    {
+        id: '3',
+        codigo: 'H0803',
+        detalle: 'Clase: Lun 7:00 10:00\n Lab: Jue 07:00-10:00',
+        estado: 'Sin Docente',
+        docentes: {
+            clase: [
+            ],
+            lab: [
             ]
         }
     }

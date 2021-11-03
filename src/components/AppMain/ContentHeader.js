@@ -3,35 +3,65 @@ import React from 'react'
 import { Controls } from '../controls/Controls';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
+import * as DTLocalServices from '../../services/DTLocalServices';
 import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
+import cicloService from "../../services/cicloService";
+import {useState, useEffect} from 'react'
+
+const fillCiclos = async () => {
+  const dataCic = await cicloService.getCiclos();
+
+  const ciclos = [];
+  dataCic.map(cic => {
+    ciclos.push({
+      id: cic.id.toString(),
+      title: cic.anho + '-' +cic.periodo
+    })
+  });
+  return ciclos;
+}
 
 const initialFieldValues = {
-    id: 0,
-    text: '',
-    gender: 'male',
-    departmentID: '',
-    date: new Date(),
-    isPermanent: false
+    id: '',
+    title: ''
 }
 
 function CboCiclo(props) {
+    const [ciclos, setCiclos] = useState([]);
+
     const cbo = props.cbo;
     const theme= useTheme();
+    
     const {
-        values,
-        // setValues,
-        handleInputChange
+      values,
+      // setValues,
+      handleInputChange
     } = useForm(initialFieldValues);
+
+    React.useEffect(() => {
+      fillCiclos()
+      .then (newCiclo =>{
+        setCiclos(newCiclo);
+        //console.log(ciclos);
+      });
+    }, [])
+
+    React.useEffect(()=>{
+      window.localStorage.setItem('ciclo', JSON.stringify(values.id))
+    },[values])
+    
+    //console.log(values);
     if (cbo) {
+
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
             <Box  sx={{width: "10vw", align: "Right"}}> 
                 <Controls.Select
-                    name="cicloId"
+                    name="title"
                     label="Ciclo"
-                    value={values.departmentId}
+                    value={values.title}
                     onChange={handleInputChange}
-                    options={employeeService.getDepartmentCollection()}
+                    options={DTLocalServices.getAllCiclos()}
                     type="contained"
                 />
             </Box>
@@ -43,6 +73,9 @@ function CboCiclo(props) {
 }
 
 export default function ContentHeader({text, cbo}) {
+
+    console.log("ContentHeader: ")
+    console.log(DTLocalServices.getAllCiclos())
     
     return (
         <Form>
