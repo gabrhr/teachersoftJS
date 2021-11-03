@@ -4,10 +4,13 @@ import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
 import AuthService from '../../services/authService';
+import { GoogleLoginButton } from "react-social-login-buttons";
+import { GoogleLogin } from "react-google-login";
 import { useState } from 'react';
 import tokens from '../../services/tokens';
 import HeaderUser from '../../components/PageComponents/HeaderUser';
 import Vacio from '../Dev/Vacio';
+import axios from 'axios';
 
 const initialFieldValues = {
   id: 0,
@@ -19,17 +22,14 @@ const initialFieldValues = {
 /*CODIGO -  */
 
 const Login = ({ setUser }) => {
-  const abrirGoogle= e =>{
-    var windowObjectReference;
-    var left = (window.screen.width/2)-(500/2);
-    var top = (window.screen.height/2)-(700/2);
-    windowObjectReference = window.open("http://localhost:8080/oauth2/authorization/google", "logueoGmail", "width=500,height=600, top="+top+", left="+left);
-    console.log(windowObjectReference.close);
-    console.log(windowObjectReference.document);
-    console.log(windowObjectReference.frames);
-    console.log(windowObjectReference.location);
-    console.log(windowObjectReference.postMessage);
-    //windowObjectReference.close();
+  const abrirGoogle= async () =>{
+
+    /* let res = await axios.get('http://localhost:8080/oauth2/authorization/google');
+
+    let data = res.data;
+    
+    }; 
+    /* windowObjectReference.close(); */
   }
   //MANEJO DE ESTADOS
   //const [login, setLogin] = useState(null);
@@ -109,6 +109,11 @@ const Login = ({ setUser }) => {
     }
   }
 
+  const responseGoogle = (response) => {
+    console.log(response);
+    /* setUser(response.profileObj) */;
+  }
+
   return (
     <Form onSubmit={handleSubmit} >
       <Controls.Input
@@ -145,17 +150,26 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      {/* <a  href="localhost:8080/oauth2/authorization/google"
-         style={{ textDecoration: "none" }}
-      > */}
-        <Controls.Button
-          variant="outlined"
-          size='small'
-          fullWidth
-          text="Iniciar sesión con correo PUCP"
-          onClick={abrirGoogle}
+      
+       <GoogleLogin
+        clientId="626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com"
+        render={renderProps => (
+          <Controls.Button
+                  variant="outlined"
+                  size='small'
+                  fullWidth
+                  text="Iniciar sesión con correo PUC"
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                />
+
+        )}
+        buttonText="Iniciar sesión con correo PUCP"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
         />
-      {/* </a> */}
+          
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña

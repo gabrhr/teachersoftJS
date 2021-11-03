@@ -47,23 +47,9 @@ function App() {
                 setUser={setUser}
               />
               </Route>
-            <Route exact path="/login">
-              <Login 
-                setUser={setUser}
-              />
-              </Route>
-            <Route exact path="/:thing?">
-              <Login 
-                setUser={setUser}
-            />
-            </Route>
           </Switch>
           
-          <HeaderUser
-              nombre={user.nombres}
-              idRol= {user.rol}
-              foto={fotoUsuario}
-          />  
+          
         </Router>
         <CssBaseline />
       </ThemeProvider>
