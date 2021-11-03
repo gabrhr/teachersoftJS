@@ -6,7 +6,7 @@ const getSecciones = async () => {
   try{
     //debugger;
     const request= await axios.get(`${url}/seccion/`) //Todas las secciones
-    return request.data;  
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
@@ -31,7 +31,7 @@ const getSeccion = async ({id}) => {
 }
 
 const registerSeccion = async newObject => {
-  try{           
+  try{
     const request = await axios.post(`${url}/seccion/`, newObject);
     console.log(request.data);
     return request.data; //Es un valor de true o no
@@ -50,7 +50,7 @@ const updateSeccion = async (newObject, {id}) => {
   }
 }
 
-const deleteSeccion = async ({id}) => {
+const deleteSeccion = async (id) => {
   try{
     const request = await axios.delete(`${url}/seccion/${id}`, id);
     return request.data; //Es un valor de true o no
