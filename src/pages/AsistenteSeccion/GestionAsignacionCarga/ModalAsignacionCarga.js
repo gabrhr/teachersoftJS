@@ -193,7 +193,6 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       })
       ));  
       //horario = horarios;
-      //console.log(horarios);
       return horarios;
     }
 

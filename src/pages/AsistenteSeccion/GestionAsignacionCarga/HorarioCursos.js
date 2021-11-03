@@ -35,6 +35,12 @@ const tableHeaders = [
       sortable: true
     },
     {
+      id: 'cargaHoraria',
+      label: 'Carga Horaria',
+      numeric: false,
+      sortable: true
+    },
+    {
       id: 'nombreCurso',
       label: 'Nombre',
       numeric: false,
@@ -52,12 +58,6 @@ const tableHeaders = [
         numeric: false,
         sortable: true
      },
-    {
-      id: 'cargaHoraria',
-      label: 'Carga Horaria',
-      numeric: false,
-      sortable: true
-    },
      {
         id: 'horaSesion',
         label: 'Hora-Sesion',
@@ -81,10 +81,16 @@ const fillHorarios = async () => {
     return [];
   }
   for (let hor of dataHor){
+    console.log(hor.id);
+    console.log(hor.sesiones[0].secuencia);
+    const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
+      hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
+      hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
+    console.log(sesion1);
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
-      "tipo": hor.tipo,
+      "tipo": hor.sesiones[0].secuencia,
       "horas_semanales": hor.horas_semanales,
       ciclo:{
         "id": hor.ciclo.id,
@@ -97,16 +103,18 @@ const fillHorarios = async () => {
         "unidad": hor.curso.unidad,
         "carga": hor.curso.carga
       },
-      "hora_sesion": HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
-        hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
-        hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin)
+      "hora_sesion": sesion1
     })
     //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
     if(hor.sesiones[1]){
+      const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana, 
+        hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio, 
+        hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+      console.log(sesion2);
       horarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
-        "tipo": hor.tipo,
+        "tipo": hor.sesiones[1].secuencia,
         "horas_semanales": hor.horas_semanales,
         ciclo:{
           "id": hor.ciclo.id,
@@ -119,14 +127,10 @@ const fillHorarios = async () => {
           "unidad": hor.curso.unidad,
           "carga": hor.curso.carga
         },
-        "hora_sesion": HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana, 
-          hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio, 
-          hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin)
+        "hora_sesion": sesion2
       })
     }
   }
-  //console.log(horarios);
-
   return horarios;
 
 }
@@ -259,10 +263,6 @@ export default function HorarioCursos({records, setRecords}) {
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
                     />
-                    <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
-                      <DeleteOutlinedIcon fontSize="large"/>
-                      Eliminar todos los cursos
-                    </Controls.ActionButton>
                 </Grid>
             </Grid>
             <BoxTbl>
@@ -279,10 +279,10 @@ export default function HorarioCursos({records, setRecords}) {
                             {item.clave}
                             </TableCell>*/}
                             <TableCell>{item.curso.codigo}</TableCell>
+                            <TableCell>{item.horas_semanales}</TableCell>
                             <TableCell>{item.curso.nombre}</TableCell>
                             <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.tipo ? "Clase":"Laboratorio"}</TableCell>
-                            <TableCell>{item.horas_semanales}</TableCell>
+                            <TableCell>{item.tipo ? "Laboratorio":"Clase"}</TableCell>
                             <TableCell>{item.hora_sesion}</TableCell>
                             <TableCell>
                               {/* Accion eliminar */}
@@ -305,6 +305,10 @@ export default function HorarioCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
+                      <DeleteOutlinedIcon fontSize="large"/>
+                      Eliminar todos los cursos
+                    </Controls.ActionButton>
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
