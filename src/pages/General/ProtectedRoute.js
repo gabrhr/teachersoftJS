@@ -1,11 +1,14 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect} from "react-router-dom";
 //import instance from "../../instance";
 import { useHistory } from "react-router-dom";
+import { useGoogleAuth } from "../Login/googleAuth";
 
 //const isAuthenticated = window.localStorage.getItem("isAuthenticated");
 
-const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
+export default function ProtectedRoute(props) {
+  const {idRoles, component: Component, ...rest } = props
+  const { isSignedIn } = useGoogleAuth();
   /* let roles = instance.getItem("roles"); */
   let roles = [
       {idRol: 1},
@@ -29,14 +32,11 @@ const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
       history.push('/');
   }
   return (
-    <Route
-      {...rest}
-      render={(props) => {
-          return <Component {...props} />;
-        
-      }}
-    />
+    <div>
+    <Route {...rest} render={props => (
+      isSignedIn ?
+      <Component {...props} />: <Redirect to="/"/>
+  )} />
+  </div>
   );
 };
-
-export default ProtectedRoute;

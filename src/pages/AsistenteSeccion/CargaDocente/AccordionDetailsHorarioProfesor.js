@@ -8,10 +8,13 @@ import { Grid, Divider, Avatar } from '@mui/material'
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import { styled } from '@mui/material/styles';
+import { Controls } from '../../../components/controls/Controls'
 
-function generateRow(docente) {
+function GenerateRow(props) {
+    const { docente } = props
     return (
         <>
+            <Controls.Divider/>
             <Grid container>
                 <Grid item xs={1}>
                     <Avatar>
@@ -52,6 +55,12 @@ function generateRow(docente) {
 
 export default function AccordionDetailsHorarioProfesor(props) {
     const { docentes } = props
+    const listDocenteClase = docentes.clase.map(docente => 
+        <GenerateRow key={docente.id} docente={docente} />
+    )
+    const listDocenteLab = docentes.lab.map(docente => 
+        <GenerateRow key={docente.id} docente={docente} />
+    )
     return (
         <Paper elevation={1} sx={{p: 1}}>
             <Typography
@@ -61,7 +70,8 @@ export default function AccordionDetailsHorarioProfesor(props) {
             >
                 Lista de Docentes de Clases
             </Typography>
-            {docentes.clase.map(docente => generateRow(docente))}
+            {listDocenteClase}
+            <Controls.Divider/>
             <Typography
                 variant="h4"
                 py="4px"
@@ -69,7 +79,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
             >
                 Lista de Docentes de Practicas
             </Typography>
-            {docentes.lab.map(docente => generateRow(docente))}
+            {listDocenteLab}
         </Paper>
     )
 }

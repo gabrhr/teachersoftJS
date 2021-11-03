@@ -198,7 +198,7 @@ export default function GestionUsuarios() {
                 </InputAdornment>
               )
             }}
-            sx={{ width: .75 }}
+            sx={{ width: .75, visibility: "hidden" }}
             onChange={handleSearch}
             type="search"
           />

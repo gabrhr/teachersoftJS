@@ -19,6 +19,8 @@ import departamentoService from '../../../services/departamentoService';
 import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import * as employeeService from '../../../services/employeeService'
+import { Form } from '../../../components/useForm'
 
 const tableHeaders = [
     {
@@ -218,7 +220,7 @@ export default function GestionDepartamento() {
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .75 }}
+                    sx={{ width: .75, visibility: "hidden" }}
                     onChange={handleSearch}
                     type="search"
                 />

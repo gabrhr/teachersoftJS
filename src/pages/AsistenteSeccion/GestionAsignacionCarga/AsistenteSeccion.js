@@ -102,6 +102,11 @@ export default function AsistenteSeccion() {
                     />
                      <ExportCSV csvData={cargaH} fileName={'fileName'} text="Exportar" size="large"
                         endIcon={<CloudDownloadOutlinedIcon/>}/>
+                    {/* <Controls.Button
+                        text="Exportar"
+                        size="large"
+                        endIcon={<CloudDownloadOutlinedIcon/>}
+                    /> */}
                 </Grid>
             </Grid>
             {/*LO DE GABRIELA*/}
