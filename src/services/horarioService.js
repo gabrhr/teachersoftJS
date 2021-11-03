@@ -88,7 +88,7 @@ const convertStringtoSesion = (sesion) => {
       }
       /*RECUPERAMOS LA HORA DE INICIO*/
       else if(substring.toString()[0] >= "0" && substring.toString()[0] <= "9"){
-        console.log("Es numero: ", substring.toString().toLowerCase());
+        //console.log("Es numero: ", substring.toString().toLowerCase());
         dataSes[1] = parseInt(substring.substring(0,2));
         dataSes[2] = parseInt(substring.substring(3,5)) ? 1 : 0;
       }
@@ -99,17 +99,14 @@ const convertStringtoSesion = (sesion) => {
   })
   /*RECUPERAMOS EL ULTIMO SUBSTRING - PARA HORA-FIN */
   substring = substring.toString().toLowerCase();
-  console.log("Es numero: ", substring.toString().toLowerCase());
+  //console.log("Es numero: ", substring.toString().toLowerCase());
   dataSes[3] = parseInt(substring.substring(0,2));
   dataSes[4] = parseInt(substring.substring(3,5)) ? 1 : 0;
 
-
-
-  console.log(dataSes);
   return dataSes;
 }
 
-const convertSesiontoString = (dia_semana, hora_ini, media_horaini, hora_fin, media_horafin) => {
+const convertSesiontoString = async (dia_semana, hora_ini, media_horaini, hora_fin, media_horafin) => {
   let str = "";
   switch(dia_semana){
     case 0:
