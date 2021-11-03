@@ -27,26 +27,19 @@ import Login from '../pages/Login/Login';
 import Employees from '../pages/Employees/Employees';
 import UserPage from '../pages/General/UserPage';
 import Showcase from '../pages/Showcase/Showcase';
+import LoginPrueba from '../App/prueba';
+import PostLogin from '../App/postLoguin';
 
 export default function Router1(props) {
   const { user, setUser, fotoUsuario } = props
   const history = useHistory();
   return (
     <Router>
-      <Route exact path="/">
-        <Login
-          setUser={setUser}
-        />
+      <Route path="/activate/:token">
+        <PostLogin/>
       </Route>
-      <Route exact path="/login">
-        <Login
-          setUser={setUser}
-        />
-      </Route>
-      <Route exact path="/:thing?">
-        <Login
-          setUser={setUser}
-        />
+      <Route path="/">
+        <LoginPrueba/>
       </Route>
       <Route exact path="/admin/showcase">
         <HeaderUser

@@ -7,6 +7,7 @@ import { GoogleAuthProvider } from './pages/Login/googleAuth';
 
 ReactDOM.render(
   // <React.StrictMode>
+  
   <GoogleAuthProvider>
     <App />
     </GoogleAuthProvider>,

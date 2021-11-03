@@ -23,17 +23,7 @@ const initialFieldValues = {
 /*CODIGO -  */
 
 const Login = ({ setUser }) => {
-  const abrirGoogle= async () =>{
-
-    /* let res = await axios.get('http://localhost:8080/oauth2/authorization/google');
-
-    let data = res.data;
-    
-    }; 
-    /* windowObjectReference.close(); */
-  }
-  //MANEJO DE ESTADOS
-  //const [login, setLogin] = useState(null);
+ 
   const history = useHistory();
 
   const {
@@ -42,7 +32,6 @@ const Login = ({ setUser }) => {
     handleInputChange
   } = useForm(initialFieldValues);
 
-  //window.localStorage.removeItem('loggedUser');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,16 +98,6 @@ const Login = ({ setUser }) => {
       history.push("/")
     }
   }
-
-  const { signIn } = useGoogleAuth();
-  console.log(signIn)
-  /* const responseGoogle = (response) => {
-    console.log("aqui")
-    console.log(response);
-    signIn() ;
-    /* setUser(response.profileObj) ;
-  } */
-
   return (
     <Form onSubmit={handleSubmit} >
       <Controls.Input
@@ -164,7 +143,6 @@ const Login = ({ setUser }) => {
                   size='small'
                   fullWidth
                   text="Iniciar sesión con correo PUC"
-                  onClick={signIn}
                 />
 
         {/* )}

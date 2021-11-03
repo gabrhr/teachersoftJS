@@ -9,19 +9,16 @@ import { useGoogleAuth } from "../Login/googleAuth";
 export default function ProtectedRoute(props) {
   const {idRoles, component: Component, ...rest } = props
   const { isSignedIn } = useGoogleAuth();
-  /* let roles = instance.getItem("roles"); */
-  let roles = [
+  /* let rol = localStoraged.getItem("roles"); */
+  let rol = [
       {idRol: 1},
-      {idRol: 2},
-      {idRol: 3},
-      {idRol: 4},
     ]
   const history=useHistory();
   let flag=0;
-  if(roles===""){
+  if(rol===""){
     history.push('/'); 
   }
-  roles.forEach(rol=>{
+  rol.forEach(rol=>{
     idRoles.map(idRol=>{
       if(rol.idRol === idRol){
         flag=1;    
