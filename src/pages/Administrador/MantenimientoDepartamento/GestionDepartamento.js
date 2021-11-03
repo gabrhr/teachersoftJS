@@ -5,15 +5,20 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import AgregarEditarDepartamento from './AgregarEditarDepartamento'
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog';
 /* ICONS */
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import SearchIcon from '@mui/icons-material/Search';
+ 
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import departamentoService from '../../../services/departamentoService';
 //import * as employeeService from '../../../services/employeeService'
+/* ICONS */
+import SearchIcon from '@mui/icons-material/Search';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 const tableHeaders = [
     {
@@ -92,9 +97,11 @@ export default function GestionDepartamento() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
+  
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevation:0}
+    color:"primary.light", elevatio:0}
     const {
         TblContainer,
         TblHead,
@@ -106,6 +113,26 @@ export default function GestionDepartamento() {
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
+    }
+
+    const onDelete = id => {
+      setConfirmDialog({
+          ...confirmDialog,
+          isOpen: false
+      })
+
+      //AGREGAR ELIMINACION DEL BACKEND Para Departamento
+      /*
+      employeeService.deleteEmployee(id);
+      setRecords(employeeService.getAllEmployees())
+      */
+   
+      setNotify({
+          isOpen: true,
+          message: 'Departamento eliminado de manera satisfactoria',
+          type: 'error'
+      })
+      
     }
 
     const handleSearch = e => {
@@ -196,7 +223,7 @@ export default function GestionDepartamento() {
                     type="search"
                 />
  
-                {/* <Controls.AddButton 
+                <Controls.AddButton 
                     title="Agregar Nuevo Departamento"
                     variant="iconoTexto"
                     onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
@@ -221,13 +248,26 @@ export default function GestionDepartamento() {
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
                             <StyledTableCell>
-                              {/* Accion editar */}
                               <Controls.ActionButton 
                                 color="warning"
                                 onClick={ () => {openInPopup(item)}}
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
+                              <Controls.ActionButton
+                                color="error"
+                                onClick={() => {
+                                  setConfirmDialog({
+                                    isOpen: true,
+                                    title: '¿Eliminar Departamento permanentemente?',
+                                    subTitle: 'No es posible deshacer esta accion',
+                                    onConfirm: () => { onDelete(item.id) }
+                                  })
+                                }}>
+                                <CloseIcon fontSize="small" />
+                              </Controls.ActionButton>
+
+
                             </StyledTableCell>
                         </StyledTableRow>
                         ))
@@ -237,7 +277,7 @@ export default function GestionDepartamento() {
                 <TblPagination />
             </BoxTbl>
             </Paper>
-            {/* Modal */}
+
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
@@ -249,6 +289,14 @@ export default function GestionDepartamento() {
               />
               {/*  <GestionUsuariosForm/> */}
             </Popup>  
+            <Notification 
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }
