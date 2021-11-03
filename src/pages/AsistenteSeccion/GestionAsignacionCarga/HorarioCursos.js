@@ -259,10 +259,6 @@ export default function HorarioCursos({records, setRecords}) {
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
                     />
-                    <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
-                      <DeleteOutlinedIcon fontSize="large"/>
-                      Eliminar todos los cursos
-                    </Controls.ActionButton>
                 </Grid>
             </Grid>
             <BoxTbl>
@@ -305,6 +301,10 @@ export default function HorarioCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
+                      <DeleteOutlinedIcon fontSize="large"/>
+                      Eliminar todos los cursos
+                    </Controls.ActionButton>
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
