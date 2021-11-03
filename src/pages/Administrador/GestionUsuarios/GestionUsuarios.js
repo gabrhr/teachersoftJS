@@ -145,7 +145,7 @@ export default function GestionUsuarios() {
     setRecords(DTLocalServices.getAllPersonas())
     setNotify({
       isOpen: true,
-      message: 'Deleted Successfully',
+      message: 'Usuario eliminado de manera satisfactoria.',
       type: 'error'
     })
   }
@@ -231,20 +231,7 @@ export default function GestionUsuarios() {
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-                      <Controls.ActionButton 
-                        color="error"
-                        onClick={() => {
-                          // onDelete(item.id)
-                          setConfirmDialog({
-                            isOpen: true,
-                            title: '¿Eliminar usuario permanentemente?',
-                            subTitle: 'No es posible deshacer esta accion',
-                            onConfirm: () => {onDelete(item.id)}
-                          })
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </Controls.ActionButton>
+
                     </StyledTableCell>
                   </StyledTableRow>
                 ))

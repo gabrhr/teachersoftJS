@@ -9,8 +9,6 @@ export function formatHorarioCursos(matrix) {
     return horarioList;
 }
 
-
-
 export function formatHorario(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion) {
    return {
