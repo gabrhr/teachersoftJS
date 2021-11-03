@@ -3,7 +3,6 @@ import React from 'react'
 import { Controls } from '../controls/Controls';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
-import * as DTLocalServices from '../../services/DTLocalServices';
 import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
 import cicloService from "../../services/cicloService";
@@ -77,11 +76,11 @@ function CboCiclo(props) {
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
             <Box  sx={{width: "10vw", align: "Right"}}> 
                 <Controls.Select
-                    name="title"
-                    label="Ciclo"
-                    value={values.title}
+                    name="id"
+                    label={"Ciclos"}
+                    value={values.id}
                     onChange={handleInputChange}
-                    options={DTLocalServices.getAllCiclos()}
+                    options={ciclos}
                     type="contained"
 
                 />
@@ -94,9 +93,6 @@ function CboCiclo(props) {
 }
 
 export default function ContentHeader({text, cbo}) {
-
-    console.log("ContentHeader: ")
-    console.log(DTLocalServices.getAllCiclos())
     
     return (
         <Form>

@@ -12,7 +12,6 @@ import EmployeeForm from './EmployeeForm'
 import Popup from '../../components/util/Popup'
 import Notification from '../../components/util/Notification'
 import ConfirmDialog from '../../components/util/ConfirmDialog'
-import * as DTLocalServices from '../../services/DTLocalServices';
 /* ICONS */
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -60,7 +59,6 @@ export default function Employees() {
   const [records, setRecords] = useState(employeeService.getAllEmployees())
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
-  const [searchText, setSearchText] = useState('')
   const [openPopup, setOpenPopup] = useState(false)
   /* stores values of record to then edit in the Dialog/Popup */
   const [recordForEdit, setRecordForEdit] = useState(null)
@@ -81,16 +79,17 @@ export default function Employees() {
   } = useTable(records, tableHeaders, filterFn);
 
   const handleSearch = e => {
+    let target = e.target;
     /* React "state object" (useState()) doens't allow functions, only
      * objects.  Thus the function needs to be inside an object. */
     setFilterFn({
       fn: items => {
-        if (searchText == "")
+        if (target.value == "")
           /* no search text */
           return items
-        else {
-          return DTLocalServices.filter(items, 'fullName', searchText)
-        }
+        else
+          return items.filter(x => x.fullName.toLowerCase()
+              .includes(target.value.toLowerCase()))
       }
     })
   }
@@ -135,10 +134,6 @@ export default function Employees() {
     })
   }
 
-  const handleChange = event => {
-    setSearchText(event.target.value)
-  }
-
   return (
     <>
       <PageHeader
@@ -150,22 +145,16 @@ export default function Employees() {
       <Toolbar mt={2}>
           <Controls.Input 
             label="Search Employees by Name"
-            // InputProps={{
-            //   startAdornment: (
-            //     <InputAdornment position="start">
-            //       <SearchIcon />
-            //     </InputAdornment>
-            //   )
-            // }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
             sx={{ width: .75 }}
+            onChange={handleSearch}
             type="search"
-            value={searchText}
-            onChange={handleChange}
-          />
-          <Controls.Button
-              text={<SearchIcon />}
-              onClick={handleSearch}
-              // onClick = {() => setOpenPopup(true)}
           />
           <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
             <Controls.Button 
@@ -187,14 +176,6 @@ export default function Employees() {
       </Toolbar>
       <Paper sx={{ borderRadius: '20px', padding:5 }}>
         <TblContainer>
-          <colgroup>
-            <col style={{width: '10%'}}/>
-            <col style={{width: '30%'}}/>
-            <col style={{width: '30%'}}/>
-            <col style={{width: '10%'}}/>
-            <col style={{width: '10%'}}/>
-            <col style={{width: '10%'}}/>
-          </colgroup>
           <TblHead />
           <TableBody>
             {

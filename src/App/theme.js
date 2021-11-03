@@ -35,11 +35,6 @@ const theme = createTheme({
         main: "#41b9e427",
         light: "#3b4a8120"
       },
-      pendiente: {
-        // dark: "#ff0000",
-        // main: "#00ff00",
-        light: "#E9D630",
-      }
       
     },
     typography: {

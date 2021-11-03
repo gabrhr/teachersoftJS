@@ -1,38 +1,8 @@
-/* Author: Mitsuo
- *
- * LocalStorage services for testing:
- * - persona
- * - curso
- * 
- * Import like this:
-import * as DTLocalServices from '../../services/DTLocalServices';
- */
-
 import { insertEmployee } from "./employeeService";
 import { data } from "./data/curso-horario"
 
 /* LIB
  * ======================= */
-
-/* Filter array `items` by `items[i].key` for substring searchText.
- * Ignores case and accents */
-export function filter(items, key, searchText) {
-    return items.filter(x => 
-        removeAccents(x[key])
-            .toLowerCase()
-            .includes( 
-                removeAccents(searchText)
-                    .toLowerCase()
-            )
-    )
-}
-
-/* remove accents from string (i.g. áéíóúñ -> aeioun) */
-export function removeAccents(s) {
-    /* first get Unicode "Canonical Decomposition" and then remove 
-       "accent code point modifiers" */
-    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-}
 
 /* Validaciones
  * 
@@ -66,9 +36,7 @@ const KEYS = {
     personaID: 'personaID',        // highest ID,  ID=0 means no data
     personas: 'personas',           // array
     cursoID: 'cursoID',
-    cursos: 'cursos',
-    cicloID: 'cicloID',
-    ciclos: 'ciclos'
+    cursos: 'cursos'
 }
 
 /* persona CRUD operations */
@@ -148,20 +116,6 @@ export function getAllRoles() {
         { id: 4, title: 'Asistente de Departamento' },
         { id: 5, title: 'Coordinador de Departamento' },
     ])
-}
-
-/* ciclo CRUD operations */
-export function getAllCiclos() {
-    let ciclos = []
-    let i
-    const base = 2021 - 20 + 1
-    for (i = 0; i < 20; i++) {
-        ciclos[2 * i] = { id: (base + i) * 10 + 1, title: `${base + i}-1` }
-        ciclos[2 * i + 1] = { id: (base + i) * 10 + 2, title: `${base + i}-2` }
-    }
-    // /* DEEP COPY */
-    // ciclos = JSON.parse(JSON.stringify(ciclos))
-    return ciclos.reverse()
 }
 
 /* curso CRUD operations */
@@ -297,7 +251,7 @@ export function getAllCursos() {
     let cursos = JSON.parse(localStorage.getItem(KEYS.cursos));
     /* Do any data transformations here (e.g., lookup ID's create new attributes
      * based on that) */
-    return cursos.map(x => ({
+    return cursos.map( x => ({
         // ...x,
         id: x.id,
         clave: x.curso.codigo,

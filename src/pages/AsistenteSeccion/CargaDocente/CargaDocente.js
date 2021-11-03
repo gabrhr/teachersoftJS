@@ -207,7 +207,7 @@ export default function CargaDocente() {
         : (<> </>)
       }
       {/* <Toolbar> */}
-      <Grid container sx={{ mb: 3, bgcolor: "#fff" }} display={horarios ? "none" : "flex"}>
+      <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
           <Controls.Input
             label="Buscar Cursos por Nombre o Clave"

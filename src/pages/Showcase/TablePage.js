@@ -11,10 +11,8 @@
  */
 import React from 'react'
 import useTable from "../../components/useTable"
-import { Typography } from '@mui/material';
 import { TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@mui/material';
 import * as employeeService from '../../services/employeeService'
-import ReactMarkdown from 'react-markdown'
 
 /* headers and row data */
 const tableHeaders = [
@@ -70,19 +68,6 @@ function generateRows(records) {
     )
 }
 
-function ColWidths() {
-    return (
-        <colgroup>
-            <col style={{width: '10%'}}/>
-            <col style={{width: '50%'}}/>
-            <col style={{width: '20%'}}/>
-            <col style={{width: '20%'}}/>
-        </colgroup>
-    )
-}
-
-const content = "Very minimal usage of the \"table reusable component\"."
-
 export default function TablePage() {
     const [records, setRecords] = React.useState(
         generateSampleData()
@@ -101,9 +86,7 @@ export default function TablePage() {
 
     return (
         <>
-            <Typography children={content}/>
             <TblContainer>
-                <ColWidths />   {/* this one is optional */}
                 <TblHead />
                 <TableBody>
                     { generateRows(recordsAfterPagingAndSorting()) }

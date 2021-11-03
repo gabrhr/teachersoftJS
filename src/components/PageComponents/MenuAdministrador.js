@@ -29,5 +29,25 @@ export const MenuAdministrador = [
             indice: 2,
             }]
     },
-    
+    {
+        text: 'Employees',
+        path: '/admin/employees',
+        icon: <ConstructionIcon />,
+        indice: 1,
+
+    },
+    {
+        text: 'Showcase of Components',
+        path: '/admin/showcase',
+        icon: <ConstructionIcon />,
+        indice: 2,
+     
+    },
+    {
+        text: 'Index',
+        path: '/admin/index',
+        icon: <ConstructionIcon />,
+        indice: 3,
+   
+    }
 ];

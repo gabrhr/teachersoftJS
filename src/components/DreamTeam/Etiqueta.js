@@ -1,15 +1,8 @@
 import { Box, Alert } from '@mui/material'
 import React from 'react'
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
 export default function Etiqueta(props) {
-    let { text, type, ...other } = props
-
-    if (type === "pendiente") {
-        other.icon = (<AccessTimeOutlinedIcon/>)
-        other.color= "pendiente"
-    }
-
+    const { text, type, ...other } = props
     return (
         <Box //display="flex"
             // transform="scale(0.5)"   // FIXME: No funciona :(
