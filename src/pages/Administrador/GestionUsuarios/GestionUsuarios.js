@@ -246,8 +246,9 @@ export default function GestionUsuarios() {
     })
     console.log(idPersona)
     console.log(id)
+    
     userService.borrarUsuario(id)
-    window.location.replace('');
+    
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
@@ -364,7 +365,7 @@ export default function GestionUsuarios() {
                             isOpen: true,
                             title: '¿Eliminar usuario permanentemente?',
                             subTitle: 'No es posible deshacer esta accion',
-                            onConfirm: () => {onDelete(item.idPersona, item.id)}
+                            onConfirm: () => {onDelete(item.idPersona,item.id)}
                           })
                         }}
                       >
