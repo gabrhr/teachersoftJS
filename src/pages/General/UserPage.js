@@ -31,34 +31,34 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function UserPage() {
   return (
     /* Content Body (aka. AppMain) (lo que tiene el fondito de la ardillita) */
-    <Box 
-      component="main" 
+    <Box
+      component="main"
       /* fill remainder of body */
       width={1}
       // flexGrow={1}   // unnecessary
       // bottom="0px"
-      p={2} 
+      p={2}
       overflow="auto"   // grow with content
       /* fondo y ardillita loca */
       // transform='translateZ(0)'
       sx={{
-        backgroundColor:"#ffffff",
+        backgroundColor: "#ffffff",
         // backgroundImage:'url("assets/img/ardillaloca.svg"), url("assets/img/rayaslocas.svg")',
-        backgroundImage:'url("assets/img/fondoDT.svg")',
-        backgroundRepeat:'no-repeat',
-        backgroundPosition:'bottom right',
+        backgroundImage: 'url("assets/img/fondoDT.svg")',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'bottom right',
         // backgroundSize:'30%',
-        backgroundSize:'contain',
+        backgroundSize: 'contain',
       }}
     >
       {/* USER PAGE */}
       <DrawerHeader />  {/* SOLAMENTE UN DIV PARA HACER MARGIN TOP, 
                             codigo repetido en HeaderUser */}
       <Switch>
-        
+
         {/* admin */}
-        <ProtectedRoute exact path="/login" idRoles={[1,2,3,4,5,6,7,8,9,10]}>
-          <Login/>
+        <ProtectedRoute exact path="/login" idRoles={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
+          <Login />
         </ProtectedRoute>
 
         {/* DUCKTAPE */}
@@ -69,6 +69,10 @@ export default function UserPage() {
         <ProtectedRoute exact path="/admin/mantenimiento" idRoles={[1]}>
           <Redirect to="/admin/mantenimiento/usr" />
         </ProtectedRoute>
+
+        {/* Not yet listed */}
+        <ProtectedRoute exact path="/admin/mantenimiento/per" idRoles={[1]} component={Vacio} />
+        {/* ----end----- */}
 
         <ProtectedRoute exact path="/admin/mantenimiento/usr" idRoles={[1]} component={GestionUsuarios} />
         <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={GestionDepartamento} />

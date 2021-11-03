@@ -1,4 +1,10 @@
 /* Author: Mitsuo
+ *
+ * Registro de Carga Docente (asignar docentes a los horarios)
+ * 
+ * Componente donde se muestran los horarios de un curso seleccionado.  Cada
+ * horario se puede expandir y mostrar la lista de docentes actualmente
+ * asignados.
  */
 import React from 'react'
 import { Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
