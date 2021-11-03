@@ -6,6 +6,9 @@ import React from 'react'
 import { AppBar, Grid, IconButton, Button, Toolbar, Divider, Avatar } from "@mui/material";
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { useGoogleLogout } from 'react-google-login';
+import { useHistory, Redirect } from "react-router"
+import { Controls } from '../components/controls/Controls';
 
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import logout from "../assets/images/log-out.png";
@@ -21,9 +24,28 @@ const useStyles = makeStyles((themex) => ({
     },
 }));
 
+
+
+const clientId = '626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com';
 export default function Header2(props) {
+    const history = useHistory();
     const { foto, nombre, idRol, rol, handleDrawerOpen } = props
     const classes = useStyles();
+    const onLogoutSuccess = () => {
+        /*  setUser({}); */
+        // setRole({});
+        // localStorage.clear();
+        history.push('/login')
+    }
+    const onLogoutFailure = (response) => {
+    // console.log(response)
+        console.log('Failed to log out')
+    }
+    const {signOut} = useGoogleLogout({
+        clientId,
+        onLogoutSuccess,
+        onLogoutFailure,
+    })
 
     return (
         <AppBar
@@ -71,13 +93,14 @@ export default function Header2(props) {
                         </div>
                     </Grid>
                     <Grid item>
-                        <Button variant="text" endIcon={<img src={logout} alt="" />}>
-                            <div className={classes.pageIcon}>
-                                <Typography variant="body1" component="div">
-                                    Cerrar Sesión
-                                </Typography>
-                            </div>
-                        </Button>
+                        <Controls.Button
+                            variant="outlined"
+                            size='small'
+                            fullWidth
+                            text="Cerrar sesión"
+                            onClick={signOut}
+                            endIcon={logout}
+                        />
                     </Grid>
                 </Grid>
             </Toolbar>
