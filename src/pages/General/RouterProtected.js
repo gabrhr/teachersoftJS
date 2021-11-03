@@ -5,7 +5,8 @@ import { useHistory } from "react-router-dom";
 
 //const isAuthenticated = window.localStorage.getItem("isAuthenticated");
 
-const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
+export default function ProtectedRoute(props) {
+  const {idRoles, component: Component, ...rest } = props
   /* let roles = instance.getItem("roles"); */
   let roles = [
       {idRol: 1},
@@ -38,5 +39,3 @@ const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
     />
   );
 };
-
-export default ProtectedRoute;
