@@ -34,8 +34,7 @@ const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
     <div>
     <Route {...rest} render={props => (
       isSignedIn ?
-      <Component {...props} />: 
-      <Redirect to="/"/>
+      <Component {...props} />: <Redirect to="/"/>
   )} />
   </div>
   );

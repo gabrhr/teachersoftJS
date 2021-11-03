@@ -1,8 +1,12 @@
 import React from 'react';
 import { useGoogleAuth } from '../pages/Login/googleAuth';
 
-const PrivatePage = () => {
-    const { signIn } = useGoogleAuth();
+const LoginPrueba = () => {
+    const { signIn,googleUser} = useGoogleAuth();
+
+    //Axios -> mandar tokenId, correo, etc
+    // respuesta -> objeto usuario -> (rol)
+
     return (
         <div>
             <h2>Private Page</h2>
@@ -12,4 +16,4 @@ const PrivatePage = () => {
     );
 };
 
-export default PrivatePage;
+export default LoginPrueba;

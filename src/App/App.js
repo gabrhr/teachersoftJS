@@ -23,10 +23,10 @@ import Employees from '../pages/Employees/Employees';
 import UserPage from '../pages/General/UserPage';
 //import ContentHeader from '../components/AppMain/ContentHeader';
 
-import ProtectedRoute from '../pages/General/RouterProtected';
+import ProtectedRoute from '../pages/General/ProtectedRoute';
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
-import PublicRouter from '../pages/General/RoutePublic';
-import PrivatePage from './prueba';
+import PublicRoute from '../pages/General/PublicRoute';
+import LoginPrueba from './prueba';
 
 import TestHeaderUser from '../pages/Dev/TestHeaderUser'
 import { useGoogleAuth } from '../pages/Login/googleAuth';
@@ -42,13 +42,25 @@ function App() {
       <ThemeProvider theme={theme}>
           <Router>
             <Switch>
-              <ProtectedRoute exact path="/admin" idRoles={[1]} component={() => <TestHeaderUser 
-                nombre= "hola"
-                rol="Administrador"
-                idRol= {1}      // admin: 0, as: 1
-                foto={fotoUsuario}              
-              />} />
-              <PublicRouter exact path="/" component={PrivatePage} />
+              
+              <ProtectedRoute exact path="/admin" idRoles={[1]} component={() => 
+                <TestHeaderUser 
+                  nombre= "hola"
+                  rol="Administrador"
+                  idRol= {1}      // admin: 0, as: 1
+                  foto={fotoUsuario}              
+                />} 
+              />
+              <ProtectedRoute exact path="/as" idRoles={[2]} component={() => 
+                <TestHeaderUser 
+                  nombre= "hola mundo"
+                  rol="Administrador"
+                  idRol= {2}      // admin: 0, as: 1
+                  foto={fotoUsuario}              
+                />} 
+              />
+              
+              <PublicRoute exact path="/" component={LoginPrueba} />
             </Switch>
           </Router>
         <CssBaseline />
