@@ -171,13 +171,13 @@ export default function GestionUsuarios() {
         tipo_persona: usuario.rol,
         seccion: {
           id: usuario.seccion.id,
-          nombre: usuario.seccion.nombre
+          nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
         },
         departamento: {
           id: usuario.departamento.id,
-          nombre: usuario.departamento.nombre
+          nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null
         },
-        foto_URL: usuario.foto
+        foto_URL: null
       }
 
     }
@@ -191,27 +191,25 @@ export default function GestionUsuarios() {
       tipo_persona: usuario.rol,
       seccion: {
         id: usuario.seccion.id,
-        nombre: usuario.seccion.nombre
+        nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
       },
       departamento: {
         id: usuario.departamento.id,
-        nombre: usuario.departamento.nombre
+        nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null 
       },
-      foto_URL: usuario.foto
+      foto_URL: null
     }
 
     recordForEdit 
         ? personaService.updatePersona(dataPer, usuario.idPersona) 
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
-            if(!recordForEdit)
-              setRecordForEdit(idUsuario);
-            else
+            if(recordForEdit)
               setRecordForEdit(null);
         })
     setOpenPopup(false)
     resetForm()
-
+    window.location.replace('');
     /*if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
       //DTLocalServices.postPersona(dataPer)
@@ -246,9 +244,10 @@ export default function GestionUsuarios() {
       ...confirmDialog,
       isOpen: false
     })
-
-    personaService.deletePersona(idPersona)
+    console.log(idPersona)
+    console.log(id)
     userService.borrarUsuario(id)
+    window.location.replace('');
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
@@ -357,7 +356,20 @@ export default function GestionUsuarios() {
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-
+                      <Controls.ActionButton 
+                        color="error"
+                        onClick={() => {
+                          // onDelete(item.id)
+                          setConfirmDialog({
+                            isOpen: true,
+                            title: '¿Eliminar usuario permanentemente?',
+                            subTitle: 'No es posible deshacer esta accion',
+                            onConfirm: () => {onDelete(item.idPersona, item.id)}
+                          })
+                        }}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </Controls.ActionButton>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
