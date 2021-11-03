@@ -152,10 +152,10 @@ export default function GestionUsuarios() {
       setRecords(newUsr);
 
     });
-  }, [recordForEdit])
+  }, [recordForEdit, records])
 
   const addOrEdit = (usuario, resetForm) => {
-    
+
     const dataUsr = {
       id: usuario.id,
       fecha_creacion: null,
@@ -195,13 +195,13 @@ export default function GestionUsuarios() {
       },
       departamento: {
         id: usuario.departamento.id,
-        nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null 
+        nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null
       },
       foto_URL: null
     }
 
-    recordForEdit 
-        ? personaService.updatePersona(dataPer, usuario.idPersona) 
+    recordForEdit
+        ? personaService.updatePersona(dataPer, usuario.idPersona)
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
             if(recordForEdit)
@@ -228,7 +228,7 @@ export default function GestionUsuarios() {
       message: 'Cambios añadidos',
       type: 'success'
     })
-    
+
   }
 
   /* open object in a pop up (for edit) */
@@ -246,15 +246,15 @@ export default function GestionUsuarios() {
     })
     console.log(idPersona)
     console.log(id)
-    
+
     userService.borrarUsuario(id)
-    
+
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
     });*/
     //setRecords(DTLocalServices.getAllPersonas())
-    
+
     setNotify({
       isOpen: true,
       message: 'Borrado Exitoso',
@@ -357,7 +357,7 @@ export default function GestionUsuarios() {
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-                      <Controls.ActionButton 
+                      <Controls.ActionButton
                         color="error"
                         onClick={() => {
                           // onDelete(item.id)

@@ -12,6 +12,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 //import AgregarEditarDepartamento from './AgregarEditarDepartamento'
@@ -101,6 +103,11 @@ export default function GestionDepartamento() {
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
+    /* notification snackbar */
+    //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+    /* confirm dialog */
+    const [confirmDialog, setConfirmDialog] = useState(
+      { isOpen: false, title: '', subtitle: '' })
     const {
         TblContainer,
         TblHead,
@@ -178,6 +185,30 @@ export default function GestionDepartamento() {
         type: 'success'
       })
     }
+    const onDelete = (idDepartamento) => {
+      // if (!window.confirm('Are you sure to delete this record?'))
+      //   return
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+      console.log(idDepartamento)
+      //console.log(id)
+      DepartamentoService.deleteDepartamento(idDepartamento);
+      //userService.borrarUsuario(idDepartamento)
+
+      /*DTLocalServices.getUsers().then((response) => {
+        setRecords(response.data)
+        console.log(response.data);
+      });*/
+      //setRecords(DTLocalServices.getAllPersonas())
+
+      setNotify({
+        isOpen: true,
+        message: 'Borrado Exitoso',
+        type: 'error'
+      })
+    }
 
 
     return (
@@ -248,10 +279,15 @@ export default function GestionDepartamento() {
                           <IconButton aria-label="delete">
                             <DeleteIcon
                             color="warning"
-                            onClick={()=>{
-                              setOpenPopup(true);
-                              setRecordForEdit(item);}}
-                            />
+                            onClick={() => {
+                              // onDelete(item.id)
+                              setConfirmDialog({
+                                isOpen: true,
+                                title: '¿Eliminar departamento permanentemente?',
+                                subTitle: 'No es posible deshacer esta accion',
+                                onConfirm: () => {onDelete(item.id)}
+                              })
+                            }}/>
                           </IconButton>
                         </StyledTableCell>
                       </StyledTableRow>
@@ -274,6 +310,14 @@ export default function GestionDepartamento() {
               />
               {/*  <GestionUsuariosForm/> */}
             </Popup>
+            <Notification
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+              confirmDialog={confirmDialog}
+              setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }
