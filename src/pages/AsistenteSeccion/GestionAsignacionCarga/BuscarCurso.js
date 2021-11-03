@@ -46,6 +46,7 @@ const fillCursos = async () => {
       nombre: cur.nombre,
       codigo: cur.codigo,
       creditos: cur.creditos,
+      seccion: cur.seccion
     })
     ));
   //console.log(cursos);

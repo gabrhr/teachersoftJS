@@ -16,6 +16,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import BuscarCurso from './BuscarCurso'
 import Popup from '../../../components/util/Popup'
 import AddButton from '../../../components/controls/AddButton';
+import horarioService from '../../../services/horarioService';
+import ModalCancelarHorarioCurso from './ModalCancelarHorarioCurso';
+import ModalGuardarHorarioCurso from './ModalGuardarHorarioCurso';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -35,44 +38,33 @@ const initialFieldValues = {
 
 const tableHeaders = [
     {id: 'tipo', label: 'Tipo'},
-    {id: 'diaSesion', label: 'Día - Sesión'},
-    {id: 'horaSesion', label: 'Hora - Sesión'}
+    {id: 'diaSesion', label: 'Sesión'}
 ]
 
 const tipo = [
     { id: 'Clase', title: 'Clase' },
-    { id: 'Laboratorio', title: 'Laboratorio' },
-    { id: 'Práctica', title: 'Práctica' }
+    { id: 'Laboratorio', title: 'Laboratorio' }
 ]
 
-const diaSes = [
-    { id: 'Lunes', title: 'Lunes' },
-    { id: 'Martes', title: 'Martes' },
-    { id: 'Miércoles', title: 'Miércoles' }    
-]
 
-const horaSes = [
-    { id: '15:00 - 17:00', title: '15:00 - 17:00' },
-    { id: '17:00 - 19:00', title: '17:00 - 19:00' },
-    { id: '19:00 - 21:00', title: '19:00 - 21:00' }
-]
 
 export default function GestionCargaCursos() {
 
     
     const [openPopup, setOpenPopup] = useState(false)
+    const [openCancelarPopup, setOpenCancelarPopup] = useState(false)
+    const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
 
     const [vTipo, setVTipo] = useState('')
-    const [vDiaSesion, setVDiaSesion] = useState('')
-    const [vHoraSesion, setVHoraSesion] = useState('')
+    const [dataSes, setDataSes] = useState([])
 
     const [dValuNombre, setDefValueNombre] = useState('')
     const [dValuCreditos, setDefValueCreditos] = useState('')
-    const [dValuHLectivas, setDefValueHLectivas] = useState('')
     const [dValuUnidad, setDefValueUnidad] = useState('')
     const [dValuHorario, setDefValueHorario] = useState('')
     const [valueTipo, setValueTipo] = useState('')
-
+    const [horario, setHorario] = useState('')
+    const [sesion, setSesion] = useState('')
     const classes = useStyles()
 
     const [records, setRecords] = useState([])
@@ -91,35 +83,46 @@ export default function GestionCargaCursos() {
         handleInputChange
     } = useForm(initialFieldValues);
 
-    function getRow ({...props}){
+    function getRow (props){
+        console.log(props)
         setOpenPopup(false)
         setDefValueNombre(`${props.codigo} - ${props.nombre}`)
         setDefValueCreditos(`${props.creditos}`)
-        setDefValueHLectivas(`${props.horasLec}`)
-        setDefValueUnidad(`${props.especialidad}`)
+        setDefValueUnidad(`${props.seccion.nombre}`)
         setDefValueHorario(`${props.horario}`)
     }
 
     function resetPage(){
         setDefValueNombre(``)
         setDefValueCreditos(``)
-        setDefValueHLectivas(``)
         setDefValueUnidad(``)
         setDefValueHorario(``)
         setValueTipo('')
+        setRecords([])
+        setHorario('')
+        setSesion('')
+        setOpenCancelarPopup(false)
     }
 
+    
+
     function addSession(){
+       
         setRecords(records => [...records, {
                 tipo: `${vTipo}`,
-                diaSesion: `${vDiaSesion}`,
-                horaSesion: `${vHoraSesion}`
-        }]);
+                diaSesion: horarioService.convertSesiontoString(dataSes[0], dataSes[1], dataSes[2], dataSes[3], dataSes[4])
+        }]
+        )
+        
     }
 
     const changeTipo = e => {setVTipo(e.target.value)}
-    const changeDiaSesion = e => {setVDiaSesion(e.target.value)}
-    const changeHoraSesion = e => {setVHoraSesion(e.target.value)}
+    const changeHorario = e => {setHorario(e.target.value)}
+    const changeSesion = e => { setDataSes(horarioService.convertStringtoSesion(e.target.value))}
+
+    const guardarHorario = () => {
+        /* GUARDAR EL HORARIO CONFIGURADO */
+    }
 
     return (
         <> 
@@ -157,13 +160,6 @@ export default function GestionCargaCursos() {
                             /*variant = 'contained'*/
                         />
                         <Controls.Input 
-                            name="horasLec"
-                            label="Cantidad de horas lectivas"  
-                            value={dValuHLectivas} 
-                            onChange = {handleInputChange}
-                            size= 'small'
-                        />
-                        <Controls.Input 
                             name="especialidad"
                             label="Unidad correspondiente"  
                             value={dValuUnidad} 
@@ -173,8 +169,8 @@ export default function GestionCargaCursos() {
                         <Controls.Input 
                             name="horario"
                             label="Horario"  
-                            value={dValuHorario} 
-                            onChange = {handleInputChange}
+                            value={horario} 
+                            onChange = {changeHorario}
                             size= 'small'
                         />
                     </Stack>
@@ -182,7 +178,7 @@ export default function GestionCargaCursos() {
                 <Grid item xs={7} sx={{paddingLeft:'20%'}}>
                     <DT.BorderBox>
                         <Stack direction="column" alignItems="top" spacing={3} px = {9}>
-                            <AddButton onClick = {addSession}/>
+                            
                             <Controls.Select
                             name="tipo"
                             label="Tipo"
@@ -191,20 +187,16 @@ export default function GestionCargaCursos() {
                             options={tipo}
                             displayEmpty
                             /> 
-                            <Controls.Select
-                            name="diaSesion"
-                            label="Día - Sesión"
-                            value={values.diaSesion}
-                            onChange={changeDiaSesion}
-                            options={diaSes}
-                            /> 
-                            <Controls.Select
+                            <Controls.Input
                             name="horaSesion"
-                            label="Hora - Sesión"
-                            value={values.horaSesion}
-                            onChange={changeHoraSesion}
-                            options={horaSes}
-                            />    
+                            label="Horario - Sesión"
+                            value={sesion}
+                            onChange={(e)=>{
+                                changeSesion(e)
+                                setSesion(e.target.value)
+                            }}
+                            />
+                            <AddButton onClick = {addSession} title = "Agregar horario"/>  
                         </Stack>
                     </DT.BorderBox>
                     <DT.BorderBox marginY={3}>
@@ -216,7 +208,6 @@ export default function GestionCargaCursos() {
                                             <TableRow key={item.id}>
                                                 <TableCell>{item.tipo}</TableCell>
                                                 <TableCell>{item.diaSesion}</TableCell>
-                                                <TableCell>{item.horaSesion}</TableCell>
                                             </TableRow>
                                         ))
                                 }
@@ -232,13 +223,14 @@ export default function GestionCargaCursos() {
                         variant="outlined"
                         text="cancelar"
                         endIcon={<CloseIcon/>}
-                        onClick = {resetPage}
+                        onClick = {()=>setOpenCancelarPopup(true)}
                         />
                         
                     <Controls.Button
                         text="guardar"
                         type="submit" 
-                        endIcon={<SaveIcon/>}  
+                        endIcon={<SaveIcon/>}
+                        onClick = {()=>setOpenGuardarPopup(true)}  
                         />
                 </Grid>
             </Grid>
@@ -248,7 +240,21 @@ export default function GestionCargaCursos() {
                 title="Buscar Curso"
             >
                <BuscarCurso getRow = {getRow}/>
-            </Popup>  
+            </Popup>
+            <Popup
+                openPopup={openCancelarPopup}
+                setOpenPopup={setOpenCancelarPopup}
+                title="Cancelar"
+            >
+               <ModalCancelarHorarioCurso cancelar = {resetPage} setOpenCancelarPopup={setOpenCancelarPopup}/>
+            </Popup> 
+            <Popup
+                openPopup={openGuardarPopup}
+                setOpenPopup={setOpenGuardarPopup}
+                title="Guardar"
+            >
+               <ModalGuardarHorarioCurso setOpenGuardarPopup = {setOpenGuardarPopup} guardarHorario = {guardarHorario}/>
+            </Popup>   
         </>
     )
 }
