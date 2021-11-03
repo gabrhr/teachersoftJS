@@ -7,6 +7,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
+import HorarioService from '../../../services/horarioService';
+
 
 const headers = [
     { id: '1', title: 'Horarios' },
@@ -29,7 +31,72 @@ function HeaderBoxs(props) {
         ))
     )
 }
+/*
+const fillHorarios = async () => {
+  //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
+  const dataHor = await HorarioService.getHorarios();
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const horarios = [];
+  if(!dataHor)  {
+    console.error("No se puede traer la data del servidor de los horarios")
+    return [];
+  }
+  for (let hor of dataHor){
+    await horarios.push({
+      "id": hor.id,
+      "codigo": hor.codigo,
+      "tipo": hor.tipo,
+      "horas_semanales": hor.horas_semanales,
+      ciclo:{
+        "id": hor.ciclo.id,
+      },
+      curso:{
+        "id": hor.curso.id,
+      },
+      docentes:[{
+        clase: [
+        {
+            id: 20201234,
+            nombre: 'Freddy Paz',
+            seccion: 'Ing. Informatica',
+            tipo: 'TC',
+            cargaHoraria: 10,
+            deudaHoraria: 2
+        }
+        ],
+        lab: [
+            {
+                id: 20001234,
+                nombre: 'Andres',
+                seccion: 'Ing. Informatica',
+                tipo: 'TPA',
+                cargaHoraria: 6,
+                deudaHoraria: 0
+            },
+            {
+                id: 20004321,
+                nombre: 'Bruno',
+                seccion: 'Ing. Informatica',
+                tipo: 'TPA',
+                cargaHoraria: 4,
+                deudaHoraria: 0
+            }
+        ]
+      }],
+      hora_sesion: [HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
+        hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
+        hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin)],
+      "estado": 'sin Docente'
+    })
+    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
 
+  }
+
+  console.log(horarios);
+
+  return horarios;
+}
+*/
 const sampleData = [
     {
         id: '1',
@@ -171,8 +238,21 @@ function generateRows(records) {
     )
 }
 
-export default function TestPage() {
+export default function TestPage(recordForEdit, setRecordForEdit) {
+  //console.log(recordForEdit);
     const [records, setRecords] = React.useState([])
+/*
+    React.useEffect(() => {
+      fillHorarios()
+      .then (newHor =>{
+        setRecords(newHor);
+        console.log(newHor);
+        //console.log(newSeccion);
+        
+        console.log(records);
+      });
+    }, [])
+*/
     return (
         <>
             <Accordion disabled>
