@@ -11,6 +11,7 @@ import tokens from '../../services/tokens';
 import HeaderUser from '../../components/PageComponents/HeaderUser';
 import Vacio from '../Dev/Vacio';
 import axios from 'axios';
+import { useGoogleAuth } from './googleAuth';
 
 const initialFieldValues = {
   id: 0,
@@ -109,10 +110,13 @@ const Login = ({ setUser }) => {
     }
   }
 
-  const responseGoogle = (response) => {
+  const { signIn } = useGoogleAuth();
+  /* const responseGoogle = (response) => {
+    console.log("aqui")
     console.log(response);
-    /* setUser(response.profileObj) */;
-  }
+    signIn() ;
+    /* setUser(response.profileObj) ;
+  } */
 
   return (
     <Form onSubmit={handleSubmit} >
@@ -151,24 +155,24 @@ const Login = ({ setUser }) => {
         o
       </Typography>
       
-       <GoogleLogin
+       {/* <GoogleLogin
         clientId="626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com"
-        render={renderProps => (
+        render={renderProps => (  */}
           <Controls.Button
                   variant="outlined"
                   size='small'
                   fullWidth
                   text="Iniciar sesión con correo PUC"
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
+                  onClick={signIn}
                 />
 
-        )}
+        {/* )}
         buttonText="Iniciar sesión con correo PUCP"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={'single_host_origin'}
-        />
+
+        /> */}
           
       <Typography paddingTop="20px" >
         <Link to="#" >

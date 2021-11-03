@@ -25,6 +25,7 @@
     "react-scripts": "4.0.3",
     "react-social-login-buttons": "^3.6.0",
     "react-swipeable-views": "^0.14.0",
+    "react-use-googlelogin": "^0.12.5",
     "web-vitals": "^1.1.2",
     "xlsx": "^0.17.3"
   },

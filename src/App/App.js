@@ -15,21 +15,23 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 // import {MenuAdministrador} from '../components/PageComponents/MenuAdministrador';
 import Login from '../pages/Login/Login';
 import { FamilyRestroomOutlined, FormatColorResetSharp } from '@mui/icons-material';
 import Employees from '../pages/Employees/Employees';
 import UserPage from '../pages/General/UserPage';
 //import ContentHeader from '../components/AppMain/ContentHeader';
-// import ProtectedRoute from './RouterProtected';
+
+import ProtectedRoute from '../pages/General/RouterProtected';
+import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
+import PublicRouter from '../pages/General/RoutePublic';
 
 function App() {
   /* PRUEBAS */
   //if (true) {
   /* PRUEBAS (solo util para probarl login screen) */
   const [user, setUser] = React.useState({nombres: '', rol: ''});
-  const history = useHistory();
 
   useEffect(() => {
     console.log('App: UseEffect:')
@@ -40,23 +42,22 @@ function App() {
   if (true) {
     return (
       <ThemeProvider theme={theme}>
-        <Router>
-          <Switch>
-            <Route exact path="/">
+          <BrowserRouter>
+            <PublicRouter exact path="/">
               <Login 
                 setUser={setUser}
               />
-              </Route>
-          </Switch>
+              </PublicRouter>
+              <ProtectedRoute exact path="/admin" idRoles={[1]} component={GestionUsuarios} />
+          </BrowserRouter>
           
           
-        </Router>
         <CssBaseline />
       </ThemeProvider>
     )
   }
 
-  return (
+  /* return (
     <ThemeProvider theme={theme}>
       <Router>
         {/* <Route exact path="/" component={Login} />
@@ -64,7 +65,7 @@ function App() {
           {/* "HeaderderUser" (main)
               > {Hpucp, H2user, sidebar, "UserPage" (content)}  
                 > {router (the thing that loads all other things)}
-          */}
+          }
           <HeaderUser
               nombre="Pedro Picapiedra"
               rol="Administrador"
@@ -74,7 +75,7 @@ function App() {
         <CssBaseline />
       </Router>
     </ThemeProvider>  
-  );
+  ); */
 }
 
 export default App;
