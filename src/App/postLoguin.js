@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import UserService from '../services/userService'
 
 import {useParams, useHistory} from "react-router";
 const PostLogin = () => {
@@ -16,7 +17,12 @@ const PostLogin = () => {
         waitLoadUser();
     }, []);
     const waitLoadUser = () => {
-
+      
+      const getUsuario = (token) => {
+        const user = UserService.getUsuario(token);
+        console.log(user);
+        console.log(user.id);
+      }
         setLoading(undefined);
         setTimeout(() => {
             //axios llame getUsuario("localhost:8080/usuario/id",)
@@ -25,6 +31,7 @@ const PostLogin = () => {
             setCurrent(instance.getItem("sasaGurudumu"));
             //console.log(current);
           }); */
+
           setLoading(true);
           setTimeout(() => {
               setLoading(false);
