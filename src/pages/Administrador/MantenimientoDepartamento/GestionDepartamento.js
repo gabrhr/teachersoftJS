@@ -9,7 +9,9 @@ import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { Typography } from '@mui/material'
+import { Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 //import AgregarEditarDepartamento from './AgregarEditarDepartamento'
@@ -180,68 +182,84 @@ export default function GestionDepartamento() {
 
     return (
         <>
-            <ContentHeader
-                text="Gestión de Departamentos"
-                cbo={false}
-            />
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}>
-                   Departamentos
-                </Typography>
-                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
-                <Controls.Input
-                    label="Buscar Departamentos por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
-                />
+          <ContentHeader
+            text="Gestión de Departamentos"
+            cbo={false}
+          />
+          <Paper variant="outlined" sx={PaperStyle}>
+            <Typography variant="h4" style={SubtitulosTable}>
+              Departamentos
+            </Typography>
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+              {/* <Toolbar> */}
+              <Controls.Input
+                label="Buscar Departamentos por Nombre"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  )
+                }}
+                sx={{ width: .75 }}
+                onChange={handleSearch}
+                type="search"
+              />
 
-                <Controls.AddButton
-                    title="Agregar Nuevo Departamento"
-                    variant="iconoTexto"
-                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                />
+              <Controls.AddButton
+                title="Agregar Nuevo Departamento"
+                variant="iconoTexto"
+                onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+              />
 
-                {/* </Toolbar> */}
-                </div>
-                <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id}>
-                            <StyledTableCell
-                            align="right"
-                            >
-                            {item.id}
-                            </StyledTableCell>
-                            <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.correo}</StyledTableCell>
-                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
-                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                            </StyledTableCell>
-                        </StyledTableRow>
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
-                <TblPagination />
+              {/* </Toolbar> */}
+            </div>
+            <BoxTbl>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell
+                          align="right"
+                        >
+                          {item.id}
+                        </StyledTableCell>
+                        <StyledTableCell>{item.nombre}</StyledTableCell>
+                        <StyledTableCell>{item.correo}</StyledTableCell>
+                        <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                        <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                        <StyledTableCell>
+                          <Controls.ActionButton
+                            color="warning"
+                            onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                          >
+                            <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          <Controls.ActionButton
+                          color="warning"
+                          onClick={()=>{
+                            setOpenPopup(true);
+                            setRecordForEdit(item);}}
+                          >
+                          <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          <IconButton aria-label="delete">
+                            <DeleteIcon
+                            color="warning"
+                            onClick={()=>{
+                              setOpenPopup(true);
+                              setRecordForEdit(item);}}
+                            />
+                          </IconButton>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  }
+                </TableBody>
+              </TblContainer>
+              <TblPagination />
             </BoxTbl>
             </Paper>
 

@@ -15,8 +15,6 @@ import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
 //import * as employeeService from '../../../services/employeeService'
 
-
-
 const tableHeaders = [
     {
       id: 'id',
@@ -171,45 +169,45 @@ export default function GestionSeccion() {
 */
     return (
         <>
-            <ContentHeader
-                text="Gestión de Secciones"
-                cbo={false}
-            />
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
-                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                <Toolbar>
+          <ContentHeader
+            text="Gestión de Secciones"
+            cbo={false}
+          />
+          <Paper variant="outlined" sx={PaperStyle}>
+            <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+              <Toolbar>
                 <Controls.Input
-                    label="Buscar Secciones por Nombre"
-                    InputProps={{
+                  label="Buscar Secciones por Nombre"
+                  InputProps={{
                     startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
                     )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
+                  }}
+                  sx={{ width: .75 }}
+                  onChange={handleSearch}
+                  type="search"
                 />
                 <Controls.AddButton
-                    title="Agregar Nueva Sección"
-                    variant="iconoTexto"
-                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                    //openInPopup();^
+                  title="Agregar Nueva Sección"
+                  variant="iconoTexto"
+                  onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                  //openInPopup();^
                 />
 
-                </Toolbar>
-                </div>
-                <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id}>
-                            <StyledTableCell
-                            align="right"
+              </Toolbar>
+            </div>
+            <BoxTbl>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell
+                          align="right"
                             >
                             {item.id}
                             </StyledTableCell>

@@ -122,6 +122,7 @@ export default function AgregarEditarSeccion(props) {
     }, [recordForEdit])
 
     return (
+
       <Form onSubmit={handleSubmit}>
 
             <Grid container>
@@ -136,16 +137,19 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
+                    {console.log("Estos es values: ",values)}
                     <Controls.Input
                         name="correo"
                         label="Correo Electrónico"
                         value={values.correo}
+
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
-
+                    {console.log("Estos es record",recordForEdit)}
                     <Controls.Select
                         name="departmentId"
+
                         label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
