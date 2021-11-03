@@ -171,13 +171,13 @@ export default function GestionUsuarios() {
         tipo_persona: usuario.rol,
         seccion: {
           id: usuario.seccion.id,
-          nombre: usuario.seccion.nombre
+          nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
         },
         departamento: {
           id: usuario.departamento.id,
-          nombre: usuario.departamento.nombre
+          nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null
         },
-        foto_URL: usuario.foto
+        foto_URL: null
       }
 
     }
@@ -191,27 +191,25 @@ export default function GestionUsuarios() {
       tipo_persona: usuario.rol,
       seccion: {
         id: usuario.seccion.id,
-        nombre: usuario.seccion.nombre
+        nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
       },
       departamento: {
         id: usuario.departamento.id,
-        nombre: usuario.departamento.nombre
+        nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null 
       },
-      foto_URL: usuario.foto
+      foto_URL: null
     }
 
     recordForEdit 
         ? personaService.updatePersona(dataPer, usuario.idPersona) 
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
-            if(!recordForEdit)
-              setRecordForEdit(idUsuario);
-            else
+            if(recordForEdit)
               setRecordForEdit(null);
         })
     setOpenPopup(false)
     resetForm()
-
+    window.location.replace('');
     /*if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
       //DTLocalServices.postPersona(dataPer)
@@ -249,6 +247,7 @@ export default function GestionUsuarios() {
 
     personaService.deletePersona(idPersona)
     userService.borrarUsuario(id)
+    window.location.replace('');
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);

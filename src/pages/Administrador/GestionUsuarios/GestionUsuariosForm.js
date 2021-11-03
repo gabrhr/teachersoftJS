@@ -32,6 +32,14 @@ const initialFieldValues = {
   nombreDepartamento: '',
   seccionId: '',
   nombreSeccion: '',
+  departamento: {
+    id: '',
+    nombre: ''
+  },
+  seccion: {
+    id: '',
+    nombre: ''
+  }
 }
 
 const getDepartamento = async () => {
@@ -158,14 +166,14 @@ export default function GestionUsuariosForm(props) {
         rol: values.rol,
         departamento: {
           id: recordForEdit ? parseInt(values.departamento.id) : parseInt(values.departmentId) ,
-          nombre: recordForEdit ? values.departamento.nombre : null,
+          nombre: recordForEdit ? parseInt(values.departamento.nombre) : null,
         },
         seccion: {
           id: recordForEdit ? parseInt(values.seccion.id) : parseInt(values.seccionId) ,
-          nombre: recordForEdit ? values.seccion.nombre : null,
+          nombre: recordForEdit ? parseInt(values.seccion.nombre) : null,
         }, 
         
-        foto: fotoPerfil ? fotoPerfil : values.foto_URL,
+        //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //~~~foto: --queda pendiente 
       }
       console.log(newUsr);
@@ -298,16 +306,16 @@ export default function GestionUsuariosForm(props) {
             
             <Controls.Select
               name="departmentId"
-              label={recordForEdit? values.departamento.nombre : "Departamento"}
-              value={recordForEdit? values.departamento.id : values.departmentId}
+              label={recordForEdit ? values.departamento.nombre : "Departamento"}
+              value={recordForEdit ? values.departamento.id : values.departmentId}
               onChange={handleInputChange}
               options={departamento}
               
             />
             <Controls.Select
               name="seccionId"
-              label={recordForEdit? values.seccion.nombre : "Seccion Principal"}
-              value={recordForEdit? values.seccion.id : values.seccionId}
+              label={recordForEdit ? values.seccion.nombre : "Seccion Principal"}
+              value={recordForEdit ? values.seccion.id : values.seccionId}
               onChange={handleInputChange}
               options={seccion}
               
