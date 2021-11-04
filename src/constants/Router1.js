@@ -35,10 +35,13 @@ export default function Router1(props) {
   const history = useHistory();
   return (
     <Router>
-      <Route path="/activate/:token">
+      {/* <Route exact path="/activate/:userId/:userToken">
         <PostLogin/>
+      </Route> */}
+      <Route exact path="/noRoles">
+        <div>No rol </div>
       </Route>
-      <Route path="/">
+      <Route exact path="/">
         <LoginPrueba/>
       </Route>
       <Route exact path="/admin/showcase">

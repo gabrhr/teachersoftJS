@@ -12,8 +12,13 @@ const getUsuarios = async () => {
     }
 }
 const getUsuario = async (id) => {
+    let secureConfig = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      };
     try{
-        const request = await axios.get(`${url}/usuario/${id}`, id);
+        const request = await axios.get(`${url}/usuario/${id}`, id,secureConfig);
         /* const request = await axios.get(`${url}/usuario/${id}`, id, tokenService.getToken()); */
         if(!request) 
           return request.data;

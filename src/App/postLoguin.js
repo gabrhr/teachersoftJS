@@ -1,48 +1,66 @@
 import React, { useState, useEffect, useContext } from "react";
 import UserService from '../services/userService'
+import { Grid,CircularProgress } from '@mui/material';
+
 
 import {useParams, useHistory} from "react-router";
 const PostLogin = () => {
     
-    const {token}=useParams()
-    localStorage.setItem("id",token)
+    const {userId,userToken}=useParams()
+    localStorage.setItem("userId",userId)
+    localStorage.setItem("userToken",JSON.stringify(userToken))
     const history = useHistory();
     const [current, setCurrent] = useState(undefined);
     const [loading, setLoading] = useState(undefined);
-
+    let token= sessionStorage.getItem("access_token")
     useEffect(() => {
-        console.log(token)
-        //funcion
-        //console.log(Token);
+        console.log(userId)
         waitLoadUser();
     }, []);
+
+    /* useEffect(() => {
+      if (loading == false) {
+        if (!current) return history.push("/noRoles");;
+  
+        switch (current.idRol) {
+          case 1:
+                history.push("/admin");
+                break;
+              case 2:
+                history.push({
+                  pathname: "/as",
+                });
+                break;
+              default:
+                return history.push("/noRoles");
+        }
+      }
+    }, [loading]);
+ */
     const waitLoadUser = () => {
-      
-      const getUsuario = (token) => {
-        const user = UserService.getUsuario(token);
+      setLoading(undefined);
+      setTimeout(() => {
+        const user = UserService.getUsuario(userId);
+        setCurrent(user)
+        /* localStorage.setItem("userObj",JSON) */
         console.log(user);
         console.log(user.id);
-      }
-        setLoading(undefined);
+        setLoading(true);
         setTimeout(() => {
-            //axios llame getUsuario("localhost:8080/usuario/id",)
-          /* loadUser().then((response) => {
-            //guardar user en localStoraed
-            setCurrent(instance.getItem("sasaGurudumu"));
-            //console.log(current);
-          }); */
-
-          setLoading(true);
-          setTimeout(() => {
-              setLoading(false);
-          }, 1000);
+            setLoading(false);
         }, 1000);
-    
+      }, 1000);
+  
     };
 
     return (
       <div>
-          Hola mundo
+          {localStorage.getItem("userId")}
+          {localStorage.getItem("userToken")}
+          <Grid xs={6} textAlign="center" ml={25} mr={2}>
+              <div> Espere un momento ...  </div>
+              <CircularProgress />
+          </Grid>
       </div>
     );
   };
