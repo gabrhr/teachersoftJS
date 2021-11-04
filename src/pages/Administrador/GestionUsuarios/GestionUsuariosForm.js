@@ -7,7 +7,7 @@ import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
 import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
-import DTLocalServices from '../../../services/DTLocalServices';
+import * as DTLocalServices from '../../../services/DTLocalServices';
 import departamentoService from '../../../services/departamentoService';
 import SeccionService from '../../../services/seccionService.js';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';

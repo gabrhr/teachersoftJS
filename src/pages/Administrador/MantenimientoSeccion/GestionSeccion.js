@@ -134,14 +134,12 @@ export default function GestionSeccion() {
         ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
           .then(idSeccion => {
-            if(!recordForEdit)
-              setRecordForEdit(idSeccion);
-            else
+            if(recordForEdit)
               setRecordForEdit(null);
         })
       setOpenPopup(false)
       resetForm()
-
+      window.location.replace('');
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',

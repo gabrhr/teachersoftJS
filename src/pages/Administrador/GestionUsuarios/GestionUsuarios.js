@@ -14,12 +14,12 @@ import Notification from '../../../components/util/Notification'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
 /* SERVICES */
 import personaService from '../../../services/personaService'
-import DTLocalServices from '../../../services/DTLocalServices';
+import * as DTLocalServices from '../../../services/DTLocalServices';
 import userService from '../../../services/userService';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CloseIcon from '@mui/icons-material/Close';
 
 const initialFieldValues = {
   seccionID: '',
@@ -73,7 +73,7 @@ const tableHeaders = [
 const getUsuario = async () => {
 
   const usuario = await userService.getUsuarios();
-
+  console.log(usuario)
   var str
   let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
@@ -357,8 +357,9 @@ export default function GestionUsuarios() {
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-                      <Controls.ActionButton
-                        color="error"
+                      <IconButton aria-label="delete">
+                        <DeleteIcon
+                        color="warning"
                         onClick={() => {
                           // onDelete(item.id)
                           setConfirmDialog({
@@ -367,10 +368,8 @@ export default function GestionUsuarios() {
                             subTitle: 'No es posible deshacer esta accion',
                             onConfirm: () => {onDelete(item.idPersona,item.id)}
                           })
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </Controls.ActionButton>
+                        }}/>
+                      </IconButton>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))

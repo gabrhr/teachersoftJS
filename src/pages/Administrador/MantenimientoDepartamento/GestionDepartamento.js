@@ -171,14 +171,13 @@ export default function GestionDepartamento() {
       .then(idDepartamento=> {
         if(!recordForEdit)
           setRecordForEdit(idDepartamento);
-        else {
-          setRecordForEdit(null);
-        }
+        else
+          setRecordForEdit(null)
       })
 
       setOpenPopup(false)
       resetForm()
-
+      
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
