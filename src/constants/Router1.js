@@ -31,6 +31,7 @@ import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuar
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
+import { UserContext } from './UserContext';
 
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -47,7 +48,8 @@ const privateroutes = [
   /* Docente */
   /* AS */
   { requireRoles: [2], path: "/as", page: AsistenteSeccion },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
+  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
   { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
   { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
@@ -61,27 +63,39 @@ const privateroutes = [
   /* rol sin asignar */
 ]
 
+const publicroutes = [
+  { requireRoles: [], path: "/noRoles", page: Vacio },
+]
+
 export default function Router1(props) {
-  const { usuario, setUsuario } = props
   return (
     <Router>
       <Switch>
         {/* Login */}
         <Route exact path="/login" children={Login} />
+        <Route exact path="/" children={Login} />
         {/* Rutas protegidas */}
         {privateroutes.map(r =>
           <PrivateRoute exact path={r.path} 
             requireRoles={r.requireRoles}
-            usuario={usuario}
+            component={() =>
+              <HeaderUser
+                pagina={r.page}
+              />
+            }
           >
-            <HeaderUser
-              nombre={usuario.fullName}
-              rol={usuario.roleName}
-              idRol={usuario.roleID}
-              foto={usuario.fotoUsuario}
-              pagina={r.page}
-            />
           </PrivateRoute>
+        )}
+        {/* Rutas no protegidas */}
+        {publicroutes.map(r =>
+          <Route exact path={r.path} 
+            render={({location}) =>
+              <HeaderUser
+                pagina={r.page}
+              />
+            }
+          >
+          </Route>
         )}
       </Switch>
     </Router>

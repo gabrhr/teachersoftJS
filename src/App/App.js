@@ -17,22 +17,21 @@ import Router1 from '../constants/Router1'
 import fotoUsuario from '../assets/images/profile-photo.png'
 import { UserProvider } from '../constants/UserContext';
 
-const usuarioInit = {
-  fullName: "Abel Ackermann",
-  roleName: "Administrador",
-  roleID: 2,    // 0: admin, 2: AS
-  fotoUsuario: fotoUsuario,
+// const usuarioInit = {
+//   fullName: "Abel Ackermann",
+//   roleName: "Administrador",
+//   roleID: 2,    // 0: admin, 2: AS
+//   fotoUsuario: fotoUsuario,
 
-  isAuthenticated: false    // true if token como cookie disponible ?
-}
+//   isAuthenticated: false    // true if token como cookie disponible ?
+// }
 
 function App() {
-  const [usuario, setUsuario] = React.useState(usuarioInit)
 
   return (
     <ThemeProvider theme={theme}>
       <UserProvider>  
-        <Router1 usuario={usuario} setUsuario={setUsuario}/>
+        <Router1 />
       </UserProvider>
       <CssBaseline />
     </ThemeProvider>
