@@ -54,11 +54,11 @@ export default function AgregarEditarSeccion(props) {
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('nombre' in fieldValues)
-            temp.nombre = fieldValues.nombre ? "" : "This field is required."
+            temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
                     .test(fieldValues.correo) ? ""
-                    : "This correo is not vaild."
+                    : "Este correo no es válido."
         setErrors({
             ...temp
         })
@@ -91,8 +91,8 @@ export default function AgregarEditarSeccion(props) {
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
-            }, 
-            foto: fotoPerfil,
+            },
+            //foto: fotoPerfil,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
@@ -138,6 +138,7 @@ export default function AgregarEditarSeccion(props) {
     }, [recordForEdit])
 
     return (
+
       <Form onSubmit={handleSubmit}>
 
             <Grid container>
@@ -152,6 +153,7 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
+                    {console.log("Estos es values: ",values)}
                     <Controls.Input
                         name="correo"
                         label="Correo Electrónico"
@@ -159,9 +161,10 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
-
+                    {console.log("Estos es record",recordForEdit)}
                     <Controls.Select
                         name="departmentId"
+
                         label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}

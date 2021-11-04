@@ -1,5 +1,5 @@
 import React from 'react';
-import InboxIcon from '@mui/icons-material/MoveToInbox' 
+import InboxIcon from '@mui/icons-material/MoveToInbox'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
@@ -29,25 +29,5 @@ export const MenuAdministrador = [
             indice: 2,
             }]
     },
-    {
-        text: 'Employees',
-        path: '/admin/employees',
-        icon: <ConstructionIcon />,
-        indice: 1,
 
-    },
-    {
-        text: 'Showcase of Components',
-        path: '/admin/showcase',
-        icon: <ConstructionIcon />,
-        indice: 2,
-     
-    },
-    {
-        text: 'Index',
-        path: '/admin/index',
-        icon: <ConstructionIcon />,
-        indice: 3,
-   
-    }
 ];

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
@@ -10,10 +10,13 @@ import ConfirmDialog from '../../../components/util/ConfirmDialog';
 /* ICONS */
  
 import AddIcon from '@mui/icons-material/Add';
-import { Typography } from '@mui/material'
+import { Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
-import departamentoService from '../../../services/departamentoService';
+//import AgregarEditarDepartamento from './AgregarEditarDepartamento'
+//import departamentoService from '../../../services/departamentoService';
 //import * as employeeService from '../../../services/employeeService'
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
@@ -64,7 +67,7 @@ function createData(id, nombre, correo, fechaFundacion, fechaModificacion) {
         id, nombre, correo, fechaFundacion, fechaModificacion,
     }
   }
-  
+
 const usuarios2 = [
     createData('0', 'Departamento 1', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
     createData('1', 'Departamento 2', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
@@ -72,11 +75,13 @@ const usuarios2 = [
 ]
 */
 
-const getDepartamento = async () => {
+const getDepartamentos = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  const dataDep = await DepartamentoService.getDepartamentos(); 
+  const dataDep = await DepartamentoService.getDepartamentos();
+  console.log(dataDep);
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];
+  console.log(departamentos);
   dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
@@ -87,6 +92,7 @@ const getDepartamento = async () => {
     })
     ));
   //console.log(secciones);
+  window.localStorage.setItem('listDeps',JSON.stringify(dataDep));
   return departamentos;
 }
 
@@ -100,7 +106,7 @@ export default function GestionDepartamento() {
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
   
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
     const {
         TblContainer,
@@ -109,32 +115,14 @@ export default function GestionDepartamento() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-
+    //Posible delete
+/*
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
     }
-
-    const onDelete = id => {
-      setConfirmDialog({
-          ...confirmDialog,
-          isOpen: false
-      })
-
-      //AGREGAR ELIMINACION DEL BACKEND Para Departamento
-      /*
-      employeeService.deleteEmployee(id);
-      setRecords(employeeService.getAllEmployees())
-      */
-   
-      setNotify({
-          isOpen: true,
-          message: 'Departamento eliminado de manera satisfactoria',
-          type: 'error'
-      })
-      
-    }
-
+    //Fin del delete
+*/
     const handleSearch = e => {
       let target = e.target;
       /* React "state object" (useState()) doens't allow functions, only
@@ -150,7 +138,7 @@ export default function GestionDepartamento() {
         }
       })
     }
-    
+
     /* const addOrEdit = (departamento, resetForm) => {
       if (departamento.id == 0)
         departamentoService.registerDepartamento(departamento)
@@ -160,121 +148,125 @@ export default function GestionDepartamento() {
       setRecordForEdit(null)
       setOpenPopup(false)
       setRecords(getDepartamentos.getAllEmployees())
-  
+
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
         type: 'success'
       })
     } */
-    
+    useEffect(() => {
+      getDepartamentos()
+      .then (newDep =>{
+        setRecords(newDep);
+        console.log(newDep);
+      });
+    }, [recordForEdit,records])
+
+
     const addOrEdit = (departamento, resetForm) => {
-      if (departamento.id === 0)
-        departamentoService.registerDepartamento(departamento)
-      else
-        departamentoService.updateDepartamento(departamento)
-      resetForm()
-      setRecordForEdit(null)
+      recordForEdit
+      ? DepartamentoService.updateDepartamento(departamento,departamento.id)
+      : DepartamentoService.registerDepartamento(departamento)
+      .then(idDepartamento=> {
+        if(!recordForEdit)
+          setRecordForEdit(idDepartamento);
+        else {
+          setRecordForEdit(null);
+        }
+      })
+
       setOpenPopup(false)
-      setRecords(prevRecords => prevRecords.concat(departamento))
-  
+      resetForm()
+
       setNotify({
         isOpen: true,
-        message: 'Submitted Successfully',
+        message: 'Registro de Cambios Exitoso',
         type: 'success'
       })
     }
 
 
-    React.useEffect(() => {
-      getDepartamento()
-      .then (newDep =>{
-        setRecords(prevRecords => prevRecords.concat(newDep));
-        
-        //console.log(newSeccion);
-        
-        console.log(records);
-      });
-    }, [])
-
     return (
         <>
-            <ContentHeader
-                text="Gestión de Departamentos"
-                cbo={false}
-            />
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}>
-                   Departamentos
-                </Typography>
-                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
-                <Controls.Input
-                    label="Buscar Departamentos por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
-                />
- 
-                <Controls.AddButton 
-                    title="Agregar Nuevo Departamento"
-                    variant="iconoTexto"
-                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                />
-      
-                {/* </Toolbar> */}
-                </div>
-                <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id}>
-                            <StyledTableCell
-                            align="right"
-                            >
-                            {item.id}
-                            </StyledTableCell>
-                            <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.correo}</StyledTableCell>
-                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
-                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>
-                              <Controls.ActionButton 
-                                color="warning"
-                                onClick={ () => {openInPopup(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              <Controls.ActionButton
-                                color="error"
-                                onClick={() => {
-                                  setConfirmDialog({
-                                    isOpen: true,
-                                    title: '¿Eliminar Departamento permanentemente?',
-                                    subTitle: 'No es posible deshacer esta accion',
-                                    onConfirm: () => { onDelete(item.id) }
-                                  })
-                                }}>
-                                <CloseIcon fontSize="small" />
-                              </Controls.ActionButton>
+          <ContentHeader
+            text="Gestión de Departamentos"
+            cbo={false}
+          />
+          <Paper variant="outlined" sx={PaperStyle}>
+            <Typography variant="h4" style={SubtitulosTable}>
+              Departamentos
+            </Typography>
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+              {/* <Toolbar> */}
+              <Controls.Input
+                label="Buscar Departamentos por Nombre"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  )
+                }}
+                sx={{ width: .75 }}
+                onChange={handleSearch}
+                type="search"
+              />
 
+              <Controls.AddButton
+                title="Agregar Nuevo Departamento"
+                variant="iconoTexto"
+                onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+              />
 
-                            </StyledTableCell>
-                        </StyledTableRow>
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
-                <TblPagination />
+              {/* </Toolbar> */}
+            </div>
+            <BoxTbl>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell
+                          align="right"
+                        >
+                          {item.id}
+                        </StyledTableCell>
+                        <StyledTableCell>{item.nombre}</StyledTableCell>
+                        <StyledTableCell>{item.correo}</StyledTableCell>
+                        <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                        <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                        <StyledTableCell>
+                          <Controls.ActionButton
+                            color="warning"
+                            onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                          >
+                            <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          <Controls.ActionButton
+                          color="warning"
+                          onClick={()=>{
+                            setOpenPopup(true);
+                            setRecordForEdit(item);}}
+                          >
+                          <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          <IconButton aria-label="delete">
+                            <DeleteIcon
+                            color="warning"
+                            onClick={()=>{
+                              setOpenPopup(true);
+                              setRecordForEdit(item);}}
+                            />
+                          </IconButton>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  }
+                </TableBody>
+              </TblContainer>
+              <TblPagination />
             </BoxTbl>
             </Paper>
 
@@ -283,12 +275,12 @@ export default function GestionDepartamento() {
                 setOpenPopup={setOpenPopup}
                 title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
             >
-              <AgregarEditarDepartamento 
+              <AgregarEditarDepartamento
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
               />
               {/*  <GestionUsuariosForm/> */}
-            </Popup>  
+              {/*            </Popup>  
             <Notification 
               notify={notify}
               setNotify={setNotify}
@@ -297,6 +289,8 @@ export default function GestionDepartamento() {
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
             />
+              */}
+            </Popup>
         </>
     )
 }

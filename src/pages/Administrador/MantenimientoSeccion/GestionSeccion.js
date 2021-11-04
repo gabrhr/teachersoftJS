@@ -15,15 +15,7 @@ import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
 //import * as employeeService from '../../../services/employeeService'
 
-
-
 const tableHeaders = [
-    {
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },
     {
       id: 'nombre',
       label: 'Nombre de la seccion',
@@ -50,8 +42,9 @@ const tableHeaders = [
     }
 ]
 
-function getSecciones(){
-  const dataSecc = SeccionService.getSecciones();
+const getSecciones = async () => {
+
+  const dataSecc = await SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -113,73 +106,97 @@ export default function GestionSeccion() {
       getSecciones()
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
-        
+        console.log(newSeccion);
       });
-      
-    }, [recordForEdit])
-  
+
+    }, [recordForEdit,records])
+
     const addOrEdit = (seccion, resetForm) => {
 
-      recordForEdit 
-        ? SeccionService.updateSeccion(seccion, seccion.id) 
+      recordForEdit
+        ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
           .then(idSeccion => {
-            if(!recordForEdit)  
+            if(!recordForEdit)
               setRecordForEdit(idSeccion);
             else
               setRecordForEdit(null);
         })
       setOpenPopup(false)
       resetForm()
-  
+
       setNotify({
         isOpen: true,
-        message: 'Submitted Successfully',
+        message: 'Registro de Cambios Exitoso',
         type: 'success'
       })
     }
 
+/*    const onDelete = (idSeccion,id) => {
+      // if (!window.confirm('Are you sure to delete this record?'))
+      //   return
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+
+      SeccionService.deleteSeccion(idSeccion)
+      //userService.borrarUsuario(id)
+      //DTLocalServices.getUsers().then((response) => {
+      SeccionService
+        setRecords(response.data)
+        console.log(response.data);
+      });
+      //setRecords(DTLocalServices.getAllPersonas())
+      setNotify({
+        isOpen: true,
+        message: 'Deleted Successfully',
+        type: 'error'
+      })
+    }
+*/
     return (
         <>
-            <ContentHeader
-                text="Gestión de Secciones"
-                cbo={false}
-            />
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
-                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/*<Toolbar>*/}
+          <ContentHeader
+            text="Gestión de Secciones"
+            cbo={false}
+          />
+          <Paper variant="outlined" sx={PaperStyle}>
+            <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+              <Toolbar>
                 <Controls.Input
-                    label="Buscar Secciones por Nombre"
-                    InputProps={{
+                  label="Buscar Secciones por Nombre"
+                  InputProps={{
                     startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
                     )
-                    }}
-                    sx={{ width: .1 }}
-                    onChange={handleSearch}
-                    type="search"
+                  }}
+                  sx={{ width: .75 }}
+                  onChange={handleSearch}
+                  type="search"
                 />
-                <Controls.AddButton 
-                    title="Agregar Nueva Sección"
-                    variant="iconoTexto"
-                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                    //openInPopup();^
+                <Controls.AddButton
+                  title="Agregar Nueva Sección"
+                  variant="iconoTexto"
+                  onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                  //openInPopup();^
                 />
-                
-                {/*</Toolbar>*/}
-                </div>
-                <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id}>
-                            {/*<StyledTableCell
-                            align="right"
+
+              </Toolbar>
+            </div>
+            <BoxTbl>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        {/*
+                        <StyledTableCell
+                          align="right"
                             >
                             {item.id}
                             </StyledTableCell>
@@ -196,6 +213,7 @@ export default function GestionSeccion() {
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
+
                             </StyledTableCell>
                         </StyledTableRow>
                         ))

@@ -1,8 +1,16 @@
+import axios from "axios";
 import { insertEmployee } from "./employeeService";
 import { data } from "./data/curso-horario"
 
 /* LIB
  * ======================= */
+import tokenService from './tokens.js';
+
+const POST_PERSONA_URL = 'http://3.227.216.157:8080/persona/';
+const POST_USER_URL = 'http://3.227.216.157:8080/usuario/';
+const GET_USER_URL = 'http://3.227.216.157:8080/usuario/';
+const GET_DEPARTAMENTO_URL = 'http://3.227.216.157:8080/departamento/';
+const GET_SECCION_URL = 'http://3.227.216.157:8080/seccion/porDepartamento=';
 
 /* Validaciones
  * 
@@ -261,3 +269,69 @@ export function getAllCursos() {
         estado: "Pendiente"     // Atendido o Pendiente
     }))
 }
+class DTLocalServices {
+
+    validateEmail(email) {
+        return (/^$|^[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/).test(email)
+            ? ""
+            : "Correo electronico invalido"
+    }
+
+    validateName(name) {
+        return (/^$|^[A-Za-záéíóúñ -]+$/).test(name)
+            ? ""
+            : "Nombre invalido"
+    }
+
+    requiredField(s) {
+        return s.length !== 0 ? "" : "Campo requerido"
+    }
+
+    postUser(data){
+        
+        return axios.post(POST_USER_URL,data);
+    }
+
+    postPersona(data){
+        
+        return axios.post(POST_PERSONA_URL,data);
+    }
+
+    getUsers(){
+        return axios.get(GET_USER_URL);
+    }
+
+    getDepartamentos(){
+        return axios.get(GET_DEPARTAMENTO_URL);
+    }
+
+    /*getSecciones(id){
+        return axios.get(GET_SECCION_URL + id);
+    }*/
+
+    getAllRoles() {
+        return ([
+            { id: 0, nombre: 'Administrador' },
+            { id: 1, nombre: 'Docente' },
+            { id: 2, nombre: 'Asistente de Seccion' },
+            { id: 3, nombre: 'Coordinador de Seccion' },
+            { id: 4, nombre: 'Asistente de Departamento' },
+            { id: 5, nombre: 'Coordinador de Departamento' },
+            { id: 6, nombre: 'Secretario de Departamento' },
+            { id: 7, nombre: 'Externo' },
+            { id: 8, nombre: 'Nuevo Usuario' }
+        ])
+    }
+
+    getAllSecciones() {
+        return ([
+            { id: 1, nombre: 'Informatica' },
+            { id: 2, nombre: 'Telecomunicaciones' },
+            { id: 3, nombre: 'Industrial' },
+            { id: 4, nombre: 'Civil' },
+            { id: 5, nombre: 'Mecanica' },
+            { id: 6, nombre: 'Fisica' }
+        ])
+    }
+}
+export default new DTLocalServices();
