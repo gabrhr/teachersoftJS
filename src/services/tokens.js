@@ -8,7 +8,7 @@ const GetTokenPrueba = () => {
 
   const config = {
     headers: {
-      Authorization: ${token},
+      Authorization: `${token}`,
     }
   };
 
