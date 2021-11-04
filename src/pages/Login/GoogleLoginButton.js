@@ -38,7 +38,7 @@ const GoogleLoginButton = () => {
          /*  if (!current) return history.push("/noRoles");; */
     
           switch (rol) {
-            case 0:
+            case 8:
                   history.push("/admin");
                   break;
             case 1:
@@ -109,7 +109,7 @@ const GoogleLoginButton = () => {
                         variant="outlined"
                         size='small'
                         fullWidth
-                        text="Iniciar sesión con correo PUC"
+                        text="Iniciar sesión con correo PUCP"
                         onClick={renderProps.onClick} disabled={renderProps.disabled}
                         />
             )}
