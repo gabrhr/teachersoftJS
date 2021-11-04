@@ -36,7 +36,7 @@ import { UserContext } from './UserContext';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
-  { requireRoles: [0], path: "/admin", page: GestionUsuarios },
+  { requireRoles: [0,8], path: "/admin", page: GestionUsuarios },
   { requireRoles: [0], path: "/admin/mantenimiento", page: GestionUsuarios },
   { requireRoles: [0], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
   { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
@@ -84,7 +84,7 @@ export default function Router1(props) {
           </PrivateRoute>
         )}
         {/* Rutas no protegidas */}
-        {publicroutes.map(r =>
+        {/* {publicroutes.map(r =>
           <Route exact path={r.path} 
           render={({location}) =>
           <HeaderUser
@@ -93,7 +93,7 @@ export default function Router1(props) {
         }
         >
           </Route>
-        )}
+        )} */}
         {/* Login */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/" children={Login} />
