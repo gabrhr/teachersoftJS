@@ -82,9 +82,9 @@ const GoogleLoginButton = () => {
                     setUser(request.data.user)
                     setRol(request.data.user.persona.tipo_persona)
                     setToken(request.data.token)
+                    console.log("hola mundo")
                     const user = await userService.getUsuario(1);
                     console.log(user);
-                    console.log("hola mundo")
                     setLoading(true);
                 }
             } catch(except) {
