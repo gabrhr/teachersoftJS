@@ -1,3 +1,5 @@
+/* OUT OF USE */
+
 import React from "react";
 import { Route, Redirect} from "react-router-dom";
 //import instance from "../../instance";

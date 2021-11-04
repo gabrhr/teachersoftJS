@@ -99,7 +99,7 @@ export default function Header2(props) {
                             fullWidth
                             text="Cerrar sesión"
                             onClick={signOut}
-                            endIcon={logout}
+                            endIcon={<img src={logout} />}
                         />
                     </Grid>
                 </Grid>

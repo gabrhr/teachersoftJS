@@ -1,3 +1,7 @@
+/* Author: Mitsuo, Gabriela
+ * 
+ * Wrapper for Header1, Header2, Drawer (aka. Navbar, aka. SideBar)
+ */
 import React from "react";
 import { Box } from "@mui/material";
 
@@ -96,7 +100,7 @@ export default function HeaderUser(props) {
       />
       {/* Router de Paginas pasa el prop */}
       <BoxPadding>
-        {props.pagina}
+        <props.pagina />
       </BoxPadding>
     </Box>
   );

@@ -1,4 +1,4 @@
-/* Author: Gabriela
+/* Author: Gabriela, Mitsuo
  * 
  * Top level Router that routes all pages, sidebar and headers.
  * 
@@ -12,49 +12,78 @@
  * Ref: https://www.youtube.com/watch?v=yQf1KbGiwiI
  */
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch, useHistory, Link } from 'react-router-dom';
-import HeaderUser from '../components/PageComponents/HeaderUser';
-// import ProtectedRoute from '../pages/General/RouterProtected';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import DTRoute from './DTRoute'
+import PrivateRoute from './PrivateRoute'
 
-/* 
-<Link to="/admin/showcase">
-  aldkfjasldf
-</Link> 
-*/
-
-/* (Content)Pages */
+/* Pages */
 import Login from '../pages/Login/Login';
 import Employees from '../pages/Employees/Employees';
-import UserPage from '../pages/General/UserPage';
-import Showcase from '../pages/Showcase/Showcase';
-import LoginPrueba from '../App/prueba';
-import PostLogin from '../App/postLoguin';
+import Showcase from '../pages/Showcase/Showcase'
+import TestIndex from '../pages/Dev/TestIndex';
+import AsistenteSeccion from '../pages/AsistenteSeccion/GestionAsignacionCarga/AsistenteSeccion';
+import GestionCargaCursos from '../pages/AsistenteSeccion/GestionAsignacionCarga/GestiónCargaCursos';
+import GestionDepartamento from '../pages/Administrador/MantenimientoDepartamento/GestionDepartamento'
+import GestionSeccion from '../pages/Administrador/MantenimientoSeccion/GestionSeccion'
+import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
+import Vacio from '../pages/Dev/Vacio'
+import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
+import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
+import { RouterSharp } from '@mui/icons-material';
+import HeaderUser from '../components/PageComponents/HeaderUser';
+
+/* Todos menos el login que es especial porque settea al usuario */
+const privateroutes = [
+  /* Admin */
+  { requireRoles: [0], path: "/admin", page: GestionUsuarios },
+  { requireRoles: [0], path: "/admin/mantenimiento", page: GestionUsuarios },
+  { requireRoles: [0], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
+  { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
+  { requireRoles: [0], path: "/admin/mantenimiento/sec", page: GestionSeccion },
+  { requireRoles: [0], path: "/admin/mantenimiento/per", page: Vacio },
+  { requireRoles: [0], path: "/admin/showcase", page: Showcase },
+  { requireRoles: [0], path: "/admin/index", page: TestIndex },
+  { requireRoles: [0], path: "/admin/employees", page: Employees },
+  /* Docente */
+  /* AS */
+  { requireRoles: [2], path: "/as", page: AsistenteSeccion },
+  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
+  { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
+  { requireRoles: [2], path: "/as/docentes", page: Vacio },
+  { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
+  /* CS */
+  /* AD */
+  /* CD */
+  /* Secretario de D */
+  /* Externo */
+  /* rol sin asignar */
+]
 
 export default function Router1(props) {
-  const { user, setUser, fotoUsuario } = props
-  const history = useHistory();
+  const { usuario, setUsuario } = props
   return (
     <Router>
-      <Route path="/activate/:token">
-        <PostLogin/>
-      </Route>
-      <Route path="/">
-        <LoginPrueba/>
-      </Route>
-      <Route exact path="/admin/showcase">
-        <HeaderUser
-          //   nombre={user.nombres}
-          //   idRol= {user.rol}
-          //   foto={fotoUsuario}
-          nombre="New Employee"
-          rol="Administrador"
-          idRol={1}      // admin: 0, as: 1
-          foto={fotoUsuario}
-          // pagina={Showcase}        // esta forma no funciona,
-          // que raro
-          pagina={<Showcase />}
-        />
-      </Route>
+      <Switch>
+        {/* Login */}
+        <Route exact path="/login" children={Login} />
+        {/* Rutas protegidas */}
+        {privateroutes.map(r =>
+          <PrivateRoute exact path={r.path} 
+            requireRoles={r.requireRoles}
+            usuario={usuario}
+          >
+            <HeaderUser
+              nombre={usuario.fullName}
+              rol={usuario.roleName}
+              idRol={usuario.roleID}
+              foto={usuario.fotoUsuario}
+              pagina={r.page}
+            />
+          </PrivateRoute>
+        )}
+      </Switch>
     </Router>
   )
 }
