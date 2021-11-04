@@ -100,7 +100,7 @@ export default function AgregarEditarSeccion(props) {
       dataDep.map(dep => (
         departamentos.push({
           id: dep.id.toString(),
-          title: dep.nombre,
+          nombre: dep.nombre,
         })
       ));
 
