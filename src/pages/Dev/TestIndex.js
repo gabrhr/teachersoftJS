@@ -4,29 +4,25 @@ import ReactMarkdown from 'react-markdown'
 
 const markdown = `# Index of testing pages in TeacherSoft
 
-- [Asistente De Seccion](${window.location.origin + '/AsistenteSeccion'})
-- [Administrador](${window.location.origin + '/GestionUsuariosForm'})
-- [employee](${window.location.origin + '/employee'})
-- [login screen](${window.location.origin + '/login'})
-- [DreamTeam components showcase](${window.location.origin + '/showcase'})
-- [here](${window.location.href})
-- [Gestion Usuarios](${window.location.origin + '/GestionDeUsuarios'})
-- [Gestión carga cursos](${window.location.origin + '/GestionCargaCursos'})
+Dev:
 
-~~~C
-# include <stdio.h>
+- [Employees.js](${window.location.origin + '/admin/employees'})
+- [Showcase.js](${window.location.origin + '/admin/showcase'})
+- [Login.js](${window.location.origin + '/login'})
+- [TestIndex.js](${window.location.href})
 
-int main() {
-    printf("hola mundo!\n");
-    return 0;
-}
-~~~
+Admin:
 
-- [just a linnk](https://reactjs.com)
-- [react-markdown](https://github.com/remarkjs/react-markdown)
+- [GestionUsuarios.js](${window.location.origin + '/admin/mantenimiento/usr'})
+- [GestionDepartamento.js](${window.location.origin + '/admin/mantenimiento/dep'})
+- [GestionSeccion.js](${window.location.origin + '/admin/mantenimiento/sec'})
+
+Asistente de Seccion (as):
+
+> [react-markdown](https://github.com/remarkjs/react-markdown)
 `
 
-/* Lists current testing pages */
+/* Index page for pages being develop */
 export default function TestIndex() {
     return (
         <Paper sx={{p: 4}}>

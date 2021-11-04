@@ -1,24 +1,24 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect} from "react-router-dom";
 //import instance from "../../instance";
 import { useHistory } from "react-router-dom";
+import { useGoogleAuth } from "../Login/googleAuth";
 
 //const isAuthenticated = window.localStorage.getItem("isAuthenticated");
 
-const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
-  /* let roles = instance.getItem("roles"); */
-  let roles = [
+export default function ProtectedRoute(props) {
+  const {idRoles, component: Component, ...rest } = props
+  const { isSignedIn } = useGoogleAuth();
+  /* let rol = localStoraged.getItem("roles"); */
+  let rol = [
       {idRol: 1},
-      {idRol: 2},
-      {idRol: 3},
-      {idRol: 4},
     ]
   const history=useHistory();
   let flag=0;
-  if(roles===""){
+  if(rol===""){
     history.push('/'); 
   }
-  roles.forEach(rol=>{
+  rol.forEach(rol=>{
     idRoles.map(idRol=>{
       if(rol.idRol === idRol){
         flag=1;    
@@ -29,14 +29,12 @@ const ProtectedRoute = ({idRoles,component: Component, ...rest }) => {
       history.push('/');
   }
   return (
-    <Route
-      {...rest}
-      render={(props) => {
-          return <Component {...props} />;
-        
-      }}
-    />
+    <div>
+    <Route {...rest} render={props => (
+      isSignedIn ?
+      <Component {...props} />: 
+      <Redirect to="/"/>
+  )} />
+  </div>
   );
 };
-
-export default ProtectedRoute;

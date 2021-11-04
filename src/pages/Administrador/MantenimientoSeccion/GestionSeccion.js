@@ -33,12 +33,6 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'fechaFundacion',
-      label: 'Fecha de Fundación',
-      numeric: false,
-      sortable: true
-    },
-    {
       id: 'fechaModificacion',
       label: 'Última Modificación',
       numeric: false,
@@ -58,9 +52,14 @@ const tableHeaders = [
     }
 ]
 
+<<<<<<< HEAD
 const getSecciones = async () => {
 
   const dataSecc = await SeccionService.getSecciones();
+=======
+function getSecciones(){
+  const dataSecc = SeccionService.getSecciones();
+>>>>>>> gabrhr
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -81,7 +80,6 @@ const getSecciones = async () => {
   window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
   return secciones;
 }
-
 export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
@@ -118,6 +116,7 @@ export default function GestionSeccion() {
           }
         })
     }
+
     useEffect(() => {
       //Obtenemos las secciones
       getSecciones()
@@ -196,6 +195,7 @@ export default function GestionSeccion() {
 */
     return (
         <>
+<<<<<<< HEAD
           <ContentHeader
             text="Gestión de Secciones"
             cbo={false}
@@ -204,6 +204,16 @@ export default function GestionSeccion() {
             <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
               <Toolbar>
+=======
+            <ContentHeader
+                text="Gestión de Secciones"
+                cbo={false}
+            />
+            <Paper variant="outlined" sx={PaperStyle}>
+                <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
+                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+                {/*<Toolbar>*/}
+>>>>>>> gabrhr
                 <Controls.Input
                   label="Buscar Secciones por Nombre"
                   InputProps={{
@@ -212,10 +222,17 @@ export default function GestionSeccion() {
                         <SearchIcon />
                       </InputAdornment>
                     )
+<<<<<<< HEAD
                   }}
                   sx={{ width: .75 }}
                   onChange={handleSearch}
                   type="search"
+=======
+                    }}
+                    sx={{ width: .3, visibility: "hidden" }}
+                    onChange={handleSearch}
+                    type="search"
+>>>>>>> gabrhr
                 />
                 <Controls.AddButton
                   title="Agregar Nueva Sección"
@@ -223,6 +240,7 @@ export default function GestionSeccion() {
                   onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                   //openInPopup();^
                 />
+<<<<<<< HEAD
 
               </Toolbar>
             </div>
@@ -235,9 +253,24 @@ export default function GestionSeccion() {
                       <StyledTableRow key={item.id}>
                         <StyledTableCell
                           align="right"
+=======
+                
+                {/*</Toolbar>*/}
+                </div>
+                <BoxTbl>
+                <TblContainer>
+                    <TblHead />
+                    <TableBody>
+                    {
+                        recordsAfterPagingAndSorting().map(item => (
+                        <StyledTableRow key={item.id}>
+                            {/*<StyledTableCell
+                            align="right"
+>>>>>>> gabrhr
                             >
                             {item.id}
                             </StyledTableCell>
+                            */}
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
@@ -284,6 +317,7 @@ export default function GestionSeccion() {
                 {console.log("Este es el recordforedit ",recordForEdit)}
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
+<<<<<<< HEAD
             <Notification
               notify={notify}
               setNotify={setNotify}
@@ -292,6 +326,8 @@ export default function GestionSeccion() {
               confirmDialog={confirmDialog}
               setConfirmDialog={setConfirmDialog}
             />
+=======
+>>>>>>> gabrhr
         </>
     )
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import url from '../config.js';
 import tokenService from './tokens.js';
+import { formatHorario, formatHorarioCursos } from '../components/auxFunctions';
 
 const getSecciones = async () => {
   try{
@@ -33,7 +34,7 @@ const getSeccion = async ({id}) => {
 const registerSeccion = async newObject => {
   try{
     const request = await axios.post(`${url}/seccion/`, newObject);
-    console.log(request.data);
+    //console.log(request.data);
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
@@ -59,6 +60,9 @@ const deleteSeccion = async (id) => {
   }
 }
 
+<<<<<<< HEAD
 //, tokenService.getToken()
 
+=======
+>>>>>>> gabrhr
 export default {getSecciones, getSeccionxDepartamento, getSeccion, registerSeccion, updateSeccion, deleteSeccion}

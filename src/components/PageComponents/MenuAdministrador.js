@@ -29,5 +29,9 @@ export const MenuAdministrador = [
             indice: 2,
             }]
     },
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> gabrhr
 ];

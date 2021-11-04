@@ -4,10 +4,14 @@ import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
 import AuthService from '../../services/authService';
+import { GoogleLoginButton } from "react-social-login-buttons";
+import { GoogleLogin } from "react-google-login";
 import { useState } from 'react';
 import tokens from '../../services/tokens';
 import HeaderUser from '../../components/PageComponents/HeaderUser';
 import Vacio from '../Dev/Vacio';
+import axios from 'axios';
+import { useGoogleAuth } from './googleAuth';
 
 const initialFieldValues = {
   id: 0,
@@ -19,9 +23,7 @@ const initialFieldValues = {
 /*CODIGO -  */
 
 const Login = ({ setUser }) => {
-
-  //MANEJO DE ESTADOS
-  //const [login, setLogin] = useState(null);
+ 
   const history = useHistory();
 
   const {
@@ -30,7 +32,6 @@ const Login = ({ setUser }) => {
     handleInputChange
   } = useForm(initialFieldValues);
 
-  //window.localStorage.removeItem('loggedUser');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,7 +98,6 @@ const Login = ({ setUser }) => {
       history.push("/")
     }
   }
-
   return (
     <Form onSubmit={handleSubmit} >
       <Controls.Input
@@ -134,16 +134,25 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      <a  href="localhost:8080/oauth2/authorization/google"
-         style={{ textDecoration: "none" }}
-      >
-        <Controls.Button
-          variant="outlined"
-          size='small'
-          fullWidth
-          text="Iniciar sesión con correo PUCP"
-        />
-      </a>
+      
+       {/* <GoogleLogin
+        clientId="626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com"
+        render={renderProps => (  */}
+          <Controls.Button
+                  variant="outlined"
+                  size='small'
+                  fullWidth
+                  text="Iniciar sesión con correo PUC"
+                />
+
+        {/* )}
+        buttonText="Iniciar sesión con correo PUCP"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+
+        /> */}
+          
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña

@@ -124,6 +124,7 @@ export default function useTable(records, headCells, filterFn) {
       count={records.length}
       onPageChange={handleChangePage}
       onRowsPerPageChange={handleChangeRowsPerPage}
+      /* labelRowsPerPage = {"Filas por página:"} */
     />
   )
 

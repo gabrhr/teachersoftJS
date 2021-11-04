@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
@@ -9,16 +9,12 @@ import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { Typography } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import Notification from '../../../components/util/Notification'
-import ConfirmDialog from '../../../components/util/ConfirmDialog'
+import { Typography } from '@mui/material'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
-//import AgregarEditarDepartamento from './AgregarEditarDepartamento'
-//import departamentoService from '../../../services/departamentoService';
-//import * as employeeService from '../../../services/employeeService'
+import departamentoService from '../../../services/departamentoService';
+import * as employeeService from '../../../services/employeeService'
+import { Form } from '../../../components/useForm'
 
 const tableHeaders = [
     {
@@ -64,7 +60,7 @@ function createData(id, nombre, correo, fechaFundacion, fechaModificacion) {
         id, nombre, correo, fechaFundacion, fechaModificacion,
     }
   }
-
+  
 const usuarios2 = [
     createData('0', 'Departamento 1', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
     createData('1', 'Departamento 2', 'dep1@pucp.edu.pe', '2021-09-30 01:14 pm ', '2021-09-30 01:14 pm '),
@@ -72,13 +68,11 @@ const usuarios2 = [
 ]
 */
 
-const getDepartamentos = async () => {
+const getDepartamento = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  const dataDep = await DepartamentoService.getDepartamentos();
-  console.log(dataDep);
+  const dataDep = await DepartamentoService.getDepartamentos(); 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];
-  console.log(departamentos);
   dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
@@ -89,7 +83,6 @@ const getDepartamentos = async () => {
     })
     ));
   //console.log(secciones);
-  window.localStorage.setItem('listDeps',JSON.stringify(dataDep));
   return departamentos;
 }
 
@@ -101,13 +94,8 @@ export default function GestionDepartamento() {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
-    color:"primary.light", elevatio:0}
-    /* notification snackbar */
-    //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
-    /* confirm dialog */
-    const [confirmDialog, setConfirmDialog] = useState(
-      { isOpen: false, title: '', subtitle: '' })
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    color:"primary.light", elevation:0}
     const {
         TblContainer,
         TblHead,
@@ -115,14 +103,12 @@ export default function GestionDepartamento() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-    //Posible delete
-/*
+
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
     }
-    //Fin del delete
-*/
+
     const handleSearch = e => {
       let target = e.target;
       /* React "state object" (useState()) doens't allow functions, only
@@ -138,7 +124,7 @@ export default function GestionDepartamento() {
         }
       })
     }
-
+    
     /* const addOrEdit = (departamento, resetForm) => {
       if (departamento.id == 0)
         departamentoService.registerDepartamento(departamento)
@@ -148,187 +134,122 @@ export default function GestionDepartamento() {
       setRecordForEdit(null)
       setOpenPopup(false)
       setRecords(getDepartamentos.getAllEmployees())
-
+  
       setNotify({
         isOpen: true,
         message: 'Submitted Successfully',
         type: 'success'
       })
     } */
-    useEffect(() => {
-      getDepartamentos()
-      .then (newDep =>{
-        setRecords(newDep);
-        console.log(newDep);
-      });
-    }, [recordForEdit,records])
-
-
+    
     const addOrEdit = (departamento, resetForm) => {
-      recordForEdit
-      ? DepartamentoService.updateDepartamento(departamento,departamento.id)
-      : DepartamentoService.registerDepartamento(departamento)
-      .then(idDepartamento=> {
-        if(!recordForEdit)
-          setRecordForEdit(idDepartamento);
-        else
-          setRecordForEdit(null)
-      })
-
-      setOpenPopup(false)
+      if (departamento.id === 0)
+        departamentoService.registerDepartamento(departamento)
+      else
+        departamentoService.updateDepartamento(departamento)
       resetForm()
-      
+      setRecordForEdit(null)
+      setOpenPopup(false)
+      setRecords(prevRecords => prevRecords.concat(departamento))
+  
       setNotify({
         isOpen: true,
-        message: 'Registro de Cambios Exitoso',
+        message: 'Submitted Successfully',
         type: 'success'
       })
     }
-    const onDelete = (idDepartamento) => {
-      // if (!window.confirm('Are you sure to delete this record?'))
-      //   return
-      setConfirmDialog({
-        ...confirmDialog,
-        isOpen: false
-      })
-      console.log(idDepartamento)
-      //console.log(id)
-      DepartamentoService.deleteDepartamento(idDepartamento);
-      //userService.borrarUsuario(idDepartamento)
 
-      /*DTLocalServices.getUsers().then((response) => {
-        setRecords(response.data)
-        console.log(response.data);
-      });*/
-      //setRecords(DTLocalServices.getAllPersonas())
 
-      setNotify({
-        isOpen: true,
-        message: 'Borrado Exitoso',
-        type: 'error'
-      })
-    }
-
+    React.useEffect(() => {
+      getDepartamento()
+      .then (newDep =>{
+        setRecords(prevRecords => prevRecords.concat(newDep));
+        
+        //console.log(newSeccion);
+        
+        console.log(records);
+      });
+    }, [])
 
     return (
         <>
-          <ContentHeader
-            text="Gestión de Departamentos"
-            cbo={false}
-          />
-          <Paper variant="outlined" sx={PaperStyle}>
-            <Typography variant="h4" style={SubtitulosTable}>
-              Departamentos
-            </Typography>
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-              {/* <Toolbar> */}
-              <Controls.Input
-                label="Buscar Departamentos por Nombre"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  )
-                }}
-                sx={{ width: .75 }}
-                onChange={handleSearch}
-                type="search"
-              />
-
-              <Controls.AddButton
-                title="Agregar Nuevo Departamento"
-                variant="iconoTexto"
-                onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-              />
-
-              {/* </Toolbar> */}
-            </div>
-            <BoxTbl>
-              <TblContainer>
-                <TblHead />
-                <TableBody>
-                  {
-                    recordsAfterPagingAndSorting().map(item => (
-                      <StyledTableRow key={item.id}>
-                        <StyledTableCell
-                          align="right"
-                        >
-                          {item.id}
-                        </StyledTableCell>
-                        <StyledTableCell>{item.nombre}</StyledTableCell>
-                        <StyledTableCell>{item.correo}</StyledTableCell>
-                        <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
-                        <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                        <StyledTableCell>
-                          <Controls.ActionButton
-                            color="warning"
-                            onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
-                          >
-                            <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          <Controls.ActionButton
-                          color="warning"
-                          onClick={()=>{
-                            setOpenPopup(true);
-                            setRecordForEdit(item);}}
-                          >
-                          <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          <IconButton aria-label="delete">
-                            <DeleteIcon
-                            color="warning"
-                            onClick={() => {
-                              // onDelete(item.id)
-                              setConfirmDialog({
-                                isOpen: true,
-                                title: '¿Eliminar departamento permanentemente?',
-                                subTitle: 'No es posible deshacer esta accion',
-                                onConfirm: () => {onDelete(item.id)}
-                              })
-                            }}/>
-                          </IconButton>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
+            <ContentHeader
+                text="Gestión de Departamentos"
+                cbo={false}
+            />
+            <Paper variant="outlined" sx={PaperStyle}>
+                <Typography variant="h4" style={SubtitulosTable}>
+                   Departamentos
+                </Typography>
+                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+                {/* <Toolbar> */}
+                <Controls.Input
+                    label="Buscar Departamentos por Nombre"
+                    InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    )
+                    }}
+                    sx={{ width: .75, visibility: "hidden" }}
+                    onChange={handleSearch}
+                    type="search"
+                />
+ 
+                {/* <Controls.AddButton 
+                    title="Agregar Nuevo Departamento"
+                    variant="iconoTexto"
+                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                />
+      
+                {/* </Toolbar> */}
+                </div>
+                <BoxTbl>
+                <TblContainer>
+                    <TblHead />
+                    <TableBody>
+                    {
+                        recordsAfterPagingAndSorting().map(item => (
+                        <StyledTableRow key={item.id}>
+                            <StyledTableCell
+                            align="right"
+                            >
+                            {item.id}
+                            </StyledTableCell>
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.correo}</StyledTableCell>
+                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
+                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                            <StyledTableCell>
+                              {/* Accion editar */}
+                              <Controls.ActionButton 
+                                color="warning"
+                                onClick={ () => {openInPopup(item)}}
+                              >
+                                <EditOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                            </StyledTableCell>
+                        </StyledTableRow>
+                        ))
+                    }
+                    </TableBody>
+                </TblContainer>
+                <TblPagination />
             </BoxTbl>
             </Paper>
-
+            {/* Modal */}
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
             >
-              <AgregarEditarDepartamento
+              <AgregarEditarDepartamento 
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
               />
               {/*  <GestionUsuariosForm/> */}
-            </Popup>
-            <Notification
-              notify={notify}
-              setNotify={setNotify}
-            />
-            <ConfirmDialog
-              confirmDialog={confirmDialog}
-              setConfirmDialog={setConfirmDialog}
-            />
+            </Popup>  
         </>
     )
 }
-/*
-const getUsuario = (id) => {
-  const user = UserService.getUsuario(id);
-  console.log(user);
-  console.log(user.id);
-}
-
-const getUsuario = async (id) => {
-  const user = await UserService.getUsuario(id);
-  console.log(user);
-  console.log(user.id);
-}*/

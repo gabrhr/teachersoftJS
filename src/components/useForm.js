@@ -13,6 +13,7 @@ export function useForm(initialFieldValues, validateOnChange=false, validate) {
     const [values, setValues] = useState(initialFieldValues);
     const [errors, setErrors] = useState({});
 
+    /* The e param is a React's SyntheticEvent */
     const handleInputChange = e => {
         /* retrieve values from "Default" event */
         const { name, value } = e.target
@@ -46,7 +47,7 @@ export function useForm(initialFieldValues, validateOnChange=false, validate) {
 const useStyles = makeStyles(theme => ({
     root: {
         '& .MuiFormControl-root' : {
-            width: '100%',      // left to right
+            width: '100%',
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1)
         }

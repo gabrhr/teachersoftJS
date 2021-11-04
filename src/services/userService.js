@@ -12,9 +12,21 @@ const getUsuarios = async () => {
     }
 }
 const getUsuario = async (id) => {
+<<<<<<< HEAD
     try{
         const request = await axios.get(`${url}/usuario/${id}`, id, tokenService.getToken());
         if(!request)
+=======
+    let secureConfig = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      };
+    try{
+        const request = await axios.get(`${url}/usuario/${id}`, id,secureConfig);
+        /* const request = await axios.get(`${url}/usuario/${id}`, id, tokenService.getToken()); */
+        if(!request) 
+>>>>>>> gabrhr
           return request.data;
     } catch (except){
         console.error(except);
@@ -37,7 +49,11 @@ const borrarUsuario = async (id) => {
     }
 }
 const updateUsuario = async (newObject, {id}) => {
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> gabrhr
     try{
         const request = await axios.put(`${url}/usuario/${id}`,newObject,id);
         return request.data;
@@ -46,4 +62,8 @@ const updateUsuario = async (newObject, {id}) => {
     }
 }
 
+<<<<<<< HEAD
 export default { getUsuarios, getUsuario, registerUsuario, borrarUsuario, updateUsuario };
+=======
+export default { getUsuarios, getUsuario, registerUsuario, borrarUsuario, updateUsuario };
+>>>>>>> gabrhr
