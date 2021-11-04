@@ -9,6 +9,7 @@ const GetTokenPrueba = () => {
   const config = {
     headers: {
       Authorization: `${token}`,
+    // "Authorization" : `${"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwiaWF0IjoxNjM2MDUyNTM1LCJzdWIiOiJzZG9sYXJ0ZUBwdWNwLmVkdS5wZSIsImlzcyI6Ik1haW4iLCJleHAiOjE2MzYzOTgxMzV9.TsmkWJH9dxfzltURtiK7Mr0lA_e3PKVIXAog2B7_3Ow"}`,
     }
   };
 
