@@ -24,42 +24,6 @@ function App() {
     //console.log(user)
     // console.log(localStorage.getItem('loggedUser'))
   }, [user])
-<<<<<<< HEAD
-  
-  if (false) {
-    return (
-      <ThemeProvider theme={theme}>
-        <Router>
-          <Switch>
-            <Route exact path="/">
-              <Login 
-                setUser={setUser}
-              />
-              </Route>
-            <Route exact path="/login">
-              <Login 
-                setUser={setUser}
-              />
-              </Route>
-            <Route exact path="/:thing?">
-              <Login 
-                setUser={setUser}
-            />
-            </Route>
-          </Switch>
-          
-          <HeaderUser
-              nombre={user.nombres}
-              idRol= {user.rol}
-              foto={fotoUsuario}
-          />  
-        </Router>
-        <CssBaseline />
-      </ThemeProvider>
-    )
-  }
-=======
->>>>>>> gabrhr
 
   return (
     <ThemeProvider theme={theme}>

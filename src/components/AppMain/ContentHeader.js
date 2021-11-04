@@ -3,7 +3,7 @@ import React from 'react'
 import { Controls } from '../controls/Controls';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
-import * as DTLocalServices from '../../services/DTLocalServices';
+import * as DTLocalServices from '../../services/DTLocalServices.js';
 import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
 import cicloService from "../../services/cicloService";
@@ -32,7 +32,7 @@ function CboCiclo(props) {
 
     const cbo = props.cbo;
     const theme= useTheme();
-    
+
     const {
       values,
       // setValues,
@@ -50,18 +50,18 @@ function CboCiclo(props) {
     React.useEffect(()=>{
       window.localStorage.setItem('ciclo', JSON.stringify(values.id))
     },[values])
-    
+
     //console.log(values);
     if (cbo) {
 
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
-            <Box  sx={{width: "10vw", align: "Right"}}> 
+            <Box  sx={{width: "10vw", align: "Right"}}>
                 <Controls.Select
                     name="title"
                     label="Ciclo"
                     value={values.title}
                     onChange={handleInputChange}
-                    options={DTLocalServices.getAllCiclos()}
+                    //options={DTLocalServices.getAllCiclos()}
                     type="contained"
                 />
             </Box>
@@ -75,13 +75,13 @@ function CboCiclo(props) {
 export default function ContentHeader({text, cbo}) {
 
     console.log("ContentHeader: ")
-    console.log(DTLocalServices.getAllCiclos())
-    
+    //console.log(DTLocalServices.getAllCiclos())
+
     return (
         <Form>
             <Grid container >
                 <Grid item >
-                    <Typography 
+                    <Typography
                         variant="h3"
                         component="div"
                         paddingTop="5px"

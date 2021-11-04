@@ -20,26 +20,6 @@ const initialFieldValues = {
     foto: '',
 }
 
-<<<<<<< HEAD
-=======
-const convertirBase64 = (file) =>{
-  return new Promise((resolve, reject) =>{
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    }
-
-    //Si es error
-    fileReader.error = (error) => {
-      reject(error)
-    }
-
-  });
-}   
-
->>>>>>> gabrhr
 
 export default function AgregarEditarSeccion(props) {
     const {addOrEdit, recordForEdit} = props
@@ -61,11 +41,7 @@ export default function AgregarEditarSeccion(props) {
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
                     .test(fieldValues.correo) ? ""
-<<<<<<< HEAD
                     : "Este correo no es válido."
-=======
-                    : "This correo is not vaild."
->>>>>>> gabrhr
         setErrors({
             ...temp
         })
@@ -98,13 +74,8 @@ export default function AgregarEditarSeccion(props) {
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
-<<<<<<< HEAD
             },
             //foto: fotoPerfil,
-=======
-            }, 
-            foto: fotoPerfil,
->>>>>>> gabrhr
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
@@ -165,18 +136,12 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
-<<<<<<< HEAD
                     {console.log("Estos es values: ",values)}
-=======
->>>>>>> gabrhr
                     <Controls.Input
                         name="correo"
                         label="Correo Electrónico"
                         value={values.correo}
-<<<<<<< HEAD
 
-=======
->>>>>>> gabrhr
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
@@ -206,14 +171,14 @@ export default function AgregarEditarSeccion(props) {
 
                                 setFileFoto(files[0])
                                 setCambio(true)
-                                
+
                                 if (files && files[0]) {
                                   var reader = new FileReader();
                                   reader.onload = function (e) {
                                     setFotoPerfil(e.target.result)
                                   };
                                   reader.readAsDataURL(files[0]);
-                                
+
                                 }
                             }}
                         />

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import axios from "axios";
 import { insertEmployee } from "./employeeService";
 import tokenService from './tokens.js';
@@ -8,46 +7,9 @@ const POST_USER_URL = 'http://3.227.216.157:8080/usuario/';
 const GET_USER_URL = 'http://3.227.216.157:8080/usuario/';
 const GET_DEPARTAMENTO_URL = 'http://3.227.216.157:8080/departamento/';
 const GET_SECCION_URL = 'http://3.227.216.157:8080/seccion/porDepartamento=';
-=======
-/* Author: Mitsuo
- *
- * LocalStorage services for testing:
- * - persona
- * - curso
- * 
- * Import like this:
-import * as DTLocalServices from '../../services/DTLocalServices';
- */
-
-import { insertEmployee } from "./employeeService";
-import { data } from "./data/curso-horario"
-
-/* LIB
- * ======================= */
-
-/* Filter array `items` by `items[i].key` for substring searchText.
- * Ignores case and accents */
-export function filter(items, key, searchText) {
-    return items.filter(x => 
-        removeAccents(x[key])
-            .toLowerCase()
-            .includes( 
-                removeAccents(searchText)
-                    .toLowerCase()
-            )
-    )
-}
-
-/* remove accents from string (i.g. áéíóúñ -> aeioun) */
-export function removeAccents(s) {
-    /* first get Unicode "Canonical Decomposition" and then remove 
-       "accent code point modifiers" */
-    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-}
->>>>>>> gabrhr
 
 /* Validaciones
- * 
+ *
  * Todas retornan mensaje de error.  Empty string means valid.
  */
 
@@ -160,24 +122,7 @@ export function getAllRoles() {
         { id: 4, title: 'Asistente de Departamento' },
         { id: 5, title: 'Coordinador de Departamento' },
     ])
-<<<<<<< HEAD
-=======
 }
-
-/* ciclo CRUD operations */
-export function getAllCiclos() {
-    let ciclos = []
-    let i
-    const base = 2021 - 20 + 1
-    for (i = 0; i < 20; i++) {
-        ciclos[2 * i] = { id: (base + i) * 10 + 1, title: `${base + i}-1` }
-        ciclos[2 * i + 1] = { id: (base + i) * 10 + 2, title: `${base + i}-2` }
-    }
-    // /* DEEP COPY */
-    // ciclos = JSON.parse(JSON.stringify(ciclos))
-    return ciclos.reverse()
-}
-
 /* curso CRUD operations */
 const initCursoData = () => [
     {
@@ -311,7 +256,7 @@ export function getAllCursos() {
     let cursos = JSON.parse(localStorage.getItem(KEYS.cursos));
     /* Do any data transformations here (e.g., lookup ID's create new attributes
      * based on that) */
-    return cursos.map(x => ({
+    return cursos.map( x => ({
         // ...x,
         id: x.id,
         clave: x.curso.codigo,
@@ -320,5 +265,70 @@ export function getAllCursos() {
         creditos: x.curso.creditos,
         estado: "Pendiente"     // Atendido o Pendiente
     }))
->>>>>>> gabrhr
 }
+class DTLocalServices {
+
+    validateEmail(email) {
+        return (/^$|^[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/).test(email)
+            ? ""
+            : "Correo electronico invalido"
+    }
+
+    validateName(name) {
+        return (/^$|^[A-Za-záéíóúñ -]+$/).test(name)
+            ? ""
+            : "Nombre invalido"
+    }
+
+    requiredField(s) {
+        return s.length !== 0 ? "" : "Campo requerido"
+    }
+
+    postUser(data){
+
+        return axios.post(POST_USER_URL,data);
+    }
+
+    postPersona(data){
+
+        return axios.post(POST_PERSONA_URL,data);
+    }
+
+    getUsers(){
+        return axios.get(GET_USER_URL);
+    }
+
+    getDepartamentos(){
+        return axios.get(GET_DEPARTAMENTO_URL);
+    }
+
+    /*getSecciones(id){
+        return axios.get(GET_SECCION_URL + id);
+    }*/
+
+    getAllRoles() {
+        return ([
+            { id: 0, nombre: 'Administrador' },
+            { id: 1, nombre: 'Docente' },
+            { id: 2, nombre: 'Asistente de Seccion' },
+            { id: 3, nombre: 'Coordinador de Seccion' },
+            { id: 4, nombre: 'Asistente de Departamento' },
+            { id: 5, nombre: 'Coordinador de Departamento' },
+            { id: 6, nombre: 'Secretario de Departamento' },
+            { id: 7, nombre: 'Externo' },
+            { id: 8, nombre: 'Nuevo Usuario' }
+        ])
+    }
+
+    getAllSecciones() {
+        return ([
+            { id: 1, nombre: 'Informatica' },
+            { id: 2, nombre: 'Telecomunicaciones' },
+            { id: 3, nombre: 'Industrial' },
+            { id: 4, nombre: 'Civil' },
+            { id: 5, nombre: 'Mecanica' },
+            { id: 6, nombre: 'Fisica' }
+        ])
+    }
+}
+export default new DTLocalServices();

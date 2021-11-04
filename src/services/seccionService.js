@@ -60,9 +60,4 @@ const deleteSeccion = async (id) => {
   }
 }
 
-<<<<<<< HEAD
-//, tokenService.getToken()
-
-=======
->>>>>>> gabrhr
 export default {getSecciones, getSeccionxDepartamento, getSeccion, registerSeccion, updateSeccion, deleteSeccion}
