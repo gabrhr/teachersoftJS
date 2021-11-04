@@ -1,4 +1,4 @@
-/* Author: Gabriela
+/* Author: Gabriela, Mitsuo
  * 
  * Top level Router that routes all pages, sidebar and headers.
  * 
@@ -11,98 +11,92 @@
  * descargue de nuevo toda la pagina.  (`Link` enables client side routing)
  * Ref: https://www.youtube.com/watch?v=yQf1KbGiwiI
  */
-import React, {useContext} from 'react'
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import HeaderUser from '../components/PageComponents/HeaderUser';
-// import ProtectedRoute from '../pages/General/RouterProtected';
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import DTRoute from './DTRoute'
+import PrivateRoute from './PrivateRoute'
 
-/* 
-<Link to="/admin/showcase">
-  aldkfjasldf
-</Link> 
-*/
-
-/* (Content)Pages */
+/* Pages */
 import Login from '../pages/Login/Login';
 import Employees from '../pages/Employees/Employees';
-import UserPage from '../pages/General/UserPage';
-import Showcase from '../pages/Showcase/Showcase';
-import LoginPrueba from '../App/prueba';
-import { useGoogleLogout } from 'react-google-login';
-import { Controls } from '../components/controls/Controls';
-import { useHistory, Redirect } from "react-router"
-import ProtectedRoute from '../pages/General/RouterProtected';
+import Showcase from '../pages/Showcase/Showcase'
+import TestIndex from '../pages/Dev/TestIndex';
+import AsistenteSeccion from '../pages/AsistenteSeccion/GestionAsignacionCarga/AsistenteSeccion';
+import GestionCargaCursos from '../pages/AsistenteSeccion/GestionAsignacionCarga/GestiónCargaCursos';
+import GestionDepartamento from '../pages/Administrador/MantenimientoDepartamento/GestionDepartamento'
+import GestionSeccion from '../pages/Administrador/MantenimientoSeccion/GestionSeccion'
+import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
+import Vacio from '../pages/Dev/Vacio'
+import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
+import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
+import { RouterSharp } from '@mui/icons-material';
+import HeaderUser from '../components/PageComponents/HeaderUser';
 import { UserContext } from './UserContext';
 
+/* Todos menos el login que es especial porque settea al usuario */
+const privateroutes = [
+  /* Admin */
+  { requireRoles: [0], path: "/admin", page: GestionUsuarios },
+  { requireRoles: [0], path: "/admin/mantenimiento", page: GestionUsuarios },
+  { requireRoles: [0], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
+  { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
+  { requireRoles: [0], path: "/admin/mantenimiento/sec", page: GestionSeccion },
+  { requireRoles: [0], path: "/admin/mantenimiento/per", page: Vacio },
+  { requireRoles: [0], path: "/admin/showcase", page: Showcase },
+  { requireRoles: [0], path: "/admin/index", page: TestIndex },
+  { requireRoles: [0], path: "/admin/employees", page: Employees },
+  /* Docente */
+  /* AS */
+  { requireRoles: [2], path: "/as", page: AsistenteSeccion },
+  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
+  { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
+  { requireRoles: [2], path: "/as/docentes", page: Vacio },
+  { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
+  /* CS */
+  /* AD */
+  /* CD */
+  /* Secretario de D */
+  /* Externo */
+  /* rol sin asignar */
+]
 
-function Button(){
-  const history = useHistory();
-  const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
-  const {rol,user, setRol,setUser} = useContext(UserContext)
-  const onLogoutSuccess = () => {
-    /* setRol({}); */
-    //setUser({}) 
-    localStorage.clear(); 
-    history.push("/")
-  }
-  const onLogoutFailure = (response) => {
-      console.log(response)
-            
-  }
-  const {signOut} = useGoogleLogout({
-      clientId,
-      onLogoutSuccess,
-      onLogoutFailure,
-  })
-
-  return (
-      <div>
-          <Controls.Button
-              variant="outlined"
-              size='small'
-              fullWidth
-              text="Cerrar"
-              onClick={signOut} 
-            /> 
-      </div>
-  )
-
-}
+const publicroutes = [
+  { requireRoles: [], path: "/noRoles", page: Vacio },
+]
 
 export default function Router1(props) {
-  const { user, setUser, fotoUsuario } = props
   return (
     <Router>
       <Switch>
-      <ProtectedRoute exact path="/admin"
-        idRoles={[1,8]}
-        component={Employees}
-        />
-      <ProtectedRoute exact path="/noRoles" idRoles={[8]} >
-        <>
-        <div>Espere a ser asignado     </div>
-        <Button/>
-        </>
-      </ProtectedRoute>
-      <ProtectedRoute exact path="/admin/showcase" idRoles={[2]} 
-        componente ={ () => 
+        {/* Rutas protegidas */}
+        {privateroutes.map(r =>
+          <PrivateRoute exact path={r.path} 
+          requireRoles={r.requireRoles}
+          component={() =>
+            <HeaderUser
+            pagina={r.page}
+            />
+          }
+          >
+          </PrivateRoute>
+        )}
+        {/* Rutas no protegidas */}
+        {publicroutes.map(r =>
+          <Route exact path={r.path} 
+          render={({location}) =>
           <HeaderUser
-            //   nombre={user.nombres}
-            //   idRol= {user.rol}
-            //   foto={fotoUsuario}
-            nombre="New Employee"
-            rol="Administrador"
-            idRol={1}      // admin: 0, as: 1
-            foto={fotoUsuario}
-            // pagina={Showcase}        // esta forma no funciona,
-            // que raro
-            pagina={<Showcase/>}
+          pagina={r.page}
           />
-        }/>
-       
-      <Route exact path="/" >
-        <Login/>
-      </Route>
+        }
+        >
+          </Route>
+        )}
+        {/* Login */}
+        <Route exact path="/login" children={Login} />
+        <Route exact path="/" children={Login} />
       </Switch>
     </Router>
   )
