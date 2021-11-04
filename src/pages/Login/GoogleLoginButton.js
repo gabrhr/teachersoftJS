@@ -17,9 +17,9 @@ const GoogleLoginButton = () => {
     const [current, setCurrent] = useState(undefined);
 
     const onLogoutSuccess = () => {
-        setRol({});
-        setUser({})
-        // localStorage.clear();
+       /*  setRol({});
+        setUser({}) */
+        localStorage.clear();
         history.push('/')
     }
     const onLogoutFailure = (response) => {
@@ -99,9 +99,9 @@ const GoogleLoginButton = () => {
         alert('Error al hacer login')
     }
 
-
     return (
         <>
+            
         <GoogleLogin
             clientId={clientId}
             render={renderProps => (

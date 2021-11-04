@@ -1,40 +1,52 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Redirect} from "react-router-dom";
 //import instance from "../../instance";
 import { useHistory } from "react-router-dom";
-import { useGoogleAuth } from "../Login/googleAuth";
+import { UserContext } from "../../constants/UserContext";
 
 //const isAuthenticated = window.localStorage.getItem("isAuthenticated");
 
 export default function ProtectedRoute(props) {
   const {idRoles, component: Component, ...rest } = props
-  const { isSignedIn } = useGoogleAuth();
-  /* let rol = localStoraged.getItem("roles"); */
-  let rol = [
-      {idRol: 1},
-    ]
   const history=useHistory();
-  let flag=0;
-  if(rol===""){
+  let rol = JSON.parse(localStorage.getItem("rol"))
+  let permiso=0
+  console.log(rol)
+/*   if(rol){
     history.push('/'); 
   }
-  rol.forEach(rol=>{
-    idRoles.map(idRol=>{
-      if(rol.idRol === idRol){
-        flag=1;    
-      }
-    }) 
-  })
-  if(flag===0){
-      history.push('/');
+ */
+  if(idRoles.includes(rol)){
+    permiso=1
+    console.log(permiso)
   }
+  if(rol==null){
+    permiso=2
+  }
+  console.log(permiso)
   return (
-    <div>
-    <Route {...rest} render={props => (
-      isSignedIn ?
-      <Component {...props} />: 
-      <Redirect to="/"/>
-  )} />
-  </div>
+    <Route
+      {...rest}
+      render={props => {
+        switch(permiso){
+          case(0):                                          
+                switch (rol) {
+                  case 0:
+                      return history.push("/admin");
+                  case 1:
+                      return history.push({
+                      pathname: "/as",
+                      });
+                  default:
+                      return history.push("/noRoles");
+                }   
+          case(1):                             
+              return <Component {...props} />;   
+          default:
+              return (
+                <Redirect to={{pathname: "/"}}/>
+              );
+        }
+      }}  />
   );
 };

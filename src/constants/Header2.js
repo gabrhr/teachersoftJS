@@ -34,8 +34,8 @@ export default function Header2(props) {
     const onLogoutSuccess = () => {
         /*  setUser({}); */
         // setRole({});
-        // localStorage.clear();
-        history.push('/login')
+        localStorage.clear();
+        history.push('/')
     }
     const onLogoutFailure = (response) => {
     // console.log(response)
@@ -74,9 +74,7 @@ export default function Header2(props) {
                     </Grid>
                     <Divider orientation="vertical" flexItem />
                     <Grid item pl={2}>
-                        <Avatar className={classes.pageIcon}>
-                            <img className="userImage" src={foto} alt=""></img>
-                        </Avatar>
+                        <Avatar alt="profile pic" src={foto} />
                     </Grid>
                     <Grid item sm>
                         <div className={classes.pageIcon}>
@@ -99,7 +97,7 @@ export default function Header2(props) {
                             fullWidth
                             text="Cerrar sesión"
                             onClick={signOut}
-                            endIcon={logout}
+                            endIcon={<img src={logout} />}
                         />
                     </Grid>
                 </Grid>

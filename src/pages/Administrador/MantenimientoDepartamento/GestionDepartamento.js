@@ -70,7 +70,8 @@ const usuarios2 = [
 
 const getDepartamento = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  const dataDep = await DepartamentoService.getDepartamentos(); 
+  let dataDep = await DepartamentoService.getDepartamentos(); 
+  dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];
   dataDep.map(dep => (
