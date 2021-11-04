@@ -3,14 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
-import { GoogleAuthProvider } from './pages/Login/googleAuth';
 
 ReactDOM.render(
   // <React.StrictMode>
   
-  <GoogleAuthProvider>
-    <App />
-    </GoogleAuthProvider>,
+    <App />,
   // </React.StrictMode>,
   document.getElementById('root')
 );

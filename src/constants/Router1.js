@@ -28,7 +28,6 @@ import Employees from '../pages/Employees/Employees';
 import UserPage from '../pages/General/UserPage';
 import Showcase from '../pages/Showcase/Showcase';
 import LoginPrueba from '../App/prueba';
-import PostLogin from '../App/postLoguin';
 import { useGoogleLogout } from 'react-google-login';
 import { Controls } from '../components/controls/Controls';
 import { useHistory, Redirect } from "react-router"
@@ -68,14 +67,8 @@ function Button(){
 
 export default function Router1(props) {
   const { user, setUser, fotoUsuario } = props
-
-  
-
   return (
     <Router>
-      {/* <Route exact path="/activate/:userId/:userToken">
-        <PostLogin/>
-      </Route> */}
       <Route exact path="/admin">
         <div>No rol hola soy admin  </div>
       </Route>
@@ -86,7 +79,7 @@ export default function Router1(props) {
         </>
       </Route>
       <Route exact path="/">
-        <LoginPrueba/>
+        <Login/>
       </Route>
       <Route exact path="/admin/showcase">
         <HeaderUser
