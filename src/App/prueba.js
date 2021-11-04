@@ -3,14 +3,8 @@ import GoogleLogin from 'react-google-login';
 import { Controls } from '../components/controls/Controls';
 import { useGoogleAuth } from '../pages/Login/googleAuth';
 
-const LoginPrueba = () => {
-
-    //Axios -> mandar tokenId, correo, etc
-    // respuesta -> objeto usuario -> (rol)
-
-    const logueoGmail = () =>{
-        window.open("http://back.teachersoft.solutions:8080/oauth2/authorization/google", "_self");
-    }
+const PrivatePage = () => {
+    const { signIn } = useGoogleAuth();
     return (
         <div>
             <h2>Login Page</h2>
@@ -25,4 +19,4 @@ const LoginPrueba = () => {
     );
 };
 
-export default LoginPrueba;
+export default PrivatePage;

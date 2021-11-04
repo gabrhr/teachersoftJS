@@ -32,7 +32,8 @@ export default function ProtectedRoute(props) {
     <div>
     <Route {...rest} render={props => (
       isSignedIn ?
-      <Component {...props} />: <Redirect to="/"/>
+      <Component {...props} />: 
+      <Redirect to="/"/>
   )} />
   </div>
   );

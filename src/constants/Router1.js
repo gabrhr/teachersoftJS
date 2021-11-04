@@ -55,7 +55,7 @@ export default function Router1(props) {
           foto={fotoUsuario}
           // pagina={Showcase}        // esta forma no funciona,
           // que raro
-          pagina={<Showcase />}
+          pagina={<Showcase/>}
         />
       </Route>
     </Router>

@@ -50,7 +50,6 @@ const PostLogin = () => {
             setLoading(false);
         }, 1000);
       }, 1000);
-  
     };
 
     return (
