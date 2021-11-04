@@ -151,8 +151,8 @@ export default function CargaDocente() {
     React.useEffect(() => {
       fillCursos()
       .then (newCur =>{
-        setRecord(newCur);
-        
+        if(newCur)
+          setRecord(newCur);
         //console.log(newCur);
       });
     }, [])
