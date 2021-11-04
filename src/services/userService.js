@@ -11,10 +11,10 @@ const getUsuarios = async () => {
         console.error(except);
     }
 }
-const getUsuario = async ({id}) => {
+const getUsuario = async (id) => {
     try{
         const request = await axios.get(`${url}/usuario/${id}`, id, tokenService.getToken());
-        if(!request) 
+        if(!request)
           return request.data;
     } catch (except){
         console.error(except);
@@ -37,7 +37,7 @@ const borrarUsuario = async (id) => {
     }
 }
 const updateUsuario = async (newObject, {id}) => {
-    
+
     try{
         const request = await axios.put(`${url}/usuario/${id}`,newObject,id);
         return request.data;

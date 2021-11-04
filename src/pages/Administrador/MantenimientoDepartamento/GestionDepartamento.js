@@ -321,3 +321,15 @@ export default function GestionDepartamento() {
         </>
     )
 }
+/*
+const getUsuario = (id) => {
+  const user = UserService.getUsuario(id);
+  console.log(user);
+  console.log(user.id);
+}
+
+const getUsuario = async (id) => {
+  const user = await UserService.getUsuario(id);
+  console.log(user);
+  console.log(user.id);
+}*/
