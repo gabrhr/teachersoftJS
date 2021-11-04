@@ -4,7 +4,7 @@ export const UserContext = createContext({});
 
 export const UserProvider= (props)=>{
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
-    const [rol, setRol] = useState(JSON.parse(localStorage.getItem("rol")) || {});
+    const [rol, setRol] = useState(JSON.parse(localStorage.getItem("rol"))||{});
     const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")) || {});
     const setUserAndLocal = (user) => {
       localStorage.setItem("user", JSON.stringify(user));
