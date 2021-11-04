@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory, Redirect } from "react-router"
 import {GoogleLogin,useGoogleLogout} from 'react-google-login';
-import { Controls } from '../components/controls/Controls';
+import { Controls } from '../../components/controls/Controls';
 import { refreshTokenSetup } from './refreshTokenSetup';
 import axios from 'axios';
-import url from '../config'
-import userService from '../services/userService';
+import url from '../../config'
+import { UserContext } from '../../constants/UserContext';
+import { RotateLeftRounded } from '@mui/icons-material';
+import userService from '../../services/userService';
 
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
-const LoginPrueba = () => {
+const GoogleLoginButton = () => {
     const history = useHistory();
+    const { user, setUser, rol,setRol,setToken } = useContext(UserContext);
     const [loading, setLoading] = useState(undefined);
     const [current, setCurrent] = useState(undefined);
 
     const onLogoutSuccess = () => {
-        // setRole({});
+        setRol({});
+        setUser({})
         // localStorage.clear();
         history.push('/')
     }
@@ -29,11 +33,11 @@ const LoginPrueba = () => {
     })
 
     useEffect(() => {
-        if (loading) {
+        if (loading && rol) {
           //console.log(current);
          /*  if (!current) return history.push("/noRoles");; */
     
-          switch (current) {
+          switch (rol) {
             case 0:
                   history.push("/admin");
                   break;
@@ -46,7 +50,7 @@ const LoginPrueba = () => {
                 return history.push("/noRoles");
           }
         }
-      }, [loading]);
+    }, [loading]);
 
     const onSuccess = async (response) => {
      console.log(response)
@@ -71,13 +75,16 @@ const LoginPrueba = () => {
                 if(request){
                     console.log(request.data)
                     /* localStorage("user",request.data)  */
-                    localStorage.setItem("user", JSON.stringify(request.data.user));
+                    /*  localStorage.setItem("user", JSON.stringify(request.data.user));
                     localStorage.setItem("token", JSON.stringify(request.data.token));
-                    setCurrent(request.data.user.persona.tipo_persona);
-                    const user = userService.getUsuario(1);
+
+                    setCurrent(request.data.user.persona.tipo_persona);*/
+                    setUser(request.data.user)
+                    setRol(request.data.user.persona.tipo_persona)
+                    setToken(request.data.token)
+                    const user = await userService.getUsuario(1);
                     console.log(user);
                     console.log("hola mundo")
-
                     setLoading(true);
                 }
             } catch(except) {
@@ -94,8 +101,7 @@ const LoginPrueba = () => {
 
 
     return (
-        <div>
-            <h2>Login Page</h2>
+        <>
         <GoogleLogin
             clientId={clientId}
             render={renderProps => (
@@ -114,8 +120,8 @@ const LoginPrueba = () => {
             accessType={'offline'}
             responseType={'token,code'}
         />
-        </div>
+        </>
     );
 };
 
-export default LoginPrueba;
+export default GoogleLoginButton;

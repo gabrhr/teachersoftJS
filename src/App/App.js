@@ -15,6 +15,7 @@ import theme from './theme.js'
 import Router1 from '../constants/Router1'
 
 import fotoUsuario from '../assets/images/profile-photo.png'
+import { UserProvider } from '../constants/UserContext';
 
 function App() {
   const [user, setUser] = React.useState({ nombres: '', rol: '' });
@@ -27,7 +28,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router1 user={user} setUser={setUser} fotoUsuario={fotoUsuario} />
+      <UserProvider>  
+        <Router1 user={user} setUser={setUser} fotoUsuario={fotoUsuario} />
+      </UserProvider>
       <CssBaseline />
     </ThemeProvider>
   );

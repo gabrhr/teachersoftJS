@@ -28,20 +28,17 @@ import Employees from '../pages/Employees/Employees';
 import UserPage from '../pages/General/UserPage';
 import Showcase from '../pages/Showcase/Showcase';
 import LoginPrueba from '../App/prueba';
-import PostLogin from '../App/postLoguin';
 import { useGoogleLogout } from 'react-google-login';
 import { Controls } from '../components/controls/Controls';
 import { useHistory, Redirect } from "react-router"
 
-const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 
-export default function Router1(props) {
-  const { user, setUser, fotoUsuario } = props
+function Button(){
   const history = useHistory();
-
+  const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
   const onLogoutSuccess = () => {
-      // setRole({});
-      localStorage.clear();
+    // setRole({});
+    localStorage.clear();
       history.push("/")
   }
   const onLogoutFailure = (response) => {
@@ -54,30 +51,35 @@ export default function Router1(props) {
       onLogoutFailure,
   })
 
-
   return (
-    <Router>
-      {/* <Route exact path="/activate/:userId/:userToken">
-        <PostLogin/>
-      </Route> */}
-      <Route exact path="/admin">
-        <div>No rol hola soy admin  </div>
-      </Route>
-      <Route exact path="/noRoles">
-        <div>Espere a ser asignado
-          
+      <div>
           <Controls.Button
               variant="outlined"
               size='small'
               fullWidth
-              text="Iniciar sesión con correo PUC"
-              onClick={signOut.bind(this)} 
-            />  
-          
-        </div>
+              text="Cerrar"
+              onClick={signOut} 
+            /> 
+      </div>
+  )
+
+}
+
+export default function Router1(props) {
+  const { user, setUser, fotoUsuario } = props
+  return (
+    <Router>
+      <Route exact path="/admin">
+        <div>No rol hola soy admin  </div>
+      </Route>
+      <Route exact path="/noRoles">
+        <>
+        <div>Espere a ser asignado     </div>
+        <Button/>
+        </>
       </Route>
       <Route exact path="/">
-        <LoginPrueba/>
+        <Login/>
       </Route>
       <Route exact path="/admin/showcase">
         <HeaderUser

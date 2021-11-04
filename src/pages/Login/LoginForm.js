@@ -4,7 +4,7 @@ import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
 import AuthService from '../../services/authService';
-import { GoogleLoginButton } from "react-social-login-buttons";
+import GoogleLoginButton from './GoogleLoginButton'
 import { GoogleLogin } from "react-google-login";
 import { useState } from 'react';
 import tokens from '../../services/tokens';
@@ -22,7 +22,7 @@ const initialFieldValues = {
 
 /*CODIGO -  */
 
-const Login = ({ setUser }) => {
+const Login = () => {
  
   const history = useHistory();
 
@@ -47,11 +47,6 @@ const Login = ({ setUser }) => {
     // console.log(loggedUser.user.persona.tipo_persona);
     //debugger;
     if (user) {
-      setUser(
-        {
-          nombres: loggedUser.user.persona.nombres,
-          rol: loggedUser.user.persona.tipo_persona
-        })
       switch (loggedUser.user.persona.tipo_persona) {
       case 0:
         history.push("/admin");
@@ -134,25 +129,7 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      
-       {/* <GoogleLogin
-        clientId="626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com"
-        render={renderProps => (  */}
-          <Controls.Button
-                  variant="outlined"
-                  size='small'
-                  fullWidth
-                  text="Iniciar sesión con correo PUC"
-                />
-
-        {/* )}
-        buttonText="Iniciar sesión con correo PUCP"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-        cookiePolicy={'single_host_origin'}
-
-        /> */}
-          
+      <GoogleLoginButton/>
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña
