@@ -15,6 +15,7 @@ import theme from './theme.js'
 import Router1 from '../constants/Router1'
 
 import fotoUsuario from '../assets/images/profile-photo.png'
+import { UserProvider } from '../constants/UserContext';
 
 const usuarioInit = {
   fullName: "Abel Ackermann",
@@ -30,7 +31,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router1 usuario={usuario} setUsuario={setUsuario}/>
+      <UserProvider>  
+        <Router1 usuario={usuario} setUsuario={setUsuario}/>
+      </UserProvider>
       <CssBaseline />
     </ThemeProvider>
   );
