@@ -30,7 +30,6 @@ const fillCiclos = async () => {
         title: cic.anho + '-' +cic.periodo
       }
     }
-    //console.log(cicloActual)
   });
   return [ciclos,cicloActual];
 }
@@ -70,7 +69,7 @@ function CboCiclo(props) {
       window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
     },[values])
     
-    //console.log(values);
+
     if (cbo) {
 
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>

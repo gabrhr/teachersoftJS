@@ -1,9 +1,10 @@
 import axios from 'axios';
 import url from '../config.js';
+import tokenService from './tokens.js';
 
 const getCiclos = async () => {
   try{
-    const request = await axios.get(`${url}/ciclo/`);
+    const request = await axios.get(`${url}/ciclo/`, tokenService.getToken());
     return request ? request.data : [];  
   }catch(exception){
     console.error(exception);

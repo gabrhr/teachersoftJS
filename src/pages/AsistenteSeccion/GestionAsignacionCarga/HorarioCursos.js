@@ -81,8 +81,8 @@ const fillHorarios = async () => {
     return [];
   }
   for (let hor of dataHor){
-    console.log(hor.id);
-    console.log(hor.sesiones[0].secuencia);
+    //console.log(hor.id);
+    //console.log(hor.sesiones[0].secuencia);
     const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
       hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
       hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);

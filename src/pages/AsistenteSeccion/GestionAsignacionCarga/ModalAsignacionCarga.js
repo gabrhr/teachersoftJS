@@ -52,12 +52,6 @@ const tableHeaders = [
       numeric: false,
       sortable: true
     },
-     {
-        id: 'horaSesion',
-        label: 'Hora-Sesion',
-        numeric: false,
-        sortable: true
-     },
 ]
 
 async function llenarDatosHorarios (otroHorario, postHorario, hor) {
@@ -71,7 +65,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           "codigo": hor.codigo,
           //"tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
           //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
-          "horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
+          //"horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
           ciclo:{
             //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
             "id": hor.ciclo.id,
@@ -87,11 +81,10 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           //"sesiones_excel": hor.sesiones_excel,
           sesiones:[{
             "secuencia": hor.tipo,
-            "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
-            "hora_inicio": dataSes[1],
-            "media_hora_inicio": dataSes[2],
-            "hora_fin": dataSes[3],
-            "media_hora_fin": dataSes[4],
+            "sesiones_dictado": [],
+              //"persona": - es uno de los docente - es un objeto - objeto persona
+              //"horas_dictado_docente_sesion:" - lo que dicta este docente - entero 
+            "horas_semanales":  1,
           }]
         }
         //Analizamos si el siguiente item es el mismo horario pero otro tipo
@@ -180,13 +173,13 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         curso:{
           "codigo": hor.Clave, //INF...
           "nombre": hor.Nombre, //NOMBRE DEL CURSO
-          "creditos": hor.Creditos, //Creditos del Curso
-          "unidad": hor.Unidad, //Creditos del Curso
-          "carga": hor.Carga_Horaria, //Creditos del Curso
+          //"creditos": hor.Creditos, //Creditos del Curso
+          //"unidad": hor.Unidad, //Creditos del Curso
+          //"carga": hor.Carga_Horaria, //Creditos del Curso
         },
         //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos: 
         profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
-        "sesiones_excel": hor.Hora_Sesion
+        //"sesiones_excel": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
         /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
         //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
@@ -355,7 +348,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
-                                <TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>
+                                {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
                             </TableRow>
                             ))
                         }

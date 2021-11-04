@@ -6,11 +6,12 @@ const setToken = (user) => {
 }
 
 const getToken = () => {
-  const newToken = JSON.parse(window.localStorage.getItem('loggedUser'));
+  //const newToken = JSON.parse(window.localStorage.getItem('loggedUser'));
 
   const config = {
     headers: {
-    "Authorization" : `${newToken.token}`,
+      //POR AHROA ES FIJO - LUEGO SERÁ REGRESANDO LA DATA DEL TOKEN
+    "Authorization" : `${"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxNSIsImlhdCI6MTYzNjA1MDUwNCwic3ViIjoiYTIwMTcyNjY1QHB1Y3AuZWR1LnBlIiwiaXNzIjoiTWFpbiIsImV4cCI6MTYzNjM5NjEwNH0.AAbxXZ76PbpeQD6UDjF6NLlnaqoXOExAhK1d35y0uzk"}`,
     }
   };
 

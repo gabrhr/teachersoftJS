@@ -49,7 +49,7 @@ const getSecciones = async () => {
   const secciones = [];
   dataSecc.map(seccion => (
     secciones.push({
-      id: seccion.id.toString(),
+      id: seccion.id,
       nombre: seccion.nombre,
       fechaFundacion: seccion.fecha_fundacion,
       fechaModificacion: seccion.fecha_modificacion,
@@ -106,15 +106,16 @@ export default function GestionSeccion() {
       getSecciones()
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
-        console.log(newSeccion);
+        //console.log(newSeccion);
       });
 
-    }, [recordForEdit,records])
+    }, [recordForEdit])
 
     const addOrEdit = (seccion, resetForm) => {
-
+      seccion.id = parseInt(seccion.id);
+      console.log(seccion);
       recordForEdit
-        ? SeccionService.updateSeccion(seccion, seccion.id)
+        ? SeccionService.updateSeccion(seccion)
         : SeccionService.registerSeccion(seccion)
           .then(idSeccion => {
             if(!recordForEdit)
@@ -232,7 +233,7 @@ export default function GestionSeccion() {
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 />
-                {console.log("Este es el recordforedit ",recordForEdit)}
+                {/*console.log("Este es el recordforedit ",recordForEdit)*/}
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
         </>
