@@ -73,6 +73,7 @@ export default function Router1(props) {
   const { user, setUser, fotoUsuario } = props
   return (
     <Router>
+      <Switch>
       <ProtectedRoute exact path="/admin"
         idRoles={[1,8]}
         component={Employees}
@@ -83,23 +84,26 @@ export default function Router1(props) {
         <Button/>
         </>
       </ProtectedRoute>
-      <ProtectedRoute exact path="/admin/showcase" idRoles={[2]}>
-        <HeaderUser
-          //   nombre={user.nombres}
-          //   idRol= {user.rol}
-          //   foto={fotoUsuario}
-          nombre="New Employee"
-          rol="Administrador"
-          idRol={1}      // admin: 0, as: 1
-          foto={fotoUsuario}
-          // pagina={Showcase}        // esta forma no funciona,
-          // que raro
-          pagina={<Showcase/>}
-        />
-      </ProtectedRoute>
-      <Route exact path="/">
+      <ProtectedRoute exact path="/admin/showcase" idRoles={[2]} 
+        componente ={ () => 
+          <HeaderUser
+            //   nombre={user.nombres}
+            //   idRol= {user.rol}
+            //   foto={fotoUsuario}
+            nombre="New Employee"
+            rol="Administrador"
+            idRol={1}      // admin: 0, as: 1
+            foto={fotoUsuario}
+            // pagina={Showcase}        // esta forma no funciona,
+            // que raro
+            pagina={<Showcase/>}
+          />
+        }/>
+       
+      <Route exact path="/" >
         <Login/>
       </Route>
+      </Switch>
     </Router>
   )
 }

@@ -34,8 +34,8 @@ export default function Header2(props) {
     const onLogoutSuccess = () => {
         /*  setUser({}); */
         // setRole({});
-        // localStorage.clear();
-        history.push('/login')
+        localStorage.clear();
+        history.push('/')
     }
     const onLogoutFailure = (response) => {
     // console.log(response)
