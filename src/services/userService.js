@@ -5,21 +5,34 @@ import tokenService from './tokens.js';
 const getUsuarios = async () => {
     console.log(`${url}/usuario/`)
     try{
-        const request = await axios.get(`${url}/usuario/`);
+        const request = await axios.get(`${url}/usuario/`, tokenService.GetTokenPrueba());
         return request.data;
     } catch(except){
         console.error(except);
     }
 }
 const getUsuario = async (id) => {
-    
+    /* const config = tokenService.GetTokenPrueba() */
     try{
-        const request = await axios.get(`${url}/usuario/${id}`, id, tokenService.GetTokenPrueba());
+        const request = await axios.get(`${url}/usuario/${id}`, tokenService.GetTokenPrueba());
         return request.data;
     } catch (except){
         console.error(except);
     }
-}
+}/*  
+const getUsuario = async (id) => {
+    let user
+        const config = tokenService.GetTokenPrueba()
+        axios({
+          method: 'get',
+          url: `${url}/usuario/${id}`,
+          ...config
+        })
+          .then(res => {user=res.data.persona})
+          .catch(err => console.error(err));
+          return user
+   
+} */
 const registerUsuario = async newObject => {
     try {
         const request = await axios.post(`${url}/usuario/`, newObject);
