@@ -73,9 +73,9 @@ export default function AgregarEditarSeccion(props) {
             correo: values.correo,
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
-              nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
+              nombre: null,
             },
-            //foto: fotoPerfil,
+            //foto: null,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
@@ -137,20 +137,18 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
-                    {console.log("Estos es values: ",values)}
+                    
                     <Controls.Input
                         name="correo"
                         label="Correo Electrónico"
                         value={values.correo}
-
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
-                    {console.log("Estos es record",recordForEdit)}
+
                     <Controls.Select
                         name="departmentId"
-
-                        label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+                        label="Departamento"
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}

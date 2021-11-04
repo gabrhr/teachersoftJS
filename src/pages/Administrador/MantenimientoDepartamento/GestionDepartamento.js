@@ -161,7 +161,7 @@ export default function GestionDepartamento() {
         setRecords(newDep);
         console.log(newDep);
       });
-    }, [recordForEdit,records])
+    }, [recordForEdit])
 
 
     const addOrEdit = (departamento, resetForm) => {
@@ -169,12 +169,10 @@ export default function GestionDepartamento() {
       ? DepartamentoService.updateDepartamento(departamento,departamento.id)
       : DepartamentoService.registerDepartamento(departamento)
       .then(idDepartamento=> {
-        if(!recordForEdit)
-          setRecordForEdit(idDepartamento);
-        else
-          setRecordForEdit(null)
+        if(recordForEdit)
+          setRecordForEdit(null);
       })
-
+      window.location.replace('');
       setOpenPopup(false)
       resetForm()
       
@@ -266,14 +264,6 @@ export default function GestionDepartamento() {
                             onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
                           >
                             <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          <Controls.ActionButton
-                          color="warning"
-                          onClick={()=>{
-                            setOpenPopup(true);
-                            setRecordForEdit(item);}}
-                          >
-                          <EditOutlinedIcon fontSize="small" />
                           </Controls.ActionButton>
                           <IconButton aria-label="delete">
                             <DeleteIcon
