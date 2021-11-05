@@ -75,17 +75,23 @@ const getUsuario = async () => {
   let usuario = await userService.getUsuarios();
   usuario = usuario ?? []
   console.log(usuario)
-  var str
+  var str,std,stl,ape1,ape2
   let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
+  
   usuario.map(usr => (
-    str = usr.persona.apellidos.split(" "),
+    ape1 = '',
+    ape2 = '',
+    str = usr.persona.apellidos ? usr.persona.apellidos : -1,
+    std = str!=-1 ? str.indexOf(' ') : -1,
+    stl = std >= 0 ? usr.persona.apellidos.split(" ") : -1,
+    stl != -1 ? (ape1 = stl[0], ape2 = stl[1]) : (ape1 = usr.persona.apellidos, ape2 = ''),
     usuarios.push({
       id: usr.id.toString(),
       idPersona: usr.persona.id.toString(),
       nombre: usr.persona.nombres,
-      apellidoPaterno: str[0],
-      apellidoMaterno: str[1],
+      apellidoPaterno: ape1,
+      apellidoMaterno: ape2,
       documento: usr.persona.numero_documento,
       correo: usr.persona.correo_pucp,
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
@@ -252,7 +258,7 @@ export default function GestionUsuarios() {
 
     userService.borrarUsuario(id);
     
-    window.location.replace('');
+    //window.location.replace('');
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
