@@ -33,6 +33,9 @@ import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import NoAsignado from '../constants/NoAsignado'
 import { UserContext } from './UserContext';
+import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
+import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
+import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -43,10 +46,14 @@ const privateroutes = [
   { requireRoles: [0,8], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
   { requireRoles: [0,8], path: "/admin/mantenimiento/sec", page: GestionSeccion },
   { requireRoles: [0,8], path: "/admin/mantenimiento/per", page: Vacio },
-  { requireRoles: [0,8], path: "/admin/showcase", page: Showcase },
+  { requireRoles: [0,1,2,3,4,5,6,7,8], path: "/admin/showcase", page: Showcase },
   { requireRoles: [0,8], path: "/admin/index", page: TestIndex },
   { requireRoles: [0,8], path: "/admin/employees", page: Employees },
   /* Docente */
+  /* TODO: Remover rol 8 (acceso temporal) */
+  { requireRoles: [0,1,8], path: "/doc/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
+  { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   /* AS */
   { requireRoles: [2], path: "/as", page: AsistenteSeccion },
   { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },

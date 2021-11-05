@@ -13,6 +13,7 @@ import React from 'react'
 import useTable from "../../components/useTable"
 import { Typography } from '@mui/material';
 import { TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@mui/material';
+import { StyledTableCell, StyledTableRow } from '../../components/controls/StyledTable';
 import * as employeeService from '../../services/employeeService'
 import ReactMarkdown from 'react-markdown'
 
@@ -60,12 +61,12 @@ function generateSampleData() {
 function generateRows(records) {
     return (
         records.map(item => (
-            <TableRow key={item.id}>
-                <TableCell align="right">{item.id}</TableCell>
-                <TableCell>{item.field1}</TableCell>
-                <TableCell>{item.field2}</TableCell>
-                <TableCell>{item.field3}</TableCell>
-            </TableRow>
+            <StyledTableRow key={item.id}>
+                <StyledTableCell align="right">{item.id}</StyledTableCell>
+                <StyledTableCell>{item.field1}</StyledTableCell>
+                <StyledTableCell>{item.field2}</StyledTableCell>
+                <StyledTableCell>{item.field3}</StyledTableCell>
+            </StyledTableRow>
         ))
     )
 }
