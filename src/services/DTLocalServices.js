@@ -142,7 +142,8 @@ export function getAllDepartamentos() {
 /* rol CRUD operations */
 export function getAllRoles() {
     return ([
-        { id: 1, nombre: 'Administrador' },
+        { id: 0, nombre: 'Administrador' },
+        { id: 1, nombre: 'Docente' },
         { id: 2, nombre: 'Asistente de Seccion' },
         { id: 3, nombre: 'Coordinador de Seccion' },
         { id: 4, nombre: 'Asistente de Departamento' },
