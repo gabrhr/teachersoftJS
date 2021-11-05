@@ -1,5 +1,5 @@
 import React from 'react';
-import InboxIcon from '@mui/icons-material/MoveToInbox' 
+import InboxIcon from '@mui/icons-material/MoveToInbox'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 

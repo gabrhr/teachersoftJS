@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IconButton, InputAdornment, Toolbar } from '@mui/material';
 import { Box, Paper, TableBody, TableRow, TableCell } from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
@@ -13,12 +13,13 @@ import { StyledTableCell, StyledTableRow } from '../../../components/controls/St
 import Notification from '../../../components/util/Notification'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
 /* SERVICES */
-import * as personaService from '../../../services/personaService'
+import personaService from '../../../services/personaService'
 import * as DTLocalServices from '../../../services/DTLocalServices';
+import userService from '../../../services/userService';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CloseIcon from '@mui/icons-material/Close';
 
 const initialFieldValues = {
   seccionID: '',
@@ -69,11 +70,47 @@ const tableHeaders = [
   }
 ]
 
+const getUsuario = async () => {
+
+  let usuario = await userService.getUsuarios();
+  usuario = usuario ?? []
+  console.log(usuario)
+  var str
+  let roles = DTLocalServices.getAllRoles();
+  const usuarios = [];
+  usuario.map(usr => (
+    str = usr.persona.apellidos.split(" "),
+    usuarios.push({
+      id: usr.id.toString(),
+      idPersona: usr.persona.id.toString(),
+      nombre: usr.persona.nombres,
+      apellidoPaterno: str[0],
+      apellidoMaterno: str[1],
+      documento: usr.persona.numero_documento,
+      correo: usr.persona.correo_pucp,
+      rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
+      rol: usr.persona.tipo_persona,
+      departamento: {
+        id: usr.persona.departamento ? usr.persona.departamento.id : '',
+        nombre: usr.persona.departamento ? usr.persona.departamento.nombre : ''
+      },
+      seccion: {
+        id: usr.persona.seccion ? usr.persona.seccion.id : '',
+        nombre: usr.persona.seccion ? usr.persona.seccion.nombre : ''
+      },
+      foto_URL: usr.persona.foto_URL
+    })
+    ));
+  console.log(usuarios)
+  window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
+  return usuarios;
+}
+
 export default function GestionUsuarios() {
-  /* COSAS PARA LA TABLITA 
+  /* COSAS PARA LA TABLITA
    * ===================== */
 
-  const [records, setRecords] = useState(DTLocalServices.getAllPersonas())
+  const [records, setRecords] = useState([])
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
@@ -93,7 +130,7 @@ export default function GestionUsuarios() {
     BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
-  /* updates filter function inside `filterFn` object.  Which is used in 
+  /* updates filter function inside `filterFn` object.  Which is used in
    * `useTable`'s `recordsAfterPagingAndSorting()`.  Because  */
   const handleSearch = e => {
     let target = e.target;
@@ -110,21 +147,91 @@ export default function GestionUsuarios() {
     })
   }
 
+  useEffect(() => {
+    getUsuario()
+    .then (newUsr =>{
+      setRecords(newUsr);
+
+    });
+  }, [recordForEdit])
+
   const addOrEdit = (usuario, resetForm) => {
-    if (usuario.id == 0)
-      DTLocalServices.insertPersona(usuario)
-    else
-      DTLocalServices.updatePersona(usuario)
+
+    const dataUsr = {
+      id: usuario.id,
+      fecha_creacion: null,
+      fecha_modificacion: null,
+      password: null,
+      usuario: usuario.correo,
+      persona: {
+        id: usuario.idPersona,
+        nombres: usuario.nombre,
+        apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
+        correo_pucp: usuario.correo,
+        numero_documento: usuario.DNI,
+        tipo_persona: usuario.rol,
+        seccion: {
+          id: usuario.seccion.id,
+          nombre: usuario.seccion.nombre
+        },
+        departamento: {
+          id: usuario.departamento.id,
+          nombre: usuario.departamento.nombre
+        },
+        foto_url: null
+      }
+
+    }
+
+    const dataPer = {
+      id: usuario.idPersona,
+      nombres: usuario.nombre,
+      apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
+      correo_pucp: usuario.correo,
+      numero_documento: usuario.DNI,
+      tipo_persona: usuario.rol,
+      seccion: {
+        id: usuario.seccion.id,
+        nombre: usuario.seccion.nombre
+      },
+      departamento: {
+        id: usuario.departamento.id,
+        nombre: usuario.departamento.nombre
+      },
+      foto_url: null
+    }
+
+    recordForEdit
+        ? personaService.updatePersona(dataPer, usuario.idPersona)
+        : userService.registerUsuario(dataUsr)
+          .then(idUsuario => {
+            if(recordForEdit)
+              setRecordForEdit(null);
+            
+        })
+    window.location.replace('')
+    setOpenPopup(false)
+    resetForm()
+    //window.location.replace('');
+    /*if (usuario.id == 0){
+      //DTLocalServices.postUser(dataUsr)
+      //DTLocalServices.postPersona(dataPer)
+      userService.registerUsuario(dataUsr)
+    }
+    else{
+      userService.updateUsuario(dataUsr,usuario.id)
+    }
     resetForm()
     setRecordForEdit(null)
     setOpenPopup(false)
-    setRecords(DTLocalServices.getAllPersonas())
-
+    setRecords(prevRecords => prevRecords.concat(usuario))
+    //setRecords(DTLocalServices.getAllPersonas())*/
     setNotify({
       isOpen: true,
-      message: 'Usuario añadido',
+      message: 'Cambios añadidos',
       type: 'success'
     })
+
   }
 
   /* open object in a pop up (for edit) */
@@ -133,29 +240,38 @@ export default function GestionUsuarios() {
     setOpenPopup(true)
   }
 
-  const onDelete = id => {
+  const onDelete = (idPersona,id) => {
     // if (!window.confirm('Are you sure to delete this record?'))
     //   return
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false
     })
+    console.log(idPersona)
+    console.log(id)
 
-    DTLocalServices.deletePersona(id)
-    setRecords(DTLocalServices.getAllPersonas())
+    userService.borrarUsuario(id);
+    
+    window.location.replace('');
+    /*DTLocalServices.getUsers().then((response) => {
+      setRecords(response.data)
+      console.log(response.data);
+    });*/
+    //setRecords(DTLocalServices.getAllPersonas())
+
     setNotify({
       isOpen: true,
-      message: 'Deleted Successfully',
+      message: 'Borrado Exitoso',
       type: 'error'
     })
   }
 
-  /* STYLES 
+  /* STYLES
    * ====== */
   const SubtitulosTable = { display: "flex" }
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
 
-  /* FORM 
+  /* FORM
    * ==== */
   /* para seleccion de seccion */
   const {
@@ -163,6 +279,20 @@ export default function GestionUsuarios() {
     // setValues,
     handleInputChange
   } = useForm(initialFieldValues);
+
+
+
+  /*useEffect(() => {
+    getUsers()
+  }, [])
+
+  const getUsers = () => {
+
+    userService.getUsuarios().then((response) => {
+          setRecords(response.data)
+          console.log(response.data);
+      });
+  };*/
 
   return (
     <>
@@ -184,7 +314,7 @@ export default function GestionUsuarios() {
       </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
-        <Typography variant="h4" style={SubtitulosTable} > 
+        <Typography variant="h4" style={SubtitulosTable} >
           Usuarios del Sistema
         </Typography>
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
@@ -217,36 +347,35 @@ export default function GestionUsuarios() {
                 // API devuelve [].  map se cae.  Llamar 2 veces.
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
-                  <TableRow key={item.id}>
-                    <StyledTableCell>{item.fullName}</StyledTableCell>
-                    <StyledTableCell>{item.DNI}</StyledTableCell>
+                  <StyledTableRow key={item.id}>
+                    <StyledTableCell>{item.nombre} {item.apellidoPaterno} {item.apellidoMaterno}</StyledTableCell>
+                    <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>
-                    <StyledTableCell>{item.seccionName}</StyledTableCell>
-                    <StyledTableCell>{item.departamentoName}</StyledTableCell>
+                    <StyledTableCell>{item.seccion.nombre}</StyledTableCell>
+                    <StyledTableCell>{item.departamento.nombre}</StyledTableCell>
                     <StyledTableCell>
-                      <Controls.ActionButton 
+                      <Controls.ActionButton
                         color="warning"
                         onClick={ () => {openInPopup(item)}}
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-                      <Controls.ActionButton 
-                        color="error"
+                      <IconButton aria-label="delete">
+                        <DeleteIcon
+                        color="warning"
                         onClick={() => {
                           // onDelete(item.id)
                           setConfirmDialog({
                             isOpen: true,
                             title: '¿Eliminar usuario permanentemente?',
                             subTitle: 'No es posible deshacer esta accion',
-                            onConfirm: () => {onDelete(item.id)}
+                            onConfirm: () => {onDelete(item.idPersona,item.id)}
                           })
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </Controls.ActionButton>
+                        }}/>
+                      </IconButton>
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 ))
               }
             </TableBody>
@@ -257,20 +386,20 @@ export default function GestionUsuarios() {
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        title="Registrar nuevo usuario"
+        title={recordForEdit ? "Editar Usuario": "Registrar Usuario"}
       >
         {/* <EmployeeForm /> */}
-        <GestionUsuariosForm 
+        <GestionUsuariosForm
           recordForEdit={recordForEdit}
           addOrEdit={addOrEdit}
         />
       </Popup>
       {/* </Grid> */}
-      <Notification 
+      <Notification
         notify={notify}
         setNotify={setNotify}
       />
-      <ConfirmDialog 
+      <ConfirmDialog
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />

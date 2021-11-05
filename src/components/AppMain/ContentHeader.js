@@ -1,3 +1,8 @@
+/* Author: Gabriela 
+ *
+ * Componente que va como cabecera de la mayoria de las paginas,  
+ * indica el ciclo sobre el que se esta modificando la data 
+ */
 import { Grid,Typography,Box } from '@mui/material'
 import React from 'react'
 import { Controls } from '../controls/Controls';
@@ -10,7 +15,8 @@ import cicloService from "../../services/cicloService";
 import {useState, useEffect} from 'react'
 
 const fillCiclos = async () => {
-  const dataCic = await cicloService.getCiclos();
+  let dataCic = await cicloService.getCiclos();
+  dataCic = dataCic ?? [{id: '1', title: '2021-2'}]
 
   const ciclos = [];
   dataCic.map(cic => {
@@ -74,8 +80,8 @@ function CboCiclo(props) {
 
 export default function ContentHeader({text, cbo}) {
 
-    console.log("ContentHeader: ")
-    console.log(DTLocalServices.getAllCiclos())
+    // console.log("ContentHeader: ")
+    // console.log(DTLocalServices.getAllCiclos())
     
     return (
         <Form>

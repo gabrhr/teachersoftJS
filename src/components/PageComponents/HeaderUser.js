@@ -1,3 +1,7 @@
+/* Author: Mitsuo, Gabriela
+ * 
+ * Wrapper for Header1, Header2, Drawer (aka. Navbar, aka. SideBar)
+ */
 import React from "react";
 import { Box } from "@mui/material";
 
@@ -9,6 +13,7 @@ import { styled } from "@mui/material/styles";
 import Header1 from '../../constants/Header1'
 import Header2 from '../../constants/Header2'
 import DrawerAdmin from '../../constants/DrawerAdmin'
+import { UserContext } from "../../constants/UserContext";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -51,8 +56,8 @@ function BoxPadding(props) {
 }
 
 export default function HeaderUser(props) {
-  /* Del usuario logueado */
-  const { nombre, idRol, foto } = props
+  const { user, rol } = React.useContext(UserContext);
+
   /* estado del Drawer */
   const [open, setOpen] = React.useState(true);
 
@@ -60,19 +65,23 @@ export default function HeaderUser(props) {
     setOpen(!open);
   };
 
-  let rol     // rolname
+  let rolName     // rolname
   let listaMenu = [];
-  if (idRol == 0) {
-    rol = "Administrador"
+  if (rol == 0) {
+    rolName = "Administrador"
     listaMenu = MenuAdministrador
   }
-  if (idRol == 1) {
-    rol = "Asistente de Sección"
+  if (rol == 1) {
+    rolName = "Docente"
+    listaMenu = MenuAsistenteSeccion // arreglar
+  } 
+  if (rol == 2) {
+    rolName = "Asistente de Sección"
     listaMenu = MenuAsistenteSeccion
-  }
-  if (idRol == 2) {
-    rol = "Coordinador de Sección"
-    listaMenu = MenuAsistenteSeccion
+  } 
+  if (rol == 8) {
+    rolName = "Asistente de Sección"  // arreglar
+    listaMenu = MenuAdministrador
   }
 
   return (
@@ -86,8 +95,11 @@ export default function HeaderUser(props) {
       {/*Header Azul*/}
       <Header1 />
       {/*Header de Información de usuario*/}
-      <Header2 foto={foto} nombre={nombre} idRol={idRol} 
-        rol={rol}
+      <Header2 
+        nombre={user.persona.nombres + ' ' + user.persona.apellidos} 
+        foto={user.persona.foto_URL} 
+        idRol={rol} 
+        rol={rolName}
         handleDrawerOpen={handleDrawerOpen}
       />
       {/* SideBar (aka. Navbar, aka. Drawer) */}
@@ -96,7 +108,7 @@ export default function HeaderUser(props) {
       />
       {/* Router de Paginas pasa el prop */}
       <BoxPadding>
-        {props.pagina}
+        <props.pagina />
       </BoxPadding>
     </Box>
   );

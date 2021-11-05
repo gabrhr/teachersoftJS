@@ -6,6 +6,9 @@ import React from 'react'
 import { AppBar, Grid, IconButton, Button, Toolbar, Divider, Avatar } from "@mui/material";
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { useGoogleLogout } from 'react-google-login';
+import { useHistory, Redirect } from "react-router"
+import { Controls } from '../components/controls/Controls';
 
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import logout from "../assets/images/log-out.png";
@@ -21,9 +24,28 @@ const useStyles = makeStyles((themex) => ({
     },
 }));
 
+
+
+const clientId = '626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com';
 export default function Header2(props) {
+    const history = useHistory();
     const { foto, nombre, idRol, rol, handleDrawerOpen } = props
     const classes = useStyles();
+    const onLogoutSuccess = () => {
+        /*  setUser({}); */
+        // setRole({});
+        localStorage.clear();
+        history.push('/')
+    }
+    const onLogoutFailure = (response) => {
+    // console.log(response)
+        console.log('Failed to log out')
+    }
+    const {signOut} = useGoogleLogout({
+        clientId,
+        onLogoutSuccess,
+        onLogoutFailure,
+    })
 
     return (
         <AppBar
@@ -52,9 +74,7 @@ export default function Header2(props) {
                     </Grid>
                     <Divider orientation="vertical" flexItem />
                     <Grid item pl={2}>
-                        <Avatar className={classes.pageIcon}>
-                            <img className="userImage" src={foto} alt=""></img>
-                        </Avatar>
+                        <Avatar alt="profile pic" src={foto} />
                     </Grid>
                     <Grid item sm>
                         <div className={classes.pageIcon}>
@@ -71,13 +91,14 @@ export default function Header2(props) {
                         </div>
                     </Grid>
                     <Grid item>
-                        <Button variant="text" endIcon={<img src={logout} alt="" />}>
-                            <div className={classes.pageIcon}>
-                                <Typography variant="body1" component="div">
-                                    Cerrar Sesión
-                                </Typography>
-                            </div>
-                        </Button>
+                        <Controls.Button
+                            variant="outlined"
+                            size='small'
+                            fullWidth
+                            text="Cerrar sesión"
+                            onClick={signOut}
+                            endIcon={<img src={logout} />}
+                        />
                     </Grid>
                 </Grid>
             </Toolbar>

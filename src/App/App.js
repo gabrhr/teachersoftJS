@@ -15,19 +15,24 @@ import theme from './theme.js'
 import Router1 from '../constants/Router1'
 
 import fotoUsuario from '../assets/images/profile-photo.png'
+import { UserProvider } from '../constants/UserContext';
+
+// const usuarioInit = {
+//   fullName: "Abel Ackermann",
+//   roleName: "Administrador",
+//   roleID: 2,    // 0: admin, 2: AS
+//   fotoUsuario: fotoUsuario,
+
+//   isAuthenticated: false    // true if token como cookie disponible ?
+// }
 
 function App() {
-  const [user, setUser] = React.useState({ nombres: '', rol: '' });
-
-  useEffect(() => {
-    //console.log('App: UseEffect:')
-    //console.log(user)
-    // console.log(localStorage.getItem('loggedUser'))
-  }, [user])
 
   return (
     <ThemeProvider theme={theme}>
-      <Router1 user={user} setUser={setUser} fotoUsuario={fotoUsuario} />
+      <UserProvider>  
+        <Router1 />
+      </UserProvider>
       <CssBaseline />
     </ThemeProvider>
   );

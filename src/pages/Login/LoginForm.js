@@ -4,10 +4,14 @@ import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
 import AuthService from '../../services/authService';
+import GoogleLoginButton from './GoogleLoginButton'
+import { GoogleLogin } from "react-google-login";
 import { useState } from 'react';
 import tokens from '../../services/tokens';
 import HeaderUser from '../../components/PageComponents/HeaderUser';
 import Vacio from '../Dev/Vacio';
+import axios from 'axios';
+import { useGoogleAuth } from './googleAuth';
 
 const initialFieldValues = {
   id: 0,
@@ -18,10 +22,8 @@ const initialFieldValues = {
 
 /*CODIGO -  */
 
-const Login = ({ setUser }) => {
-
-  //MANEJO DE ESTADOS
-  //const [login, setLogin] = useState(null);
+const Login = () => {
+ 
   const history = useHistory();
 
   const {
@@ -30,7 +32,6 @@ const Login = ({ setUser }) => {
     handleInputChange
   } = useForm(initialFieldValues);
 
-  //window.localStorage.removeItem('loggedUser');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,11 +47,6 @@ const Login = ({ setUser }) => {
     // console.log(loggedUser.user.persona.tipo_persona);
     //debugger;
     if (user) {
-      setUser(
-        {
-          nombres: loggedUser.user.persona.nombres,
-          rol: loggedUser.user.persona.tipo_persona
-        })
       switch (loggedUser.user.persona.tipo_persona) {
       case 0:
         history.push("/admin");
@@ -97,7 +93,6 @@ const Login = ({ setUser }) => {
       history.push("/")
     }
   }
-
   return (
     <Form onSubmit={handleSubmit} >
       <Controls.Input
@@ -134,16 +129,7 @@ const Login = ({ setUser }) => {
       <Typography align="center">
         o
       </Typography>
-      <a href="http://back.teachersoft.solutions:8080/oauth2/authorization/google"
-         style={{ textDecoration: "none" }}
-      >
-        <Controls.Button
-          variant="outlined"
-          size='small'
-          fullWidth
-          text="Iniciar sesión con correo PUCP"
-        />
-      </a>
+      <GoogleLoginButton/>
       <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña

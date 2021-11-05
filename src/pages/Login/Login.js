@@ -7,13 +7,13 @@ import { Box } from '@mui/system';
 
 
 
-export default function Login({setUser}) {
+export default function Login() {
     const paperStyle={
         paddingLeft: 60,
         paddingRight: 60,
         paddingTop: 20,
         paddingBottom: 20,
-        width:"60%", 
+        width:"60%",
         margin:"20px auto",
 
         borderStyle: 'solid',
@@ -23,7 +23,7 @@ export default function Login({setUser}) {
     }
     const textStyle = {
         zIndex:2,
-        color: "primary.main",  
+        color: "primary.main",
         fontSize: "50px",
         position: "absolute",
         top: "45%",
@@ -32,15 +32,15 @@ export default function Login({setUser}) {
     }
 
     return (
-        <Box 
+        <Box
             position="absolute"
             width="100%"
             height="100vh"
             zIndex={10000}
         >
             <Header />
-            <Grid container 
-                spacing={0} 
+            <Grid container
+                spacing={0}
                 width= "100%"
                 height= "calc(100vh - 80px)"
                 gridTemplateColumns= "1fr 1fr"
@@ -65,7 +65,7 @@ export default function Login({setUser}) {
                         elevation={0}
                         style={paperStyle}
                         >
-                        <LoginForm setUser={setUser}/>
+                        <LoginForm />
                     </Paper>
                 </Grid>
                 <Grid item xs={6}
