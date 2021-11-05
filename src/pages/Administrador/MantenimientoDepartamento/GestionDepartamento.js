@@ -81,7 +81,6 @@ const getDepartamentos = async () => {
   dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];
-  console.log(departamentos);
   dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
@@ -106,6 +105,11 @@ export default function GestionDepartamento() {
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevation:0}
+    /* notification snackbar */
+    //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+    /* confirm dialog */
+    const [confirmDialog, setConfirmDialog] = useState(
+      { isOpen: false, title: '', subtitle: '' })
     const {
         TblContainer,
         TblHead,
@@ -114,13 +118,13 @@ export default function GestionDepartamento() {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
     //Posible delete
-/*
+    /*
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
     }
     //Fin del delete
-*/
+    */
     const handleSearch = e => {
       let target = e.target;
       /* React "state object" (useState()) doens't allow functions, only
@@ -153,6 +157,13 @@ export default function GestionDepartamento() {
         type: 'success'
       })
     } */
+
+    // const addOrEdit = (departamento, resetForm) => {
+    //   if (departamento.id === 0)
+    //     departamentoService.registerDepartamento(departamento)
+    //   else
+    //     departamentoService.updateDepartamento(departamento)
+
     useEffect(() => {
       getDepartamentos()
       .then (newDep =>{

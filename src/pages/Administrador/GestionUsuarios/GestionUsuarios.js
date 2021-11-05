@@ -72,7 +72,8 @@ const tableHeaders = [
 
 const getUsuario = async () => {
 
-  const usuario = await userService.getUsuarios();
+  let usuario = await userService.getUsuarios();
+  usuario = usuario ?? []
   console.log(usuario)
   var str
   let roles = DTLocalServices.getAllRoles();

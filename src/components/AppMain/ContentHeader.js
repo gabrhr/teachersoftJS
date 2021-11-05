@@ -80,8 +80,8 @@ function CboCiclo(props) {
 
 export default function ContentHeader({text, cbo}) {
 
-    console.log("ContentHeader: ")
-    console.log(DTLocalServices.getAllCiclos())
+    // console.log("ContentHeader: ")
+    // console.log(DTLocalServices.getAllCiclos())
     
     return (
         <Form>

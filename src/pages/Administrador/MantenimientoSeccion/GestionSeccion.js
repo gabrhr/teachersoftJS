@@ -54,7 +54,8 @@ const tableHeaders = [
 
 const getSecciones = async () => {
 
-  const dataSecc = await SeccionService.getSecciones();
+  let dataSecc = await SeccionService.getSecciones();
+  dataSecc = dataSecc ?? []
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
