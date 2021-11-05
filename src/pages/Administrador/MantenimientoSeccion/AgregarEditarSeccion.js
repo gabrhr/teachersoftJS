@@ -20,6 +20,23 @@ const initialFieldValues = {
     foto: '',
 }
 
+const convertirBase64 = (file) =>{
+  return new Promise((resolve, reject) =>{
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    }
+
+    //Si es error
+    fileReader.error = (error) => {
+      reject(error)
+    }
+
+  });
+}   
+
 
 export default function AgregarEditarSeccion(props) {
     const {addOrEdit, recordForEdit} = props
@@ -73,9 +90,9 @@ export default function AgregarEditarSeccion(props) {
             correo: values.correo,
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
-              nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
+              nombre: null,
             },
-            //foto: fotoPerfil,
+            //foto: null,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
@@ -136,20 +153,17 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
-                    {console.log("Estos es values: ",values)}
                     <Controls.Input
                         name="correo"
                         label="Correo Electrónico"
                         value={values.correo}
-
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
-                    {console.log("Estos es record",recordForEdit)}
+
                     <Controls.Select
                         name="departmentId"
-
-                        label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+                        label="Departamento"
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
@@ -171,14 +185,14 @@ export default function AgregarEditarSeccion(props) {
 
                                 setFileFoto(files[0])
                                 setCambio(true)
-
+                                
                                 if (files && files[0]) {
                                   var reader = new FileReader();
                                   reader.onload = function (e) {
                                     setFotoPerfil(e.target.result)
                                   };
                                   reader.readAsDataURL(files[0]);
-
+                                
                                 }
                             }}
                         />

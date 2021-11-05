@@ -72,7 +72,8 @@ const tableHeaders = [
 
 const getUsuario = async () => {
 
-  const usuario = await userService.getUsuarios();
+  let usuario = await userService.getUsuarios();
+  usuario = usuario ?? []
   console.log(usuario)
   var str
   let roles = DTLocalServices.getAllRoles();
@@ -152,7 +153,7 @@ export default function GestionUsuarios() {
       setRecords(newUsr);
 
     });
-  }, [recordForEdit, records])
+  }, [recordForEdit])
 
   const addOrEdit = (usuario, resetForm) => {
 
@@ -171,13 +172,13 @@ export default function GestionUsuarios() {
         tipo_persona: usuario.rol,
         seccion: {
           id: usuario.seccion.id,
-          nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
+          nombre: usuario.seccion.nombre
         },
         departamento: {
           id: usuario.departamento.id,
-          nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null
+          nombre: usuario.departamento.nombre
         },
-        foto_URL: null
+        foto_url: null
       }
 
     }
@@ -191,13 +192,13 @@ export default function GestionUsuarios() {
       tipo_persona: usuario.rol,
       seccion: {
         id: usuario.seccion.id,
-        nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
+        nombre: usuario.seccion.nombre
       },
       departamento: {
         id: usuario.departamento.id,
-        nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null
+        nombre: usuario.departamento.nombre
       },
-      foto_URL: null
+      foto_url: null
     }
 
     recordForEdit
@@ -206,10 +207,12 @@ export default function GestionUsuarios() {
           .then(idUsuario => {
             if(recordForEdit)
               setRecordForEdit(null);
+            
         })
+    window.location.replace('')
     setOpenPopup(false)
     resetForm()
-    window.location.replace('');
+    //window.location.replace('');
     /*if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
       //DTLocalServices.postPersona(dataPer)
@@ -247,8 +250,9 @@ export default function GestionUsuarios() {
     console.log(idPersona)
     console.log(id)
 
-    userService.borrarUsuario(id)
-
+    userService.borrarUsuario(id);
+    
+    window.location.replace('');
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);

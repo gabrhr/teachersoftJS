@@ -153,7 +153,7 @@ export default function GestionUsuariosForm(props) {
     /* e is a "default parameter" */
     e.preventDefault()
     if (validate()){
-      
+      window.alert('valid')
     //Este pasa como la nueva seccion o la seccion editada
       const newUsr = {
         id: values.id,
@@ -166,11 +166,11 @@ export default function GestionUsuariosForm(props) {
         rol: values.rol,
         departamento: {
           id: recordForEdit ? parseInt(values.departamento.id) : parseInt(values.departmentId) ,
-          nombre: recordForEdit ? parseInt(values.departamento.nombre) : null,
+          nombre: null,
         },
         seccion: {
           id: recordForEdit ? parseInt(values.seccion.id) : parseInt(values.seccionId) ,
-          nombre: recordForEdit ? parseInt(values.seccion.nombre) : null,
+          nombre: null,
         }, 
         
         //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
@@ -178,6 +178,8 @@ export default function GestionUsuariosForm(props) {
       }
       console.log(newUsr);
       addOrEdit({...newUsr, image: fileFoto}, resetForm)
+    }else{
+      window.alert('invalid')
     }
       
   }
@@ -306,7 +308,7 @@ export default function GestionUsuariosForm(props) {
             
             <Controls.Select
               name="departmentId"
-              label={recordForEdit ? values.departamento.nombre : "Departamento"}
+              label="Departamento"
               value={recordForEdit ? values.departamento.id : values.departmentId}
               onChange={handleInputChange}
               options={departamento}
@@ -314,7 +316,7 @@ export default function GestionUsuariosForm(props) {
             />
             <Controls.Select
               name="seccionId"
-              label={recordForEdit ? values.seccion.nombre : "Seccion Principal"}
+              label="Seccion Principal"
               value={recordForEdit ? values.seccion.id : values.seccionId}
               onChange={handleInputChange}
               options={seccion}

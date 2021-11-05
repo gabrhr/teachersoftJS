@@ -37,14 +37,14 @@ import { UserContext } from './UserContext';
 const privateroutes = [
   /* Admin */
   { requireRoles: [0,8], path: "/admin", page: GestionUsuarios },
-  { requireRoles: [0], path: "/admin/mantenimiento", page: GestionUsuarios },
-  { requireRoles: [0], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
-  { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
-  { requireRoles: [0], path: "/admin/mantenimiento/sec", page: GestionSeccion },
-  { requireRoles: [0], path: "/admin/mantenimiento/per", page: Vacio },
-  { requireRoles: [0], path: "/admin/showcase", page: Showcase },
-  { requireRoles: [0], path: "/admin/index", page: TestIndex },
-  { requireRoles: [0], path: "/admin/employees", page: Employees },
+  { requireRoles: [0,8], path: "/admin/mantenimiento", page: GestionUsuarios },
+  { requireRoles: [0,8], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
+  { requireRoles: [0,8], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
+  { requireRoles: [0,8], path: "/admin/mantenimiento/sec", page: GestionSeccion },
+  { requireRoles: [0,8], path: "/admin/mantenimiento/per", page: Vacio },
+  { requireRoles: [0,8], path: "/admin/showcase", page: Showcase },
+  { requireRoles: [0,8], path: "/admin/index", page: TestIndex },
+  { requireRoles: [0,8], path: "/admin/employees", page: Employees },
   /* Docente */
   /* AS */
   { requireRoles: [2], path: "/as", page: AsistenteSeccion },

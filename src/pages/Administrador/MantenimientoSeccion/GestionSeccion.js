@@ -54,7 +54,8 @@ const tableHeaders = [
 
 const getSecciones = async () => {
 
-  const dataSecc = await SeccionService.getSecciones();
+  let dataSecc = await SeccionService.getSecciones();
+  dataSecc = dataSecc ?? []
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -67,8 +68,7 @@ const getSecciones = async () => {
         idDepartamento: seccion.departamento.id,
         nombreDepartamento: seccion.departamento.nombre
       },
-      correo: seccion.correo,
-      foto:seccion.foto
+      correo: seccion.correo
     })
     ));
   //console.log(secciones);
@@ -120,10 +120,10 @@ export default function GestionSeccion() {
         console.log(newSeccion);
       });
 
-    }, [recordForEdit,records])
+    }, [recordForEdit])
 
     const addOrEdit = (seccion, resetForm) => {
-
+      
       recordForEdit
         ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
@@ -133,7 +133,7 @@ export default function GestionSeccion() {
         })
       setOpenPopup(false)
       resetForm()
-      window.location.replace('');
+      window.location.replace('')
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
@@ -276,7 +276,7 @@ export default function GestionSeccion() {
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 />
-                {console.log("Este es el recordforedit ",recordForEdit)}
+                
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
             <Notification
