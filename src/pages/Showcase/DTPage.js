@@ -28,6 +28,11 @@ export default function DTPage() {
                 {"Simple Divider.  OJO que esta en `Controls` y no en `DT`"}
             </Typography>
             <Controls.Divider/>
+
+            <Typography>
+                Title.  El mismo de "ContentHeader.js"
+            </Typography>
+            <DT.Title text="Ejemplo Titulo DreamTeam" />
         </div>
     )
 }
