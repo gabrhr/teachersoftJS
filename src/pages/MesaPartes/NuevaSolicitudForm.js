@@ -7,7 +7,7 @@ import React from 'react'
 export default function NuevaSolicitudForm() {
     return (
         <div>
-            
+            Hola mundo
         </div>
     )
 }
