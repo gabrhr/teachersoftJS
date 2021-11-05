@@ -1,5 +1,38 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select as MuiSelect } from '@mui/material';
 import React from 'react'
+import { styled } from '@mui/material/styles'
+import { InputBase } from '@mui/material'
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const StyledInput = styled(InputBase)(({ theme }) => ({
+    'label + &': {
+        marginTop: theme.spacing(2),
+        color: theme.palette.primary.main
+    },
+    '& .MuiInputBase-input': {
+        fontSize: 16,
+    }
+}))
+
+function CustomSelect(props) {
+    return (
+        <Select
+            input={<StyledInput />}
+        >
+            {props.children}
+        </Select>
+    )
+}
 
 export default function Select(props) {
 
@@ -31,7 +64,7 @@ export default function Select(props) {
                     options.map(
                         item => (
                             <MenuItem key={item.id} value={item.id} >
-                                {item.nombre}
+                                {item.nombre || item.title}
                             </MenuItem>
                         )
                     )

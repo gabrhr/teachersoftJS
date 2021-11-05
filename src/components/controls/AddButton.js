@@ -1,3 +1,7 @@
+/* Author: Manuel
+ * 
+ * Reusable component text + AddIcon
+ */
 import React from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, Typography } from '@mui/material'
@@ -13,7 +17,7 @@ export default function AddButton(props) {
             <Grid item xs = {12} md ={2}>
               <Box  x={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
                 <Typography align="center">
-                  {title}
+                  {title || props.text}
                 </Typography>
               </Box>
             </Grid>
