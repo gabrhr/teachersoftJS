@@ -288,7 +288,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
-      if(permission)  setRecords(recordsX);
+      if(permission)  {
+        setRecords(recordsX);
+        setCargaH(records);
+      }
       setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }

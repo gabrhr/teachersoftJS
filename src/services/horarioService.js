@@ -6,7 +6,7 @@ import { formatHorario, formatHorarioCursos } from '../components/auxFunctions';
 export const getHorarios = async () => {
   try{
     //debugger;
-    const request= await axios.get(`${url}/horario/`,tokenService.getToken()) //Todas las secciones
+    const request= await axios.get(`${url}/horario/`, tokenService.GetTokenPrueba()) //Todas las secciones
     return request.data;  
   }catch(exception){
     console.error(exception);
@@ -15,7 +15,7 @@ export const getHorarios = async () => {
 
 export const getHorario = async ({id}) => {
   try{
-    const request = await axios.get(`${url}/horario/${id}`,tokenService.getToken(),id);
+    const request = await axios.get(`${url}/horario/${id}`,tokenService.GetTokenPrueba(),id);
     return request.data;  //Es un dato.
   }catch(exception){
     console.error(exception);
@@ -24,7 +24,7 @@ export const getHorario = async ({id}) => {
 
 const registerHorario = async newObject => {
   try{           
-    const request = await axios.post(`${url}/horario/`,newObject, tokenService.getToken());
+    const request = await axios.post(`${url}/horario/`,newObject, tokenService.GetTokenPrueba());
     console.log(request.data);
     return request.data; //Es un valor de true o no
   }catch(exception){
@@ -35,7 +35,7 @@ const registerHorario = async newObject => {
 const updateHorario = async (newObject, {id}) => {
   try{
     //console.log(newObject);
-    const request = await axios.put(`${url}/horario/`, tokenService.getToken(),newObject, id);
+    const request = await axios.put(`${url}/horario/`, tokenService.GetTokenPrueba(),newObject, id);
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
@@ -44,7 +44,7 @@ const updateHorario = async (newObject, {id}) => {
 
 const deleteHorario = async (id) => {
   try{
-    const request = await axios.delete(`${url}/horario/${id}`, tokenService.getToken(),id);
+    const request = await axios.delete(`${url}/horario/${id}`, tokenService.GetTokenPrueba(),id);
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);

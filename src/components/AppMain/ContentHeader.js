@@ -83,11 +83,11 @@ function CboCiclo(props) {
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
             <Box  sx={{width: "10vw", align: "Right"}}> 
                 <Controls.Select
-                    name="title"
+                    name="id"
                     label="Ciclo"
-                    value={values.title}
+                    value={values.id}
                     onChange={handleInputChange}
-                    options={DTLocalServices.getAllCiclos()}
+                    options={ciclos}
                     type="contained"
 
                 />

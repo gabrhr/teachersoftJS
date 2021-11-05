@@ -139,7 +139,7 @@ const fillHorarios = async () => {
 
 }
 
-export default function HorarioCursos({records, setRecords}) {
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) {
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
@@ -177,6 +177,7 @@ export default function HorarioCursos({records, setRecords}) {
       .then (newHorarios =>{
         //setRecordsX(newHorarios); //Se quiere actualizar todo
         setRecords(newHorarios);
+        setCargaH(records);
       });
       
     }, [])
@@ -263,11 +264,11 @@ export default function HorarioCursos({records, setRecords}) {
                 {/* FIX:  left align */}
                 <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
-                    {/* <Controls.AddButton 
+                    <Controls.AddButton 
                         title="Agregar Nuevo Horario"
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
-                    /> */}
+                    />
                 </Grid>
             </Grid>
             <BoxTbl>
@@ -311,10 +312,13 @@ export default function HorarioCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-            <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
-                      <DeleteOutlinedIcon fontSize="small"/>
-                      Eliminar todos los cursos
-                    </Controls.ActionButton>
+                <Controls.Button
+                text="Eliminar todos los cursos"
+                size = "small"
+                color="warning"
+                endIcon={<DeleteOutlinedIcon fontSize="small"/>}
+                onClick={ () => {setOpenAllPopup(true)}}
+                />
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
