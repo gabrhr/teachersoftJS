@@ -47,6 +47,9 @@ const GoogleLoginButton = () => {
                 pathname: "/as",
                 });
                 break;
+            case 2:
+                  history.push("/as");
+                  break;
             default:
                 return history.push("/noRoles");
           }
