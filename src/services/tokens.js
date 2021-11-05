@@ -1,37 +1,20 @@
 
-const setToken = (user) => {
-  //let token = `Bearer ${newToken}`
-  window.localStorage.setItem('loggedUser', JSON.stringify(user));
-  //console.log('No puede ingresar más de una vez el token')
-}
+const GetTokenPrueba = () => {
 
-const getToken = () => {
-  //const newToken = JSON.parse(window.localStorage.getItem('loggedUser'));
-
+  const token = JSON.parse(localStorage.getItem("token"))
+  console.log(localStorage.getItem("token"))
+  console.log(token);
+  
   const config = {
     headers: {
-      //POR AHROA ES FIJO - LUEGO SERÁ REGRESANDO LA DATA DEL TOKEN
-    "Authorization" : `${"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzMyIsImlhdCI6MTYzNjEzNzg5Niwic3ViIjoiYTIwMTcyNjY1QHB1Y3AuZWR1LnBlIiwiaXNzIjoiTWFpbiIsImV4cCI6MTYzNjQ4MzQ5Nn0.J3bA19Hh-6xxsOe0nSbFI5r7RyYCcQAvpdaZG4XzTJE"}`,
+      Authorization: `${token}`,
+    // "Authorization" : `${"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwiaWF0IjoxNjM2MDUyNTM1LCJzdWIiOiJzZG9sYXJ0ZUBwdWNwLmVkdS5wZSIsImlzcyI6Ik1haW4iLCJleHAiOjE2MzYzOTgxMzV9.TsmkWJH9dxfzltURtiK7Mr0lA_e3PKVIXAog2B7_3Ow"}`,
     }
   };
 
-  //console.log(config);
+  console.log(config);
   return config;
   //return `Bearer ${newToken.token}`;  //Bearer si se utiliza dicha cabecera - de autenticacion
-}
-
-const getUser = () => {
-  const newUser = JSON.parse(window.localStorage.getItem('loggedUser').token);//Obtenemos el id del user almacenado
-  console.log(newUser.user);
-
-  return newUser.user;
-  //return `Bearer ${newToken.token}`;  //Bearer si se utiliza dicha cabecera - de autenticacion
-}
-
-//const renewimToken -- Por si se implementa
-
-const deleteToken = () => {
-  window.localStorage.removeItem('loggedUser');
 }
 
 const verifyAuthentication = Request => {
@@ -42,4 +25,4 @@ const verifyAuthentication = Request => {
   return true;
 }
 
-export default { setToken , getToken, deleteToken, verifyAuthentication}
+export default { GetTokenPrueba, verifyAuthentication}

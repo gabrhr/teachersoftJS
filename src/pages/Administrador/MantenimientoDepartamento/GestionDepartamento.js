@@ -13,8 +13,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
+import departamentoService from '../../../services/departamentoService';
+import * as employeeService from '../../../services/employeeService'
+import { Form } from '../../../components/useForm'
 //import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 //import departamentoService from '../../../services/departamentoService';
 //import * as employeeService from '../../../services/employeeService'
@@ -77,11 +82,10 @@ const usuarios2 = [
 
 const getDepartamentos = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  const dataDep = await DepartamentoService.getDepartamentos();
-  console.log(dataDep);
+  let dataDep = await DepartamentoService.getDepartamentos(); 
+  dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const departamentos = [];
-  console.log(departamentos);
   dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
@@ -106,8 +110,13 @@ export default function GestionDepartamento() {
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
   
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
-    color:"primary.light", elevatio:0}
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    color:"primary.light", elevation:0}
+    /* notification snackbar */
+    //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+    /* confirm dialog */
+    const [confirmDialog, setConfirmDialog] = useState(
+      { isOpen: false, title: '', subtitle: '' })
     const {
         TblContainer,
         TblHead,
@@ -116,13 +125,13 @@ export default function GestionDepartamento() {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
     //Posible delete
-/*
+    /*
     const openInPopup = item => {
       setRecordForEdit(item)
       setOpenPopup(true)
     }
     //Fin del delete
-*/
+    */
     const handleSearch = e => {
       let target = e.target;
       /* React "state object" (useState()) doens't allow functions, only
@@ -155,13 +164,20 @@ export default function GestionDepartamento() {
         type: 'success'
       })
     } */
+
+    // const addOrEdit = (departamento, resetForm) => {
+    //   if (departamento.id === 0)
+    //     departamentoService.registerDepartamento(departamento)
+    //   else
+    //     departamentoService.updateDepartamento(departamento)
+
     useEffect(() => {
       getDepartamentos()
       .then (newDep =>{
         setRecords(newDep);
         console.log(newDep);
       });
-    }, [recordForEdit,records])
+    }, [recordForEdit])
 
 
     const addOrEdit = (departamento, resetForm) => {
@@ -169,20 +185,41 @@ export default function GestionDepartamento() {
       ? DepartamentoService.updateDepartamento(departamento,departamento.id)
       : DepartamentoService.registerDepartamento(departamento)
       .then(idDepartamento=> {
-        if(!recordForEdit)
-          setRecordForEdit(idDepartamento);
-        else {
+        if(recordForEdit)
           setRecordForEdit(null);
-        }
       })
-
+      window.location.replace('');
       setOpenPopup(false)
       resetForm()
-
+      
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
         type: 'success'
+      })
+    }
+    const onDelete = (idDepartamento) => {
+      // if (!window.confirm('Are you sure to delete this record?'))
+      //   return
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+      console.log(idDepartamento)
+      //console.log(id)
+      DepartamentoService.deleteDepartamento(idDepartamento);
+      //userService.borrarUsuario(idDepartamento)
+
+      /*DTLocalServices.getUsers().then((response) => {
+        setRecords(response.data)
+        console.log(response.data);
+      });*/
+      //setRecords(DTLocalServices.getAllPersonas())
+
+      setNotify({
+        isOpen: true,
+        message: 'Borrado Exitoso',
+        type: 'error'
       })
     }
 
@@ -244,21 +281,18 @@ export default function GestionDepartamento() {
                           >
                             <EditOutlinedIcon fontSize="small" />
                           </Controls.ActionButton>
-                          <Controls.ActionButton
-                          color="warning"
-                          onClick={()=>{
-                            setOpenPopup(true);
-                            setRecordForEdit(item);}}
-                          >
-                          <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
                           <IconButton aria-label="delete">
                             <DeleteIcon
                             color="warning"
-                            onClick={()=>{
-                              setOpenPopup(true);
-                              setRecordForEdit(item);}}
-                            />
+                            onClick={() => {
+                              // onDelete(item.id)
+                              setConfirmDialog({
+                                isOpen: true,
+                                title: '¿Eliminar departamento permanentemente?',
+                                subTitle: 'No es posible deshacer esta accion',
+                                onConfirm: () => {onDelete(item.id)}
+                              })
+                            }}/>
                           </IconButton>
                         </StyledTableCell>
                       </StyledTableRow>
@@ -291,6 +325,14 @@ export default function GestionDepartamento() {
             />
               */}
             </Popup>
+            <Notification
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+              confirmDialog={confirmDialog}
+              setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }

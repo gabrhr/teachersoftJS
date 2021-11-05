@@ -22,12 +22,6 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    /*{
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -269,11 +263,11 @@ export default function HorarioCursos({records, setRecords}) {
                 {/* FIX:  left align */}
                 <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
-                    <Controls.AddButton 
+                    {/* <Controls.AddButton 
                         title="Agregar Nuevo Horario"
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
-                    />
+                    /> */}
                 </Grid>
             </Grid>
             <BoxTbl>

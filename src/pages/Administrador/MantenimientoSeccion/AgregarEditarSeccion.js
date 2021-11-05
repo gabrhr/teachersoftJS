@@ -116,7 +116,7 @@ export default function AgregarEditarSeccion(props) {
       dataDep.map(dep => (
         departamentos.push({
           id: dep.id.toString(),
-          title: dep.nombre,
+          nombre: dep.nombre,
         })
       ));
 
@@ -153,7 +153,6 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.nombre}
                     />
-                    {/*console.log("Estos es values: ",values)*/}
                     <Controls.Input
                         name="correo"
                         label="Correo Electrónico"
@@ -161,11 +160,10 @@ export default function AgregarEditarSeccion(props) {
                         onChange = {handleInputChange}
                         error={errors.corre}
                     />
-                    {/*console.log("Estos es record",recordForEdit)*/}
+
                     <Controls.Select
                         name="departmentId"
-            
-                        label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+                        label="Departamento"
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}

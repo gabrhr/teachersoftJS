@@ -86,13 +86,13 @@ export default function Descargaform() {
     return (
         <>
         {/* Solicitud actual del año */}
-        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+        {/* <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
             <Controls.AddButton
                 title="Agregar Nueva Solicitud"
                 variant="iconoTexto"
                 onClick = {() => {setOpenPopup(true);}}
             />
-        </div>
+        </div> */}
         {/* Solicitud Pasada */}
         <Typography variant="h4" > Solicitudes Pasadas</Typography>
 

@@ -6,8 +6,10 @@ import { formatHorario, formatHorarioCursos } from '../components/auxFunctions';
 const getSecciones = async () => {
   try{
     //debugger;
-    const request= await axios.get(`${url}/seccion/`,tokenService.getToken()) //Todas las secciones
-    return request.data;  
+    const request= await axios.get(`${url}/seccion/`, tokenService.GetTokenPrueba()) //Todas las secciones
+    console.log(request)
+    console.log(tokenService.GetTokenPrueba())
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
@@ -15,7 +17,7 @@ const getSecciones = async () => {
 
 const getSeccionxDepartamento = async ({id_departamento}) => {
   try{
-    const request = await axios.get(`${url}/seccion/porDepartamento=${id_departamento}`, tokenService.getToken(), id_departamento,);  //Es un entero que se pasa
+    const request = await axios.get(`${url}/seccion/porDepartamento=${id_departamento}`, tokenService.GetTokenPrueba(), id_departamento);  //Es un entero que se pasa
     return request.data;
   }catch(exception){
     console.error(exception);
@@ -24,7 +26,7 @@ const getSeccionxDepartamento = async ({id_departamento}) => {
 
 const getSeccion = async ({id}) => {
   try{
-    const request = await axios.get(`${url}/seccion/${id}`,tokenService.getToken(), id);
+    const request = await axios.get(`${url}/seccion/${id}`, tokenService.GetTokenPrueba(), id);
     return request.data;  //Es un dato.
   }catch(exception){
     console.error(exception);
@@ -32,19 +34,19 @@ const getSeccion = async ({id}) => {
 }
 
 const registerSeccion = async newObject => {
-  try{           
-    const request = await axios.post(`${url}/seccion/`, tokenService.getToken(), newObject);
-    //console.log(request.data);
+  try{
+    const request = await axios.post(`${url}/seccion/`, newObject, tokenService.GetTokenPrueba());
+    console.log(request.data);
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
   }
 }
 
-const updateSeccion = async (newObject, id) => {
+const updateSeccion = async (newObject,{id}) => {
   try{
-    //console.log(newObject);
-    const request = await axios.put(`${url}/seccion/`, tokenService.getToken(), newObject);
+    console.log(newObject);
+    const request = await axios.put(`${url}/seccion/`, newObject, tokenService.GetTokenPrueba());
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
@@ -53,11 +55,13 @@ const updateSeccion = async (newObject, id) => {
 
 const deleteSeccion = async (id) => {
   try{
-    const request = await axios.delete(`${url}/seccion/${id}`, tokenService.getToken(), id);
+    const request = await axios.delete(`${url}/seccion/${id}`, tokenService.GetTokenPrueba(),id);
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
   }
 }
+
+//, tokenService.getToken()
 
 export default {getSecciones, getSeccionxDepartamento, getSeccion, registerSeccion, updateSeccion, deleteSeccion}

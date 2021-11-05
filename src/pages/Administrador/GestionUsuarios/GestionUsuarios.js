@@ -14,12 +14,12 @@ import Notification from '../../../components/util/Notification'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
 /* SERVICES */
 import personaService from '../../../services/personaService'
-import DTLocalServices from '../../../services/DTLocalServices';
+import * as DTLocalServices from '../../../services/DTLocalServices';
 import userService from '../../../services/userService';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CloseIcon from '@mui/icons-material/Close';
 
 const initialFieldValues = {
   seccionID: '',
@@ -72,19 +72,26 @@ const tableHeaders = [
 
 const getUsuario = async () => {
 
-  const usuario = await userService.getUsuarios();
-
-  var str
+  let usuario = await userService.getUsuarios();
+  usuario = usuario ?? []
+  console.log(usuario)
+  var str,std,stl,ape1,ape2
   let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
+  
   usuario.map(usr => (
-    str = usr.persona.apellidos.split(" "),
+    ape1 = '',
+    ape2 = '',
+    str = usr.persona.apellidos ? usr.persona.apellidos : -1,
+    std = str!=-1 ? str.indexOf(' ') : -1,
+    stl = std >= 0 ? usr.persona.apellidos.split(" ") : -1,
+    stl != -1 ? (ape1 = stl[0], ape2 = stl[1]) : (ape1 = usr.persona.apellidos, ape2 = ''),
     usuarios.push({
       id: usr.id.toString(),
       idPersona: usr.persona.id.toString(),
       nombre: usr.persona.nombres,
-      apellidoPaterno: str[0],
-      apellidoMaterno: str[1],
+      apellidoPaterno: ape1,
+      apellidoMaterno: ape2,
       documento: usr.persona.numero_documento,
       correo: usr.persona.correo_pucp,
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
@@ -155,7 +162,7 @@ export default function GestionUsuarios() {
   }, [recordForEdit])
 
   const addOrEdit = (usuario, resetForm) => {
-    
+
     const dataUsr = {
       id: usuario.id,
       fecha_creacion: null,
@@ -171,13 +178,13 @@ export default function GestionUsuarios() {
         tipo_persona: usuario.rol,
         seccion: {
           id: usuario.seccion.id,
-          nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
+          nombre: usuario.seccion.nombre
         },
         departamento: {
           id: usuario.departamento.id,
-          nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null
+          nombre: usuario.departamento.nombre
         },
-        foto_URL: null
+        foto_url: null
       }
 
     }
@@ -191,25 +198,27 @@ export default function GestionUsuarios() {
       tipo_persona: usuario.rol,
       seccion: {
         id: usuario.seccion.id,
-        nombre: usuario.seccion.nombre ? usuario.seccion.nombre : null
+        nombre: usuario.seccion.nombre
       },
       departamento: {
         id: usuario.departamento.id,
-        nombre: usuario.departamento.nombre ? usuario.departamento.nombre : null 
+        nombre: usuario.departamento.nombre
       },
-      foto_URL: null
+      foto_url: null
     }
 
-    recordForEdit 
-        ? personaService.updatePersona(dataPer, usuario.idPersona) 
+    recordForEdit
+        ? personaService.updatePersona(dataPer, usuario.idPersona)
         : userService.registerUsuario(dataUsr)
           .then(idUsuario => {
             if(recordForEdit)
               setRecordForEdit(null);
+            
         })
+    window.location.replace('')
     setOpenPopup(false)
     resetForm()
-    window.location.replace('');
+    //window.location.replace('');
     /*if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
       //DTLocalServices.postPersona(dataPer)
@@ -228,7 +237,7 @@ export default function GestionUsuarios() {
       message: 'Cambios añadidos',
       type: 'success'
     })
-    
+
   }
 
   /* open object in a pop up (for edit) */
@@ -246,14 +255,16 @@ export default function GestionUsuarios() {
     })
     console.log(idPersona)
     console.log(id)
-    userService.borrarUsuario(id)
-    window.location.replace('');
+
+    userService.borrarUsuario(id);
+    
+    //window.location.replace('');
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
     });*/
     //setRecords(DTLocalServices.getAllPersonas())
-    
+
     setNotify({
       isOpen: true,
       message: 'Borrado Exitoso',
@@ -323,7 +334,7 @@ export default function GestionUsuarios() {
                 </InputAdornment>
               )
             }}
-            sx={{ width: .75 }}
+            sx={{ width: .75, visibility: "hidden" }}
             onChange={handleSearch}
             type="search"
           />
@@ -356,20 +367,19 @@ export default function GestionUsuarios() {
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
-                      <Controls.ActionButton 
-                        color="error"
+                      <IconButton aria-label="delete">
+                        <DeleteIcon
+                        color="warning"
                         onClick={() => {
                           // onDelete(item.id)
                           setConfirmDialog({
                             isOpen: true,
                             title: '¿Eliminar usuario permanentemente?',
                             subTitle: 'No es posible deshacer esta accion',
-                            onConfirm: () => {onDelete(item.idPersona, item.id)}
+                            onConfirm: () => {onDelete(item.idPersona,item.id)}
                           })
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </Controls.ActionButton>
+                        }}/>
+                      </IconButton>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))

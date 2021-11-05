@@ -7,7 +7,7 @@ import { Box } from '@mui/system';
 
 
 
-export default function Login({setUser}) {
+export default function Login() {
     const paperStyle={
         paddingLeft: 60,
         paddingRight: 60,
@@ -65,7 +65,7 @@ export default function Login({setUser}) {
                         elevation={0}
                         style={paperStyle}
                         >
-                        <LoginForm setUser={setUser}/>
+                        <LoginForm />
                     </Paper>
                 </Grid>
                 <Grid item xs={6}

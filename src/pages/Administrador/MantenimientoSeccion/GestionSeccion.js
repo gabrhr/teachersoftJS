@@ -7,8 +7,12 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } fr
 /* ICONS */
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
@@ -44,7 +48,9 @@ const tableHeaders = [
 
 const getSecciones = async () => {
 
-  const dataSecc = await SeccionService.getSecciones();
+  let dataSecc = await SeccionService.getSecciones();
+  //console.log(dataSecc)
+  dataSecc = dataSecc ?? []
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -57,8 +63,7 @@ const getSecciones = async () => {
         idDepartamento: seccion.departamento.id,
         nombreDepartamento: seccion.departamento.nombre
       },
-      correo: seccion.correo,
-      foto:seccion.foto
+      correo: seccion.correo
     })
     ));
   //console.log(secciones);
@@ -75,7 +80,8 @@ export default function GestionSeccion() {
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
-
+    const [confirmDialog, setConfirmDialog] = useState(
+      { isOpen: false, title: '', subtitle: '' })
     //console.log(records);
     const {
         TblContainer,
@@ -112,24 +118,45 @@ export default function GestionSeccion() {
     }, [recordForEdit])
 
     const addOrEdit = (seccion, resetForm) => {
-      seccion.id = parseInt(seccion.id);
-      console.log(seccion);
+      
       recordForEdit
         ? SeccionService.updateSeccion(seccion)
         : SeccionService.registerSeccion(seccion)
           .then(idSeccion => {
-            if(!recordForEdit)
-              setRecordForEdit(idSeccion);
-            else
+            if(recordForEdit)
               setRecordForEdit(null);
         })
       setOpenPopup(false)
       resetForm()
-
+      window.location.replace('')
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
         type: 'success'
+      })
+    }
+    const onDelete = (idSeccion) => {
+      // if (!window.confirm('Are you sure to delete this record?'))
+      //   return
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+      console.log(idSeccion)
+      //console.log(id)
+      SeccionService.deleteSeccion(idSeccion);
+      //userService.borrarUsuario(idDepartamento)
+
+      /*DTLocalServices.getUsers().then((response) => {
+        setRecords(response.data)
+        console.log(response.data);
+      });*/
+      //setRecords(DTLocalServices.getAllPersonas())
+
+      setNotify({
+        isOpen: true,
+        message: 'Borrado Exitoso',
+        type: 'error'
       })
     }
 
@@ -214,7 +241,19 @@ export default function GestionSeccion() {
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
-
+                              <IconButton aria-label="delete">
+                                <DeleteIcon
+                                color="warning"
+                                onClick={() => {
+                                  // onDelete(item.id)
+                                  setConfirmDialog({
+                                    isOpen: true,
+                                    title: '¿Eliminar seccion permanentemente?',
+                                    subTitle: 'No es posible deshacer esta accion',
+                                    onConfirm: () => {onDelete(item.id)}
+                                  })
+                                }}/>
+                              </IconButton>
                             </StyledTableCell>
                         </StyledTableRow>
                         ))
@@ -236,6 +275,14 @@ export default function GestionSeccion() {
                 {/*console.log("Este es el recordforedit ",recordForEdit)*/}
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
+            <Notification
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+              confirmDialog={confirmDialog}
+              setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }
