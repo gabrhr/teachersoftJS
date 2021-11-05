@@ -136,9 +136,9 @@ export default function NuevaSolicitudForm() {
 
     return (
         <div>
-            <DT.Title text="Mesa de partes" />
+            <DT.Title size="big" text="Mesa de partes" />
             <DT.BorderBox>
-                <DT.Title small text="Nueva Solicitud" />
+                <DT.Title size="medium" text="Nueva Solicitud" />
                 <ActualForm 
                     values={values} 
                     handleInputChange={handleInputChange}
