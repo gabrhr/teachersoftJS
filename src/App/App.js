@@ -44,7 +44,7 @@ function App() {
     // console.log(localStorage.getItem('loggedUser'))
   }, [user])
   
-  if (true) {
+  if (false) {
     return (
       <ThemeProvider theme={theme}>
         <Router>

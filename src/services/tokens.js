@@ -11,7 +11,7 @@ const getToken = () => {
   const config = {
     headers: {
       //POR AHROA ES FIJO - LUEGO SERÁ REGRESANDO LA DATA DEL TOKEN
-    "Authorization" : `${"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxNSIsImlhdCI6MTYzNjA1MDUwNCwic3ViIjoiYTIwMTcyNjY1QHB1Y3AuZWR1LnBlIiwiaXNzIjoiTWFpbiIsImV4cCI6MTYzNjM5NjEwNH0.AAbxXZ76PbpeQD6UDjF6NLlnaqoXOExAhK1d35y0uzk"}`,
+    "Authorization" : `${"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxNSIsImlhdCI6MTYzNjA3MTE0MSwic3ViIjoiYTIwMTcyNjY1QHB1Y3AuZWR1LnBlIiwiaXNzIjoiTWFpbiIsImV4cCI6MTYzNjQxNjc0MX0.7EOa_sO8Wwsf2IBYbTPu1Xan9vZCYwQc5GAuGtF50nQ"}`,
     }
   };
 

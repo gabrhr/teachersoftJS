@@ -83,15 +83,13 @@ const fillHorarios = async () => {
   for (let hor of dataHor){
     //console.log(hor.id);
     //console.log(hor.sesiones[0].secuencia);
-    const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
-      hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
-      hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
-    console.log(sesion1);
+    //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
+    //console.log(sesion1);
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.horas_semanales,
+      "horas_semanales": hor.sesiones[0].hora_sesion + hor.sesiones[1].hora_sesion, 
       ciclo:{
         "id": hor.ciclo.id,
       },
@@ -101,21 +99,22 @@ const fillHorarios = async () => {
         "nombre": hor.curso.nombre,
         "creditos": hor.curso.creditos,
         "unidad": hor.curso.unidad,
-        "carga": hor.curso.carga
       },
-      "hora_sesion": sesion1
+      sesiones:{
+        "secuencia": hor.sesiones[0].secuencia,
+        "sesiones_dictado": [],
+        "hora_sesion": hor.sesiones[0].horas_semanales,
+      },
     })
     //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
     if(hor.sesiones[1]){
-      const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana, 
-        hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio, 
-        hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
-      console.log(sesion2);
+      //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+      //console.log(sesion2);
       horarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
-        "tipo": hor.sesiones[1].secuencia,
-        "horas_semanales": hor.horas_semanales,
+        "tipo": hor.sesiones[0].secuencia,
+        "horas_semanales": hor.sesiones[0].hora_sesion + hor.sesiones[1].hora_sesion, 
         ciclo:{
           "id": hor.ciclo.id,
         },
@@ -125,9 +124,12 @@ const fillHorarios = async () => {
           "nombre": hor.curso.nombre,
           "creditos": hor.curso.creditos,
           "unidad": hor.curso.unidad,
-          "carga": hor.curso.carga
         },
-        "hora_sesion": sesion2
+        sesiones:{
+          "secuencia": hor.sesiones[1].secuencia,
+          "sesiones_dictado": [],
+          "hora_sesion": hor.sesiones[1].horas_semanales,
+        },
       })
     }
   }

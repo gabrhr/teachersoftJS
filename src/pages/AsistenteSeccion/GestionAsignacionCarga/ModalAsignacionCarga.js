@@ -56,7 +56,7 @@ const tableHeaders = [
 
 async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   if(otroHorario === 1){  //Si otorHorario = 1 - entonces si es nuevo horario
-    const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
+    //const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
 
     await cursoService.getCursosxCodigoNombre(hor.curso.codigo)
       .then(request => {
@@ -79,12 +79,13 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           }
           */
           //"sesiones_excel": hor.sesiones_excel,
+          //teorico - carga_horaria: suma de horas_sesiones 
           sesiones:[{
             "secuencia": hor.tipo,
             "sesiones_dictado": [],
               //"persona": - es uno de los docente - es un objeto - objeto persona
-              //"horas_dictado_docente_sesion:" - lo que dicta este docente - entero 
-            "horas_semanales":  1,
+              //"hora_sesion_docente:" - lo que dicta este docente - entero 
+            "hora_sesion": hor.horas_semanales, //Hora del tipo de sesion [clase - 3 horas: teorico]
           }]
         }
         //Analizamos si el siguiente item es el mismo horario pero otro tipo
@@ -94,15 +95,14 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   }
   
   else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
-    const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
+    //const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
 
     postHorario.sesiones.push({
       "secuencia": hor.tipo,
-      "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
-      "hora_inicio": dataSes[1],
-      "media_hora_inicio": dataSes[2],
-      "hora_fin": dataSes[3],
-      "media_hora_fin": dataSes[4],
+      "sesiones_dictado": [],
+        //"persona": - es uno de los docente - es un objeto - objeto persona
+        //"hora_sesion_docente:" - lo que dicta este docente - entero 
+      "hora_sesion": hor.horas_semanales, //Hora del tipo de sesion [clase - 3 horas: teorico]
     })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
@@ -345,9 +345,9 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 </TableCell>*/}
                                 <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
-                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
+                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
                             </TableRow>
                             ))
