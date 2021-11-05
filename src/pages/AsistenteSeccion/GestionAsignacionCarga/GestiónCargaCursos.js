@@ -118,10 +118,10 @@ export default function GestionCargaCursos() {
 
     const changeTipo = e => {setVTipo(e.target.value)}
     const changeHorario = e => {setHorario(e.target.value)}
-    const changeSesion = e => { setDataSes(horarioService.convertStringtoSesion(e.target.value))}
+    const changeSesion = e => { setDataSes(e.target.value)}
 
     const guardarHorario = () => {
-        /* GUARDAR EL HORARIO CONFIGURADO */
+        /* GUARDAR EL HORARIO CONFIGURADO - Falta que se guarde el horario */
     }
 
     return (

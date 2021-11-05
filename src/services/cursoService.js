@@ -5,7 +5,7 @@ import tokenService from './tokens.js';
 const getCursosxCodigoNombre = async (codigo_nombre) => {
   //console.log("EL codigo pasado es: ",codigo_nombre);
   const token = tokenService.getToken();
-  console.log(token);
+  //console.log(token);
   try{
     const request = await axios.get(`${url}/curso/codigonombre=${codigo_nombre}`, token  , codigo_nombre, { allowCredentials: false });  //Normalmente es un string
     return request.data;  //Es un dato

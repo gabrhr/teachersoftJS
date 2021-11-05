@@ -60,7 +60,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
 
     await cursoService.getCursosxCodigoNombre(hor.curso.codigo)
       .then(request => {
-        console.log(request);
+        //console.log(request);
         postHorario = {
           "codigo": hor.codigo,
           //"tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
@@ -82,10 +82,10 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           //teorico - carga_horaria: suma de horas_sesiones 
           sesiones:[{
             "secuencia": hor.tipo,
-            "sesiones_dictado": [],
+            //"sesiones_dictado": null,
               //"persona": - es uno de los docente - es un objeto - objeto persona
               //"hora_sesion_docente:" - lo que dicta este docente - entero 
-            "hora_sesion": hor.horas_semanales, //Hora del tipo de sesion [clase - 3 horas: teorico]
+            "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
           }]
         }
         //Analizamos si el siguiente item es el mismo horario pero otro tipo
@@ -99,13 +99,14 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
 
     postHorario.sesiones.push({
       "secuencia": hor.tipo,
-      "sesiones_dictado": [],
+      //"sesiones_dictado": null,
         //"persona": - es uno de los docente - es un objeto - objeto persona
         //"hora_sesion_docente:" - lo que dicta este docente - entero 
-      "hora_sesion": hor.horas_semanales, //Hora del tipo de sesion [clase - 3 horas: teorico]
+      "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
     })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
+  //console.log(postHorario);
   return [otroHorario, postHorario];
 }
 
@@ -272,9 +273,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
 
     const actualizarDatos = async e => { 
       let otroHorario = 1;
-
+      let permission = 1;
       let postHorario = {}; //Para poder usar el horario en una segunda vuelta
-      const horariosTotales = [];
       //Servicio para cargar los horarios
       for (let hor of recordsX) {
         const resultArray = await llenarDatosHorarios(otroHorario, postHorario, hor);
@@ -283,13 +283,12 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //Loop finished
         
         if(otroHorario === 1)  {
-          horarioService.registerHorario(postHorario);
-          horariosTotales.push(postHorario);
+          if(horarioService.registerHorario(postHorario))
+            permission = 0;
         }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
-      console.log(horariosTotales);
-      setRecords(recordsX)
+      if(permission)  setRecords(recordsX);
       setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }

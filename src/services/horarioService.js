@@ -24,7 +24,7 @@ export const getHorario = async ({id}) => {
 
 const registerHorario = async newObject => {
   try{           
-    const request = await axios.post(`${url}/horario/`, tokenService.getToken(),newObject);
+    const request = await axios.post(`${url}/horario/`,newObject, tokenService.getToken());
     console.log(request.data);
     return request.data; //Es un valor de true o no
   }catch(exception){
@@ -35,7 +35,7 @@ const registerHorario = async newObject => {
 const updateHorario = async (newObject, {id}) => {
   try{
     //console.log(newObject);
-    const request = await axios.put(`${url}/horario/${id}`, tokenService.getToken(),newObject, id);
+    const request = await axios.put(`${url}/horario/`, tokenService.getToken(),newObject, id);
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
@@ -51,7 +51,16 @@ const deleteHorario = async (id) => {
   }
 }
 
+
+
+
+
+
 //FUNCIONES ADICIONALES PARA RECUPERAR LAS SESIONES
+
+
+
+
 
 const convertStringtoSesion = (sesion) => {
   const dataSes = []; 

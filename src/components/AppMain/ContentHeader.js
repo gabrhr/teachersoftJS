@@ -11,7 +11,7 @@ import {useState, useEffect} from 'react'
 const fillCiclos = async () => {
   const dataCic = await cicloService.getCiclos();
   let cicloActual = {};
-  //console.log("Este es el dataCiclo: ", dataCic);
+  console.log("Este es el dataCiclo: ", dataCic);
 
   const ciclos = [];
   if(!dataCic) {
@@ -27,7 +27,7 @@ const fillCiclos = async () => {
     if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
       cicloActual = {
         id: cic.id.toString(),
-        title: cic.anho + '-' +cic.periodo
+        title: cic.anho + '-' + cic.periodo
       }
     }
   });
