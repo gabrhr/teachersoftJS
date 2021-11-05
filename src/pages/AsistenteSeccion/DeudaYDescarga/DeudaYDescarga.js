@@ -103,7 +103,7 @@ export default function DeudaYDescarga() {
             aria-label="styled tabs example"
             >
             <StyledTab label="DEUDAS"  {...a11yProps(0)}/>
-            <StyledTab label="DESCARGAS"  {...a11yProps(1)}/>
+            {/* <StyledTab label="DESCARGAS"  {...a11yProps(1)}/> */}
             </StyledTabs>
             <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -113,9 +113,9 @@ export default function DeudaYDescarga() {
             <TabPanel value={value} index={0}>
                 <DeudaForm/>
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            {/* <TabPanel value={value} index={1}>
                <DescargaForm/>
-            </TabPanel>
+            </TabPanel> */}
             </SwipeableViews>
             <Box sx={{ p: 3 }} />
         </Box>

@@ -70,15 +70,18 @@ export default function HeaderUser(props) {
   if (rol == 0) {
     rolName = "Administrador"
     listaMenu = MenuAdministrador
-  } else if (rol == 1) {
+  }
+  if (rol == 1) {
     rolName = "Docente"
     listaMenu = MenuAsistenteSeccion // arreglar
-  } else if (rol == 2) {
+  } 
+  if (rol == 2) {
     rolName = "Asistente de Sección"
     listaMenu = MenuAsistenteSeccion
-  } else if (rol == 8) {
+  } 
+  if (rol == 8) {
     rolName = "Asistente de Sección"  // arreglar
-    listaMenu = MenuAsistenteSeccion
+    listaMenu = MenuAdministrador
   }
 
   return (

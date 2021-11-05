@@ -33,7 +33,8 @@ const GoogleLoginButton = () => {
     })
 
     useEffect(() => {
-        if (loading && rol) {
+        // if (loading && rol) {
+        if (loading) {
           //console.log(current);
          /*  if (!current) return history.push("/noRoles");; */
     
@@ -46,6 +47,9 @@ const GoogleLoginButton = () => {
                 pathname: "/as",
                 });
                 break;
+            case 2:
+                  history.push("/as");
+                  break;
             default:
                 return history.push("/noRoles");
           }
@@ -109,7 +113,7 @@ const GoogleLoginButton = () => {
                         variant="outlined"
                         size='small'
                         fullWidth
-                        text="Iniciar sesión con correo PUC"
+                        text="Iniciar sesión con correo PUCP"
                         onClick={renderProps.onClick} disabled={renderProps.disabled}
                         />
             )}
