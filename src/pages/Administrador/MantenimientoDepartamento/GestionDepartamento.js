@@ -13,8 +13,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import Notification from '../../../components/util/Notification'
-import ConfirmDialog from '../../../components/util/ConfirmDialog'
+//import Notification from '../../../components/util/Notification'
+//import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import departamentoService from '../../../services/departamentoService';
@@ -107,7 +107,7 @@ export default function GestionDepartamento() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
-    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
+    //const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
   
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
