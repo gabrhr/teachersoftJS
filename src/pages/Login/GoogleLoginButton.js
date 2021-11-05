@@ -33,12 +33,13 @@ const GoogleLoginButton = () => {
     })
 
     useEffect(() => {
-        if (loading && rol) {
+        // if (loading && rol) {
+        if (loading) {
           //console.log(current);
          /*  if (!current) return history.push("/noRoles");; */
     
           switch (rol) {
-            case 8:
+            case 0:
                   history.push("/admin");
                   break;
             case 1:
@@ -46,6 +47,9 @@ const GoogleLoginButton = () => {
                 pathname: "/as",
                 });
                 break;
+            case 2:
+                  history.push("/as");
+                  break;
             default:
                 return history.push("/noRoles");
           }
