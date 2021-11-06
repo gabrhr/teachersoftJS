@@ -13,6 +13,7 @@ import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
 import cicloService from "../../services/cicloService";
 import {useState, useEffect} from 'react'
+import { DT } from '../../components/DreamTeam/DT'
 
 const fillCiclos = async () => {
   //const dataCic = await cicloService.getCiclos();
@@ -108,16 +109,7 @@ export default function ContentHeader({text, cbo}) {
         <Form>
             <Grid container >
                 <Grid item >
-                    <Typography 
-                        variant="h3"
-                        component="div"
-                        paddingTop="5px"
-                        paddingBottom="4px"
-                        align="center"
-                        color="primary"
-                    >
-                        {text}
-                    </Typography>
+                    <DT.Title size="big" text={text} />
                 </Grid>
                 <Grid item sm/>
                 <CboCiclo cbo={cbo}/>
