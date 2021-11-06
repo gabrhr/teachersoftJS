@@ -334,12 +334,12 @@ export default function GestionUsuarios() {
                 </InputAdornment>
               )
             }}
-            sx={{ width: .75, visibility: "hidden" }}
+            sx={{ width: .75 }}
             onChange={handleSearch}
             type="search"
           />
           <Controls.AddButton
-            title="Agregar Nuevo Usuario"
+            title="Nuevo Usuario"
             variant="iconoTexto"
             onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
           />

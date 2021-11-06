@@ -205,22 +205,14 @@ export default function GestionDepartamento() {
       })
       console.log(records)
       console.log(idDepartamento)
-      //console.log(id)
       const nuevaTabla = records.filter(departamentoPorEliminar => departamentoPorEliminar.id !== idDepartamento)
       console.log(nuevaTabla)
       DepartamentoService.deleteDepartamento(idDepartamento);
-      //userService.borrarUsuario(idDepartamento)
-
-      /*DTLocalServices.getUsers().then((response) => {
-        setRecords(response.data)
-        console.log(response.data);
-      });*/
-      //setRecords(DTLocalServices.getAllPersonas())
 
       setNotify({
         isOpen: true,
         message: 'Borrado Exitoso',
-        type: 'error'
+        type: 'info'
       })
     }
 
@@ -238,7 +230,7 @@ export default function GestionDepartamento() {
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
               {/* <Toolbar> */}
               <Controls.Input
-                label="Buscar Departamentos por Nombre"
+                label="Buscar departamentos por nombre"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -252,7 +244,7 @@ export default function GestionDepartamento() {
               />
 
               <Controls.AddButton
-                title="Agregar Nuevo Departamento"
+                title="Nuevo Departamento"
                 variant="iconoTexto"
                 onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
               />

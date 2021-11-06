@@ -19,12 +19,12 @@ const initialFieldValues = {
 
 export default function AgregarEditarDepartamento(props) {
     const {addOrEdit, recordForEdit} = props
+    const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [departamento, setDepartamentos] = React.useState([]);
 
-    const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         align:"left",

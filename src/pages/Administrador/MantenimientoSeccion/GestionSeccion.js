@@ -28,7 +28,7 @@ const tableHeaders = [
     },
     {
       id: 'nombre',
-      label: 'Nombre de la seccion',
+      label: 'Nombre de la sección',
       numeric: false,
       sortable: true
     },
@@ -139,7 +139,7 @@ export default function GestionSeccion() {
         })
       setOpenPopup(false)
       resetForm()
-      window.location.replace('')
+      //window.location.replace('')
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
@@ -161,7 +161,7 @@ export default function GestionSeccion() {
       setNotify({
         isOpen: true,
         message: 'Borrado Exitoso',
-        type: 'error'
+        type: 'info'
       })
     }
 
@@ -195,11 +195,13 @@ export default function GestionSeccion() {
             cbo={false}
           />
           <Paper variant="outlined" sx={PaperStyle}>
-            <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
+            <Typography variant="h4" style={SubtitulosTable}>
+              Secciones
+            </Typography>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-              <Toolbar>
+              {/* <Toolbar> */}
                 <Controls.Input
-                  label="Buscar Secciones por Nombre"
+                  label="Buscar secciones por nombre"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -212,13 +214,11 @@ export default function GestionSeccion() {
                   type="search"
                 />
                 <Controls.AddButton
-                  title="Agregar Nueva Sección"
+                  title="Nueva Sección"
                   variant="iconoTexto"
                   onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                  //openInPopup();^
                 />
-
-              </Toolbar>
+              {/* <Toolbar> */}
             </div>
             <BoxTbl>
               <TblContainer>
@@ -227,58 +227,48 @@ export default function GestionSeccion() {
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
-                        <StyledTableCell
-                          align="right"
-                            >
-                            {item.id}
-                            </StyledTableCell>
-                            */}
-                            <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
-                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
-                            <StyledTableCell>
-                              {/* Accion editar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              <IconButton aria-label="delete">
-                                <DeleteIcon
-                                color="warning"
-                                onClick={() => {
-                                  // onDelete(item.id)
-                                  setConfirmDialog({
-                                    isOpen: true,
-                                    title: '¿Eliminar seccion permanentemente?',
-                                    subTitle: 'No es posible deshacer esta accion',
-                                    onConfirm: () => {onDelete(item.id)}
-                                  })
-                                }}/>
-                              </IconButton>
-                            </StyledTableCell>
-                        </StyledTableRow>
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
-                <TblPagination />
+                        <StyledTableCell align="right">{item.id}</StyledTableCell>
+                        <StyledTableCell>{item.nombre}</StyledTableCell>
+                        <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                        <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
+                        <StyledTableCell>
+                          <Controls.ActionButton 
+                            color="warning" 
+                            onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}>
+                            <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          <IconButton aria-label="delete">
+                            <DeleteIcon
+                              color="warning"
+                              onClick={() => {
+                                setConfirmDialog({
+                                  isOpen: true,
+                                  title: '¿Eliminar seccion permanentemente?',
+                                  subTitle: 'No es posible deshacer esta accion',
+                                  onConfirm: () => {onDelete(item.id)}
+                                })
+                              }}
+                            />
+                          </IconButton>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  }
+                </TableBody>
+              </TblContainer>
+              <TblPagination />
             </BoxTbl>
-            </Paper>
-            <Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
-            >
-              <AgregarEditarSeccion
-                recordForEdit={recordForEdit}
-                addOrEdit={addOrEdit}
-                />
-                
-              {/*  <AgregarEditarSeccion/> */}
-            </Popup>
+          </Paper>
+          <Popup
+            openPopup={openPopup}
+            setOpenPopup={setOpenPopup}
+            title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
+          >
+            <AgregarEditarSeccion
+              recordForEdit={recordForEdit}
+              addOrEdit={addOrEdit}
+            />
+          </Popup>
             <Notification
               notify={notify}
               setNotify={setNotify}
