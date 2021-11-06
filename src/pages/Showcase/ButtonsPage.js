@@ -33,10 +33,15 @@ export default function ButtonsPage() {
                 text="outlined"
                 size="small"
             />
-            <div></div>
-            
-            <Typography> Boton con icono (malogrado) </Typography>
+
+            <Typography> Boton con icono (mitsuo) </Typography>
             <Controls.Button
+                variant="text+icon"
+                text="icon button text"
+            />
+
+            <Typography> Boton con icono (manuel) </Typography>
+            <Controls.AddButton
                 variant="iconoTexto"
                 text="icon button text"
             />

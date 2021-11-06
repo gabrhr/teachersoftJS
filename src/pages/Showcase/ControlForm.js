@@ -1,5 +1,11 @@
 /* Author: Mitsuo
  * Date: 2021-10-27
+ *
+ * Uso minimo de los componentes reutilizables de tipo input. 
+ * (listados en `Controls`)
+ * 
+ * El uso del "printValues" es muy recomendado.  Ya que permite detectar
+ * errores de tipeo rapidamente ;)
  */
 import React from 'react'
 import { IconButton, Typography, Box } from '@mui/material';
@@ -19,7 +25,8 @@ const radioGroupValues = [
 
 const initialFieldValues = {
     id: 0,
-    text: 'Please input some text',
+    text: 'default text value',
+    desc: '',
     gender: 'male',
     departmentID: '2',
     date: new Date(),
@@ -47,19 +54,33 @@ export default function ControlForm() {
 
     return (
         <Form>
-            <Typography sx={{
-                fontFamily: "monospace",
-                whiteSpace: "pre"
-            }}>
-                {printValues(values)}
-            </Typography>
+            <Box height="250px" overflow="auto">
+                <Typography sx={{
+                    fontFamily: "monospace",
+                    whiteSpace: "pre"
+                }}>
+                    {printValues(values)}
+                </Typography>
+            </Box>
+
             <Controls.Input 
                 name="text"   // name debe ser el mismo nombre de la propiedad 
                               // de initialFieldValues
-                label="Text"  
+                label="text input"
                 value={values.text} 
                 onChange = {handleInputChange}
             />
+
+            <Controls.Input 
+                name="desc"
+                label="Multiline text input"
+                value={values.desc} 
+                onChange = {handleInputChange}
+                multiline
+                minRows={3}
+                maxRows={8}
+            />
+
             <Controls.RadioGroup
                 name="gender"
                 label="Radio Group"
@@ -67,6 +88,7 @@ export default function ControlForm() {
                 onChange={handleInputChange}
                 items={radioGroupValues}
             />
+
             <Controls.Select
                 name="departmentID"
                 label="Default value is Marketing"
@@ -74,29 +96,32 @@ export default function ControlForm() {
                 onChange={handleInputChange}
                 options={employeeService.getDepartmentCollection()}
             />
+
             <Controls.DatePicker
                 name="date"
                 label="Date Picker"
                 value={values.date}
                 onChange={handleInputChange}
             />
+
             <Controls.Checkbox
                 name="isPermanent"
                 label="Permanent Employee"
                 value={values.isPermanent}
                 onChange={handleInputChange}
             />
+
             <div> 
-                {/* Boton Azul */}
-                <Controls.Button
-                    text="Submit"
-                    type="submit"
-                    endIcon={<ErrorOutlineIcon />}
-                />
                 <Controls.Button
                     variant="disabled"
                     text="Reset"
                     onClick={resetForm}
+                />
+
+                <Controls.Button
+                    text="Submit"
+                    type="submit"
+                    endIcon={<ErrorOutlineIcon />}
                 />
             </div>
         </Form>
