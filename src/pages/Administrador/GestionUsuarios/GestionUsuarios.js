@@ -307,7 +307,7 @@ export default function GestionUsuarios() {
         cbo={false}
       />
       <Form>
-        <Box display="flex" width={.2} mb={4}>
+        <Box display="flex" width={.2} mb={4}  mt={3}>
           <Controls.Select
             name="seccionID"
             label="Sección"
@@ -334,7 +334,7 @@ export default function GestionUsuarios() {
                 </InputAdornment>
               )
             }}
-            sx={{ width: .75, visibility: "hidden" }}
+            sx={{ width: .75}}
             onChange={handleSearch}
             type="search"
           />

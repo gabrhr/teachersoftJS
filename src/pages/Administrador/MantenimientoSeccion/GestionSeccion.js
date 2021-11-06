@@ -89,7 +89,7 @@ export default function GestionSeccion() {
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
+    const PaperStyle={ borderRadius: '20px',  mt: 3,pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
     const [confirmDialog, setConfirmDialog] = useState(
       { isOpen: false, title: '', subtitle: '' })
@@ -197,7 +197,7 @@ export default function GestionSeccion() {
           <Paper variant="outlined" sx={PaperStyle}>
             <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-              <Toolbar>
+              {/* <Toolbar> */}
                 <Controls.Input
                   label="Buscar Secciones por Nombre"
                   InputProps={{
@@ -218,7 +218,7 @@ export default function GestionSeccion() {
                   //openInPopup();^
                 />
 
-              </Toolbar>
+              {/* </Toolbar> */}
             </div>
             <BoxTbl>
               <TblContainer>
@@ -232,7 +232,6 @@ export default function GestionSeccion() {
                             >
                             {item.id}
                             </StyledTableCell>
-                            */}
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>

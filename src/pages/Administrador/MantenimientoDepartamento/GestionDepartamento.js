@@ -115,8 +115,7 @@ export default function GestionDepartamento() {
     //const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
   
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevation:0}
+    const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
     /* notification snackbar */
     //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     /* confirm dialog */
