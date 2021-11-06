@@ -31,7 +31,7 @@ export default function Select(props) {
                     options.map(
                         item => (
                             <MenuItem key={item.id} value={item.id} >
-                                {item.nombre}
+                                {item.nombre || item.title}
                             </MenuItem>
                         )
                     )

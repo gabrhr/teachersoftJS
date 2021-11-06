@@ -53,16 +53,12 @@ export default function ConfirmDialog(props) {
                     {confirmDialog.subTitle}
                 </Typography>
             </DialogContent>
+
             <DialogActions>
                 <Controls.Button 
                     text="No"
                     variant="outlined"
-                    // color="primary"
-                    onClick={() => setConfirmDialog({
-                            ...confirmDialog,
-                            isOpen: false
-                        })}
-                />
+                    onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })} />
                 <Controls.Button 
                     text="Yes"
                     color="primary"

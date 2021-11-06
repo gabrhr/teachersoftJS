@@ -8,6 +8,7 @@ import IconButton from "./IconButton";
 import ActionButton from "./ActionButton";
 import AddButton from "./AddButton";
 import Divider from "./Divider"
+import RowCheckBox from "./RowCheckBox"
 
 export const Controls = {
     Input,
@@ -19,5 +20,7 @@ export const Controls = {
     IconButton,
     ActionButton, 
     AddButton,
-    Divider
+    Divider,
+    RowCheckBox
+
 }

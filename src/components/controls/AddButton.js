@@ -10,7 +10,7 @@ export default function AddButton(props) {
 
     return (
         <Grid   direction="row" container justifyContent="flex-end" alignItems="center" >
-            <Grid item xs = {12} md ={2}>
+            <Grid item xs = {12} md ={3}>
               <Box  x={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
                 <Typography align="center">
                   {title}
@@ -21,7 +21,7 @@ export default function AddButton(props) {
               <Box  x={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
                 <Button
                   variant= {variant}
-                  startIcon={<AddIcon/>}
+                  text={<AddIcon/>}
                   onClick = {onClick}
                 />
               </Box>

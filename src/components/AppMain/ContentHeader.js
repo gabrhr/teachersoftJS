@@ -15,17 +15,31 @@ import cicloService from "../../services/cicloService";
 import {useState, useEffect} from 'react'
 
 const fillCiclos = async () => {
+  //const dataCic = await cicloService.getCiclos();
+  //console.log("Este es el dataCiclo: ", dataCic);
   let dataCic = await cicloService.getCiclos();
   dataCic = dataCic ?? [{id: '1', title: '2021-2'}]
+  let cicloActual = {};
 
   const ciclos = [];
+  if(!dataCic) {
+    console.error("No se pudo regresar la data del backend para Ciclos");
+    return [];
+  }
+  
   dataCic.map(cic => {
     ciclos.push({
       id: cic.id.toString(),
       title: cic.anho + '-' +cic.periodo
     })
+    if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
+      cicloActual = {
+        id: cic.id.toString(),
+        title: cic.anho + '-' + cic.periodo
+      }
+    }
   });
-  return ciclos;
+  return [ciclos,cicloActual];
 }
 
 const initialFieldValues = {
@@ -35,40 +49,47 @@ const initialFieldValues = {
 
 function CboCiclo(props) {
     const [ciclos, setCiclos] = useState([]);
-
+    const [cicloActual, setCicloActual] = useState();
     const cbo = props.cbo;
     const theme= useTheme();
-    
+
     const {
       values,
-      // setValues,
+      setValues,
       handleInputChange
     } = useForm(initialFieldValues);
+    //console.log(values);
 
     React.useEffect(() => {
       fillCiclos()
-      .then (newCiclo =>{
-        setCiclos(newCiclo);
-        //console.log(ciclos);
+      .then (newCiclo => {
+        setCiclos(newCiclo[0]);
+        setCicloActual(newCiclo[1]);
+        setValues(newCiclo[1]); //Si aca no lo hacemos directo - se muere porque no prometemos antes el CicloActual
+        //console.log("Ciclo: ",cicloActual);
+        //console.log("Values: ", values);
       });
     }, [])
+    //console.log("Values: ", values);
+    /*UNA VEZ ACTUALIZAMOS LOS DATOS DE VALUES - LE PASAMOS EL CICLOACTUAL PARA QUE SEA EL DEFAULT */
 
     React.useEffect(()=>{
-      window.localStorage.setItem('ciclo', JSON.stringify(values.id))
+      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
     },[values])
     
-    //console.log(values);
+
     if (cbo) {
 
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
             <Box  sx={{width: "10vw", align: "Right"}}> 
                 <Controls.Select
-                    name="title"
+                    name="id"
                     label="Ciclo"
-                    value={values.title}
+                    value={values.id}
                     onChange={handleInputChange}
-                    options={DTLocalServices.getAllCiclos()}
+                    options={ciclos}
                     type="contained"
+
                 />
             </Box>
         </Grid>
