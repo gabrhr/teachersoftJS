@@ -7,7 +7,9 @@ import Button from "./Button";
 import IconButton from "./IconButton";
 import ActionButton from "./ActionButton";
 import AddButton from "./AddButton";
-import Divider from "./Divider"
+import Divider from "./Divider";
+import DreamTitle from "./DreamTitle";
+import FileButton from "./FileButton";
 
 export const Controls = {
     Input,
@@ -19,5 +21,7 @@ export const Controls = {
     IconButton,
     ActionButton, 
     AddButton,
-    Divider
+    Divider,
+    DreamTitle,
+    FileButton
 }
