@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
 import { DT } from '../../../components/DreamTeam/DT'
-import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/seccionService';
+import HorarioService from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
@@ -13,6 +13,9 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EliminarUnCurso from './EliminarUnCurso'
+import EliminarTodosLosCursos from './EliminarTodosLosCursos'
 
 const initialFieldValues = {
     searchText: ''
@@ -26,14 +29,20 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'nombreCurso',
-      label: 'Nombre',
+      id: 'cargaHoraria',
+      label: 'Carga',
       numeric: false,
       sortable: true
     },
     {
-      id: 'cargaHoraria',
-      label: 'Carga Horaria',
+        id: 'Facultad',
+        label: 'Facultad',
+        numeric: false,
+        sortable: true
+    },
+    {
+      id: 'nombreCurso',
+      label: 'Nombre',
       numeric: false,
       sortable: true
     },
@@ -51,23 +60,98 @@ const tableHeaders = [
      },
      {
         id: 'horaSesion',
-        label: 'Hora-Sesion',
+        label: 'Horas',
         numeric: false,
         sortable: true
      },
+     {
+      id: 'actions',
+      label: 'Acción',
+      numeric: false,
+      sortable: false
+    }
 ]
 
+const fillHorarios = async () => {
+  const dataHor = await HorarioService.getHorarios();
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const horarios = [];
+  if(!dataHor)  {
+    console.error("No se puede traer la data del servidor de los horarios")
+    return [];
+  }
+  for (let hor of dataHor){
+    //console.log(hor.id);
+    //console.log(hor.sesiones[0].secuencia);
+    //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
+    //console.log(sesion1);
+    horarios.push({
+      "id": hor.id,
+      "codigo": hor.codigo,
+      "tipo": hor.sesiones[0].secuencia,
+      "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
+      ciclo:{
+        "id": hor.ciclo.id,
+      },
+      curso:{
+        "id": hor.curso.id,
+        "codigo": hor.curso.codigo,
+        "nombre": hor.curso.nombre,
+        "creditos": hor.curso.creditos,
+        "unidad": hor.curso.unidad,
+        "facultad": hor.curso.seccion.departamento.unidad.nombre,
+      },
+      sesiones:{
+        "secuencia": hor.sesiones[0].secuencia,
+        "sesiones_dictado": [],
+        "hora_sesion": hor.sesiones[0].horas,
+      },
+    })
+    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
+    if(hor.sesiones[1]){
+      //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+      //console.log(sesion2);
+      horarios.push({
+        "id": hor.id,
+        "codigo": hor.codigo,
+        "tipo": hor.sesiones[0].secuencia,
+        "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
+        ciclo:{
+          "id": hor.ciclo.id,
+        },
+        curso:{
+          "id": hor.curso.id,
+          "codigo": hor.curso.codigo,
+          "nombre": hor.curso.nombre,
+          "creditos": hor.curso.creditos,
+          "unidad": hor.curso.unidad,
+          "facultad": hor.curso.seccion.departamento.unidad.nombre
+        },
+        sesiones:{
+          "secuencia": hor.sesiones[1].secuencia,
+          "sesiones_dictado": [],
+          "hora_sesion": hor.sesiones[1].horas,
+        },
+      })
+    }
+  }
+  return horarios;
 
-export default function HorarioCursos({records}, {setRecords}) {
+}
+
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) {
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
-    const [openPopup, setOpenPopup] = useState(false);
+    //const [openPopup, setOpenPopup] = useState(false);
     //const [recordsX, setRecordsX] = useState([]); //Se debe colocar el ID
-    const [columns, setColumns] = useState([]);
-    const [data, setData] = useState([]);
-    const [open, setOpen] = React.useState(false);
+    //const [columns, setColumns] = useState([]);
+    //const [data, setData] = useState([]);
+    //const [open, setOpen] = React.useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [openOnePopup, setOpenOnePopup] = useState(false)
+    const [openAllPopup, setOpenAllPopup] = useState(false)
+    const [indexDelete, setIndexDelete] = useState(0)
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -84,59 +168,22 @@ export default function HorarioCursos({records}, {setRecords}) {
         // setValues,
         handleInputChange
     } = useForm(initialFieldValues);
-    
-    const processData = dataString => {
-        
-        const dataStringLines = dataString.split(/\r\n|\n/);
-        const headers = dataStringLines[0].split(
-            /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
-        );
 
-        let list = [];
-        for (let i = 1; i < dataStringLines.length; i++) {
-            const row = dataStringLines[i].split(
-                /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
-            );
-            if (headers && row.length == headers.length) {
-                const obj = {};
-                for (let j = 0; j < headers.length; j++) {
-                    let d = row[j];
-                    if (d.length > 0) {
-                        if (d[0] == '"') d = d.substring(1, d.length - 1);
-                        if (d[d.length - 1] == '"') d = d.substring(d.length - 2, 1);
-                    }
-                    if (headers[j]) {
-                        obj[headers[j]] = d;
-                    }
-                }
+    //Le pasamos los horarios
 
-                // remove the blank rows
-                if (Object.values(obj).filter(x => x).length > 0) {
-                    list.push(obj);
-                }
-            }
-        }
-
-        // prepare columns list from headers
-        const columns = headers.map(c => ({
-            name: c,
-            selector: c
-        }));
-
-        //console.log(list)
-        setData(list);
-        setColumns(columns);
-
-        let listaIncorrectos = []
-
-        for (let i = 0; i < list.length; i++) {
-            listaIncorrectos.push(list[i])
-        }
-        setRecords(listaIncorrectos)
-    };
-
-
-  console.log(records);
+    React.useEffect(() => {
+      //Obtenemos las secciones
+      fillHorarios()
+      .then (newHorarios =>{
+        //setRecordsX(newHorarios); //Se quiere actualizar todo
+        setRecords(newHorarios);
+        setCargaH(records);
+      });
+      
+    }, [])
+  
+    //console.log(records);
+    //console.log(indexDelete);
 
     const handleSearch = e => {
         let target = e.target;
@@ -148,7 +195,7 @@ export default function HorarioCursos({records}, {setRecords}) {
               /* no search text */
               return items
             else
-              return items.filter(x => x.nombreCurso.toLowerCase()
+              return items.filter(x => x.curso.nombre.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
@@ -156,6 +203,34 @@ export default function HorarioCursos({records}, {setRecords}) {
     const handleClick = (e) => {
         history.push("/as/asignacionCarga/cursos");
     };
+
+    const guardarIndex = item => {
+      setIndexDelete(item.id)
+      setOpenOnePopup(true)
+    }
+
+    const eliminarCursos = () =>{
+      records.map(item => {
+        HorarioService.deleteHorario(item.id);
+      })
+      setRecords([])
+      setOpenAllPopup(false)
+    }
+
+    const eliminarCurso = () =>{
+      console.log(indexDelete);
+      //Funcion para elimianr el Curso seleccionado
+      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      records.splice(pos,1);
+      pos = 0;
+      //De nuevo, solo para comprobar que existen ambos campos en pantalla - solo en pantalla.
+      pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      records.splice(pos,1);
+      //setRecords(); 
+      HorarioService.deleteHorario(indexDelete);
+      setOpenOnePopup(false)
+    }
+
     return (
         <Form>            
             <Typography variant="h4"
@@ -189,18 +264,18 @@ export default function HorarioCursos({records}, {setRecords}) {
                 {/* FIX:  left align */}
                 <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
-                    {/* <Controls.AddButton 
+                    <Controls.AddButton 
                         title="Agregar Nuevo Horario"
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
-                    /> */}
+                    />
                 </Grid>
             </Grid>
             <BoxTbl>
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    
+                    {console.log(records)}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
@@ -210,11 +285,21 @@ export default function HorarioCursos({records}, {setRecords}) {
                             {item.clave}
                             </TableCell>*/}
                             <TableCell>{item.curso.codigo}</TableCell>
-                            <TableCell>{item.curso.nombre}</TableCell>
-                            <TableCell>{item.curso.carga}</TableCell>
-                            <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.tipo}</TableCell>
                             <TableCell>{item.horas_semanales}</TableCell>
+                            <TableCell>{item.curso.facultad}</TableCell>
+                            <TableCell>{item.curso.nombre}</TableCell>
+                            <TableCell>{item.codigo}</TableCell>
+                            <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
+                            <TableCell>{item.sesiones.hora_sesion}</TableCell>
+                            <TableCell>
+                              {/* Accion eliminar */}
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {guardarIndex(item)}}
+                              >
+                                <DeleteOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                            </TableCell>
                         </TableRow>
                         ))
                         :   (
@@ -227,6 +312,27 @@ export default function HorarioCursos({records}, {setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+                <Controls.Button
+                text="Eliminar todos los cursos"
+                size = "small"
+                color="warning"
+                endIcon={<DeleteOutlinedIcon fontSize="small"/>}
+                onClick={ () => {setOpenAllPopup(true)}}
+                />
+            <Popup
+                openPopup={openOnePopup}
+                setOpenPopup={setOpenOnePopup}
+                title="Eliminar curso"
+            >
+              <EliminarUnCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
+            </Popup>
+            <Popup
+                openPopup={openAllPopup}
+                setOpenPopup={setOpenAllPopup}
+                title="Eliminar cursos"
+            >
+              <EliminarTodosLosCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
+            </Popup>
         </Form>
     )
 }

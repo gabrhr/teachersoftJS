@@ -90,9 +90,9 @@ export default function AgregarEditarSeccion(props) {
             correo: values.correo,
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
-              nombre: null,
+              nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
             },
-            //foto: null,
+            //foto: fotoPerfil,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
