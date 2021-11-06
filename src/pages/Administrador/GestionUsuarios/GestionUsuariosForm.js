@@ -44,10 +44,12 @@ const initialFieldValues = {
 
 const getDepartamento = async () => {
   
-  const dataDep = await departamentoService.getDepartamentos(); 
-  
+  const dataDep = await departamentoService.getDepartamentos();
+  console.log("AQUI ESTA EL DATADEP")
+  console.log(dataDep)
   const departamentos = [];
-  dataDep.map(dep => (
+  if(dataDep){
+    dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
       nombre: dep.nombre,
@@ -56,7 +58,8 @@ const getDepartamento = async () => {
       fechaFundacion: dep.fechaFundacion,
     })
     ));
-  
+  }
+  else console.log("No existen datos en Departamentos");
   return departamentos;
 }
 
