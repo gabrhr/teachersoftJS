@@ -16,6 +16,7 @@ import Popup from '../../components/util/Popup';
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import NuevaSolicitudForm from './NuevaSolicitudForm';
 import { DT } from '../../components/DreamTeam/DT';
+import { Form, useForm } from '../../components/useForm';
 
 
 const tableHeaders = [
@@ -44,6 +45,15 @@ const tableHeaders = [
     },
 ]
 
+const initialFieldValues = {
+    departmentID: '0',
+}
+
+export const getTemaTramites = () => ([
+    { id: '1', title: 'Tema 1' },
+    { id: '2', title: 'Tema 2' },
+    { id: '3', title: 'Tema 3' },
+])
 
 function createData(id, asunto, descripcion , fecha, autorNombre, descargaSolicitada, descargaAceptada) {
     return {
@@ -58,10 +68,11 @@ const usuarios2 = [
 
 export default function MisSolicitudes() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [openDetalle, setOpenDetalle] = useState(false)
+    const [openNuevo, setOpenNuevo] = useState(false)
     const [row, setRow] = useState(false)
     const [records, setRecords] = useState(usuarios2)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    let estado= 1;
     const {
         TblContainer,
         TblHead,
@@ -70,6 +81,15 @@ export default function MisSolicitudes() {
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
     
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues);
+
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -86,33 +106,65 @@ export default function MisSolicitudes() {
         })
     }
     function getRow ({...props}){
-        setOpenDetalle(true)
+        setOpenPopup(true)
         setRow(props)
     }
     
     return (
-        <>
+        <Form>
             <ContentHeader text={"Mis solicitudes a Mesa de Partes"} cbo={false}/>
             {/* Buscador */}
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20 , width:"500px"}}>
                 
                 <Controls.Input
                     label="Buscar Solicitud por Nombre"
                     InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <SearchIcon />
+                            <SearchIcon/>
                         </InputAdornment>
                     )
                     }}
-                    sx={{ width: .3 }}
                     onChange={handleSearch}
                     type="search"
                 />
             </div>
             {/* Filtrados */}
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                
+                <div style={{width:"400px", marginRight:"50px"}}> 
+                <Controls.Select
+                    name="departmentID"
+                    label="Tema de Tramite"
+                    value={values.departmentID}
+                    onChange={handleInputChange}
+                    options={getTemaTramites()} 
+                />
+                </div>
+                <div style={{width:"200px",  marginRight:"50px"}}> 
+                <Controls.Select
+                    name="departmentID"
+                    label="Tipo Solicitud"
+                    value={values.departmentID}
+                    onChange={handleInputChange}
+                    options={getTemaTramites()} 
+                />
+                </div>
+                <div style={{width:"400px", marginRight:"50px"}}> 
+                <Controls.Select
+                    name="departmentID"
+                    label="Estado de Solicitud"
+                    value={values.departmentID}
+                    onChange={handleInputChange}
+                    options={getTemaTramites()} 
+                />
+                </div>
+                <div style={{ width:"60vw",textAlign: "right"}}>
+                <Controls.AddButton
+                    variant="iconoTexto"
+                    text="Nueva Solicitud"
+                    onClick = {() => {setOpenNuevo(true);}}
+                />
+                </div>
             </div>
             <BoxTbl>
                 <TblContainer>
@@ -120,7 +172,7 @@ export default function MisSolicitudes() {
                     <TableBody>
                     {
                        recordsAfterPagingAndSorting().map(item => (
-                            <Item item={item} getRow= {getRow}/>
+                            <Item item={item} getRow= {getRow} estado={estado}/>
                         ))
                     }
                     </TableBody>
@@ -129,8 +181,8 @@ export default function MisSolicitudes() {
             </BoxTbl>
             {/* Agregar nueva solicitud */}
             <Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
+                openPopup={openNuevo}
+                setOpenPopup={setOpenNuevo}
                 title="Nueva solicitud"
             >
                 <NuevaSolicitudForm/>
@@ -144,15 +196,14 @@ export default function MisSolicitudes() {
             >
                 <SolicitudDetalle  row ={row} />
             </Popup> */}
-        </>
+        </Form>
     )
 }
 
 function Item(props){
-    const {item,getRow} = props
+    const {item,getRow,estado} = props
     return (
         <>
-        
             <TableRow key={item.id}>
                 <TableCell sx={{maxWidth:"400px"}}>
                     <div >
@@ -166,14 +217,14 @@ function Item(props){
                     </div>
                     
                 </TableCell>
-                <TableCell sx={{maxWidth:"250px"}}> 
+                <TableCell sx={{maxWidth:"200px"}}> 
                     <Typography paragraph>
                         Descripcion: {item.descripcion}
                     </Typography>
                 </TableCell>
                 <TableCell >
                     <DT.Etiqueta
-                        type="enRevision"
+                        type={estado==0?"enRevision":"delegado"}
                     />
                 </TableCell>
                 <TableCell>
@@ -185,8 +236,6 @@ function Item(props){
                 </TableCell>
                 {/* <TableCell>{item.bono}</TableCell> */}
             </TableRow>
-                        
-
         </>
     );
 }

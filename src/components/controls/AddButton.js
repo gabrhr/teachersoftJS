@@ -10,13 +10,16 @@ import Button from "./Button";
 
 export default function AddButton(props) {
 
-    const { title, variant, onClick} = props;
+    const { title, variant, color, onClick} = props;
 
     return (
-        <Grid   direction="row" container justifyContent="flex-end" alignItems="center" >
+        <Grid   direction="row" container 
+            justifyContent="flex-end" alignItems="center"
+            marginTop={2}
+        >
             <Grid item xs = {12} md ={2}>
               <Box  x={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                <Typography align="center">
+                <Typography align="rigth">
                   {title || props.text}
                 </Typography>
               </Box>
