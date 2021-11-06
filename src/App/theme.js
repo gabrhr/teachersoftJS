@@ -68,15 +68,26 @@ const theme = createTheme({
         fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 30,
-        lineHeight: '50px',
+        lineHeight: '30px',
+      },
+      h5:{
+        /* (LO SIENTO MUCHO GENTE) Este es intermedio entre h3 y h4. 
+         * Sino malogra titulos existentes.
+         */
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
+        fontStyle: 'SemiBold',
+        fontWeight: 'bold',
+        fontSize: 22,
+        lineHeight: '30px',
       },
       h4:{
         // fontFamily: 'NotoSerif',
         fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 18,
-        lineHeight: '50px',
-      }
+        lineHeight: '30px',
+      },
     },
     shape: {
       borderRadius: 4
