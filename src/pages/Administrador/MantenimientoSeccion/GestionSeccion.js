@@ -57,23 +57,28 @@ const getSecciones = async () => {
   let dataSecc = await SeccionService.getSecciones();
   console.log(dataSecc)
   dataSecc = dataSecc ?? []
+  console.log("AQUI ESTA EL DATASECC")
+  console.log(dataSecc)
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
-  dataSecc.map(seccion => (
-    secciones.push({
-      id: seccion.id.toString(),
-      nombre: seccion.nombre,
-      fechaFundacion: seccion.fecha_fundacion,
-      fechaModificacion: seccion.fecha_modificacion,
-      departamento:{
-        idDepartamento: seccion.departamento.id,
-        nombreDepartamento: seccion.departamento.nombre
-      },
-      correo: seccion.correo
-    })
-    ));
-  //console.log(secciones);
-  window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
+  if(dataSecc){
+    dataSecc.map(seccion => (
+      secciones.push({
+        id: seccion.id.toString(),
+        nombre: seccion.nombre,
+        fechaFundacion: seccion.fecha_fundacion,
+        fechaModificacion: seccion.fecha_modificacion,
+        departamento:{
+          idDepartamento: seccion.departamento.id,
+          nombreDepartamento: seccion.departamento.nombre
+        },
+        correo: seccion.correo
+      })
+      ));
+    //console.log(secciones);
+    window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
+  }
+  else console.log("No existen datos en Secciones");
   return secciones;
 }
 export default function GestionSeccion() {
@@ -88,7 +93,7 @@ export default function GestionSeccion() {
     color:"primary.light", elevatio:0}
     const [confirmDialog, setConfirmDialog] = useState(
       { isOpen: false, title: '', subtitle: '' })
-    //console.log(records);
+    console.log(records);
     const {
         TblContainer,
         TblHead,
@@ -141,24 +146,18 @@ export default function GestionSeccion() {
         type: 'success'
       })
     }
+
+
+
     const onDelete = (idSeccion) => {
-      // if (!window.confirm('Are you sure to delete this record?'))
-      //   return
       setConfirmDialog({
         ...confirmDialog,
         isOpen: false
       })
-      console.log(idSeccion)
-      //console.log(id)
+      // Funcion para eliminar la Seccion seleccionado
+      let pos = records.map(function(e) { return e.id; }).indexOf(idSeccion);
+      records.splice(pos,1);
       SeccionService.deleteSeccion(idSeccion);
-      //userService.borrarUsuario(idDepartamento)
-
-      /*DTLocalServices.getUsers().then((response) => {
-        setRecords(response.data)
-        console.log(response.data);
-      });*/
-      //setRecords(DTLocalServices.getAllPersonas())
-
       setNotify({
         isOpen: true,
         message: 'Borrado Exitoso',
