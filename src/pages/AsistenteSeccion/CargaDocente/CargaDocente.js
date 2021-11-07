@@ -23,6 +23,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DT } from '../../../components/DreamTeam/DT'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CargaDocenteHorarios from './CargaDocenteHorarios';
+import CursoService from '../../../services/cursoService';
 
 const tableHeaders = [
   // {
@@ -78,16 +79,16 @@ const tableHeaders = [
 /* Form control (Select) */
 
 const initialFieldValues = {
-  id: 0,
+  id: 1,
   title: 'Todos los estados',
 }
 
-/* FIXME: Esto debe ser un service? */
-const getEstadoCollection = () => ([
+/* Arreglo para manejar los estados - fijos puesto que no habrán más*/
+const getEstadoCollection = [
   { id: '1', title: 'Todos los estados' },
   { id: '2', title: 'Atendido' },
   { id: '3', title: 'Pendiente' },
-])
+]
 
 function GetRow({ ...props }) {
   /*  setOpenPopup(false) */
@@ -95,6 +96,33 @@ function GetRow({ ...props }) {
   history.push("/as/asignacionCarga/registroCarga/horarios")
   /* setDefValueNombre(`${props.clave} - ${props.nombre}`)
   setDefValueCreditos(`${props.credito}`) */
+}
+
+
+//LLENADO DE LA LISTA DE CURSOS
+const fillCursos = async () => {
+  //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
+  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,""); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const cursos = [];
+  dataCur.map(cur => (
+    cursos.push({
+      id: cur.id,
+      nombre: cur.nombre,
+      codigo: cur.codigo,
+      creditos: cur.creditos,
+      seccion: {
+        id: cur.seccion.id,
+        nombre: cur.seccion.nombre,
+        departamento:{
+          id:cur.seccion.departamento.id,
+          nombre:cur.seccion.departamento.nombre,
+        }
+      },
+    })
+    ));
+  //console.log(cursos);
+  return cursos;
 }
 
 
@@ -110,7 +138,7 @@ export default function CargaDocente() {
     values,
     // setValues,
     handleInputChange
-  } = useForm(initialFieldValues);
+  } = useForm(getEstadoCollection[0]);
 
   const {
     TblContainer,
@@ -120,13 +148,22 @@ export default function CargaDocente() {
     BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
+    React.useEffect(() => {
+      fillCursos()
+      .then (newCur =>{
+        if(newCur)
+          setRecord(newCur);
+        //console.log(newCur);
+      });
+    }, [])
+
   const handleSearch = e => {
     let target = e.target;
     /* React "state object" (useState()) doens't allow functions, only
         * objects.  Thus the function needs to be inside an object. */
     setFilterFn({
       fn: items => {
-        if (target.value == "")
+        if (target.value === "")
           /* no search text */
           return items
         else
@@ -161,7 +198,7 @@ export default function CargaDocente() {
           <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}>
             <Controls.Input
               label="Curso"
-              value={`${recordsForEdit.clave} - ${recordsForEdit.nombre}`}
+              value={`${recordsForEdit.codigo} - ${recordsForEdit.nombre}`}
               disabled
             />
           </div>
@@ -190,11 +227,11 @@ export default function CargaDocente() {
         <Grid item xs={3} sx={{ marginRight: theme.spacing(3) }}>
           <Box sx={{ width: "200px", align: "right" }}>
             <Controls.Select
-              name="title"
+              name="id"
               label="Estados"
-              value={values.title}
+              value={values.id}
               onChange={handleInputChange}
-              options={getEstadoCollection()}
+              options={getEstadoCollection}
               type="contained"
             // displayNoneOpt
             />
@@ -208,7 +245,7 @@ export default function CargaDocente() {
               <Typography variant="h4" style={SubtitulosTable}>
                 Lista de Horarios
               </Typography>
-              <CargaDocenteHorarios />
+              <CargaDocenteHorarios recordForEdit = {recordsForEdit} setRecordForEdit = {setRecordForEdit} />
             </>
           ) 
           : (
@@ -223,15 +260,10 @@ export default function CargaDocente() {
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
-                        <StyledTableCell
-                          align="right"
-                        >
-                          {item.id}
-                        </StyledTableCell>
-                        <StyledTableCell>{item.clave}</StyledTableCell>
+                        <StyledTableCell>{item.codigo}</StyledTableCell>
                         <StyledTableCell>{item.nombre}</StyledTableCell>
-                        <StyledTableCell>{item.facultad}</StyledTableCell>
-                        <StyledTableCell>{item.creditos}</StyledTableCell>
+                        <StyledTableCell>{item.seccion ? item.seccion.departamento.nombre : ""}</StyledTableCell>
+                        <StyledTableCell>{item.creditos}</StyledTableCell>  
                         <StyledTableCell>
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>

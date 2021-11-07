@@ -18,8 +18,8 @@ export default function ActionButton(props) {
 
     return (
         <IconButton
-            onClick={onClick}
             color={color}
+            onClick={onClick}
             {...other}
         >
             {children}

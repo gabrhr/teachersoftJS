@@ -34,13 +34,21 @@ const theme = createTheme({
         dark: "#3b4a81",
         main: "#41b9e427",
         light: "#3b4a8120"
-      },
+      }, 
       pendiente: {
-        // dark: "#ff0000",
-        // main: "#00ff00",
         light: "#E9D630",
-      }
-      
+      },
+      /* Colores de mesa de partes */
+      enviado: {
+        light: "#3B4A81",
+      },
+      delegado: {
+        light: "#FF7A00",
+      },
+      atendido: {
+        main: "FF7A00",
+        light: "#43DB7F",
+      },    
     },
     typography: {
       fontFamily: '"Quicksand","Arial","sans-serif"',
@@ -60,15 +68,26 @@ const theme = createTheme({
         fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 30,
-        lineHeight: '50px',
+        lineHeight: '30px',
+      },
+      h5:{
+        /* (LO SIENTO MUCHO GENTE) Este es intermedio entre h3 y h4. 
+         * Sino malogra titulos existentes.
+         */
+        // fontFamily: 'NotoSerif',
+        fontFamily: '"Quicksand","Arial","sans-serif"',
+        fontStyle: 'SemiBold',
+        fontWeight: 'bold',
+        fontSize: 22,
+        lineHeight: '30px',
       },
       h4:{
         // fontFamily: 'NotoSerif',
         fontFamily: '"Quicksand","Arial","sans-serif"',
         fontStyle: 'SemiBold',
         fontSize: 18,
-        lineHeight: '50px',
-      }
+        lineHeight: '30px',
+      },
     },
     shape: {
       borderRadius: 4

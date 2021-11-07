@@ -5,15 +5,16 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import AgregarEditarDepartamento from './AgregarEditarDepartamento'
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog';
 /* ICONS */
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import SearchIcon from '@mui/icons-material/Search';
+ 
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import Notification from '../../../components/util/Notification'
-import ConfirmDialog from '../../../components/util/ConfirmDialog'
+//import Notification from '../../../components/util/Notification'
+//import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import departamentoService from '../../../services/departamentoService';
@@ -22,6 +23,10 @@ import { Form } from '../../../components/useForm'
 //import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 //import departamentoService from '../../../services/departamentoService';
 //import * as employeeService from '../../../services/employeeService'
+/* ICONS */
+import SearchIcon from '@mui/icons-material/Search';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 const tableHeaders = [
     {
@@ -80,16 +85,21 @@ const getDepartamentos = async () => {
   let dataDep = await DepartamentoService.getDepartamentos(); 
   dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  console.log("AQUI ESTA EL DATASECC")
+  console.log(dataDep)
   const departamentos = [];
-  dataDep.map(dep => (
-    departamentos.push({
-      id: dep.id.toString(),
-      nombre: dep.nombre,
-      correo: dep.correo,
-      fechaModificacion: dep.fecha_modificacion,
-      fechaFundacion: dep.fechaFundacion,
-    })
+  if(dataDep){
+    dataDep.map(dep => (
+      departamentos.push({
+        id: dep.id.toString(),
+        nombre: dep.nombre,
+        correo: dep.correo,
+        fechaModificacion: dep.fecha_modificacion,
+        fechaFundacion: dep.fechaFundacion,
+      })
     ));
+  }
+  else console.log("No existen datos en Departamentos");
   //console.log(secciones);
   window.localStorage.setItem('listDeps',JSON.stringify(dataDep));
   return departamentos;
@@ -102,9 +112,10 @@ export default function GestionDepartamento() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+    //const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
+  
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevation:0}
+    const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
     /* notification snackbar */
     //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     /* confirm dialog */
@@ -198,8 +209,11 @@ export default function GestionDepartamento() {
         ...confirmDialog,
         isOpen: false
       })
+      console.log(records)
       console.log(idDepartamento)
       //console.log(id)
+      const nuevaTabla = records.filter(departamentoPorEliminar => departamentoPorEliminar.id !== idDepartamento)
+      console.log(nuevaTabla)
       DepartamentoService.deleteDepartamento(idDepartamento);
       //userService.borrarUsuario(idDepartamento)
 
@@ -296,7 +310,7 @@ export default function GestionDepartamento() {
               <TblPagination />
             </BoxTbl>
             </Paper>
-            {/* Modal */}
+
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
@@ -307,6 +321,16 @@ export default function GestionDepartamento() {
                 addOrEdit={addOrEdit}
               />
               {/*  <GestionUsuariosForm/> */}
+              {/*            </Popup>  
+            <Notification 
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+            />
+              */}
             </Popup>
             <Notification
               notify={notify}

@@ -10,6 +10,8 @@ import AddButton from "./AddButton";
 import Divider from "./Divider";
 import DreamTitle from "./DreamTitle";
 import FileButton from "./FileButton";
+import Divider from "./Divider"
+import RowCheckBox from "./RowCheckBox"
 
 export const Controls = {
     Input,
@@ -24,4 +26,5 @@ export const Controls = {
     Divider,
     DreamTitle,
     FileButton
+ 
 }

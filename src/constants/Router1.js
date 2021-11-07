@@ -31,6 +31,7 @@ import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuar
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
+import NoAsignado from '../constants/NoAsignado'
 import { UserContext } from './UserContext';
 import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
@@ -54,14 +55,15 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   /* AS */
-  { requireRoles: [2], path: "/as", page: AsistenteSeccion },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [0,2], path: "/as", page: AsistenteSeccion },
+  { requireRoles: [0,2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
   // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
-  { requireRoles: [2], path: "/as/docentes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
+  { requireRoles: [0,2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [0,2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [0,2], path: "/as/solicitudDocencia", page: Vacio },
+  { requireRoles: [0,2], path: "/as/docentes", page: Vacio },
+  { requireRoles: [0,2], path: "/as/mesaPartes", page: Vacio },
+
   /* CS */
   /* AD */
   /* CD */
@@ -78,7 +80,7 @@ export default function Router1(props) {
   return (
     <Router>
       <Switch>
-        {/* Rutas protegidas */}
+        {/* Rutas protegidas.  Page dentro de HeaderUser (headers+SideBar) */}
         {privateroutes.map(r =>
           <PrivateRoute exact path={r.path} 
           requireRoles={r.requireRoles}
@@ -90,6 +92,16 @@ export default function Router1(props) {
           >
           </PrivateRoute>
         )}
+        {/* Rutas protegidas. Page solita */}
+        <PrivateRoute exact path="/noRoles" 
+          requireRoles={[0,8]}
+          component={() =>
+            <NoAsignado/>
+          }
+          >
+          </PrivateRoute>
+
+
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
           <Route exact path={r.path} 
