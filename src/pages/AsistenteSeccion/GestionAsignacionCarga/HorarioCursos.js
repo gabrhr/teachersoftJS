@@ -313,7 +313,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                 <TblPagination />
             </BoxTbl>
                 <Controls.Button
-                text="Eliminar todos los cursos"
+                text="Eliminar todos los horarios"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
@@ -322,14 +322,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
-                title="Eliminar curso"
+                title="Eliminar horario"
             >
               <EliminarUnCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
             <Popup
                 openPopup={openAllPopup}
                 setOpenPopup={setOpenAllPopup}
-                title="Eliminar cursos"
+                title="Eliminar todos los horarios"
             >
               <EliminarTodosLosCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
             </Popup>
