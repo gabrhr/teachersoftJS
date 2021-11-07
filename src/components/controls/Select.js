@@ -57,12 +57,16 @@ export default function Select(props) {
                     borderRadius: "20px",
                     boxShadow: " 0px 3px 3px rgba(0, 0, 0, 0.25)",
                     borderColor:"hsl(0, 0%, 0%, 0)",
+                    '& fieldset': {
+                        borderColor: "hsl(0, 0%, 0%, 0)"
+                       
+                    },
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: " hsl(0, 0%, 0%, 0)",
                     },
                     "&:hover": {
                         "&& fieldset": {
-                          border: "0.5px solid hsl(0, 0%, 0%, 0)"
+                          border: "0.5px solid #BBBBBB44"
                         }
                       }
                 }}
