@@ -7,9 +7,7 @@ import Button from "./Button";
 import IconButton from "./IconButton";
 import ActionButton from "./ActionButton";
 import AddButton from "./AddButton";
-import Divider from "./Divider";
 import DreamTitle from "./DreamTitle";
-import FileButton from "./FileButton";
 import Divider from "./Divider"
 import RowCheckBox from "./RowCheckBox"
 import RangeTimePicker from "./RangeTimePicker"
@@ -26,9 +24,6 @@ export const Controls = {
     AddButton,
     Divider,
     DreamTitle,
-    FileButton,
     RowCheckBox,
     RangeTimePicker
- 
-
 }

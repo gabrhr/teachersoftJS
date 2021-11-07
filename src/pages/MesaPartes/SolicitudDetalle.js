@@ -8,6 +8,7 @@ import {makeStyles} from '@mui/styles';
 import { Controls } from '../../components/controls/Controls'
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell,InputAdornment, Grid, Typography, TextField } from '@mui/material';
+import { DT } from '../../components/DreamTeam/DT';
 
 /*ICONS*/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -94,8 +95,7 @@ export default function SolicitudDetalle() {
                         size = '16px'
                         lineheight = '300%'
                     />
-                    <Controls.FileButton
-                        
+                    <DT.FileButton
                         text="Iniciar Sesión"
                     />
                 </Box>
