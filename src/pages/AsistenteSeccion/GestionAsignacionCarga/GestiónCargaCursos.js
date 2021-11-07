@@ -19,6 +19,7 @@ import AddButton from '../../../components/controls/AddButton';
 import horarioService from '../../../services/horarioService';
 import ModalCancelarHorarioCurso from './ModalCancelarHorarioCurso';
 import ModalGuardarHorarioCurso from './ModalGuardarHorarioCurso';
+import ModalSesionesLlenas from './ModalSesionesLlenas';
 import cursoService from '../../../services/cursoService';
 
 const useStyles = makeStyles(theme => ({
@@ -53,6 +54,7 @@ export default function GestionCargaCursos() {
     const [openPopup, setOpenPopup] = useState(false)
     const [openCancelarPopup, setOpenCancelarPopup] = useState(false)
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
+    const [openSesionesFullPopup, setOpenSesionesFullPopup] = useState(false)
 
     const [vTipo, setVTipo] = useState('')
     const [dataSes, setDataSes] = useState([])
@@ -116,6 +118,8 @@ export default function GestionCargaCursos() {
                 "sesion": sesion,
             });
             setCantSes(cantSes + 1);
+        }else{
+            setOpenSesionesFullPopup(true);
         }
     }
 
@@ -144,7 +148,7 @@ export default function GestionCargaCursos() {
         ]
           }
         console.log(postHorario);
-        horarioService.registerHorario(postHorario);
+        //horarioService.registerHorario(postHorario);
         resetPage();
         setOpenGuardarPopup(false);
     }
@@ -279,7 +283,14 @@ export default function GestionCargaCursos() {
                 title="Guardar"
             >
                <ModalGuardarHorarioCurso setOpenGuardarPopup = {setOpenGuardarPopup} guardarHorario = {guardarHorario}/>
-            </Popup>   
+            </Popup>
+            <Popup
+                openPopup={openSesionesFullPopup}
+                setOpenPopup={setOpenSesionesFullPopup}
+                title="Atención"
+            >
+               <ModalSesionesLlenas setOpenSesionesFullPopup = {setOpenSesionesFullPopup}/>
+            </Popup>    
         </>
     )
 }
