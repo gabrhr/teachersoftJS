@@ -150,10 +150,8 @@ export default function HeaderUser(props) {
   /* estado del Drawer */
   const [open, setOpen] = React.useState(true);
 
-const HeaderUser = ({ nombre, idRol, foto }) => {
+
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  let rol
   let listaMenu=[];
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -227,6 +225,5 @@ const HeaderUser = ({ nombre, idRol, foto }) => {
       </BoxPadding>
     </Box>
   );
-};
-  //export default HeaderUser;
+  
 }
