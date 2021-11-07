@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select as MuiSelect } from '@mui/material';
+import { Box, FormControl, FormHelperText, InputLabel, MenuItem, Select as MuiSelect } from '@mui/material';
 import React from 'react'
 import { styled } from '@mui/material/styles'
 import { InputBase } from '@mui/material'
@@ -33,22 +33,13 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
         padding: '10px 26px 10px 12px',
         transition: theme.transitions.create(['border-color', 'box-shadow']),
         '&:focus': {
+            borderRadius: "18px",
             //borderRadius: 4,
             //borderColor: '#80bdff',
             //boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
         },
     },
 }))
-
-function CustomSelect(props) {
-    return (
-        <Select
-            input={<StyledInput />}
-        >
-            {props.children}
-        </Select>
-    )
-}
 
 export default function Select(props) {
     const theme = useTheme()
@@ -111,7 +102,10 @@ export default function Select(props) {
                     options.map(
                         item => (
                             <MenuItem key={item.id} value={item.id} >
-                                {item.nombre || item.title}
+                                <Box display display="flex" alignItems="center" ml={2}>
+                                    {item.icon}
+                                    {item.nombre || item.title}
+                                </Box>      
                             </MenuItem>
                         )
                     )
