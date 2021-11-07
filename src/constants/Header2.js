@@ -76,7 +76,7 @@ export default function Header2(props) {
                     <Grid item pl={2}>
                         <Avatar alt="profile pic" src={foto} />
                     </Grid>
-                    <Grid item sm>
+                    <Grid item sm alignItems="right">
                         <div className={classes.pageIcon}>
                             <Typography
                                 variant="h6"
@@ -94,7 +94,7 @@ export default function Header2(props) {
                         <Controls.Button
                             variant="outlined"
                             size='small'
-                            fullWidth
+             
                             text="Cerrar sesión"
                             onClick={signOut}
                             endIcon={<img src={logout} />}
