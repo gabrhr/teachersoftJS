@@ -20,6 +20,7 @@ import horarioService from '../../../services/horarioService';
 import ModalCancelarHorarioCurso from './ModalCancelarHorarioCurso';
 import ModalGuardarHorarioCurso from './ModalGuardarHorarioCurso';
 import ModalSesionesLlenas from './ModalSesionesLlenas';
+import ModalFaltaSesion from './ModalFaltaSesion';
 import cursoService from '../../../services/cursoService';
 
 const useStyles = makeStyles(theme => ({
@@ -55,6 +56,7 @@ export default function GestionCargaCursos() {
     const [openCancelarPopup, setOpenCancelarPopup] = useState(false)
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
     const [openSesionesFullPopup, setOpenSesionesFullPopup] = useState(false)
+    const [openFaltaSesionPopup, setOpenFaltaSesionPopup] = useState(false)
 
     const [vTipo, setVTipo] = useState('')
     const [dataSes, setDataSes] = useState([])
@@ -111,19 +113,22 @@ export default function GestionCargaCursos() {
     
 
     function addSession(vTipo, sesion){
-        console.log(cantSes);
+        if(sesion === '')return
         if(cantSes < 2){
-            records.push({
-                "tipo": vTipo,
-                "sesion": sesion,
-            });
-            setCantSes(cantSes + 1);
+            if(cantSes === 1 && records[0].tipo === vTipo){
+                    setOpenFaltaSesionPopup(true);
+            }else{
+                records.push({
+                    "tipo": vTipo,
+                    "sesion": sesion,
+                });
+                setCantSes(cantSes + 1);
+            }
         }else{
             setOpenSesionesFullPopup(true);
         }
     }
 
-    const changeTipo = e => {setVTipo(e.target.value)}
     const changeHorario = e => {setHorario(e.target.value)}
 
     const guardarHorario = async() => {
@@ -141,14 +146,16 @@ export default function GestionCargaCursos() {
             sesiones:[{
               "secuencia": (records[0].tipo === "Laboratorio") ? 1 : 0, 
               "horas": parseFloat(records[0].sesion),
-            },{
-            "secuencia": (records[1].tipo === "Laboratorio") ? 1 : 0,
-            "horas": parseFloat(records[1].sesion),
-            }  
-        ]
-          }
+            }]
+        }
+        if(records[1]){
+            postHorario.sesiones.push({
+                    "secuencia": (records[1].tipo === "Laboratorio") ? 1 : 0,
+                    "horas": parseFloat(records[1].sesion),
+            })
+        }
         console.log(postHorario);
-        //horarioService.registerHorario(postHorario);
+        horarioService.registerHorario(postHorario);
         resetPage();
         setOpenGuardarPopup(false);
     }
@@ -290,7 +297,14 @@ export default function GestionCargaCursos() {
                 title="Atención"
             >
                <ModalSesionesLlenas setOpenSesionesFullPopup = {setOpenSesionesFullPopup}/>
-            </Popup>    
+            </Popup>
+            <Popup
+                openPopup={openFaltaSesionPopup}
+                setOpenPopup={setOpenFaltaSesionPopup}
+                title="Atención"
+            >
+               <ModalFaltaSesion setOpenFaltaClasePopup = {setOpenFaltaSesionPopup} sesionFaltante = {vTipo}/>
+            </Popup>   
         </>
     )
 }
