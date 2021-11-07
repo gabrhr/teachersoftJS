@@ -54,11 +54,12 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   /* AS */
-  { requireRoles: [2], path: "/as", page: AsistenteSeccion },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [2, 8], path: "/as", page: AsistenteSeccion },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
   // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
   { requireRoles: [2], path: "/as/docentes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
@@ -69,6 +70,7 @@ const privateroutes = [
   /* Externo */
   /* rol sin asignar */
 ]
+
 
 const publicroutes = [
   { requireRoles: [], path: "/noRoles", page: Vacio },

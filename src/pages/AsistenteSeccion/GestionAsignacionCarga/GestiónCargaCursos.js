@@ -19,6 +19,7 @@ import AddButton from '../../../components/controls/AddButton';
 import horarioService from '../../../services/horarioService';
 import ModalCancelarHorarioCurso from './ModalCancelarHorarioCurso';
 import ModalGuardarHorarioCurso from './ModalGuardarHorarioCurso';
+import cursoService from '../../../services/cursoService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -46,8 +47,6 @@ const tipo = [
     { id: 'Laboratorio', title: 'Laboratorio' }
 ]
 
-
-
 export default function GestionCargaCursos() {
 
     
@@ -57,6 +56,8 @@ export default function GestionCargaCursos() {
 
     const [vTipo, setVTipo] = useState('')
     const [dataSes, setDataSes] = useState([])
+
+    const [cantSes, setCantSes] = useState(0);
 
     const [dValuNombre, setDefValueNombre] = useState('')
     const [dValuCreditos, setDefValueCreditos] = useState('')
@@ -101,27 +102,51 @@ export default function GestionCargaCursos() {
         setRecords([])
         setHorario('')
         setSesion('')
+        setCantSes(0)
         setOpenCancelarPopup(false)
     }
 
     
 
-    function addSession(){
-       
-        setRecords(records => [...records, {
-                tipo: `${vTipo}`,
-                diaSesion: horarioService.convertSesiontoString(dataSes[0], dataSes[1], dataSes[2], dataSes[3], dataSes[4])
-        }]
-        )
-        
+    function addSession(vTipo, sesion){
+        console.log(cantSes);
+        if(cantSes < 2){
+            records.push({
+                "tipo": vTipo,
+                "sesion": sesion,
+            });
+            setCantSes(cantSes + 1);
+        }
     }
 
     const changeTipo = e => {setVTipo(e.target.value)}
     const changeHorario = e => {setHorario(e.target.value)}
-    const changeSesion = e => { setDataSes(e.target.value)}
 
-    const guardarHorario = () => {
-        /* GUARDAR EL HORARIO CONFIGURADO - Falta que se guarde el horario */
+    const guardarHorario = async() => {
+        let arrayCadenas = dValuNombre.split(" ");
+        const request = await cursoService.getCursosxCodigoNombre(arrayCadenas[0]);
+        console.log(request);
+        const postHorario = {
+            "codigo": horario,
+            ciclo:{
+              "id": parseInt(window.localStorage.getItem('ciclo')),
+            },
+            curso:{
+              "id": request[0].id,
+            },
+            sesiones:[{
+              "secuencia": (records[0].tipo === "Laboratorio") ? 1 : 0, 
+              "horas": parseFloat(records[0].sesion),
+            },{
+            "secuencia": (records[1].tipo === "Laboratorio") ? 1 : 0,
+            "horas": parseFloat(records[1].sesion),
+            }  
+        ]
+          }
+        console.log(postHorario);
+        horarioService.registerHorario(postHorario);
+        resetPage();
+        setOpenGuardarPopup(false);
     }
 
     return (
@@ -182,8 +207,9 @@ export default function GestionCargaCursos() {
                             <Controls.Select
                             name="tipo"
                             label="Tipo"
-                            value={values.tipo}
-                            onChange={changeTipo}
+                            value={vTipo}
+                            onChange={(e) => {setVTipo(e.target.value);
+                            console.log(e.target.value)}}
                             options={tipo}
                             displayEmpty
                             /> 
@@ -192,11 +218,10 @@ export default function GestionCargaCursos() {
                             label="Horario - Sesión"
                             value={sesion}
                             onChange={(e)=>{
-                                changeSesion(e)
                                 setSesion(e.target.value)
                             }}
                             />
-                            <AddButton onClick = {addSession} title = "Agregar horario"/>  
+                            <AddButton onClick = {() => addSession(vTipo, sesion)} title = "Agregar horario"/>  
                         </Stack>
                     </DT.BorderBox>
                     <DT.BorderBox marginY={3}>
@@ -207,7 +232,7 @@ export default function GestionCargaCursos() {
                                     recordsAfterPagingAndSorting().map(item => (
                                             <TableRow key={item.id}>
                                                 <TableCell>{item.tipo}</TableCell>
-                                                <TableCell>{item.diaSesion}</TableCell>
+                                                <TableCell>{item.sesion}</TableCell>
                                             </TableRow>
                                         ))
                                 }
