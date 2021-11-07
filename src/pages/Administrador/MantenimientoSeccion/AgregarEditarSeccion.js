@@ -35,11 +35,11 @@ const convertirBase64 = (file) =>{
     }
 
   });
-}   
+}
 
 
 export default function AgregarEditarSeccion(props) {
-    const {addOrEdit, recordForEdit} = props
+    const {addOrEdit, recordForEdit, setOpenPopup} = props
     const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
@@ -56,7 +56,7 @@ export default function AgregarEditarSeccion(props) {
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
-            temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+            temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido."
         setErrors({
@@ -81,7 +81,7 @@ export default function AgregarEditarSeccion(props) {
         e.preventDefault()
         //Definicio de validaciones
         if (validate()){
-          window.alert('valid')
+          //window.alert('valid')
 
           //Este pasa como la nueva seccion o la seccion editada
           const newSecc = {
@@ -89,8 +89,8 @@ export default function AgregarEditarSeccion(props) {
             nombre: values.nombre,
             correo: values.correo,
             departamento: {
-              id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
-              nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
+              id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
+              nombre: recordForEdit ? parseInt(values.idDepartamento) : null,
             },
             //foto: fotoPerfil,
             fecha_fundacion: null
@@ -158,24 +158,24 @@ export default function AgregarEditarSeccion(props) {
                         label="Correo Electrónico"
                         value={values.correo}
                         onChange = {handleInputChange}
-                        error={errors.corre}
+                        error={errors.correo}
                     />
 
                     <Controls.Select
-                        name="departmentId"
+                        name={recordForEdit? "idDepartamento" : "departmentId"}
                         label="Departamento"
-                        value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
+                        value={recordForEdit? values.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
                     />
                 </Grid>
-                {/* 
+                {/*
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
                 <Grid item sx={5} style={ColumnGridItemStyle} align="center">
                     <Typography variant="h4" mb={2} >
                         FOTO REFERENCIAL
                     </Typography>
-                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> 
+                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} />
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
                     <label htmlFor="contained-button-file">
                         <Input accept="image/*" id="contained-button-file"
@@ -186,14 +186,14 @@ export default function AgregarEditarSeccion(props) {
 
                                 setFileFoto(files[0])
                                 setCambio(true)
-                                
+
                                 if (files && files[0]) {
                                   var reader = new FileReader();
                                   reader.onload = function (e) {
                                     setFotoPerfil(e.target.result)
                                   };
                                   reader.readAsDataURL(files[0]);
-                                
+
                                 }
                             }}
                         />
@@ -213,7 +213,7 @@ export default function AgregarEditarSeccion(props) {
                         // disabled={true}
                         variant="disabled"
                         text="Cancelar"
-                        onClick={resetForm}
+                        onClick={()=> setOpenPopup(false)}
                         />
                     <Controls.Button
                         text="Guardar Cambios"

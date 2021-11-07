@@ -9,6 +9,7 @@ import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typo
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
 
+
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import { maxWidth } from '@mui/system';
@@ -17,7 +18,11 @@ import ContentHeader from '../../components/AppMain/ContentHeader';
 import NuevaSolicitudForm from './NuevaSolicitudForm';
 import { DT } from '../../components/DreamTeam/DT';
 import { Form, useForm } from '../../components/useForm';
-
+//Iconos Mesa de Partes
+import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 
 const tableHeaders = [
     {
@@ -35,7 +40,7 @@ const tableHeaders = [
     {
       id: 'estado',
       label: 'Estado',
-      numeric: false,
+      numeric: true,
       sortable: true
     },{
       id: 'detalle',
@@ -47,23 +52,36 @@ const tableHeaders = [
 
 const initialFieldValues = {
     departmentID: '0',
+    estadoID:'4'
 }
 
 export const getTemaTramites = () => ([
-    { id: '1', title: 'Tema 1' },
+    { id: '1', title: 'Tema 1'},
     { id: '2', title: 'Tema 2' },
     { id: '3', title: 'Tema 3' },
 ])
 
-function createData(id, asunto, descripcion , fecha, autorNombre, descargaSolicitada, descargaAceptada) {
+function getEstadoSolicitud() {
+    return([
+
+    { id: '4', title: 'Todos los estados', icon:<div style={{mr:2 }}/> },
+    { id: '0', title: 'Enviado', icon:<NearMeOutlinedIcon sx={{color:"#3B4A81", mr:2, }}/> },
+    { id: '1', title: 'En Revisión', icon:<AccessTimeOutlinedIcon sx={{color:"#E9D630",mr:2 }}/> },
+    { id: '2', title: 'Delegado', icon:<HowToRegOutlinedIcon sx={{color:"#FF7A00",mr:2 }}/> },
+    { id: '3', title: 'Atendido', icon:<TaskAltOutlinedIcon sx={{color:"#43DB7F",mr:2 }}/> },
+    ])
+}
+function createData(id, asunto, descripcion , fecha, autorNombre, estado) {
     return {
-        id, asunto, descripcion ,fecha, autorNombre, descargaSolicitada, descargaAceptada
+        id, asunto, descripcion ,fecha, autorNombre,estado
     }
   }
 const usuarios2 = [
-    createData('0', 'Solicitud Descarga 2021','Se estima los siguientes docentes asfdasdasdasdasdasdasd ...','2021-09-30 01:14 pm','Caceres','10','3'),
-    createData('1', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','10','3'),
-    createData('2', 'Solicitud Descarga 2019','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','10','3'),
+    createData('0', 'Solicitud Descarga 2019','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','0'),
+    createData('1', 'Solicitud Descarga 2021','Se estima los siguientes docentes asfdasdasdasdasdasdasd ...','2021-09-30 01:14 pm','Caceres','1'),
+    createData('2', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','2'),
+    createData('3', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','3'),
+    createData('4', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','3'),
 ]
 
 export default function MisSolicitudes() {
@@ -105,6 +123,24 @@ export default function MisSolicitudes() {
           }
         })
     }
+
+    const handleSearchEstados = e => {
+        let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
+        handleInputChange(e)
+        setFilterFn({
+          fn: items => {
+            if (target.value == 4)
+              /* no search text */
+              return items
+            else
+              return items.filter(x => x.estado
+                  .includes(target.value))
+          }
+        })
+    }
+
     function getRow ({...props}){
         setOpenPopup(true)
         setRow(props)
@@ -148,11 +184,12 @@ export default function MisSolicitudes() {
                 </div>
                 <div style={{width:"400px", marginRight:"50px"}}> 
                 <Controls.Select
-                    name="departmentID"
+                    name="estadoID"
                     label="Estado de Solicitud"
-                    value={values.departmentID}
-                    onChange={handleInputChange}
-                    options={getTemaTramites()} 
+                    value={values.estadoID}
+                    onChange={handleSearchEstados}
+                    
+                    options={getEstadoSolicitud()} 
                 />
                 </div>
                 <div style={{ width:"80vw",textAlign: "right"}}>
@@ -169,7 +206,8 @@ export default function MisSolicitudes() {
                     <TableBody>
                     {
                        recordsAfterPagingAndSorting().map(item => (
-                            <Item item={item} getRow= {getRow} estado={estado}/>
+                            <Item item={item} getRow= {getRow} estado={estado} 
+                            handleSearchEstados={handleSearchEstados}/>
                         ))
                     }
                     </TableBody>
@@ -180,7 +218,7 @@ export default function MisSolicitudes() {
             <Popup
                 openPopup={openNuevo}
                 setOpenPopup={setOpenNuevo}
-                title="Nueva solicitud"
+                title="Mesa de Partes"
             >
                 <NuevaSolicitudForm/>
             </Popup>
@@ -198,7 +236,8 @@ export default function MisSolicitudes() {
 }
 
 function Item(props){
-    const {item,getRow,estado} = props
+    const {item,getRow,handleSearchEstados} = props
+    
     return (
         <>
             <TableRow key={item.id}>
@@ -221,7 +260,10 @@ function Item(props){
                 </TableCell>
                 <TableCell >
                     <DT.Etiqueta
-                        type={estado==0?"enRevision":"delegado"}
+                        type={item.estado==0? "enviado":
+                            item.estado==1? "enRevision":
+                            item.estado==2? "delegado": "atendido"
+                        }
                     />
                 </TableCell>
                 <TableCell>
@@ -231,7 +273,6 @@ function Item(props){
                         onClick = {() => {getRow(item)}}
                     />
                 </TableCell>
-                {/* <TableCell>{item.bono}</TableCell> */}
             </TableRow>
         </>
     );

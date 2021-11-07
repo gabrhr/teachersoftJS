@@ -1,12 +1,12 @@
 /* Author: Gabriela, Mitsuo
- * 
+ *
  * Top level Router that routes all pages, sidebar and headers.
- * 
+ *
  * "HeaderUser" es el componente que combina Drawer + Header(s) + (Content)Page
- * 
+ *
  * Q: Cual es la diferencia entre Router y Switch?
  * A: Switch hace que solo se seleccione 1 Route.
- * 
+ *
  * Usar Link para los redireccionamientos.  Utilizar href hace que se
  * descargue de nuevo toda la pagina.  (`Link` enables client side routing)
  * Ref: https://www.youtube.com/watch?v=yQf1KbGiwiI
@@ -31,11 +31,11 @@ import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuar
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
-import NoAsignado from '../constants/NoAsignado'
 import { UserContext } from './UserContext';
 import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
+import NoAsignado from './NoAsignado'
 
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -82,7 +82,7 @@ export default function Router1(props) {
       <Switch>
         {/* Rutas protegidas.  Page dentro de HeaderUser (headers+SideBar) */}
         {privateroutes.map(r =>
-          <PrivateRoute exact path={r.path} 
+          <PrivateRoute exact path={r.path}
           requireRoles={r.requireRoles}
           component={() =>
             <HeaderUser
@@ -93,7 +93,7 @@ export default function Router1(props) {
           </PrivateRoute>
         )}
         {/* Rutas protegidas. Page solita */}
-        <PrivateRoute exact path="/noRoles" 
+        <PrivateRoute exact path="/noRoles"
           requireRoles={[0,8]}
           component={() =>
             <NoAsignado/>
@@ -104,7 +104,7 @@ export default function Router1(props) {
 
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
-          <Route exact path={r.path} 
+          <Route exact path={r.path}
           render={({location}) =>
           <HeaderUser
           pagina={r.page}
