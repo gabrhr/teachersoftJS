@@ -85,16 +85,21 @@ const getDepartamentos = async () => {
   let dataDep = await DepartamentoService.getDepartamentos(); 
   dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  console.log("AQUI ESTA EL DATASECC")
+  console.log(dataDep)
   const departamentos = [];
-  dataDep.map(dep => (
-    departamentos.push({
-      id: dep.id.toString(),
-      nombre: dep.nombre,
-      correo: dep.correo,
-      fechaModificacion: dep.fecha_modificacion,
-      fechaFundacion: dep.fechaFundacion,
-    })
+  if(dataDep){
+    dataDep.map(dep => (
+      departamentos.push({
+        id: dep.id.toString(),
+        nombre: dep.nombre,
+        correo: dep.correo,
+        fechaModificacion: dep.fecha_modificacion,
+        fechaFundacion: dep.fechaFundacion,
+      })
     ));
+  }
+  else console.log("No existen datos en Departamentos");
   //console.log(secciones);
   window.localStorage.setItem('listDeps',JSON.stringify(dataDep));
   return departamentos;
@@ -110,8 +115,7 @@ export default function GestionDepartamento() {
     //const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
   
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevation:0}
+    const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
     /* notification snackbar */
     //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     /* confirm dialog */
@@ -205,8 +209,11 @@ export default function GestionDepartamento() {
         ...confirmDialog,
         isOpen: false
       })
+      console.log(records)
       console.log(idDepartamento)
       //console.log(id)
+      const nuevaTabla = records.filter(departamentoPorEliminar => departamentoPorEliminar.id !== idDepartamento)
+      console.log(nuevaTabla)
       DepartamentoService.deleteDepartamento(idDepartamento);
       //userService.borrarUsuario(idDepartamento)
 

@@ -15,6 +15,10 @@ export default function TestPage() {
                 Accordion
             </Typography>
             <AccordionHorarioProfesor/>
+
+            <Typography>
+                Que seguira??
+            </Typography>
         </>
     )
 }

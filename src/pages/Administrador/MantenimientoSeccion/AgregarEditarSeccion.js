@@ -169,12 +169,13 @@ export default function AgregarEditarSeccion(props) {
                         options={departamento}
                     />
                 </Grid>
+                {/* 
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
                 <Grid item sx={5} style={ColumnGridItemStyle} align="center">
                     <Typography variant="h4" mb={2} >
                         FOTO REFERENCIAL
                     </Typography>
-                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> */}
+                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> 
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
                     <label htmlFor="contained-button-file">
                         <Input accept="image/*" id="contained-button-file"
@@ -204,7 +205,7 @@ export default function AgregarEditarSeccion(props) {
                             component="span"
                             />
                     </label>
-                </Grid>
+                </Grid> */}
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>

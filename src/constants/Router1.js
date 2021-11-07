@@ -31,6 +31,7 @@ import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuar
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
+import NoAsignado from '../constants/NoAsignado'
 import { UserContext } from './UserContext';
 import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
@@ -62,6 +63,7 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
   { requireRoles: [2], path: "/as/docentes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
+
   /* CS */
   /* AD */
   /* CD */
@@ -90,6 +92,15 @@ export default function Router1(props) {
           >
           </PrivateRoute>
         )}
+        <PrivateRoute exact path="/noRoles" 
+          requireRoles={[8]}
+          component={() =>
+            <NoAsignado/>
+          }
+          >
+          </PrivateRoute>
+
+
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
           <Route exact path={r.path} 
