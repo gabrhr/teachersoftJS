@@ -9,6 +9,7 @@ import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typo
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
 
+
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import { maxWidth } from '@mui/system';
@@ -17,7 +18,11 @@ import ContentHeader from '../../components/AppMain/ContentHeader';
 import NuevaSolicitudForm from './NuevaSolicitudForm';
 import { DT } from '../../components/DreamTeam/DT';
 import { Form, useForm } from '../../components/useForm';
-
+//Iconos Mesa de Partes
+import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 
 const tableHeaders = [
     {
@@ -47,23 +52,32 @@ const tableHeaders = [
 
 const initialFieldValues = {
     departmentID: '0',
+    estadoID:'0'
 }
 
 export const getTemaTramites = () => ([
-    { id: '1', title: 'Tema 1' },
+    { id: '1', title: 'Tema 1'},
     { id: '2', title: 'Tema 2' },
     { id: '3', title: 'Tema 3' },
 ])
 
-function createData(id, asunto, descripcion , fecha, autorNombre, descargaSolicitada, descargaAceptada) {
+function getEstadoSolicitud() {
+    return([
+    { id: '0', title: 'Enviado', icon:<NearMeOutlinedIcon sx={{color:"#3B4A81", mr:2, }}/> },
+    { id: '1', title: 'En Revisión', icon:<AccessTimeOutlinedIcon sx={{color:"#E9D630",mr:2 }}/> },
+    { id: '2', title: 'Delegado', icon:<HowToRegOutlinedIcon sx={{color:"#FF7A00",mr:2 }}/> },
+    { id: '3', title: 'Atendido', icon:<TaskAltOutlinedIcon sx={{color:"#43DB7F",mr:2 }}/> },
+    ])
+}
+function createData(id, asunto, descripcion , fecha, autorNombre, estado) {
     return {
-        id, asunto, descripcion ,fecha, autorNombre, descargaSolicitada, descargaAceptada
+        id, asunto, descripcion ,fecha, autorNombre,estado
     }
   }
 const usuarios2 = [
-    createData('0', 'Solicitud Descarga 2021','Se estima los siguientes docentes asfdasdasdasdasdasdasd ...','2021-09-30 01:14 pm','Caceres','10','3'),
-    createData('1', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','10','3'),
-    createData('2', 'Solicitud Descarga 2019','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','10','3'),
+    createData('0', 'Solicitud Descarga 2021','Se estima los siguientes docentes asfdasdasdasdasdasdasd ...','2021-09-30 01:14 pm','Caceres','1'),
+    createData('1', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','2'),
+    createData('2', 'Solicitud Descarga 2019','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','0'),
 ]
 
 export default function MisSolicitudes() {
@@ -114,20 +128,26 @@ export default function MisSolicitudes() {
         <Form>
             <ContentHeader text={"Mis solicitudes a Mesa de Partes"} cbo={false}/>
             {/* Buscador */}
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20 , width:"500px"}}>
-                
-                <Controls.Input
-                    label="Buscar Solicitud por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon/>
-                        </InputAdornment>
-                    )
-                    }}
-                    onChange={handleSearch}
-                    type="search"
-                />
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+                <div style={{width:"400px", marginRight:"50px"}}> 
+                    <Controls.Input
+                        label="Buscar Solicitud por Nombre"
+                        InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon/>
+                            </InputAdornment>
+                        )
+                        }}
+                        onChange={handleSearch}
+                        type="search"
+                    />
+                    
+                </div>
+                <div style={{ width:"360px",marginRight:"50px"}}> 
+                    <Controls.RangeTimePicker
+                    />
+                </div>
             </div>
             {/* Filtrados */}
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
@@ -140,25 +160,16 @@ export default function MisSolicitudes() {
                     options={getTemaTramites()} 
                 />
                 </div>
-                <div style={{width:"200px",  marginRight:"50px"}}> 
-                <Controls.Select
-                    name="departmentID"
-                    label="Tipo Solicitud"
-                    value={values.departmentID}
-                    onChange={handleInputChange}
-                    options={getTemaTramites()} 
-                />
-                </div>
                 <div style={{width:"400px", marginRight:"50px"}}> 
                 <Controls.Select
-                    name="departmentID"
+                    name="estadoID"
                     label="Estado de Solicitud"
-                    value={values.departmentID}
+                    value={values.estadoID}
                     onChange={handleInputChange}
-                    options={getTemaTramites()} 
+                    options={getEstadoSolicitud()} 
                 />
                 </div>
-                <div style={{ width:"60vw",textAlign: "right"}}>
+                <div style={{ width:"80vw",textAlign: "right"}}>
                 <Controls.AddButton
                     variant="iconoTexto"
                     text="Nueva Solicitud"
@@ -183,7 +194,7 @@ export default function MisSolicitudes() {
             <Popup
                 openPopup={openNuevo}
                 setOpenPopup={setOpenNuevo}
-                title="Nueva solicitud"
+                title="Mesa de Partes"
             >
                 <NuevaSolicitudForm/>
             </Popup>
@@ -224,7 +235,7 @@ function Item(props){
                 </TableCell>
                 <TableCell >
                     <DT.Etiqueta
-                        type={estado==0?"enRevision":"delegado"}
+                        type={item.estado==0?"enRevision":"delegado"}
                     />
                 </TableCell>
                 <TableCell>
@@ -234,7 +245,6 @@ function Item(props){
                         onClick = {() => {getRow(item)}}
                     />
                 </TableCell>
-                {/* <TableCell>{item.bono}</TableCell> */}
             </TableRow>
         </>
     );
