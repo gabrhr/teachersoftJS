@@ -52,26 +52,20 @@ const tableHeaders = [
       numeric: false,
       sortable: true
     },
-     {
-        id: 'horaSesion',
-        label: 'Hora-Sesion',
-        numeric: false,
-        sortable: true
-     },
 ]
 
 async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   if(otroHorario === 1){  //Si otorHorario = 1 - entonces si es nuevo horario
-    const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
+    //const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
 
     await cursoService.getCursosxCodigoNombre(hor.curso.codigo)
       .then(request => {
-        console.log(request);
+        //console.log(request);
         postHorario = {
           "codigo": hor.codigo,
           //"tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
           //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
-          "horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
+          //"horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
           ciclo:{
             //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
             "id": hor.ciclo.id,
@@ -85,13 +79,13 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           }
           */
           //"sesiones_excel": hor.sesiones_excel,
+          //teorico - carga_horaria: suma de horas_sesiones 
           sesiones:[{
             "secuencia": hor.tipo,
-            "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
-            "hora_inicio": dataSes[1],
-            "media_hora_inicio": dataSes[2],
-            "hora_fin": dataSes[3],
-            "media_hora_fin": dataSes[4],
+            //"sesiones_dictado": null,
+              //"persona": - es uno de los docente - es un objeto - objeto persona
+              //"hora_sesion_docente:" - lo que dicta este docente - entero 
+            "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
           }]
         }
         //Analizamos si el siguiente item es el mismo horario pero otro tipo
@@ -101,18 +95,18 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   }
   
   else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
-    const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
+    //const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
 
     postHorario.sesiones.push({
       "secuencia": hor.tipo,
-      "dia_semana": dataSes[0], //Si es clase es 0 - si es laboratorio 1
-      "hora_inicio": dataSes[1],
-      "media_hora_inicio": dataSes[2],
-      "hora_fin": dataSes[3],
-      "media_hora_fin": dataSes[4],
+      //"sesiones_dictado": null,
+        //"persona": - es uno de los docente - es un objeto - objeto persona
+        //"hora_sesion_docente:" - lo que dicta este docente - entero 
+      "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
     })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
+  //console.log(postHorario);
   return [otroHorario, postHorario];
 }
 
@@ -180,13 +174,13 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         curso:{
           "codigo": hor.Clave, //INF...
           "nombre": hor.Nombre, //NOMBRE DEL CURSO
-          "creditos": hor.Creditos, //Creditos del Curso
-          "unidad": hor.Unidad, //Creditos del Curso
-          "carga": hor.Carga_Horaria, //Creditos del Curso
+          //"creditos": hor.Creditos, //Creditos del Curso
+          //"unidad": hor.Unidad, //Creditos del Curso
+          //"carga": hor.Carga_Horaria, //Creditos del Curso
         },
         //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos: 
         profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
-        "sesiones_excel": hor.Hora_Sesion
+        //"sesiones_excel": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
         /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
         //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
@@ -279,9 +273,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
 
     const actualizarDatos = async e => { 
       let otroHorario = 1;
-
+      let permission = 1;
       let postHorario = {}; //Para poder usar el horario en una segunda vuelta
-      const horariosTotales = [];
       //Servicio para cargar los horarios
       for (let hor of recordsX) {
         const resultArray = await llenarDatosHorarios(otroHorario, postHorario, hor);
@@ -290,13 +283,15 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //Loop finished
         
         if(otroHorario === 1)  {
-          horarioService.registerHorario(postHorario);
-          horariosTotales.push(postHorario);
+          if(horarioService.registerHorario(postHorario))
+            permission = 0;
         }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
-      console.log(horariosTotales);
-      setRecords(recordsX)
+      if(permission)  {
+        setRecords(recordsX);
+        setCargaH(records);
+      }
       setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }
@@ -352,10 +347,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 </TableCell>*/}
                                 <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
-                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
-                                <TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>
+                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
                             </TableRow>
                             ))
                         }

@@ -36,9 +36,15 @@ const tableHeaders = [
     },
     {
       id: 'cargaHoraria',
-      label: 'Carga Horaria',
+      label: 'Carga',
       numeric: false,
       sortable: true
+    },
+    {
+        id: 'Facultad',
+        label: 'Facultad',
+        numeric: false,
+        sortable: true
     },
     {
       id: 'nombreCurso',
@@ -60,7 +66,7 @@ const tableHeaders = [
      },
      {
         id: 'horaSesion',
-        label: 'Hora-Sesion',
+        label: 'Horas',
         numeric: false,
         sortable: true
      },
@@ -81,17 +87,15 @@ const fillHorarios = async () => {
     return [];
   }
   for (let hor of dataHor){
-    console.log(hor.id);
-    console.log(hor.sesiones[0].secuencia);
-    const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
-      hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
-      hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
-    console.log(sesion1);
+    //console.log(hor.id);
+    //console.log(hor.sesiones[0].secuencia);
+    //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
+    //console.log(sesion1);
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.horas_semanales,
+      "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
       ciclo:{
         "id": hor.ciclo.id,
       },
@@ -101,21 +105,23 @@ const fillHorarios = async () => {
         "nombre": hor.curso.nombre,
         "creditos": hor.curso.creditos,
         "unidad": hor.curso.unidad,
-        "carga": hor.curso.carga
+        "facultad": hor.curso.seccion.departamento.unidad.nombre,
       },
-      "hora_sesion": sesion1
+      sesiones:{
+        "secuencia": hor.sesiones[0].secuencia,
+        "sesiones_dictado": [],
+        "hora_sesion": hor.sesiones[0].horas,
+      },
     })
     //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
     if(hor.sesiones[1]){
-      const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana, 
-        hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio, 
-        hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
-      console.log(sesion2);
+      //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+      //console.log(sesion2);
       horarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
-        "tipo": hor.sesiones[1].secuencia,
-        "horas_semanales": hor.horas_semanales,
+        "tipo": hor.sesiones[0].secuencia,
+        "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
         ciclo:{
           "id": hor.ciclo.id,
         },
@@ -125,9 +131,13 @@ const fillHorarios = async () => {
           "nombre": hor.curso.nombre,
           "creditos": hor.curso.creditos,
           "unidad": hor.curso.unidad,
-          "carga": hor.curso.carga
+          "facultad": hor.curso.seccion.departamento.unidad.nombre
         },
-        "hora_sesion": sesion2
+        sesiones:{
+          "secuencia": hor.sesiones[1].secuencia,
+          "sesiones_dictado": [],
+          "hora_sesion": hor.sesiones[1].horas,
+        },
       })
     }
   }
@@ -135,7 +145,7 @@ const fillHorarios = async () => {
 
 }
 
-export default function HorarioCursos({records, setRecords}) {
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) {
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
@@ -173,6 +183,7 @@ export default function HorarioCursos({records, setRecords}) {
       .then (newHorarios =>{
         //setRecordsX(newHorarios); //Se quiere actualizar todo
         setRecords(newHorarios);
+        setCargaH(records);
       });
       
     }, [])
@@ -213,6 +224,7 @@ export default function HorarioCursos({records, setRecords}) {
     }
 
     const eliminarCurso = () =>{
+      console.log(indexDelete);
       //Funcion para elimianr el Curso seleccionado
       let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
       records.splice(pos,1);
@@ -221,7 +233,7 @@ export default function HorarioCursos({records, setRecords}) {
       pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
       records.splice(pos,1);
       //setRecords(); 
-      //HorarioService.deleteHorario(indexDelete);
+      HorarioService.deleteHorario(indexDelete);
       setOpenOnePopup(false)
     }
 
@@ -269,7 +281,7 @@ export default function HorarioCursos({records, setRecords}) {
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    
+                    {console.log(records)}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
@@ -280,10 +292,11 @@ export default function HorarioCursos({records, setRecords}) {
                             </TableCell>*/}
                             <TableCell>{item.curso.codigo}</TableCell>
                             <TableCell>{item.horas_semanales}</TableCell>
+                            <TableCell>{item.curso.facultad}</TableCell>
                             <TableCell>{item.curso.nombre}</TableCell>
                             <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.tipo ? "Laboratorio":"Clase"}</TableCell>
-                            <TableCell>{item.hora_sesion}</TableCell>
+                            <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
+                            <TableCell>{item.sesiones.hora_sesion}</TableCell>
                             <TableCell>
                               {/* Accion eliminar */}
                               <Controls.ActionButton
@@ -305,10 +318,13 @@ export default function HorarioCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-            <Controls.ActionButton color="warning" onClick={ () => {setOpenAllPopup(true)}}>
-                      <DeleteOutlinedIcon fontSize="large"/>
-                      Eliminar todos los cursos
-                    </Controls.ActionButton>
+                <Controls.Button
+                text="Eliminar todos los cursos"
+                size = "small"
+                color="warning"
+                endIcon={<DeleteOutlinedIcon fontSize="small"/>}
+                onClick={ () => {setOpenAllPopup(true)}}
+                />
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}

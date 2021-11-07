@@ -54,11 +54,11 @@ export default function AgregarEditarSeccion(props) {
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('nombre' in fieldValues)
-            temp.nombre = fieldValues.nombre ? "" : "This field is required."
+            temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
             temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
                     .test(fieldValues.correo) ? ""
-                    : "This correo is not vaild."
+                    : "Este correo no es válido."
         setErrors({
             ...temp
         })
@@ -91,8 +91,8 @@ export default function AgregarEditarSeccion(props) {
             departamento: {
               id: recordForEdit ? parseInt(values.departamento.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.departamento.idDepartamento) : null,
-            }, 
-            foto: fotoPerfil,
+            },
+            //foto: fotoPerfil,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
@@ -116,7 +116,7 @@ export default function AgregarEditarSeccion(props) {
       dataDep.map(dep => (
         departamentos.push({
           id: dep.id.toString(),
-          title: dep.nombre,
+          nombre: dep.nombre,
         })
       ));
 
@@ -138,6 +138,7 @@ export default function AgregarEditarSeccion(props) {
     }, [recordForEdit])
 
     return (
+
       <Form onSubmit={handleSubmit}>
 
             <Grid container>
@@ -162,18 +163,19 @@ export default function AgregarEditarSeccion(props) {
 
                     <Controls.Select
                         name="departmentId"
-                        label={recordForEdit? values.departamento.nombreDepartamento : "Departamento"}
+                        label="Departamento"
                         value={recordForEdit? values.departamento.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
                     />
                 </Grid>
+                {/* 
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
                 <Grid item sx={5} style={ColumnGridItemStyle} align="center">
                     <Typography variant="h4" mb={2} >
                         FOTO REFERENCIAL
                     </Typography>
-                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> */}
+                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> 
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
                     <label htmlFor="contained-button-file">
                         <Input accept="image/*" id="contained-button-file"
@@ -203,7 +205,7 @@ export default function AgregarEditarSeccion(props) {
                             component="span"
                             />
                     </label>
-                </Grid>
+                </Grid> */}
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>

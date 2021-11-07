@@ -8,7 +8,8 @@ import { useForm, Form } from '../../../components/useForm';
 import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
 import * as DTLocalServices from '../../../services/DTLocalServices';
-
+import departamentoService from '../../../services/departamentoService';
+import SeccionService from '../../../services/seccionService.js';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { Box } from '@mui/system'
 
@@ -20,19 +21,77 @@ const styles = {
 
 const initialFieldValues = {
   id: 0,
-  nombres: '',
+  idPersona: '',
+  nombre: '',
   apellidoMaterno: '',
   apellidoPaterno: '',
   DNI: '',
   correo: '',
   rol: '',
-  departamento: '',
-  seccion: '',
+  departamentId: '',
+  nombreDepartamento: '',
+  seccionId: '',
+  nombreSeccion: '',
+  departamento: {
+    id: '',
+    nombre: ''
+  },
+  seccion: {
+    id: '',
+    nombre: ''
+  }
+}
+
+const getDepartamento = async () => {
+  
+  const dataDep = await departamentoService.getDepartamentos();
+  console.log("AQUI ESTA EL DATADEP")
+  console.log(dataDep)
+  const departamentos = [];
+  if(dataDep){
+    dataDep.map(dep => (
+    departamentos.push({
+      id: dep.id.toString(),
+      nombre: dep.nombre,
+      correo: dep.correo,
+      fechaModificacion: dep.fecha_modificacion,
+      fechaFundacion: dep.fechaFundacion,
+    })
+    ));
+  }
+  else console.log("No existen datos en Departamentos");
+  return departamentos;
+}
+
+const getSecciones = async () => {
+
+  const dataSecc = await SeccionService.getSecciones(); 
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  const secciones = [];
+  dataSecc.map(seccion => (
+    secciones.push({
+      id: seccion.id.toString(),
+      nombre: seccion.nombre,
+      fechaFundacion: seccion.fecha_fundacion,
+      fechaModificacion: seccion.fecha_modificacion,
+      departamento:{
+        id: seccion.departamento.id,
+        nombre: seccion.departamento.nombre
+      },
+      correo: seccion.correo,
+      foto:seccion.foto
+    })
+    ));
+  //console.log(secciones);
+  
+  return secciones;
 }
 
 export default function GestionUsuariosForm(props) {
 
-  const { addOrEdit, recordForEdit } = props
+  const { recordForEdit,addOrEdit } = props
+  const [departamento, setDepartamentos] = useState([])
+  const [seccion, setSecciones] = useState([])
 
   // const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
   const [fotoPerfil, setFotoPerfil] = React.useState(null);
@@ -50,11 +109,11 @@ export default function GestionUsuariosForm(props) {
   /* for "onChange" validation (real time validation) */
   const validate = (fieldValues = values) => {
     let temp = { ...errors }
-    if ('nombres' in fieldValues)
-      if (fieldValues.nombres.length === 0)
-        temp.nombres = "Campo requerido"
+    if ('nombre' in fieldValues)
+      if (fieldValues.nombre.length === 0)
+        temp.nombre = "Campo requerido"
       else
-        temp.nombres = DTLocalServices.validateName(fieldValues.nombres)
+        temp.nombre = DTLocalServices.validateName(fieldValues.nombre)
     if ('apellidoPaterno' in fieldValues)
       if (fieldValues.apellidoPaterno.length === 0)
         temp.apellidoPaterno = "Campo requerido"
@@ -64,8 +123,8 @@ export default function GestionUsuariosForm(props) {
       temp.apellidoMaterno = DTLocalServices.validateName(fieldValues.apellidoMaterno)
     if ('correo' in fieldValues)
       temp.correo = DTLocalServices.validateEmail(fieldValues.correo)
-    if ('DNI' in fieldValues)
-      temp.DNI = (/^\d\d\d\d\d\d\d\d$/).test(fieldValues.DNI) 
+    if ('documento' in fieldValues)
+      temp.documento = (/^\d\d\d\d\d\d\d\d$/).test(fieldValues.documento) 
         ? ""
         : "DNI necesita 8 digitos"
     if ('rol' in fieldValues)
@@ -91,25 +150,100 @@ export default function GestionUsuariosForm(props) {
     setErrors,
     handleInputChange,
     resetForm
-  } = useForm(initialFieldValues, true, validate);
+  } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
   const handleSubmit = e => {
     /* e is a "default parameter" */
     e.preventDefault()
-    if (validate())
-      addOrEdit(values, resetForm)
+    if (validate()){
+      window.alert('valid')
+    //Este pasa como la nueva seccion o la seccion editada
+      const newUsr = {
+        id: values.id,
+        idPersona: values.idPersona,
+        nombre: values.nombre,
+        apellidoPaterno: values.apellidoPaterno,
+        apellidoMaterno: values.apellidoMaterno,
+        correo: values.correo,
+        DNI: values.documento,
+        rol: values.rol,
+        departamento: {
+          id: recordForEdit ? parseInt(values.departamento.id) : parseInt(values.departmentId) ,
+          nombre: null,
+        },
+        seccion: {
+          id: recordForEdit ? parseInt(values.seccion.id) : parseInt(values.seccionId) ,
+          nombre: null,
+        }, 
+        
+        //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
+        //~~~foto: --queda pendiente 
+      }
+      console.log(newUsr);
+      addOrEdit({...newUsr, image: fileFoto}, resetForm)
+    }else{
+      window.alert('invalid')
+    }
+      
   }
 
   /* "detect the change of recordForEdit inside this bottom component" */
+  /*useEffect(() => {
+    if (recordForEdit != null) {
+      // object is not empty
+      setValues({
+        ...recordForEdit
+      })
+    }
+  }, [recordForEdit])*/
+
   useEffect(() => {
+    getDepartamento()
+    .then (newDep =>{
+      setDepartamentos(prevRecords => prevRecords.concat(newDep));
+      
+      //console.log(newSeccion);
+      
+    });
     if (recordForEdit != null) {
       /* object is not empty */
       setValues({
         ...recordForEdit
       })
     }
+    
   }, [recordForEdit])
 
+  useEffect(() => {
+    getSecciones()
+    .then (newSecc =>{
+      setSecciones(prevSecc => prevSecc.concat(newSecc));
+      
+      //console.log(newSeccion);
+      
+      
+    });
+    if (recordForEdit != null) {
+      /* object is not empty */
+      setValues({
+        ...recordForEdit
+      })
+    }
+    
+  }, [recordForEdit])
+  
+  /*useEffect(() => {
+    getSecciones()
+  }, [])
+
+  const getSecciones = () => {
+
+    DTLocalServices.getSecciones().then((response) => {
+          setSecciones(response.data)
+          console.log(response.data);
+      });
+  };*/
+  
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -124,11 +258,11 @@ export default function GestionUsuariosForm(props) {
               DATOS PERSONALES
             </Typography>
             <Controls.Input
-              name="nombres"
+              name="nombre"
               label="Nombre"
-              value={values.nombres}
+              value={values.nombre}
               onChange={handleInputChange}
-              error={errors.nombres}
+              error={errors.nombre}
             />
             <Controls.Input
               name="apellidoPaterno"
@@ -145,11 +279,11 @@ export default function GestionUsuariosForm(props) {
               error={errors.apellidoMaterno}
             />
             <Controls.Input
-              name="DNI"
+              name="documento"
               label="Documento de Identidad"
-              value={values.DNI}
+              value={values.documento}
               onChange={handleInputChange}
-              error={errors.DNI}
+              error={errors.documento}
             />
             <Controls.Input
               name="correo"
@@ -174,22 +308,24 @@ export default function GestionUsuariosForm(props) {
               options={DTLocalServices.getAllRoles()}
               error={errors.rol}
             />
+            
             <Controls.Select
-              name="departamento"
+              name="departmentId"
               label="Departamento"
-              value={values.departamento}
+              value={recordForEdit ? values.departamento.id : values.departmentId}
               onChange={handleInputChange}
-              options={DTLocalServices.getAllDepartamentos()}
-              error={errors.departamento}
+              options={departamento}
+              
             />
             <Controls.Select
-              name="seccion"
-              label="Sección Principal"
-              value={values.seccion}
+              name="seccionId"
+              label="Seccion Principal"
+              value={recordForEdit ? values.seccion.id : values.seccionId}
               onChange={handleInputChange}
-              options={DTLocalServices.getAllSecciones()}
-              error={errors.seccion}
+              options={seccion}
+              
             />
+            
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mt: 9, mb: 2, mx: 1 }} />
           {/* Foto del usuario */}
@@ -197,25 +333,27 @@ export default function GestionUsuariosForm(props) {
             <Typography variant="h4" marginBottom={2}>
               FOTO REFERENCIAL
             </Typography>
-            <Avatar src={fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
+            <Avatar src={values.foto_URL ? values.foto_URL : fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
             {/* Botoncito para subir imagen */}
             <label htmlFor="contained-button-file">
               <Input accept="image/*" id="contained-button-file"
                 type="file" sx={{ display: 'none' }}
+                value = {values.fileFoto}
                 onChange={(event) => {
                   const files = event.target.files
-                  //console.log(files[0]);
 
+                  //console.log(files[0]);
                   setFileFoto(files[0])
                   setCambio(true)
 
                   if (files && files[0]) {
                     var reader = new FileReader();
+                    
                     reader.onload = function (e) {
                       setFotoPerfil(e.target.result)
+                      console.log(e.target.result)
                     };
                     reader.readAsDataURL(files[0]);
-
                   }
                 }}
               />

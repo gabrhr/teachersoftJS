@@ -65,10 +65,10 @@ export default function Employees() {
   /* notification snackbar */
   const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
   /* confirm dialog */
-  const [confirmDialog, setConfirmDialog] = useState({ 
-    isOpen: false, 
-    title: '', 
-    subtitle: '' 
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    subtitle: ''
   })
 
   const {
@@ -87,9 +87,9 @@ export default function Employees() {
         if (target.value == "")
           /* no search text */
           return items
-        else
-          return items.filter(x => x.fullName.toLowerCase()
-              .includes(target.value.toLowerCase()))
+        else {
+          //return DTLocalServices.filter(items, 'fullName', searchText)
+        }
       }
     })
   }
@@ -143,7 +143,7 @@ export default function Employees() {
       />
       {/* SEARCH BAR */}
       <Toolbar mt={2}>
-          <Controls.Input 
+          <Controls.Input
             label="Search Employees by Name"
             InputProps={{
               startAdornment: (
@@ -157,7 +157,7 @@ export default function Employees() {
             type="search"
           />
           <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-            <Controls.Button 
+            <Controls.Button
               text="Add New"
               variant="outlined"
               startIcon={<AddIcon/>}
@@ -191,13 +191,13 @@ export default function Employees() {
                   <TableCell>{item.mobile}</TableCell>
                   <TableCell>{item.department}</TableCell>
                   <TableCell>
-                    <Controls.ActionButton 
+                    <Controls.ActionButton
                       color="warning"
                       onClick={ () => {openInPopup(item)}}
                     >
                       <EditOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
-                    <Controls.ActionButton 
+                    <Controls.ActionButton
                       color="error"
                       onClick={() => {
                         // onDelete(item.id)
@@ -225,16 +225,16 @@ export default function Employees() {
         setOpenPopup={setOpenPopup}
         title="Add an Employee"
       >
-        <EmployeeForm 
+        <EmployeeForm
           recordForEdit={recordForEdit}
           addOrEdit={addOrEdit}
         />
       </Popup>
-      <Notification 
+      <Notification
         notify={notify}
         setNotify={setNotify}
       />
-      <ConfirmDialog 
+      <ConfirmDialog
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />

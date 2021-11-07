@@ -1,3 +1,8 @@
+/* Author: Gabriela 
+ *
+ * Componente que va como cabecera de la mayoria de las paginas,  
+ * indica el ciclo sobre el que se esta modificando la data 
+ */
 import { Grid,Typography,Box } from '@mui/material'
 import React from 'react'
 import { Controls } from '../controls/Controls';
@@ -7,18 +12,21 @@ import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
 import cicloService from "../../services/cicloService";
 import {useState, useEffect} from 'react'
+import { DT } from '../../components/DreamTeam/DT'
 
 const fillCiclos = async () => {
-  const dataCic = await cicloService.getCiclos();
-  let cicloActual = {};
+  //const dataCic = await cicloService.getCiclos();
   //console.log("Este es el dataCiclo: ", dataCic);
+  let dataCic = await cicloService.getCiclos();
+  dataCic = dataCic ?? [{id: '1', title: '2021-2'}]
+  let cicloActual = {};
 
   const ciclos = [];
   if(!dataCic) {
     console.error("No se pudo regresar la data del backend para Ciclos");
     return [];
   }
-
+  
   dataCic.map(cic => {
     ciclos.push({
       id: cic.id.toString(),
@@ -27,10 +35,9 @@ const fillCiclos = async () => {
     if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
       cicloActual = {
         id: cic.id.toString(),
-        title: cic.anho + '-' +cic.periodo
+        title: cic.anho + '-' + cic.periodo
       }
     }
-    //console.log(cicloActual)
   });
   return [ciclos,cicloActual];
 }
@@ -70,14 +77,14 @@ function CboCiclo(props) {
       window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
     },[values])
     
-    //console.log(values);
+
     if (cbo) {
 
         return (<Grid item sx={{marginRight: theme.spacing(3)}}>
             <Box  sx={{width: "10vw", align: "Right"}}> 
                 <Controls.Select
                     name="id"
-                    label={"Ciclos"}
+                    label="Ciclo"
                     value={values.id}
                     onChange={handleInputChange}
                     options={ciclos}
@@ -93,21 +100,15 @@ function CboCiclo(props) {
 }
 
 export default function ContentHeader({text, cbo}) {
+
+    // console.log("ContentHeader: ")
+    // console.log(DTLocalServices.getAllCiclos())
     
     return (
         <Form>
             <Grid container >
                 <Grid item >
-                    <Typography 
-                        variant="h3"
-                        component="div"
-                        paddingTop="5px"
-                        paddingBottom="4px"
-                        align="center"
-                        color="primary"
-                    >
-                        {text}
-                    </Typography>
+                    <DT.Title size="big" text={text} />
                 </Grid>
                 <Grid item sm/>
                 <CboCiclo cbo={cbo}/>

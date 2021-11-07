@@ -7,15 +7,17 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Toolbar } fr
 /* ICONS */
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material'
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import AgregarEditarSeccion from './AgregarEditarSeccion'
 import SeccionService from '../../../services/seccionService.js';
 //import AuthService from '../../../services/authService.js';
 //import * as employeeService from '../../../services/employeeService'
-
-
 
 const tableHeaders = [
     {
@@ -50,26 +52,33 @@ const tableHeaders = [
     }
 ]
 
-function getSecciones(){
-  const dataSecc = SeccionService.getSecciones();
+const getSecciones = async () => {
+
+  let dataSecc = await SeccionService.getSecciones();
+  console.log(dataSecc)
+  dataSecc = dataSecc ?? []
+  console.log("AQUI ESTA EL DATASECC")
+  console.log(dataSecc)
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
-  dataSecc.map(seccion => (
-    secciones.push({
-      id: seccion.id.toString(),
-      nombre: seccion.nombre,
-      fechaFundacion: seccion.fecha_fundacion,
-      fechaModificacion: seccion.fecha_modificacion,
-      departamento:{
-        idDepartamento: seccion.departamento.id,
-        nombreDepartamento: seccion.departamento.nombre
-      },
-      correo: seccion.correo,
-      foto:seccion.foto
-    })
-    ));
-  //console.log(secciones);
-  window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
+  if(dataSecc){
+    dataSecc.map(seccion => (
+      secciones.push({
+        id: seccion.id.toString(),
+        nombre: seccion.nombre,
+        fechaFundacion: seccion.fecha_fundacion,
+        fechaModificacion: seccion.fecha_modificacion,
+        departamento:{
+          idDepartamento: seccion.departamento.id,
+          nombreDepartamento: seccion.departamento.nombre
+        },
+        correo: seccion.correo
+      })
+      ));
+    //console.log(secciones);
+    window.localStorage.setItem('listSecciones', JSON.stringify(dataSecc));
+  }
+  else console.log("No existen datos en Secciones");
   return secciones;
 }
 export default function GestionSeccion() {
@@ -80,10 +89,11 @@ export default function GestionSeccion() {
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
+    const PaperStyle={ borderRadius: '20px',  mt: 3,pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
-
-    //console.log(records);
+    const [confirmDialog, setConfirmDialog] = useState(
+      { isOpen: false, title: '', subtitle: '' })
+    console.log(records);
     const {
         TblContainer,
         TblHead,
@@ -113,77 +123,115 @@ export default function GestionSeccion() {
       getSecciones()
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
-        
+        console.log(newSeccion);
       });
-      
-    }, [recordForEdit])
-  
-    const addOrEdit = (seccion, resetForm) => {
 
-      recordForEdit 
-        ? SeccionService.updateSeccion(seccion, seccion.id) 
+    }, [recordForEdit])
+
+    const addOrEdit = (seccion, resetForm) => {
+      
+      recordForEdit
+        ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
           .then(idSeccion => {
-            if(!recordForEdit)  
-              setRecordForEdit(idSeccion);
-            else
+            if(recordForEdit)
               setRecordForEdit(null);
         })
       setOpenPopup(false)
       resetForm()
-  
+      window.location.replace('')
       setNotify({
         isOpen: true,
-        message: 'Submitted Successfully',
+        message: 'Registro de Cambios Exitoso',
         type: 'success'
       })
     }
 
+
+
+    const onDelete = (idSeccion) => {
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+      // Funcion para eliminar la Seccion seleccionado
+      let pos = records.map(function(e) { return e.id; }).indexOf(idSeccion);
+      records.splice(pos,1);
+      SeccionService.deleteSeccion(idSeccion);
+      setNotify({
+        isOpen: true,
+        message: 'Borrado Exitoso',
+        type: 'error'
+      })
+    }
+
+/*    const onDelete = (idSeccion,id) => {
+      // if (!window.confirm('Are you sure to delete this record?'))
+      //   return
+      setConfirmDialog({
+        ...confirmDialog,
+        isOpen: false
+      })
+
+      SeccionService.deleteSeccion(idSeccion)
+      //userService.borrarUsuario(id)
+      //DTLocalServices.getUsers().then((response) => {
+      SeccionService
+        setRecords(response.data)
+        console.log(response.data);
+      });
+      //setRecords(DTLocalServices.getAllPersonas())
+      setNotify({
+        isOpen: true,
+        message: 'Deleted Successfully',
+        type: 'error'
+      })
+    }
+*/
     return (
         <>
-            <ContentHeader
-                text="Gestión de Secciones"
-                cbo={false}
-            />
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
-                <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/*<Toolbar>*/}
+          <ContentHeader
+            text="Gestión de Secciones"
+            cbo={false}
+          />
+          <Paper variant="outlined" sx={PaperStyle}>
+            <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+              {/* <Toolbar> */}
                 <Controls.Input
-                    label="Buscar Secciones por Nombre"
-                    InputProps={{
+                  label="Buscar Secciones por Nombre"
+                  InputProps={{
                     startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
                     )
-                    }}
-                    sx={{ width: .1 }}
-                    onChange={handleSearch}
-                    type="search"
+                  }}
+                  sx={{ width: .75 }}
+                  onChange={handleSearch}
+                  type="search"
                 />
-                <Controls.AddButton 
-                    title="Agregar Nueva Sección"
-                    variant="iconoTexto"
-                    onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                    //openInPopup();^
+                <Controls.AddButton
+                  title="Agregar Nueva Sección"
+                  variant="iconoTexto"
+                  onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                  //openInPopup();^
                 />
-                
-                {/*</Toolbar>*/}
-                </div>
-                <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id}>
-                            {/*<StyledTableCell
-                            align="right"
+
+              {/* </Toolbar> */}
+            </div>
+            <BoxTbl>
+              <TblContainer>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell
+                          align="right"
                             >
                             {item.id}
                             </StyledTableCell>
-                            */}
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
                             <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
@@ -196,6 +244,19 @@ export default function GestionSeccion() {
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
+                              <IconButton aria-label="delete">
+                                <DeleteIcon
+                                color="warning"
+                                onClick={() => {
+                                  // onDelete(item.id)
+                                  setConfirmDialog({
+                                    isOpen: true,
+                                    title: '¿Eliminar seccion permanentemente?',
+                                    subTitle: 'No es posible deshacer esta accion',
+                                    onConfirm: () => {onDelete(item.id)}
+                                  })
+                                }}/>
+                              </IconButton>
                             </StyledTableCell>
                         </StyledTableRow>
                         ))
@@ -214,9 +275,17 @@ export default function GestionSeccion() {
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 />
-                {console.log("Este es el recordforedit ",recordForEdit)}
+                
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
+            <Notification
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+              confirmDialog={confirmDialog}
+              setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }
