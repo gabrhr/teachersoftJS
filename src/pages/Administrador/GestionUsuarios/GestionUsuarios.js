@@ -138,8 +138,6 @@ export default function GestionUsuarios() {
    * `useTable`'s `recordsAfterPagingAndSorting()`.  Because  */
   const handleSearch = (e) => {
     let target = e.target;
-    console.log("IMPRIME");
-    console.log(e.target);
     setFilterFn({
       fn: items => {
         if (target.value === "")
