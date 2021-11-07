@@ -6,7 +6,7 @@ export default function TimePickerPage() {
     return (
         <div>
             <Controls.RangeTimePicker/>
-            <div style={{marginBottom:"600px"}}/>
+            {/* <div style={{marginBottom:"600px"}}/> */}
         </div>
     )
 }

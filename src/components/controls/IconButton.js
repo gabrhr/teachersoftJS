@@ -14,7 +14,7 @@ export default function IconButton(props) {
                 {text}
             </Typography>
             <MuiIconButton
-                size="large"
+                size="small"
                 color={color || "DTButton"}
                 disableFocusRipple={true}
                 onClick={onClick}
