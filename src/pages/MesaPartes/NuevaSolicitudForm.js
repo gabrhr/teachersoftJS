@@ -4,7 +4,7 @@
  */
 import React from 'react'
 import { DT } from '../../components/DreamTeam/DT'
-import { IconButton, Typography, Box } from '@mui/material';
+import { Grid, IconButton, Typography, Box } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 
@@ -53,11 +53,12 @@ function printValues(values) {
 }
 
 function ActualForm(props) {
-    const { values, handleInputChange, resetForm } = props
+    const { values, handleInputChange } = props
 
     return (
         <Form>
-            <Box height="250px" overflow="auto" display="inherit">
+            {/* Display values ( easy debug ) (should be hidden) */}
+            <Box height="250px" overflow="auto" display="none">
                 <Typography sx={{
                     fontFamily: "monospace",
                     whiteSpace: "pre"
@@ -66,30 +67,37 @@ function ActualForm(props) {
                 </Typography>
             </Box>
 
-            <Controls.Select
-                name="departamentoID"
-                label="Departamento"
-                value={values.departamentoID}
-                onChange={handleInputChange}
-                options={getDepartamentos()}
-            />
+            {/* seleccion de tema y tipo tramite */}
+            <Grid container spacing={8}>
+                <Grid item xs={6}>
+                    <Controls.Select
+                        name="departamentoID"
+                        label="Departamento"
+                        value={values.departamentoID}
+                        onChange={handleInputChange}
+                        options={getDepartamentos()}
+                    />
 
-            <Controls.Select
-                name="temaTramiteID"
-                label="Tema de Trámite"
-                value={values.temaTramiteID}
-                onChange={handleInputChange}
-                options={getTemaTramites()}
-            />
-
-            <Controls.Select
-                name="tipoTramiteID"
-                label="Departamento"
-                value={values.tipoTramiteID}
-                onChange={handleInputChange}
-                options={getTipoTramites()}
-            />
+                    <Controls.Select
+                        name="temaTramiteID"
+                        label="Tema de Trámite"
+                        value={values.temaTramiteID}
+                        onChange={handleInputChange}
+                        options={getTemaTramites()}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controls.Select
+                        name="tipoTramiteID"
+                        label="Departamento"
+                        value={values.tipoTramiteID}
+                        onChange={handleInputChange}
+                        options={getTipoTramites()}
+                    />
+                </Grid>
+            </Grid>
             
+            {/* asunto + descripcion */}
             <Controls.Input 
                 name="asunto"
                 label="Asunto"  
@@ -107,11 +115,12 @@ function ActualForm(props) {
                 maxRows={12}
             />
 
+            {/* botones */}
             <Box display="flex" justifyContent="flex-end"> 
                 <Controls.Button
                     variant="disabled"
                     text="Cancelar"
-                    onClick={resetForm}
+                    // onClick={regresar}
                     endIcon={<CancelOutlinedIcon />}
                 />
                 <Controls.Button
@@ -142,7 +151,6 @@ export default function NuevaSolicitudForm() {
                 <ActualForm 
                     values={values} 
                     handleInputChange={handleInputChange}
-                    resetForm={resetForm}
                 />
             </DT.BorderBox>
         </div>
