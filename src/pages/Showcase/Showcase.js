@@ -11,6 +11,7 @@ import UtilPage from "./UtilPage";
 import DTPage from "./DTPage";
 import TestPage from "./TestPage";
 import { useGoogleAuth } from '../Login/googleAuth';
+import TimePickerPage from './TimePickerPage';
 
 /* static MUI CSS (export it if it's going to be used a lot) */
 const paperCSS = {
@@ -76,6 +77,10 @@ export default function Employees() {
             <Paper sx={{...paperCSS}} elevation={24}>
                 <CenteredTitle text="test"/>
                 <TestPage/>
+            </Paper>
+            <Paper sx={{...paperCSS}} elevation={24}>
+                <CenteredTitle text="Picker en un rango determinado"/>
+                <TimePickerPage/>
             </Paper>
         </>
     )

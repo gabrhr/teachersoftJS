@@ -12,6 +12,7 @@ import DreamTitle from "./DreamTitle";
 import FileButton from "./FileButton";
 import Divider from "./Divider"
 import RowCheckBox from "./RowCheckBox"
+import RangeTimePicker from "./RangeTimePicker"
 
 export const Controls = {
     Input,
@@ -25,6 +26,9 @@ export const Controls = {
     AddButton,
     Divider,
     DreamTitle,
-    FileButton
+    FileButton,
+    RowCheckBox,
+    RangeTimePicker
  
+
 }
