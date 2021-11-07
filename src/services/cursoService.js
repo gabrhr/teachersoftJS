@@ -17,7 +17,7 @@ const getCursosxCodigoNombre = async (codigo_nombre) => {
 const getCursosxSeccionCodigoNombre = async (id_seccion, codigo_nombre) => {
   //console.log(id_seccion, "  ", codigo_nombre);
   try{
-    if(id_seccion !== 0){
+    if(id_seccion){
       const request = await axios.get(`${url}/curso/seccion=${id_seccion}/codigonombre=${codigo_nombre}`, tokenService.GetTokenPrueba(), id_seccion, codigo_nombre);
       console.log(request.data)
       return request.data;  //Es un dato

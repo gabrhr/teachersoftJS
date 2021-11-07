@@ -24,6 +24,7 @@ import { DT } from '../../../components/DreamTeam/DT'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CargaDocenteHorarios from './CargaDocenteHorarios';
 import CursoService from '../../../services/cursoService';
+import HorarioService from '../../../services/horarioService';
 
 const tableHeaders = [
   // {
@@ -102,10 +103,27 @@ function GetRow({ ...props }) {
 //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,""); 
+  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
+  const ciclo = window.localStorage.getItem("ciclo"); 
+  let horarios;
+  let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const cursos = [];
-  dataCur.map(cur => (
+  for(let cur of dataCur) {
+    horarios = await HorarioService.listarPorCursoCiclo(cur.id , ciclo);
+    for(let hor of horarios){
+      if (hor.sesiones.sesion_docente) {
+        estado = 'Asignados'
+        tipo= 'atendido'
+      }
+      else  {
+        estado = 'Por asignar'
+        tipo= 'pendiente'
+        break;
+      }
+    }
+    //console.log(horarios);
+    //Hacemos la creación y verificación de los estados
     cursos.push({
       id: cur.id,
       nombre: cur.nombre,
@@ -119,9 +137,12 @@ const fillCursos = async () => {
           nombre:cur.seccion.departamento.nombre,
         }
       },
+      estado: estado,
+      type: tipo
     })
-    ));
-  //console.log(cursos);
+
+  }
+  console.log(cursos);
   return cursos;
 }
 
@@ -256,6 +277,13 @@ export default function CargaDocente() {
             <BoxTbl>
               <TblContainer>
                 <TblHead />
+                  <colgroup>
+                    <col style={{ width: '5%' }} />
+                    <col style={{ width: '30%' }} />
+                    <col style={{ width: '30%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '20%' }} />
+                  </colgroup>
                 <TableBody>
                   {
                     recordsAfterPagingAndSorting().map(item => (
