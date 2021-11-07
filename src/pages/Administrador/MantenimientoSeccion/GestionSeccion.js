@@ -20,21 +20,15 @@ import SeccionService from '../../../services/seccionService.js';
 //import * as employeeService from '../../../services/employeeService'
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'SeccionID',
       numeric: true,
       sortable: true
-    },
+    },*/
     {
       id: 'nombre',
-      label: 'Nombre de la seccion',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'fechaModificacion',
-      label: 'Última Modificación',
+      label: 'Nombre Sección',
       numeric: false,
       sortable: true
     },
@@ -45,8 +39,14 @@ const tableHeaders = [
         sortable: true
     },
     {
+      id: 'fechaModificacion',
+      label: 'Última Modificación',
+      numeric: false,
+      sortable: true
+    },
+    {
       id: 'actions',
-      label: 'Acción',
+      label: 'Acciones',
       numeric: false,
       sortable: false
     }
@@ -68,10 +68,8 @@ const getSecciones = async () => {
         nombre: seccion.nombre,
         fechaFundacion: seccion.fecha_fundacion,
         fechaModificacion: seccion.fecha_modificacion,
-        departamento:{
-          idDepartamento: seccion.departamento.id,
-          nombreDepartamento: seccion.departamento.nombre
-        },
+        idDepartamento: seccion.departamento.id,
+        nombreDepartamento: seccion.departamento.nombre,
         correo: seccion.correo
       })
       ));
@@ -85,6 +83,8 @@ export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
     const [records, setRecords] = useState([])
+    const [deleteData, setDeleteData] = useState(false);
+    const [changeData, setChangeData] = useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
@@ -102,7 +102,7 @@ export default function GestionSeccion() {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
 
-    const handleSearch = e => {
+    const handleSearch = (e) => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
          * objects.  Thus the function needs to be inside an object. */
@@ -124,12 +124,14 @@ export default function GestionSeccion() {
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
         console.log(newSeccion);
+        setDeleteData(false);
+        setChangeData(false);
       });
 
-    }, [recordForEdit])
+    }, [recordForEdit, deleteData, changeData])
 
     const addOrEdit = (seccion, resetForm) => {
-      
+
       recordForEdit
         ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
@@ -139,7 +141,8 @@ export default function GestionSeccion() {
         })
       setOpenPopup(false)
       resetForm()
-      window.location.replace('')
+      setChangeData(true);
+      //window.location.replace('')
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
@@ -158,10 +161,11 @@ export default function GestionSeccion() {
       let pos = records.map(function(e) { return e.id; }).indexOf(idSeccion);
       records.splice(pos,1);
       SeccionService.deleteSeccion(idSeccion);
+      setDeleteData(true);
       setNotify({
         isOpen: true,
         message: 'Borrado Exitoso',
-        type: 'error'
+        type: 'success'
       })
     }
 
@@ -227,15 +231,17 @@ export default function GestionSeccion() {
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
-                        <StyledTableCell
-                          align="right"
-                            >
-                            {item.id}
-                            </StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
-                            <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                            <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell align="left">
+                            {"Hora: "
+                            +item.fechaModificacion.slice(11,19)
+                            +"   -  Fecha: "
+                            +item.fechaModificacion.slice(8,10)
+                            +'/'
+                            +item.fechaModificacion.slice(5,7)
+                            +'/'
+                            +item.fechaModificacion.slice(0,4)}</StyledTableCell>
                             <StyledTableCell>
                               {/* Accion editar */}
                               <Controls.ActionButton
@@ -272,10 +278,11 @@ export default function GestionSeccion() {
                 title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
               <AgregarEditarSeccion
-                recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
+                recordForEdit={recordForEdit}
+                setOpenPopup={setOpenPopup}
                 />
-                
+
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
             <Notification

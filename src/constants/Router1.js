@@ -1,12 +1,12 @@
 /* Author: Gabriela, Mitsuo
- * 
+ *
  * Top level Router that routes all pages, sidebar and headers.
- * 
+ *
  * "HeaderUser" es el componente que combina Drawer + Header(s) + (Content)Page
- * 
+ *
  * Q: Cual es la diferencia entre Router y Switch?
  * A: Switch hace que solo se seleccione 1 Route.
- * 
+ *
  * Usar Link para los redireccionamientos.  Utilizar href hace que se
  * descargue de nuevo toda la pagina.  (`Link` enables client side routing)
  * Ref: https://www.youtube.com/watch?v=yQf1KbGiwiI
@@ -31,7 +31,6 @@ import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuar
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
-import NoAsignado from '../constants/NoAsignado'
 import { UserContext } from './UserContext';
 import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
@@ -55,15 +54,14 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   /* AS */
-  { requireRoles: [2], path: "/as", page: AsistenteSeccion },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [2,8], path: "/as", page: AsistenteSeccion },
+  { requireRoles: [2,8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
   // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
-  { requireRoles: [2], path: "/as/docentes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
-
+  { requireRoles: [2,8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [2,8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [2,8], path: "/as/solicitudDocencia", page: Vacio },
+  { requireRoles: [2,8], path: "/as/docentes", page: Vacio },
+  { requireRoles: [2,8], path: "/as/mesaPartes", page: Vacio },
   /* CS */
   /* AD */
   /* CD */
@@ -82,7 +80,7 @@ export default function Router1(props) {
       <Switch>
         {/* Rutas protegidas */}
         {privateroutes.map(r =>
-          <PrivateRoute exact path={r.path} 
+          <PrivateRoute exact path={r.path}
           requireRoles={r.requireRoles}
           component={() =>
             <HeaderUser
@@ -92,18 +90,9 @@ export default function Router1(props) {
           >
           </PrivateRoute>
         )}
-        <PrivateRoute exact path="/noRoles" 
-          requireRoles={[8]}
-          component={() =>
-            <NoAsignado/>
-          }
-          >
-          </PrivateRoute>
-
-
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
-          <Route exact path={r.path} 
+          <Route exact path={r.path}
           render={({location}) =>
           <HeaderUser
           pagina={r.page}
