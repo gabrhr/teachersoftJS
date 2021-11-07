@@ -68,6 +68,7 @@ const getSecciones = async () => {
         nombre: seccion.nombre,
         fechaFundacion: seccion.fecha_fundacion,
         fechaModificacion: seccion.fecha_modificacion,
+        fechaCreacion:seccion.fecha_creacion,
         idDepartamento: seccion.departamento.id,
         nombreDepartamento: seccion.departamento.nombre,
         correo: seccion.correo

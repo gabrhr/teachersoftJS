@@ -353,7 +353,9 @@ export default function GestionUsuarios() {
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
                   <StyledTableRow key={item.id}>
-                    <StyledTableCell>{item.nombre} {item.apellidoPaterno} {item.apellidoMaterno}</StyledTableCell>
+                    <StyledTableCell>
+                    {item.nombre.toUpperCase()} {item.apellidoPaterno.toUpperCase()} {item.apellidoMaterno.toUpperCase()}
+                    </StyledTableCell>
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>

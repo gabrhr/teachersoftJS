@@ -96,6 +96,7 @@ const getDepartamentos = async () => {
         nombre: dep.nombre,
         correo: dep.correo,
         fechaModificacion: dep.fecha_modificacion,
+        fechaCreacion:dep.fecha_creacion,
         fechaFundacion: dep.fechaFundacion,
       })
     ));
