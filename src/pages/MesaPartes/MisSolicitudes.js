@@ -40,7 +40,7 @@ const tableHeaders = [
     {
       id: 'estado',
       label: 'Estado',
-      numeric: false,
+      numeric: true,
       sortable: true
     },{
       id: 'detalle',
@@ -52,7 +52,7 @@ const tableHeaders = [
 
 const initialFieldValues = {
     departmentID: '0',
-    estadoID:'0'
+    estadoID:'4'
 }
 
 export const getTemaTramites = () => ([
@@ -63,6 +63,8 @@ export const getTemaTramites = () => ([
 
 function getEstadoSolicitud() {
     return([
+
+    { id: '4', title: 'Todos los estados', icon:<div style={{mr:2 }}/> },
     { id: '0', title: 'Enviado', icon:<NearMeOutlinedIcon sx={{color:"#3B4A81", mr:2, }}/> },
     { id: '1', title: 'En Revisión', icon:<AccessTimeOutlinedIcon sx={{color:"#E9D630",mr:2 }}/> },
     { id: '2', title: 'Delegado', icon:<HowToRegOutlinedIcon sx={{color:"#FF7A00",mr:2 }}/> },
@@ -75,9 +77,11 @@ function createData(id, asunto, descripcion , fecha, autorNombre, estado) {
     }
   }
 const usuarios2 = [
-    createData('0', 'Solicitud Descarga 2021','Se estima los siguientes docentes asfdasdasdasdasdasdasd ...','2021-09-30 01:14 pm','Caceres','1'),
-    createData('1', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','2'),
-    createData('2', 'Solicitud Descarga 2019','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','0'),
+    createData('0', 'Solicitud Descarga 2019','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','0'),
+    createData('1', 'Solicitud Descarga 2021','Se estima los siguientes docentes asfdasdasdasdasdasdasd ...','2021-09-30 01:14 pm','Caceres','1'),
+    createData('2', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','2'),
+    createData('3', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','3'),
+    createData('4', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','3'),
 ]
 
 export default function MisSolicitudes() {
@@ -119,6 +123,24 @@ export default function MisSolicitudes() {
           }
         })
     }
+
+    const handleSearchEstados = e => {
+        let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
+        handleInputChange(e)
+        setFilterFn({
+          fn: items => {
+            if (target.value == 4)
+              /* no search text */
+              return items
+            else
+              return items.filter(x => x.estado
+                  .includes(target.value))
+          }
+        })
+    }
+
     function getRow ({...props}){
         setOpenPopup(true)
         setRow(props)
@@ -165,7 +187,8 @@ export default function MisSolicitudes() {
                     name="estadoID"
                     label="Estado de Solicitud"
                     value={values.estadoID}
-                    onChange={handleInputChange}
+                    onChange={handleSearchEstados}
+                    
                     options={getEstadoSolicitud()} 
                 />
                 </div>
@@ -183,7 +206,8 @@ export default function MisSolicitudes() {
                     <TableBody>
                     {
                        recordsAfterPagingAndSorting().map(item => (
-                            <Item item={item} getRow= {getRow} estado={estado}/>
+                            <Item item={item} getRow= {getRow} estado={estado} 
+                            handleSearchEstados={handleSearchEstados}/>
                         ))
                     }
                     </TableBody>
@@ -212,7 +236,8 @@ export default function MisSolicitudes() {
 }
 
 function Item(props){
-    const {item,getRow,estado} = props
+    const {item,getRow,handleSearchEstados} = props
+    
     return (
         <>
             <TableRow key={item.id}>
@@ -235,7 +260,10 @@ function Item(props){
                 </TableCell>
                 <TableCell >
                     <DT.Etiqueta
-                        type={item.estado==0?"enRevision":"delegado"}
+                        type={item.estado==0? "enviado":
+                            item.estado==1? "enRevision":
+                            item.estado==2? "delegado": "atendido"
+                        }
                     />
                 </TableCell>
                 <TableCell>
