@@ -10,9 +10,7 @@ export default function ConfirmDialog(props) {
     const styles = {
         dialog: {
             padding: theme.spacing(2),
-            position: 'absolute',
             top: theme.spacing(0)
-            // top: -40         // No funciona ni dentro de 'sx'
         },
         // dialogContent: {
         //     textAlign: 'center'

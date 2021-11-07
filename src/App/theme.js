@@ -38,7 +38,7 @@ const theme = createTheme({
       pendiente: {
         light: "#E9D630",
       },
-      /* Colores de mesa de partes */
+      /* Colores de mesa de partes (enRevision reusa "pendiente") */
       enviado: {
         light: "#3B4A81",
       },

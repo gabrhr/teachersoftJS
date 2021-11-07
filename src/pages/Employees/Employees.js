@@ -89,7 +89,7 @@ export default function Employees() {
           /* no search text */
           return items
         else {
-          //return DTLocalServices.filter(items, 'fullName', searchText)
+          return DTLocalServices.filter(items, 'fullName', searchText)
         }
       }
     })
@@ -165,7 +165,6 @@ export default function Employees() {
           <Controls.Button
               text={<SearchIcon />}
               onClick={handleSearch}
-              // onClick = {() => setOpenPopup(true)}
           />
           <Box sx={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
             <Controls.Button

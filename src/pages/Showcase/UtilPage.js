@@ -1,13 +1,12 @@
 /* Author: Mitsuo
  */
+import { Paper, Typography } from '@mui/material';
 import React from 'react'
 import { Controls } from '../../components/controls/Controls'
 import ConfirmDialog from '../../components/util/ConfirmDialog';
+import Popup from '../../components/util/Popup';
 
-/* try moving it to separate function.  ConfirmDialog alone is quite big. */
-
-export default function UtilPage() {
-    /* ConfirmDialog */
+function EjemploConfirmDialog() {
     const [confirmDialog, setConfirmDialog] = React.useState({ 
         isOpen: false, 
         title: '', 
@@ -15,46 +14,85 @@ export default function UtilPage() {
         onConfirm: () => onConfirm()
     })
 
+    /* Executes after Confirm button is pressed,  just before the popup closes */
     const onConfirm = () => {
-        setConfirmDialog({
-            ...confirmDialog,       // BUG: algo raro pasa aqui
-            subTitle: 'confirmado :O'
-        })
+        window.alert("ConfirmDialog: confirmado")
     }
 
-    /* MessageBoxOK (Manuel) */
-
-    /* TODO */
-
-    /* MessageBoxYesNo (Manuel) */
-
-    /* TODO */
-
-    /* Notification */
-
-    /* TODO */
-
-    /* Popup */
-
-    /* TODO */
+    /* abrir modal */
+    function onClickButtonConfirmDialog() {
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: true,
+            title: 'Dialogo de Confirmacion',
+            subTitle: 'Desea confirmar?',
+        })
+    }
 
     return (
         <div>
             <Controls.Button
-                text="ConfirmDialog"
-                onClick={() => {
-                    setConfirmDialog({
-                        ...confirmDialog,
-                        isOpen: true,
-                        title: 'Dialogo de Confirmacion',
-                        subTitle: 'Desea confirmar?',
-                    })
-                }}
+                text="Open"
+                onClick={onClickButtonConfirmDialog}
             />
+            {/* modals  */}
             <ConfirmDialog 
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
             />
         </div>
+    )
+}
+
+function EjemploPopup() {
+    const [openPopup, setOpenPopup] = React.useState(false)
+
+    /* open modal */
+    function handleOpenPopup() {
+        setOpenPopup(true)
+    }
+
+    /* Executed on exit */
+    function onClose() {
+        window.alert("Popup:  onClose()")
+    }
+
+    return (
+        <>
+            <Controls.Button
+                text="Open"
+                onClick={handleOpenPopup}
+            />
+            {/* modals  */}
+            <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                title="Popup Title"
+                onClose={onClose}
+            >
+                <div style={{width: "800px", height: "400px"}}>
+                    Heeeey,  I'm inside the paper inside the popup.
+                </div>
+            </Popup>
+        </>
+    )
+}
+
+export default function UtilPage() {
+    return (
+        <>
+            <Typography children="ConfirmDialog" />
+            <EjemploConfirmDialog />
+
+            <Typography pt={1} children="Popup" />
+            <EjemploPopup />
+
+            <Typography pt={1} children="Notificacion" />
+
+            <Typography pt={1} children="MessageBoxOK" />
+
+            <Typography pt={1} children="MessageBoxYesNo" />
+
+        </>
     )
 }
