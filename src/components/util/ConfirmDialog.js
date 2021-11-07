@@ -10,9 +10,7 @@ export default function ConfirmDialog(props) {
     const styles = {
         dialog: {
             padding: theme.spacing(2),
-            position: 'absolute',
             top: theme.spacing(0)
-            // top: -40         // No funciona ni dentro de 'sx'
         },
         // dialogContent: {
         //     textAlign: 'center'
@@ -58,11 +56,17 @@ export default function ConfirmDialog(props) {
                 <Controls.Button 
                     text="No"
                     variant="outlined"
-                    onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })} />
+                    onClick={() => {
+                        setConfirmDialog({ ...confirmDialog, isOpen: false })
+                    }}
+                />
                 <Controls.Button 
                     text="Yes"
                     color="primary"
-                    onClick = {confirmDialog.onConfirm}
+                    onClick={() => {
+                        setConfirmDialog({ ...confirmDialog, isOpen: false })
+                        confirmDialog.onConfirm()
+                    }}
                 />
             </DialogActions>
         </Dialog>
