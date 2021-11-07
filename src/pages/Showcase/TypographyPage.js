@@ -16,11 +16,11 @@ export default function TypographyPage() {
             <Typography variant="h3">
                 h3: Header
             </Typography>
-            <Typography variant="h4">
-                h4: Header
-            </Typography>
             <Typography variant="h5">
                 h5: Header
+            </Typography>
+            <Typography variant="h4">
+                h4: Header
             </Typography>
             <Typography variant="body1">
                 body1: The quick brown fox jumps over the lazy dog
