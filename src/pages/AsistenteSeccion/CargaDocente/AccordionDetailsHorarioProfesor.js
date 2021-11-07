@@ -2,12 +2,17 @@
  * 
  * Desc.:  Lista de profesores que va dentro del AccordionDetails
  */
-import React from 'react'
+import React, { useState } from 'react'
 import { Typography, Box, Paper } from '@mui/material'
 import { Grid, Divider, Avatar } from '@mui/material'
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import { styled } from '@mui/material/styles';
+import { Controls } from '../../../components/controls/Controls'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import Popup from '../../../components/util/Popup'
+import ModalBusquedaDocente from './ModalBusquedaDocente'
+import ModalDocenteClases from './ModalDocenteClases'
 
 function generateRow(docente) {
     return (
@@ -51,25 +56,70 @@ function generateRow(docente) {
 }
 
 export default function AccordionDetailsHorarioProfesor(props) {
-    const { docentes } = props
+    const { sesiones } = props
+    const [openEditarClasesPopup, setOpenEditarClasesPopup] = useState(false)
+    const [openEditarPracticasPopup, setOpenEditarPracticasPopup] = useState(false)
+    const seleccionarDocentesP = seleccionadosP => {
+        console.log(seleccionadosP)
+    }
+    const clase = sesiones.filter((ses)=>ses.secuencia==='Clase')
+    const laboratorio = sesiones.filter((ses)=>ses.secuencia==='Laboratorio')
     return (
-        <Paper elevation={1} sx={{p: 1}}>
-            <Typography
-                variant="h4"
-                py="4px"
-                color="primary"
+        <>
+            <Paper elevation={1} sx={{p: 1}}>
+                <Grid container>
+                    <Grid item xs={10}>
+                        <Typography
+                            variant="h4"
+                            py="4px"
+                            color="primary"
+                        >
+                            Lista de Docentes de Clases
+                        </Typography>
+                    </Grid>
+                    <Controls.Button
+                        variant="outlined"
+                        text="Editar"
+                        size="small"
+                        endIcon={<EditOutlinedIcon />}
+                        onClick={() => {setOpenEditarClasesPopup(true)}}
+                    />
+                </Grid>
+                {clase[0].sesiones_dictado.map(sesion_dic => generateRow(sesion_dic.persona))}
+                <Grid container>
+                    <Grid item xs={10}>
+                        <Typography
+                            variant="h4"
+                            py="4px"
+                            color="primary"
+                        >
+                            Lista de Docentes de Prácticas
+                        </Typography>
+                    </Grid>
+                    <Controls.Button
+                        variant="outlined"
+                        text="Editar"
+                        size="small"
+                        endIcon={<EditOutlinedIcon />}
+                        onClick={() => {setOpenEditarPracticasPopup(true)}}
+                    />
+                </Grid>
+                {laboratorio[0].sesiones_dictado.map(sesion_dic => generateRow(sesion_dic.persona))}
+            </Paper>
+            <Popup
+            openPopup={openEditarClasesPopup}
+            setOpenPopup={setOpenEditarClasesPopup}
+            title="Búsqueda de docentes para clases"
             >
-                Lista de Docentes de Clases
-            </Typography>
-            {docentes.clase.map(docente => generateRow(docente))}
-            <Typography
-                variant="h4"
-                py="4px"
-                color="primary"
+                <ModalDocenteClases docentesAsig={clase[0].sesiones_dictado.map(sesion_dic => sesion_dic.persona)}/>
+            </Popup>
+            <Popup
+            openPopup={openEditarPracticasPopup}
+            setOpenPopup={setOpenEditarPracticasPopup}
+            title="Búsqueda de docentes para prácticas"
             >
-                Lista de Docentes de Practicas
-            </Typography>
-            {docentes.lab.map(docente => generateRow(docente))}
-        </Paper>
+                <ModalDocenteClases docentesAsig={laboratorio[0].sesiones_dictado.map(sesion_dic => sesion_dic.persona)}/>
+            </Popup>
+        </>
     )
 }

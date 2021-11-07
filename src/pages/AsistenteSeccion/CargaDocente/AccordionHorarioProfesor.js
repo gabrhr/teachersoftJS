@@ -1,4 +1,10 @@
 /* Author: Mitsuo
+ *
+ * Registro de Carga Docente (asignar docentes a los horarios)
+ * 
+ * Componente donde se muestran los horarios de un curso seleccionado.  Cada
+ * horario se puede expandir y mostrar la lista de docentes actualmente
+ * asignados.
  */
 import React from 'react'
 import { Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
@@ -9,6 +15,7 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
 import HorarioService from '../../../services/horarioService';
 
+import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
     { id: '1', title: 'Horarios' },
@@ -97,95 +104,121 @@ const fillHorarios = async () => {
   return horarios;
 }
 */
+
+/*
+    El horaraio se recuperará - de un llamado axios que es - getHorariosxCicloxCurso - 
+    HORARIO{
+        id: numero - identificador,
+        codigo: codigo del horario - 0881 1081
+        curso:{
+            id: cursoid
+            nombre: nombre del curso
+            seccion:{
+                id:
+                departamento:{
+                    
+                }
+            }
+        }
+        ciclo:{
+            id: mismo id que se tiene seleccionado
+        }
+        sesiones:[{
+            //no esta pero para que se enteinda mejor: tipo_sesion: compartida- 0 [suma de profesores = horas] o codictado - 1[horas = horas_de_profesor]: 
+            secuencia: tipo del horario [clase o laboratorio: 0 o 1]
+            horas: hor.sesiones.horas [valor fijo ingresado de las horas que corresponden a la secuencia - Clase ocupa en su dictado 3 horas]
+            sesiones_dictado:[{
+                persona:{
+                    id_persona: es el docente como tal - su id - 
+                    el resto de datos:
+                    ---------------------------------------------------------
+                    PERSONA TAMBIEN CAMBIO
+                    deuda: del ciclo pasado - cuantas horas me debio?
+                    carga_horaria: este es el valor fijo - las horas que debería dictar un docente por cada ciclo - TP O TCA AUTOMTICO - 10 A 6
+                    carga_del_ciclo: 3              |carga: |carga_del_ciclo -> 8 + 3 = 11  > carga_horaria = 10|deuda: 2-1 = 1|
+                }
+                horas_dictadas: 3
+            },
+                {OTRO SESION_DICTADO
+                horas_dictadas: 3}
+        ]
+        }]
+    }
+*/
+
 const sampleData = [
     {
         id: '1',
         codigo: 'H0801',
         detalle: 'Clase: Jue 10:00 - 12 Vie 10:00 - 14:00',
         estado: 'Con Docente',
-        docentes: {
-            clase: [
-                {
-                    id: 20201234,
-                    nombre: 'Freddy Paz',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TC',
-                    cargaHoraria: 10,
-                    deudaHoraria: 2
-                }
-            ],
-            lab: [
-                {
-                    id: 20001234,
-                    nombre: 'Andres',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 6,
-                    deudaHoraria: 0
-                },
-                {
-                    id: 20004321,
-                    nombre: 'Bruno',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 4,
-                    deudaHoraria: 0
-                }
-            ]
-        }
-    },
-    {
-        id: '2',
-        codigo: 'H0802',
-        detalle: 'Clase: Mie 10:00 - 12 Sab 10:00 - 14:00',
-        estado: 'Sin Docente',
-        docentes: {
-            clase: [
-                {
-                    id: 20201234,
-                    nombre: 'Freddy Paz',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TC',
-                    cargaHoraria: 10,
-                    deudaHoraria: 2
-                }
-            ],
-            lab: [
-                {
-                    id: 20001234,
-                    nombre: 'Andres',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 6,
-                    deudaHoraria: 0
-                },
-                {
-                    id: 20004321,
-                    nombre: 'Bruno',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 4,
-                    deudaHoraria: 0
-                }
-            ]
-        }
+        sesiones: [
+            {
+                secuencia: 'Clase',
+                horas: 3,
+                sesiones_dictado:[
+                    {
+                        persona:{
+                            id: 20201234,
+                            nombre: 'Freddy Paz',
+                            seccion: 'Ing. Informatica',
+                            tipo: 'TC',
+                            cargaHoraria: 10,
+                            deudaHoraria: 2
+                        },
+                        horas_dictadas: 3
+                    }
+                ]
+            },
+            {
+                secuencia: 'Laboratorio',
+                horas: 2,
+                sesiones_dictado:[
+                    {
+                        persona:{
+                            id: 20001234,
+                            nombre: 'Andres',
+                            seccion: 'Ing. Informatica',
+                            tipo: 'TPA',
+                            cargaHoraria: 6,
+                            deudaHoraria: 0
+                        },
+                        horas_dictadas: 2
+                    },
+                    {
+                        persona:{
+                            id: 20004321,
+                            nombre: 'Bruno',
+                            seccion: 'Ing. Informatica',
+                            tipo: 'TPA',
+                            cargaHoraria: 4,
+                            deudaHoraria: 0
+                        },
+                        horas_dictadas: 2
+                    }
+                ]
+            }
+        ]
+        
     }
 ]
 
-function chompDocentes(docentes) {
+function chompDocentes(sesiones) {
+    const clase = sesiones.filter((ses)=>ses.secuencia==='Clase')
+    const laboratorio = sesiones.filter((ses)=>ses.secuencia==='Laboratorio')
     return (
         <>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Clase: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {docentes.clase.length} {"\n"}
+                {clase[0].sesiones_dictado.length} {"\n"}
             </Typography>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Lab: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {docentes.lab.length}
+                {laboratorio[0].sesiones_dictado.length}
             </Typography>
         </>
     )
@@ -212,7 +245,7 @@ function generateRow(horario) {
                 }
             </Box>
             <Box width="25%">
-                {chompDocentes(horario.docentes)}
+                {chompDocentes(horario.sesiones)}
             </Box>
         </>
     )
@@ -231,7 +264,7 @@ function generateRows(records) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsHorarioProfesor docentes={horario.docentes} />
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} />
                 </AccordionDetails>
             </Accordion>
         ))

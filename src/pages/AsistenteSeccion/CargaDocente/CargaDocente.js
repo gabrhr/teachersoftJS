@@ -99,31 +99,31 @@ function GetRow({ ...props }) {
 }
 
 
-//LLENADO DE LA LISTA DE CURSOS
-const fillCursos = async () => {
-  //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,""); 
-  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
-  const cursos = [];
-  dataCur.map(cur => (
-    cursos.push({
-      id: cur.id,
-      nombre: cur.nombre,
-      codigo: cur.codigo,
-      creditos: cur.creditos,
-      seccion: {
-        id: cur.seccion.id,
-        nombre: cur.seccion.nombre,
-        departamento:{
-          id:cur.seccion.departamento.id,
-          nombre:cur.seccion.departamento.nombre,
-        }
-      },
-    })
-    ));
-  //console.log(cursos);
-  return cursos;
-}
+// //LLENADO DE LA LISTA DE CURSOS
+// const fillCursos = async () => {
+//   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
+//   const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,""); 
+//   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+//   const cursos = [];
+//   dataCur.map(cur => (
+//     cursos.push({
+//       id: cur.id,
+//       nombre: cur.nombre,
+//       codigo: cur.codigo,
+//       creditos: cur.creditos,
+//       seccion: {
+//         id: cur.seccion.id,
+//         nombre: cur.seccion.nombre,
+//         departamento:{
+//           id:cur.seccion.departamento.id,
+//           nombre:cur.seccion.departamento.nombre,
+//         }
+//       },
+//     })
+//     ));
+//   //console.log(cursos);
+//   return cursos;
+// }
 
 
 export default function CargaDocente() {
@@ -148,14 +148,14 @@ export default function CargaDocente() {
     BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
-    React.useEffect(() => {
-      fillCursos()
-      .then (newCur =>{
-        setRecord(newCur);
+    // React.useEffect(() => {
+    //   fillCursos()
+    //   .then (newCur =>{
+    //     setRecord(newCur);
         
-        //console.log(newCur);
-      });
-    }, [])
+    //     //console.log(newCur);
+    //   });
+    // }, [])
 
   const handleSearch = e => {
     let target = e.target;
