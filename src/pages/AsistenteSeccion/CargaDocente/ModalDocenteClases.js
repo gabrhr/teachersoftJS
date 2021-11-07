@@ -27,25 +27,25 @@ const handleSubmit = e => {
 export default function ModalDocenteClases({docentesAsig}){
     const [recordsBusq, setRecordsBusq] = useState([
         {
-            codigo:1,
+            id:1,
             horasDocente:0,
-            deudaDocente: 2,
-            cargaDocente: 8,
-            nombreDocente: 'José'
+            deudaHoraria: 2,
+            cargaHoraria: 8,
+            nombre: 'José'
         },
         {
-            codigo:2,
+            id:2,
             horasDocente:0,
-            deudaDocente: 1,
-            cargaDocente: 9,
-            nombreDocente: 'Salomón'
+            deudaHoraria: 1,
+            cargaHoraria: 9,
+            nombre: 'Salomón'
         },
         {
-            codigo:3,
+            id:3,
             horasDocente:0,
-            deudaDocente: 4,
-            cargaDocente: 8,
-            nombreDocente: 'Lorena'
+            deudaHoraria: 4,
+            cargaHoraria: 8,
+            nombre: 'Lorena'
         }
     ])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
@@ -55,7 +55,7 @@ export default function ModalDocenteClases({docentesAsig}){
         <Form onSubmit={handleSubmit}>
             <Paper>
                 <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig}/>
-                <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq}/>
+                <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {setRecordsAsig} setRecordsAsig = {setRecordsAsig}/>
             </Paper>
             <Grid cointainer align="right" mt={5}>
                 <div>

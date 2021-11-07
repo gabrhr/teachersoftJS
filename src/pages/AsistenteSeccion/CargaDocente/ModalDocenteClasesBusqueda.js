@@ -45,10 +45,11 @@ const tableHeaders = [
      }
 ]
 
-export default function ModalDocenteClasesBusqueda({records, setRecords}){
+export default function ModalDocenteClasesBusqueda({records, setRecords, recordsAsig, setRecordsAsig}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [selectedRow, setSelectedRow] = useState(records.length+1)
     const [asignarDisabled, setAsignarDisabled] = useState(true)
+    const [profAdd, setProfAdd] = useState({})
 
     const {
         TblContainer,
@@ -78,23 +79,21 @@ export default function ModalDocenteClasesBusqueda({records, setRecords}){
       if(sel===selectedRow){
            setSelectedRow(records.length+1)
            setAsignarDisabled(true)
-          //  setBorrarDisabled(true)
-          //  setHorasAsig('')
-          //  setCargaHor('')
-          //  setDeudaHor('')
-          //  setProfDelete({})
       }else{
           setSelectedRow(sel)
           setAsignarDisabled(false)
-          // setBorrarDisabled(false)
-          // setHorasAsig(`${prof.horasDocente}`)
-          // setCargaHor(`${prof.cargaDocente}`)
-          // setCargaHorIni(`${prof.cargaDocente}`)
-          // setDeudaHor(`${prof.deudaDocente}`)
-          // setDeudaHorIni(`${prof.deudaDocente}`)
-          // setProfDelete(prof)
+          setProfAdd(prof)
       }
-  }
+    }
+
+    const addProf = () => {
+        console.log(profAdd)
+        setRecordsAsig(recordsAsig => [...recordsAsig, profAdd])
+        let items = records.filter((row) => row.codigo !== profAdd.codigo);
+        setRecords(items);
+        setSelectedRow(records.length+1)
+        setAsignarDisabled(true)
+    }
 
     return(
         <>
@@ -109,7 +108,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords}){
                 </Typography>
                 <Button
                   variant= "iconoTexto"
-                  onClick = {()=>{}}
+                  onClick = {()=>addProf()}
                   disabled = {asignarDisabled}
                 />
             </Grid>
@@ -132,14 +131,14 @@ export default function ModalDocenteClasesBusqueda({records, setRecords}){
             <TableBody>
             {
               recordsAfterPagingAndSorting().map(item => (
-              <StyledTableRow key={item.codigo} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
+              <StyledTableRow key={item.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                               sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                               onClick={()=>changeSelected(item)}>
-                  <StyledTableCell align="right">{item.codigo}</StyledTableCell>
-                  <StyledTableCell>{item.nombreDocente}</StyledTableCell>
-                  <StyledTableCell>{item.tipoDocente}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.cargaDocente}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.deudaDocente}</StyledTableCell>
+                  <StyledTableCell align="right">{item.id}</StyledTableCell>
+                  <StyledTableCell>{item.nombre}</StyledTableCell>
+                  <StyledTableCell>{item.tipo}</StyledTableCell>
+                  <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
+                  <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
               </StyledTableRow>
               ))
             }
