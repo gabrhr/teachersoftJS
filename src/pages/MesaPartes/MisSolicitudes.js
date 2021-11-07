@@ -114,20 +114,26 @@ export default function MisSolicitudes() {
         <Form>
             <ContentHeader text={"Mis solicitudes a Mesa de Partes"} cbo={false}/>
             {/* Buscador */}
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20 , width:"500px"}}>
-                
-                <Controls.Input
-                    label="Buscar Solicitud por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon/>
-                        </InputAdornment>
-                    )
-                    }}
-                    onChange={handleSearch}
-                    type="search"
-                />
+            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+                <div style={{width:"400px", marginRight:"50px"}}> 
+                    <Controls.Input
+                        label="Buscar Solicitud por Nombre"
+                        InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon/>
+                            </InputAdornment>
+                        )
+                        }}
+                        onChange={handleSearch}
+                        type="search"
+                    />
+                    
+                </div>
+                <div style={{ width:"360px",marginRight:"50px"}}> 
+                    <Controls.RangeTimePicker
+                    />
+                </div>
             </div>
             {/* Filtrados */}
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
@@ -135,15 +141,6 @@ export default function MisSolicitudes() {
                 <Controls.Select
                     name="departmentID"
                     label="Tema de Tramite"
-                    value={values.departmentID}
-                    onChange={handleInputChange}
-                    options={getTemaTramites()} 
-                />
-                </div>
-                <div style={{width:"200px",  marginRight:"50px"}}> 
-                <Controls.Select
-                    name="departmentID"
-                    label="Tipo Solicitud"
                     value={values.departmentID}
                     onChange={handleInputChange}
                     options={getTemaTramites()} 
@@ -158,7 +155,7 @@ export default function MisSolicitudes() {
                     options={getTemaTramites()} 
                 />
                 </div>
-                <div style={{ width:"60vw",textAlign: "right"}}>
+                <div style={{ width:"80vw",textAlign: "right"}}>
                 <Controls.AddButton
                     variant="iconoTexto"
                     text="Nueva Solicitud"
