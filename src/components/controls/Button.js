@@ -1,3 +1,7 @@
+/* Author: Mitsuo
+ * 
+ * Collection of buttons as reusable components.
+ */
 import React from 'react'
 import { Button as MuiButton, Typography } from '@mui/material'
 import IconButton from './IconButton'
@@ -20,52 +24,52 @@ import { Box } from '@mui/system';
  * - Button requiere las propiedades de CSS "color" y "backgroundcolor".  
  *   Entonces, hacer  `color="#00ff00"`  hara que no funcione.
  */
+
+function TextIconButton(props) {
+    let { text, size, color, variant, onClick, sx, ...other } = props
+    return (
+        <Box display="flex" flexDirection="row" alignItems="center">
+            <Typography display="inline"> 
+                {text}
+            </Typography>
+            <IconButton
+                color="secondary"
+                size="large"
+                sx={{
+                    color: "#fff",
+                    backgroundColor: "primary.main",
+                    "&:hover": {
+                        backgroundColor: "primary.light",
+                    }
+                }}
+                onClick={onClick}
+                { ...other }
+            >
+                <AddIcon />
+            </IconButton>
+        </Box>
+    )
+}
+
 export default function Button(props) {
     /* "strasdkjfls? syntax from JS" */
-    let {text, size, color, variant, onClick, sx, ...other} = props
-
-    /* opciones super sercretas */
-    if (variant === "asdf") {
-        variant="disabled"
-        text = ":)"
-    }
+    let { text, size, color, variant, onClick, sx, ...other } = props
 
     /* Variantes DreamTeam */
     if (variant === "normal") {
-        variant="contained"
+        variant = "contained"
     } else if (variant === "disabled") {
-        variant="contained"
-        color="disabled"
-        other={
+        variant = "contained"
+        color = "disabled"
+        other = {
             ...other,
             // disabled:true
         }
     } else if (variant === "white") {
-        variant="text"
-    }else if (variant=="iconoTexto"){
+        variant = "text"
+    } else if (variant === "text+icon" | variant === "iconoTexto") {
         return (
-            <Box display="inline" textAlign="center" > 
-            
-                <Typography pt={1.3}> {text} </Typography>
-                <IconButton 
-                    color="secondary"
-                    size="large"
-                    sx={{
-                        color: "#fff",
-                        backgroundColor: "primary.main",
-                      
-                        "&:hover" :{
-                            backgroundColor: "primary.light",
-                        }
-                    }}
-                    onClick={onClick}
-                    {
-                        ...other
-                    }
-                >
-                <AddIcon />
-           </IconButton>
-            </Box>
+            <TextIconButton {...props}/>
         );
     }
 
@@ -75,16 +79,16 @@ export default function Button(props) {
             size={size || "medium"}
             color={color || "DTButton"}
             onClick={onClick}
-            
+
             {...other}
             // classes={{root: classes.root}}
             /* FIXME: Combinar con sx pasada como propiedad.  O utilizar 
              *        CSS classes / rules */
             sx={{
                 ...sx,
-                borderRadius :'15px'
+                borderRadius: '15px'
             }}
-            >
+        >
             {text}
         </MuiButton>
     )

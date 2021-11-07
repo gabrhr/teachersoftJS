@@ -20,21 +20,15 @@ import SeccionService from '../../../services/seccionService.js';
 //import * as employeeService from '../../../services/employeeService'
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'SeccionID',
       numeric: true,
       sortable: true
-    },
+    },*/
     {
       id: 'nombre',
-      label: 'Nombre de la sección',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'fechaModificacion',
-      label: 'Última Modificación',
+      label: 'Nombre Sección',
       numeric: false,
       sortable: true
     },
@@ -45,8 +39,14 @@ const tableHeaders = [
         sortable: true
     },
     {
+      id: 'fechaModificacion',
+      label: 'Última Modificación',
+      numeric: false,
+      sortable: true
+    },
+    {
       id: 'actions',
-      label: 'Acción',
+      label: 'Acciones',
       numeric: false,
       sortable: false
     }
@@ -68,10 +68,8 @@ const getSecciones = async () => {
         nombre: seccion.nombre,
         fechaFundacion: seccion.fecha_fundacion,
         fechaModificacion: seccion.fecha_modificacion,
-        departamento:{
-          idDepartamento: seccion.departamento.id,
-          nombreDepartamento: seccion.departamento.nombre
-        },
+        idDepartamento: seccion.departamento.id,
+        nombreDepartamento: seccion.departamento.nombre,
         correo: seccion.correo
       })
       ));
@@ -85,11 +83,13 @@ export default function GestionSeccion() {
     const [openPopup, setOpenPopup] = useState(false)
     //const [seccion, setSeccion] = useState([])
     const [records, setRecords] = useState([])
+    const [deleteData, setDeleteData] = useState(false);
+    const [changeData, setChangeData] = useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState()
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
+    const PaperStyle={ borderRadius: '20px',  mt: 3,pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0}
     const [confirmDialog, setConfirmDialog] = useState(
       { isOpen: false, title: '', subtitle: '' })
@@ -102,7 +102,7 @@ export default function GestionSeccion() {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
 
-    const handleSearch = e => {
+    const handleSearch = (e) => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
          * objects.  Thus the function needs to be inside an object. */
@@ -124,12 +124,14 @@ export default function GestionSeccion() {
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
         console.log(newSeccion);
+        setDeleteData(false);
+        setChangeData(false);
       });
 
-    }, [recordForEdit])
+    }, [recordForEdit, deleteData, changeData])
 
     const addOrEdit = (seccion, resetForm) => {
-      
+
       recordForEdit
         ? SeccionService.updateSeccion(seccion, seccion.id)
         : SeccionService.registerSeccion(seccion)
@@ -139,6 +141,7 @@ export default function GestionSeccion() {
         })
       setOpenPopup(false)
       resetForm()
+      setChangeData(true);
       //window.location.replace('')
       setNotify({
         isOpen: true,
@@ -158,10 +161,11 @@ export default function GestionSeccion() {
       let pos = records.map(function(e) { return e.id; }).indexOf(idSeccion);
       records.splice(pos,1);
       SeccionService.deleteSeccion(idSeccion);
+      setDeleteData(true);
       setNotify({
         isOpen: true,
         message: 'Borrado Exitoso',
-        type: 'info'
+        type: 'success'
       })
     }
 
@@ -195,13 +199,11 @@ export default function GestionSeccion() {
             cbo={false}
           />
           <Paper variant="outlined" sx={PaperStyle}>
-            <Typography variant="h4" style={SubtitulosTable}>
-              Secciones
-            </Typography>
+            <Typography variant="h4" style={SubtitulosTable}> Secciones</Typography>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
               {/* <Toolbar> */}
                 <Controls.Input
-                  label="Buscar secciones por nombre"
+                  label="Buscar Secciones por Nombre"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -214,11 +216,13 @@ export default function GestionSeccion() {
                   type="search"
                 />
                 <Controls.AddButton
-                  title="Nueva Sección"
+                  title="Agregar Nueva Sección"
                   variant="iconoTexto"
                   onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                  //openInPopup();^
                 />
-              {/* <Toolbar> */}
+
+              {/* </Toolbar> */}
             </div>
             <BoxTbl>
               <TblContainer>
@@ -227,48 +231,60 @@ export default function GestionSeccion() {
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
-                        <StyledTableCell align="right">{item.id}</StyledTableCell>
-                        <StyledTableCell>{item.nombre}</StyledTableCell>
-                        <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
-                        <StyledTableCell>{item.departamento.nombreDepartamento}</StyledTableCell>
-                        <StyledTableCell>
-                          <Controls.ActionButton 
-                            color="warning" 
-                            onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}>
-                            <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          <IconButton aria-label="delete">
-                            <DeleteIcon
-                              color="warning"
-                              onClick={() => {
-                                setConfirmDialog({
-                                  isOpen: true,
-                                  title: '¿Eliminar seccion permanentemente?',
-                                  subTitle: 'No es posible deshacer esta accion',
-                                  onConfirm: () => {onDelete(item.id)}
-                                })
-                              }}
-                            />
-                          </IconButton>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                            <StyledTableCell align="left">
+                            {"Hora: "
+                            +item.fechaModificacion.slice(11,19)
+                            +"   -  Fecha: "
+                            +item.fechaModificacion.slice(8,10)
+                            +'/'
+                            +item.fechaModificacion.slice(5,7)
+                            +'/'
+                            +item.fechaModificacion.slice(0,4)}</StyledTableCell>
+                            <StyledTableCell>
+                              {/* Accion editar */}
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {setOpenPopup(true); setRecordForEdit(item)}}
+                              >
+                                <EditOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                              <IconButton aria-label="delete">
+                                <DeleteIcon
+                                color="warning"
+                                onClick={() => {
+                                  // onDelete(item.id)
+                                  setConfirmDialog({
+                                    isOpen: true,
+                                    title: '¿Eliminar seccion permanentemente?',
+                                    subTitle: 'No es posible deshacer esta accion',
+                                    onConfirm: () => {onDelete(item.id)}
+                                  })
+                                }}/>
+                              </IconButton>
+                            </StyledTableCell>
+                        </StyledTableRow>
+                        ))
+                    }
+                    </TableBody>
+                </TblContainer>
+                <TblPagination />
             </BoxTbl>
-          </Paper>
-          <Popup
-            openPopup={openPopup}
-            setOpenPopup={setOpenPopup}
-            title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
-          >
-            <AgregarEditarSeccion
-              recordForEdit={recordForEdit}
-              addOrEdit={addOrEdit}
-            />
-          </Popup>
+            </Paper>
+            <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
+            >
+              <AgregarEditarSeccion
+                addOrEdit={addOrEdit}
+                recordForEdit={recordForEdit}
+                setOpenPopup={setOpenPopup}
+                />
+
+              {/*  <AgregarEditarSeccion/> */}
+            </Popup>
             <Notification
               notify={notify}
               setNotify={setNotify}

@@ -4,10 +4,10 @@
 import React from 'react'
 import AccordionHorarioProfesor from './AccordionHorarioProfesor'
 
-export default function CargaDocenteHorarios() {
+export default function CargaDocenteHorarios(recordForEdit, setRecordForEdit) {
     return (
         <>
-            <AccordionHorarioProfesor />
+            <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit}/>
         </>
     )
 }

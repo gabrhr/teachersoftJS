@@ -5,15 +5,16 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import AgregarEditarDepartamento from './AgregarEditarDepartamento'
+import Notification from '../../../components/util/Notification'
+import ConfirmDialog from '../../../components/util/ConfirmDialog';
 /* ICONS */
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import SearchIcon from '@mui/icons-material/Search';
+
 import AddIcon from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import Notification from '../../../components/util/Notification'
-import ConfirmDialog from '../../../components/util/ConfirmDialog'
+//import Notification from '../../../components/util/Notification'
+//import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import DepartamentoService from '../../../services/departamentoService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import departamentoService from '../../../services/departamentoService';
@@ -22,14 +23,19 @@ import { Form } from '../../../components/useForm'
 //import AgregarEditarDepartamento from './AgregarEditarDepartamento'
 //import departamentoService from '../../../services/departamentoService';
 //import * as employeeService from '../../../services/employeeService'
+/* ICONS */
+import SearchIcon from '@mui/icons-material/Search';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 const tableHeaders = [
-    {
+    /*{
       id: 'id',
       label: 'DepartamentoID',
       numeric: true,
       sortable: true
     },
+    */
     {
       id: 'nombre',
       label: 'Nombre Completo',
@@ -42,12 +48,12 @@ const tableHeaders = [
       numeric: false,
       sortable: true
     },
-    {
+    /*{
       id: 'fechaFundacion',
       label: 'Fecha de Fundación',
       numeric: false,
       sortable: true
-    },
+    },*/
     {
       id: 'fechaModificacion',
       label: 'Última Modificación',
@@ -56,7 +62,7 @@ const tableHeaders = [
     },
     {
       id: 'actions',
-      label: 'Acción',
+      label: 'Acciones',
       numeric: false,
       sortable: false
     }
@@ -77,7 +83,7 @@ const usuarios2 = [
 
 const getDepartamentos = async () => {
   //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  let dataDep = await DepartamentoService.getDepartamentos(); 
+  let dataDep = await DepartamentoService.getDepartamentos();
   dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   console.log("AQUI ESTA EL DATASECC")
@@ -103,13 +109,17 @@ const getDepartamentos = async () => {
 export default function GestionDepartamento() {
 
     const [openPopup, setOpenPopup] = useState(false)
+    const [deleteData, setDeleteData] = useState(false)
+    const [createData, setCreateData] = useState(false);
+
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+    //const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
+
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevation:0}
+    const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
     /* notification snackbar */
     //const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     /* confirm dialog */
@@ -174,8 +184,10 @@ export default function GestionDepartamento() {
       .then (newDep =>{
         setRecords(newDep);
         console.log(newDep);
+        setDeleteData(false);
+        setCreateData(false);
       });
-    }, [recordForEdit])
+    }, [recordForEdit, deleteData, createData])
 
 
     const addOrEdit = (departamento, resetForm) => {
@@ -186,10 +198,10 @@ export default function GestionDepartamento() {
         if(recordForEdit)
           setRecordForEdit(null);
       })
-      window.location.replace('');
+      //window.location.replace('');
       setOpenPopup(false)
       resetForm()
-      
+      setCreateData(true);
       setNotify({
         isOpen: true,
         message: 'Registro de Cambios Exitoso',
@@ -199,20 +211,29 @@ export default function GestionDepartamento() {
     const onDelete = (idDepartamento) => {
       // if (!window.confirm('Are you sure to delete this record?'))
       //   return
+      setDeleteData(true);
       setConfirmDialog({
         ...confirmDialog,
         isOpen: false
       })
       console.log(records)
       console.log(idDepartamento)
+      //console.log(id)
       const nuevaTabla = records.filter(departamentoPorEliminar => departamentoPorEliminar.id !== idDepartamento)
       console.log(nuevaTabla)
       DepartamentoService.deleteDepartamento(idDepartamento);
+      //userService.borrarUsuario(idDepartamento)
+
+      /*DTLocalServices.getUsers().then((response) => {
+        setRecords(response.data)
+        console.log(response.data);
+      });*/
+      //setRecords(DTLocalServices.getAllPersonas())
 
       setNotify({
         isOpen: true,
         message: 'Borrado Exitoso',
-        type: 'info'
+        type: 'success'
       })
     }
 
@@ -230,7 +251,7 @@ export default function GestionDepartamento() {
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
               {/* <Toolbar> */}
               <Controls.Input
-                label="Buscar departamentos por nombre"
+                label="Buscar Departamentos por Nombre"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -244,7 +265,7 @@ export default function GestionDepartamento() {
               />
 
               <Controls.AddButton
-                title="Nuevo Departamento"
+                title="Agregar Nuevo Departamento"
                 variant="iconoTexto"
                 onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
               />
@@ -258,15 +279,18 @@ export default function GestionDepartamento() {
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
-                        <StyledTableCell
-                          align="right"
-                        >
-                          {item.id}
-                        </StyledTableCell>
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell>{item.correo}</StyledTableCell>
-                        <StyledTableCell>{item.fechaFundacion}</StyledTableCell>
-                        <StyledTableCell>{item.fechaModificacion}</StyledTableCell>
+                        {/*//<StyledTableCell>{item.fechaFundacion}</StyledTableCell>*/}
+                        <StyledTableCell align="left">
+                        {"Hora: "
+                        +item.fechaModificacion.slice(11,19)
+                        +"   -  Fecha: "
+                        +item.fechaModificacion.slice(8,10)
+                        +'/'
+                        +item.fechaModificacion.slice(5,7)
+                        +'/'
+                        +item.fechaModificacion.slice(0,4)}</StyledTableCell>
                         <StyledTableCell>
                           <Controls.ActionButton
                             color="warning"
@@ -296,7 +320,7 @@ export default function GestionDepartamento() {
               <TblPagination />
             </BoxTbl>
             </Paper>
-            {/* Modal */}
+
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
@@ -305,8 +329,19 @@ export default function GestionDepartamento() {
               <AgregarEditarDepartamento
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
+                setOpenPopup={setOpenPopup}
               />
               {/*  <GestionUsuariosForm/> */}
+              {/*            </Popup>
+            <Notification
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+            />
+              */}
             </Popup>
             <Notification
               notify={notify}

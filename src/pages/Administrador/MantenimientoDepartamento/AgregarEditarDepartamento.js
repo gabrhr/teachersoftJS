@@ -18,13 +18,13 @@ const initialFieldValues = {
 }
 
 export default function AgregarEditarDepartamento(props) {
-    const {addOrEdit, recordForEdit} = props
-    const theme = useTheme();
+    const {addOrEdit, recordForEdit, setOpenPopup} = props
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [departamento, setDepartamentos] = React.useState([]);
 
+    const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         align:"left",
@@ -35,7 +35,8 @@ export default function AgregarEditarDepartamento(props) {
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
         if ('correo' in fieldValues)
-            temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+            //temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+            temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido"
         setErrors({
@@ -60,7 +61,7 @@ export default function AgregarEditarDepartamento(props) {
         /* e is a "default parameter" */
         e.preventDefault()
         if (validate()){
-          window.alert('valid')
+          //window.alert('valid')
 
           const newDep = {
             id:values.id,
@@ -110,19 +111,20 @@ export default function AgregarEditarDepartamento(props) {
                             label="Correo Electrónico"
                             value={values.correo}
                             onChange = {handleInputChange}
-                            error={errors.corre}
+                            error={errors.correo}
                         />
                 </Grid>
+                {/*
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
-                <Grid item sx={5} style={ColumnGridItemStyle} align="center">
+                 <Grid item sx={5} style={ColumnGridItemStyle} align="center">
                     <Typography variant="h4" mb={2} >
                         FOTO REFERENCIAL
                     </Typography>
-                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} /> */}
+                    {/* <Avatar src="/broken-image.jpg" sx={{ width: 250, height: 250,mb:2}} />
                     <Avatar src={fotoPerfil} sx={{ width: 250, height: 250,mb:2}} />
-                        {/* <Avatar sx={{ width: 250, height: 250}}>
+                         <Avatar sx={{ width: 250, height: 250}}>
                             <img className="userImage" src="assets/img/profile-photo.png" alt="" />
-                        </Avatar> */}
+                        </Avatar>
                     <label htmlFor="contained-button-file">
                             <Input accept="image/*" id="contained-button-file"
                                 type="file" sx={{display: 'none'}}
@@ -149,7 +151,7 @@ export default function AgregarEditarDepartamento(props) {
                                 component="span"
                                 />
                         </label>
-                </Grid>
+                </Grid> */}
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>
@@ -157,7 +159,7 @@ export default function AgregarEditarDepartamento(props) {
                         // disabled={true}
                         variant="disabled"
                         text="Cancelar"
-                        onClick={resetForm}
+                        onClick={()=> setOpenPopup(false)}
                         />
                     <Controls.Button
                         // variant="contained"

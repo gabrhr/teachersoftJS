@@ -1,12 +1,12 @@
 /* Author: Gabriela, Mitsuo
- * 
+ *
  * Top level Router that routes all pages, sidebar and headers.
- * 
+ *
  * "HeaderUser" es el componente que combina Drawer + Header(s) + (Content)Page
- * 
+ *
  * Q: Cual es la diferencia entre Router y Switch?
  * A: Switch hace que solo se seleccione 1 Route.
- * 
+ *
  * Usar Link para los redireccionamientos.  Utilizar href hace que se
  * descargue de nuevo toda la pagina.  (`Link` enables client side routing)
  * Ref: https://www.youtube.com/watch?v=yQf1KbGiwiI
@@ -32,6 +32,10 @@ import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDesca
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import { UserContext } from './UserContext';
+import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
+import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
+import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
+import NoAsignado from './NoAsignado'
 
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -42,19 +46,24 @@ const privateroutes = [
   { requireRoles: [0,8], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
   { requireRoles: [0,8], path: "/admin/mantenimiento/sec", page: GestionSeccion },
   { requireRoles: [0,8], path: "/admin/mantenimiento/per", page: Vacio },
-  { requireRoles: [0,8], path: "/admin/showcase", page: Showcase },
+  { requireRoles: [0,1,2,3,4,5,6,7,8], path: "/admin/showcase", page: Showcase },
   { requireRoles: [0,8], path: "/admin/index", page: TestIndex },
   { requireRoles: [0,8], path: "/admin/employees", page: Employees },
   /* Docente */
+  /* TODO: Remover rol 8 (acceso temporal) */
+  { requireRoles: [0,1,8], path: "/doc/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
+  { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   /* AS */
-  { requireRoles: [2], path: "/as", page: AsistenteSeccion },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [0,2], path: "/as", page: AsistenteSeccion },
+  { requireRoles: [0,2], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
   // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
-  { requireRoles: [2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
-  { requireRoles: [2], path: "/as/docentes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
+  { requireRoles: [0,2], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [0,2], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [0,2], path: "/as/solicitudDocencia", page: Vacio },
+  { requireRoles: [0,2], path: "/as/docentes", page: Vacio },
+  { requireRoles: [0,2], path: "/as/mesaPartes", page: Vacio },
+
   /* CS */
   /* AD */
   /* CD */
@@ -71,9 +80,9 @@ export default function Router1(props) {
   return (
     <Router>
       <Switch>
-        {/* Rutas protegidas */}
+        {/* Rutas protegidas.  Page dentro de HeaderUser (headers+SideBar) */}
         {privateroutes.map(r =>
-          <PrivateRoute exact path={r.path} 
+          <PrivateRoute exact path={r.path}
           requireRoles={r.requireRoles}
           component={() =>
             <HeaderUser
@@ -83,9 +92,19 @@ export default function Router1(props) {
           >
           </PrivateRoute>
         )}
+        {/* Rutas protegidas. Page solita */}
+        <PrivateRoute exact path="/noRoles"
+          requireRoles={[0,8]}
+          component={() =>
+            <NoAsignado/>
+          }
+          >
+          </PrivateRoute>
+
+
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
-          <Route exact path={r.path} 
+          <Route exact path={r.path}
           render={({location}) =>
           <HeaderUser
           pagina={r.page}
