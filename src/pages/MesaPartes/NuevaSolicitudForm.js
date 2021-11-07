@@ -89,7 +89,7 @@ function ActualForm(props) {
                 <Grid item xs={6}>
                     <Controls.Select
                         name="tipoTramiteID"
-                        label="Departamento"
+                        label="Tipo de Trámite"
                         value={values.tipoTramiteID}
                         onChange={handleInputChange}
                         options={getTipoTramites()}

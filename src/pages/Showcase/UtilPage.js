@@ -4,6 +4,7 @@ import { Paper, Typography } from '@mui/material';
 import React from 'react'
 import { Controls } from '../../components/controls/Controls'
 import ConfirmDialog from '../../components/util/ConfirmDialog';
+import Notification from '../../components/util/Notification';
 import Popup from '../../components/util/Popup';
 
 function EjemploConfirmDialog() {
@@ -16,7 +17,7 @@ function EjemploConfirmDialog() {
 
     /* Executes after Confirm button is pressed,  just before the popup closes */
     const onConfirm = () => {
-        window.alert("ConfirmDialog: confirmado")
+        window.alert("ConfirmDialog: confirmado.")
     }
 
     /* abrir modal */
@@ -24,8 +25,8 @@ function EjemploConfirmDialog() {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: true,
-            title: 'Dialogo de Confirmacion',
-            subTitle: 'Desea confirmar?',
+            title: '(ConfirmDialog title)',
+            subTitle: '(ConfirmDialog subtitle)',
         })
     }
 
@@ -78,6 +79,65 @@ function EjemploPopup() {
     )
 }
 
+function EjemploNotificacion() {
+    /* notification snackbar */
+    const [notify, setNotify] = React.useState({
+        isOpen: false, 
+        message: '', 
+        type: ''
+    })
+
+    function handleShowNotification(e) {
+        let type = ""
+
+        if (e.target.id === 'notification-error-button')
+            type = "error"
+        else if (e.target.id === 'notification-info-button')
+            type = "info"
+        else if (e.target.id === 'notification-success-button')
+            type = "success"
+        else if (e.target.id === 'notification-warning-button')
+            type = "warning"
+
+        setNotify({
+            isOpen: true,
+            message: '(auto dissapears after 8 seconds)',
+            type: type,
+        })
+        // console.log(e)
+    }
+
+    return (
+        <>
+            <Controls.Button
+                id="notification-error-button"
+                text="error"
+                onClick={handleShowNotification}
+            />
+            <Controls.Button
+                id="notification-info-button"
+                text="info"
+                onClick={handleShowNotification}
+            />
+            <Controls.Button
+                id="notification-success-button"
+                text="success"
+                onClick={handleShowNotification}
+            />
+            <Controls.Button
+                id="notification-warning-button"
+                text="warning"
+                onClick={handleShowNotification}
+            />
+            {/* "modals" */}
+            <Notification
+                notify={notify}
+                setNotify={setNotify}
+            />
+        </>
+    )
+}
+
 export default function UtilPage() {
     return (
         <>
@@ -88,6 +148,7 @@ export default function UtilPage() {
             <EjemploPopup />
 
             <Typography pt={1} children="Notificacion" />
+            <EjemploNotificacion />
 
             <Typography pt={1} children="MessageBoxOK" />
 
