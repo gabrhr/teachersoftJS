@@ -265,7 +265,7 @@ export default function GestionDepartamento() {
               />
 
               <Controls.AddButton
-                title="Agregar Nuevo Departamento"
+                title="Nuevo departamento"
                 variant="iconoTexto"
                 onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
               />

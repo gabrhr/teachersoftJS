@@ -20,6 +20,7 @@ import UserService from '../../../services/userService';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import FormControl from '@mui/material/FormControl';
 
 const initialFieldValues = {
   seccionID: '',
@@ -305,18 +306,6 @@ export default function GestionUsuarios() {
         text="Gestión de usuarios"
         cbo={false}
       />
-      <Form>
-        <Box display="flex" width={.2} mb={4}  mt={3}>
-          <Controls.Select
-            name="seccionID"
-            label="Sección"
-            value={values.seccionID}
-            onChange={handleInputChange}
-            options={DTLocalServices.getAllSecciones()}
-            size="medium"
-          />
-        </Box>
-      </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
         <Typography variant="h4" style={SubtitulosTable} >
@@ -337,8 +326,20 @@ export default function GestionUsuarios() {
             onChange={handleSearch}
             type="search"
           />
+          <FormControl style={{minWidth: 200}}>
+        {/* <Box display="flex" width={.2} mb={4}  mt={3}> */}
+          <Controls.Select
+            name="seccionID"
+            label="Sección"
+            value={values.seccionID}
+            onChange={handleInputChange}
+            options={DTLocalServices.getAllSecciones()}
+            size="medium"
+          />
+        {/* </Box> */}
+      </FormControl>
           <Controls.AddButton
-            title="Agregar Nuevo Usuario"
+            title="Nuevo usuario"
             variant="iconoTexto"
             onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
           />
