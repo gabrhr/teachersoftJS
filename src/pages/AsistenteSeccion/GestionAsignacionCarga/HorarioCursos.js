@@ -22,6 +22,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
+    /*{
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
+      sortable: true
+    },*/
     {
       id: 'claveCurso',
       label: 'Clave',

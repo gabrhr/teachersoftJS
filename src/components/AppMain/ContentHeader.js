@@ -8,7 +8,6 @@ import React from 'react'
 import { Controls } from '../controls/Controls';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
-import * as DTLocalServices from '../../services/DTLocalServices';
 import { Form, useForm } from '../useForm'
 import { useTheme } from '@mui/material/styles'
 import cicloService from "../../services/cicloService";
@@ -61,16 +60,16 @@ function CboCiclo(props) {
     } = useForm(initialFieldValues);
     //console.log(values);
 
-    React.useEffect(() => {
-      fillCiclos()
-      .then (newCiclo => {
-        setCiclos(newCiclo[0]);
-        setCicloActual(newCiclo[1]);
-        setValues(newCiclo[1]); //Si aca no lo hacemos directo - se muere porque no prometemos antes el CicloActual
-        //console.log("Ciclo: ",cicloActual);
-        //console.log("Values: ", values);
-      });
-    }, [])
+    // React.useEffect(() => {
+    //   fillCiclos()
+    //   .then (newCiclo => {
+    //     setCiclos(newCiclo[0]);
+    //     setCicloActual(newCiclo[1]);
+    //     setValues(newCiclo[1]); //Si aca no lo hacemos directo - se muere porque no prometemos antes el CicloActual
+    //     //console.log("Ciclo: ",cicloActual);
+    //     //console.log("Values: ", values);
+    //   });
+    // }, [])
     //console.log("Values: ", values);
     /*UNA VEZ ACTUALIZAMOS LOS DATOS DE VALUES - LE PASAMOS EL CICLOACTUAL PARA QUE SEA EL DEFAULT */
 

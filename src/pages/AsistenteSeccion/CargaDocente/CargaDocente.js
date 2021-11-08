@@ -100,7 +100,7 @@ function GetRow({ ...props }) {
 }
 
 
-//LLENADO DE LA LISTA DE CURSOS
+// //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
   const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
@@ -228,7 +228,7 @@ export default function CargaDocente() {
         : (<> </>)
       }
       {/* <Toolbar> */}
-      <Grid container sx={{ mb: 3, bgcolor: "#fff" }} display={horarios ? "none" : "flex"}>
+      <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
           <Controls.Input
             label="Buscar Cursos por Nombre o Clave"

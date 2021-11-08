@@ -9,13 +9,14 @@ $ npm install xlsx
 
 import React, { useEffect } from 'react'
 import './App.css';
-import { CssBaseline } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, formLabelClasses } from '@mui/material';
+/* PAGES */
+import {ThemeProvider} from '@mui/material/styles';
 import theme from './theme.js'
-import Router1 from '../constants/Router1'
-
+import HeaderUser from '../components/PageComponents/HeaderUser';
 import fotoUsuario from '../assets/images/profile-photo.png'
 import { UserProvider } from '../constants/UserContext';
+import Router1 from '../constants/Router1';
 
 // const usuarioInit = {
 //   fullName: "Abel Ackermann",
