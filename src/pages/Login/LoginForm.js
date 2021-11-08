@@ -10,8 +10,6 @@ import { useState } from 'react';
 import tokens from '../../services/tokens';
 import HeaderUser from '../../components/PageComponents/HeaderUser';
 import Vacio from '../Dev/Vacio';
-import axios from 'axios';
-import { useGoogleAuth } from './googleAuth';
 
 const initialFieldValues = {
   id: 0,

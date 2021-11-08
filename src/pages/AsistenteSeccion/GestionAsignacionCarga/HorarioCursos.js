@@ -22,6 +22,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
+    /*{
+      id: 'id',
+      label: 'SeccionID',
+      numeric: true,
+      sortable: true
+    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -84,12 +90,12 @@ const fillHorarios = async () => {
     //console.log(hor.id);
     //console.log(hor.sesiones[0].secuencia);
     //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
-    //console.log(sesion1); 
+    //console.log(sesion1);
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas, 
+      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
       ciclo:{
         "id": hor.ciclo.id,
       },
@@ -115,7 +121,7 @@ const fillHorarios = async () => {
         "id": hor.id,
         "codigo": hor.codigo,
         "tipo": hor.sesiones[0].secuencia,
-        "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
+        "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
         ciclo:{
           "id": hor.ciclo.id,
         },
@@ -125,7 +131,7 @@ const fillHorarios = async () => {
           "nombre": hor.curso.nombre,
           "creditos": hor.curso.creditos,
           "unidad": hor.curso.unidad,
-          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
+          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-'
         },
         sesiones:{
           "secuencia": hor.sesiones[1].secuencia,
@@ -179,7 +185,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
         setRecords(newHorarios);
         setCargaH(records);
       });
-      console.log(records);
+      
     }, [])
   
     //console.log(records);
@@ -275,7 +281,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    {console.log(records)}
+                    {/*console.log(records)*/}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
@@ -313,7 +319,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                 <TblPagination />
             </BoxTbl>
                 <Controls.Button
-                text="Eliminar todos los cursos"
+                text="Eliminar todos los horarios"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
@@ -322,14 +328,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
-                title="Eliminar curso"
+                title="Eliminar horario"
             >
               <EliminarUnCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
             <Popup
                 openPopup={openAllPopup}
                 setOpenPopup={setOpenAllPopup}
-                title="Eliminar cursos"
+                title="Eliminar todos los horarios"
             >
               <EliminarTodosLosCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
             </Popup>
