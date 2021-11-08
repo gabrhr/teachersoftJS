@@ -11,6 +11,9 @@ import ModalAsignacionCarga from './ModalAsignacionCarga';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import { getHorarios, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+import { Link } from '@mui/material';
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion) {
@@ -104,7 +107,37 @@ export default function AsistenteSeccion() {
         formatHorario('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
       ];
     
-     
+    /*Bota tu ga nomás*/
+    
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+
+    const fileExtension = '.xlsx';
+
+    const exportToCSV = (csvData, fileName) => {
+
+        const ws = XLSX.utils.json_to_sheet(csvData);
+
+        const wb = { Sheets: { 'Carga_Horaria': ws }, SheetNames: ['Carga_Horaria'] };
+
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+        const data = new Blob([excelBuffer], {type: fileType});
+
+        FileSaver.saveAs(data, fileName + fileExtension);
+
+    }
+
+    const vacio = [{
+        "Clave": " ",
+        "Nombre": " ",
+        "Unidad": " ",
+        "Creditos": " ",
+        "Carga_Horaria": " ",
+        "Horario": " ",
+        "Tipo": " ",
+        "Horas": " "
+    }];
+
     //let listHorario = getHorario(-1);
       //LO DE GABRIELA
     const [records, setRecords] = useState([])
@@ -120,8 +153,11 @@ export default function AsistenteSeccion() {
             />
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
-                    <Typography variant="body1">
-                        Puedes descargar la plantilla en Excel para subir la carga de horario de un determinado curso.
+                    <Typography variant="button" style={{ fontSize: '10px' }}> Puedes&nbsp;
+                        <Link style={{ fontSize: '10px' }} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
+                        descargar la plantilla en Excel
+                        </Link>
+                        &nbsp;para subir la carga de horario de un determinado curso.
                     </Typography>
                 </Grid>
                 <Grid item xs={3} align="right" m={1}>
