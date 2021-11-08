@@ -108,6 +108,9 @@ export default function SolicitudDetalle() {
                     size = '18px'
                     lineheight = '150%'
                 />
+                <DT.PhaseStepper>
+                    
+                </DT.PhaseStepper>
             </Grid>
         </Grid>
         <Grid item xl={6} md={6} sm={12} xs={12}>

@@ -102,7 +102,7 @@ function GetRow({ ...props }) {
 //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,""); 
+  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,"");
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const cursos = [];
   dataCur.map(cur => (
@@ -111,6 +111,8 @@ const fillCursos = async () => {
       nombre: cur.nombre,
       codigo: cur.codigo,
       creditos: cur.creditos,
+      fechaCreacion:cur.fecha_modificacion,
+      fechaModificacion: cur.fecha_creacion,
       seccion: {
         id: cur.seccion.id,
         nombre: cur.seccion.nombre,
@@ -247,7 +249,7 @@ export default function CargaDocente() {
               </Typography>
               <CargaDocenteHorarios recordForEdit = {recordsForEdit} setRecordForEdit = {setRecordForEdit} />
             </>
-          ) 
+          )
           : (
           <>
             <Typography variant="h4" style={SubtitulosTable}>
@@ -263,7 +265,7 @@ export default function CargaDocente() {
                         <StyledTableCell>{item.codigo}</StyledTableCell>
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell>{item.seccion ? item.seccion.departamento.nombre : ""}</StyledTableCell>
-                        <StyledTableCell>{item.creditos}</StyledTableCell>  
+                        <StyledTableCell>{item.creditos}</StyledTableCell>
                         <StyledTableCell>
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
