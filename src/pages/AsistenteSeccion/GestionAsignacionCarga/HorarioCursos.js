@@ -84,12 +84,12 @@ const fillHorarios = async () => {
     //console.log(hor.id);
     //console.log(hor.sesiones[0].secuencia);
     //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
-    //console.log(sesion1);
+    //console.log(sesion1); 
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas,
+      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas, 
       ciclo:{
         "id": hor.ciclo.id,
       },
@@ -99,14 +99,12 @@ const fillHorarios = async () => {
         "nombre": hor.curso.nombre,
         "creditos": hor.curso.creditos,
         "unidad": hor.curso.unidad,
-        "facultad": hor.curso.seccion.departamento.unidad.nombre,
+        "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
       },
       sesiones:{
         "secuencia": hor.sesiones[0].secuencia,
         "sesiones_dictado": [],
         "hora_sesion": hor.sesiones[0].horas,
-        "fechaCreacion":hor.fecha_creacion,
-        "fechaModificacion":hor.fecha_modificacion
       },
     })
     //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
@@ -117,7 +115,7 @@ const fillHorarios = async () => {
         "id": hor.id,
         "codigo": hor.codigo,
         "tipo": hor.sesiones[0].secuencia,
-        "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas,
+        "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
         ciclo:{
           "id": hor.ciclo.id,
         },
@@ -127,7 +125,7 @@ const fillHorarios = async () => {
           "nombre": hor.curso.nombre,
           "creditos": hor.curso.creditos,
           "unidad": hor.curso.unidad,
-          "facultad": hor.curso.seccion.departamento.unidad.nombre
+          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
         },
         sesiones:{
           "secuencia": hor.sesiones[1].secuencia,
@@ -156,7 +154,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
     const [indexDelete, setIndexDelete] = useState(0)
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
     const {
         TblContainer,
@@ -181,9 +179,9 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
         setRecords(newHorarios);
         setCargaH(records);
       });
-
+      console.log(records);
     }, [])
-
+  
     //console.log(records);
     //console.log(indexDelete);
 
@@ -228,13 +226,13 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
       //De nuevo, solo para comprobar que existen ambos campos en pantalla - solo en pantalla.
       pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
       records.splice(pos,1);
-      //setRecords();
+      //setRecords(); 
       HorarioService.deleteHorario(indexDelete);
       setOpenOnePopup(false)
     }
 
     return (
-        <Form>
+        <Form>            
             <Typography variant="h4"
                 color="primary.light" style={SubtitulosTable}
             >
@@ -253,7 +251,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                                 maxWidth: .7
                             }}
                         />
-                        {/* <Controls.Button
+                        {/* <Controls.Button  
                             text={<SearchIcon/>}
                             size="small"
                             sx = {{
@@ -266,7 +264,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                 {/* FIX:  left align */}
                 <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
-                    <Controls.AddButton
+                    <Controls.AddButton 
                         title="Agregar Nuevo Horario"
                         variant="iconoTexto"
                         onClick = {(event) => handleClick(event)}
@@ -278,7 +276,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                     <TblHead />
                     <TableBody>
                     {console.log(records)}
-                    {records.length > 0 ?
+                    {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
                             {/*<TableCell
@@ -305,9 +303,9 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                         </TableRow>
                         ))
                         :   (
-                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>
-                                No hay elementos en la tabla.
-                            </Typography>
+                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
+                                No hay elementos en la tabla. 
+                            </Typography>  
                             )
                     }
                     </TableBody>
