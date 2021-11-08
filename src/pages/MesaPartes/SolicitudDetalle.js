@@ -16,22 +16,39 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const initialFieldValues = {
     seccionID: '',
   }
+
+function crearEstado(estado, titulo, contenido,fecha, completado) {
+    return {
+        estado, titulo, contenido, fecha,completado
+    }
+}
+
+
+const estadosTrackingInit =[
+    crearEstado(1, 'Enviado',"", "15/08/2021 14:00", true),
+    crearEstado(2, 'En revisión',"", "15/08/2021 14:00", true),
+    crearEstado(3, 'Delegado', "Roberto Mitsuo Tokumori","15/08/2021 14:00", true),
+    crearEstado(4, 'Atendido',"" ,"15/08/2021 14:00", true),
+    crearEstado(5, 'Resultado',"", "15/08/2021 14:00", true),
+]
     
 
 export default function SolicitudDetalle() {
-
-    const [records, setRecords] = useState([])
+    const [records, setRecords] = useState()
     /* no filter function initially */
-
     /* STYLES
     * ====== */
     const SubtitulosTable = { display: "flex" }
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
 
+    const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit)
   
-
     return (
         <>
+        <ContentHeader
+            text="Mesa de Partes - Detalle de la solicitud"
+            cbo={false}
+        />
         <Grid
             container
             ml={-1}
@@ -40,21 +57,12 @@ export default function SolicitudDetalle() {
             justifyContent="flex-start"
             alignItems="center"
         >
-
-        <Grid  item xs={6} md={8} >
-          <ContentHeader
-            text="Mesa de Partes - Detalle de la solicitud"
-            cbo={false}
-          />
-        </Grid>
-        <Grid   item xs={6} md={3}     ></Grid>
-        <Grid item xs={6} md={1} >
+        <Grid item xs={6} md={1} mb={3}>
             <Controls.Button
-                text ="Volver"
                 variant="outlined"
-                size='small'
-                fullWidth
-                
+                text="Regresar"
+                size="small"
+                startIcon={<ArrowBackIcon />}
             />
           </Grid>
         </Grid>
@@ -62,11 +70,7 @@ export default function SolicitudDetalle() {
          <Grid container spacing={2}>
             <Grid item xs={6} md={8}>
                 <Box>
-                    <Controls.DreamTitle
-                        title ={'Trámite: ' + 'Nombre del trámite - Ejemplo'}
-                        size = '25px'
-                        lineheight = '150%'
-                    />
+                    <DT.Title size="medium" text={'Trámite: ' + 'Nombre del trámite - Ejemplo'} />
                     <Typography variant = "subtitle1">
                         Sección: {' ' + 'Ingeniería '}
                     </Typography>
@@ -101,16 +105,14 @@ export default function SolicitudDetalle() {
                 </Box>
             </Grid>
             <Grid item xs={0.3} md={0.3}/>
-            <Divider orientation="vertical" flexItem sx={{marginTop : '20px'}} />
+            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"50px", ml:"20px"}} />
             <Grid item xs={6} md={3}>
                 <Controls.DreamTitle
                     title ={'Respuesta a la Solicitud'}
                     size = '18px'
                     lineheight = '150%'
                 />
-                <DT.PhaseStepper>
-                    
-                </DT.PhaseStepper>
+                <DT.Tracking estadosTracking={estadosTracking}/>
             </Grid>
         </Grid>
         <Grid item xl={6} md={6} sm={12} xs={12}>
