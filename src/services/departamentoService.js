@@ -13,9 +13,8 @@ const getDepartamentos = async () => {
 const getDepartamento = async (id) => {
     try{
         //const request = await axios.get(`${url}/departamento/${id}`, id, tokenService.getToken());
-        const request = await axios.get(`${url}/departamento/${id}`, tokenService.GetTokenPrueba());
-        if(!request)
-          return request.data;
+        const request = await axios.get(`${url}/departamento/${id}`, tokenService.GetTokenPrueba(),id);
+        return request.data;
     } catch (except){
         console.error(except);
     }

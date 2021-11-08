@@ -57,10 +57,9 @@ const tableHeaders = [
 async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   if(otroHorario === 1){  //Si otorHorario = 1 - entonces si es nuevo horario
     //const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
-
+    console.log(hor.curso.codigo)
     await cursoService.getCursosxCodigoNombre(hor.curso.codigo)
       .then(request => {
-        //console.log(request);
         postHorario = {
           "codigo": hor.codigo,
           //"tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
@@ -293,6 +292,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         setCargaH(records);
       }
       setOpenPopup(false) 
+      console.log(postHorario);
        /*  setRecords(employeeService.getAllEmployees()) */
     }
     

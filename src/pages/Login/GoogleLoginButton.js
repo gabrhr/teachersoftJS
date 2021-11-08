@@ -12,13 +12,11 @@ import userService from '../../services/userService';
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 const GoogleLoginButton = () => {
     const history = useHistory();
-    const { user, setUser, rol,setRol,setToken } = useContext(UserContext);
+    const { user, setUser, rol, setRol, setToken } = useContext(UserContext);
     const [loading, setLoading] = useState(undefined);
     const [current, setCurrent] = useState(undefined);
 
     const onLogoutSuccess = () => {
-       /*  setRol({});
-        setUser({}) */
         localStorage.clear();
         history.push('/')
     }
@@ -70,7 +68,8 @@ const GoogleLoginButton = () => {
                     persona:{
                         apellidos: response.profileObj.familyName,
                         nombres: response.profileObj.givenName,
-                        foto_URL: response.profileObj.imageUrl,
+                        correo_pucp: response.profileObj.email,
+                        foto_URL: response.profileObj.imageUrl
                     }
             }
 
