@@ -86,21 +86,18 @@ export default function Router1(props) {
           requireRoles={r.requireRoles}
           component={() =>
             <HeaderUser
-            pagina={r.page}
+              pagina={r.page}
             />
           }
-          >
-          </PrivateRoute>
+          />
         )}
 
         {/* Rutas protegidas. Page solita */}
-        <PrivateRoute exact path="/noRoles"
-          requireRoles={[0,8]}
+        <Route exact path="/noRoles"
           component={() =>
             <NoAsignado/>
           }
-          >
-          </PrivateRoute>
+        />
 
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
@@ -113,9 +110,10 @@ export default function Router1(props) {
         >
           </Route>
         )} */}
-        {/* Login */}
+        {/* Rutas calatitas */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/" children={Login} />
+        <Route exact path="/noRoles" component={() => <NoAsignado/> } />
       </Switch>
     </Router>
   )
