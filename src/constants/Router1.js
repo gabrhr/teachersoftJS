@@ -36,6 +36,7 @@ import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 import NoAsignado from './NoAsignado'
+import Error404 from '../pages/Dev/Error404'
 
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -116,6 +117,7 @@ export default function Router1(props) {
         {/* Login */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/" children={Login} />
+        <Route default children={Error404} />
       </Switch>
     </Router>
   )
