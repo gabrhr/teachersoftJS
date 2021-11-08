@@ -185,9 +185,8 @@ function registerTipo() {
 
 /* Solicitud CRUD operations 
  * ===================================*/
-export function getSolicitudes() {
-    let solicitudes = []
-    axios({
+export async function getSolicitudes() {
+    return await axios({
         method: 'get',
         url: `${url}/mesa/`,
         ...config
@@ -198,10 +197,9 @@ export function getSolicitudes() {
             });
             // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
             // showOutput(res)
-            solicitudes = res.data
+            return res.data
         })
         .catch(err => console.error(err));
-    return solicitudes
 }
 
 /* id: int */
