@@ -12,7 +12,7 @@ const GetTokenPrueba = () => {
     }
   };
 
-  console.log(config);
+  //console.log(config);
   return config;
   //return `Bearer ${newToken.token}`;  //Bearer si se utiliza dicha cabecera - de autenticacion
 }

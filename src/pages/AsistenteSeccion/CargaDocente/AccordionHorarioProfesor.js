@@ -146,80 +146,55 @@ const fillHorarios = async () => {
     }
 */
 
-const sampleData = [
-    {
-        id: '1',
-        codigo: 'H0801',
-        detalle: 'Clase: Jue 10:00 - 12 Vie 10:00 - 14:00',
-        estado: 'Con Docente',
-        sesiones: [
-            {
-                secuencia: 'Clase',
-                horas: 3,
-                sesiones_dictado:[
-                    {
-                        persona:{
-                            id: 20201234,
-                            nombre: 'Freddy Paz',
-                            seccion: 'Ing. Informatica',
-                            tipo: 'TC',
-                            cargaHoraria: 10,
-                            deudaHoraria: 2
-                        },
-                        horas_dictadas: 3
-                    }
-                ]
-            },
-            {
-                secuencia: 'Laboratorio',
-                horas: 2,
-                sesiones_dictado:[
-                    {
-                        persona:{
-                            id: 20001234,
-                            nombre: 'Andres',
-                            seccion: 'Ing. Informatica',
-                            tipo: 'TPA',
-                            cargaHoraria: 6,
-                            deudaHoraria: 0
-                        },
-                        horas_dictadas: 2
-                    },
-                    {
-                        persona:{
-                            id: 20004321,
-                            nombre: 'Bruno',
-                            seccion: 'Ing. Informatica',
-                            tipo: 'TPA',
-                            cargaHoraria: 4,
-                            deudaHoraria: 0
-                        },
-                        horas_dictadas: 2
-                    }
-                ]
-            }
-        ]
-        
-    }
-]
-
 function chompDocentes(sesiones) {
-    const clase = sesiones.filter((ses)=>ses.secuencia==='Clase')
-    const laboratorio = sesiones.filter((ses)=>ses.secuencia==='Laboratorio')
+    const clase = sesiones.filter((ses)=>ses.secuencia===0)
+    const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
     return (
         <>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Clase: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {clase[0].sesiones_dictado.length} {"\n"}
+                {clase.sesion_docentes ? clase.sesion_docentes.length : 0} {"\n"}
             </Typography>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Lab: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {laboratorio[0].sesiones_dictado.length}
+                {laboratorio.sesion_docentes ? laboratorio.sesion_docentes.length : 0}
             </Typography>
+        </>
+    )
+}
+
+function chompDetalles(sesiones) {
+
+  const horasLaboratorio = (laboratorio) => {
+    return(
+      <>
+      <Typography display="inline" whiteSpace="pre">
+          {"Horas de Laboratorio: "}
+      </Typography>
+      <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+        {laboratorio.horas}
+      </Typography>
+      </>
+    )
+  }
+
+    const clase = sesiones.filter((ses)=>ses.secuencia===0)
+    const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
+    if(!laboratorio) laboratorio = []
+    console.log("clase: ", clase, "laboratorio: ", laboratorio);
+    return (
+        <>
+            <Typography display="inline" whiteSpace="pre">
+                {"Horas de Clase: "}
+            </Typography>
+            <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+                {clase[0].horas} {"\n"}
+            </Typography>
+            {laboratorio[0] ? horasLaboratorio(laboratorio[0]) : ""}
         </>
     )
 }
@@ -233,14 +208,14 @@ function generateRow(horario) {
                     {horario.codigo}
                 </Typography>
             </Box>
-            <Box width="25%" alignItems="center" display="flex">
-                {horario.detalle}
+            <Box width="25%" >
+                {chompDetalles(horario.sesiones)}
             </Box>
             <Box width="25%" alignItems="center" display="flex">
                 {
-                    horario.estado === "Con Docente"
-                        ? <DT.Etiqueta type="success" text="Con Docente"/>
-                        : <DT.Etiqueta type="error" text="Sin Docente" 
+                    horario.estado === "Horas Asignadas"
+                        ? <DT.Etiqueta type="success" text="Horas Asignadas"/>
+                        : <DT.Etiqueta type="error" text="Faltan Horas" 
                             icon={<CancelOutlinedIcon/>}/>
                 }
             </Box>
@@ -271,21 +246,68 @@ function generateRows(records) {
     )
 }
 
+const hallarDetalle = (sesiones) => {
+  let hor_clases = 0, hor_labs = 0;
+  //Vamos a desintegrar el horario para hallar su detalle
+  for (let ses of sesiones) {
+    ses.secuencia ? (hor_clases = ses.horas) : (hor_labs = ses.horas);
+  }
+  const detalle_lab = hor_labs ? `\n Horas de Laboratorio: ${hor_labs}` : ``;
+  const detalle = `Horas de Clase: ${hor_clases} ${detalle_lab}`;
+  return detalle;
+}
+
+const hallarEstado = (sesiones) => {
+  let estado;
+  //Vamos a desintegrar el horario para hallar su estado
+  for (let ses of sesiones) {
+    let sumaHorasdoc = 0;
+    if(ses.sesion_docentes){
+      for (let docente of ses.sesion_docentes){
+        sumaHorasdoc += docente.hora_sesion; 
+      }
+    }
+    //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
+    (sumaHorasdoc < sesiones.horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+    if(estado === "Faltan Horas") break;
+  }
+
+  return estado;
+}
+
+
+const fillHorarios = async (horarios) => {
+  const dataHorarios = [];
+  for(let hor of horarios){
+      //Haremos el detalle
+      const detalle = hallarDetalle(hor.sesiones);
+      //Haremos el estado
+      const estado = hallarEstado(hor.sesiones);
+      dataHorarios.push({
+        "id": hor.id,
+        "codigo": hor.codigo,
+        "ciclo": hor.ciclo,
+        "curso": hor.curso,
+        "sesiones": hor.sesiones,
+        "detalle": detalle,
+        "estado": estado,
+      })
+  }
+  console.log(dataHorarios);
+  return dataHorarios;
+}
+
+
 export default function TestPage(recordForEdit, setRecordForEdit) {
-  //console.log(recordForEdit);
-    const [records, setRecords] = React.useState([])
-/*
+    const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
+
     React.useEffect(() => {
-      fillHorarios()
-      .then (newHor =>{
-        setRecords(newHor);
-        console.log(newHor);
-        //console.log(newSeccion);
-        
-        console.log(records);
-      });
+      fillHorarios(recordForEdit.recordForEdit.horarios)
+        .then(horarios => {
+          setRecords(horarios);        
+        });  
     }, [])
-*/
+
     return (
         <>
             <Accordion disabled>
@@ -295,7 +317,7 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
                     <HeaderBoxs headers={headers} />
                 </AccordionSummary>
             </Accordion>
-            {generateRows(sampleData)}
+            {generateRows(records)}
         </>
     )
 }

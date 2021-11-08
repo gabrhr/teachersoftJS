@@ -10,12 +10,13 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import SearchIcon from '@mui/icons-material/Search';
 import ModalDocenteClasesAsignados from "./ModalDocenteClasesAsignados";
 import ModalDocenteClasesBusqueda from "./ModalDocenteClasesBusqueda"
+import HorarioService from '../../../services/horarioService';
+import PersonaService from '../../../services/personaService';
 
 const handleSubmit = e => {
     /* e is a "default parameter" */
     e.preventDefault()
     // if (validate())
-
 
     // const selec = records.map(profesor =>
     //   seleccionados[records.indexOf(profesor)] ? profesor : null
@@ -24,31 +25,42 @@ const handleSubmit = e => {
     // props.setOpenPopup(false)
 }
 
+
+const fillDocentes = async() => {
+  //Llamado del axios para llenar a los docentes - personas con id_rol = 1
+  const docentes = [];
+
+  const dataDoc = await PersonaService.getPersonasxTipo(1); //1 - docente
+  
+  if(!dataDoc) {  //No estima que no haya docentes ingresados - no deberia ser problema igual
+    console.error("No se pudo regresar la data del backend para Docentes");
+    return [];
+  }
+  dataDoc.map(doc => {
+    const nombreFormat = `${doc.nombres} ${doc.apellidos[0]}.`;
+    docentes.push({
+      "id": doc.id,
+      "nombre": nombreFormat,
+      "tipo": doc.tipo_persona, //Esto debe de cambiar a tipo de profesor.
+      "codigo": doc.codigo_pucp,
+      "cargaHoraria": doc.cargaDocente,
+      "deudaHoraria": doc.deuda_docente,
+    })
+  });
+  console.log(docentes);
+  return docentes
+}
+
 export default function ModalDocenteClases({docentesAsig}){
-    const [recordsBusq, setRecordsBusq] = useState([
-        {
-            id:1,
-            horasDocente:0,
-            deudaHoraria: 2,
-            cargaHoraria: 8,
-            nombre: 'José'
-        },
-        {
-            id:2,
-            horasDocente:0,
-            deudaHoraria: 1,
-            cargaHoraria: 9,
-            nombre: 'Salomón'
-        },
-        {
-            id:3,
-            horasDocente:0,
-            deudaHoraria: 4,
-            cargaHoraria: 8,
-            nombre: 'Lorena'
-        }
-    ])
+    const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
+
+    React.useEffect(() => {
+      fillDocentes()
+        .then(docentes => {
+          setRecordsBusq(docentes);        
+        });  
+    }, [])
 
     return(
         

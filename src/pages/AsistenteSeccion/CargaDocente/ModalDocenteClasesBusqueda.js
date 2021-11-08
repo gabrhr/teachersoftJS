@@ -134,11 +134,11 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
               <StyledTableRow key={item.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                               sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                               onClick={()=>changeSelected(item)}>
-                  <StyledTableCell align="right">{item.id}</StyledTableCell>
+                  <StyledTableCell align="right">{item.codigo}</StyledTableCell>
                   <StyledTableCell>{item.nombre}</StyledTableCell>
                   <StyledTableCell>{item.tipo}</StyledTableCell>
                   <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
+                  <StyledTableCell        align="right">{item.deudaHoraria}</StyledTableCell>
               </StyledTableRow>
               ))
             }

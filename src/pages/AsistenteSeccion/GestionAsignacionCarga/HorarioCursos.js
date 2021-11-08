@@ -95,7 +95,7 @@ const fillHorarios = async () => {
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
+      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
       ciclo:{
         "id": hor.ciclo.id,
       },
@@ -105,7 +105,7 @@ const fillHorarios = async () => {
         "nombre": hor.curso.nombre,
         "creditos": hor.curso.creditos,
         "unidad": hor.curso.unidad,
-        "facultad": hor.curso.seccion.departamento.unidad.nombre,
+        "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
       },
       sesiones:{
         "secuencia": hor.sesiones[0].secuencia,
@@ -121,7 +121,7 @@ const fillHorarios = async () => {
         "id": hor.id,
         "codigo": hor.codigo,
         "tipo": hor.sesiones[0].secuencia,
-        "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
+        "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
         ciclo:{
           "id": hor.ciclo.id,
         },
@@ -131,7 +131,7 @@ const fillHorarios = async () => {
           "nombre": hor.curso.nombre,
           "creditos": hor.curso.creditos,
           "unidad": hor.curso.unidad,
-          "facultad": hor.curso.seccion.departamento.unidad.nombre
+          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-'
         },
         sesiones:{
           "secuencia": hor.sesiones[1].secuencia,
@@ -281,7 +281,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    {console.log(records)}
+                    {/*console.log(records)*/}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>

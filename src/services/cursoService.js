@@ -5,7 +5,7 @@ import tokenService from './tokens.js';
 const getCursosxCodigoNombre = async (codigo_nombre) => {
   //console.log("EL codigo pasado es: ",codigo_nombre);
   const token = tokenService.GetTokenPrueba();
-  console.log(token);
+  //console.log(token);
   try{
     const request = await axios.get(`${url}/curso/codigonombre=${codigo_nombre}`, token  , codigo_nombre, { allowCredentials: false });  //Normalmente es un string
     return request.data;  //Es un dato
@@ -19,7 +19,7 @@ const getCursosxSeccionCodigoNombre = async (id_seccion, codigo_nombre) => {
   try{
     if(id_seccion){
       const request = await axios.get(`${url}/curso/seccion=${id_seccion}/codigonombre=${codigo_nombre}`, tokenService.GetTokenPrueba(), id_seccion, codigo_nombre);
-      console.log(request.data)
+      //console.log(request.data)
       return request.data;  //Es un dato
     }
   }catch(exception){
