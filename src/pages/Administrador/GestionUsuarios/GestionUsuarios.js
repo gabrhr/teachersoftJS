@@ -338,7 +338,7 @@ export default function GestionUsuarios() {
             type="search"
           />
           <Controls.AddButton
-            title="Agregar Nuevo Usuario"
+            title="Nuevo Usuario"
             variant="iconoTexto"
             onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
           />
