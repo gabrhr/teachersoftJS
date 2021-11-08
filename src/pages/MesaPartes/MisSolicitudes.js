@@ -80,7 +80,7 @@ function getEstadoSolicitud() {
 }
 const usuarios2 = [
     createData('0', 'Solicitud Descarga 2019', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '0'),
-    createData('1', 'Solicitud Descarga 2021', 'Se estima los siguientes docentes asfdasdasdasdasdasdasd ...', '2021-09-30 01:14 pm', 'Caceres', '1'),
+    createData('1', 'Solicitud Descarga 2021', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '1'),
     createData('2', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '2'),
     createData('3', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '3'),
     createData('4', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '3'),
@@ -102,8 +102,9 @@ export default function MisSolicitudes() {
     function getSolicitudes() {
         MesaPartesService.getSolicitudes()
             .then(data => {
+                console.log('MisSolicitudes: getSolicitudes():')
                 console.log(data)
-                setRecords(data)
+                setRecords(data ?? [])
             })
     }
 
@@ -131,7 +132,7 @@ export default function MisSolicitudes() {
           * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
            fn: items => {
-             if (target.value == "")
+             if (target.value == "" || items.length === 0)
                /* no search text */
                return items
              else
@@ -148,7 +149,7 @@ export default function MisSolicitudes() {
         handleInputChange(e)
         setFilterFn({
           fn: items => {
-             if (target.value == 4)
+             if (target.value == 4 || items.length === 0)
                /* no search text */
                return items
              else
@@ -158,7 +159,7 @@ export default function MisSolicitudes() {
         })
     }
 
-    /* Busquen que significa lista vacia aqui ¿Cuando se ejecuta? */
+    /* ¿Cuando se ejecuta? */
     React.useEffect(() => {
         getSolicitudes()
     }, [])
