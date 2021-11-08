@@ -217,7 +217,7 @@ export default function GestionSeccion() {
                   type="search"
                 />
                 <Controls.AddButton
-                  title="Agregar Nueva Sección"
+                  title="Nueva Sección"
                   variant="iconoTexto"
                   onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                   //openInPopup();^
