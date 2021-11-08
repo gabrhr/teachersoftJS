@@ -8,9 +8,8 @@
  */
 import axios from 'axios'
 import url from '../config'
-import tokenService, { getToken } from './tokens.js';
+import tokenService from './tokens.js';
 
-const url = "http://back.teachersoft.solutions:8080";
 const config = {
     headers: {
         Authorization: tokenService.getToken()
@@ -141,7 +140,7 @@ function registerTema() {
         },
         ...config
     })
-        .then(res => showOutput(res))
+        //.then(res => showOutput(res))
         .catch(err => console.error(err));
 }
 
@@ -180,7 +179,7 @@ function registerTipo() {
         },
         ...config
     })
-        .then(res => showOutput(res))
+        //.then(res => showOutput(res))
         .catch(err => console.error(err));
 }
 
@@ -239,6 +238,6 @@ function registerSolicitud() {
         },
         ...config
     })
-        .then(res => showOutput(res))
+        //.then(res => showOutput(res))
         .catch(err => console.error(err));
 }

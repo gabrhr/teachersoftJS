@@ -18,11 +18,13 @@ import ContentHeader from '../../components/AppMain/ContentHeader';
 import NuevaSolicitudForm from './NuevaSolicitudForm';
 import { DT } from '../../components/DreamTeam/DT';
 import { Form, useForm } from '../../components/useForm';
+import * as MesaPartesService from '../../services/mesaPartesService'
 //Iconos Mesa de Partes
 import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
+
 
 const tableHeaders = [
     {
@@ -85,11 +87,8 @@ const usuarios2 = [
 ]
 
 const getSolicitudes = async () => {
-    //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-    let dataSolicitud
-    //dataSolicitud= await MesaPartesService.getDepartamentos();
-    dataSolicitud = dataSolicitud ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
-    return dataSolicitud;
+   
+    return await MesaPartesService.getSolicitudes()??[];
 }
 
 
@@ -151,7 +150,7 @@ export default function MisSolicitudes() {
         })
     }
 
-    React.useEffect(() => {
+/*     React.useEffect(() => {
         getSolicitudes()
         .then (newSolicitud =>{
           setRecords(newSolicitud);
@@ -159,7 +158,7 @@ export default function MisSolicitudes() {
           setCreateData(false);
         });
     }, [createData])
-
+ */
     const add = (solicitud, resetForm) => {
         //MesaPartesService.registerDepartamento(solicitud)
         setOpenNuevo(false)
@@ -253,15 +252,6 @@ export default function MisSolicitudes() {
             >
                 <NuevaSolicitudForm add={add}/>
             </Popup>
-            {/* Ver detalle de solicitud -> hay que pensarla bien como redireccionar */}
-            {/* 
-            <Popup
-                openPopup={openDetalle}
-                setOpenPopup={setOpenDetalle}
-                title="Detalle de Solicitud"
-            >
-                <SolicitudDetalle  row ={row} />
-            </Popup> */}
         </Form>
     )
 }
