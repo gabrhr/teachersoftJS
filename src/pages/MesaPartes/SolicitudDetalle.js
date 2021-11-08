@@ -12,6 +12,8 @@ import { DT } from '../../components/DreamTeam/DT';
 
 /*ICONS*/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useHistory, useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const initialFieldValues = {
     seccionID: '',
@@ -35,14 +37,13 @@ const estadosTrackingInit =[
 
 export default function SolicitudDetalle() {
     const [records, setRecords] = useState()
-    /* no filter function initially */
-    /* STYLES
-    * ====== */
+    const location= useLocation()
+    const {solicitud}=location.state
     const SubtitulosTable = { display: "flex" }
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
-
     const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit)
-  
+    const history = useHistory();
+
     return (
         <>
         <ContentHeader
@@ -58,28 +59,29 @@ export default function SolicitudDetalle() {
             alignItems="center"
         >
         <Grid item xs={6} md={1} mb={3}>
-            <Controls.Button
-                variant="outlined"
-                text="Regresar"
-                size="small"
-                startIcon={<ArrowBackIcon />}
-            />
+            <Link to={'/doc/misSolicitudes'}  style={{ textDecoration: 'none' }}> 
+                <Controls.Button
+                    variant="outlined"
+                    text="Regresar"
+                    size="small"
+                    startIcon={<ArrowBackIcon />}
+                />
+            </Link>
           </Grid>
         </Grid>
         <Paper variant="outlined" sx={PaperStyle}>
          <Grid container spacing={2}>
             <Grid item xs={6} md={8}>
                 <Box>
-                    <DT.Title size="medium" text={'Trámite: ' + 'Nombre del trámite - Ejemplo'} />
+                    <DT.Title size="medium" text={'Trámite: ' + `${solicitud.temaTramite}`+' - '+ `${solicitud.tipoTramite}`} />
                     <Typography variant = "subtitle1">
-                        Sección: {' ' + 'Ingeniería '}
+                        Sección: {solicitud.seccion}
                     </Typography>
-                    
                 </Box>
                 <Divider  flexItem/>
                 <Box>
                     <Controls.DreamTitle
-                        title ={'Asunto: ' + 'Ejemplo de Asunto'}
+                        title ={'Asunto: ' + `${solicitud.asunto}`}
                         size = '20px'
                         lineheight = '300%'
                     />
@@ -95,7 +97,7 @@ export default function SolicitudDetalle() {
                 <Divider  flexItem/>
                 <Box>
                     <Controls.DreamTitle
-                        title ={'Archivos Adjuntos: ' }
+                        title ={'Archivos Adjuntos: '}
                         size = '16px'
                         lineheight = '300%'
                     />
@@ -105,7 +107,7 @@ export default function SolicitudDetalle() {
                 </Box>
             </Grid>
             <Grid item xs={0.3} md={0.3}/>
-            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"50px", ml:"20px"}} />
+            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"30px", ml:"20px"}} />
             <Grid item xs={6} md={3}>
                 <Controls.DreamTitle
                     title ={'Respuesta a la Solicitud'}
