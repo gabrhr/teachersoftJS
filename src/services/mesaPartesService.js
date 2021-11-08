@@ -161,10 +161,10 @@ export function getTipos() {
 }
 
 /* TODO: work-in-progress */
-function registerTema() {
+function registerTipo() {
     axios({
         method: 'post',
-        url: `${url}/tema/`,
+        url: `${url}/tipo/`,
         data: {
             // /* DATA OBLIGATORIA */
             // asunto: 'Asunto1',              // opcional
