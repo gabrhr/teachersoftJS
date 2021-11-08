@@ -78,11 +78,25 @@ export default function AgregarEditarSeccion(props) {
     } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
-        e.preventDefault()
+        e.preventDefault();
+        let fechaCreacion= "";
+        let fechaC="Holi";
         //Definicio de validaciones
         if (validate()){
           //window.alert('valid')
+          //si es una edición tenemos que enviar la fecha de creacion
+            console.log(values.id);
+            values.id
+            ? SeccionService.getSeccion(values.id):null
+            .then(seccion=>{
+              fechaCreacion=seccion.data.fecha_creacion;
+            })
 
+            console.log("Esto es sección");
+            //console.log(seccion);
+            console.log(fechaC);
+
+          if(values.id) console.log(values.id);;
           //Este pasa como la nueva seccion o la seccion editada
           const newSecc = {
             id: values.id,
@@ -92,7 +106,9 @@ export default function AgregarEditarSeccion(props) {
               id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.idDepartamento) : null,
             },
+            fecha_creacion:fechaCreacion,
             //foto: fotoPerfil,
+            fecha_modificacion: null,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }

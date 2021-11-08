@@ -79,12 +79,12 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
           }
           */
           //"sesiones_excel": hor.sesiones_excel,
-          //teorico - carga_horaria: suma de horas_sesiones 
+          //teorico - carga_horaria: suma de horas_sesiones
           sesiones:[{
             "secuencia": hor.tipo,
             //"sesiones_dictado": null,
               //"persona": - es uno de los docente - es un objeto - objeto persona
-              //"hora_sesion_docente:" - lo que dicta este docente - entero 
+              //"hora_sesion_docente:" - lo que dicta este docente - entero
             "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
           }]
         }
@@ -93,7 +93,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
         //horarioService.registerHorario(postHorario);
       })
   }
-  
+
   else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
     //const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
 
@@ -101,7 +101,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
       "secuencia": hor.tipo,
       //"sesiones_dictado": null,
         //"persona": - es uno de los docente - es un objeto - objeto persona
-        //"hora_sesion_docente:" - lo que dicta este docente - entero 
+        //"hora_sesion_docente:" - lo que dicta este docente - entero
       "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
     })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
@@ -117,14 +117,14 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
+    const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2,
     color:"primary.light", elevatio:0, marginTop: 3}
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
     const [usuarios, setUsuarios] = useState(null)
     const [usuariosIncorrectos, setUsuariosIncorrectos] = useState(null)
-    
+
     const [open, setOpen] = useState(false);
     const handleClose = () => {
       setOpen(false);
@@ -132,7 +132,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     const handleToggle = () => {
       setOpen(!open);
     }
-    
+
     const {
         TblContainer,
         TblHead,
@@ -140,7 +140,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(recordsX, tableHeaders, filterFn);
-    
+
     const onInputClick = (event) => {
         event.target.value = ''
     }
@@ -154,7 +154,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         "hora_fin": 15,
         "media_hora_fin": 1
       }
-      
+
       return dataSesiones;
     }
 */
@@ -178,21 +178,21 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
           //"unidad": hor.Unidad, //Creditos del Curso
           //"carga": hor.Carga_Horaria, //Creditos del Curso
         },
-        //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos: 
+        //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos:
         profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
         //"sesiones_excel": hor.Hora_Sesion
           //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
-        /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
+        /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/
         //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
       })
-      ));  
+      ));
       //horario = horarios;
       return horarios;
     }
 
 
     const processData = dataString => {
-        
+
         const dataStringLines = dataString.split(/\r\n|\n/);
         const headers = dataStringLines[0].split(
             /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
@@ -260,8 +260,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                 const ws = wb.Sheets[wsname];
                 /* Convert array of arrays */
                 const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-                 
-                
+
+
                 processData(data);
             };
             reader.readAsBinaryString(file);
@@ -271,7 +271,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         }
     };
 
-    const actualizarDatos = async e => { 
+    const actualizarDatos = async e => {
       let otroHorario = 1;
       let permission = 1;
       let postHorario = {}; //Para poder usar el horario en una segunda vuelta
@@ -281,7 +281,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         otroHorario = resultArray[0];
         postHorario = resultArray[1];
         //Loop finished
-        
+
         if(otroHorario === 1)  {
           if(horarioService.registerHorario(postHorario))
             permission = 0;
@@ -292,10 +292,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         setRecords(recordsX);
         setCargaH(records);
       }
-      setOpenPopup(false) 
+      setOpenPopup(false)
        /*  setRecords(employeeService.getAllEmployees()) */
     }
-    
+
     const handleSubmit = e => {
       e.preventDefault()
         //UNA VEZ SE SUBA - VAMOS A PROCEDER A REALIZAR LA INSERCION
@@ -304,16 +304,16 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //window.localStorage.setItem("listHorario", recordsX);
         setRecords(recordsX)
         handleClose()
-        setOpenPopup(false) 
+        setOpenPopup(false)
        /*  setRecords(employeeService.getAllEmployees()) */
     }
-    
+
     return (
         <Form onSubmit={handleSubmit}>
             <Grid align="right">
                 <label htmlFor="contained-button-file" >
-                    <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
-                        type="file" sx={{display: 'none'}} 
+                    <Input accept=".csv,.xlsx,.xls" id="contained-button-file"
+                        type="file" sx={{display: 'none'}}
                         onChange={handleUploadFile}
                         onClick={onInputClick}
                     />
@@ -342,7 +342,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 {/*<TableCell
                                 align="right"
                                 >
-                             
+
                                 {item.id}
                                 </TableCell>*/}
                                 <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
@@ -375,7 +375,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         /* type="submit" */
                         onClick={actualizarDatos}
                     />
-                    
+
                 </div>
             </Grid>
             <Backdrop

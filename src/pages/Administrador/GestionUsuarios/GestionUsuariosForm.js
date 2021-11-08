@@ -177,9 +177,9 @@ export default function GestionUsuariosForm(props) {
       const newUsr = {
         id: values.id,
         idPersona: values.idPersona,
-        nombre: values.nombre,
-        apellidoPaterno: values.apellidoPaterno,
-        apellidoMaterno: values.apellidoMaterno,
+        nombre: values.nombre.toUpperCase(),
+        apellidoPaterno: values.apellidoPaterno.toUpperCase(),
+        apellidoMaterno: values.apellidoMaterno.toUpperCase(),
         correo: values.correo,
         DNI: values.documento,
         rol: values.rol,

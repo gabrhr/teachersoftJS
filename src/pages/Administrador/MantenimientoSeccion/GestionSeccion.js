@@ -68,6 +68,7 @@ const getSecciones = async () => {
         nombre: seccion.nombre,
         fechaFundacion: seccion.fecha_fundacion,
         fechaModificacion: seccion.fecha_modificacion,
+        fechaCreacion:seccion.fecha_creacion,
         idDepartamento: seccion.departamento.id,
         nombreDepartamento: seccion.departamento.nombre,
         correo: seccion.correo
@@ -216,7 +217,7 @@ export default function GestionSeccion() {
                   type="search"
                 />
                 <Controls.AddButton
-                  title="Nueva sección"
+                  title="Nueva Sección"
                   variant="iconoTexto"
                   onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                   //openInPopup();^

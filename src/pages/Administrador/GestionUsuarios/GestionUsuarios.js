@@ -20,7 +20,6 @@ import UserService from '../../../services/userService';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import FormControl from '@mui/material/FormControl';
 
 const initialFieldValues = {
   seccionID: '',
@@ -306,6 +305,18 @@ export default function GestionUsuarios() {
         text="Gestión de usuarios"
         cbo={false}
       />
+      <Form>
+        <Box display="flex" width={.2} mb={4}  mt={3}>
+          <Controls.Select
+            name="seccionID"
+            label="Sección"
+            value={values.seccionID}
+            onChange={handleInputChange}
+            options={DTLocalServices.getAllSecciones()}
+            size="medium"
+          />
+        </Box>
+      </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
         <Typography variant="h4" style={SubtitulosTable} >
@@ -326,20 +337,8 @@ export default function GestionUsuarios() {
             onChange={handleSearch}
             type="search"
           />
-          <FormControl style={{minWidth: 200}}>
-        {/* <Box display="flex" width={.2} mb={4}  mt={3}> */}
-          <Controls.Select
-            name="seccionID"
-            label="Sección"
-            value={values.seccionID}
-            onChange={handleInputChange}
-            options={DTLocalServices.getAllSecciones()}
-            size="medium"
-          />
-        {/* </Box> */}
-      </FormControl>
           <Controls.AddButton
-            title="Nuevo usuario"
+            title="Nuevo Usuario"
             variant="iconoTexto"
             onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
           />
@@ -354,7 +353,9 @@ export default function GestionUsuarios() {
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
                   <StyledTableRow key={item.id}>
-                    <StyledTableCell>{item.nombre} {item.apellidoPaterno} {item.apellidoMaterno}</StyledTableCell>
+                    <StyledTableCell>
+                    {item.nombre.toUpperCase()} {item.apellidoPaterno.toUpperCase()} {item.apellidoMaterno.toUpperCase()}
+                    </StyledTableCell>
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>

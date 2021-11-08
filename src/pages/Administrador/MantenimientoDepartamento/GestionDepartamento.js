@@ -96,6 +96,7 @@ const getDepartamentos = async () => {
         nombre: dep.nombre,
         correo: dep.correo,
         fechaModificacion: dep.fecha_modificacion,
+        fechaCreacion:dep.fecha_creacion,
         fechaFundacion: dep.fechaFundacion,
       })
     ));
@@ -111,7 +112,7 @@ export default function GestionDepartamento() {
     const [openPopup, setOpenPopup] = useState(false)
     const [deleteData, setDeleteData] = useState(false)
     const [createData, setCreateData] = useState(false);
-
+    const [updateData, setUpdateData] = useState(false);
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
@@ -195,18 +196,31 @@ export default function GestionDepartamento() {
       ? DepartamentoService.updateDepartamento(departamento,departamento.id)
       : DepartamentoService.registerDepartamento(departamento)
       .then(idDepartamento=> {
-        if(recordForEdit)
+        if(recordForEdit){
           setRecordForEdit(null);
+          setUpdateData(true);}
       })
       //window.location.replace('');
       setOpenPopup(false)
       resetForm()
       setCreateData(true);
-      setNotify({
-        isOpen: true,
-        message: 'Registro de Cambios Exitoso',
-        type: 'success'
-      })
+      console.log(updateData);
+      console.log(createData);
+      if(!updateData){
+        setNotify({
+          isOpen: true,
+          message: 'Cambios Guardados Exitosamente',
+          type: 'success'
+        });
+        setUpdateData(false);
+      } else {
+        setNotify({
+          isOpen: true,
+          message: 'Registro de Departamento Exitoso',
+          type: 'success'
+        });
+        setUpdateData(false);
+      }
     }
     const onDelete = (idDepartamento) => {
       // if (!window.confirm('Are you sure to delete this record?'))
@@ -265,7 +279,7 @@ export default function GestionDepartamento() {
               />
 
               <Controls.AddButton
-                title="Nuevo departamento"
+                title="Nuevo Departamento"
                 variant="iconoTexto"
                 onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
               />
