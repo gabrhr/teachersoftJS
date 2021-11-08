@@ -92,7 +92,7 @@ function b2fSolicitud(x) {
             fecha_delegado: x.fecha_delegacion,
             fecha_atendido: x.fecha_atencion
         },
-        estado: x.estado_tracking,  // del tracking
+        estado: x.estado_tracking.toString(),  // del tracking
         resultado: x.resultado,
 
         tipoTramite: tipoTramite,

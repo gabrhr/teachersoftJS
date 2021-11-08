@@ -73,7 +73,7 @@ function getEstadoSolicitud() {
         { id: '3', title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
     ])
 }
-function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
+/* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
     return {
         id, asunto, descripcion, fecha, autorNombre, estado
     }
@@ -85,7 +85,7 @@ const usuarios2 = [
     createData('3', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '3'),
     createData('4', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '3'),
 ]
-
+ */
 
 
 export default function MisSolicitudes() {
@@ -102,6 +102,7 @@ export default function MisSolicitudes() {
     function getSolicitudes() {
         MesaPartesService.getSolicitudes()
             .then(data => {
+                console.log(data)
                 setRecords(data)
             })
     }
@@ -128,33 +129,33 @@ export default function MisSolicitudes() {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
           * objects.  Thus the function needs to be inside an object. */
-        // setFilterFn({
-        //   fn: items => {
-        //     if (target.value == "")
-        //       /* no search text */
-        //       return items
-        //     else
-        //       return items.filter(x => x.asunto.toLowerCase()
-        //           .includes(target.value.toLowerCase()))
-        //   }
-        // })
+        setFilterFn({
+           fn: items => {
+             if (target.value == "")
+               /* no search text */
+               return items
+             else
+               return items.filter(x => x.asunto.toLowerCase()
+                   .includes(target.value.toLowerCase()))
+           }
+        })
     }
 
     const handleSearchEstados = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
           * objects.  Thus the function needs to be inside an object. */
-        // handleInputChange(e)
-        // setFilterFn({
-        //   fn: items => {
-        //     if (target.value == 4)
-        //       /* no search text */
-        //       return items
-        //     else
-        //       return items.filter(x => x.estado
-        //           .includes(target.value))
-        //   }
-        // })
+        handleInputChange(e)
+        setFilterFn({
+          fn: items => {
+             if (target.value == 4)
+               /* no search text */
+               return items
+             else
+               return items.filter(x => x.estado
+                   .includes(target.value))
+          }
+        })
     }
 
     /* Busquen que significa lista vacia aqui ¿Cuando se ejecuta? */
@@ -221,7 +222,6 @@ export default function MisSolicitudes() {
                         label="Estado de Solicitud"
                         value={values.estadoID}
                         onChange={handleSearchEstados}
-
                         options={getEstadoSolicitud()}
                     />
                 </div>
@@ -239,8 +239,7 @@ export default function MisSolicitudes() {
                     <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                                <Item item={item} getRow={getRow} estado={estado}
-                                    handleSearchEstados={handleSearchEstados} />
+                                <Item item={item} getRow={getRow} estado={estado} />
                             ))
                         }
                     </TableBody>
@@ -273,7 +272,7 @@ function Item(props) {
                         {item.asunto}
                     </Typography>
                     <div >
-                        Autor: {item.autorNombre}
+                        Autor: {item.solicitador.fullName}
                     </div>
 
                 </TableCell>
