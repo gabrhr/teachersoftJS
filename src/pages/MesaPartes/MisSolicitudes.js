@@ -71,7 +71,7 @@ function getEstadoSolicitud() {
     { id: '3', title: 'Atendido', icon:<TaskAltOutlinedIcon sx={{color:"#43DB7F",mr:2 }}/> },
     ])
 }
-function createData(id, asunto, descripcion , fecha, autorNombre, estado) {
+function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
     return {
         id, asunto, descripcion ,fecha, autorNombre,estado
     }
@@ -84,12 +84,22 @@ const usuarios2 = [
     createData('4', 'Solicitud Descarga 2020','Se estima los siguientes docentes ...','2021-09-30 01:14 pm','Caceres','3'),
 ]
 
+const getSolicitudes = async () => {
+    //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
+    let dataSolicitud
+    //dataSolicitud= await MesaPartesService.getDepartamentos();
+    dataSolicitud = dataSolicitud ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
+    return dataSolicitud;
+}
+
+
 export default function MisSolicitudes() {
-    const [openPopup, setOpenPopup] = useState(false)
     const [openNuevo, setOpenNuevo] = useState(false)
+    const [createData, setCreateData] = useState(false);
     const [row, setRow] = useState(false)
     const [records, setRecords] = useState(usuarios2)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     let estado= 1;
     const {
         TblContainer,
@@ -141,8 +151,29 @@ export default function MisSolicitudes() {
         })
     }
 
+    React.useEffect(() => {
+        getSolicitudes()
+        .then (newSolicitud =>{
+          setRecords(newSolicitud);
+          console.log(newSolicitud);
+          setCreateData(false);
+        });
+    }, [createData])
+
+    const add = (solicitud, resetForm) => {
+        //MesaPartesService.registerDepartamento(solicitud)
+        setOpenNuevo(false)
+        resetForm()
+        setCreateData(true);
+        setNotify({
+          isOpen: true,
+          message: 'Registro de Solicitud Exitosa',
+          type: 'success'
+        })
+    }
+
     function getRow ({...props}){
-        setOpenPopup(true)
+        //setOpenPopup(true)
         setRow(props)
     }
     
@@ -220,7 +251,7 @@ export default function MisSolicitudes() {
                 setOpenPopup={setOpenNuevo}
                 title="Mesa de Partes"
             >
-                <NuevaSolicitudForm/>
+                <NuevaSolicitudForm add={add}/>
             </Popup>
             {/* Ver detalle de solicitud -> hay que pensarla bien como redireccionar */}
             {/* 
@@ -236,7 +267,7 @@ export default function MisSolicitudes() {
 }
 
 function Item(props){
-    const {item,getRow,handleSearchEstados} = props
+    const {item,getRow} = props
     
     return (
         <>
