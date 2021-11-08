@@ -109,6 +109,7 @@ function b2fSolicitud(x) {
 /* tema_tramite CRUD operations
  * ===================================*/
 export function getTemas() {
+    let temas = []
     axios({
         method: 'get',
         url: `${url}/tema/`,
@@ -119,9 +120,11 @@ export function getTemas() {
                 res.data[i] = b2fTemaTramite(x)
             });
             // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            showOutput(res)
+            // showOutput(res)
+            temas = res.data
         })
         .catch(err => console.error(err));
+    return temas
 }
 
 /* TODO: work-in-progress */
@@ -145,6 +148,7 @@ function registerTema() {
 /* tipo_tramite CRUD operations
  * ===================================*/
 export function getTipos() {
+    let tipos = []
     axios({
         method: 'get',
         url: `${url}/tipo/`,
@@ -155,9 +159,11 @@ export function getTipos() {
                 res.data[i] = b2fTipoTramite(x)
             });
             res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            showOutput(res)
+            // showOutput(res)
+            tipos = res.data
         })
         .catch(err => console.error(err));
+    return tipos
 }
 
 /* TODO: work-in-progress */
@@ -181,6 +187,7 @@ function registerTipo() {
 /* Solicitud CRUD operations 
  * ===================================*/
 export function getSolicitudes() {
+    let solicitudes = []
     axios({
         method: 'get',
         url: `${url}/mesa/`,
@@ -191,26 +198,31 @@ export function getSolicitudes() {
                 res.data[i] = b2fSolicitud(x)
             });
             // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            showOutput(res)
+            // showOutput(res)
+            solicitudes = res.data
         })
         .catch(err => console.error(err));
+    return solicitudes
 }
 
 /* id: int */
 export function getSolicitud(id) {
+    let solicitud = null
     axios({
         method: 'get',
         url: `${url}/mesa/${id}`,
         ...config
     })
         .then(res => {
-            res.data.forEach((x, i) => {
-                res.data[i] = b2fSolicitud(x)
-            });
+            // res.data.forEach((x, i) => {
+            //     res.data[i] = b2fSolicitud(x)
+            // });
             // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            showOutput(res)
+            // showOutput(res)
+            solicitud = b2fSolicitud(res.data)
         })
         .catch(err => console.error(err));
+    return solicitud
 }
 
 /* TODO: work-in-progress */
