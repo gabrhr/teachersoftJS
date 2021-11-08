@@ -11,12 +11,13 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 export default function Etiqueta(props) {
     let { text, type, sx, ...other } = props
 
+    /* Carga Docente */
     if (type === "pendiente") {
         other.icon = (<AccessTimeOutlinedIcon/>)
         other.color= "pendiente"
     }
-    //Mesa de partes
-    if (type === "enviado") { //Para los usuarios que envian solicitud
+    /* Mesa de Partes */
+    else if (type === "enviado") { //Para los usuarios que envian solicitud
         text="Enviado"
         other.icon = (<NearMeOutlinedIcon/>)
         other.color= "enviado"
@@ -46,9 +47,12 @@ export default function Etiqueta(props) {
                 sx={{
                     pt: 0,
                     pb: 0,
-                    width:"140px",
-                    borderRadius:"50px",
-                    marginBottom: 1
+                    minWidth: "140px",
+                    maxWidth: "300px",
+                    height: "40px",
+                    borderRadius: "20px",
+
+                    transform: "scale(.90)"
                 }}
                 {...other}
             >

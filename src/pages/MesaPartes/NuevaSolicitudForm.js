@@ -89,7 +89,7 @@ function ActualForm(props) {
                 <Grid item xs={6}>
                     <Controls.Select
                         name="tipoTramiteID"
-                        label="Departamento"
+                        label="Tipo de Trámite"
                         value={values.tipoTramiteID}
                         onChange={handleInputChange}
                         options={getTipoTramites()}
@@ -133,7 +133,9 @@ function ActualForm(props) {
     )
 }
 
-export default function NuevaSolicitudForm() {
+export default function NuevaSolicitudForm(props) {
+    const{add}=props
+    
     const {
         values,
         setValues,
@@ -143,6 +145,17 @@ export default function NuevaSolicitudForm() {
         resetForm
     } = useForm(initialFieldValues);
 
+    const handleSubmit = async e => {
+        e.preventDefault()
+        /* if (validate()){ */
+          console.log(values);
+          add(values,resetForm);
+        /*  }
+        else
+            window.alert('invalid')*/
+    }
+
+
     return (
         <div>
             <DT.Title size="big" text="Mesa de partes" />
@@ -151,6 +164,7 @@ export default function NuevaSolicitudForm() {
                 <ActualForm 
                     values={values} 
                     handleInputChange={handleInputChange}
+                    handleSubmit = {handleSubmit}
                 />
             </DT.BorderBox>
         </div>

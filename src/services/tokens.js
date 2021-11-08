@@ -25,4 +25,8 @@ const verifyAuthentication = Request => {
   return true;
 }
 
-export default { GetTokenPrueba, verifyAuthentication}
+function getToken() {
+  return JSON.parse(localStorage.getItem("token"))
+}
+
+export default { GetTokenPrueba, verifyAuthentication, getToken}

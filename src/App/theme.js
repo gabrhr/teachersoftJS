@@ -37,18 +37,25 @@ const theme = createTheme({
       }, 
       pendiente: {
         light: "#E9D630",
+        main: "#F9FB9D"
       },
-      /* Colores de mesa de partes */
+      /* Colores de mesa de partes (enRevision reusa "pendiente") */
       enviado: {
+        main:"#E2F6FA",
         light: "#3B4A81",
       },
       delegado: {
         light: "#FF7A00",
+        main:"#FFDCA8"
       },
       atendido: {
-        main: "FF7A00",
+        main: "#D2FFBE",
         light: "#43DB7F",
-      },    
+      }, 
+      inactivo:{
+        light: "#888EA4",
+        main:"#888EA450"
+      }   
     },
     typography: {
       fontFamily: '"Quicksand","Arial","sans-serif"',

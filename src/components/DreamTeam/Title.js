@@ -6,6 +6,7 @@ import React from 'react'
 import { Typography } from '@mui/material'
 
 export default function Title(props) {
+    const { text, ...other } = props
     let variant = "h3"      // size="big"  (default)
     let pb = 2              // padding bottom (default)
     if (props.size === "medium") {
@@ -23,8 +24,9 @@ export default function Title(props) {
             pb={pb}
             align="left"
             color="primary.light"
+            {...other}
         >
-            {props.text}
+            {text}
         </Typography>
     )
 }
