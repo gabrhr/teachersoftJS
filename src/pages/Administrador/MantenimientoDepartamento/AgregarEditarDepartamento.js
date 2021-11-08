@@ -67,6 +67,7 @@ export default function AgregarEditarDepartamento(props) {
             id:values.id,
             nombre: values.nombre,
             correo: values.correo,
+            fecha_creacion:values.fecha_creacion
             //foto: null,
           }
           console.log(newDep);
