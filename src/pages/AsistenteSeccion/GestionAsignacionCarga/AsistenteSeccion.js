@@ -9,7 +9,7 @@ import HorarioCursos from './HorarioCursos'
 import Popup from '../../../components/util/Popup'
 import ModalAsignacionCarga from './ModalAsignacionCarga';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
-import { getHorario, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
+import { getHorarios, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
@@ -56,11 +56,42 @@ export default function AsistenteSeccion() {
         console.log(valueXlsx)
         window.localStorage.setItem('xlsx', xlsx)
     }*/
-    
-    function getHorario (input){
+    function transformarHorarios (request){
+        const recordsX = []
+        request.map(hor => {
+            recordsX.push({
+                "Clave": hor.curso.codigo,
+                "Nombre": hor.curso.nombre,
+                "Unidad": hor.curso.seccion.departamento.unidad.nombre,
+                "Creditos": hor.curso.creditos,
+                "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                "Horario": hor.codigo,
+                "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
+                "Horas": hor.sesiones[0].horas
+            })
+            if(hor.sesiones[1]){
+                recordsX.push({
+                    "Clave": hor.curso.codigo,
+                    "Nombre": hor.curso.nombre,
+                    "Unidad": hor.curso.seccion.departamento.unidad.nombre,
+                    "Creditos": hor.curso.creditos,
+                    "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                    "Horario": hor.codigo,
+                    "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
+                    "Horas": hor.sesiones[1].horas
+                })
+            }
+        })
+        return recordsX;
+    }
+
+    async function getHorario (input){
         setOpenPopup(false)
-        listHorario = input
-        setHorario(listHorario);
+        const request = await getHorarios();
+        const recordsX = transformarHorarios(request);
+        setCargaH(recordsX);
+        //listHorario = input
+        //setHorario(listHorario);
         //setHorario(listHorario)
         //console.log(horario)
         //window.localStorage.setItem('listHorario', listHorario) 

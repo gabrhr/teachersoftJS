@@ -21,6 +21,7 @@ import ModalCancelarHorarioCurso from './ModalCancelarHorarioCurso';
 import ModalGuardarHorarioCurso from './ModalGuardarHorarioCurso';
 import ModalSesionesLlenas from './ModalSesionesLlenas';
 import ModalFaltaSesion from './ModalFaltaSesion';
+import ModalRegistroExitoso from './ModalRegistroExitoso';
 import cursoService from '../../../services/cursoService';
 
 const useStyles = makeStyles(theme => ({
@@ -57,6 +58,7 @@ export default function GestionCargaCursos() {
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
     const [openSesionesFullPopup, setOpenSesionesFullPopup] = useState(false)
     const [openFaltaSesionPopup, setOpenFaltaSesionPopup] = useState(false)
+    const [openRegistroExitoso, setOpenRegistroExitoso] = useState(false)
 
     const [vTipo, setVTipo] = useState('')
     const [dataSes, setDataSes] = useState([])
@@ -158,6 +160,7 @@ export default function GestionCargaCursos() {
         horarioService.registerHorario(postHorario);
         resetPage();
         setOpenGuardarPopup(false);
+        setOpenRegistroExitoso(true);
     }
 
     return (
@@ -304,7 +307,14 @@ export default function GestionCargaCursos() {
                 title="Atención"
             >
                <ModalFaltaSesion setOpenFaltaClasePopup = {setOpenFaltaSesionPopup} sesionFaltante = {vTipo}/>
-            </Popup>   
+            </Popup>
+            <Popup
+                openPopup={openRegistroExitoso}
+                setOpenPopup={setOpenRegistroExitoso}
+                title="Atención"
+            >
+               <ModalRegistroExitoso setOpenRegistroExitoso = {setOpenRegistroExitoso}/>
+            </Popup>    
         </>
     )
 }

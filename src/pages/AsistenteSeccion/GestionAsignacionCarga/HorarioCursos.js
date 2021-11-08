@@ -84,12 +84,12 @@ const fillHorarios = async () => {
     //console.log(hor.id);
     //console.log(hor.sesiones[0].secuencia);
     //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
-    //console.log(sesion1);
+    //console.log(sesion1); 
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[0].horas + hor.sesiones[1].horas, 
+      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas, 
       ciclo:{
         "id": hor.ciclo.id,
       },
@@ -99,7 +99,7 @@ const fillHorarios = async () => {
         "nombre": hor.curso.nombre,
         "creditos": hor.curso.creditos,
         "unidad": hor.curso.unidad,
-        "facultad": hor.curso.seccion.departamento.unidad.nombre,
+        "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
       },
       sesiones:{
         "secuencia": hor.sesiones[0].secuencia,
@@ -125,7 +125,7 @@ const fillHorarios = async () => {
           "nombre": hor.curso.nombre,
           "creditos": hor.curso.creditos,
           "unidad": hor.curso.unidad,
-          "facultad": hor.curso.seccion.departamento.unidad.nombre
+          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
         },
         sesiones:{
           "secuencia": hor.sesiones[1].secuencia,
@@ -179,7 +179,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
         setRecords(newHorarios);
         setCargaH(records);
       });
-      
+      console.log(records);
     }, [])
   
     //console.log(records);

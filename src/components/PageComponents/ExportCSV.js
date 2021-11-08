@@ -22,7 +22,7 @@ export const ExportCSV = ({csvData, fileName, ...props}) => {
 
         const ws = XLSX.utils.json_to_sheet(csvData);
 
-        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+        const wb = { Sheets: { 'Carga_Horaria': ws }, SheetNames: ['Carga_Horaria'] };
 
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
