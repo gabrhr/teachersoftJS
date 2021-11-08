@@ -3,7 +3,7 @@
 import React from 'react'
 import { Typography, Box, Stack, Divider } from '@mui/material'
 import { DT } from '../../components/DreamTeam/DT'
-import { Controls } from '../../components/controls/Controls'
+import {Controls} from '../../components/controls/Controls'
 
 function EjemploBorderBox() {
     return (

@@ -12,12 +12,15 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
   }));
   
-export const StyledTableRow = styled(TableRow)(({ theme }) => ({
+export const StyledTableRow = styled(TableRow)(({ theme, backCl = '#E9ECF8' }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: '#E9ECF8',
+      backgroundColor: backCl,
     },
     // hide last border
     '&:last-child td, &:last-child th': {
       border: 0,
     },
+    /*'&:hover': {
+      backgroundColor: '#DEEEFF',
+    },*/
   }));
