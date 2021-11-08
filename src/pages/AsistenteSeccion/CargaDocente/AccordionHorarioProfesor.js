@@ -14,6 +14,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
 import HorarioService from '../../../services/horarioService';
+
 import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
@@ -103,108 +104,97 @@ const fillHorarios = async () => {
   return horarios;
 }
 */
-const sampleData = [
-    {
-        id: '1',
-        codigo: 'H0801',
-        detalle: 'Clase: Jue 10:00 - 12 Vie 10:00 - 14:00',
-        estado: 'Con Docente',
-        docentes: {
-            clase: [
-                {
-                    id: 20201234,
-                    nombre: 'Freddy Paz',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TC',
-                    cargaHoraria: 10,
-                    deudaHoraria: 2
-                }
-            ],
-            lab: [
-                {
-                    id: 20001234,
-                    nombre: 'Andres',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 6,
-                    deudaHoraria: 0
-                },
-                {
-                    id: 20004321,
-                    nombre: 'Bruno',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 4,
-                    deudaHoraria: 0
-                }
-            ]
-        }
-    },
-    {
-        id: '2',
-        codigo: 'H0802',
-        detalle: 'Clase: Mie 10:00 - 12 Sab 10:00 - 14:00',
-        estado: 'Con Docente',
-        docentes: {
-            clase: [
-                {
-                    id: 20201234,
-                    nombre: 'Freddy Paz',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TC',
-                    cargaHoraria: 10,
-                    deudaHoraria: 2
-                }
-            ],
-            lab: [
-                {
-                    id: 20001234,
-                    nombre: 'Andres',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 6,
-                    deudaHoraria: 0
-                },
-                {
-                    id: 20004321,
-                    nombre: 'Bruno',
-                    seccion: 'Ing. Informatica',
-                    tipo: 'TPA',
-                    cargaHoraria: 4,
-                    deudaHoraria: 0
-                }
-            ]
-        }
-    },
-    {
-        id: '3',
-        codigo: 'H0803',
-        detalle: 'Clase: Lun 7:00 10:00\n Lab: Jue 07:00-10:00',
-        estado: 'Sin Docente',
-        docentes: {
-            clase: [
-            ],
-            lab: [
-            ]
-        }
-    }
-]
 
-function chompDocentes(docentes) {
+/*
+    El horaraio se recuperará - de un llamado axios que es - getHorariosxCicloxCurso - 
+    HORARIO{
+        id: numero - identificador,
+        codigo: codigo del horario - 0881 1081
+        curso:{
+            id: cursoid
+            nombre: nombre del curso
+            seccion:{
+                id:
+                departamento:{
+                    
+                }
+            }
+        }
+        ciclo:{
+            id: mismo id que se tiene seleccionado
+        }
+        sesiones:[{
+            //no esta pero para que se enteinda mejor: tipo_sesion: compartida- 0 [suma de profesores = horas] o codictado - 1[horas = horas_de_profesor]: 
+            secuencia: tipo del horario [clase o laboratorio: 0 o 1]
+            horas: hor.sesiones.horas [valor fijo ingresado de las horas que corresponden a la secuencia - Clase ocupa en su dictado 3 horas]
+            sesiones_dictado:[{
+                persona:{
+                    id_persona: es el docente como tal - su id - 
+                    el resto de datos:
+                    ---------------------------------------------------------
+                    PERSONA TAMBIEN CAMBIO
+                    deuda: del ciclo pasado - cuantas horas me debio?
+                    carga_horaria: este es el valor fijo - las horas que debería dictar un docente por cada ciclo - TP O TCA AUTOMTICO - 10 A 6
+                    carga_del_ciclo: 3              |carga: |carga_del_ciclo -> 8 + 3 = 11  > carga_horaria = 10|deuda: 2-1 = 1|
+                }
+                horas_dictadas: 3
+            },
+                {OTRO SESION_DICTADO
+                horas_dictadas: 3}
+        ]
+        }]
+    }
+*/
+
+function chompDocentes(sesiones) {
+    const clase = sesiones.filter((ses)=>ses.secuencia===0)
+    const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
     return (
         <>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Clase: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {docentes.clase.length} {"\n"}
+                {clase.sesion_docentes ? clase.sesion_docentes.length : 0} {"\n"}
             </Typography>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Lab: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {docentes.lab.length}
+                {laboratorio.sesion_docentes ? laboratorio.sesion_docentes.length : 0}
             </Typography>
+        </>
+    )
+}
+
+function chompDetalles(sesiones) {
+
+  const horasLaboratorio = (laboratorio) => {
+    return(
+      <>
+      <Typography display="inline" whiteSpace="pre">
+          {"Horas de Laboratorio: "}
+      </Typography>
+      <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+        {laboratorio.horas}
+      </Typography>
+      </>
+    )
+  }
+
+    const clase = sesiones.filter((ses)=>ses.secuencia===0)
+    const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
+    if(!laboratorio) laboratorio = []
+    console.log("clase: ", clase, "laboratorio: ", laboratorio);
+    return (
+        <>
+            <Typography display="inline" whiteSpace="pre">
+                {"Horas de Clase: "}
+            </Typography>
+            <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+                {clase[0].horas} {"\n"}
+            </Typography>
+            {laboratorio[0] ? horasLaboratorio(laboratorio[0]) : ""}
         </>
     )
 }
@@ -218,19 +208,19 @@ function generateRow(horario) {
                     {horario.codigo}
                 </Typography>
             </Box>
-            <Box width="25%" alignItems="center" display="flex">
-                {horario.detalle}
+            <Box width="25%" >
+                {chompDetalles(horario.sesiones)}
             </Box>
             <Box width="25%" alignItems="center" display="flex">
                 {
-                    horario.estado === "Con Docente"
-                        ? <DT.Etiqueta type="success" text="Con Docente"/>
-                        : <DT.Etiqueta type="error" text="Sin Docente" 
+                    horario.estado === "Horas Asignadas"
+                        ? <DT.Etiqueta type="success" text="Horas Asignadas"/>
+                        : <DT.Etiqueta type="error" text="Faltan Horas" 
                             icon={<CancelOutlinedIcon/>}/>
                 }
             </Box>
             <Box width="25%">
-                {chompDocentes(horario.docentes)}
+                {chompDocentes(horario.sesiones)}
             </Box>
         </>
     )
@@ -249,28 +239,75 @@ function generateRows(records) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsHorarioProfesor docentes={horario.docentes} />
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} />
                 </AccordionDetails>
             </Accordion>
         ))
     )
 }
 
+const hallarDetalle = (sesiones) => {
+  let hor_clases = 0, hor_labs = 0;
+  //Vamos a desintegrar el horario para hallar su detalle
+  for (let ses of sesiones) {
+    ses.secuencia ? (hor_clases = ses.horas) : (hor_labs = ses.horas);
+  }
+  const detalle_lab = hor_labs ? `\n Horas de Laboratorio: ${hor_labs}` : ``;
+  const detalle = `Horas de Clase: ${hor_clases} ${detalle_lab}`;
+  return detalle;
+}
+
+const hallarEstado = (sesiones) => {
+  let estado;
+  //Vamos a desintegrar el horario para hallar su estado
+  for (let ses of sesiones) {
+    let sumaHorasdoc = 0;
+    if(ses.sesion_docentes){
+      for (let docente of ses.sesion_docentes){
+        sumaHorasdoc += docente.hora_sesion; 
+      }
+    }
+    //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
+    (sumaHorasdoc < sesiones.horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+    if(estado === "Faltan Horas") break;
+  }
+
+  return estado;
+}
+
+
+const fillHorarios = async (horarios) => {
+  const dataHorarios = [];
+  for(let hor of horarios){
+      //Haremos el detalle
+      const detalle = hallarDetalle(hor.sesiones);
+      //Haremos el estado
+      const estado = hallarEstado(hor.sesiones);
+      dataHorarios.push({
+        "id": hor.id,
+        "codigo": hor.codigo,
+        "ciclo": hor.ciclo,
+        "curso": hor.curso,
+        "sesiones": hor.sesiones,
+        "detalle": detalle,
+        "estado": estado,
+      })
+  }
+  console.log(dataHorarios);
+  return dataHorarios;
+}
+
+
 export default function TestPage(recordForEdit, setRecordForEdit) {
-  //console.log(recordForEdit);
-    const [records, setRecords] = React.useState([])
-/*
+    const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
+
     React.useEffect(() => {
-      fillHorarios()
-      .then (newHor =>{
-        setRecords(newHor);
-        console.log(newHor);
-        //console.log(newSeccion);
-        
-        console.log(records);
-      });
+      fillHorarios(recordForEdit.recordForEdit.horarios)
+        .then(horarios => {
+          setRecords(horarios);        
+        });  
     }, [])
-*/
+
     return (
         <>
             <Accordion disabled>
@@ -280,7 +317,7 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
                     <HeaderBoxs headers={headers} />
                 </AccordionSummary>
             </Accordion>
-            {generateRows(sampleData)}
+            {generateRows(records)}
         </>
     )
 }

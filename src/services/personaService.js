@@ -13,7 +13,7 @@ export const getPersonas = async () => {
 
 const getPersonasxTipo = async (tipo_persona) => {
   try{
-    const request = await axios.get(`${url}/persona/tipo=${tipo_persona}`, tipo_persona, tokenService.GetTokenPrueba());  //Es un entero que se pasa
+    const request = await axios.get(`${url}/persona/tipo=${tipo_persona}`, tokenService.GetTokenPrueba(), tipo_persona);  //Es un entero que se pasa
     return request.then(response => response.data)
   }catch(exception){
     console.error(exception);
