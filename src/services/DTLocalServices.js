@@ -1,16 +1,46 @@
+/* Author: Mitsuo
+ *
+ * LocalStorage services for testing:
+ * - persona
+ * - curso
+ *
+ * Import like this:
+import * as DTLocalServices from '../../services/DTLocalServices';
+ */
+
 import { insertEmployee } from "./employeeService";
 import { data } from "./data/curso-horario"
 
 /* LIB
  * ======================= */
 
+/* Filter array `items` by `items[i].key` for substring searchText.
+ * Ignores case and accents */
+export function filter(items, key, searchText) {
+    return items.filter(x =>
+        removeAccents(x[key])
+            .toLowerCase()
+            .includes(
+                removeAccents(searchText)
+                    .toLowerCase()
+            )
+    )
+}
+
+/* remove accents from string (i.g. áéíóúñ -> aeioun) */
+export function removeAccents(s) {
+    /* first get Unicode "Canonical Decomposition" and then remove
+       "accent code point modifiers" */
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+}
+
 /* Validaciones
- * 
+ *
  * Todas retornan mensaje de error.  Empty string means valid.
  */
 
 export function validateEmail(email) {
-    return (/^$|^[A-Za-z_\.]+@[A-Za-z_]+\.[A-Za-z_\.]+$/).test(email)
+    return (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(email)
         ? ""
         : "Correo electronico invalido"
 }

@@ -15,7 +15,7 @@ import ConfirmDialog from '../../../components/util/ConfirmDialog'
 /* SERVICES */
 import personaService from '../../../services/personaService'
 import * as DTLocalServices from '../../../services/DTLocalServices';
-import userService from '../../../services/userService';
+import UserService from '../../../services/userService';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -26,12 +26,12 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-  /*{
+    {
     id: 'fullName',
     label: 'Nombre Completo',
     numeric: false,
     sortable: true
-  },*/
+  },
   {
     id: 'dni',
     label: 'DNI',
@@ -46,7 +46,7 @@ const tableHeaders = [
   },
   {
     id: 'rol',
-    label: 'rol',
+    label: 'Rol',
     numeric: false,
     sortable: true
   },
@@ -64,7 +64,7 @@ const tableHeaders = [
   },
   {
     id: 'actions',
-    label: 'Actions',
+    label: 'Acciones',
     numeric: false,
     sortable: false
   }
@@ -72,13 +72,13 @@ const tableHeaders = [
 
 const getUsuario = async () => {
 
-  let usuario = await userService.getUsuarios();
+  let usuario = await UserService.getUsuarios();
   usuario = usuario ?? []
   console.log(usuario)
   var str,std,stl,ape1,ape2
   let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
-  
+
   usuario.map(usr => (
     ape1 = '',
     ape2 = '',
@@ -96,14 +96,10 @@ const getUsuario = async () => {
       correo: usr.persona.correo_pucp,
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
       rol: usr.persona.tipo_persona,
-      departamento: {
-        id: usr.persona.departamento ? usr.persona.departamento.id : '',
-        nombre: usr.persona.departamento ? usr.persona.departamento.nombre : ''
-      },
-      seccion: {
-        id: usr.persona.seccion ? usr.persona.seccion.id : '',
-        nombre: usr.persona.seccion ? usr.persona.seccion.nombre : ''
-      },
+      idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : '',
+      nombreDepartamento: usr.persona.departamento ? usr.persona.departamento.nombre : '',
+      idSeccion: usr.persona.seccion ? usr.persona.seccion.id : '',
+      nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
       foto_URL: usr.persona.foto_URL
     })
     ));
@@ -117,6 +113,8 @@ export default function GestionUsuarios() {
    * ===================== */
 
   const [records, setRecords] = useState([])
+  const [deleteData, setDeleteData] = useState(false);
+  const [changeData, setChangeData] = useState(false);
   /* no filter function initially */
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
@@ -138,7 +136,7 @@ export default function GestionUsuarios() {
 
   /* updates filter function inside `filterFn` object.  Which is used in
    * `useTable`'s `recordsAfterPagingAndSorting()`.  Because  */
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
       fn: items => {
@@ -146,8 +144,7 @@ export default function GestionUsuarios() {
           /* no search text */
           return items
         else
-          return items
-            .filter(x => x.fullName.toLowerCase()
+          return items.filter(x => x.nombre.toLowerCase()
             .includes(target.value.toLowerCase()))
       }
     })
@@ -157,9 +154,10 @@ export default function GestionUsuarios() {
     getUsuario()
     .then (newUsr =>{
       setRecords(newUsr);
-
+      setDeleteData(false);
+      setChangeData(false);
     });
-  }, [recordForEdit])
+  }, [recordForEdit,changeData, deleteData])
 
   const addOrEdit = (usuario, resetForm) => {
 
@@ -209,15 +207,16 @@ export default function GestionUsuarios() {
 
     recordForEdit
         ? personaService.updatePersona(dataPer, usuario.idPersona)
-        : userService.registerUsuario(dataUsr)
+        : UserService.registerUsuario(dataUsr)
           .then(idUsuario => {
             if(recordForEdit)
               setRecordForEdit(null);
-            
+
         })
-    window.location.replace('')
+    //window.location.replace('')
     setOpenPopup(false)
     resetForm()
+    setChangeData(true);
     //window.location.replace('');
     /*if (usuario.id == 0){
       //DTLocalServices.postUser(dataUsr)
@@ -234,7 +233,7 @@ export default function GestionUsuarios() {
     //setRecords(DTLocalServices.getAllPersonas())*/
     setNotify({
       isOpen: true,
-      message: 'Cambios añadidos',
+      message: 'Registro de Cambios Añadidos',
       type: 'success'
     })
 
@@ -256,19 +255,19 @@ export default function GestionUsuarios() {
     console.log(idPersona)
     console.log(id)
 
-    userService.borrarUsuario(id);
-    
+    UserService.borrarUsuario(id);
+
     //window.location.replace('');
     /*DTLocalServices.getUsers().then((response) => {
       setRecords(response.data)
       console.log(response.data);
     });*/
     //setRecords(DTLocalServices.getAllPersonas())
-
+    setDeleteData(true);
     setNotify({
       isOpen: true,
       message: 'Borrado Exitoso',
-      type: 'error'
+      type: 'success'
     })
   }
 
@@ -326,7 +325,7 @@ export default function GestionUsuarios() {
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
           {/* <Toolbar> */}
           <Controls.Input
-            label="Buscar usuarios por nombre"
+            label="Buscar Usuarios por nombre"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -358,8 +357,8 @@ export default function GestionUsuarios() {
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>
-                    <StyledTableCell>{item.seccion.nombre}</StyledTableCell>
-                    <StyledTableCell>{item.departamento.nombre}</StyledTableCell>
+                    <StyledTableCell>{item.nombreSeccion}</StyledTableCell>
+                    <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
                     <StyledTableCell>
                       <Controls.ActionButton
                         color="warning"
@@ -398,6 +397,7 @@ export default function GestionUsuarios() {
         <GestionUsuariosForm
           recordForEdit={recordForEdit}
           addOrEdit={addOrEdit}
+          setOpenPopup={setOpenPopup}
         />
       </Popup>
       {/* </Grid> */}
