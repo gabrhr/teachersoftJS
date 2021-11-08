@@ -5,13 +5,13 @@ import tokenService from './tokens.js';
 export const getPersonas = async () => {
   try{
     const request = await axios.get(`${url}/persona/`, tokenService.GetTokenPrueba());
-    return request.then(response => response.data) 
+    return request.then(response => response.data)
   }catch(exception){
     console.error(exception);
   }
 }
 
-const getPersonasxTipo = async ({tipo_persona}) => {
+const getPersonasxTipo = async (tipo_persona) => {
   try{
     const request = await axios.get(`${url}/persona/tipo=${tipo_persona}`, tipo_persona, tokenService.GetTokenPrueba());  //Es un entero que se pasa
     return request.then(response => response.data)
@@ -20,7 +20,7 @@ const getPersonasxTipo = async ({tipo_persona}) => {
   }
 }
 
-const getPersonasxSeccionTipo = async ({id_seccion}, {tipo_persona}) => {
+const getPersonasxSeccionTipo = async (id_seccion, tipo_persona) => {
   try{
     const request = await axios.get(`${url}/persona/tipo=${tipo_persona}/seccion=${id_seccion}`, tipo_persona, id_seccion, tokenService.GetTokenPrueba());
     return request.then(response => response.data)
@@ -29,7 +29,7 @@ const getPersonasxSeccionTipo = async ({id_seccion}, {tipo_persona}) => {
   }
 }
 
-const getPersona = async ({id}) => {
+const getPersona = async (id) => {
   try{
     const request = await axios.get(`${url}/persona/${id}`, id, tokenService.GetTokenPrueba());
     return request.then(response => response.data)  //Es un dato.
@@ -48,7 +48,7 @@ const registerPersona = async newObject => {
   }
 }
 
-const updatePersona = async (newObject, {id}) => {
+const updatePersona = async (newObject, id) => {
   try{
     console.log(newObject)
     const request = await axios.put(`${url}/persona/`, newObject, tokenService.GetTokenPrueba());
@@ -58,7 +58,7 @@ const updatePersona = async (newObject, {id}) => {
   }
 }
 
-const deletePersona = async ({id}) => {
+const deletePersona = async (id) => {
   try{
     const request = await axios.delete(`${url}/persona/${id}`, tokenService.GetTokenPrueba(), id);
     return request.then(response => response.data) //Es un valor de true o no

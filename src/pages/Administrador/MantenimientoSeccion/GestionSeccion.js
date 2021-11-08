@@ -55,10 +55,10 @@ const tableHeaders = [
 const getSecciones = async () => {
 
   let dataSecc = await SeccionService.getSecciones();
-  console.log(dataSecc)
+  //console.log(dataSecc)
   dataSecc = dataSecc ?? []
-  console.log("AQUI ESTA EL DATASECC")
-  console.log(dataSecc)
+  //console.log("AQUI ESTA EL DATASECC")
+  //console.log(dataSecc)
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   if(dataSecc){
@@ -94,7 +94,7 @@ export default function GestionSeccion() {
     color:"primary.light", elevatio:0}
     const [confirmDialog, setConfirmDialog] = useState(
       { isOpen: false, title: '', subtitle: '' })
-    console.log(records);
+    //console.log(records);
     const {
         TblContainer,
         TblHead,
@@ -124,7 +124,7 @@ export default function GestionSeccion() {
       getSecciones()
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
-        console.log(newSeccion);
+        //console.log(newSeccion);
         setDeleteData(false);
         setChangeData(false);
       });

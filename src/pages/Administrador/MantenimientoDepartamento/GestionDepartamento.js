@@ -86,8 +86,8 @@ const getDepartamentos = async () => {
   let dataDep = await DepartamentoService.getDepartamentos();
   dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
-  console.log("AQUI ESTA EL DATASECC")
-  console.log(dataDep)
+  //console.log("AQUI ESTA EL DATASECC")
+  //console.log(dataDep)
   const departamentos = [];
   if(dataDep){
     dataDep.map(dep => (

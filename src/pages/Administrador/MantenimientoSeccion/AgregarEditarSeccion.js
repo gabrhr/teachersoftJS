@@ -80,23 +80,29 @@ export default function AgregarEditarSeccion(props) {
     const handleSubmit = async e => {
         e.preventDefault();
         let fechaCreacion= "";
-        let fechaC="Holi";
         //Definicio de validaciones
         if (validate()){
           //window.alert('valid')
           //si es una edición tenemos que enviar la fecha de creacion
-            console.log(values.id);
-            values.id
-            ? SeccionService.getSeccion(values.id):null
-            .then(seccion=>{
-              fechaCreacion=seccion.data.fecha_creacion;
-            })
-
-            console.log("Esto es sección");
-            //console.log(seccion);
-            console.log(fechaC);
-
-          if(values.id) console.log(values.id);;
+            //Función para llenar fechaDeCreación
+          /*  async function getFecha (id) {
+              let fechaC="";
+              if(values.id){
+                await SeccionService.getSeccion(id)
+                .then(request=>{
+                  fechaC= request.fecha_creacion;console.log(request);
+                })
+              }
+              return fechaC;
+            }
+            const fechaCreacion = await getFecha(values.id);
+            */
+            //console.log("Esto es sección");
+            if(values.id) {
+              const secc= await SeccionService.getSeccion(values.id);
+              fechaCreacion = secc.fecha_creacion;
+            }
+            //console.log(fechaCreacion);
           //Este pasa como la nueva seccion o la seccion editada
           const newSecc = {
             id: values.id,
@@ -112,13 +118,11 @@ export default function AgregarEditarSeccion(props) {
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
-
           console.log(newSecc);
           //const rpta = await SeccionService.registerSeccion(newSecc);
           //console.log(rpta);
           addOrEdit(newSecc,resetForm)
           //resetForm()
-
         }
         else
             window.alert('invalid')

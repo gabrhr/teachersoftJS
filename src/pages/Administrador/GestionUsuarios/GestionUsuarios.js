@@ -103,7 +103,7 @@ const getUsuario = async () => {
       foto_URL: usr.persona.foto_URL
     })
     ));
-  console.log(usuarios)
+  //console.log(usuarios)
   window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
   return usuarios;
 }
