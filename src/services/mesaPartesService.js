@@ -1,5 +1,13 @@
 /* Author: Mitsuo
  *
+ * Todas estas funciones retornas un <Promise>.  Es imposible retornar solo
+ * la data.  Ejecutar .then(f) en el retorno de las funciones para que cuando
+ * reciba la respuesta del servidor.  Ejecute  `f` sobre la data.
+ * 
+ * e.g.:
+ *  getSolicitudes().then((data) => {setRecords(data)})
+ *  getSolicitud(8).then((data) => {setRecord(data)})
+ *
  * Llamadas al API de BackEnd para todos los objetos relacionados a mesa de
  * partes:
  * - Solicitud
@@ -36,7 +44,18 @@ function b2fTemaTramite(x) {
         departamento: x.seccion.departamento.nombre,
         unidad: x.seccion.departamento.unidad
             ? x.seccion.departamento.unidad.nombre
-            : null
+            : null,
+
+        /* RELACIONES */
+        seccionID: x.seccion.id
+    }
+}
+
+function f2bTemaTramite(x) {
+    return {
+        id: x.id,
+        nombre: x.nombre,
+        seccion: { id: x.seccionID }
     }
 }
 
@@ -47,7 +66,19 @@ function b2fTipoTramite(x) {
         nombre: x.nombre,
 
         temaTramite: temaTramiteNombre,
-        ...other
+        ...other,
+
+        /* RELACIONES */
+        temaTramiteID: id
+    }
+}
+
+function f2bTipoTramite(x) {
+    return {
+        id: x.id,
+        nombre: x.nombre,
+
+        temaTramiteMesaDePartes: { id: x.tramiteID }
     }
 }
 
@@ -97,19 +128,42 @@ function b2fSolicitud(x) {
 
         tipoTramite: tipoTramite,
         ...other,
-        // _backFormat: x          // Luego ver como recuperar los ids. 
-        // no se deberia usar esto porque los ids,
-        // deberian salir de los combobox.
+
+        /* RELACIONES (necesario para back) */
+        solicitadorID: x.solicitador ? x.solicitador.id : null,
+        delegadoID: x.delegado ? x.delegado.id : null,
+        tipoTramiteID: x.tipoTramiteMesaDePartes
     }
 }
+
+function f2bSolicitud(x) {
+    return {
+        id: x.id,
+        asunto: x.asunto,
+        descripcion: x.descripcion,
+        solicitador: { id: x.solicitadorID },
+        archivos: x.archivos,
+        delegado: { id: x.delegadoID },
+
+        fecha_creacion: x.fecha_enviado,
+        fecha_recepcion: x.tracking.fecha_enviado,
+        fecha_delegacion: x.tracking.fecha_revision,
+        fecha_atencion: x.tracking.fecha_delegado,
+
+        estado_tracking: x.estado,
+        resultado: x.resultado,
+
+        tipoTramiteMesaDePartes: { id: x.tipoTramiteID }    // requerido
+    }
+}
+
 
 /* ----------FIN FUNCIONES AUXILIARES------------------ */
 
 /* tema_tramite CRUD operations
  * ===================================*/
 export function getTemas() {
-    let temas = []
-    axios({
+    return axios({
         method: 'get',
         url: `${url}/tema/`,
         ...config
@@ -118,37 +172,32 @@ export function getTemas() {
             res.data.forEach((x, i) => {
                 res.data[i] = b2fTemaTramite(x)
             });
-            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+            res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
             // showOutput(res)
-            temas = res.data
+            return res.data
         })
         .catch(err => console.error(err));
-    return temas
 }
 
 /* TODO: work-in-progress */
-function registerTema() {
+function registerTema(tema) {
     axios({
         method: 'post',
         url: `${url}/tema/`,
         data: {
             /* DATA OBLIGATORIA */
-            // asunto: 'Asunto1',              // opcional
-            // solicitador: { id: 30 },          // opcional
-            // seccion: { id: 3 },
-            // tipoTramiteMesaDePartes: { id: 1 }
+            ...f2bTemaTramite(tema)
         },
         ...config
     })
-        //.then(res => showOutput(res))
+        // .then(res => showOutput(res))
         .catch(err => console.error(err));
 }
 
 /* tipo_tramite CRUD operations
  * ===================================*/
 export function getTipos() {
-    let tipos = []
-    axios({
+    return axios({
         method: 'get',
         url: `${url}/tipo/`,
         ...config
@@ -159,23 +208,19 @@ export function getTipos() {
             });
             res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
             // showOutput(res)
-            tipos = res.data
+            return res.data
         })
         .catch(err => console.error(err));
-    return tipos
 }
 
 /* TODO: work-in-progress */
-function registerTipo() {
+function registerTipo(tipo) {
     axios({
         method: 'post',
         url: `${url}/tipo/`,
         data: {
             // /* DATA OBLIGATORIA */
-            // asunto: 'Asunto1',              // opcional
-            // solicitador: { id: 30 },          // opcional
-            // seccion: { id: 3 },
-            // tipoTramiteMesaDePartes: { id: 1 }
+            ...f2bTipoTramite(tipo)
         },
         ...config
     })
@@ -185,8 +230,8 @@ function registerTipo() {
 
 /* Solicitud CRUD operations 
  * ===================================*/
-export async function getSolicitudes() {
-    return await axios({
+export function getSolicitudes() {
+    return axios({
         method: 'get',
         url: `${url}/mesa/`,
         ...config
@@ -196,7 +241,7 @@ export async function getSolicitudes() {
                 res.data[i] = b2fSolicitud(x)
             });
             // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            // showOutput(res)
+            console.log(res.data)
             return res.data
         })
         .catch(err => console.error(err));
@@ -211,11 +256,6 @@ export function getSolicitud(id) {
         ...config
     })
         .then(res => {
-            // res.data.forEach((x, i) => {
-            //     res.data[i] = b2fSolicitud(x)
-            // });
-            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            // showOutput(res)
             solicitud = b2fSolicitud(res.data)
         })
         .catch(err => console.error(err));
@@ -223,16 +263,12 @@ export function getSolicitud(id) {
 }
 
 /* TODO: work-in-progress */
-function registerSolicitud() {
+function registerSolicitud(soli) {
     axios({
         method: 'post',
         url: `${url}/mesa/`,
         data: {
-            // /* DATA OBLIGATORIA */
-            // asunto: 'Asunto1',              // opcional
-            // solicitador: { id: 30 },          // opcional
-            // seccion: { id: 3 },
-            // tipoTramiteMesaDePartes: { id: 1 }
+            ...f2bSolicitud(soli)
         },
         ...config
     })
