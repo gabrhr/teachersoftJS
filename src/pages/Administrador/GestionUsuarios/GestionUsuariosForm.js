@@ -41,13 +41,30 @@ const initialFieldValues = {
     nombre: ''
   }
 }
+/*
+const FillDepartamentos = async () =>{
+  const dataDep = await DepartamentoService.getDepartamentos();
+  const departamentos = []
+  //if(dataDep) setDepartamentos(dataDep);
+  dataDep.map(dep => (
+    departamentos.push({
+      id: dep.id.toString(),
+      nombre: dep.nombre,
+    })
+  ));
+
+  //console.log(departamentos);
+  return departamentos;
+}*/
 
 const getDepartamento = async () => {
-  
-  const dataDep = await departamentoService.getDepartamentos(); 
-  
+
+  const dataDep = await departamentoService.getDepartamentos();
+  console.log("AQUI ESTA EL DATADEP")
+  console.log(dataDep)
   const departamentos = [];
-  dataDep.map(dep => (
+  if(dataDep){
+    dataDep.map(dep => (
     departamentos.push({
       id: dep.id.toString(),
       nombre: dep.nombre,
@@ -56,13 +73,14 @@ const getDepartamento = async () => {
       fechaFundacion: dep.fechaFundacion,
     })
     ));
-  
+  }
+  else console.log("No existen datos en Departamentos");
   return departamentos;
 }
 
 const getSecciones = async () => {
 
-  const dataSecc = await SeccionService.getSecciones(); 
+  const dataSecc = await SeccionService.getSecciones();
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -80,13 +98,14 @@ const getSecciones = async () => {
     })
     ));
   //console.log(secciones);
-  
+
   return secciones;
 }
 
 export default function GestionUsuariosForm(props) {
 
-  const { recordForEdit,addOrEdit } = props
+  const { recordForEdit,addOrEdit, setOpenPopup } = props
+  const [createData, setCreateData] = useState(false);
   const [departamento, setDepartamentos] = useState([])
   const [seccion, setSecciones] = useState([])
 
@@ -121,7 +140,7 @@ export default function GestionUsuariosForm(props) {
     if ('correo' in fieldValues)
       temp.correo = DTLocalServices.validateEmail(fieldValues.correo)
     if ('documento' in fieldValues)
-      temp.documento = (/^\d\d\d\d\d\d\d\d$/).test(fieldValues.documento) 
+      temp.documento = (/^\d\d\d\d\d\d\d\d$/).test(fieldValues.documento)
         ? ""
         : "DNI necesita 8 digitos"
     if ('rol' in fieldValues)
@@ -153,7 +172,7 @@ export default function GestionUsuariosForm(props) {
     /* e is a "default parameter" */
     e.preventDefault()
     if (validate()){
-      window.alert('valid')
+      //window.alert('valid')
     //Este pasa como la nueva seccion o la seccion editada
       const newUsr = {
         id: values.id,
@@ -165,23 +184,24 @@ export default function GestionUsuariosForm(props) {
         DNI: values.documento,
         rol: values.rol,
         departamento: {
-          id: recordForEdit ? parseInt(values.departamento.id) : parseInt(values.departmentId) ,
+          id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
           nombre: null,
         },
         seccion: {
-          id: recordForEdit ? parseInt(values.seccion.id) : parseInt(values.seccionId) ,
+          id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId) ,
           nombre: null,
-        }, 
-        
+        },
+
         //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
-        //~~~foto: --queda pendiente 
+        //~~~foto: --queda pendiente
       }
       console.log(newUsr);
+
       addOrEdit({...newUsr, image: fileFoto}, resetForm)
     }else{
       window.alert('invalid')
     }
-      
+
   }
 
   /* "detect the change of recordForEdit inside this bottom component" */
@@ -195,12 +215,13 @@ export default function GestionUsuariosForm(props) {
   }, [recordForEdit])*/
 
   useEffect(() => {
+
     getDepartamento()
     .then (newDep =>{
       setDepartamentos(prevRecords => prevRecords.concat(newDep));
-      
+
       //console.log(newSeccion);
-      
+
     });
     if (recordForEdit != null) {
       /* object is not empty */
@@ -208,17 +229,17 @@ export default function GestionUsuariosForm(props) {
         ...recordForEdit
       })
     }
-    
+
   }, [recordForEdit])
 
   useEffect(() => {
     getSecciones()
     .then (newSecc =>{
       setSecciones(prevSecc => prevSecc.concat(newSecc));
-      
+
       //console.log(newSeccion);
-      
-      
+
+
     });
     if (recordForEdit != null) {
       /* object is not empty */
@@ -226,9 +247,9 @@ export default function GestionUsuariosForm(props) {
         ...recordForEdit
       })
     }
-    
+
   }, [recordForEdit])
-  
+
   /*useEffect(() => {
     getSecciones()
   }, [])
@@ -240,7 +261,7 @@ export default function GestionUsuariosForm(props) {
           console.log(response.data);
       });
   };*/
-  
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -305,24 +326,24 @@ export default function GestionUsuariosForm(props) {
               options={DTLocalServices.getAllRoles()}
               error={errors.rol}
             />
-            
+
             <Controls.Select
-              name="departmentId"
+              name={recordForEdit ? "idDepartamento":"departmentId"}
               label="Departamento"
-              value={recordForEdit ? values.departamento.id : values.departmentId}
+              value={recordForEdit ? values.idDepartamento : values.departmentId}
               onChange={handleInputChange}
               options={departamento}
-              
+
             />
             <Controls.Select
-              name="seccionId"
+              name={recordForEdit ? "idSeccion" : "seccionId"}
               label="Seccion Principal"
-              value={recordForEdit ? values.seccion.id : values.seccionId}
+              value={recordForEdit ? values.idSeccion : values.seccionId}
               onChange={handleInputChange}
               options={seccion}
-              
+
             />
-            
+
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mt: 9, mb: 2, mx: 1 }} />
           {/* Foto del usuario */}
@@ -345,7 +366,7 @@ export default function GestionUsuariosForm(props) {
 
                   if (files && files[0]) {
                     var reader = new FileReader();
-                    
+
                     reader.onload = function (e) {
                       setFotoPerfil(e.target.result)
                       console.log(e.target.result)
@@ -369,6 +390,7 @@ export default function GestionUsuariosForm(props) {
           <Controls.Button
             variant="outlined"
             text="cancelar"
+            onClick={()=>setOpenPopup(false)}
           />
 
           <Controls.Button
@@ -382,7 +404,7 @@ export default function GestionUsuariosForm(props) {
           //         onConfirm: () => {onSubmit()}
           //         } )
           //     }
-          // } 
+          // }
           />
         </Box>
       </Form>

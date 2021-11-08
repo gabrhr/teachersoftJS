@@ -10,10 +10,10 @@ const getDepartamentos = async () => {
         console.error(except);
     }
 }
-const getDepartamento = async ({id}) => {
+const getDepartamento = async (id) => {
     try{
         //const request = await axios.get(`${url}/departamento/${id}`, id, tokenService.getToken());
-        const request = await axios.get(`${url}/departamento/${id}`, tokenService.GetTokenPrueba(), id);
+        const request = await axios.get(`${url}/departamento/${id}`, tokenService.GetTokenPrueba());
         if(!request)
           return request.data;
     } catch (except){
@@ -30,11 +30,11 @@ const registerDepartamento = async newObject => {
     }
 }
 
-const updateDepartamento = async (newObject,{id}) => {
+const updateDepartamento = async (newObject,id) => {
     try{
         console.log(newObject)
         //const request = await axios.put(`${url}/departamento/${id}`, tokenService.getToken(),id);
-        const request = await axios.put(`${url}/departamento/${id}`,newObject, tokenService.GetTokenPrueba(), id);
+        const request = await axios.put(`${url}/departamento/`,newObject, tokenService.GetTokenPrueba());
         return request.data;
     } catch(exception){
         console.error(exception)
@@ -43,7 +43,7 @@ const updateDepartamento = async (newObject,{id}) => {
 const deleteDepartamento = async (id) => {
     try{
         //const request = await axios.delete(`${url}/departamento/${id}`,tokenService.getToken(),id);
-        const request = await axios.delete(`${url}/departamento/${id}`, tokenService.GetTokenPrueba(), id);
+        const request = await axios.delete(`${url}/departamento/${id}`, tokenService.GetTokenPrueba());
         return request.data;
     } catch(exception) {
         console.error(exception);
