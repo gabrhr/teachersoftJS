@@ -29,6 +29,7 @@ const initialFieldValues = {
   DNI: '',
   correo: '',
   rol: '',
+  foto_URL: '',
   departamentId: '',
   nombreDepartamento: '',
   seccionId: '',
@@ -202,14 +203,14 @@ export default function GestionUsuariosForm(props) {
           nombre: null,
         },
         fecha_creacion:fechaCreacion,
-        fecha_modificacion:null
+        fecha_modificacion:null,
 
-        //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
+        foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //~~~foto: --queda pendiente
       }
       console.log(newUsr);
 
-      addOrEdit({...newUsr, image: fileFoto}, resetForm)
+      addOrEdit(newUsr, resetForm)
     }else{
       window.alert('invalid')
     }
@@ -365,36 +366,12 @@ export default function GestionUsuariosForm(props) {
             </Typography>
             <Avatar src={values.foto_URL ? values.foto_URL : fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
             {/* Botoncito para subir imagen */}
-            <label htmlFor="contained-button-file">
-              <Input accept="image/*" id="contained-button-file"
-                type="file" sx={{ display: 'none' }}
-                value = {values.fileFoto}
-                onChange={(event) => {
-                  const files = event.target.files
-
-                  //console.log(files[0]);
-                  setFileFoto(files[0])
-                  setCambio(true)
-
-                  if (files && files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                      setFotoPerfil(e.target.result)
-                      console.log(e.target.result)
-                    };
-                    reader.readAsDataURL(files[0]);
-                  }
-                }}
-              />
-              <Controls.Button
-                text="Subir foto"
-                // type="submit"   // html property (not component)
-                endIcon={<AddAPhotoIcon />} //Opcional con imagen
-                size="medium"
-                component="span"
-              />
-            </label>
+            <Controls.Input
+              name="foto_URL"
+              label="URL de Foto"
+              value={values.foto_URL}
+              onChange={handleInputChange}
+            />
           </Grid>
         </Grid>
         {/* <Grid align="right" marginY={5} > */}

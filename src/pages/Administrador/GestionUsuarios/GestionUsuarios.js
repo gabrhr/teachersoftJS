@@ -198,7 +198,7 @@ export default function GestionUsuarios() {
           id: usuario.departamento.id,
           nombre: usuario.departamento.nombre
         },
-        foto_url: null
+        foto_URL: usuario.foto
       }
 
     }
@@ -218,7 +218,7 @@ export default function GestionUsuarios() {
         id: usuario.departamento.id,
         nombre: usuario.departamento.nombre
       },
-      foto_url: null
+      foto_URL: usuario.foto
     }
 
     recordForEdit
