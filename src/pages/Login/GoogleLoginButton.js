@@ -38,16 +38,19 @@ const GoogleLoginButton = () => {
     
           switch (rol) {
             case 0:
-                  history.push("/admin");
-                  break;
+                return history.push("/admin");
             case 1:
-                history.push({
-                pathname: "/as",
-                });
-                break;
+                return history.push("/doc");
             case 2:
-                  history.push("/as");
-                  break;
+                return history.push("/as");
+            case 3:
+                return history.push("/cord");
+            case 4:
+                return history.push("/ad"); 
+            case 4:
+                return history.push("/jd"); 
+            case 4:
+                return history.push("/secretaria");
             default:
                 return history.push("/noRoles");
           }

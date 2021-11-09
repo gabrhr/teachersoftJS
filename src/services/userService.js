@@ -42,11 +42,15 @@ const registerUsuario = async (newObject) => {
     }
 }
 const borrarUsuario = async (id) => {
-    try{
-        const request = await axios.delete(`${url}/usuario/${id}`, tokenService.GetTokenPrueba(),id);
-        return request.data;
-    } catch(exception) {
-        console.error(exception);
+    try {
+      const request = await axios.delete(
+        `${url}/usuario/${id}`,
+        tokenService.GetTokenPrueba(),
+        id
+      );
+      return request.data;
+    } catch (exception) {
+      console.error(exception);
     }
 }
 const updateUsuario = async (newObject, id) => {
