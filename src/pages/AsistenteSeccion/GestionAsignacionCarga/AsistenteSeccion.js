@@ -153,8 +153,8 @@ export default function AsistenteSeccion() {
             />
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
-                    <Typography variant="button" style={{ fontSize: '10px' }}> Puedes&nbsp;
-                        <Link style={{ fontSize: '10px' }} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
+                    <Typography variant="body1"> Puedes&nbsp;
+                        <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
                         </Link>
                         &nbsp;para subir la carga de horario de un determinado curso.

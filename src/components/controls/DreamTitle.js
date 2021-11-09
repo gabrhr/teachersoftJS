@@ -17,7 +17,7 @@ import {makeStyles} from '@mui/styles';
    
            
            /* H4 */
-           fontFamily: 'Bell MT',
+           fontFamily: 'Quicksand',
            fontStyle: 'normal',
            fontWeight: 'normal',
            fontSize: size,

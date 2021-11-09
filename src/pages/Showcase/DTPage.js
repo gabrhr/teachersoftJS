@@ -3,7 +3,7 @@
 import React from 'react'
 import { Typography, Box, Stack, Divider } from '@mui/material'
 import { DT } from '../../components/DreamTeam/DT'
-import { Controls } from '../../components/controls/Controls'
+import {Controls} from '../../components/controls/Controls'
 
 function EjemploBorderBox() {
     return (
@@ -22,13 +22,28 @@ function EjemploBorderBox() {
 function EjemploEtiqueta() {
     return (
         <>
-            <Typography >
-                Etiqueta.  Hay que hacerla mas pequeña
-            </Typography>
-            <DT.Etiqueta
-                type="pendiente"       // error | info | success | warning | pendiente
-                text="Pendiente"
-            />
+            <Typography children="Etiqueta.  Hay que hacerla mas pequeña" />
+
+            <Typography children="MUI" />
+            <Stack direction="row" spacing={1}>
+                <DT.Etiqueta type="error" text="error"/>
+                <DT.Etiqueta type="info" text="info"/>
+                <DT.Etiqueta type="success" text="success"/>
+                <DT.Etiqueta type="warning" text="warning"/>
+            </Stack>
+
+            <Typography children="Carga Docente" />
+            <Stack direction="row" spacing={1}>
+                <DT.Etiqueta type="pendiente" text="pendiente"/>
+            </Stack>
+
+            <Typography children="Mesa Partes" />
+            <Stack direction="row" spacing={1}>
+                <DT.Etiqueta type="enviado"/>
+                <DT.Etiqueta type="enRevision"/>
+                <DT.Etiqueta type="delegado"/>
+                <DT.Etiqueta type="atendido"/>
+            </Stack>
         </>
     )
 }
@@ -81,13 +96,26 @@ function EjemploTitle() {
 }
 
 function EjemploFileButton() {
-
+    return (
+        <>
+            <Typography children="FileButton" />
+            <DT.FileButton />
+        </>
+    )
 }
 
 export default function DTPage() {
+    const importstmt = "import { DT } from '../../components/DreamTeam/DT'"
+
     return (
         <>
-            <Typography children="Los elementos aqui litados" />
+            <Typography 
+                sx={{
+                    fontFamily: "monospace",
+                    whiteSpace: "pre"
+                }}
+                children={importstmt}
+            />
             <Stack
                 direction="column"
                 divider={<Divider orientation="horizontal" flexItem />}
@@ -97,6 +125,7 @@ export default function DTPage() {
                 <EjemploBorderBox />
                 <EjemploDivider />
                 <EjemploTitle />
+                <EjemploFileButton />
             </Stack>
         </>
     )

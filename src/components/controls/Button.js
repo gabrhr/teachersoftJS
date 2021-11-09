@@ -28,8 +28,10 @@ import { Box } from '@mui/system';
 function TextIconButton(props) {
     let { text, size, color, variant, onClick, sx, ...other } = props
     return (
-        <Box display="flex" flexDirection="row" alignItems="center">
-            <Typography display="inline"> 
+        <Box display="flex" flexDirection="row" alignItems="center"
+            height="80px"
+        >
+            <Typography> 
                 {text}
             </Typography>
             <IconButton

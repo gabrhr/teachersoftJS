@@ -35,7 +35,7 @@ import { UserContext } from './UserContext';
 import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-
+import NoAsignado from './NoAsignado'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -92,6 +92,16 @@ export default function Router1(props) {
           >
           </PrivateRoute>
         )}
+
+        {/* Rutas protegidas. Page solita */}
+        <PrivateRoute exact path="/noRoles"
+          requireRoles={[0,8]}
+          component={() =>
+            <NoAsignado/>
+          }
+          >
+          </PrivateRoute>
+
         {/* Rutas no protegidas */}
         {/* {publicroutes.map(r =>
           <Route exact path={r.path} 

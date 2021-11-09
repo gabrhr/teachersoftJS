@@ -9,6 +9,7 @@ const getCiclos = async () => {
     return request ? request.data : []; 
     */ 
     const request = await axios.get(`${url}/ciclo/`, tokenService.GetTokenPrueba());
+    console.log(request.data);
     return request.data;  
   }catch(exception){
     console.error(exception);
