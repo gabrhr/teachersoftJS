@@ -40,10 +40,10 @@ const tableHeaders = [
         sortable: true
      },
      {
-         id: 'horasDocente',
-         labe: 'Horas',
-         numeric: true,
-         sortable: true
+        id: 'horasDocente',
+        label: 'Horas',
+        numeric: true,
+        sortable: true
      }
 ]
 
@@ -59,6 +59,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
     const [deudaHor, setDeudaHor] = useState('')
     const [deudaHorIni, setDeudaHorIni] = useState('')
     const [profDelete, setProfDelete] = useState({})
+    const [maxHoras, setMaxHoras] = useState(6);
 
     const {
         TblContainer,
@@ -80,25 +81,39 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
         }else{
             setSelectedRow(sel)
             setBorrarDisabled(false)
-            setHorasAsig(`${prof.horasDocente}`)
+            setHorasAsig(`${prof.horasDocente ? prof.horasDocente : ""}`)
             setCargaHor(`${prof.cargaHoraria}`)
             setCargaHorIni(`${prof.cargaHoraria}`)
             setDeudaHor(`${prof.deudaHoraria}`)
             setDeudaHorIni(`${prof.deudaHoraria}`)
             setProfDelete(prof)
         }
+        let maximoHoras;
+        switch(prof.tipo){
+          case "TC":
+            maximoHoras = 10;
+            break;
+          case "TPC":
+            maximoHoras = 6;
+            break;
+          default:
+            maximoHoras = 6;
+            break;
+        }
+        setMaxHoras(maximoHoras);
     }
 
     const changeCarga = (e) => {
-        console.log('hola')
-        console.log(`${e.target.value}`)
+
         setHorasAsig(`${e.target.value}`)
         records[selectedRow].horasDocente = e.target.value===''?0: e.target.value
         records[selectedRow].cargaHoraria = parseInt(cargaHorIni) + parseInt(records[selectedRow].horasDocente)
-        records[selectedRow].deudaHoraria = deudaHorIni - records[selectedRow].horasDocente    
         setCargaHor(records[selectedRow].cargaHoraria)
+
+        records[selectedRow].deudaHoraria = parseInt(deudaHorIni) + ( (records[selectedRow].cargaHoraria>= maxHoras ) ? (maxHoras - records[selectedRow].cargaHoraria) : 0)
         setDeudaHor(records[selectedRow].deudaHoraria)
-        console.log(horasAsig)
+
+        //console.log(horasAsig)
     }
 
     const deleteProfesor = () => {
@@ -120,7 +135,8 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
     return(
         <>
             <Grid container>
-                <Grid item xs = {8}>
+                <Grid item xs = {9.5}>
+                <Grid cointainer align="right" mt={2.5} />  
                     <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Lista de docentes asignados
                     </Typography>
@@ -137,18 +153,26 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                 <BoxTbl>
                     <TblContainer>
                         <TblHead/>
+                        <colgroup>
+                          <col style={{ width: '10%' }} />
+                          <col style={{ width: '65%' }} />
+                          <col style={{ width: '10%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '5%' }} />
+                        </colgroup>
                         <TableBody>
                         {
                         recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.codigo} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
+                        <StyledTableRow key={item.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                                         sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                                         onClick={()=>changeSelected(item)}>
-                            <StyledTableCell align="right">{item.id}</StyledTableCell>
+                            <StyledTableCell align="right">{item.codigo}</StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
                             <StyledTableCell>{item.tipo}</StyledTableCell>
-                            <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
-                            <StyledTableCell        align="right">{item.deudaHoraria}</StyledTableCell>
-                            <StyledTableCell        align="right">{item.horasDocente}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.cargaHoraria}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.deudaHoraria}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.horasDocente ? item.horasDocente : 0}</StyledTableCell>
                         </StyledTableRow>
                         ))
                         }
@@ -157,7 +181,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                     <TblPagination/>
                 </BoxTbl>
                 <Grid container>
-                    <Grid item xs={3} sx={{marginX: 1}}>
+                    <Grid item xs={2} sx={{marginX: 1}}>
                         <Controls.Input
                             value = {horasAsig}
                             label="Horas asignadas"
@@ -166,8 +190,8 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                             onChange={(selectedRow<=records.length)?((e)=>changeCarga(e)):(()=>{})}
                         />
                     </Grid>
-                    <Grid item xs={2}></Grid>
-                    <Grid item xs={3} sx={{marginRight: 2, marginLeft:1}} >
+                    <Grid item xs={5.5}></Grid>
+                    <Grid item xs={2} sx={{marginRight: 2, marginLeft:1}} >
                         <Controls.Input
                             value = {cargaHor}
                             label="Carga horaria"
@@ -175,7 +199,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                             size= 'small'
                         />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         <Controls.Input
                             value= {deudaHor}
                             label="Deuda horaria"

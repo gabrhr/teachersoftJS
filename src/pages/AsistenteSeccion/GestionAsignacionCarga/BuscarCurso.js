@@ -14,6 +14,7 @@ import useTable from "../../../components/useTable"
 import cursoService from '../../../services/cursoService';
 import GestionCargaCursos from './GestiónCargaCursos';
 import CursoService from '../../../services/cursoService';
+import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 
 const tableHeaders = [
     {
@@ -57,7 +58,7 @@ export default function BuscarCurso(props)  {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [records, setRecords] = useState([])
     const [selected, setSelected] = useState(false)
-    
+    const [selectedRow, setSelectedRow] = useState(50) //Se tiene que cambiar
 
     const {
         TblContainer,
@@ -71,20 +72,20 @@ export default function BuscarCurso(props)  {
       fillCursos()
       .then (newCurs =>{
         setRecords(prevRecords => prevRecords.concat(newCurs));
-        
         //console.log(newSeccion);
         
         //console.log(records);
       });
     }, [])
 
+    
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
          * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
+            if (target.value === "")
               /* no search text */
               return items
             else
@@ -93,7 +94,7 @@ export default function BuscarCurso(props)  {
           }
         })
       }
-
+    
     return (
         <>
             <DT.BorderBox marginBottom={2}>
@@ -116,11 +117,14 @@ export default function BuscarCurso(props)  {
                         <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                            <TableRow key={item.id} onDoubleClick = {() => {props.getRow(item)}}>
-                                <TableCell>{item.codigo}</TableCell>
-                                <TableCell>{item.nombre}</TableCell>
-                                <TableCell>{item.creditos}</TableCell>
-                            </TableRow>
+                            <StyledTableRow key={item.id} backCl = {(selectedRow === records.indexOf(item))?'#DEEEFF':'#E9ECF8' } 
+                              sx={(selectedRow === records.indexOf(item))?{backgroundColor: '#DEEEFF', '&:hover': {
+                                backgroundColor: '#DEEEFF',}}:{'&:hover': {backgroundColor: '#DEEEFF',}}}
+                              onDoubleClick = {() => {props.getRow(item)}}>
+                                <StyledTableCell>{item.codigo}</StyledTableCell>
+                                <StyledTableCell>{item.nombre}</StyledTableCell>
+                                <StyledTableCell align= "right">{item.creditos}</StyledTableCell>
+                            </StyledTableRow>
                             ))
                         }
                         </TableBody>

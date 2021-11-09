@@ -36,17 +36,37 @@ const fillDocentes = async() => {
     console.error("No se pudo regresar la data del backend para Docentes");
     return [];
   }
-  dataDoc.map(doc => {
-    const nombreFormat = `${doc.nombres} ${doc.apellidos[0]}.`;
+  let seSale = 0;
+  for (let doc of dataDoc) {
+    let tipoDoc;
+    const nombreFormat = `${doc.nombres}, ${doc.apellidos}`;
+    switch(doc.tipo_docente){
+      case 1:
+        tipoDoc = "TC"
+        break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
+      case 2:
+        tipoDoc = "TPC"
+        break;
+      case 3:
+        tipoDoc = "TPA"
+        break;
+      default:
+        seSale = 1;
+        break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
+      }
+      if(seSale)  {
+        seSale = 0;
+        continue;  
+    }
     docentes.push({
       "id": doc.id,
       "nombre": nombreFormat,
-      "tipo": doc.tipo_persona, //Esto debe de cambiar a tipo de profesor.
+      "tipo": tipoDoc, //Esto debe de cambiar a tipo de profesor.
       "codigo": doc.codigo_pucp,
       "cargaHoraria": doc.cargaDocente,
       "deudaHoraria": doc.deuda_docente,
     })
-  });
+  }
   console.log(docentes);
   return docentes
 }
@@ -65,8 +85,11 @@ export default function ModalDocenteClases({docentesAsig}){
     return(
         
         <Form onSubmit={handleSubmit}>
-            <Paper>
+            <Paper> 
                 <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig}/>
+                <Grid cointainer align="right" mt={2.5} />   
+                <hr color = "#636e9a"/> 
+                <Grid cointainer align="right" mt={2.5} />
                 <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {setRecordsAsig} setRecordsAsig = {setRecordsAsig}/>
             </Paper>
             <Grid cointainer align="right" mt={5}>
@@ -75,7 +98,7 @@ export default function ModalDocenteClases({docentesAsig}){
                         // variant="contained"
                         // color="primary"
                         // size="large"
-                        text="Seleccionar"
+                        text="Guardar"
                         type="submit"
                     >
                     </Controls.Button>
