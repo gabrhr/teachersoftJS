@@ -12,7 +12,7 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 export default function Tracking(props) {
     const {estadosTracking}=props
     return (
-        <div style={{marginTop:"20px",marginLeft:"5px"}}>
+        <div style={{marginTop:"20px",marginLeft:"20px"}}>
             <Stack 
                 direction="column" 
                 spacing={.2}
@@ -23,6 +23,11 @@ export default function Tracking(props) {
                        
                     )
                }
+              {/*   <Item estado={1} completado={true}/>
+                <Item estado={2} completado={true}/>
+                <Item estado={3} completado={false}/>
+                <Item estado={4} completado={false}/>
+                <Item estado={5} completado={true}/> */}
             </Stack>
         </div>
     )
@@ -93,7 +98,7 @@ function Item(props){
     return(
         <>
         <Grid container >
-            <Grid item xs={2}>
+            <Grid item xs={3}>
                 <Avatar sx={sxConditional(estado)}>
                     {iconEstado(estado)}
                 </Avatar>

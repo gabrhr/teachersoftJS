@@ -36,20 +36,12 @@ export default function PrivateRoute(props) {
             switch(permiso){
               case(0):                                          
                     switch (rol) {
-                        case 0:
-                            return history.push("/admin");
-                        case 1:
-                            return history.push("/doc");
-                        case 2:
-                            return history.push("/as");
-                        case 3:
-                            return history.push("/cord");
-                        case 4:
-                            return history.push("/ad"); 
-                        case 5:
-                            return history.push("/jd"); 
-                        case 6:
-                            return history.push("/secretaria");    
+                      case 0:
+                          return history.push("/admin");
+                      case 1:
+                          return history.push({
+                          pathname: "/as",
+                          });
                       default:
                           return history.push("/noRoles");
                     }   

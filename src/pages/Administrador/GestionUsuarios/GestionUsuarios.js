@@ -145,19 +145,25 @@ export default function GestionUsuarios() {
     })
   }
 
-  const handleSearchSeccion = e => {
+  const handleSearchEstados = e => {
         let target = e.target;
+        console.log("SOY E: ---------------------")
+        console.log(e)
+        console.log("SOY TARGET: ----------------")
+        console.log(e.target)
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
         handleInputChange(e)
-        setFilterFn({
-           fn: items => {
-            //4 es el valor escrito en bruto para listar todo
-            if (target.value == "" || items.length === 0)
-              return items
-            else
-               return items.filter(x => x.nombreSeccion
-                   .includes(target.value))
-          }
-        })
+        // setFilterFn({
+        //   fn: items => {
+        //     // 4 es el valor escrito en bruto para listar todo
+        //     // if (target.value == 4)
+        //     //   return items
+        //     // else
+        //       return items.filter(x => x.estado
+        //           .includes(target.value))
+        //   }
+        // })
     }
 
   useEffect(() => {
@@ -192,7 +198,7 @@ export default function GestionUsuarios() {
           id: usuario.departamento.id,
           nombre: usuario.departamento.nombre
         },
-        foto_URL: usuario.foto
+        foto_url: null
       }
 
     }
@@ -212,7 +218,7 @@ export default function GestionUsuarios() {
         id: usuario.departamento.id,
         nombre: usuario.departamento.nombre
       },
-      foto_URL: usuario.foto
+      foto_url: null
     }
 
     recordForEdit
@@ -295,18 +301,18 @@ export default function GestionUsuarios() {
         text="Gestión de usuarios"
         cbo={false}
       />
-      {/* <Form>
+      <Form>
         <Box display="flex" width={.2} mb={4}  mt={3}>
           <Controls.Select
             name="seccionID"
             label="Sección"
             value={values.seccionID}
-            onChange={handleSearchSeccion}
+            onChange={handleSearchEstados}
             options={DTLocalServices.getAllSecciones()}
             size="medium"
           />
         </Box>
-      </Form> */}
+      </Form>
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
         <Typography variant="h4" style={SubtitulosTable} >

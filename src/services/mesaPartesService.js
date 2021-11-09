@@ -18,11 +18,6 @@ import axios from 'axios'
 import url from '../config'
 import tokenService from './tokens.js';
 
-/* para la funcioncita especial */
-// import DepartamentoService from './departamentoService';
-// import SeccionService from './seccionService';
-// import * as UnidadService from './unidadService'
-
 const config = {
     headers: {
         Authorization: tokenService.getToken()
@@ -120,7 +115,7 @@ function b2fSolicitud(x) {
         asunto: x.asunto,
         descripcion: x.descripcion,
         solicitador: b2fPersona(x.solicitador ?? personaInit()),
-        archivos: x.archivos,       // CUIDADO AL MANDAR A BACK
+        archivos: x.archivos,
         delegado: b2fPersona(x.delegado ?? personaInit()),
         tracking: {
             fecha_enviado: x.fecha_creacion,
@@ -146,7 +141,7 @@ function f2bSolicitud(x) {
         id: x.id,
         asunto: x.asunto,
         descripcion: x.descripcion,
-        solicitador: { id: x.solicitadorID },   // requerido
+        solicitador: { id: x.solicitadorID },
         archivos: x.archivos,
         delegado: { id: x.delegadoID },
 
@@ -268,7 +263,7 @@ export function getSolicitud(id) {
 }
 
 /* TODO: work-in-progress */
-export function registerSolicitud(soli) {
+function registerSolicitud(soli) {
     axios({
         method: 'post',
         url: `${url}/mesa/`,
