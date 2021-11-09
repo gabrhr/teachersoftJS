@@ -78,11 +78,31 @@ export default function AgregarEditarSeccion(props) {
     } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
-        e.preventDefault()
+        e.preventDefault();
+        let fechaCreacion= "";
         //Definicio de validaciones
         if (validate()){
           //window.alert('valid')
-
+          //si es una edición tenemos que enviar la fecha de creacion
+            //Función para llenar fechaDeCreación
+          /*  async function getFecha (id) {
+              let fechaC="";
+              if(values.id){
+                await SeccionService.getSeccion(id)
+                .then(request=>{
+                  fechaC= request.fecha_creacion;console.log(request);
+                })
+              }
+              return fechaC;
+            }
+            const fechaCreacion = await getFecha(values.id);
+            */
+            //console.log("Esto es sección");
+            if(values.id) {
+              const secc= await SeccionService.getSeccion(values.id);
+              fechaCreacion = secc.fecha_creacion;
+            }
+            //console.log(fechaCreacion);
           //Este pasa como la nueva seccion o la seccion editada
           const newSecc = {
             id: values.id,
@@ -92,17 +112,17 @@ export default function AgregarEditarSeccion(props) {
               id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.idDepartamento) : null,
             },
+            fecha_creacion:fechaCreacion,
             //foto: fotoPerfil,
+            fecha_modificacion: null,
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
-
           console.log(newSecc);
           //const rpta = await SeccionService.registerSeccion(newSecc);
           //console.log(rpta);
           addOrEdit(newSecc,resetForm)
           //resetForm()
-
         }
         else
             window.alert('invalid')

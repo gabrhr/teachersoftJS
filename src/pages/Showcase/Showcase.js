@@ -26,7 +26,6 @@ const paperCSS = {
 }
 
 export default function Employees() {
-            
     return (
         <>
             <Typography variant="h1">

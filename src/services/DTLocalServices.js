@@ -66,9 +66,7 @@ const KEYS = {
     personaID: 'personaID',        // highest ID,  ID=0 means no data
     personas: 'personas',           // array
     cursoID: 'cursoID',
-    cursos: 'cursos',
-    cicloID: 'cicloID',
-    ciclos: 'ciclos'
+    cursos: 'cursos'
 }
 
 /* persona CRUD operations */
@@ -152,20 +150,6 @@ export function getAllRoles() {
         { id: 7, nombre: 'Externo' },
         { id: 8, nombre: 'Nuevo Usuario' },
     ])
-}
-
-/* ciclo CRUD operations */
-export function getAllCiclos() {
-    let ciclos = []
-    let i
-    const base = 2021 - 20 + 1
-    for (i = 0; i < 20; i++) {
-        ciclos[2 * i] = { id: (base + i) * 10 + 1, title: `${base + i}-1` }
-        ciclos[2 * i + 1] = { id: (base + i) * 10 + 2, title: `${base + i}-2` }
-    }
-    // /* DEEP COPY */
-    // ciclos = JSON.parse(JSON.stringify(ciclos))
-    return ciclos.reverse()
 }
 
 /* curso CRUD operations */
@@ -301,7 +285,7 @@ export function getAllCursos() {
     let cursos = JSON.parse(localStorage.getItem(KEYS.cursos));
     /* Do any data transformations here (e.g., lookup ID's create new attributes
      * based on that) */
-    return cursos.map(x => ({
+    return cursos.map( x => ({
         // ...x,
         id: x.id,
         clave: x.curso.codigo,

@@ -55,10 +55,10 @@ const tableHeaders = [
 const getSecciones = async () => {
 
   let dataSecc = await SeccionService.getSecciones();
-  console.log(dataSecc)
+  //console.log(dataSecc)
   dataSecc = dataSecc ?? []
-  console.log("AQUI ESTA EL DATASECC")
-  console.log(dataSecc)
+  //console.log("AQUI ESTA EL DATASECC")
+  //console.log(dataSecc)
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   if(dataSecc){
@@ -68,6 +68,7 @@ const getSecciones = async () => {
         nombre: seccion.nombre,
         fechaFundacion: seccion.fecha_fundacion,
         fechaModificacion: seccion.fecha_modificacion,
+        fechaCreacion:seccion.fecha_creacion,
         idDepartamento: seccion.departamento.id,
         nombreDepartamento: seccion.departamento.nombre,
         correo: seccion.correo
@@ -93,7 +94,7 @@ export default function GestionSeccion() {
     color:"primary.light", elevatio:0}
     const [confirmDialog, setConfirmDialog] = useState(
       { isOpen: false, title: '', subtitle: '' })
-    console.log(records);
+    //console.log(records);
     const {
         TblContainer,
         TblHead,
@@ -123,7 +124,7 @@ export default function GestionSeccion() {
       getSecciones()
       .then (newSeccion =>{
         setRecords(newSeccion); //Se quiere actualizar todo
-        console.log(newSeccion);
+        //console.log(newSeccion);
         setDeleteData(false);
         setChangeData(false);
       });
@@ -216,7 +217,7 @@ export default function GestionSeccion() {
                   type="search"
                 />
                 <Controls.AddButton
-                  title="Agregar Nueva Sección"
+                  title="Nueva Sección"
                   variant="iconoTexto"
                   onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                   //openInPopup();^

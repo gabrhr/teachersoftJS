@@ -24,6 +24,7 @@ import { DT } from '../../../components/DreamTeam/DT'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CargaDocenteHorarios from './CargaDocenteHorarios';
 import CursoService from '../../../services/cursoService';
+import HorarioService from '../../../services/horarioService';
 
 const tableHeaders = [
   // {
@@ -99,29 +100,65 @@ function GetRow({ ...props }) {
 }
 
 
-//LLENADO DE LA LISTA DE CURSOS
+// //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(1,""); 
+  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
+  const ciclo = window.localStorage.getItem("ciclo"); 
+  let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
+  let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const cursos = [];
-  dataCur.map(cur => (
+  for(let cur of dataCur) {
+    horCiclo = [];  //se reinician los horarios
+    horarios = await HorarioService.listarPorCursoCiclo(cur.id , ciclo);
+    if(!horarios)  continue; //Si se retorna un promise vacio - no se lista el curso
+    for(let hor of horarios){
+      if (hor.sesiones.sesion_docente) {
+        estado = 'Asignados'
+        tipo= 'atendido'
+      }
+      else  {
+        estado = 'Por asignar'
+        tipo= 'pendiente'
+        break;
+      }
+    }
+    //Adicionalmente a esto
+    for(let hor of horarios){
+      horCiclo.push({
+        "id": hor.id,
+        "codigo": hor.codigo,
+        "ciclo":{
+          "id": ciclo,
+        } ,
+        "curso":{
+          "id": cur.id,
+        },
+        "sesiones": hor.sesiones
+      })
+    }
+    //Hacemos la creación y verificación de los estados
     cursos.push({
-      id: cur.id,
-      nombre: cur.nombre,
-      codigo: cur.codigo,
-      creditos: cur.creditos,
-      seccion: {
-        id: cur.seccion.id,
-        nombre: cur.seccion.nombre,
-        departamento:{
-          id:cur.seccion.departamento.id,
-          nombre:cur.seccion.departamento.nombre,
+      "id": cur.id,
+      "nombre": cur.nombre,
+      "codigo": cur.codigo,
+      "creditos": cur.creditos,
+      "seccion": {
+        "id": cur.seccion.id,
+        "nombre": cur.seccion.nombre,
+        "departamento":{
+          "id":cur.seccion.departamento.id,
+          "nombre":cur.seccion.departamento.nombre,
         }
       },
+      "horarios": horCiclo,
+      "estado": estado,
+      "type": tipo
     })
-    ));
-  //console.log(cursos);
+
+  }
+  console.log(cursos);
   return cursos;
 }
 
@@ -130,7 +167,7 @@ export default function CargaDocente() {
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const SubtitulosTable = { display: "flex" }
   const [recordsForEdit, setRecordForEdit] = useState()
-  const [records, setRecord] = useState(DTLocalServices.getAllCursos())
+  const [records, setRecord] = useState([])
   const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
   // en lugar de la de cursos
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
@@ -207,7 +244,7 @@ export default function CargaDocente() {
         : (<> </>)
       }
       {/* <Toolbar> */}
-      <Grid container sx={{ mb: 3, bgcolor: "#fff" }} display={horarios ? "none" : "flex"}>
+      <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
           <Controls.Input
             label="Buscar Cursos por Nombre o Clave"
@@ -245,6 +282,7 @@ export default function CargaDocente() {
               <Typography variant="h4" style={SubtitulosTable}>
                 Lista de Horarios
               </Typography>
+              {console.log(recordsForEdit)}
               <CargaDocenteHorarios recordForEdit = {recordsForEdit} setRecordForEdit = {setRecordForEdit} />
             </>
           ) 
@@ -256,6 +294,13 @@ export default function CargaDocente() {
             <BoxTbl>
               <TblContainer>
                 <TblHead />
+                  <colgroup>
+                    <col style={{ width: '5%' }} />
+                    <col style={{ width: '30%' }} />
+                    <col style={{ width: '30%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '20%' }} />
+                  </colgroup>
                 <TableBody>
                   {
                     recordsAfterPagingAndSorting().map(item => (

@@ -12,13 +12,11 @@ import userService from '../../services/userService';
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 const GoogleLoginButton = () => {
     const history = useHistory();
-    const { user, setUser, rol,setRol,setToken } = useContext(UserContext);
+    const { user, setUser, rol, setRol, setToken } = useContext(UserContext);
     const [loading, setLoading] = useState(undefined);
     const [current, setCurrent] = useState(undefined);
 
     const onLogoutSuccess = () => {
-       /*  setRol({});
-        setUser({}) */
         localStorage.clear();
         history.push('/')
     }
@@ -40,16 +38,19 @@ const GoogleLoginButton = () => {
     
           switch (rol) {
             case 0:
-                  history.push("/admin");
-                  break;
+                return history.push("/admin");
             case 1:
-                history.push({
-                pathname: "/as",
-                });
-                break;
+                return history.push("/doc");
             case 2:
-                  history.push("/as");
-                  break;
+                return history.push("/as");
+            case 3:
+                return history.push("/cord");
+            case 4:
+                return history.push("/ad"); 
+            case 4:
+                return history.push("/jd"); 
+            case 4:
+                return history.push("/secretaria");
             default:
                 return history.push("/noRoles");
           }
@@ -70,7 +71,8 @@ const GoogleLoginButton = () => {
                     persona:{
                         apellidos: response.profileObj.familyName,
                         nombres: response.profileObj.givenName,
-                        foto_URL: response.profileObj.imageUrl,
+                        correo_pucp: response.profileObj.email,
+                        foto_URL: response.profileObj.imageUrl
                     }
             }
 

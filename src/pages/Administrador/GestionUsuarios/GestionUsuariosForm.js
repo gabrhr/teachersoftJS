@@ -8,10 +8,11 @@ import { useForm, Form } from '../../../components/useForm';
 import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
 import * as DTLocalServices from '../../../services/DTLocalServices';
-import departamentoService from '../../../services/departamentoService';
+import DepartamentoService from '../../../services/departamentoService';
 import SeccionService from '../../../services/seccionService.js';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import { Box } from '@mui/system'
+import { Box } from '@mui/system';
+import UserService from '../../../services/userService';
 
 const styles = {
   columnGridItem: {
@@ -39,7 +40,8 @@ const initialFieldValues = {
   seccion: {
     id: '',
     nombre: ''
-  }
+  },
+  foto_URL:''
 }
 /*
 const FillDepartamentos = async () =>{
@@ -59,9 +61,9 @@ const FillDepartamentos = async () =>{
 
 const getDepartamento = async () => {
 
-  const dataDep = await departamentoService.getDepartamentos();
-  console.log("AQUI ESTA EL DATADEP")
-  console.log(dataDep)
+  const dataDep = await DepartamentoService.getDepartamentos();
+  //console.log("AQUI ESTA EL DATADEP")
+  //console.log(dataDep)
   const departamentos = [];
   if(dataDep){
     dataDep.map(dep => (
@@ -168,18 +170,27 @@ export default function GestionUsuariosForm(props) {
     resetForm
   } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     /* e is a "default parameter" */
-    e.preventDefault()
+    e.preventDefault();
+    let fechaCreacion = "";
     if (validate()){
       //window.alert('valid')
     //Este pasa como la nueva seccion o la seccion editada
+
+      if(values.id) {
+        const user= UserService.getUsuario(values.id);
+        console.log(user);
+        console.log(user.data);
+        fechaCreacion = user.fecha_creacion;
+      }
+
       const newUsr = {
         id: values.id,
         idPersona: values.idPersona,
-        nombre: values.nombre,
-        apellidoPaterno: values.apellidoPaterno,
-        apellidoMaterno: values.apellidoMaterno,
+        nombre: values.nombre.toUpperCase(),
+        apellidoPaterno: values.apellidoPaterno.toUpperCase(),
+        apellidoMaterno: values.apellidoMaterno.toUpperCase(),
         correo: values.correo,
         DNI: values.documento,
         rol: values.rol,
@@ -191,13 +202,14 @@ export default function GestionUsuariosForm(props) {
           id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId) ,
           nombre: null,
         },
-
-        //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
+        fecha_creacion:fechaCreacion,
+        fecha_modificacion:null,
+        foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //~~~foto: --queda pendiente
       }
       console.log(newUsr);
 
-      addOrEdit({...newUsr, image: fileFoto}, resetForm)
+      addOrEdit(newUsr, resetForm)
     }else{
       window.alert('invalid')
     }
@@ -353,6 +365,7 @@ export default function GestionUsuariosForm(props) {
             </Typography>
             <Avatar src={values.foto_URL ? values.foto_URL : fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
             {/* Botoncito para subir imagen */}
+            {/*
             <label htmlFor="contained-button-file">
               <Input accept="image/*" id="contained-button-file"
                 type="file" sx={{ display: 'none' }}
@@ -383,6 +396,13 @@ export default function GestionUsuariosForm(props) {
                 component="span"
               />
             </label>
+              */}
+            <Controls.Input
+              name="foto_URL"
+              label="URL de Foto"
+              value={values.foto_URL}
+              onChange={handleInputChange}
+            />
           </Grid>
         </Grid>
         {/* <Grid align="right" marginY={5} > */}

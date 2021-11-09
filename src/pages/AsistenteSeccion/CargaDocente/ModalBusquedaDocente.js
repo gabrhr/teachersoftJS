@@ -10,6 +10,7 @@ import { useForm, Form } from '../../../components/useForm';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { set } from 'date-fns';
+import SearchIcon from '@mui/icons-material/Search';
 
 /*Headers de la tabla*/
 
@@ -63,6 +64,8 @@ function createData(selected, codigo, nombreDocente, tipoDocente, cargaDocente, 
     const [records, setRecords] = useState(listDocentes)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
+    const seleccionados = records.map(()=>(false))    
+    console.log(seleccionados)
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0, marginTop: 3}
@@ -140,7 +143,31 @@ function createData(selected, codigo, nombreDocente, tipoDocente, cargaDocente, 
     /* e is a "default parameter" */
     e.preventDefault()
     // if (validate())
-    getListDocentes(records)
+    const selec = records.map(profesor =>
+      seleccionados[records.indexOf(profesor)] ? profesor : null
+    )
+    getListDocentes(selec)
+    props.setOpenPopup(false)
+  }
+
+  const cambiarSeleccion = num => {
+    seleccionados[num] = !seleccionados[num]
+    console.log(seleccionados)
+  }
+
+  const handleSearch = e => {
+    let target = e.target;
+    setFilterFn({
+      fn: items => {
+        if (target.value === "")
+          /* no search text */
+          return items
+        else
+          return items
+            .filter(x => x.fullName.toLowerCase()
+            .includes(target.value.toLowerCase()))
+      }
+    })
   }
 
   return (
@@ -149,6 +176,19 @@ function createData(selected, codigo, nombreDocente, tipoDocente, cargaDocente, 
         <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
           Docentes
         </Typography>
+        <Controls.Input
+            label="Buscar docentes por nombre"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
+            sx={{ width: .75 }}
+            onChange={handleSearch}
+            type="search"
+          />
         <BoxTbl>
           <TblContainer>
             <TblHead />
@@ -157,7 +197,7 @@ function createData(selected, codigo, nombreDocente, tipoDocente, cargaDocente, 
               recordsAfterPagingAndSorting().map(item => (
               <StyledTableRow key={item.codigo} >
                   <StyledTableCell>
-                    <Controls.RowCheckBox value = {item.selected}  sx = '1'>
+                    <Controls.RowCheckBox value = {item.selected}  sx = '1' onClick = {()=>cambiarSeleccion(records.indexOf(item))}>
                       <EditOutlinedIcon fontSize="small" />
                     </Controls.RowCheckBox>
                   </StyledTableCell >

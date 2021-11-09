@@ -3,6 +3,7 @@
  * Se muestran "Mis Solicitudes".  Desde aqui se puede:
  * - Generar una nueva solicitud.
  * - Ver detalle de una solicitud.
+ * "/doc/misSolicitudes"
  */
 import React, { useState } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
@@ -25,6 +26,7 @@ import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
+import { Link, Redirect } from 'react-router-dom';
 
 
 const tableHeaders = [
@@ -180,7 +182,6 @@ export default function MisSolicitudes() {
     }
 
     function getRow({ ...props }) {
-        //setOpenPopup(true)
         setRow(props)
     }
 
@@ -205,8 +206,7 @@ export default function MisSolicitudes() {
 
                 </div>
                 <div style={{ width: "360px", marginRight: "50px" }}>
-                    <Controls.RangeTimePicker
-                    />
+                    <Controls.RangeTimePicker/>
                 </div>
             </div>
             {/* Filtrados */}
@@ -294,16 +294,23 @@ function Item(props) {
                     <DT.Etiqueta
                         type={item.estado == 0 ? "enviado" :
                             item.estado == 1 ? "enRevision" :
-                                item.estado == 2 ? "delegado" : "atendido"
+                            item.estado == 2 ? "delegado" : "atendido"
                         }
                     />
                 </TableCell>
                 <TableCell>
+                    <Link to ={{
+                        pathname:'/doc/solicitudDetalle',
+                        state:{
+                            solicitud: item
+                        }
+                    }}  style={{ textDecoration: 'none' }}>
                     <Controls.Button
                         text="Detalle"
                         type="submit"
                         onClick={() => { getRow(item) }}
                     />
+                    </Link>
                 </TableCell>
             </TableRow>
         </>

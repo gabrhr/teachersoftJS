@@ -103,28 +103,20 @@ const getUsuario = async () => {
       foto_URL: usr.persona.foto_URL
     })
     ));
-  console.log(usuarios)
+  //console.log(usuarios)
   window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
   return usuarios;
 }
 
 export default function GestionUsuarios() {
-  /* COSAS PARA LA TABLITA
-   * ===================== */
-
   const [records, setRecords] = useState([])
   const [deleteData, setDeleteData] = useState(false);
   const [changeData, setChangeData] = useState(false);
-  /* no filter function initially */
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [openPopup, setOpenPopup] = useState(false)
-  /* stores values of record to then edit in the Dialog/Popup */
   const [recordForEdit, setRecordForEdit] = useState(null)
-  /* notification snackbar */
   const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
-  /* confirm dialog */
-  const [confirmDialog, setConfirmDialog] = useState(
-    { isOpen: false, title: '', subtitle: '' })
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
 
   const {
     TblContainer,
@@ -134,8 +126,11 @@ export default function GestionUsuarios() {
     BoxTbl
   } = useTable(records, tableHeaders, filterFn);
 
-  /* updates filter function inside `filterFn` object.  Which is used in
-   * `useTable`'s `recordsAfterPagingAndSorting()`.  Because  */
+  const {
+    values,
+    handleInputChange
+  } = useForm(initialFieldValues);
+
   const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
@@ -149,6 +144,21 @@ export default function GestionUsuarios() {
       }
     })
   }
+
+  const handleSearchSeccion = e => {
+        let target = e.target;
+        handleInputChange(e)
+        setFilterFn({
+           fn: items => {
+            //4 es el valor escrito en bruto para listar todo
+            if (target.value == "" || items.length === 0)
+              return items
+            else
+               return items.filter(x => x.nombreSeccion
+                   .includes(target.value))
+          }
+        })
+    }
 
   useEffect(() => {
     getUsuario()
@@ -182,7 +192,7 @@ export default function GestionUsuarios() {
           id: usuario.departamento.id,
           nombre: usuario.departamento.nombre
         },
-        foto_url: null
+        foto_URL: usuario.foto
       }
 
     }
@@ -202,7 +212,7 @@ export default function GestionUsuarios() {
         id: usuario.departamento.id,
         nombre: usuario.departamento.nombre
       },
-      foto_url: null
+      foto_URL: usuario.foto
     }
 
     recordForEdit
@@ -278,45 +288,25 @@ export default function GestionUsuarios() {
 
   /* FORM
    * ==== */
-  /* para seleccion de seccion */
-  const {
-    values,
-    // setValues,
-    handleInputChange
-  } = useForm(initialFieldValues);
-
-
-
-  /*useEffect(() => {
-    getUsers()
-  }, [])
-
-  const getUsers = () => {
-
-    userService.getUsuarios().then((response) => {
-          setRecords(response.data)
-          console.log(response.data);
-      });
-  };*/
-
+  
   return (
     <>
       <ContentHeader
         text="Gestión de usuarios"
         cbo={false}
       />
-      <Form>
+      {/* <Form>
         <Box display="flex" width={.2} mb={4}  mt={3}>
           <Controls.Select
             name="seccionID"
             label="Sección"
             value={values.seccionID}
-            onChange={handleInputChange}
+            onChange={handleSearchSeccion}
             options={DTLocalServices.getAllSecciones()}
             size="medium"
           />
         </Box>
-      </Form>
+      </Form> */}
       {/* TABLA */}
       <Paper variant="outlined" sx={PaperStyle}>
         <Typography variant="h4" style={SubtitulosTable} >
@@ -338,7 +328,7 @@ export default function GestionUsuarios() {
             type="search"
           />
           <Controls.AddButton
-            title="Agregar Nuevo Usuario"
+            title="Nuevo Usuario"
             variant="iconoTexto"
             onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
           />
@@ -353,7 +343,9 @@ export default function GestionUsuarios() {
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
                   <StyledTableRow key={item.id}>
-                    <StyledTableCell>{item.nombre} {item.apellidoPaterno} {item.apellidoMaterno}</StyledTableCell>
+                    <StyledTableCell>
+                    {item.nombre.toUpperCase()} {item.apellidoPaterno.toUpperCase()} {item.apellidoMaterno.toUpperCase()}
+                    </StyledTableCell>
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>
