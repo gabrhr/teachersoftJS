@@ -39,7 +39,7 @@ const fillDocentes = async() => {
   let seSale = 0;
   for (let doc of dataDoc) {
     let tipoDoc;
-    const nombreFormat = `${doc.nombres} ${doc.apellidos[0]}.`;
+    const nombreFormat = `${doc.nombres}, ${doc.apellidos}`;
     switch(doc.tipo_docente){
       case 1:
         tipoDoc = "TC"
@@ -85,9 +85,11 @@ export default function ModalDocenteClases({docentesAsig}){
     return(
         
         <Form onSubmit={handleSubmit}>
-            <Paper>
+            <Paper> 
                 <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig}/>
-                <Grid cointainer align="right" mt={5} />    
+                <Grid cointainer align="right" mt={2.5} />   
+                <hr color = "#636e9a"/> 
+                <Grid cointainer align="right" mt={2.5} />
                 <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {setRecordsAsig} setRecordsAsig = {setRecordsAsig}/>
             </Paper>
             <Grid cointainer align="right" mt={5}>

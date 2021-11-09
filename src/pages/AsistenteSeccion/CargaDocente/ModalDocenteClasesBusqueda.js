@@ -47,7 +47,7 @@ const tableHeaders = [
 
 export default function ModalDocenteClasesBusqueda({records, setRecords, recordsAsig, setRecordsAsig}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [selectedRow, setSelectedRow] = useState(records.length+1)
+    const [selectedRow, setSelectedRow] = useState(50) //se tiene que cambiar a records.lenght+1
     const [asignarDisabled, setAsignarDisabled] = useState(true)
     const [profAdd, setProfAdd] = useState({})
 
@@ -68,7 +68,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
               return items
             else
               return items
-                .filter(x => x.nombreDocente.toLowerCase()
+                .filter(x => x.nombre.toLowerCase()
                 .includes(target.value.toLowerCase()))
           }
         })
@@ -98,18 +98,19 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     return(
         <>
             <Grid container>
-                <Grid item xs = {8}>
-                    <Typography variant="h4" color="primary.light" style={SubtitulosTable} >
+                <Grid item xs = {10}>
+                    <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Docentes
                     </Typography>
                 </Grid>
-
-                <Button
-                  text = "Asignar profesor"
-                  variant= "iconoTexto"
-                  onClick = {()=>addProf()}
-                  disabled = {asignarDisabled}
-                />
+                {!asignarDisabled ? 
+                  <Button
+                    text = "Asignar profesor"
+                    variant= "iconoTexto"
+                    onClick = {()=>addProf()}
+                  />
+                  : <Grid cointainer align="right" mt={10} />    
+                }
             </Grid>
             <Controls.Input
             label="Buscar docentes por nombre"
