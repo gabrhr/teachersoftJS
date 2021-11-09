@@ -88,11 +88,33 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
 
     const addProf = () => {
         console.log(profAdd)
-        setRecordsAsig(recordsAsig => [...recordsAsig, profAdd])
+        let sesion_docente = {
+          "docente" : profAdd,
+          "horas_dictado_docente_sesion": 0,
+        }
+        setRecordsAsig(recordsAsig => [...recordsAsig, sesion_docente])
         let items = records.filter((row) => row.codigo !== profAdd.codigo);
+
         setRecords(items);
         setSelectedRow(records.length+1)
         setAsignarDisabled(true)
+    }
+
+
+    const hallarDocente = (tipo) => {
+        let tipo_doc;
+        switch(tipo){
+          case 1:
+             tipo_doc = "TC";
+            break;
+          case 2:
+             tipo_doc = "TPC";
+            break;
+          default:
+             tipo_doc = "TPA";
+            break;
+        }
+        return  tipo_doc;
     }
 
     return(
@@ -141,11 +163,11 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
               <StyledTableRow key={item.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                               sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                               onClick={()=>changeSelected(item)}>
-                  <StyledTableCell align="right">{item.codigo}</StyledTableCell>
-                  <StyledTableCell>{item.nombre}</StyledTableCell>
-                  <StyledTableCell        align="center">{item.tipo}</StyledTableCell>
-                  <StyledTableCell        align="center">{item.cargaHoraria}</StyledTableCell>
-                  <StyledTableCell        align="center">{item.deudaHoraria}</StyledTableCell>
+                  <StyledTableCell align="right">{item.codigo_pucp}</StyledTableCell>
+                  <StyledTableCell>{`${item.nombres}, ${item.apellidos}`}</StyledTableCell>
+                  <StyledTableCell        align="center">{hallarDocente(item.tipo_docente)}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.cargaDocente}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.deuda_docente}</StyledTableCell>
               </StyledTableRow>
               ))
             }
