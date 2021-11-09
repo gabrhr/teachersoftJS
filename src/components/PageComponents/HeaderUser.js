@@ -19,6 +19,11 @@ import { UserContext } from "../../constants/UserContext";
 import { MenuAdministrador } from "./MenuAdministrador";
 import UserPage from "../../pages/General/UserPage";
 import { MenuAsistenteSeccion } from "./MenuAsistenteSeccion";
+import { MenuDocente } from "./MenuDocente";
+import { MenuSecretaria } from "./MenuSecretaria";
+import { MenuCoordinadorSeccion } from "./MenuCoordinadorSeccion";
+import { MenuAsistenteDepartamento } from "./MenuAsistenteDepartamento";
+import { MenuJefeDepartamento } from "./MenuJefeDepartamento";
 
 function BoxPadding(props) {
   return (
@@ -117,7 +122,6 @@ const closedMixin = (theme) => ({
   },
 });
 
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -162,28 +166,32 @@ export default function HeaderUser(props) {
   if (rol == 0) {
     rolName = "Administrador"
     listaMenu = MenuAdministrador
-  }
-  if (rol == 1) {
+  }else if (rol == 1) {
     rolName = "Docente"
-    listaMenu = MenuAsistenteSeccion // arreglar
-  } 
-  if (rol == 2) {
+    listaMenu = MenuDocente 
+  } else if (rol == 2) {
     rolName = "Asistente de Sección"
     listaMenu = MenuAsistenteSeccion
-  } 
-  if (rol == 8) {
+  }else if (rol == 3) {
+    rolName = "Coordinador de Sección"
+    listaMenu = MenuCoordinadorSeccion
+  }else if (rol == 4) {
+    rolName = "Asistente de Departamento"
+    listaMenu = MenuAsistenteDepartamento
+  }else if (rol == 5) {
+    rolName = "Jefe de Departamento"
+    listaMenu = MenuJefeDepartamento
+  }else if (rol == 6) {
+    rolName = "Secretaria de Departamento"
+    listaMenu = MenuSecretaria
+  }   else if(rol == 8) {
     rolName = "Asistente de Sección"  // arreglar
     listaMenu = MenuAdministrador
   }
 
   return (
-    /* Box principal de toda la aplicacion */
-    // <Box display="flex">
     <Box 
-      /* flex is life */
       display="flex" 
-      /* fill remainder of screen */
-      // position="absolute"  // messes with header
       top="0px" 
       bottom="0px"
       width="100%"
