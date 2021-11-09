@@ -91,7 +91,7 @@ export default function EmployeeForm(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(initialFieldValues, true, validate);
+    } = useForm(initialFieldValues)//, true, validate);
 
     const handleSubmit = e => {
         /* e is a "default parameter" */
@@ -100,7 +100,7 @@ export default function EmployeeForm(props) {
         //     window.alert('valid')
         // else
         //     window.alert('invalid')
-        if (validate())
+        if (validateOG())
             addOrEdit(values, resetForm)
     }
 
