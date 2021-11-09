@@ -40,7 +40,8 @@ const initialFieldValues = {
   seccion: {
     id: '',
     nombre: ''
-  }
+  },
+  foto_URL:''
 }
 /*
 const FillDepartamentos = async () =>{
@@ -61,8 +62,8 @@ const FillDepartamentos = async () =>{
 const getDepartamento = async () => {
 
   const dataDep = await DepartamentoService.getDepartamentos();
-  console.log("AQUI ESTA EL DATADEP")
-  console.log(dataDep)
+  //console.log("AQUI ESTA EL DATADEP")
+  //console.log(dataDep)
   const departamentos = [];
   if(dataDep){
     dataDep.map(dep => (
@@ -208,7 +209,7 @@ export default function GestionUsuariosForm(props) {
       }
       console.log(newUsr);
 
-      addOrEdit({...newUsr, image: fileFoto}, resetForm)
+      addOrEdit(newUsr, resetForm)
     }else{
       window.alert('invalid')
     }
@@ -364,6 +365,7 @@ export default function GestionUsuariosForm(props) {
             </Typography>
             <Avatar src={values.foto_URL ? values.foto_URL : fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
             {/* Botoncito para subir imagen */}
+            {/*
             <label htmlFor="contained-button-file">
               <Input accept="image/*" id="contained-button-file"
                 type="file" sx={{ display: 'none' }}
@@ -394,6 +396,13 @@ export default function GestionUsuariosForm(props) {
                 component="span"
               />
             </label>
+              */}
+            <Controls.Input
+              name="foto_URL"
+              label="URL de Foto"
+              value={values.foto_URL}
+              onChange={handleInputChange}
+            />
           </Grid>
         </Grid>
         {/* <Grid align="right" marginY={5} > */}
