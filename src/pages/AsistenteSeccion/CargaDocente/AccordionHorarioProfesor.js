@@ -264,11 +264,12 @@ const hallarEstado = (sesiones) => {
     let sumaHorasdoc = 0;
     if(ses.sesion_docentes){
       for (let docente of ses.sesion_docentes){
-        sumaHorasdoc += docente.hora_sesion; 
+        sumaHorasdoc += docente.horas_dictado_docente_sesion; 
       }
     }
     //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
-    (sumaHorasdoc < sesiones.horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+    (sumaHorasdoc >= sesiones[0].horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+
     if(estado === "Faltan Horas") break;
   }
 

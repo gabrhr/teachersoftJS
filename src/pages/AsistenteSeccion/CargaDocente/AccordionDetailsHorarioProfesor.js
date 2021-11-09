@@ -35,7 +35,7 @@ function generateRow(docente) {
             <Grid container>
                 <Grid item xs={1}>
                     <Avatar>
-                        <img src={docente.foto_URL} alt=""></img>
+                        <img height = "125%" width = "125%" text-align ="center" src={docente.foto_URL ? docente.foto_URL : 'static/images/avatar/1.jpg'} alt=""></img>
                     </Avatar>
                 </Grid>
                 <Grid item xs={3}>
@@ -75,15 +75,18 @@ export default function AccordionDetailsHorarioProfesor(props) {
     sesiones = horario.sesiones;
     const [openEditarClasesPopup, setOpenEditarClasesPopup] = useState(false)
     const [openEditarPracticasPopup, setOpenEditarPracticasPopup] = useState(false)
+    const [actHorario, setActHorario] = useState(horario);
+
     const seleccionarDocentesP = seleccionadosP => {
         console.log(seleccionadosP)
     }
+
     console.log("Sesion:", horario);
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     //if(!clase.sesion_docentes) clase.sesion_docentes = []
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
     //if(!laboratorio.sesion_docentes) laboratorio.sesion_docentes = []
-      console.log("clase: ", clase, "laboratorio: ", laboratorio);
+      //console.log("clase: ", clase, "laboratorio: ", laboratorio);
     return (
         <>
             <Paper elevation={1} sx={{p: 1}}>
@@ -131,14 +134,14 @@ export default function AccordionDetailsHorarioProfesor(props) {
             setOpenPopup={setOpenEditarClasesPopup}
             title="Búsqueda de docentes para clases"
             >
-                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {0}/>
+                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {0} actHorario = {actHorario} setActHorario = {setActHorario}/>
             </Popup>
             <Popup
             openPopup={openEditarPracticasPopup}
             setOpenPopup={setOpenEditarPracticasPopup}
             title="Búsqueda de docentes para prácticas"
             >
-                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {1}/>
+                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {1}  actHorario = {actHorario} setActHorario = {setActHorario}/>
             </Popup>
         </>
     )

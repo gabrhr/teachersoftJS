@@ -84,19 +84,19 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
             setSelectedRow(sel)
             setBorrarDisabled(false)
             setHorasAsig(`${prof.horas_dictado_docente_sesion ? (prof.horas_dictado_docente_sesion) : ""}`)
-            setCargaHor(`${prof.docente.cargaHoraria}`)
-            setCargaHorIni(`${prof.docente.cargaHoraria}`)
-            setDeudaHor(`${prof.docente.deudaHoraria}`)
-            setDeudaHorIni(`${prof.docente.deudaHoraria}`)
+            setCargaHor(`${prof.docente.cargaDocente}`)
+            setCargaHorIni(`${prof.docente.cargaDocente}`)
+            setDeudaHor(`${prof.docente.deuda_docente}`)
+            setDeudaHorIni(`${prof.docente.deuda_docente}`)
             setProfDelete(prof)
             setIsSelected(true);
         }
         let maximoHoras;
-        switch(prof.docente.tipo){
-          case "TC":
+        switch(prof.docente.tipo_docente){
+          case 1:
             maximoHoras = 10;
             break;
-          case "TPC":
+          case 2:
             maximoHoras = 6;
             break;
           default:
@@ -110,11 +110,11 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
 
         setHorasAsig(`${e.target.value}`)
         records[selectedRow].horas_dictado_docente_sesion = parseInt(e.target.value===''?0: e.target.value)
-        records[selectedRow].docente.cargaHoraria = parseInt(cargaHorIni) + records[selectedRow].horas_dictado_docente_sesion
-        setCargaHor(records[selectedRow].docente.cargaHoraria)
+        records[selectedRow].docente.cargaDocente = parseInt(cargaHorIni) + records[selectedRow].horas_dictado_docente_sesion
+        setCargaHor(records[selectedRow].docente.cargaDocente)
 
-        records[selectedRow].docente.deudaHoraria = parseInt(deudaHorIni) + ( (records[selectedRow].docente.cargaHoraria>= maxHoras ) ? (maxHoras - records[selectedRow].docente.cargaHoraria) : 0)
-        setDeudaHor(records[selectedRow].docente.deudaHoraria)
+        records[selectedRow].docente.deuda_docente = parseInt(deudaHorIni) + ( (records[selectedRow].docente.cargaDocente>= maxHoras ) ? (maxHoras - records[selectedRow].docente.cargaDocente) : 0)
+        setDeudaHor(records[selectedRow].docente.deuda_docente)
 
         //console.log(horasAsig)
     }
@@ -138,6 +138,23 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
         setProfDelete({})
     }
     //console.log("Set Records - asignados: ", records);
+
+    const hallarDocente = (tipo) => {
+        let tipo_doc;
+        switch(tipo){
+          case 1:
+             tipo_doc = "TC";
+            break;
+          case 2:
+             tipo_doc = "TPC";
+            break;
+          default:
+             tipo_doc = "TPA";
+            break;
+        }
+        return  tipo_doc;
+    }
+
     return(
         <>
             <Grid container>
@@ -173,11 +190,11 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                         <StyledTableRow key={item.docente.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                                         sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                                         onClick={()=>changeSelected(item)}>
-                            <StyledTableCell align="right">{item.docente.codigo}</StyledTableCell>
-                            <StyledTableCell>{item.docente.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.docente.tipo}</StyledTableCell>
-                            <StyledTableCell        align="center">{item.docente.cargaHoraria}</StyledTableCell>
-                            <StyledTableCell        align="center">{item.docente.deudaHoraria}</StyledTableCell>
+                            <StyledTableCell align="right">{item.docente.codigo_pucp}</StyledTableCell>
+                            <StyledTableCell>{`${item.docente.nombres}, ${item.docente.apellidos}`}</StyledTableCell>
+                            <StyledTableCell>{hallarDocente(item.docente.tipo_docente)}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.docente.cargaDocente}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.docente.deuda_docente}</StyledTableCell>
                             <StyledTableCell        align="center">{item.horas_dictado_docente_sesion ? item.horas_dictado_docente_sesion : 0}</StyledTableCell>
                         </StyledTableRow>
                         ))

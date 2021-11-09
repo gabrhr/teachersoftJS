@@ -15,7 +15,7 @@ import PersonaService from '../../../services/personaService';
 
 const fillDocentes = async() => {
   //Llamado del axios para llenar a los docentes - personas con id_rol = 1
-  const docentes = [];
+  let docentes = [];
 
   const dataDoc = await PersonaService.getPersonasxTipo(1); //1 - docente
   
@@ -23,42 +23,17 @@ const fillDocentes = async() => {
     console.error("No se pudo regresar la data del backend para Docentes");
     return [];
   }
-  let seSale = 0;
-  for (let doc of dataDoc) {
-    let tipoDoc;
-    const nombreFormat = `${doc.nombres}, ${doc.apellidos}`;
-    switch(doc.tipo_docente){
-      case 1:
-        tipoDoc = "TC"
-        break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
-      case 2:
-        tipoDoc = "TPC"
-        break;
-      case 3:
-        tipoDoc = "TPA"
-        break;
-      default:
-        seSale = 1;
-        break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
-      }
-      if(seSale)  {
-        seSale = 0;
-        continue;  
-    }
-    docentes.push({
-      "id": doc.id,
-      "nombre": nombreFormat,
-      "tipo": tipoDoc, //Esto debe de cambiar a tipo de profesor.
-      "codigo": doc.codigo_pucp,
-      "cargaHoraria": doc.cargaDocente,
-      "deudaHoraria": doc.deuda_docente,
-    })
+  for(let doc of dataDoc){
+    if(!doc.tipo_docente)
+      continue; //Se esquiva al docente - no se enlista porque no está asignado como tal.
   }
-  //console.log(docentes);
+    docentes = dataDoc;
+  
+  console.log(docentes);
   return docentes
 }
 
-export default function ModalDocenteClases({docentesAsig, horario, tipo}){
+export default function ModalDocenteClases({docentesAsig, horario, tipo, actHorario, setActHorario}){
     const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
     //console.log("Lista de asignación: ", recordsAsig);
@@ -70,7 +45,7 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo}){
     }, [])
 
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
       /* e is a "default parameter" */
       e.preventDefault()
       // if (validate())
@@ -142,14 +117,15 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo}){
         "sesiones": sesionesActual
       }
 
-      //console.log(horUpdate);
+      console.log(horUpdate);
 
-      HorarioService.updateHorario(horUpdate);
+      const dataHor = await HorarioService.updateHorario(horUpdate);
       // const selec = records.map(profesor =>
       //   seleccionados[records.indexOf(profesor)] ? profesor : null
       // )
       // getListDocentes(selec)
-      //props.setOpenPopup(false)
+      setActHorario(dataHor);
+      //window.location.reload();
     }
 
 
