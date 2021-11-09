@@ -59,17 +59,24 @@ export default function AgregarEditarDepartamento(props) {
 
     const handleSubmit = async e => {
         /* e is a "default parameter" */
-        e.preventDefault()
+        e.preventDefault();
+        let fechaCreacion= "";
         if (validate()){
           //window.alert('valid')
-
+          if(values.id) {
+            const dep= await DepartamentoService.getDepartamento(values.id);
+            fechaCreacion = dep.fecha_creacion;
+          }
           const newDep = {
             id:values.id,
             nombre: values.nombre,
             correo: values.correo,
+            fecha_creacion:fechaCreacion,
+            fecha_modificacion:null,
+            fecha_fundacion:fechaCreacion
             //foto: null,
           }
-          console.log(newDep);
+          //console.log(newDep);
           //const rpta = await DepartamentoService.registerDepartamento(newDep);
           //console.log(rpta);
           addOrEdit(newDep,resetForm);

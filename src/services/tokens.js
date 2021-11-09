@@ -4,7 +4,7 @@ const GetTokenPrueba = () => {
   const token = JSON.parse(localStorage.getItem("token"))
   //console.log(localStorage.getItem("token"))
   //console.log(token);
-  
+
   const config = {
     headers: {
       Authorization: `${token}`,
@@ -19,10 +19,14 @@ const GetTokenPrueba = () => {
 
 const verifyAuthentication = Request => {
   if(!Request)  {
-    console.log("Se envia al login")
+    //console.log("Se envia al login")
     return false;
   }
   return true;
 }
 
-export default { GetTokenPrueba, verifyAuthentication}
+function getToken() {
+  return JSON.parse(localStorage.getItem("token"))
+}
+
+export default { GetTokenPrueba, verifyAuthentication, getToken}
