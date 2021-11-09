@@ -20,25 +20,25 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'nombreDocente',
+      id: 'nombre',
       label: 'Nombre',
       numeric: false,
       sortable: true
     },
     {
-      id: 'tipoDocente',
+      id: 'tipo',
       label: 'Tipo',
       numeric: false,
       sortable: true
     },
     {
-        id: 'cargaDocente',
+        id: 'cargaHoraria',
         label: 'Carga',
         numeric: true,
         sortable: true
      },
      {
-        id: 'deudaDocente',
+        id: 'deudaHoraria',
         label: 'Deuda',
         numeric: true,
         sortable: true
@@ -99,14 +99,13 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
         <>
             <Grid container>
                 <Grid item xs = {8}>
-                    <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
+                    <Typography variant="h4" color="primary.light" style={SubtitulosTable} >
                         Docentes
                     </Typography>
                 </Grid>
-                <Typography align="center" sx = {{marginTop: 3}}>
-                  Asignar profesor
-                </Typography>
+
                 <Button
+                  text = "Asignar profesor"
                   variant= "iconoTexto"
                   onClick = {()=>addProf()}
                   disabled = {asignarDisabled}
@@ -128,6 +127,13 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
         <BoxTbl>
           <TblContainer>
             <TblHead />
+              <colgroup>
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '70%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '5%' }} />
+              </colgroup>
             <TableBody>
             {
               recordsAfterPagingAndSorting().map(item => (
@@ -136,9 +142,9 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
                               onClick={()=>changeSelected(item)}>
                   <StyledTableCell align="right">{item.codigo}</StyledTableCell>
                   <StyledTableCell>{item.nombre}</StyledTableCell>
-                  <StyledTableCell>{item.tipo}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.deudaHoraria}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.tipo}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.cargaHoraria}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.deudaHoraria}</StyledTableCell>
               </StyledTableRow>
               ))
             }
