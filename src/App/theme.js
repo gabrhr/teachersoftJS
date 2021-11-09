@@ -55,7 +55,12 @@ const theme = createTheme({
       inactivo:{
         light: "#888EA4",
         main:"#888EA450"
-      }   
+      },file:{
+        light:"#7b61ff"
+      },
+      adjuntar:{
+        light:"#432DB4"
+      }
     },
     typography: {
       fontFamily: '"Quicksand","Arial","sans-serif"',
