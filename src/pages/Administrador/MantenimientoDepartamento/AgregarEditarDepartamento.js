@@ -82,8 +82,6 @@ export default function AgregarEditarDepartamento(props) {
           addOrEdit(newDep,resetForm);
           //resetForm()
         }
-        else
-            window.alert('invalid')
 //        if (validate())
 //            addOrEdit(values,resetForm)
     }

@@ -20,25 +20,25 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'nombreDocente',
+      id: 'nombre',
       label: 'Nombre',
       numeric: false,
       sortable: true
     },
     {
-      id: 'tipoDocente',
+      id: 'tipo',
       label: 'Tipo',
       numeric: false,
       sortable: true
     },
     {
-        id: 'cargaDocente',
+        id: 'cargaHoraria',
         label: 'Carga',
         numeric: true,
         sortable: true
      },
      {
-        id: 'deudaDocente',
+        id: 'deudaHoraria',
         label: 'Deuda',
         numeric: true,
         sortable: true
@@ -47,7 +47,7 @@ const tableHeaders = [
 
 export default function ModalDocenteClasesBusqueda({records, setRecords, recordsAsig, setRecordsAsig}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [selectedRow, setSelectedRow] = useState(records.length+1)
+    const [selectedRow, setSelectedRow] = useState(50) //se tiene que cambiar a records.lenght+1
     const [asignarDisabled, setAsignarDisabled] = useState(true)
     const [profAdd, setProfAdd] = useState({})
 
@@ -68,7 +68,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
               return items
             else
               return items
-                .filter(x => x.nombreDocente.toLowerCase()
+                .filter(x => x.nombre.toLowerCase()
                 .includes(target.value.toLowerCase()))
           }
         })
@@ -88,29 +88,51 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
 
     const addProf = () => {
         console.log(profAdd)
-        setRecordsAsig(recordsAsig => [...recordsAsig, profAdd])
+        let sesion_docente = {
+          "docente" : profAdd,
+          "horas_dictado_docente_sesion": 0,
+        }
+        setRecordsAsig(recordsAsig => [...recordsAsig, sesion_docente])
         let items = records.filter((row) => row.codigo !== profAdd.codigo);
+
         setRecords(items);
         setSelectedRow(records.length+1)
         setAsignarDisabled(true)
     }
 
+
+    const hallarDocente = (tipo) => {
+        let tipo_doc;
+        switch(tipo){
+          case 1:
+             tipo_doc = "TC";
+            break;
+          case 2:
+             tipo_doc = "TPC";
+            break;
+          default:
+             tipo_doc = "TPA";
+            break;
+        }
+        return  tipo_doc;
+    }
+
     return(
         <>
             <Grid container>
-                <Grid item xs = {8}>
+                <Grid item xs = {10}>
                     <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Docentes
                     </Typography>
                 </Grid>
-                <Typography align="center" sx = {{marginTop: 3}}>
-                  Asignar profesor
-                </Typography>
-                <Button
-                  variant= "iconoTexto"
-                  onClick = {()=>addProf()}
-                  disabled = {asignarDisabled}
-                />
+                {!asignarDisabled ? 
+                  <Button
+                    text = "Asignar profesor"
+                    variant= "iconoTexto"
+                    onClick = {()=>addProf()}
+                  />
+                  : <Grid cointainer align="right" mt={10} />    
+                }
             </Grid>
             <Controls.Input
             label="Buscar docentes por nombre"
@@ -128,17 +150,24 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
         <BoxTbl>
           <TblContainer>
             <TblHead />
+              <colgroup>
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '70%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '5%' }} />
+              </colgroup>
             <TableBody>
             {
               recordsAfterPagingAndSorting().map(item => (
               <StyledTableRow key={item.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                               sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                               onClick={()=>changeSelected(item)}>
-                  <StyledTableCell align="right">{item.codigo}</StyledTableCell>
-                  <StyledTableCell>{item.nombre}</StyledTableCell>
-                  <StyledTableCell>{item.tipo}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.deudaHoraria}</StyledTableCell>
+                  <StyledTableCell align="right">{item.codigo_pucp}</StyledTableCell>
+                  <StyledTableCell>{`${item.nombres}, ${item.apellidos}`}</StyledTableCell>
+                  <StyledTableCell        align="center">{hallarDocente(item.tipo_docente)}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.cargaDocente}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.deuda_docente}</StyledTableCell>
               </StyledTableRow>
               ))
             }

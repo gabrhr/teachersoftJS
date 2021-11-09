@@ -41,7 +41,8 @@ const initialFieldValues = {
   seccion: {
     id: '',
     nombre: ''
-  }
+  },
+  foto_URL: ''
 }
 /*
 const FillDepartamentos = async () =>{
@@ -62,18 +63,18 @@ const FillDepartamentos = async () =>{
 const getDepartamento = async () => {
 
   const dataDep = await DepartamentoService.getDepartamentos();
-  console.log("AQUI ESTA EL DATADEP")
-  console.log(dataDep)
+  //console.log("AQUI ESTA EL DATADEP")
+  //console.log(dataDep)
   const departamentos = [];
-  if(dataDep){
+  if (dataDep) {
     dataDep.map(dep => (
-    departamentos.push({
-      id: dep.id.toString(),
-      nombre: dep.nombre,
-      correo: dep.correo,
-      fechaModificacion: dep.fecha_modificacion,
-      fechaFundacion: dep.fechaFundacion,
-    })
+      departamentos.push({
+        id: dep.id.toString(),
+        nombre: dep.nombre,
+        correo: dep.correo,
+        fechaModificacion: dep.fecha_modificacion,
+        fechaFundacion: dep.fechaFundacion,
+      })
     ));
   }
   else console.log("No existen datos en Departamentos");
@@ -91,14 +92,14 @@ const getSecciones = async () => {
       nombre: seccion.nombre,
       fechaFundacion: seccion.fecha_fundacion,
       fechaModificacion: seccion.fecha_modificacion,
-      departamento:{
+      departamento: {
         id: seccion.departamento.id,
         nombre: seccion.departamento.nombre
       },
       correo: seccion.correo,
-      foto:seccion.foto
+      foto: seccion.foto
     })
-    ));
+  ));
   //console.log(secciones);
 
   return secciones;
@@ -106,7 +107,7 @@ const getSecciones = async () => {
 
 export default function GestionUsuariosForm(props) {
 
-  const { recordForEdit,addOrEdit, setOpenPopup } = props
+  const { recordForEdit, addOrEdit, setOpenPopup } = props
   const [createData, setCreateData] = useState(false);
   const [departamento, setDepartamentos] = useState([])
   const [seccion, setSecciones] = useState([])
@@ -174,12 +175,12 @@ export default function GestionUsuariosForm(props) {
     /* e is a "default parameter" */
     e.preventDefault();
     let fechaCreacion = "";
-    if (validate()){
+    if (validate()) {
       //window.alert('valid')
-    //Este pasa como la nueva seccion o la seccion editada
+      //Este pasa como la nueva seccion o la seccion editada
 
-      if(values.id) {
-        const user= UserService.getUsuario(values.id);
+      if (values.id) {
+        const user = UserService.getUsuario(values.id);
         console.log(user);
         console.log(user.data);
         fechaCreacion = user.fecha_creacion;
@@ -195,26 +196,22 @@ export default function GestionUsuariosForm(props) {
         DNI: values.documento,
         rol: values.rol,
         departamento: {
-          id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
+          id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId),
           nombre: null,
         },
         seccion: {
-          id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId) ,
+          id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId),
           nombre: null,
         },
-        fecha_creacion:fechaCreacion,
-        fecha_modificacion:null,
-
+        fecha_creacion: fechaCreacion,
+        fecha_modificacion: null,
         foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //~~~foto: --queda pendiente
       }
       console.log(newUsr);
 
       addOrEdit(newUsr, resetForm)
-    }else{
-      window.alert('invalid')
     }
-
   }
 
   /* "detect the change of recordForEdit inside this bottom component" */
@@ -230,12 +227,12 @@ export default function GestionUsuariosForm(props) {
   useEffect(() => {
 
     getDepartamento()
-    .then (newDep =>{
-      setDepartamentos(prevRecords => prevRecords.concat(newDep));
+      .then(newDep => {
+        setDepartamentos(prevRecords => prevRecords.concat(newDep));
 
-      //console.log(newSeccion);
+        //console.log(newSeccion);
 
-    });
+      });
     if (recordForEdit != null) {
       /* object is not empty */
       setValues({
@@ -247,13 +244,13 @@ export default function GestionUsuariosForm(props) {
 
   useEffect(() => {
     getSecciones()
-    .then (newSecc =>{
-      setSecciones(prevSecc => prevSecc.concat(newSecc));
+      .then(newSecc => {
+        setSecciones(prevSecc => prevSecc.concat(newSecc));
 
-      //console.log(newSeccion);
+        //console.log(newSeccion);
 
 
-    });
+      });
     if (recordForEdit != null) {
       /* object is not empty */
       setValues({
@@ -341,7 +338,7 @@ export default function GestionUsuariosForm(props) {
             />
 
             <Controls.Select
-              name={recordForEdit ? "idDepartamento":"departmentId"}
+              name={recordForEdit ? "idDepartamento" : "departmentId"}
               label="Departamento"
               value={recordForEdit ? values.idDepartamento : values.departmentId}
               onChange={handleInputChange}
@@ -366,6 +363,38 @@ export default function GestionUsuariosForm(props) {
             </Typography>
             <Avatar src={values.foto_URL ? values.foto_URL : fotoPerfil} sx={{ width: 250, height: 250, mb: 2 }} />
             {/* Botoncito para subir imagen */}
+            {/*
+            <label htmlFor="contained-button-file">
+              <Input accept="image/*" id="contained-button-file"
+                type="file" sx={{ display: 'none' }}
+                value = {values.fileFoto}
+                onChange={(event) => {
+                  const files = event.target.files
+
+                  //console.log(files[0]);
+                  setFileFoto(files[0])
+                  setCambio(true)
+
+                  if (files && files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                      setFotoPerfil(e.target.result)
+                      console.log(e.target.result)
+                    };
+                    reader.readAsDataURL(files[0]);
+                  }
+                }}
+              />
+              <Controls.Button
+                text="Subir foto"
+                // type="submit"   // html property (not component)
+                endIcon={<AddAPhotoIcon />} //Opcional con imagen
+                size="medium"
+                component="span"
+              />
+            </label>
+              */}
             <Controls.Input
               name="foto_URL"
               label="URL de Foto"
@@ -379,7 +408,7 @@ export default function GestionUsuariosForm(props) {
           <Controls.Button
             variant="outlined"
             text="cancelar"
-            onClick={()=>setOpenPopup(false)}
+            onClick={() => setOpenPopup(false)}
           />
 
           <Controls.Button

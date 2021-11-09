@@ -3,37 +3,34 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
-import InboxIcon from '@mui/icons-material/Inbox';
-import CloseIcon from '@mui/icons-material/Close';
 
-export const MenuAsistenteSeccion = [
+export const MenuCoordinadorSeccion = [
     {
         text: 'Asignación de Carga',
-        path: '/as/asignacionCarga',
+        path: '',
         icon: <CalendarTodayOutlinedIcon />,
         indice: 0,
         subNav: [
             {
                 text: 'Registro de Cursos',
-                path: '/as/asignacionCarga/registroCursos',
+                path: '/cord/asignacionCarga/registroCursos',
                 indice: 0,
             },
             {
                 text: 'Registrar Carga',
-                path: '/as/asignacionCarga/registroCarga',
+                path: '/cord/asignacionCarga/registroCarga',
                 indice: 1,
             },
             {
                 text: 'Deudas y Descarga',
-                path: '/as/asignacionCarga/deudaYDescarga',
+                path: '/cord/asignacionCarga/deudaYDescarga',
                 indice: 2,
             }
         ]
     },
-    /*
     {
         text: 'Docentes',
-        path: '/as/docentes',
+        path: '/cord/docentes',
         icon: <AccountBoxOutlinedIcon />,
         indice: 1,
     },
@@ -45,14 +42,14 @@ export const MenuAsistenteSeccion = [
         subNav: [
             {
                 text: 'Mis solicitudes',
-                path: '/as/mesaPartes/misSolicitudes',
+                path: '/cord/misSolicitudes',
                 indice: 0,
             },
             {
                 text: 'Solicitudes delegadas a mí',
-                path: '/as/mesaPartes/misDelegados',
+                path: '/cord/misDelegados',
                 indice: 1,
             }
         ]
-    }*/
+    }
 ];

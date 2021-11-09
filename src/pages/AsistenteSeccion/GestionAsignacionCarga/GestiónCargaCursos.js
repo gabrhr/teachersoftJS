@@ -42,7 +42,7 @@ const initialFieldValues = {
 
 const tableHeaders = [
     {id: 'tipo', label: 'Tipo'},
-    {id: 'diaSesion', label: 'Sesión'}
+    {id: 'diaSesion', label: 'Horas - Sesión'}
 ]
 
 const tipo = [
@@ -167,7 +167,7 @@ export default function GestionCargaCursos() {
         <> 
             <ContentHeader 
                 text="Gestión de la carga de cursos"
-                cbo= {true}
+                cbo= {false}
             />
             <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '1%'}}>
                 <Grid item xs={5}>
@@ -229,7 +229,7 @@ export default function GestionCargaCursos() {
                             /> 
                             <Controls.Input
                             name="horaSesion"
-                            label="Horario - Sesión"
+                            label="Horas - Sesión"
                             value={sesion}
                             onChange={(e)=>{
                                 setSesion(e.target.value)
@@ -246,7 +246,7 @@ export default function GestionCargaCursos() {
                                     recordsAfterPagingAndSorting().map(item => (
                                             <TableRow key={item.id}>
                                                 <TableCell>{item.tipo}</TableCell>
-                                                <TableCell>{item.sesion}</TableCell>
+                                                <TableCell  >{item.sesion}</TableCell>
                                             </TableRow>
                                         ))
                                 }
