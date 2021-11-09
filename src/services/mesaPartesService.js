@@ -146,7 +146,7 @@ function f2bSolicitud(x) {
         id: x.id,
         asunto: x.asunto,
         descripcion: x.descripcion,
-        solicitador: { id: x.solicitadorID },
+        solicitador: { id: x.solicitadorID },   // requerido
         archivos: x.archivos,
         delegado: { id: x.delegadoID },
 

@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
+import Notification from '../../components/util/Notification'
 
 
 /* ICONS */
@@ -249,6 +250,7 @@ export default function MisSolicitudes() {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            {/* "MODALS" */}
             {/* Agregar nueva solicitud */}
             <Popup
                 openPopup={openNuevo}
@@ -257,6 +259,10 @@ export default function MisSolicitudes() {
             >
                 <NuevaSolicitudForm add={add} />
             </Popup>
+            <Notification
+                notify={notify}
+                setNotify={setNotify}
+            />
         </Form>
     )
 }
