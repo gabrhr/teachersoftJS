@@ -155,13 +155,13 @@ function chompDocentes(sesiones) {
                 {"Docentes en Clase: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {clase.sesion_docentes ? clase.sesion_docentes.length : 0} {"\n"}
+                {clase[0].sesion_docentes ? clase[0].sesion_docentes.length : 0} {"\n"}
             </Typography>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Lab: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {laboratorio.sesion_docentes ? laboratorio.sesion_docentes.length : 0}
+                {laboratorio[0].sesion_docentes ? laboratorio[0].sesion_docentes.length : 0}
             </Typography>
         </>
     )
@@ -184,7 +184,7 @@ function chompDetalles(sesiones) {
 
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
-    if(!laboratorio) laboratorio = []
+    //if(!laboratorio) laboratorio = []
     console.log("clase: ", clase, "laboratorio: ", laboratorio);
     return (
         <>
@@ -239,12 +239,12 @@ function generateRows(records) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} />
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario}/>
                 </AccordionDetails>
             </Accordion>
         ))
     )
-}
+} 
 
 const hallarDetalle = (sesiones) => {
   let hor_clases = 0, hor_labs = 0;

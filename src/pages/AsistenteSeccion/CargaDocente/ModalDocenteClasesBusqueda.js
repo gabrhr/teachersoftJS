@@ -88,8 +88,13 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
 
     const addProf = () => {
         console.log(profAdd)
-        setRecordsAsig(recordsAsig => [...recordsAsig, profAdd])
+        let sesion_docente = {
+          "docente" : profAdd,
+          "horas_dictado_docente_sesion": 0,
+        }
+        setRecordsAsig(recordsAsig => [...recordsAsig, sesion_docente])
         let items = records.filter((row) => row.codigo !== profAdd.codigo);
+
         setRecords(items);
         setSelectedRow(records.length+1)
         setAsignarDisabled(true)

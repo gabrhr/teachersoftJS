@@ -60,6 +60,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
     const [deudaHorIni, setDeudaHorIni] = useState('')
     const [profDelete, setProfDelete] = useState({})
     const [maxHoras, setMaxHoras] = useState(6);
+    const [isSelected, setIsSelected] = useState(false); 
 
     const {
         TblContainer,
@@ -78,18 +79,20 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
              setCargaHor('')
              setDeudaHor('')
              setProfDelete({})
+             setIsSelected(false);
         }else{
             setSelectedRow(sel)
             setBorrarDisabled(false)
-            setHorasAsig(`${prof.horasDocente ? prof.horasDocente : ""}`)
-            setCargaHor(`${prof.cargaHoraria}`)
-            setCargaHorIni(`${prof.cargaHoraria}`)
-            setDeudaHor(`${prof.deudaHoraria}`)
-            setDeudaHorIni(`${prof.deudaHoraria}`)
+            setHorasAsig(`${prof.horas_dictado_docente_sesion ? (prof.horas_dictado_docente_sesion) : ""}`)
+            setCargaHor(`${prof.docente.cargaHoraria}`)
+            setCargaHorIni(`${prof.docente.cargaHoraria}`)
+            setDeudaHor(`${prof.docente.deudaHoraria}`)
+            setDeudaHorIni(`${prof.docente.deudaHoraria}`)
             setProfDelete(prof)
+            setIsSelected(true);
         }
         let maximoHoras;
-        switch(prof.tipo){
+        switch(prof.docente.tipo){
           case "TC":
             maximoHoras = 10;
             break;
@@ -106,15 +109,17 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
     const changeCarga = (e) => {
 
         setHorasAsig(`${e.target.value}`)
-        records[selectedRow].horasDocente = e.target.value===''?0: e.target.value
-        records[selectedRow].cargaHoraria = parseInt(cargaHorIni) + parseInt(records[selectedRow].horasDocente)
-        setCargaHor(records[selectedRow].cargaHoraria)
+        records[selectedRow].horas_dictado_docente_sesion = parseInt(e.target.value===''?0: e.target.value)
+        records[selectedRow].docente.cargaHoraria = parseInt(cargaHorIni) + records[selectedRow].horas_dictado_docente_sesion
+        setCargaHor(records[selectedRow].docente.cargaHoraria)
 
-        records[selectedRow].deudaHoraria = parseInt(deudaHorIni) + ( (records[selectedRow].cargaHoraria>= maxHoras ) ? (maxHoras - records[selectedRow].cargaHoraria) : 0)
-        setDeudaHor(records[selectedRow].deudaHoraria)
+        records[selectedRow].docente.deudaHoraria = parseInt(deudaHorIni) + ( (records[selectedRow].docente.cargaHoraria>= maxHoras ) ? (maxHoras - records[selectedRow].docente.cargaHoraria) : 0)
+        setDeudaHor(records[selectedRow].docente.deudaHoraria)
 
         //console.log(horasAsig)
     }
+
+    //console.log(records);
 
     const deleteProfesor = () => {
         // let recAux = records
@@ -122,7 +127,8 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
         // console.log(recAux)
         // setRecords(recAux)
         // console.log(records)
-        let items = records.filter((row) => row.codigo !== profDelete.codigo);
+        let items = records.filter((row) => row.docente.codigo !== profDelete.docente.codigo);
+
         setRecords(items);
         setSelectedRow(records.length+1)
         setBorrarDisabled(true)
@@ -131,7 +137,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
         setDeudaHor('')
         setProfDelete({})
     }
-
+    //console.log("Set Records - asignados: ", records);
     return(
         <>
             <Grid container>
@@ -164,15 +170,15 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                         <TableBody>
                         {
                         recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
+                        <StyledTableRow key={item.docente.id} backCl = {(selectedRow===records.indexOf(item))?'#DEEEFF':'#E9ECF8'}
                                         sx={(selectedRow===records.indexOf(item))?{backgroundColor: '#DEEEFF'}:{}} 
                                         onClick={()=>changeSelected(item)}>
-                            <StyledTableCell align="right">{item.codigo}</StyledTableCell>
-                            <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.tipo}</StyledTableCell>
-                            <StyledTableCell        align="center">{item.cargaHoraria}</StyledTableCell>
-                            <StyledTableCell        align="center">{item.deudaHoraria}</StyledTableCell>
-                            <StyledTableCell        align="center">{item.horasDocente ? item.horasDocente : 0}</StyledTableCell>
+                            <StyledTableCell align="right">{item.docente.codigo}</StyledTableCell>
+                            <StyledTableCell>{item.docente.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.docente.tipo}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.docente.cargaHoraria}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.docente.deudaHoraria}</StyledTableCell>
+                            <StyledTableCell        align="center">{item.horas_dictado_docente_sesion ? item.horas_dictado_docente_sesion : 0}</StyledTableCell>
                         </StyledTableRow>
                         ))
                         }
@@ -181,32 +187,39 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
                     <TblPagination/>
                 </BoxTbl>
                 <Grid container>
-                    <Grid item xs={2} sx={{marginX: 1}}>
-                        <Controls.Input
-                            value = {horasAsig}
-                            label="Horas asignadas"
-                            sx={{ width: .75 }}
-                            size= 'small'
-                            onChange={(selectedRow<=records.length)?((e)=>changeCarga(e)):(()=>{})}
-                        />
-                    </Grid>
-                    <Grid item xs={5.5}></Grid>
-                    <Grid item xs={2} sx={{marginRight: 2, marginLeft:1}} >
-                        <Controls.Input
-                            value = {cargaHor}
-                            label="Carga horaria"
-                            sx={{ width: .75 }}
-                            size= 'small'
-                        />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Controls.Input
-                            value= {deudaHor}
-                            label="Deuda horaria"
-                            sx={{ width: .75 }}
-                            size= 'small'
-                        />
-                    </Grid>
+                  {isSelected ? 
+                    <>
+                      <Grid item xs={2} sx={{marginX: 1}}>
+                          <Controls.Input
+                              value = {horasAsig}
+                              label="Horas asignadas"
+                              sx={{ width: .75 }}
+                              size= 'small'
+                              onChange={(selectedRow<=records.length)?((e)=>changeCarga(e)):(()=>{})}
+                          />
+                      </Grid>
+                      <Grid item xs={5.5}></Grid>
+                      <Grid item xs={2} sx={{marginRight: 2, marginLeft:1}} >
+                          <Controls.Input
+                              value = {cargaHor}
+                              label="Carga horaria"
+                              sx={{ width: .75 }}
+                              disabled = {isSelected}
+                              size= 'small'
+                          />
+                      </Grid>
+                      <Grid item xs={2}>
+                          <Controls.Input
+                              value= {deudaHor}
+                              label="Deuda horaria"
+                              sx={{ width: .75 }}
+                              disabled = {isSelected}
+                              size= 'small'
+                          />
+                      </Grid>
+                    </>
+                  : <Grid cointainer align="right" mt={2.5} />    
+                }
                 </Grid>
                 </>
     )

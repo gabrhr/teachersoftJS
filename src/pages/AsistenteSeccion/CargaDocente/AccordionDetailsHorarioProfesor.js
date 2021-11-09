@@ -15,28 +15,43 @@ import ModalBusquedaDocente from './ModalBusquedaDocente'
 import ModalDocenteClases from './ModalDocenteClases'
 
 function generateRow(docente) {
+  let tipoDoc = 1;
+    switch (docente.tipo_docente){
+    case 1:
+      tipoDoc = "TC"
+      break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
+    case 2:
+      tipoDoc = "TPC"
+      break;
+    case 3:
+      tipoDoc = "TPA"
+      break;
+    default:
+      tipoDoc = "No asignado";
+      break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
+    }
     return (
         <>
             <Grid container>
                 <Grid item xs={1}>
                     <Avatar>
-                        <img src={`/static/images/avatar/1.jpg`} alt=""></img>
+                        <img src={docente.foto_URL} alt=""></img>
                     </Avatar>
                 </Grid>
                 <Grid item xs={3}>
                     <Typography>
-                        {docente.nombre}
+                        {`${docente.nombres}, ${docente.apellidos}`}
                     </Typography>
                     <Typography variant="body2" color="darkGray">
-                        {docente.id}
+                        {docente.codigo_pucp}
                     </Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography >
-                        {docente.seccion}
+                        {docente.seccion.nombre}
                     </Typography>
                     <Typography variant="body2" color="darkGray">
-                        {docente.tipo}
+                        {tipoDoc}
                     </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -44,10 +59,10 @@ function generateRow(docente) {
                         Carga del ciclo: {"\n"}
                     </Typography>
                     <Typography display="inline" color="#41B9E4">
-                        {docente.cargaHoraria} horas
+                        {docente.cargaDocente} horas
                     </Typography>
                     <Typography color="red">
-                        Deuda horaria: {docente.deudaHoraria} horas
+                        Deuda horaria: {docente.deuda_docente} horas
                     </Typography>
                 </Grid>
             </Grid>
@@ -56,16 +71,18 @@ function generateRow(docente) {
 }
 
 export default function AccordionDetailsHorarioProfesor(props) {
-    const { sesiones } = props
+    let { sesiones , horario} = props;
+    sesiones = horario.sesiones;
     const [openEditarClasesPopup, setOpenEditarClasesPopup] = useState(false)
     const [openEditarPracticasPopup, setOpenEditarPracticasPopup] = useState(false)
     const seleccionarDocentesP = seleccionadosP => {
         console.log(seleccionadosP)
     }
+    console.log("Sesion:", horario);
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
-    if(!clase.sesion_docentes) clase.sesion_docentes = []
+    //if(!clase.sesion_docentes) clase.sesion_docentes = []
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
-    if(!laboratorio.sesion_docentes) laboratorio.sesion_docentes = []
+    //if(!laboratorio.sesion_docentes) laboratorio.sesion_docentes = []
       console.log("clase: ", clase, "laboratorio: ", laboratorio);
     return (
         <>
@@ -88,7 +105,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
                         onClick={() => {setOpenEditarClasesPopup(true)}}
                     />
                 </Grid>
-                {clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.persona))}
+                {clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
                 <Grid container>
                     <Grid item xs={10}>
                         <Typography
@@ -96,7 +113,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
                             py="4px"
                             color="primary"
                         >
-                            Lista de Docentes de Prácticas
+                            Lista de Docentes de Laboratorios
                         </Typography>
                     </Grid>
                     <Controls.Button
@@ -107,21 +124,21 @@ export default function AccordionDetailsHorarioProfesor(props) {
                         onClick={() => {setOpenEditarPracticasPopup(true)}}
                     />
                 </Grid>
-                {laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.persona))}
+                {laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
             </Paper>
             <Popup
             openPopup={openEditarClasesPopup}
             setOpenPopup={setOpenEditarClasesPopup}
             title="Búsqueda de docentes para clases"
             >
-                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic.persona)}/>
+                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {0}/>
             </Popup>
             <Popup
             openPopup={openEditarPracticasPopup}
             setOpenPopup={setOpenEditarPracticasPopup}
             title="Búsqueda de docentes para prácticas"
             >
-                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic.persona)}/>
+                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {1}/>
             </Popup>
         </>
     )
