@@ -202,9 +202,8 @@ export default function GestionUsuariosForm(props) {
           nombre: null,
         },
         fecha_creacion:fechaCreacion,
-        fecha_modificacion:null
-
-        //foto: fotoPerfil ? fotoPerfil : values.foto_URL,
+        fecha_modificacion:null,
+        foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //~~~foto: --queda pendiente
       }
       console.log(newUsr);
