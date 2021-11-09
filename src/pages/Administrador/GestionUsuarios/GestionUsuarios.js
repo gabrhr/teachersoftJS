@@ -148,7 +148,6 @@ export default function GestionUsuarios() {
   const handleSearchSeccion = e => {
         let target = e.target;
         handleInputChange(e)
-        // setFilterFn({
         setFilterFn({
            fn: items => {
             //4 es el valor escrito en bruto para listar todo
