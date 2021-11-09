@@ -20,25 +20,25 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'nombreDocente',
+      id: 'nombre',
       label: 'Nombre',
       numeric: false,
       sortable: true
     },
     {
-      id: 'tipoDocente',
+      id: 'tipo',
       label: 'Tipo',
       numeric: false,
       sortable: true
     },
     {
-        id: 'cargaDocente',
+        id: 'cargaHoraria',
         label: 'Carga',
         numeric: true,
         sortable: true
      },
      {
-        id: 'deudaDocente',
+        id: 'deudaHoraria',
         label: 'Deuda',
         numeric: true,
         sortable: true
@@ -47,7 +47,7 @@ const tableHeaders = [
 
 export default function ModalDocenteClasesBusqueda({records, setRecords, recordsAsig, setRecordsAsig}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [selectedRow, setSelectedRow] = useState(records.length+1)
+    const [selectedRow, setSelectedRow] = useState(50) //se tiene que cambiar a records.lenght+1
     const [asignarDisabled, setAsignarDisabled] = useState(true)
     const [profAdd, setProfAdd] = useState({})
 
@@ -68,7 +68,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
               return items
             else
               return items
-                .filter(x => x.nombreDocente.toLowerCase()
+                .filter(x => x.nombre.toLowerCase()
                 .includes(target.value.toLowerCase()))
           }
         })
@@ -98,19 +98,19 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     return(
         <>
             <Grid container>
-                <Grid item xs = {8}>
+                <Grid item xs = {10}>
                     <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Docentes
                     </Typography>
                 </Grid>
-                <Typography align="center" sx = {{marginTop: 3}}>
-                  Asignar profesor
-                </Typography>
-                <Button
-                  variant= "iconoTexto"
-                  onClick = {()=>addProf()}
-                  disabled = {asignarDisabled}
-                />
+                {!asignarDisabled ? 
+                  <Button
+                    text = "Asignar profesor"
+                    variant= "iconoTexto"
+                    onClick = {()=>addProf()}
+                  />
+                  : <Grid cointainer align="right" mt={10} />    
+                }
             </Grid>
             <Controls.Input
             label="Buscar docentes por nombre"
@@ -128,6 +128,13 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
         <BoxTbl>
           <TblContainer>
             <TblHead />
+              <colgroup>
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '70%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '5%' }} />
+              </colgroup>
             <TableBody>
             {
               recordsAfterPagingAndSorting().map(item => (
@@ -136,9 +143,9 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
                               onClick={()=>changeSelected(item)}>
                   <StyledTableCell align="right">{item.codigo}</StyledTableCell>
                   <StyledTableCell>{item.nombre}</StyledTableCell>
-                  <StyledTableCell>{item.tipo}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.cargaHoraria}</StyledTableCell>
-                  <StyledTableCell        align="right">{item.deudaHoraria}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.tipo}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.cargaHoraria}</StyledTableCell>
+                  <StyledTableCell        align="center">{item.deudaHoraria}</StyledTableCell>
               </StyledTableRow>
               ))
             }
