@@ -124,8 +124,6 @@ export default function AgregarEditarSeccion(props) {
           addOrEdit(newSecc,resetForm)
           //resetForm()
         }
-        else
-            window.alert('invalid')
     }
 
     const FillDepartamentos = async () =>{
