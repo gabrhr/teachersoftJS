@@ -50,48 +50,23 @@ const privateroutes = [
   { requireRoles: [0,8], path: "/admin/employees", page: Employees },
   /* Docente */
   /* TODO: Remover rol 8 (acceso temporal) */
-  { requireRoles: [0,1,8], path: "/doc", page: MisSolicitudes },
   { requireRoles: [0,1,8], path: "/doc/misSolicitudes", page: MisSolicitudes },
   { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   /* AS */
   { requireRoles: [2, 8], path: "/as", page: AsistenteSeccion },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  // { requireRoles: [2], path: "/as/asignacionCarga/registroCursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
+  { requireRoles: [2], path: "/as/solicitudDocencia", page: Vacio },
   { requireRoles: [2], path: "/as/docentes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
-  /* CS*/
-  { requireRoles: [3, 8], path: "/cord", page: AsistenteSeccion },
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
-  { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
-  { requireRoles: [3], path: "/cord/docentes", page: Vacio },
-  { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
-
+  { requireRoles: [2], path: "/as/mesaPartes", page: Vacio },
+  /* CS */
   /* AD */
-  { requireRoles: [4], path: "/ad", page: Vacio },
-  { requireRoles: [4], path: "/ad/asignacionCarga", page: Vacio },
-  { requireRoles: [4], path: "/ad/docentes", page: Vacio },
-  { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: Vacio },  
-  /* JD */
-  { requireRoles: [5], path: "/jd", page: Vacio },
-  { requireRoles: [5], path: "/jd/asignacionCarga", page: Vacio },
-  { requireRoles: [5], path: "/jd/docentes", page: Vacio },
-  { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
-  { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [5], path: "/jd/mesaPartes/misDelegados", page: Vacio },  
+  /* CD */
   /* Secretario de D */
-  { requireRoles: [6], path: "/secretaria", page: Vacio },
-  { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: Vacio },
-  { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: Vacio },  
   /* Externo */
   /* rol sin asignar */
 ]
@@ -120,7 +95,7 @@ export default function Router1(props) {
 
         {/* Rutas protegidas. Page solita */}
         <PrivateRoute exact path="/noRoles"
-          requireRoles={[0,1,2,3,4,5,6,7,8]}
+          requireRoles={[0,8]}
           component={() =>
             <NoAsignado/>
           }

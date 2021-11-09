@@ -39,20 +39,8 @@ export const MenuAsistenteSeccion = [
     },
     {
         text: 'Mesa de Partes',
-        path: '',
+        path: '/as/mesaPartes',
         icon: <InboxOutlinedIcon />,
         indice: 2,
-        subNav: [
-            {
-                text: 'Mis solicitudes',
-                path: '/as/mesaPartes/misSolicitudes',
-                indice: 0,
-            },
-            {
-                text: 'Solicitudes delegadas a mí',
-                path: '/as/mesaPartes/misDelegados',
-                indice: 1,
-            }
-        ]
     }
 ];

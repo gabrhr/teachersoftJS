@@ -62,11 +62,11 @@ export default function Employees() {
                 <DTPage />
             </Paper>
 
-            {/* TESTS Mitsuo
+            {/* TESTS Mitsuo */}
             <Paper sx={{...paperCSS}} elevation={24}>
                 <Typography align="center" children="test zone Mitsuo" />
                 <TestPage/>
-            </Paper> */}
+            </Paper>
 
             {/* TESTS Gabriela */}
             <Paper sx={{...paperCSS}} elevation={24}>

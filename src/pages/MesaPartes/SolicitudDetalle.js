@@ -25,39 +25,14 @@ function crearEstado(estado, titulo, contenido,fecha, completado) {
     }
 }
 
-function estadoCompletado(fecha){
-    if(fecha==null) 
-        return false
-    return true
-}
-function formatoFecha(fecha){
-    if(fecha!=null){
-        return ("Fecha: "
-                +fecha.slice(8,10) +'/'
-                +fecha.slice(5,7) +'/'
-                +fecha.slice(0,4)
-                +"- Hora: "
-                +fecha.slice(11,19)
-        )
-    }
-    return ('Fecha: \xa0--/--/--'+'\xa0\xa0\xa0\xa0' + 'Hora: \xa0--:--')
-}
 
-function estadosTrackingInit(solicitud){
-    let fecha1= solicitud.tracking.fecha_enviado
-    let fecha2= solicitud.tracking.fecha_revision
-    let fecha3= solicitud.tracking.fecha_delegado
-    let fecha4= solicitud.tracking.fecha_atendido
-    let delegado=solicitud.delegado.fullName
-    let resultado = solicitud.resultado
-    return [
-        crearEstado(1, 'Enviado','', formatoFecha(fecha1), estadoCompletado(fecha1)),
-        crearEstado(2, 'En revisión',"", formatoFecha(fecha2), estadoCompletado(fecha2)),
-        crearEstado(3, 'Delegado',`${delegado}`,formatoFecha(fecha3), estadoCompletado(fecha3)),
-        crearEstado(4, 'Atendido',"" ,formatoFecha(fecha4), estadoCompletado(fecha4)),
-        crearEstado(5, 'Resultado',"",fecha4==null?"-":`${resultado}`, true),
-    ]
-} 
+const estadosTrackingInit =[
+    crearEstado(1, 'Enviado',"", "15/08/2021 14:00", true),
+    crearEstado(2, 'En revisión',"", "15/08/2021 14:00", true),
+    crearEstado(3, 'Delegado', "Roberto Mitsuo Tokumori","15/08/2021 14:00", true),
+    crearEstado(4, 'Atendido',"" ,"15/08/2021 14:00", true),
+    crearEstado(5, 'Resultado',"", "15/08/2021 14:00", true),
+]
     
 
 export default function SolicitudDetalle() {
@@ -66,10 +41,8 @@ export default function SolicitudDetalle() {
     const {solicitud}=location.state
     const SubtitulosTable = { display: "flex" }
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
-    const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit(solicitud))
+    const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit)
     const history = useHistory();
-
-
 
     return (
         <>
@@ -98,11 +71,11 @@ export default function SolicitudDetalle() {
         </Grid>
         <Paper variant="outlined" sx={PaperStyle}>
          <Grid container spacing={2}>
-            <Grid item xs={4} md={7.4}>
+            <Grid item xs={6} md={8}>
                 <Box>
                     <DT.Title size="medium" text={'Trámite: ' + `${solicitud.temaTramite}`+' - '+ `${solicitud.tipoTramite}`} />
                     <Typography variant = "subtitle1">
-                        Sección: {solicitud.seccion} 
+                        Sección: {solicitud.seccion}
                     </Typography>
                 </Box>
                 <Divider  flexItem/>
@@ -129,14 +102,13 @@ export default function SolicitudDetalle() {
                         lineheight = '300%'
                     />
                     <DT.FileButton
-                        text="Archivo de prueba"
-                        type="addFile"
+                        text="Iniciar Sesión"
                     />
                 </Box>
             </Grid>
             <Grid item xs={0.3} md={0.3}/>
-            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-            <Grid item xs={6} md={4}>
+            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"30px", ml:"20px"}} />
+            <Grid item xs={6} md={3}>
                 <Controls.DreamTitle
                     title ={'Respuesta a la Solicitud'}
                     size = '18px'
