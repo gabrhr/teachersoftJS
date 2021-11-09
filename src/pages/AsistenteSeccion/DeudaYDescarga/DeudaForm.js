@@ -1,8 +1,8 @@
 import { Avatar, Grid, InputAdornment, ListItem, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import useTable from '../../../components/useTable'
-
+import personaService from '../../../services/personaService';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -38,18 +38,8 @@ const tableHeaders = [
     } */
 ]
   
-function createData(id, nombre, apellido_paterno, apellido_materno, codigo, especialidad, correo, carga,deuda,bono) {
-    return {
-        id, nombre, apellido_paterno,apellido_materno, codigo, especialidad, correo, carga,deuda,bono
-    }
-  }
-const usuarios2 = [
-    createData('0', 'Juan Alberto','Perez', 'Caceres','20005723','Ingeniería Informatica','dep1@pucp.edu.pe', '2', '3', 'Bono de Investigacion'),
-    createData('1', 'Juan Alberto','Perez', 'Caceres','20005723','Ingeniería Informatica','dep1@pucp.edu.pe', '2', '3', 'Bono de Investigacion'),
-    createData('2', 'Juan Alberto','Perez', 'Caceres','20005723','Ingeniería Informatica','dep1@pucp.edu.pe', '2', '3','Bono de Investigacion'),
-]
 export default function DeudaForm() {
-    const [records, setRecords] = useState(usuarios2)
+    const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const {
         TblContainer,
@@ -59,17 +49,47 @@ export default function DeudaForm() {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
     
+    useEffect(() => {
+        //Obtenemos las secciones
+        
+        getProfesores();
+  
+      }, [records])
+
+      function transformarDocentes (request){
+        const recordsX = []
+        request.map(hor => {
+            recordsX.push({
+                "id": hor.id,
+                "url_foto": hor.foto_URL ? hor.foto_URL : 'static/images/avatar/1.jpg',
+                "nombres": hor.nombres,
+                "apellidos": hor.apellidos,
+                "especialidad": hor.seccion.nombre,
+                "correo": hor.correo,
+                "deuda": hor.deuda_docente,
+                "carga": hor.cargaDocente
+            })
+        })
+        return recordsX;
+    }
+
+    const getProfesores = async () =>{
+        const request = await personaService.getPersonasxTipo(1);
+        const recordsX = transformarDocentes(request);
+        setRecords(recordsX)
+    }
+
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
           * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
+            if (target.value === "")
               /* no search text */
               return items
             else
-              return items.filter(x => x.nombre.toLowerCase()
+              return items.filter(x => x.apellidos.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
@@ -104,12 +124,12 @@ export default function DeudaForm() {
                             <Grid container>
                                 <Grid item pl={.5}>
                                 <Avatar>
-                                    <img  src={`/static/images/avatar/1.jpg`} alt=""></img>
+                                    <img height = "125%" width = "125%" text-align ="center" src={item.url_foto} alt=""></img>
                                 </Avatar>
                                 </Grid>
                                 <Grid item sm>
                                     <Typography sx={{paddingLeft:2.5}}>
-                                        {`${item.nombre}, ${item.apellido_paterno} ${item.apellido_materno} `}
+                                        {`${item.apellidos}, ${item.nombres}`}
                                     </Typography>
                                     <div style={{paddingLeft:20}}>
                                         {item.codigo}
@@ -135,7 +155,7 @@ export default function DeudaForm() {
                             </TableCell>
                             <TableCell>
                                 <Typography style={{color:"red"}}>
-                                    Deuda horaria: {item.deuda} horas
+                                    Deuda horaria: {item.deuda} hora(s)
                                 </Typography>
                             </TableCell>
                             {/* <TableCell>{item.bono}</TableCell> */}
