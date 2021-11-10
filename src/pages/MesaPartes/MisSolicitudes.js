@@ -31,8 +31,12 @@ export default function MisSolicitudes() {
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
+    //Obtenemos el id Usuario de la sesión presente.
+    const idUser = JSON.parse(localStorage.getItem("user")).id;
+    //console.log(usuarioActual);
+   
     function getSolicitudes() {
-        MesaPartesService.getSolicitudes()
+        MesaPartesService.getSolicitudesByIdSol(idUser)
             .then(data => {
                 setRecords(data ?? [])
             })
