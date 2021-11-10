@@ -50,7 +50,7 @@ export default function Etiqueta(props) {
                     pt: 0,
                     pb: 0,
                     minWidth: "140px",
-                    maxWidth: "300px",
+                    maxWidth: "180px",
                     height: "40px",
                     borderRadius: "20px",
 
