@@ -10,12 +10,17 @@ export default function SolicitudesDelegadasAMi() {
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
+    const idUser = JSON.parse(localStorage.getItem("user")).id;
+    //console.log(usuarioActual);
+    
+    
     function getSolicitudes() {
-        MesaPartesService.getSolicitudes()
+        MesaPartesService.getSolicitudesByIdDel(idUser)
             .then(data => {
                 setRecords(data ?? [])
             })
     }
+    
     /* ¿Cuando se ejecuta? */
     React.useEffect(() => {
         getSolicitudes()
