@@ -63,19 +63,20 @@ const initialFieldValues = {
 }
 
 export const getTemaTramites = () => ([
-    { id: '1', title: 'Tema 1' },
-    { id: '2', title: 'Tema 2' },
-    { id: '3', title: 'Tema 3' },
+    { id: 1, title: 'Todos los temas' },
+    { id: 1, title: 'Tema 1' },
+    { id: 2, title: 'Tema 2' },
+    { id: 3, title: 'Tema 3' },
 ])
 
 function getEstadoSolicitud() {
     return ([
 
-        { id: '4', title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
-        { id: '0', title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
-        { id: '1', title: 'En Revisión', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
-        { id: '2', title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
-        { id: '3', title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
+        { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
+        { id: 0, title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
+        { id: 1, title: 'En Revisión', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
+        { id: 2, title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
+        { id: 3, title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
     ])
 }
 

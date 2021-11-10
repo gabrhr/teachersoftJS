@@ -45,7 +45,7 @@ export default function MisSolicitudes() {
     /* ¿Cuando se ejecuta? */
     React.useEffect(() => {
         getSolicitudes()
-    }, [records])
+    }, [])
 
     return (
         <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} records={records} setRecords={setRecords}/>
