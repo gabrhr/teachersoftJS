@@ -29,6 +29,7 @@ import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
 import Vacio from '../pages/Dev/Vacio'
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
+import CursosForm from '../pages/AsistenteSeccion/MantenimientoCursos/CursosForm';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import { UserContext } from './UserContext';
@@ -60,7 +61,8 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
-  { requireRoles: [2], path: "/as/docentes", page: Vacio },
+  { requireRoles: [2, 8], path: "/as/docentes", page: Vacio },
+  { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   /* CS*/

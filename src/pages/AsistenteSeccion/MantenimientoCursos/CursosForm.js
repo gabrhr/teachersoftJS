@@ -5,9 +5,9 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
-import HorarioCursos from './HorarioCursos'
+import ListaCursos from './ListaCursos'
 import Popup from '../../../components/util/Popup'
-import ModalAsignacionCarga from './ModalAsignacionCarga';
+import ModalCursos from './ModalCursos';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import { getHorarios, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
@@ -30,7 +30,7 @@ const usuarios2 = [
 ]
 
 
-export default function AsistenteSeccion() {
+export default function CursosForm() {
 
     
     const [horario, setHorario] = useState([]);
@@ -151,7 +151,7 @@ export default function AsistenteSeccion() {
         <>
             <ContentHeader 
                 text="Gestión de la carga de horarios"
-                cbo= {true}
+                cbo= {false}
             />
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
@@ -159,7 +159,7 @@ export default function AsistenteSeccion() {
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
                         </Link>
-                        &nbsp;para subir la carga de horario de un determinado curso.
+                        &nbsp;para subir los cursos de .
                     </Typography>
                 </Grid>
                 <Grid item xs={3} align="right" m={1}>
@@ -169,8 +169,6 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                     <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}/>
                     {/* <Controls.Button
                         text="Exportar"
                         size="large"
@@ -181,7 +179,7 @@ export default function AsistenteSeccion() {
             </Grid>
             {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
-                <HorarioCursos records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                <ListaCursos records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
             </Paper>
             <Popup
@@ -193,7 +191,7 @@ export default function AsistenteSeccion() {
 
                </ModalAsignacionCarga>*/}
               
-               < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+               < ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
             </Popup>  
         </>
