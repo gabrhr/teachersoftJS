@@ -18,67 +18,67 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 /* BACK FAKE */
 function getUnidades() {
     return [
-        { id: '0', nombre: 'Seleccionar' },
-        { id: '1', nombre: 'Facultad Ciencias E Ingenieria' },
-        { id: '2', nombre: 'Facultad de Artes y Diseño' },
-        { id: '3', nombre: 'Facultad de Ciencias Sociales' },
+        { id: 0, nombre: 'Seleccionar' },
+        { id: 1, nombre: 'Facultad Ciencias E Ingenieria' },
+        { id: 2, nombre: 'Facultad de Artes y Diseño' },
+        { id: 3, nombre: 'Facultad de Ciencias Sociales' },
     ]
 }
 
 function getDepartamentos() {
     return [
-        { id: '0', unidad: { id: '0' }, nombre: 'Seleccionar' },
-        { id: '1', unidad: { id: '1' }, nombre: 'Ingenieria' },
-        { id: '2', unidad: { id: '1' }, nombre: 'Fisica' },
-        { id: '3', unidad: { id: '1' }, nombre: 'Matematica' },
+        { id: 0, unidad: { id: 0 }, nombre: 'Seleccionar' },
+        { id: 1, unidad: { id: 1 }, nombre: 'Ingenieria' },
+        { id: 2, unidad: { id: 1 }, nombre: 'Fisica' },
+        { id: 3, unidad: { id: 1 }, nombre: 'Matematica' },
     ]
 }
 
 function getSecciones() {
     return [
-        { id: '0', departamento: { id: '0' }, nombre: 'Seleccionar' },
-        { id: '1', departamento: { id: '1' }, nombre: 'Ing. Informatica' },
-        { id: '2', departamento: { id: '1' }, nombre: 'Ing. Civil' },
-        { id: '3', departamento: { id: '1' }, nombre: 'Ing. Mecanica' },
+        { id: 0, departamento: { id: 0 }, nombre: 'Seleccionar' },
+        { id: 1, departamento: { id: 1 }, nombre: 'Ing. Informatica' },
+        { id: 2, departamento: { id: 1 }, nombre: 'Ing. Civil' },
+        { id: 3, departamento: { id: 1 }, nombre: 'Ing. Mecanica' },
     ]
 }
 
 function getTemaTramites() {
     return [
-        { id: '0', seccion: { id: '0' }, nombre: 'Seleccionar' },
-        { id: '1', seccion: { id: '1' }, nombre: 'Personal Administrativo' },
-        { id: '2', seccion: { id: '1' }, nombre: 'Personal Docente' },
-        { id: '3', seccion: { id: '1' }, nombre: 'Otros Tramites' },
-        { id: '4', seccion: { id: '2' }, nombre: 'Personal Administrativo' },
-        { id: '5', seccion: { id: '2' }, nombre: 'Personal Docente' },
-        { id: '6', seccion: { id: '2' }, nombre: 'Otros Tramites' },
-        { id: '7', seccion: { id: '3' }, nombre: 'Personal Administrativo' },
-        { id: '8', seccion: { id: '3' }, nombre: 'Personal Docente' },
-        { id: '9', seccion: { id: '3' }, nombre: 'Otros Tramites' },
+        { id: 0, seccion: { id: 0 }, nombre: 'Seleccionar' },
+        { id: 1, seccion: { id: 1 }, nombre: 'Personal Administrativo' },
+        { id: 2, seccion: { id: 1 }, nombre: 'Personal Docente' },
+        { id: 3, seccion: { id: 1 }, nombre: 'Otros Tramites' },
+        { id: 4, seccion: { id: 2 }, nombre: 'Personal Administrativo' },
+        { id: 5, seccion: { id: 2 }, nombre: 'Personal Docente' },
+        { id: 6, seccion: { id: 2 }, nombre: 'Otros Tramites' },
+        { id: 7, seccion: { id: 3 }, nombre: 'Personal Administrativo' },
+        { id: 8, seccion: { id: 3 }, nombre: 'Personal Docente' },
+        { id: 9, seccion: { id: 3 }, nombre: 'Otros Tramites' },
     ]
 }
 
 function getTipoTramites() {
     return [
-        { id: '0', temaTramite: { id: '0' }, nombre: 'Seleccionar' },
-        { id: '1', temaTramite: { id: '1' }, nombre: 'Descanso medico' },
-        { id: '2', temaTramite: { id: '1' }, nombre: 'Descarga' },
-        { id: '3', temaTramite: { id: '2' }, nombre: 'Descanso medico' },
-        { id: '4', temaTramite: { id: '2' }, nombre: 'Descarga' },
-        { id: '5', temaTramite: { id: '3' }, nombre: 'Descanso medico' },
-        { id: '6', temaTramite: { id: '3' }, nombre: 'Descarga' },
-        { id: '7', temaTramite: { id: '4' }, nombre: 'Descanso medico' },
-        { id: '8', temaTramite: { id: '4' }, nombre: 'Descarga' },
-        { id: '9', temaTramite: { id: '5' }, nombre: 'Descanso medico' },
-        { id: '10', temaTramite: { id: '5' }, nombre: 'Descarga' },
-        { id: '11', temaTramite: { id: '6' }, nombre: 'Descanso medico' },
-        { id: '12', temaTramite: { id: '6' }, nombre: 'Descarga' },
-        { id: '13', temaTramite: { id: '7' }, nombre: 'Descanso medico' },
-        { id: '14', temaTramite: { id: '7' }, nombre: 'Descarga' },
-        { id: '15', temaTramite: { id: '8' }, nombre: 'Descanso medico' },
-        { id: '16', temaTramite: { id: '8' }, nombre: 'Descarga' },
-        { id: '17', temaTramite: { id: '9' }, nombre: 'Descanso medico' },
-        { id: '18', temaTramite: { id: '9' }, nombre: 'Descarga' },
+        { id: 0, temaTramite: { id: 0 }, nombre: 'Seleccionar' },
+        { id: 1, temaTramite: { id: 1 }, nombre: 'Descanso medico' },
+        { id: 2, temaTramite: { id: 1 }, nombre: 'Descarga' },
+        { id: 3, temaTramite: { id: 2 }, nombre: 'Descanso medico' },
+        { id: 4, temaTramite: { id: 2 }, nombre: 'Descarga' },
+        { id: 5, temaTramite: { id: 3 }, nombre: 'Descanso medico' },
+        { id: 6, temaTramite: { id: 3 }, nombre: 'Descarga' },
+        { id: 7, temaTramite: { id: 4 }, nombre: 'Descanso medico' },
+        { id: 8, temaTramite: { id: 4 }, nombre: 'Descarga' },
+        { id: 9, temaTramite: { id: 5 }, nombre: 'Descanso medico' },
+        { id: 10, temaTramite: { id: 5 }, nombre: 'Descarga' },
+        { id: 11, temaTramite: { id: 6 }, nombre: 'Descanso medico' },
+        { id: 12, temaTramite: { id: 6 }, nombre: 'Descarga' },
+        { id: 13, temaTramite: { id: 7 }, nombre: 'Descanso medico' },
+        { id: 14, temaTramite: { id: 7 }, nombre: 'Descarga' },
+        { id: 15, temaTramite: { id: 8 }, nombre: 'Descanso medico' },
+        { id: 16, temaTramite: { id: 8 }, nombre: 'Descarga' },
+        { id: 17, temaTramite: { id: 9 }, nombre: 'Descanso medico' },
+        { id: 18, temaTramite: { id: 9 }, nombre: 'Descarga' },
     ]
 }
 /* -----end of BACK FAKE----- */
@@ -133,10 +133,10 @@ const initialFieldValues = {
     tipoTramiteID: '0',
 
     /* EXTRA */
-    unidadID: '0',
-    departamentoID: '0',
-    seccionID: '0',
-    temaTramiteID: '0',
+    unidadID: 0,
+    departamentoID: 0,
+    seccionID: 0,
+    temaTramiteID: 0,
 }
 
 function ActualForm(props) {
@@ -144,10 +144,10 @@ function ActualForm(props) {
         handleInputChange, handleSubmit } = props
     /* data de los comboboxes */
     const [disable, setDisable] = React.useState({
-        departamento: true,
-        seccion: true,
-        temaTramite: true,
-        tipoTramite: true
+        departamentoID: true,
+        seccionID: true,
+        temaTramiteID: true,
+        tipoTramiteID: true
     })
     const [comboData, setComboData] = React.useState({
         unidad: [],
@@ -166,44 +166,22 @@ function ActualForm(props) {
     //     getTipoTramites(setComboData)
     // }, [])
 
-    /* logica para encadenar seleccion de
+    /* Cadenita de combobox
      * Unidad > Departamento > Seccion > TemaTramite > TipoTramite 
-     * 
-     * (solo funciona en una direccion por el momento.  Sino es un infierno
-     *  estar anidando los if-else)
      */
-    React.useEffect(() => {
-        if (values.unidadID !== "0") {
-            setDisable({...disable, departamento: false});
-            if (values.departamentoID !== "0") {
-                setDisable({...disable, seccion: false});
-                if (values.seccionID !== "0") {
-                    setDisable({...disable, temaTramite: false})
-                    if (values.temaTramiteID !== "0") {
-                        setDisable({...disable, tipoTramite: false})
-                    }
-                }
-            }
+    function check(id, nextid) {
+        if (values[id] === 0) {
+            setDisable({...disable, [nextid]: true});
         }
-    }, [values])
-
-    // function chain0(e) {
-    //     /* unidad */
-    //     handleInputChange(e)
-    //     if (values.unidadID === '0')
-    //         chain1({ target: { name: 'departamentoID', value: '0'}});
-    // }
-    // function chain1(e) {
-    //     /* departamento */
-    //     handleInputChange(e)
-    //     if (values.departamentoID === '0')
-    //         chain2({ target: { name: 'seccionID', value: '0'}});
-    // }
-    // function chain2(e) {
-    //     /* seccion */
-    //     handleInputChange(e)
-    //     console.log('chain3')
-    // }
+        else {
+            setDisable({...disable, [nextid]: false});
+        }
+        setValues({...values, [nextid]: 0})
+    }
+    React.useEffect(() => check('unidadID', 'departamentoID'), [values.unidadID])
+    React.useEffect(() => check('departamentoID', 'seccionID'), [values.departamentoID])
+    React.useEffect(() => check('seccionID', 'temaTramiteID'), [values.seccionID])
+    React.useEffect(() => check('temaTramiteID', 'tipoTramiteID'), [values.temaTramiteID])
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -216,7 +194,7 @@ function ActualForm(props) {
                         value={values.unidadID}
                         onChange={handleInputChange}
                         options={getUnidades()}
-                        error={errors.tipoTramiteID}
+                        error={errors.unidadID}
                     />
                     <Controls.Select
                         name="departamentoID"
@@ -225,11 +203,11 @@ function ActualForm(props) {
                         onChange={handleInputChange}
                         options={getDepartamentos()
                             .filter(x => x.unidad.id === values.unidadID || 
-                                         x.id === '0'
+                                         x.id === 0
                             )
                         }
-                        disabled={disable.departamento}
-                        error={errors.tipoTramiteID}
+                        disabled={disable.departamentoID}
+                        error={errors.departamentoID}
                     />
                     <Controls.Select
                         name="seccionID"
@@ -239,11 +217,11 @@ function ActualForm(props) {
                         options={getSecciones()
                             .filter(x => 
                                 x.departamento.id === values.departamentoID || 
-                                x.id === '0'
+                                x.id === 0
                             )
                         }
-                        disabled={disable.seccion}
-                        error={errors.tipoTramiteID}
+                        disabled={disable.seccionID}
+                        error={errors.seccionID}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -255,11 +233,11 @@ function ActualForm(props) {
                         options={getTemaTramites()
                             .filter(x => 
                                 x.seccion.id === values.seccionID || 
-                                x.id === '0'
+                                x.id === 0
                             )
                         }
-                        disabled={disable.temaTramite}
-                        error={errors.tipoTramiteID}
+                        disabled={disable.temaTramiteID}
+                        error={errors.temaTramiteID}
                     />
                     <Controls.Select
                         name="tipoTramiteID"
@@ -269,10 +247,10 @@ function ActualForm(props) {
                         options={getTipoTramites()
                             .filter(x => 
                                 x.temaTramite.id === values.temaTramiteID || 
-                                x.id === '0'
+                                x.id === 0
                             )
                         }
-                        disabled={disable.tipoTramite}
+                        disabled={disable.tipoTramiteID}
                         error={errors.tipoTramiteID}
                     />
                 </Grid>
@@ -332,13 +310,14 @@ export default function NuevaSolicitudForm(props) {
     /* onSubmit validation */
     function validate() {
         let temp = {...errors}
-        temp.tipoTramiteID = values.tipoTramiteID !== '0'
-            ? "" 
-            : "Este campo es requerido"
-        temp.asunto = values.asunto
-            ? "" 
-            : "Este campo es requerido"
+        let defaultError = "Este campo es requerido"
+        temp.unidadID = values.unidadID !== 0 ? "" : defaultError
+        temp.departamentoID = values.departamentoID !== 0 ? "" : defaultError
+        temp.seccionID = values.seccionID !== 0 ? "" : defaultError
+        temp.temaTramiteID = values.temaTramiteID !== 0 ? "" : defaultError
+        temp.tipoTramiteID = values.tipoTramiteID !== 0 ? "" : defaultError
 
+        temp.asunto = values.asunto ? "" : defaultError
         setErrors({
             ...temp
         })

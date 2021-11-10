@@ -165,7 +165,7 @@ export default function MisSolicitudes() {
     /* ¿Cuando se ejecuta? */
     React.useEffect(() => {
         getSolicitudes()
-    }, [])
+    }, [records])
 
     /* push data to DB */
     function add (solicitud) {
