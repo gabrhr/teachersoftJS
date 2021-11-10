@@ -255,16 +255,73 @@ export function getSolicitudes() {
 /* id: int */
 export function getSolicitud(id) {
     let solicitud = null
-    axios({
+    return axios({
         method: 'get',
         url: `${url}/mesa/${id}`,
         ...config
     })
         .then(res => {
             solicitud = b2fSolicitud(res.data)
+            return [solicitud]
         })
         .catch(err => console.error(err));
-    return solicitud
+    
+}
+
+export function getSolicitudesByIdSol(idPersona) {
+    let solicitud = null;
+    return axios({
+        method: 'get',
+        url: `${url}/mesa/idsolicitador=${idPersona}`,
+        ...config
+    })
+    .then(res => {
+        res.data.forEach((x, i) => {
+            res.data[i] = b2fSolicitud(x)
+        });
+        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+        console.log(res.data)
+        console.log(res)
+        return res.data
+    })
+    .catch(err => console.error(err));
+
+}
+
+export function getSolicitudesByIdDel(idPersona) {
+    let solicitud = null;
+    return axios({
+        method: 'get',
+        url: `${url}/mesa/iddelegado=${idPersona}`,
+        ...config
+    })
+    .then(res => {
+        res.data.forEach((x, i) => {
+            res.data[i] = b2fSolicitud(x)
+        });
+        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+        console.log(res.data)
+        return res.data
+    })
+    .catch(err => console.error(err));
+}
+
+export function getSolicitudesByDep(idDepartamento) {
+    let solicitud = null;
+    return axios({
+        method: 'get',
+        url: `${url}/mesa/iddepartamento=${idDepartamento}`,
+        ...config
+    })
+    .then(res => {
+        res.data.forEach((x, i) => {
+            res.data[i] = b2fSolicitud(x)
+        });
+        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+        console.log(res.data)
+        return res.data
+    })
+    .catch(err => console.error(err));
 }
 
 /* TODO: work-in-progress */
