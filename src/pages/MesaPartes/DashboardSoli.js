@@ -5,7 +5,7 @@
  * - Ver detalle de una solicitud.
  * "/doc/misSolicitudes"
  */
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
@@ -28,6 +28,7 @@ import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Link, Redirect } from 'react-router-dom';
 import DashboardSoliOrganism from './DashboardSoliOrganism'
+import { UserContext } from '../../constants/UserContext'
 
 
 const tableHeaders = [
@@ -77,23 +78,11 @@ function getEstadoSolicitud() {
         { id: '3', title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
     ])
 }
-/* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
-    return {
-        id, asunto, descripcion, fecha, autorNombre, estado
-    }
-}
-const usuarios2 = [
-    createData('0', 'Solicitud Descarga 2019', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '0'),
-    createData('1', 'Solicitud Descarga 2021', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '1'),
-    createData('2', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '2'),
-    createData('3', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '3'),
-    createData('4', 'Solicitud Descarga 2020', 'Se estima los siguientes docentes ...', '2021-09-30 01:14 pm', 'Caceres', '3'),
-]
- */
-
 
 export default function DashboardSoli(props) {
-    const {records, setRecords} =props
+    const {title,records, setRecords} =props
+    const { rol} = useContext(UserContext);
+    console.log(rol)
     /* Abrir Nueva Solicitud Form (in popup) */
     const [openNuevo, setOpenNuevo] = useState(false)
     /* que hace este? */
@@ -184,78 +173,79 @@ export default function DashboardSoli(props) {
     
 
     return (
-        <Form>
-            <ContentHeader text={"Mis solicitudes a Mesa de Partes"} cbo={false} />
-            {/* Buscador */}
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                <div style={{ width: "400px", marginRight: "50px" }}>
-                    <Controls.Input
-                        label="Buscar Solicitud por Nombre"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            )
-                        }}
-                        onChange={handleSearch}
-                        type="search"
-                    />
-
-                </div>
-                <div style={{ width: "360px", marginRight: "50px" }}>
-                    <Controls.RangeTimePicker/>
-                </div>
-            </div>
-            {/* Filtrados */}
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                <div style={{ width: "400px", marginRight: "50px" }}>
-                    <Controls.Select
-                        name="departmentID"
-                        label="Tema de Tramite"
-                        value={values.departmentID}
-                        onChange={handleInputChange}
-                        options={getTemaTramites()}
-                    />
-                </div>
-                <div style={{ width: "400px", marginRight: "50px" }}>
-                    <Controls.Select
-                        name="estadoID"
-                        label="Estado de Solicitud"
-                        value={values.estadoID}
-                        onChange={handleSearchEstados}
-                        options={getEstadoSolicitud()}
-                    />
-                </div>
-                <div style={{ width: "80vw", textAlign: "right" }}>
-                    <Controls.AddButton
-                        variant="iconoTexto"
-                        text="Nueva Solicitud"
-                        onClick={() => { setOpenNuevo(true); }}
-                    />
-                </div>
-            </div>
-            <DashboardSoliOrganism 
-                BoxTbl={BoxTbl} 
-                TblContainer={TblContainer} 
-                TableBody={TableBody}
-                recordsAfterPagingAndSorting={recordsAfterPagingAndSorting}
-                TblPagination={TblPagination}
+      <Form>
+        <ContentHeader text={title} cbo={false} />
+        {/* Buscador */}
+        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+          <div style={{ width: "400px", marginRight: "50px" }}>
+            <Controls.Input
+              label="Buscar Solicitud por Nombre"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={handleSearch}
+              type="search"
             />
-            {/* "MODALS" */}
-            {/* Agregar nueva solicitud */}
-            <Popup
-                openPopup={openNuevo}
-                setOpenPopup={setOpenNuevo}
-                title="Mesa de Partes"
-            >
-                <NuevaSolicitudForm add={add} />
-            </Popup>
-            <Notification
-                notify={notify}
-                setNotify={setNotify}
+          </div>
+          <div style={{ width: "360px", marginRight: "50px" }}>
+            <Controls.RangeTimePicker />
+          </div>
+        </div>
+        {/* Filtrados */}
+        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+          <div style={{ width: "400px", marginRight: "50px" }}>
+            <Controls.Select
+              name="departmentID"
+              label="Tema de Tramite"
+              value={values.departmentID}
+              onChange={handleInputChange}
+              options={getTemaTramites()}
             />
-        </Form>
-    )
+          </div>
+          <div style={{ width: "400px", marginRight: "50px" }}>
+            <Controls.Select
+              name="estadoID"
+              label="Estado de Solicitud"
+              value={values.estadoID}
+              onChange={handleSearchEstados}
+              options={getEstadoSolicitud()}
+            />
+          </div>
+          {rol==6? 
+            <></>:
+            <div style={{ width: "80vw", textAlign: "right" }}>
+                <Controls.AddButton
+                variant="iconoTexto"
+                text="Nueva Solicitud"
+                onClick={() => {
+                    setOpenNuevo(true);
+                }}
+                />
+            </div>
+          }
+        </div>
+        <DashboardSoliOrganism
+          BoxTbl={BoxTbl}
+          TblContainer={TblContainer}
+          TableBody={TableBody}
+          recordsAfterPagingAndSorting={recordsAfterPagingAndSorting}
+          TblPagination={TblPagination}
+        />
+        {/* "MODALS" */}
+        {/* Agregar nueva solicitud */}
+        <Popup
+          openPopup={openNuevo}
+          setOpenPopup={setOpenNuevo}
+          title="Mesa de Partes"
+        >
+          <NuevaSolicitudForm add={add} />
+        </Popup>
+        <Notification notify={notify} setNotify={setNotify} />
+      </Form>
+    );
 }
 

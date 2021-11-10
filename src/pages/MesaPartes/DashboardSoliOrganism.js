@@ -22,7 +22,7 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Link, Redirect } from 'react-router-dom';
 
 
-
+//Componente de solo la tabla con cada uno de las solicitudes
 export default function DashboardSoliOrganism(props) {
     const {BoxTbl,TblContainer, TableBody, 
         recordsAfterPagingAndSorting, TblPagination} = props
@@ -72,7 +72,7 @@ function Item(props) {
                         Descripcion: {item.descripcion}
                     </Typography>
                 </TableCell>
-                <TableCell >
+                <TableCell  align="center"  >
                     <DT.Etiqueta
                         type={item.estado == 0 ? "enviado" :
                             item.estado == 1 ? "enRevision" :

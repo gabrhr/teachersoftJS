@@ -6,27 +6,8 @@
  * "/doc/misSolicitudes"
  */
 import React, { useState } from 'react'
-import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
-import { Controls } from '../../components/controls/Controls'
-import useTable from '../../components/useTable'
-import Notification from '../../components/util/Notification'
-
-
-/* ICONS */
-import SearchIcon from '@mui/icons-material/Search';
-import { maxWidth } from '@mui/system';
-import Popup from '../../components/util/Popup';
-import ContentHeader from '../../components/AppMain/ContentHeader';
-import NuevaSolicitudForm from './NuevaSolicitudForm';
-import { DT } from '../../components/DreamTeam/DT';
-import { Form, useForm } from '../../components/useForm';
 import * as MesaPartesService from '../../services/mesaPartesService'
 //Iconos Mesa de Partes
-import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
-import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
-import { Link, Redirect } from 'react-router-dom';
 import DashboardSoli from './DashboardSoli'
 
 /* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
@@ -43,10 +24,8 @@ const usuarios2 = [
 ]
  */
 
-
+//Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
-    /* Abrir Nueva Solicitud Form (in popup) */
-    /* que hace este? */
     const [records, setRecords] = useState([])
 
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
@@ -64,7 +43,7 @@ export default function MisSolicitudes() {
     }, [])
 
     return (
-        <DashboardSoli records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} records={records} setRecords={setRecords}/>
     )
 }
 
