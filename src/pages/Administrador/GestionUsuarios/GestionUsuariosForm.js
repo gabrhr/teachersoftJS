@@ -114,8 +114,10 @@ export default function GestionUsuariosForm(props) {
 
   // const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
   const [fotoPerfil, setFotoPerfil] = React.useState(null);
+  const [archivo, setArchivo] = React.useState(null);
   const [fileFoto, setFileFoto] = React.useState(null);
   const [cambio, setCambio] = React.useState(false);
+  const [nombArch, setNombArch] = React.useState(null);
 
 
   // const onSubmit = id => {
@@ -175,6 +177,7 @@ export default function GestionUsuariosForm(props) {
     /* e is a "default parameter" */
     e.preventDefault();
     let fechaCreacion = "";
+    
     if (validate()) {
       //window.alert('valid')
       //Este pasa como la nueva seccion o la seccion editada
@@ -206,6 +209,7 @@ export default function GestionUsuariosForm(props) {
         fecha_creacion: fechaCreacion,
         fecha_modificacion: null,
         foto: fotoPerfil ? fotoPerfil : values.foto_URL,
+        file: archivo
         //~~~foto: --queda pendiente
       }
       console.log(newUsr);
@@ -271,6 +275,14 @@ export default function GestionUsuariosForm(props) {
           console.log(response.data);
       });
   };*/
+
+  function download(ImageBase64){
+    console.log(nombArch)
+    /*var a = document.createElement("a"); //Create <a>
+    a.href = "data:application/*;base64," + ImageBase64; //Image Base64 Goes here
+    a.download = nombArch; //File name Here
+    a.click(); //Downloaded file*/
+  }
 
   return (
     <>
@@ -401,6 +413,46 @@ export default function GestionUsuariosForm(props) {
               value={values.foto_URL}
               onChange={handleInputChange}
             />
+            <label htmlFor="contained-button-file">
+              <Input accept="application/pdf" id="contained-button-file"
+                type="file" sx={{ display: 'none' }}
+                value = {values.fileFoto}
+                onChange={(event) => {
+                  const files = event.target.files
+
+                  console.log(files[0]);
+                  setFileFoto(files[0])
+                  setNombArch(files[0].name)
+                  setCambio(true)
+
+                  if (files && files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                      setArchivo(e.target.result)
+                      //console.log(e.target.result)
+                      
+                    };
+                    reader.readAsDataURL(files[0]);
+                  }
+                }}
+              />
+              <Controls.Button
+                text="Subir Archivo"
+                // type="submit"   // html property (not component)
+                //endIcon={<AddAPhotoIcon />} //Opcional con imagen
+                size="medium"
+                component="span"
+              />
+              <Controls.Button
+                text="Descargar Archivo"
+                // type="submit"   // html property (not component)
+                //endIcon={<AddAPhotoIcon />} //Opcional con imagen
+                size="medium"
+                onClick={ () => {download("AEA")}}
+              />
+              
+            </label>
           </Grid>
         </Grid>
         {/* <Grid align="right" marginY={5} > */}
