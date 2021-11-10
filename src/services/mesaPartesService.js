@@ -135,8 +135,8 @@ function b2fSolicitud(x) {
         ...other,
 
         /* RELACIONES (necesario para back) */
-        solicitadorID: x.solicitador ? x.solicitador.id : null,
-        delegadoID: x.delegado ? x.delegado.id : null,
+        solicitadorID: x.solicitador ? x.solicitador.id : null,     // personaID
+        delegadoID: x.delegado ? x.delegado.id : null,              // personaID
         tipoTramiteID: x.tipoTramiteMesaDePartes
     }
 }
