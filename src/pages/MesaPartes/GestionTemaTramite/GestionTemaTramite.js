@@ -237,7 +237,8 @@ export default function GestionTemaTramite() {
          <Paper variant="outlined" sx={PaperStyle}>
          <Grid container
           spacing={2}
-        >
+         >
+         
         <Grid item xs={8} md={8} mb={8}>
             <Typography variant="h4" style={SubtitulosTable} >
             Tipo de Trámite
