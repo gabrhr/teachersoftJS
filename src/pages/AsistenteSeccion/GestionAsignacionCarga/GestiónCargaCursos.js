@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { makeStyles } from '@mui/styles';
-import { IconButton, Paper} from '@mui/material';
+import { IconButton} from '@mui/material';
 import {TableBody, TableRow, TableCell } from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 import { useForm, Form } from '../../../components/useForm';
@@ -23,11 +23,6 @@ import ModalSesionesLlenas from './ModalSesionesLlenas';
 import ModalFaltaSesion from './ModalFaltaSesion';
 import ModalRegistroExitoso from './ModalRegistroExitoso';
 import cursoService from '../../../services/cursoService';
-import ConfirmDialog from '../../../components/util/ConfirmDialog';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Notification from '../../../components/util/Notification';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -82,10 +77,6 @@ export default function GestionCargaCursos() {
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
 
-    const SubtitulosTable={display:"flex", paddingLeft:"15px", marginBottom:"10px"}
-    const PaperStyle={ borderRadius: '20px', mt: .3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
-    
-
     const {
         TblContainer,
         TblHead,
@@ -136,7 +127,7 @@ export default function GestionCargaCursos() {
                 setCantSes(cantSes + 1);
             }
         }else{
-            handleShowNotification1();
+            setOpenSesionesFullPopup(true);
         }
     }
 
@@ -169,222 +160,119 @@ export default function GestionCargaCursos() {
         horarioService.registerHorario(postHorario);
         resetPage();
         setOpenGuardarPopup(false);
-        handleShowNotification2();
-    }
-    const history = useHistory()
-    const [confirmDialog, setConfirmDialog] = React.useState({ 
-        isOpen: false, 
-        title: '', 
-        subTitle: '',
-        onConfirm: () => onConfirm()
-    })
-
-    /* Executes after Confirm button is pressed,  just before the popup closes */
-    const onConfirm = () => {
-        resetPage()
-    }
-
-    /* abrir modal */
-    function onClickButtonConfirmDialog() {
-        setConfirmDialog({
-            ...confirmDialog,
-            isOpen: true,
-            title: 'Mensaje de Advertencia',
-            subTitle: '¿Desea cancelar los cambios realizados?',
-        })
-    }
-    const [confirmGuardar, setConfirmGuardar] = React.useState({ 
-        isOpen: false, 
-        title: '', 
-        subTitle: '',
-        onConfirm: () => onConfirmGuardar()
-    })
-    const onConfirmGuardar = () => {
-        guardarHorario();
-    }
-    /* abrir modal */
-    function onClickGuardarConfirmDialog() {
-        setConfirmGuardar({
-            ...confirmGuardar,
-            isOpen: true,
-            title: 'Mensaje de Confirmación',
-            subTitle: '¿Está seguro de guardar el horario para el curso?',
-        })
-    }
-
-    const [notify, setNotify] = React.useState({
-        isOpen: false, 
-        message: '', 
-        type: ''
-    })
-
-    function handleShowNotification1(e) {
-        setNotify({
-            isOpen: true,
-            message: 'No se pueden ingresar más de dos sesiones',
-            type: "warning",
-        })
-    }
-    function handleShowNotification2(e) {
-        setNotify({
-            isOpen: true,
-            message: 'Se ha registrado exitosamente el horario',
-            type: "success",
-        })
+        setOpenRegistroExitoso(true);
     }
 
     return (
         <> 
             <ContentHeader 
-                text="Nuevo Horario de Curso"
+                text="Gestión de la carga de cursos"
                 cbo= {false}
             />
-            <Grid item xs={6} md={1} mb={3}>
-                <Link to={'/as/asignacionCarga/registroCursos'}  style={{ textDecoration: 'none' }}> 
-                    <Controls.Button
-                        variant="outlined"
-                        text="Regresar"
-                        size="small"
-                        startIcon={<ArrowBackIcon />}
-                    />
-                </Link>
-          </Grid>
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Typography variant="h4" style={SubtitulosTable}>
-                    Seleccione el Curso
-                </Typography>
-                <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '1%'}}>
-                    <Grid item xs={5}>
-                        <Stack>
-                            <Controls.Input 
-                            name="curso"
-                            label="Curso"
+            <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '1%'}}>
+                <Grid item xs={5}>
+                    <Stack>
+                        <Controls.Input 
+                        name="curso"
+                        label="Curso"
+                        onChange = {handleInputChange}
+                        size= 'small'
+                        value = {dValuNombre}
+                        />
+                    </Stack>
+                </Grid>
+                <Controls.Button
+                    type="submit"
+                    text={<SearchIcon />}
+                    onClick = {() => setOpenPopup(true)}
+                />
+            </Grid>
+            <Grid container sx={{gridTemplateColumns: '1fr 1fr', width: '100%'}} marginY={3}>
+                <Grid item xs={3}>
+                    <Stack direction="column" alignItems="top" spacing={3} px={2}>
+                        <Controls.Input 
+                            name="creditos"
+                            label="Cantidad de créditos"  
+                            value = {dValuCreditos}
                             onChange = {handleInputChange}
                             size= 'small'
-                            value = {dValuNombre}
-                            disabled
-                            />
-                        </Stack>
-                    </Grid>
-                    <Controls.Button
-                        type="submit"
-                        text={<SearchIcon />}
-                        onClick = {() => setOpenPopup(true)}
-                    />
+                            /*variant = 'contained'*/
+                        />
+                        <Controls.Input 
+                            name="especialidad"
+                            label="Unidad correspondiente"  
+                            value={dValuUnidad} 
+                            onChange = {handleInputChange}
+                            size= 'small'
+                        />
+                        <Controls.Input 
+                            name="horario"
+                            label="Horario"  
+                            value={horario} 
+                            onChange = {changeHorario}
+                            size= 'small'
+                        />
+                    </Stack>
                 </Grid>
-                <Grid container sx={{gridTemplateColumns: '1fr 1fr', width: '100%'}} marginY={3}>
-                    <Grid item xs={3}>
-                        <Stack direction="column" alignItems="top" spacing={3} px={2}>
-                            <Typography variant="h4">
-                                Información del Curso
-                            </Typography>
-                            <Controls.Input 
-                                name="creditos"
-                                label="Cantidad de créditos"  
-                                value = {dValuCreditos}
-                                onChange = {handleInputChange}
-                                size= 'small'
-                                disabled
-                                /*variant = 'contained'*/
-                            />
-                            <Controls.Input 
-                                name="especialidad"
-                                label="Unidad correspondiente"  
-                                value={dValuUnidad} 
-                                onChange = {handleInputChange}
-                                disabled
-                                size= 'small'
-                            />
-                            <Typography variant="h4">
-                                Horario del Curso
-                            </Typography>
-
-                            <Controls.Input 
-                                name="horario"
-                                label="Horario"  
-                                value={horario} 
-                                onChange = {changeHorario}
-                                size= 'small'
-                            />
-                        </Stack>
-                    </Grid>
-                    <Grid containter xs={7} sx={{paddingLeft:'20%'}}>
-                        <Typography variant="h4" style={{marginBottom:"10px"}}>
-                            Información del Horario
-                        </Typography>
-
-                        <DT.BorderBox>
-                            <Stack direction="column" alignItems="top" spacing={3} px = {9}>
-                                
-                                <Controls.Select
-                                name="tipo"
-                                label="Tipo"
-                                value={vTipo}
-                                onChange={(e) => {setVTipo(e.target.value);
-                                console.log(e.target.value)}}
-                                options={tipo}
-                                displayEmpty
-                                /> 
-                            <Grid container >
-                                <Grid item xs={3}>
-                                    <Controls.InfoHelper text="Ingrese el número de horas &#10; del tipo de clases"/>
-                                </Grid>
-                                <Grid item xs={9}>
-                                    <Stack direction="column" alignItems="top" justifyContent= 'flex-end' spacing={3} pl = {1}>
-                                        <Controls.Input
-                                        name="horaSesion"
-                                        label="Horas - Sesión"
-                                        value={sesion}
-                                        onChange={(e)=>{
-                                            setSesion(e.target.value)
-                                        }}
-                                        />
-                                    </Stack>
-                                </Grid>
-                            </Grid>
-                            <Controls.AddButton
-                                title="Agregar Horario"
-                                variant="iconoTexto"
-                                onClick = {() => addSession(vTipo, sesion)}
-                            />
-                            </Stack>
-                        </DT.BorderBox>
-                        <DT.BorderBox marginY={3}>
-                            <TblContainer>
-                                <TblHead />
-                                <TableBody>
-                                    {
-                                        recordsAfterPagingAndSorting().map(item => (
-                                                <TableRow key={item.id}>
-                                                    <TableCell>{item.tipo}</TableCell>
-                                                    <TableCell  >{item.sesion}</TableCell>
-                                                </TableRow>
-                                            ))
-                                    }
-                                </TableBody>
-                            </TblContainer>
-                            <TblPagination />
-                        </DT.BorderBox>
-                    </Grid>
-                </Grid>
-                <Grid conteiner >
-                    <Grid item align="right" marginY={3} >
-                        <Controls.Button
-                            variant="outlined"
-                            text="cancelar"
-                            endIcon={<CloseIcon/>}
-                            onClick = {onClickButtonConfirmDialog}
-                            />
+                <Grid item xs={7} sx={{paddingLeft:'20%'}}>
+                    <DT.BorderBox>
+                        <Stack direction="column" alignItems="top" spacing={3} px = {9}>
                             
-                        <Controls.Button
-                            text="guardar"
-                            type="submit" 
-                            endIcon={<SaveIcon/>}
-                            onClick = {onClickGuardarConfirmDialog}  
+                            <Controls.Select
+                            name="tipo"
+                            label="Tipo"
+                            value={vTipo}
+                            onChange={(e) => {setVTipo(e.target.value);
+                            console.log(e.target.value)}}
+                            options={tipo}
+                            displayEmpty
+                            /> 
+                            <Controls.Input
+                            name="horaSesion"
+                            label="Horas - Sesión"
+                            value={sesion}
+                            onChange={(e)=>{
+                                setSesion(e.target.value)
+                            }}
                             />
-                    </Grid>
+                            <AddButton onClick = {() => addSession(vTipo, sesion)} title = "Agregar horario"/>  
+                        </Stack>
+                    </DT.BorderBox>
+                    <DT.BorderBox marginY={3}>
+                        <TblContainer>
+                            <TblHead />
+                            <TableBody>
+                                {
+                                    recordsAfterPagingAndSorting().map(item => (
+                                            <TableRow key={item.id}>
+                                                <TableCell>{item.tipo}</TableCell>
+                                                <TableCell  >{item.sesion}</TableCell>
+                                            </TableRow>
+                                        ))
+                                }
+                            </TableBody>
+                        </TblContainer>
+                        <TblPagination />
+                    </DT.BorderBox>
                 </Grid>
-            </Paper>
+            </Grid>
+            <Grid conteiner >
+                <Grid item align="right" marginY={3} >
+                    <Controls.Button
+                        variant="outlined"
+                        text="cancelar"
+                        endIcon={<CloseIcon/>}
+                        onClick = {()=>setOpenCancelarPopup(true)}
+                        />
+                        
+                    <Controls.Button
+                        text="guardar"
+                        type="submit" 
+                        endIcon={<SaveIcon/>}
+                        onClick = {()=>setOpenGuardarPopup(true)}  
+                        />
+                </Grid>
+            </Grid>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
@@ -392,19 +280,41 @@ export default function GestionCargaCursos() {
             >
                <BuscarCurso getRow = {getRow}/>
             </Popup>
-            <ConfirmDialog 
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-            />
-            <ConfirmDialog 
-                confirmDialog={confirmGuardar}
-                setConfirmDialog={setConfirmGuardar}
-            />
-
-            <Notification
-                notify={notify}
-                setNotify={setNotify}
-            />   
+            <Popup
+                openPopup={openCancelarPopup}
+                setOpenPopup={setOpenCancelarPopup}
+                title="Cancelar"
+            >
+               <ModalCancelarHorarioCurso cancelar = {resetPage} setOpenCancelarPopup={setOpenCancelarPopup}/>
+            </Popup> 
+            <Popup
+                openPopup={openGuardarPopup}
+                setOpenPopup={setOpenGuardarPopup}
+                title="Guardar"
+            >
+               <ModalGuardarHorarioCurso setOpenGuardarPopup = {setOpenGuardarPopup} guardarHorario = {guardarHorario}/>
+            </Popup>
+            <Popup
+                openPopup={openSesionesFullPopup}
+                setOpenPopup={setOpenSesionesFullPopup}
+                title="Atención"
+            >
+               <ModalSesionesLlenas setOpenSesionesFullPopup = {setOpenSesionesFullPopup}/>
+            </Popup>
+            <Popup
+                openPopup={openFaltaSesionPopup}
+                setOpenPopup={setOpenFaltaSesionPopup}
+                title="Atención"
+            >
+               <ModalFaltaSesion setOpenFaltaClasePopup = {setOpenFaltaSesionPopup} sesionFaltante = {vTipo}/>
+            </Popup>
+            <Popup
+                openPopup={openRegistroExitoso}
+                setOpenPopup={setOpenRegistroExitoso}
+                title="Atención"
+            >
+               <ModalRegistroExitoso setOpenRegistroExitoso = {setOpenRegistroExitoso}/>
+            </Popup>    
         </>
     )
 }

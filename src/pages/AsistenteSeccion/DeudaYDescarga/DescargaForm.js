@@ -161,7 +161,7 @@ function Item(props){
                     </div>
                     
                 </TableCell>
-                <TableCell align="center"> 
+                <TableCell sx={{maxWidth:"250px"}}> 
                     <Typography paragraph>
                         Descripcion: {item.descripcion}
                     </Typography>

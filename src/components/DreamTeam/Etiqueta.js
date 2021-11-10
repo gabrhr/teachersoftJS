@@ -47,9 +47,8 @@ export default function Etiqueta(props) {
                 sx={{
                     pt: 0,
                     pb: 0,
-                    mr:0,
                     minWidth: "140px",
-                    maxWidth: "170px",
+                    maxWidth: "300px",
                     height: "40px",
                     borderRadius: "20px",
 

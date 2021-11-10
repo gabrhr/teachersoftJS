@@ -25,7 +25,7 @@ const tableHeaders = [
     },
     {
       id: 'nombre',
-      label: 'Nombre del Curso',
+      label: 'Nombre',
       numeric: false,
       sortable: true
     },
@@ -97,42 +97,41 @@ export default function BuscarCurso(props)  {
     
     return (
         <>
-            <Typography variant="h4" style={{marginBottom:"20px"}}>
-                Seleccione el curso
-            </Typography>
-            <Controls.Input
-                    label="Buscar Curso por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
-            />
-            <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id} backCl = {(selectedRow === records.indexOf(item))?'#DEEEFF':'#E9ECF8' } 
-                          sx={(selectedRow === records.indexOf(item))?{backgroundColor: '#DEEEFF', '&:hover': {
-                            backgroundColor: '#DEEEFF',}}:{'&:hover': {backgroundColor: '#DEEEFF',}}}
-                          onDoubleClick = {() => {props.getRow(item)}}>
-                            <StyledTableCell>{item.codigo}</StyledTableCell>
-                            <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell align= "right">{item.creditos}</StyledTableCell>
-                        </StyledTableRow>
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
-                <TblPagination />
-            </BoxTbl>
+            <DT.BorderBox marginBottom={2}>
+                <Controls.Input
+                        label="Buscar Curso por Nombre"
+                        InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )
+                        }}
+                        sx={{ width: .75 }}
+                        onChange={handleSearch}
+                        type="search"
+                />
+                <BoxTbl>
+                    <TblContainer>
+                        <TblHead />
+                        <TableBody>
+                        {
+                            recordsAfterPagingAndSorting().map(item => (
+                            <StyledTableRow key={item.id} backCl = {(selectedRow === records.indexOf(item))?'#DEEEFF':'#E9ECF8' } 
+                              sx={(selectedRow === records.indexOf(item))?{backgroundColor: '#DEEEFF', '&:hover': {
+                                backgroundColor: '#DEEEFF',}}:{'&:hover': {backgroundColor: '#DEEEFF',}}}
+                              onDoubleClick = {() => {props.getRow(item)}}>
+                                <StyledTableCell>{item.codigo}</StyledTableCell>
+                                <StyledTableCell>{item.nombre}</StyledTableCell>
+                                <StyledTableCell align= "right">{item.creditos}</StyledTableCell>
+                            </StyledTableRow>
+                            ))
+                        }
+                        </TableBody>
+                    </TblContainer>
+                    <TblPagination />
+                </BoxTbl>
+            </DT.BorderBox>
         </>
     );
 }
