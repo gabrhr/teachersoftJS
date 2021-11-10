@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
@@ -20,13 +20,13 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Link, Redirect } from 'react-router-dom';
+import { UserContext } from '../../constants/UserContext'
 
 
 //Componente de solo la tabla con cada uno de las solicitudes
 export default function DashboardSoliOrganism(props) {
     const {BoxTbl,TblContainer, TableBody, 
         recordsAfterPagingAndSorting, TblPagination} = props
-
     const [row, setRow] = useState(false)
     function getRow({ ...props }) {
         setRow(props)
@@ -49,8 +49,21 @@ export default function DashboardSoliOrganism(props) {
         </div>
     )
 }
+
+function getTipoDetalle(item,user,rol){
+    if(rol==6){
+        return "/jd/mesaPartes/solicitudDetalle"
+    } else if(item.solicitador.fullName== user.nombres + ' ' + user.apellidos){
+        return "/doc/solicitudDetalle"
+    } else if (item.delegado.fullName== user.nombres + ' ' + user.apellidos){
+        return "/secretaria/mesaPartes/solicitudDetalle"
+    }
+    return "/doc/solicitudDetalle"
+}
+
 function Item(props) {
     const { item, getRow } = props
+    const {user, rol} = useContext(UserContext);
 
     return (
         <>
@@ -82,7 +95,7 @@ function Item(props) {
                 </TableCell>
                 <TableCell>
                     <Link to ={{
-                        pathname:'/doc/solicitudDetalle',
+                        pathname:getTipoDetalle(item,user,rol),
                         state:{
                             solicitud: item
                         }

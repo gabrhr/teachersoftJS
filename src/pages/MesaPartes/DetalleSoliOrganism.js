@@ -2,11 +2,10 @@ import React, {useState, useEffect} from 'react'
 import {makeStyles} from '@mui/styles'
 import { Controls } from '../../components/controls/Controls'
 import ContentHeader from '../../components/AppMain/ContentHeader';
-import { Box, Paper, Divider, TableRow, TableCell,InputAdornment, Grid, Typography, TextField } from '@mui/material';
+import { Box, Paper, Divider, TableRow, TableCell,InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { DT } from '../../components/DreamTeam/DT';
 
 /*ICONS*/
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 
 function crearEstado(estado, titulo, contenido,fecha, completado) {
@@ -52,34 +51,10 @@ export default function DetalleSoliOrganism(props) {
     const {solicitud} = props
     const [records, setRecords] = useState()
     const SubtitulosTable = { display: "flex" }
-    const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
+    
     const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit(solicitud))
     return (
         <>
-        <ContentHeader
-            text="Mesa de Partes - Detalle de la solicitud"
-            cbo={false}
-        />
-        <Grid
-            container
-            ml={-1}
-            mr={0}
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-        >
-        <Grid item xs={6} md={1} mb={3}>
-            <Link to={'/doc/misSolicitudes'}  style={{ textDecoration: 'none' }}> 
-                <Controls.Button
-                    variant="outlined"
-                    text="Regresar"
-                    size="small"
-                    startIcon={<ArrowBackIcon />}
-                />
-            </Link>
-          </Grid>
-        </Grid>
-        <Paper variant="outlined" sx={PaperStyle}>
          <Grid container spacing={2}>
             <Grid item xs={4} md={7.4}>
                 <Box>
@@ -89,7 +64,8 @@ export default function DetalleSoliOrganism(props) {
                     </Typography>
                 </Box>
                 <Divider  flexItem/>
-                <Box>
+                <DT.HeaderSolicitud solicitud={solicitud} solicitador={true}/>
+                <Box ml="75px">
                     <Controls.DreamTitle
                         title ={'Asunto: ' + `${solicitud.asunto}`}
                         size = '20px'
@@ -102,13 +78,17 @@ export default function DetalleSoliOrganism(props) {
                     multiline
                     rows={5}
                     defaultValue=""
+                    sx={{
+                        pl:"78px",
+                        mb:"20px"
+                    }}
                 />
                 <Grid item xs={0.3} md={0.3}/>
-                <Divider  flexItem/>
-                <Box>
+                <Divider  flexItem pl="20px"/>
+                <Box ml="76px">
                     <Controls.DreamTitle
                         title ={'Archivos Adjuntos: '}
-                        size = '16px'
+                        size = '20px'
                         lineheight = '300%'
                     />
                     <DT.FileButton
@@ -118,7 +98,7 @@ export default function DetalleSoliOrganism(props) {
                 </Box>
             </Grid>
             <Grid item xs={0.3} md={0.3}/>
-            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px", mb:"10px"}} />
             <Grid item xs={6} md={4}>
                 <Controls.DreamTitle
                     title ={'Respuesta a la Solicitud'}
@@ -132,7 +112,6 @@ export default function DetalleSoliOrganism(props) {
             
         </Grid>
  
-        </Paper>
          </>
     )
 }
