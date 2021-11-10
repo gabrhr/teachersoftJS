@@ -35,6 +35,8 @@ export default function Etiqueta(props) {
         other.color= "atendido"
     }
 
+    if (! ["error","info","success","warning"].includes(type)) type = "info"
+
     return (
        // <Box //display="flex"
             // transform="scale(0.5)"   // FIXME: No funciona :(

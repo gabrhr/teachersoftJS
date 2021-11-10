@@ -107,13 +107,12 @@ export default function Router1(props) {
       <Switch>
         {/* Rutas protegidas */}
         {privateroutes.map(r =>
-          <PrivateRoute exact path={r.path} 
-          requireRoles={r.requireRoles}
-          component={() =>
-            <HeaderUser
-            pagina={r.page}
-            />
-          }
+          <PrivateRoute 
+            exact path={r.path} 
+            requireRoles={r.requireRoles}
+            component={() =>
+              <HeaderUser pagina={r.page} />
+            }
           >
           </PrivateRoute>
         )}

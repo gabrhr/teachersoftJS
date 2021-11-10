@@ -246,7 +246,6 @@ export function getSolicitudes() {
                 res.data[i] = b2fSolicitud(x)
             });
             // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            console.log(res.data)
             return res.data
         })
         .catch(err => console.error(err));
@@ -280,8 +279,8 @@ export function getSolicitudesByIdSol(idPersona) {
             res.data[i] = b2fSolicitud(x)
         });
         // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-        console.log(res.data)
-        console.log(res)
+        // console.log(res.data)
+        // console.log(res)
         return res.data
     })
     .catch(err => console.error(err));
@@ -300,7 +299,7 @@ export function getSolicitudesByIdDel(idPersona) {
             res.data[i] = b2fSolicitud(x)
         });
         // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-        console.log(res.data)
+        // console.log(res.data)
         return res.data
     })
     .catch(err => console.error(err));
@@ -318,7 +317,7 @@ export function getSolicitudesByDep(idDepartamento) {
             res.data[i] = b2fSolicitud(x)
         });
         // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-        console.log(res.data)
+        // console.log(res.data)
         return res.data
     })
     .catch(err => console.error(err));

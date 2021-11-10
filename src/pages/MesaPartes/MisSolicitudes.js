@@ -61,19 +61,20 @@ const initialFieldValues = {
 }
 
 export const getTemaTramites = () => ([
-    { id: '1', title: 'Tema 1' },
-    { id: '2', title: 'Tema 2' },
-    { id: '3', title: 'Tema 3' },
+    { id: 0, title: 'Todos los temas'},
+    { id: 1, title: 'Tema 1' },
+    { id: 2, title: 'Tema 2' },
+    { id: 3, title: 'Tema 3' },
 ])
 
 function getEstadoSolicitud() {
     return ([
 
-        { id: '4', title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
-        { id: '0', title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
-        { id: '1', title: 'En Revisión', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
-        { id: '2', title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
-        { id: '3', title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
+        { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
+        { id: 0, title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
+        { id: 1, title: 'En Revisión', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
+        { id: 2, title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
+        { id: 3, title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
     ])
 }
 /* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
@@ -191,73 +192,72 @@ export default function MisSolicitudes() {
     }
 
     return (
-        <Form>
+        <>
             <ContentHeader text={"Mis solicitudes a Mesa de Partes"} cbo={false} />
-            {/* Buscador */}
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                <div style={{ width: "400px", marginRight: "50px" }}>
-                    <Controls.Input
-                        label="Buscar Solicitud por Nombre"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            )
-                        }}
-                        onChange={handleSearch}
-                        type="search"
-                    />
+            <Form>
+                {/* Buscador */}
+                <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                    <div style={{ width: "400px", marginRight: "50px" }}>
+                        <Controls.Input
+                            label="Buscar Solicitud por Nombre"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                )
+                            }}
+                            onChange={handleSearch}
+                            type="search"
+                        />
 
+                    </div>
+                    <div style={{ width: "360px", marginRight: "50px" }}>
+                        <Controls.RangeTimePicker/>
+                    </div>
                 </div>
-                <div style={{ width: "360px", marginRight: "50px" }}>
-                    <Controls.RangeTimePicker/>
+                {/* Filtrados */}
+                <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                    <div style={{ width: "400px", marginRight: "50px" }}>
+                        <Controls.Select
+                            name="departmentID"
+                            label="Tema de Tramite"
+                            value={values.departmentID}
+                            onChange={handleInputChange}
+                            options={getTemaTramites()}
+                        />
+                    </div>
+                    <div style={{ width: "400px", marginRight: "50px" }}>
+                        <Controls.Select
+                            name="estadoID"
+                            label="Estado de Solicitud"
+                            value={values.estadoID}
+                            onChange={handleSearchEstados}
+                            options={getEstadoSolicitud()}
+                        />
+                    </div>
+                    <div style={{ width: "80vw", textAlign: "right" }}>
+                        <Controls.AddButton
+                            variant="iconoTexto"
+                            text="Nueva Solicitud"
+                            onClick={() => { setOpenNuevo(true); }}
+                        />
+                    </div>
                 </div>
-            </div>
-            {/* Filtrados */}
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                <div style={{ width: "400px", marginRight: "50px" }}>
-                    <Controls.Select
-                        name="departmentID"
-                        label="Tema de Tramite"
-                        value={values.departmentID}
-                        onChange={handleInputChange}
-                        options={getTemaTramites()}
-                    />
-                </div>
-                <div style={{ width: "400px", marginRight: "50px" }}>
-                    <Controls.Select
-                        name="estadoID"
-                        label="Estado de Solicitud"
-                        value={values.estadoID}
-                        onChange={handleSearchEstados}
-                        options={getEstadoSolicitud()}
-                    />
-                </div>
-                <div style={{ width: "80vw", textAlign: "right" }}>
-                    <Controls.AddButton
-                        variant="iconoTexto"
-                        text="Nueva Solicitud"
-                        onClick={() => { setOpenNuevo(true); }}
-                    />
-                </div>
-            </div>
-            <BoxTbl>
-                <TblContainer>
-                    {/* <TblHead />  */}
-                    <TableBody>
-                        {
-                            recordsAfterPagingAndSorting().map(item => (
-                                <Item item={item} getRow={getRow} estado={estado} />
-                            ))
-                        }
-                    </TableBody>
-                    
-                </TblContainer>
-                
-                <TblPagination />
-            </BoxTbl>
-
+                <BoxTbl>
+                    <TblContainer>
+                        {/* <TblHead />  */}
+                        <TableBody>
+                            {
+                                recordsAfterPagingAndSorting().map(item => (
+                                    <Item item={item} getRow={getRow} estado={estado} />
+                                ))
+                            }
+                        </TableBody>
+                    </TblContainer>
+                    <TblPagination />
+                </BoxTbl>
+            </Form>
             {/* "MODALS" */}
             {/* Agregar nueva solicitud */}
             <Popup
@@ -271,7 +271,7 @@ export default function MisSolicitudes() {
                 notify={notify}
                 setNotify={setNotify}
             />
-        </Form>
+        </>
     )
 }
 
