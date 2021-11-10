@@ -11,11 +11,7 @@ import * as DTLocalServices from '../../../services/DTLocalServices';
  
 import { Box } from '@mui/system';
 import tematramiteService from '../../../services/tematramiteService';
-
-
- 
-
-/*SERVICES*/ 
+import tipotramiteService from '../../../services/tipotramiteService';
 
 
 const styles = {
@@ -28,52 +24,28 @@ const styles = {
 const initialFieldValues = {
     id: 0,
     nombre: '',
-    seccionId: '',
-    nombreSeccion: '',
-    seccion: {
-        id: '',
-        nombre: ''
-    }
+    id_tema: localStorage.getItem("id_tramite")
 }
 
-const getSecciones = async () => {
+const getTemaTramites = async () => {
 
-    const dataSecc = [ { id: 1, nombre: 'Seccion 1' }, 
-                       { id: 2, nombre: 'Seccion 2' },
-                       { id: 3, nombre: 'Seccion 3' },
-                       { id: 4, nombre: 'Seccion 4' }]
+    const dataTema = await tematramiteService.getTemaTramites();
+    const temaTramites = [];
 
-    const secciones = dataSecc;                    
-    /*
-    const dataSecc = await SeccionService.getSecciones();
-    //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
-    const secciones = [];
-    dataSecc.map(seccion => (
-      secciones.push({
-        id: seccion.id.toString(),
-        nombre: seccion.nombre,
-        fechaFundacion: seccion.fecha_fundacion,
-        fechaModificacion: seccion.fecha_modificacion,
-        departamento: {
-          id: seccion.departamento.id,
-          nombre: seccion.departamento.nombre
-        },
-        correo: seccion.correo,
-        foto: seccion.foto
-      })
+    dataTema.map(tema => (
+        temaTramites.push({
+            id: tema.id,
+            nombre: tema.nombre,
+            id_tema: localStorage.getItem("id_tramite")
+        })
     ));
-    //console.log(secciones);
-    */
-    return secciones;
+    return temaTramites;
 }
 
 export default function GestionTemaTramiteForm(props){
 
-    const { recordForEdit, addOrEdit, setOpenPopup } = props
-    const [createData, setCreateData] = useState(false);
-    const [seccion, setSecciones] = useState([])
-  
-    const [cambio, setCambio] = React.useState(false);
+    const { recordForEdit, addOrEdit, setOpenPopup } = props;
+    const [temaTramite, seTemaTramite] = useState([]);
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -82,10 +54,9 @@ export default function GestionTemaTramiteForm(props){
             temp.nombre = "Campo requerido"
           else
             temp.nombre = DTLocalServices.requiredField(fieldValues.nombre)
-      
-        if ('seccion' in fieldValues)
-            temp.seccion = DTLocalServices.requiredField(fieldValues.seccion)
-    
+ 
+
+
         setErrors({
           ...temp
         })
@@ -113,41 +84,26 @@ export default function GestionTemaTramiteForm(props){
           //Este pasa como la nueva seccion o la seccion editada
     
           if (values.id) {
-            const tema = tematramiteService.getTemaTramite(values.id);
-            console.log(tema);
-            
+            const tipo = tipotramiteService.getTipoTramite(values.id);
+            console.log(tipo);
           }
     
-          const newTema = {
+          const newTipo = {
             id: values.id,
             nombre: values.nombre,
-            seccion: {
-                id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId),
-                nombre: values.nombreSeccion,
-              },
-            
-            /*
-            seccion: {
-              id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId),
-              nombre: null,
-            },
-            */
-   
-            //~~~foto: --queda pendiente
+            id_tema: localStorage.getItem("id_tramite")
           }
-          console.log(newTema);
-          addOrEdit(newTema, resetForm)
+          
+          console.log(newTipo);
+          addOrEdit(newTipo, resetForm)
         }
     }
 
     useEffect(() => {
-        getSecciones()
-          .then(newSecc => {
-            setSecciones(prevSecc => prevSecc.concat(newSecc));
-    
-            //console.log(newSeccion);
-    
-    
+        getTemaTramites()
+          .then(newTema => {
+            seTemaTramite(prevTema => prevTema.concat(newTema));
+        
           });
         if (recordForEdit != null) {
           /* object is not empty */
@@ -165,24 +121,17 @@ export default function GestionTemaTramiteForm(props){
                     container 
                     sx={{ gridTemplateColumns: "1fr 1fr 1fr ", }}
                 >
-                     {/* Datos Personales */}
+
                     <Grid item xs={12} sx={styles.columnGridItem}>
                         <Typography variant="h4" mb={2}>
-                            DAATOS DEL TEMA TRÁMITE
+                            DAATOS DEL TIPO DE TRÁMITE
                         </Typography>
                         <Controls.Input
-                        name="nombre"
-                        label="Nombre"
-                        value={values.nombre}
-                        onChange={handleInputChange}
-                        error={errors.nombre}
-                        />
-                        <Controls.Select
-                            name={recordForEdit ? "idSeccion" : "seccionId"}
-                            label="Seccion Principal"
-                            value={recordForEdit ? values.idSeccion : values.seccionId}
+                            name="nombre"
+                            label="Nombre"
+                            value={values.nombre}
                             onChange={handleInputChange}
-                            options={seccion}
+                            error={errors.nombre}
                         />
                     </Grid>
         

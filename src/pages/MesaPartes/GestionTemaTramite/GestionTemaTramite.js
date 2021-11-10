@@ -22,7 +22,7 @@ import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import tematramiteService from '../../../services/tematramiteService';
 import * as DTLocalServices from '../../../services/DTLocalServices';
 import GestionTemaTramiteForm from './GestionTemaTramiteForm';
-import GestionTemaTramiteDetails from './GestionTemaTramiteDetails';
+import GestionTipoTramite from './GestionTipoTramite';
 import { render } from '@testing-library/react';
 import { WindowSharp } from '@mui/icons-material';
 
@@ -323,7 +323,7 @@ export default function GestionTemaTramite() {
                     Detalles del Tema de Trámite
             </Typography>
             <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
-            <GestionTemaTramiteDetails idTramite={selectedID} detail = {detail} setDetail = {setDetail}/>
+            <GestionTipoTramite idTramite={selectedID} detail = {detail} setDetail = {setDetail}/>
  
         </Grid>
       </Grid>

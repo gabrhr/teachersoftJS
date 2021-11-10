@@ -4,14 +4,14 @@ import tokenService from './tokens.js';
 
 function fillTipos() {
     let tipos = [];
-    const tipo1 = { id: 1 , nombre: 'tipo 1'};
-    const tipo2 = { id: 2 , nombre: 'tipo 2'};
-    const tipo3 = { id: 3 , nombre: 'tipo 3'};
-    const tipo4 = { id: 4 , nombre: 'tipo 4'};
-    const tipo5 = { id: 5 , nombre: 'tipo 5'};
-    const tipo6 = { id: 6 , nombre: 'tipo 6'};
-    const tipo7 = { id: 7 , nombre: 'tipo 7'};
-    const tipo8 = { id: 8 , nombre: 'tipo 8'};
+    const tipo1 = { id: 1 , nombre: 'tipo 1', id_tema : 1};
+    const tipo2 = { id: 2 , nombre: 'tipo 2', id_tema : 1};
+    const tipo3 = { id: 3 , nombre: 'tipo 3', id_tema : 1};
+    const tipo4 = { id: 4 , nombre: 'tipo 4', id_tema : 2};
+    const tipo5 = { id: 5 , nombre: 'tipo 5', id_tema : 2};
+    const tipo6 = { id: 6 , nombre: 'tipo 6', id_tema : 3};
+    const tipo7 = { id: 7 , nombre: 'tipo 7', id_tema : 3};
+    const tipo8 = { id: 8 , nombre: 'tipo 8', id_tema : 4};
     
     tipos.push(tipo1);
     tipos.push(tipo2);
@@ -25,7 +25,7 @@ function fillTipos() {
     return tipos;
 }
 
-let listTipos = filltipos();
+let listTipos = fillTipos();
 
 
 /*Funciones "hardcodeadas*/
@@ -50,6 +50,21 @@ export const getTipoTramite = (id) => {
     return tipo;
 }
 
+const getTipoTramitexTemaTramite =  (id_tramite) => {
+
+    if (listTipos.length <= 0)
+        listTipos = fillTipos();
+    let auxTipos = [];
+    let auxTipo;
+    for (let i = 0; i < listTipos.length; i++){
+        if (id_tramite == listTipos[i].id_tema){
+            auxTipo = listTipos[i]
+            auxTipos.push(auxTipo);
+        }
+    }   
+    return auxTipos;
+}
+
  
 export const registerTipoTramite =  newObject => {
     
@@ -62,9 +77,7 @@ export const registerTipoTramite =  newObject => {
         console.error(exception);
         return false;
     }
-
-
-    
+ 
 }
 
 export const updateTipoTramite = (newObject, id) => {
@@ -73,7 +86,7 @@ export const updateTipoTramite = (newObject, id) => {
     for (let i = 0; i < listTipos.length; i++){
         if (id == listTipos[i].id){
             auxTipo = listTipos[i];
-            auxTipo.nombre = newObject.nombre;
+            auxTipo = newObject;
             listTipos[i] = auxTipo;
             return true;
         }
@@ -95,4 +108,4 @@ export const deleteTipoTramite =  (id) => {
 
 }
 
-export default {getTipoTramites, getTipoTramite, registerTipoTramite, updateTipoTramite, deleteTipoTramite}
+export default {getTipoTramites, getTipoTramite, getTipoTramitexTemaTramite, registerTipoTramite, updateTipoTramite, deleteTipoTramite}

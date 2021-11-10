@@ -8,21 +8,16 @@ function fillTemas() {
     let temas = [];
     const tema1 = { id: 1 , nombre: 'Tema 1', seccion: { id: 1, nombre: 'Seccion 1' } };
     const tema2 = { id: 2 , nombre: 'Tema 2', seccion: { id: 1, nombre: 'Seccion 1' } };
-    const tema3 = { id: 3 , nombre: 'Tema 3', seccion: { id: 1, nombre: 'Seccion 1' } };
+    const tema3 = { id: 3 , nombre: 'Tema 3', seccion: { id: 1, nombre: 'Seccion 2' } };
     const tema4 = { id: 4 , nombre: 'Tema 4', seccion: { id: 2, nombre: 'Seccion 2' } };
-    const tema5 = { id: 5 , nombre: 'Tema 5', seccion: { id: 2, nombre: 'Seccion 2' } };
-    const tema6 = { id: 6 , nombre: 'Tema 6', seccion: { id: 2, nombre: 'Seccion 2' } };
-    const tema7 = { id: 7 , nombre: 'Tema 7', seccion: { id: 3, nombre: 'Seccion 3' } };
-    const tema8 = { id: 8 , nombre: 'Tema 8', seccion: { id: 3, nombre: 'Seccion 3' } };
-    
+    const tema5 = { id: 5 , nombre: 'Tema 5', seccion: { id: 3, nombre: 'Seccion 3' } };
+ 
     temas.push(tema1);
     temas.push(tema2);
     temas.push(tema3);
     temas.push(tema4);
     temas.push(tema5);
-    temas.push(tema6);
-    temas.push(tema7);
-    temas.push(tema8);
+ 
 
     return temas;
 }
