@@ -35,6 +35,8 @@ export default function Etiqueta(props) {
         other.color= "atendido"
     }
 
+    if (! ["error","info","success","warning"].includes(type)) type = "info"
+
     return (
        // <Box //display="flex"
             // transform="scale(0.5)"   // FIXME: No funciona :(
@@ -48,7 +50,7 @@ export default function Etiqueta(props) {
                     pt: 0,
                     pb: 0,
                     minWidth: "140px",
-                    maxWidth: "300px",
+                    maxWidth: "180px",
                     height: "40px",
                     borderRadius: "20px",
 

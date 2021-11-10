@@ -32,14 +32,9 @@ export default function MisSolicitudes() {
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
     function getSolicitudes() {
-        //FUNCIONES
-        //MesaPartesService.getSolicitudesByDep(3) 
-        //MesaPartesService.getSolicitudesByIdDel(44) 
-        //MesaPartesService.getSolicitudesByIdSol(44) 
         MesaPartesService.getSolicitudes()
             .then(data => {
                 setRecords(data ?? [])
-
             })
     }
     /* ¿Cuando se ejecuta? */

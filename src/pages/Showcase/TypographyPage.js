@@ -17,7 +17,7 @@ export default function TypographyPage() {
                 h3: Header
             </Typography>
             <Typography variant="h5">
-                h5: Header
+                h5: Header con negrita ps
             </Typography>
             <Typography variant="h4">
                 h4: Header
