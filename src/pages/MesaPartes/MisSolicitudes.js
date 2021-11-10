@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
+import Notification from '../../components/util/Notification'
 
 
 /* ICONS */
@@ -91,7 +92,9 @@ const usuarios2 = [
 
 
 export default function MisSolicitudes() {
+    /* Abrir Nueva Solicitud Form (in popup) */
     const [openNuevo, setOpenNuevo] = useState(false)
+    /* que hace este? */
     const [createData, setCreateData] = useState(false);
     const [row, setRow] = useState(false)
     const [records, setRecords] = useState([])
@@ -104,8 +107,6 @@ export default function MisSolicitudes() {
     function getSolicitudes() {
         MesaPartesService.getSolicitudes()
             .then(data => {
-                console.log('MisSolicitudes: getSolicitudes():')
-                console.log(data)
                 setRecords(data ?? [])
             })
     }
@@ -166,11 +167,13 @@ export default function MisSolicitudes() {
         getSolicitudes()
     }, [])
 
-    const add = (solicitud, resetForm) => {
+    /* push data to DB */
+    function add (solicitud) {
         //MesaPartesService.registerDepartamento(solicitud)
         setOpenNuevo(false)
         resetForm()
-        setCreateData(true);
+        // setCreateData(true);
+        // MesaPartesService.registerSolicitud(values)
         setNotify({
             isOpen: true,
             message: 'Registro de Solicitud Exitosa',
@@ -247,6 +250,7 @@ export default function MisSolicitudes() {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            {/* "MODALS" */}
             {/* Agregar nueva solicitud */}
             <Popup
                 openPopup={openNuevo}
@@ -255,6 +259,10 @@ export default function MisSolicitudes() {
             >
                 <NuevaSolicitudForm add={add} />
             </Popup>
+            <Notification
+                notify={notify}
+                setNotify={setNotify}
+            />
         </Form>
     )
 }

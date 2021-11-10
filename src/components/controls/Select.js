@@ -44,7 +44,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
 export default function Select(props) {
     const theme = useTheme()
 
-    const {name, label, value, error=null, onChange, options, variant, displayNoneOpt=false, ...other} = props;
+    const {name, label, value, error=null, onChange, options, variant, ...other} = props;
     return (
         <FormControl
             sx={{
@@ -74,7 +74,7 @@ export default function Select(props) {
                 value={value}
                 onChange={onChange}
                 hover={false}
-                defaultValue=""
+                defaultValue=""     // NO USAR
                 sx={{
                     borderRadius: "18px",
                     boxShadow: " 0px 3px 3px rgba(0, 0, 0, 0.25)",
@@ -96,13 +96,11 @@ export default function Select(props) {
                 disableUnderline
                 {...other}
             >
-                {displayNoneOpt ? <MenuItem value={value}>Seleccionar</MenuItem> : null}
-                {/*displayNoneOpt ? <MenuItem value="">None</MenuItem> : null*/}
                 {
                     options.map(
                         item => (
                             <MenuItem key={item.id} value={item.id} >
-                                <Box display display="flex" alignItems="center" ml={2}>
+                                <Box display="flex" alignItems="center" ml={2}>
                                     {item.icon}
                                     {item.nombre || item.title}
                                 </Box>      

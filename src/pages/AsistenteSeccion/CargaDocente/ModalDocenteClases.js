@@ -13,22 +13,9 @@ import ModalDocenteClasesBusqueda from "./ModalDocenteClasesBusqueda"
 import HorarioService from '../../../services/horarioService';
 import PersonaService from '../../../services/personaService';
 
-const handleSubmit = e => {
-    /* e is a "default parameter" */
-    e.preventDefault()
-    // if (validate())
-
-    // const selec = records.map(profesor =>
-    //   seleccionados[records.indexOf(profesor)] ? profesor : null
-    // )
-    // getListDocentes(selec)
-    // props.setOpenPopup(false)
-}
-
-
 const fillDocentes = async() => {
   //Llamado del axios para llenar a los docentes - personas con id_rol = 1
-  const docentes = [];
+  let docentes = [];
 
   const dataDoc = await PersonaService.getPersonasxTipo(1); //1 - docente
   
@@ -36,25 +23,20 @@ const fillDocentes = async() => {
     console.error("No se pudo regresar la data del backend para Docentes");
     return [];
   }
-  dataDoc.map(doc => {
-    const nombreFormat = `${doc.nombres} ${doc.apellidos[0]}.`;
-    docentes.push({
-      "id": doc.id,
-      "nombre": nombreFormat,
-      "tipo": doc.tipo_persona, //Esto debe de cambiar a tipo de profesor.
-      "codigo": doc.codigo_pucp,
-      "cargaHoraria": doc.cargaDocente,
-      "deudaHoraria": doc.deuda_docente,
-    })
-  });
+  for(let doc of dataDoc){
+    if(!doc.tipo_docente)
+      continue; //Se esquiva al docente - no se enlista porque no está asignado como tal.
+  }
+    docentes = dataDoc;
+  
   console.log(docentes);
   return docentes
 }
 
-export default function ModalDocenteClases({docentesAsig}){
+export default function ModalDocenteClases({docentesAsig, horario, tipo, actHorario, setActHorario}){
     const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
-
+    //console.log("Lista de asignación: ", recordsAsig);
     React.useEffect(() => {
       fillDocentes()
         .then(docentes => {
@@ -62,11 +44,99 @@ export default function ModalDocenteClases({docentesAsig}){
         });  
     }, [])
 
+
+    const handleSubmit = async e => {
+      /* e is a "default parameter" */
+      e.preventDefault()
+      // if (validate())
+
+      //console.log(recordsAsig);
+      //console.log(horario);
+
+      //Recorremos toda la persona para realizar la sesion_docente
+      const sesion_docente = [];
+      for(let ses_doc of recordsAsig){
+        sesion_docente.push({
+          "docente": {
+            "id": ses_doc.docente.id,
+            "cargaDocente": ses_doc.docente.cargaHoraria,
+            "deuda_docente": ses_doc.docente.deudaHoraria,
+          },
+          "horas_dictado_docente_sesion": ses_doc.horas_dictado_docente_sesion,
+        })
+      }
+
+      let sesionesActual;
+
+      //Ingresamos las sesiones - dependiendo del tiipo de secuencia
+      if(tipo){ //Es 1 - laboratorio
+        sesionesActual = [{
+            "id": horario.sesiones[0].id,
+            "horas": horario.sesiones[0].horas,
+            "secuencia": horario.sesiones[0].secuencia,
+            "sesion_docentes": horario.sesiones[0].sesion_docentes,
+          }, {
+          "id": horario.sesiones[1].id,
+          "horas": horario.sesiones[1].horas,
+          "secuencia": horario.sesiones[1].secuencia,
+          "sesion_docentes": sesion_docente,
+        }]
+      }
+      else{ //Es 0 - clase
+        if(horario.sesiones[1]){
+          sesionesActual = [{
+            "id": horario.sesiones[0].id,
+            "horas": horario.sesiones[0].horas,
+            "secuencia": horario.sesiones[0].secuencia,
+            "sesion_docentes": sesion_docente,
+          }, 
+          {
+            "id": horario.sesiones[1].id,
+            "horas": horario.sesiones[1].horas,
+            "secuencia": horario.sesiones[1].secuencia,
+            "sesion_docentes": horario.sesiones[1].sesion_docentes,
+          }]
+        }
+        else{
+          sesionesActual = [{
+            "id": horario.sesiones[0].id,
+            "horas": horario.sesiones[0].horas,
+            "secuencia": horario.sesiones[0].secuencia,
+            "sesion_docentes":sesion_docente,
+          }]
+        }
+      }
+
+      const horUpdate ={
+        "id": horario.id,
+        "codigo": horario.codigo,
+        "ciclo": {
+          "id": parseInt(horario.ciclo.id),
+        },
+        "curso": horario.curso,
+        "sesiones": sesionesActual
+      }
+
+      console.log(horUpdate);
+
+      const dataHor = await HorarioService.updateHorario(horUpdate);
+      // const selec = records.map(profesor =>
+      //   seleccionados[records.indexOf(profesor)] ? profesor : null
+      // )
+      // getListDocentes(selec)
+      setActHorario(dataHor);
+      //window.location.reload();
+    }
+
+
     return(
         
         <Form onSubmit={handleSubmit}>
-            <Paper>
+            <Paper> 
                 <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig}/>
+                <Grid cointainer align="right" mt={2.5} />   
+                <hr color = "#636e9a"/> 
+                <Grid cointainer align="right" mt={2.5} />
                 <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {setRecordsAsig} setRecordsAsig = {setRecordsAsig}/>
             </Paper>
             <Grid cointainer align="right" mt={5}>
@@ -75,7 +145,7 @@ export default function ModalDocenteClases({docentesAsig}){
                         // variant="contained"
                         // color="primary"
                         // size="large"
-                        text="Seleccionar"
+                        text="Guardar"
                         type="submit"
                     >
                     </Controls.Button>

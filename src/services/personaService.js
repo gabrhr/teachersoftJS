@@ -5,7 +5,7 @@ import tokenService from './tokens.js';
 export const getPersonas = async () => {
   try{
     const request = await axios.get(`${url}/persona/`, tokenService.GetTokenPrueba());
-    return request.then(response => response.data)
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
@@ -14,7 +14,7 @@ export const getPersonas = async () => {
 const getPersonasxTipo = async (tipo_persona) => {
   try{
     const request = await axios.get(`${url}/persona/tipo=${tipo_persona}`, tokenService.GetTokenPrueba(), tipo_persona);  //Es un entero que se pasa
-    return request.then(response => response.data)
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
@@ -23,7 +23,7 @@ const getPersonasxTipo = async (tipo_persona) => {
 const getPersonasxSeccionTipo = async (id_seccion, tipo_persona) => {
   try{
     const request = await axios.get(`${url}/persona/tipo=${tipo_persona}/seccion=${id_seccion}`, tipo_persona, id_seccion, tokenService.GetTokenPrueba());
-    return request.then(response => response.data)
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
@@ -32,7 +32,7 @@ const getPersonasxSeccionTipo = async (id_seccion, tipo_persona) => {
 const getPersona = async (id) => {
   try{
     const request = await axios.get(`${url}/persona/${id}`, id, tokenService.GetTokenPrueba());
-    return request.then(response => response.data)  //Es un dato.
+    return request.data;
   }catch(exception){
     console.error(exception);
   }
@@ -41,7 +41,7 @@ const getPersona = async (id) => {
 const registerPersona = async newObject => {
   try{
     const request = await axios.post(`${url}/persona/`, newObject, tokenService.GetTokenPrueba());
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data;
   }catch(exception){
     console.error(exception);
     return false;

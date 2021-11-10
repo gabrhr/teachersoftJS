@@ -41,10 +41,10 @@ const registerHorario = async newObject => {
   }
 }
 
-const updateHorario = async (newObject, {id}) => {
+const updateHorario = async (newObject) => {
   try{
-    //console.log(newObject);
-    const request = await axios.put(`${url}/horario/`, tokenService.GetTokenPrueba(),newObject, id);
+    console.log(newObject);
+    const request = await axios.put(`${url}/horario/`, newObject, tokenService.GetTokenPrueba());
     return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
