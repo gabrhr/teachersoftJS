@@ -203,7 +203,7 @@ export default function CargaDocenteCursos(){
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                   open={openBackDrop}
         >
-          <CircularProgress color="inherit" />
+          <CircularProgress color="inherit"/>
         </Backdrop>
         <Form>
             <ContentHeader text={horarios?"Carga docente - Curso":"Carga docente"} cbo={false}/>

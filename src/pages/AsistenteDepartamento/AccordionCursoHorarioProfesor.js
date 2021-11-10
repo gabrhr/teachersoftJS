@@ -147,13 +147,13 @@ function chompDocentes(sesiones) {
                 {"Docentes en Clase: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {clase.sesion_docentes ? clase.sesion_docentes.length : 0} {"\n"}
+                {clase[0].sesion_docentes ? clase[0].sesion_docentes.length : 0} {"\n"}
             </Typography>
             <Typography display="inline" whiteSpace="pre">
                 {"Docentes en Lab: "}
             </Typography>
             <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {laboratorio.sesion_docentes ? laboratorio.sesion_docentes.length : 0}
+                {laboratorio[0].sesion_docentes ? laboratorio[0].sesion_docentes.length : 0}
             </Typography>
         </>
     )
