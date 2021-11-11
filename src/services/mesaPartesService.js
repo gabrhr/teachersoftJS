@@ -30,9 +30,8 @@ const config = {
     timeout: 5000   // ms
 }
 
-/* FUNCIONES AUXILIARES */
-
-function strcmp(s1, s2) {
+//#region Funciones auxiliares
+export function strcmp(s1, s2) {
     if (s1 < s2) return -1
     else if (s1 > s2) return 1
     else return 0
@@ -135,35 +134,34 @@ function b2fSolicitud(x) {
         ...other,
 
         /* RELACIONES (necesario para back) */
-        solicitadorID: x.solicitador ? x.solicitador.id : null,
-        delegadoID: x.delegado ? x.delegado.id : null,
+        solicitadorID: x.solicitador ? x.solicitador.id : null,     // personaID
+        delegadoID: x.delegado ? x.delegado.id : null,              // personaID
         tipoTramiteID: x.tipoTramiteMesaDePartes
     }
 }
 
-function f2bSolicitud(x) {
+/* NO TOCAR */
+export function f2bSolicitud(x) {
     return {
-        id: x.id,
+        // id: x.id,    
         asunto: x.asunto,
         descripcion: x.descripcion,
         solicitador: { id: x.solicitadorID },   // requerido
-        archivos: x.archivos,
-        delegado: { id: x.delegadoID },
+        // archivos: x.archivos,
+        delegado: x.delegadoID ? { id: x.delegadoID } : undefined,
 
-        fecha_creacion: x.fecha_enviado,
-        fecha_recepcion: x.tracking.fecha_enviado,
+        estado_tracking: x.estado,
+        fecha_creacion: x.tracking.fecha_enviado,
+        fecha_recepcion: x.tracking.fecha_recepcion,
         fecha_delegacion: x.tracking.fecha_revision,
         fecha_atencion: x.tracking.fecha_delegado,
 
-        estado_tracking: x.estado,
         resultado: x.resultado,
 
         tipoTramiteMesaDePartes: { id: x.tipoTramiteID }    // requerido
     }
 }
-
-
-/* ----------FIN FUNCIONES AUXILIARES------------------ */
+//#endregion
 
 /* tema_tramite CRUD operations
  * ===================================*/
@@ -245,8 +243,6 @@ export function getSolicitudes() {
             res.data.forEach((x, i) => {
                 res.data[i] = b2fSolicitud(x)
             });
-            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-            console.log(res.data)
             return res.data
         })
         .catch(err => console.error(err));
@@ -255,21 +251,78 @@ export function getSolicitudes() {
 /* id: int */
 export function getSolicitud(id) {
     let solicitud = null
-    axios({
+    return axios({
         method: 'get',
         url: `${url}/mesa/${id}`,
         ...config
     })
         .then(res => {
             solicitud = b2fSolicitud(res.data)
+            return [solicitud]
         })
         .catch(err => console.error(err));
-    return solicitud
+    
+}
+
+export function getSolicitudesByIdSol(idPersona) {
+    let solicitud = null;
+    return axios({
+        method: 'get',
+        url: `${url}/mesa/idsolicitador=${idPersona}`,
+        ...config
+    })
+    .then(res => {
+        res.data.forEach((x, i) => {
+            res.data[i] = b2fSolicitud(x)
+        });
+        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+        // console.log(res.data)
+        // console.log(res)
+        return res.data
+    })
+    .catch(err => console.error(err));
+
+}
+
+export function getSolicitudesByIdDel(idPersona) {
+    let solicitud = null;
+    return axios({
+        method: 'get',
+        url: `${url}/mesa/iddelegado=${idPersona}`,
+        ...config
+    })
+    .then(res => {
+        res.data.forEach((x, i) => {
+            res.data[i] = b2fSolicitud(x)
+        });
+        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+        // console.log(res.data)
+        return res.data
+    })
+    .catch(err => console.error(err));
+}
+
+export function getSolicitudesByDep(idDepartamento) {
+    let solicitud = null;
+    return axios({
+        method: 'get',
+        url: `${url}/mesa/iddepartamento=${idDepartamento}`,
+        ...config
+    })
+    .then(res => {
+        res.data.forEach((x, i) => {
+            res.data[i] = b2fSolicitud(x)
+        });
+        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+        // console.log(res.data)
+        return res.data
+    })
+    .catch(err => console.error(err));
 }
 
 /* TODO: work-in-progress */
 export function registerSolicitud(soli) {
-    axios({
+    return axios({
         method: 'post',
         url: `${url}/mesa/`,
         data: {
@@ -277,6 +330,6 @@ export function registerSolicitud(soli) {
         },
         ...config
     })
-        //.then(res => showOutput(res))
-        .catch(err => console.error(err));
+        // .then(res => console.log("MPservice: registerSoli:", res))
+        // .catch(err => console.error(err));
 }

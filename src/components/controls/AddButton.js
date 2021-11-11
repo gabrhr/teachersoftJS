@@ -19,7 +19,7 @@ export default function AddButton(props) {
         >
             <Grid item xs = {12} md ={2}>
               <Box  x={{width: .25, display: "flex", justifyContent: 'flex-end'}}>
-                <Typography align="rigth">
+                <Typography align="right">
                   {title || props.text}
                 </Typography>
               </Box>

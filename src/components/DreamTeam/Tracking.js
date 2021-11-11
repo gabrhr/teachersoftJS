@@ -18,8 +18,8 @@ export default function Tracking(props) {
                 spacing={.2}
             >
                {
-                   estadosTracking.map(item =>
-                        <Item estado={item.estado} completado={item.completado} item={item}/>
+                   estadosTracking.map((item,index) =>
+                        <Item key={index} estado={item.estado} completado={item.completado} item={item}/>
                        
                     )
                }
