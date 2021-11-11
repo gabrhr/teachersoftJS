@@ -23,15 +23,27 @@ import { Link, Redirect } from 'react-router-dom';
 import { UserContext } from '../../constants/UserContext'
 
 
-//Componente de solo la tabla con cada uno de las solicitudes
+//Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
     const {BoxTbl,TblContainer, TableBody, 
         recordsAfterPagingAndSorting, TblPagination} = props
     const [row, setRow] = useState(false)
+    const {user, rol} = useContext(UserContext);
     function getRow({ ...props }) {
         setRow(props)
     }
+
+    function formatoFecha(fecha){
+        if(fecha!=null){
+            return (fecha.slice(8,10) +'/'
+                    +fecha.slice(5,7) +'/'
+                    +fecha.slice(0,4) + "\xa0\xa0\xa0"
+                    +fecha.slice(11,19)
+            )
+        }
+    }
     return (
+        //#region TABLA DE CADA SOLICITUD
         <div>
             <BoxTbl>
                 <TblContainer>
@@ -39,7 +51,67 @@ export default function DashboardSoliOrganism(props) {
                     <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                                <Item item={item} getRow={getRow}/>
+                                <TableRow key={item.id}>
+                                    <TableCell sx={{maxWidth:"260px"}}  >
+                                        <Typography display="inline">
+                                            Fecha de Enviado: {'\u00A0'}
+                                        </Typography>
+                                        <Typography display="inline" sx={{color:"primary.light"}}>
+                                            {formatoFecha(item.tracking.fecha_enviado)}
+                                        </Typography>
+                                        <div/>
+                                        <Typography fontWeight='bold' fontSize={18}>
+                                            {item.asunto}
+                                        </Typography>
+                                        <Typography display="inline">
+                                            Autor: {'\u00A0'}
+                                        </Typography>
+                                        <Typography display="inline" sx={{color:"primary.light"}}>
+                                            {item.solicitador.fullName}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{maxWidth:"250px"}} >
+                                        <Typography fontWeight='bold'>
+                                            {item.temaTramite} 
+                                        </Typography>
+                                        <div/>
+                                        <Typography display="inline">
+                                            Descripción: {'\u00A0'}
+                                        </Typography>
+                                        <Typography paragraph display="inline" sx={{color:"primary.light"}}>
+                                            {item.descripcion}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell  align="center"  >
+                                        <DT.Etiqueta
+                                            type={item.estado == 0 ? "enviado" :
+                                                item.estado == 1 ? "enRevision" :
+                                                item.estado == 2 ? "delegado" : "atendido"
+                                            }
+                                        />
+                                        <div/>
+                                        { item.estado==2? 
+                                            <Typography paragraph display="inline" sx={{color:"primary.light"}}>
+                                               {item.delegado.fullName}
+                                            </Typography> : <> </>
+
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        <Link to ={{
+                                            pathname:getTipoDetalle(item,user,rol),
+                                            state:{
+                                                solicitud: item
+                                            }
+                                        }}  style={{ textDecoration: 'none' }}>
+                                        <Controls.Button
+                                            text="Detalle"
+                                            type="submit"
+                                            onClick={() => { getRow(item) }}
+                                        />
+                                        </Link>
+                                    </TableCell>
+                                </TableRow>
                             ))
                         }
                     </TableBody>
@@ -47,67 +119,17 @@ export default function DashboardSoliOrganism(props) {
                 <TblPagination />
             </BoxTbl>
         </div>
+        //#endregion
     )
 }
 
 function getTipoDetalle(item,user,rol){
     if(rol==6){
-        return "/jd/mesaPartes/solicitudDetalle"
-    } else if(item.solicitador.fullName== user.nombres + ' ' + user.apellidos){
-        return "/doc/solicitudDetalle"
-    } else if (item.delegado.fullName== user.nombres + ' ' + user.apellidos){
         return "/secretaria/mesaPartes/solicitudDetalle"
+    } else if(item.solicitadorID== user.id){ //MisSolicitudes
+        if(rol==1) return "/doc/solicitudDetalle"
+    } else if (item.delegadoID== user.id){ //Delegados
+        if(rol==1) return "/doc/misDelegados/solicitudDetalle"
     }
     return "/doc/solicitudDetalle"
-}
-
-function Item(props) {
-    const { item, getRow } = props
-    const {user, rol} = useContext(UserContext);
-
-    return (
-        <>
-            <TableRow key={item.id}>
-                <TableCell >
-                    <div >
-                        Fecha de Creación: {item.fecha}
-                    </div>
-                    <Typography >
-                        {item.asunto}
-                    </Typography>
-                    <div >
-                        Autor: {item.solicitador.fullName}
-                    </div>
-
-                </TableCell>
-                <TableCell sx={{maxWidth:"300px"}} >
-                    <Typography paragraph>
-                        Descripcion: {item.descripcion}
-                    </Typography>
-                </TableCell>
-                <TableCell  align="center"  >
-                    <DT.Etiqueta
-                        type={item.estado == 0 ? "enviado" :
-                            item.estado == 1 ? "enRevision" :
-                            item.estado == 2 ? "delegado" : "atendido"
-                        }
-                    />
-                </TableCell>
-                <TableCell>
-                    <Link to ={{
-                        pathname:getTipoDetalle(item,user,rol),
-                        state:{
-                            solicitud: item
-                        }
-                    }}  style={{ textDecoration: 'none' }}>
-                    <Controls.Button
-                        text="Detalle"
-                        type="submit"
-                        onClick={() => { getRow(item) }}
-                    />
-                    </Link>
-                </TableCell>
-            </TableRow>
-        </>
-    );
 }

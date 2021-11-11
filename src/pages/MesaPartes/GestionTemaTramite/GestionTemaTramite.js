@@ -19,7 +19,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 /*SERVICES*/ 
-import tematramiteService from '../../../services/tematramiteService';
+import temaTramiteService from '../../../services/tematramiteService';
 import * as DTLocalServices from '../../../services/DTLocalServices';
 import GestionTemaTramiteForm from './GestionTemaTramiteForm';
 import GestionTipoTramite from './GestionTipoTramite';
@@ -49,28 +49,34 @@ const initialFieldValues = {
 ]
 
 
-const getTemaTramite = async () => {
+const getTemaTramites = async () => {
 
-    let auxTemas = tematramiteService.getTemaTramites();  
+    let auxTemas = await temaTramiteService.getTemaTramites();  
     auxTemas = auxTemas ?? [];
+    let var1= await temaTramiteService.getTemaTramite(2);
+    //console.log(var1);
+    let var2 = await temaTramiteService.getTemaTramitexSeccion(3);
+    //console.log(var2);
     console.log(auxTemas);
     var str,std,stl,ape1,ape2
     let roles = DTLocalServices.getAllRoles();
     const temas = [];
-    
-    for (let i = 0; i < auxTemas.length; i++){
-        temas.push({
-            id: auxTemas[i].id.toString(),
-            nombre: auxTemas[i].nombre,
-            seccion:{
-                id : auxTemas[i].seccion ? auxTemas[i].seccion.id : '',
-                nombre : auxTemas[i].seccion ? auxTemas[i].seccion.nombre : '',
-            },
-            idSeccion: auxTemas[i].seccion ? auxTemas[i].seccion.id : '',
-            nombreSeccion: auxTemas[i].seccion ? auxTemas[i].seccion.nombre : '',
-        })
+    if(auxTemas){
+      for (let i = 0; i < auxTemas.length; i++){
+          temas.push({
+              id: auxTemas[i].id.toString(),
+              nombre: auxTemas[i].nombre,
+              seccion:{
+                  id : auxTemas[i].seccion ? auxTemas[i].seccion.id : '',
+                  nombre : auxTemas[i].seccion ? auxTemas[i].seccion.nombre : '',
+              },
+              idSeccion: auxTemas[i].seccion ? auxTemas[i].seccion.id : '',
+              nombreSeccion: auxTemas[i].seccion ? auxTemas[i].seccion.nombre : '',
+          })
+      }
+    }else {
+      console.log("No existen Temas")
     }
-
     /*
     auxTemas.map( tema => (
 
@@ -142,7 +148,7 @@ export default function GestionTemaTramite() {
     }
 
     useEffect(() => {
-        getTemaTramite()
+        getTemaTramites()
         .then (newTema =>{
           setRecords(newTema);
           setDeleteData(false);
@@ -164,8 +170,8 @@ export default function GestionTemaTramite() {
 
         //PUede que esta parte sea necesario modificarla
         recordForEdit
-            ? tematramiteService.updateTemaTramite(dataTemaTramite, temaTramite.id)
-            : tematramiteService.registerTemaTramite(dataTemaTramite)
+            ? temaTramiteService.updateTemaTramite(dataTemaTramite, temaTramite.id)
+            : temaTramiteService.registerTemaTramite(dataTemaTramite)
 
                 
         setOpenPopup(false)
@@ -192,8 +198,9 @@ export default function GestionTemaTramite() {
           })
  
           console.log(id_tramite)
-      
-          tematramiteService.deleteTemaTramite(id_tramite);
+          let pos = records.map(function(e) { return e.id; }).indexOf(id_tramite);
+          records.splice(pos,1);
+          temaTramiteService.deleteTemaTramite(id_tramite);
       
           //window.location.replace('');
           /*DTLocalServices.getUsers().then((response) => {
@@ -292,7 +299,8 @@ export default function GestionTemaTramite() {
                         <DeleteIcon
                         color="warning"
                         onClick={() => {
-                          onDelete(item.id)
+                          //Se borra después de Confirmar
+                          //onDelete(item.id)
                           setConfirmDialog({
                             isOpen: true,
                             title: '¿Eliminar tema permanentemente?',

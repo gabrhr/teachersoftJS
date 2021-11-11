@@ -77,6 +77,7 @@ export default function DetalleSoliOrganism(props) {
                     fullWidth 
                     multiline
                     rows={5}
+                    disabled
                     defaultValue=""
                     sx={{
                         pl:"78px",

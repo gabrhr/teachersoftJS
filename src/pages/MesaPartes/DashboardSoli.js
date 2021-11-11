@@ -30,6 +30,11 @@ import { Link, Redirect } from 'react-router-dom';
 import DashboardSoliOrganism from './DashboardSoliOrganism'
 import { UserContext } from '../../constants/UserContext'
 
+// services
+import * as UnidadService from '../../services/unidadService';
+import DepartamentoService from '../../services/departamentoService'
+import SeccionService from '../../services/seccionService'
+
 
 const tableHeaders = [
     {
@@ -58,20 +63,51 @@ const tableHeaders = [
 ]
 
 const initialFieldValues = {
-    departmentID: '0',
-    estadoID: '4'
+    temaTramiteID: 0,
+    estadoID: 4
 }
 
-export const getTemaTramites = () => ([
-    { id: 1, title: 'Todos los temas' },
-    { id: 1, title: 'Tema 1' },
-    { id: 2, title: 'Tema 2' },
-    { id: 3, title: 'Tema 3' },
-])
+// export const getTemaTramites = () => ([
+//     { id: 0, title: 'Todos los temas' },
+//     { id: 1, title: 'Tema 1' },
+//     { id: 2, title: 'Tema 2' },
+//     { id: 3, title: 'Tema 3' },
+// ])
+
+function getUnidades(setUnidad) {
+    UnidadService.getUnidades()
+        .then(us => {
+            setUnidad(us)
+        })
+}
+function getDepartamentos(setDepartamento) {
+    DepartamentoService.getDepartamentos()
+        .then(ds => {
+            setDepartamento(ds)
+        })
+}
+function getSecciones(setSeccion) {
+    SeccionService.getSecciones()
+        .then(secs => {
+            setSeccion(secs)
+        })
+}
+function getTemaTramites(setTemaTramite) {
+    MesaPartesService.getTemas()
+        .then(temas => {
+            setTemaTramite(temas)
+        })
+}
+function getTiposTramites(setTipoTramite) {
+    MesaPartesService.getTipos()
+        .then(tipos => {
+            setTipoTramite(tipos)
+        })
+}
+
 
 function getEstadoSolicitud() {
     return ([
-
         { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
         { id: 0, title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
         { id: 1, title: 'En Revisión', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
@@ -81,26 +117,40 @@ function getEstadoSolicitud() {
 }
 
 export default function DashboardSoli(props) {
-    const {title,records, setRecords} =props
+    const {
+      title,
+      records, setRecords, updateRecords, 
+      user } = props
     const { rol} = useContext(UserContext);
-    console.log(rol)
     /* Abrir Nueva Solicitud Form (in popup) */
     const [openNuevo, setOpenNuevo] = useState(false)
-    /* que hace este? */
-    const [createData, setCreateData] = useState(false);
     
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
 
-    /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
-     * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
-     * cambia records. */
-    function getSolicitudes() {
-        MesaPartesService.getSolicitudes()
-            .then(data => {
-                setRecords(data ?? [])
-            })
-    }
+    /* data para mostrar en los combobox */
+    const [unidad, setUnidad] = React.useState([])
+    const [departamento, setDepartamento] = React.useState([])
+    const [seccion, setSeccion] = React.useState([])
+    const [temaTramite, setTemaTramite] = React.useState([])
+    const [tipoTramite, setTipoTramite] = React.useState([])
+    const comboData = 
+        {
+            unidad: unidad,
+            departamento: departamento,
+            seccion: seccion,
+            temaTramite: temaTramite,
+            tipoTramite: tipoTramite
+        }
+
+    React.useEffect(() => {
+        getUnidades(setUnidad)
+        getDepartamentos(setDepartamento)
+        getSecciones(setSeccion)
+        getTemaTramites(setTemaTramite)
+        getTiposTramites(setTipoTramite)
+        /* note:  estados no tiene porque solo es un numero codigo */
+    }, [])
 
     const {
         TblContainer,
@@ -118,6 +168,11 @@ export default function DashboardSoli(props) {
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues);
+
+    /* Initial data retrieved */
+    // React.useEffect(() => {
+    //   console.log("DashBoardSoli: ", comboData)
+    // }, [comboData])
 
     const handleSearch = e => {
         let target = e.target;
@@ -152,26 +207,39 @@ export default function DashboardSoli(props) {
         })
     }
 
-    /* ¿Cuando se ejecuta? */
-    React.useEffect(() => {
-        getSolicitudes()
-    }, [])
+    /* push data to DB.  Does some error handling. */
+    function add (solicitud, resetForm) {
+      if (!user || !user.persona || !user.persona.id)
+        return 
+      
+      /* complete data */
+      solicitud.solicitadorID = user.persona.id     // required
 
-    /* push data to DB */
-    function add (solicitud) {
-        //MesaPartesService.registerDepartamento(solicitud)
-        setOpenNuevo(false)
-        resetForm()
-        // setCreateData(true);
-        // MesaPartesService.registerSolicitud(values)
-        setNotify({
-            isOpen: true,
-            message: 'Registro de Solicitud Exitosa',
-            type: 'success'
+      MesaPartesService.registerSolicitud(solicitud)
+        .then((res) => {
+          /* success */
+          /* cerrar popup */
+          resetForm()
+          setOpenNuevo(false)   //setOpenPopup
+          /* notify and update table */
+          setNotify({
+              isOpen: true,
+              message: 'Registro de Solicitud Exitosa',
+              type: 'success'
+          })
+          updateRecords(setRecords, user)
+        })
+        .catch(err => {
+          /* error :( */
+          setNotify({
+              isOpen: true,
+              message: 'Estamos teniendo problemas de conexion.  Consulte a un administrador.',
+              type: 'error'
+          })
+          console.log(err)
+          console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
         })
     }
-
-    
 
     return (
       <Form>
@@ -198,13 +266,15 @@ export default function DashboardSoli(props) {
         </div>
         {/* Filtrados */}
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-          <div style={{ width: "400px", marginRight: "50px" }}>
+          <div style={{ width: "700px", marginRight: "50px" }}>
             <Controls.Select
-              name="departmentID"
+              name="temaTramiteID"
               label="Tema de Tramite"
-              value={values.departmentID}
+              value={values.temaTramiteID}
               onChange={handleInputChange}
-              options={getTemaTramites()}
+              options={[{id: 0, nombre: "Todos los temas"}]
+                .concat(comboData.temaTramite
+                  .sort((x1, x2) => x1.nombre - x2.nombre))}
             />
           </div>
           <div style={{ width: "400px", marginRight: "50px" }}>
@@ -243,7 +313,7 @@ export default function DashboardSoli(props) {
           setOpenPopup={setOpenNuevo}
           title="Mesa de Partes"
         >
-          <NuevaSolicitudForm add={add} />
+          <NuevaSolicitudForm add={add} comboData={comboData}/>
         </Popup>
         <Notification notify={notify} setNotify={setNotify} />
       </Form>
