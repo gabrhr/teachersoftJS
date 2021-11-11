@@ -60,7 +60,11 @@ export default function AgregarEditarSeccion(props) {
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido."
-        temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError          
+        if(recordForEdit){
+          temp.idDepartamento = values.idDepartamento !== 0 ? "" : defaultError;
+        } else{
+          temp.departmentId = values.departmentId !== 0 ? "":defaultError;
+        }          
         setErrors({
             ...temp
         })
@@ -188,6 +192,7 @@ export default function AgregarEditarSeccion(props) {
                         onChange={handleInputChange}
                         options={[{ id: 0, nombre: "Seleccionar"}]
                         .concat(departamento)}
+                        error={recordForEdit? values.idDepartamento:errors.departmentId}
                     />
                 </Grid>
                 {/*
