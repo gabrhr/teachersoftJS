@@ -249,7 +249,7 @@ export default function DashboardSoli(props) {
       solicitud.solicitadorID = user.persona.id     // required
 
       MesaPartesService.registerSolicitud(solicitud)
-        .then((res) => {
+        .then((id) => {
           /* success */
           /* cerrar popup */
           resetForm()
@@ -261,6 +261,9 @@ export default function DashboardSoli(props) {
               type: 'success'
           })
           getSolicitudes(setRecords, user)
+
+          /* insertar archivos relacionados */
+          // window.alert(`Se inserto la soli con id=${id}`)
         })
         .catch(err => {
           /* error :( */

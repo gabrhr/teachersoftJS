@@ -40,7 +40,6 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-import NoAsignado from './NoAsignado'
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [

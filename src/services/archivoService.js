@@ -1,3 +1,7 @@
+/* Author: Angel (aka. El Gato, QWERTY)
+ *
+ * Servicio de subida y bajada de archivos para Solicitudes de Mesa de Partes.
+ */
 import axios from 'axios'
 import url from '../config'
 import tokenService from './tokens.js';
