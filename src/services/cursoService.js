@@ -47,32 +47,35 @@ const getCurso = async ({id}) => {
 
 const registerCurso = async newObject => {
   try{
-    const request = await axios.post(`${url}/curso/`, tokenService.GetTokenPrueba(), newObject);
+    console.log("El request de register: ",newObject);
+    const request = await axios.post(`${url}/curso/`, newObject, tokenService.GetTokenPrueba());
     return request.data;  //Es un dato
     //return request.then(response => response.data) //Es un valor de true o no
   }catch(exception){
     console.error(exception);
-    return false;
+    return "Error";
   }
 }
 
-const updateCurso = async (newObject, {id}) => {
+const updateCurso = async (newObject) => {
   try{
-    const request = await axios.put(`${url}/curso/${id}`, tokenService.GetTokenPrueba(), newObject, id);
-    return request.then(response => response.data) //Es un valor de true o no
+    console.log("El request de update: ",newObject);
+    const request = await axios.put(`${url}/curso/`, newObject, tokenService.GetTokenPrueba());
+    return request.data; 
   }catch(exception){
     console.error(exception);
+    return "Error";
   }
 }
 
-const deleteCurso = async ({id}) => {
+const deleteCurso = async (id) => {
   try{
     await axios.delete(`${url}/curso/${id}`, tokenService.GetTokenPrueba(), id);
     return true;
     //return request.then(response => response.data) //Es un valor de true o no
   }catch(exception){
     console.error(exception);
-    return false;
+    return "Error";
   }
 }
 
