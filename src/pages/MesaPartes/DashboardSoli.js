@@ -77,31 +77,31 @@ const initialFieldValues = {
 function getUnidades(setUnidad) {
     UnidadService.getUnidades()
         .then(us => {
-            setUnidad(us)
+            setUnidad(us ?? [])
         })
 }
 function getDepartamentos(setDepartamento) {
     DepartamentoService.getDepartamentos()
         .then(ds => {
-            setDepartamento(ds)
+            setDepartamento(ds ?? [])
         })
 }
 function getSecciones(setSeccion) {
     SeccionService.getSecciones()
         .then(secs => {
-            setSeccion(secs)
+            setSeccion(secs ?? [])
         })
 }
 function getTemaTramites(setTemaTramite) {
     MesaPartesService.getTemas()
         .then(temas => {
-            setTemaTramite(temas)
+            setTemaTramite(temas ?? [])
         })
 }
 function getTiposTramites(setTipoTramite) {
     MesaPartesService.getTipos()
         .then(tipos => {
-            setTipoTramite(tipos)
+            setTipoTramite(tipos ?? [])
         })
 }
 
@@ -119,7 +119,7 @@ function getEstadoSolicitud() {
 export default function DashboardSoli(props) {
     const {
       title,
-      records, setRecords, updateRecords, 
+      records, setRecords, getSolicitudes, 
       user } = props
     const { rol} = useContext(UserContext);
     /* Abrir Nueva Solicitud Form (in popup) */
@@ -174,6 +174,7 @@ export default function DashboardSoli(props) {
     //   console.log("DashBoardSoli: ", comboData)
     // }, [comboData])
 
+    /* filtrado por asunto */
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -190,6 +191,7 @@ export default function DashboardSoli(props) {
         })
     }
 
+    /* filtrado por estado */
     const handleSearchEstados = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -227,7 +229,7 @@ export default function DashboardSoli(props) {
               message: 'Registro de Solicitud Exitosa',
               type: 'success'
           })
-          updateRecords(setRecords, user)
+          getSolicitudes(setRecords, user)
         })
         .catch(err => {
           /* error :( */
