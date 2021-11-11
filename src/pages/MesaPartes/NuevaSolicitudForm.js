@@ -120,23 +120,26 @@ const initialFieldValues = {
     asunto: '',
     descripcion: '',
     //solicitador
-    archivos: [],
+    // archivos: [],        // YA NO SE USA ASI  (consulatar con Christian)
     //delegado
 
     tracking: {
         fecha_enviado: new Date(),
     },
 
-    estado: 0,          // enviado
+    estado: 0,          // (del tracking) enviado
     resultado: 0,
 
     tipoTramiteID: '0',
 
-    /* EXTRA */
+    /* EXTRA (solo se utilizan en este componente) */
     unidadID: 0,
     departamentoID: 0,
     seccionID: 0,
     temaTramiteID: 0,
+    /* extra extra (no se usan aqui pero se listan para mantener un orden) */
+    solicitadorID: null,
+    delegadoID: null
 }
 
 function ActualForm(props) {
@@ -327,7 +330,7 @@ export default function NuevaSolicitudForm(props) {
     function handleSubmit(e) {
         e.preventDefault()
         if (validate()) {
-            add(values)
+            add(values, resetForm)
         }
     }
 

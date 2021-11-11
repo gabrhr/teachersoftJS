@@ -63,7 +63,7 @@ const initialFieldValues = {
 }
 
 export const getTemaTramites = () => ([
-    { id: 1, title: 'Todos los temas' },
+    { id: 0, title: 'Todos los temas' },
     { id: 1, title: 'Tema 1' },
     { id: 2, title: 'Tema 2' },
     { id: 3, title: 'Tema 3' },
@@ -71,7 +71,6 @@ export const getTemaTramites = () => ([
 
 function getEstadoSolicitud() {
     return ([
-
         { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
         { id: 0, title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
         { id: 1, title: 'En Revisión', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
@@ -81,13 +80,10 @@ function getEstadoSolicitud() {
 }
 
 export default function DashboardSoli(props) {
-    const {title,records, setRecords} =props
+    const {title,records, setRecords, updateRecords, user} =props
     const { rol} = useContext(UserContext);
-    console.log(rol)
     /* Abrir Nueva Solicitud Form (in popup) */
     const [openNuevo, setOpenNuevo] = useState(false)
-    /* que hace este? */
-    const [createData, setCreateData] = useState(false);
     
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
@@ -144,17 +140,37 @@ export default function DashboardSoli(props) {
           }
         })
     }
-    /* push data to DB */
-    function add (solicitud) {
-        //MesaPartesService.registerDepartamento(solicitud)
-        setOpenNuevo(false)
-        resetForm()
-        // setCreateData(true);
-        // MesaPartesService.registerSolicitud(values)
-        setNotify({
-            isOpen: true,
-            message: 'Registro de Solicitud Exitosa',
-            type: 'success'
+
+    /* push data to DB.  Does some error handling. */
+    function add (solicitud, restForm) {
+      if (!user || !user.persona || !user.persona.id)
+        return 
+      
+      /* complete data */
+      solicitud.solicitadorID = user.persona.id     // required
+
+      MesaPartesService.registerSolicitud(solicitud)
+        .then((res) => {
+          /* success */
+          /* cerrar popup */
+          resetForm()
+          setOpenNuevo(false)   //setOpenPopup
+          /* notify and update table */
+          setNotify({
+              isOpen: true,
+              message: 'Registro de Solicitud Exitosa',
+              type: 'success'
+          })
+          updateRecords()
+        })
+        .catch(err => {
+          /* error :( */
+          setNotify({
+              isOpen: true,
+              message: 'Estamos teniendo problemas de conexion.  Consulte a un administrador.',
+              type: 'error'
+          })
+          console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
         })
     }
 

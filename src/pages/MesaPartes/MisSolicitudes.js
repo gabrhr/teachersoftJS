@@ -34,8 +34,6 @@ export default function MisSolicitudes() {
      * cambia records. */
     const {user, rol} = useContext(UserContext);
     const usuarioLogeado=JSON.parse(localStorage.getItem("user"))
-    console.log("usuarioActual", user.id);
-    console.log("usuarioActual LOCAL", usuarioLogeado.id);
     
     
     function getSolicitudes() {
@@ -57,7 +55,10 @@ export default function MisSolicitudes() {
     }, [])
 
     return (
-        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
+            records={records} setRecords={setRecords} updateRecords={getSolicitudes}
+            user={user}
+        />
     )
 }
 
