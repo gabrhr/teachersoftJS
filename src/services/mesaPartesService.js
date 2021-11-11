@@ -30,8 +30,7 @@ const config = {
     timeout: 5000   // ms
 }
 
-/* FUNCIONES AUXILIARES */
-
+//#region Funciones auxiliares
 function strcmp(s1, s2) {
     if (s1 < s2) return -1
     else if (s1 > s2) return 1
@@ -161,9 +160,7 @@ function f2bSolicitud(x) {
         tipoTramiteMesaDePartes: { id: x.tipoTramiteID }    // requerido
     }
 }
-
-
-/* ----------FIN FUNCIONES AUXILIARES------------------ */
+//#endregion
 
 /* tema_tramite CRUD operations
  * ===================================*/
