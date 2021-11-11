@@ -131,20 +131,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     const onInputClick = (event) => {
         event.target.value = ''
     }
-/*
-    const defragmentarSesiones = listHorarios =>{
-      const dataSesiones = {
-        "secuencia": 0,
-        "dia_semana": 1,
-        "hora_inicio": 12,
-        "media_hora_inicio": 0,
-        "hora_fin": 15,
-        "media_hora_fin": 1
-      }
-      
-      return dataSesiones;
-    }
-*/
+
     const datosHorarios = listHorarios => {
       //const dataSesiones = defragmentarSesiones(listHorarios);
       const horarios = []
@@ -264,20 +251,13 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       let postHorario = {}; //Para poder usar el horario en una segunda vuelta
       //Servicio para cargar los horarios
       for (let hor of recordsX) {
-        const resultArray = await llenarDatosHorarios(otroHorario, postHorario, hor);
-        otroHorario = resultArray[0];
-        postHorario = resultArray[1];
-        //Loop finished
         
-        if(otroHorario === 1)  {
-          if(horarioService.registerHorario(postHorario))
-            permission = 0;
-        }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       if(permission)  {
         setRecords(recordsX);
         setCargaH(records);
+        console.log(records);
       }
       setOpenPopup(false) 
       console.log(postHorario);
@@ -295,11 +275,33 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         setOpenPopup(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }
-    
+
     return (
-        <>
-            <BoxTbl>
-                <TblContainer>
+      <Form onSubmit={handleSubmit}>
+          <Grid align="right">
+              <label htmlFor="contained-button-file" >
+                  <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
+                      type="file" sx={{display: 'none'}} 
+                      onChange={handleUploadFile}
+                      onClick={onInputClick}
+                  />
+                  <Controls.Button
+                      text="Subir archivo"
+                      endIcon={<AttachFileIcon />}
+                      size="medium"
+                      component="span"
+                      align="right"
+                  />
+              </label>
+          </Grid>
+          <Paper variant="outlined" sx={PaperStyle}>
+              <Typography variant="h4"
+                  color="primary.light" style={SubtitulosTable}
+              >
+                  Vista Previa
+              </Typography>
+              <BoxTbl>
+              <TblContainer>
                     <TblHead />
                     <TableBody>
                     {
@@ -352,7 +354,33 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                     </TableBody>
                 </TblContainer>
                 <TblPagination />
-            </BoxTbl>
-        </>
-    )
+              </BoxTbl>
+          </Paper>
+          <Grid cointainer align="right" mt={5}>
+              <div>
+                  <Controls.Button
+                      // disabled={true}
+                      variant="disabled"
+                      text="Cancelar"
+                      /* onClick={resetForm} */
+                      />
+                  <Controls.Button
+                      // variant="contained"
+                      // color="primary"
+                      // size="large"
+                      text="Cargar Datos"
+                      /* type="submit" */
+                      onClick={actualizarDatos}
+                  />
+                  
+              </div>
+          </Grid>
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={open}
+          >
+              <CircularProgress color="inherit" />
+          </Backdrop>
+      </Form>
+  )
 }
