@@ -58,6 +58,7 @@ export default function MisSolicitudes() {
 
     return (
         <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
+            delegado={false}
             records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
             user={user}
         />

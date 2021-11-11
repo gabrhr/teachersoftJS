@@ -6,7 +6,7 @@
  * "/doc/misSolicitudes"
  */
 import React, { useState, useContext } from 'react'
-import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
+import { Avatar, Grid, InputAdornment, Box, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
 import Notification from '../../components/util/Notification'
@@ -44,7 +44,7 @@ const tableHeaders = [
         sortable: true
     },
     {
-        id: 'descripcion',
+        id: 'temaTramiteID',
         label: 'Descripcion',
         numeric: false,
         sortable: false
@@ -106,7 +106,14 @@ function getTiposTramites(setTipoTramite) {
 }
 
 
-function getEstadoSolicitud() {
+function getEstadoSolicitud(delegado) {
+    if(delegado==true){
+      return ([
+        { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
+        { id: 2, title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
+        { id: 3, title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
+    ])
+    }
     return ([
         { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
         { id: 0, title: 'Enviado', icon: <NearMeOutlinedIcon sx={{ color: "#3B4A81", mr: 2, }} /> },
@@ -118,7 +125,7 @@ function getEstadoSolicitud() {
 
 export default function DashboardSoli(props) {
     const {
-      title,
+      title, delegado,
       records, setRecords, getSolicitudes, 
       user } = props
     const { rol} = useContext(UserContext);
@@ -175,6 +182,8 @@ export default function DashboardSoli(props) {
     // }, [comboData])
 
     /* filtrado por asunto */
+    
+    //#region HANDLESEARCHS para filtras en la tabla
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -208,6 +217,28 @@ export default function DashboardSoli(props) {
           }
         })
     }
+
+    const handleSearchTemas = e =>{
+      let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
+      handleInputChange(e)
+      console.log("target value",target)
+      setFilterFn({
+        fn: items => {
+           if (target.value == 0 || items.length === 0)
+             /* no search text */
+             return items
+           else
+            console.log("itemsssssss",items)
+             return items.filter(x => x.temaTramiteID == target.value)
+
+        }
+      })
+    }
+
+    //#endregion
+    
 
     /* push data to DB.  Does some error handling. */
     function add (solicitud, resetForm) {
@@ -273,7 +304,7 @@ export default function DashboardSoli(props) {
               name="temaTramiteID"
               label="Tema de Tramite"
               value={values.temaTramiteID}
-              onChange={handleInputChange}
+              onChange={handleSearchTemas}
               options={[{id: 0, nombre: "Todos los temas"}]
                 .concat(comboData.temaTramite
                   .sort((x1, x2) => x1.nombre - x2.nombre))}
@@ -285,26 +316,25 @@ export default function DashboardSoli(props) {
               label="Estado de Solicitud"
               value={values.estadoID}
               onChange={handleSearchEstados}
-              options={getEstadoSolicitud()}
+              options={getEstadoSolicitud(delegado)}
             />
           </div>
-          {rol==6? 
-            <></>:
-            <div style={{ width: "80vw", textAlign: "right" }}>
-                <Controls.AddButton
-                variant="iconoTexto"
-                text="Nueva Solicitud"
-                onClick={() => {
-                    setOpenNuevo(true);
-                }}
-                />
-            </div>
-          }
+          <div style={{ width: "80vw", textAlign: "right" }}>
+            {delegado? 
+              <></>:
+                  <Controls.AddButton
+                  variant="iconoTexto"
+                  text="Nueva Solicitud"
+                  onClick={() => {
+                      setOpenNuevo(true);
+                  }}
+                  />
+                }
+          </div>
         </div>
         <DashboardSoliOrganism
           BoxTbl={BoxTbl}
           TblContainer={TblContainer}
-          TableBody={TableBody}
           recordsAfterPagingAndSorting={recordsAfterPagingAndSorting}
           TblPagination={TblPagination}
         />
