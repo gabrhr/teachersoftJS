@@ -25,7 +25,7 @@ import { UserContext } from '../../constants/UserContext'
 
 //Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
-    const {BoxTbl,TblContainer, TableBody, 
+    const {BoxTbl,TblContainer, 
         recordsAfterPagingAndSorting, TblPagination} = props
     const [row, setRow] = useState(false)
     const {user, rol} = useContext(UserContext);
@@ -71,9 +71,9 @@ export default function DashboardSoliOrganism(props) {
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{maxWidth:"250px"}} >
-                                        <Typography fontWeight='bold'>
+                                        <Typography fontWeight='bold' display="inline">
                                             {item.temaTramite} 
-                                        </Typography>
+                                        </Typography >
                                         <div/>
                                         <Typography display="inline">
                                             Descripción: {'\u00A0'}

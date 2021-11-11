@@ -44,7 +44,7 @@ export default function MisSolicitudes() {
     }, [])
 
     return (
-        <DashboardSoli title={"solicitudes Generales a Mesa de Partes"} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"solicitudes Generales a Mesa de Partes"} delegado={true} records={records} setRecords={setRecords}/>
     )
 }
 
