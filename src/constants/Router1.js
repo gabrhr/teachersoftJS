@@ -43,6 +43,7 @@ import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolic
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
+import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -67,6 +68,7 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
+  { requireRoles: [2, 6,8], path: "/as/gestiontematramite", page: GestionTemaTramite },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
@@ -97,7 +99,7 @@ const privateroutes = [
   /* Secretario de D */
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: RecepcionSolicitud },
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
-  { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: Vacio },  
+  { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: GestionTemaTramite },  
   /* Externo */
   /* rol sin asignar */
 ]

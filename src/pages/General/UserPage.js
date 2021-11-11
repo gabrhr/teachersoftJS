@@ -20,6 +20,7 @@ import { Assistant } from '@mui/icons-material';
 import GestionUsuarios from '../Administrador/GestionUsuarios/GestionUsuarios';
 import CargaDocenteHorarios from '../AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import DeudaYDescarga from '../AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
+import GestionTemaTramite from '../MesaPartes/GestionTemaTramite/GestionTemaTramite'
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -71,6 +72,7 @@ export default function UserPage() {
         <ProtectedRoute exact path="/admin/mantenimiento/usr" idRoles={[1]} component={GestionUsuarios} />
         <ProtectedRoute exact path="/admin/mantenimiento/dep" idRoles={[1]} component={GestionDepartamento} />
         <ProtectedRoute exact path="/admin/mantenimiento/sec" idRoles={[1]} component={GestionSeccion} />
+        
         <ProtectedRoute exact path="/admin/showcase" idRoles={[1]} component={Showcase} />
         <ProtectedRoute exact path="/admin/index" idRoles={[1]} component={TestIndex} />
         <ProtectedRoute exact path="/admin/employees" idRoles={[1]} component={Employees} />
@@ -85,6 +87,7 @@ export default function UserPage() {
         <ProtectedRoute exact path="/as/solicitudDocencia" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/docentes" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/mesaPartes" idRoles={[2]} component={Vacio} />
+        <ProtectedRoute exact path="/as/gestiontematramite/gestiontematramite" idRoles={[8]} component={GestionTemaTramite} />
 
       </Switch>
     </Box>

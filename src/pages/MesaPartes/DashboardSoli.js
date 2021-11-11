@@ -10,7 +10,7 @@ import { Avatar, Grid, InputAdornment, Box, TableCell, TableRow, Typography, Div
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
 import Notification from '../../components/util/Notification'
-
+import moment from 'moment'
 
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
@@ -77,37 +77,37 @@ const initialFieldValues = {
 function getUnidades(setUnidad) {
     UnidadService.getUnidades()
         .then(us => {
-            setUnidad(us ?? [])
+            setUnidad(us)
         })
 }
 function getDepartamentos(setDepartamento) {
     DepartamentoService.getDepartamentos()
         .then(ds => {
-            setDepartamento(ds ?? [])
+            setDepartamento(ds)
         })
 }
 function getSecciones(setSeccion) {
     SeccionService.getSecciones()
         .then(secs => {
-            setSeccion(secs ?? [])
+            setSeccion(secs)
         })
 }
 function getTemaTramites(setTemaTramite) {
     MesaPartesService.getTemas()
         .then(temas => {
-            setTemaTramite(temas ?? [])
+            setTemaTramite(temas)
         })
 }
 function getTiposTramites(setTipoTramite) {
     MesaPartesService.getTipos()
         .then(tipos => {
-            setTipoTramite(tipos ?? [])
+            setTipoTramite(tipos)
         })
 }
 
 
-function getEstadoSolicitud(delegado) {
-    if(delegado==true){
+function getEstadoSolicitud(delegado,rol) {
+    if(delegado==true && rol!=6){
       return ([
         { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
         { id: 2, title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
@@ -181,7 +181,6 @@ export default function DashboardSoli(props) {
     //   console.log("DashBoardSoli: ", comboData)
     // }, [comboData])
 
-    /* filtrado por asunto */
     
     //#region HANDLESEARCHS para filtras en la tabla
     const handleSearch = e => {
@@ -200,7 +199,6 @@ export default function DashboardSoli(props) {
         })
     }
 
-    /* filtrado por estado */
     const handleSearchEstados = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -223,14 +221,12 @@ export default function DashboardSoli(props) {
         /* React "state object" (useState()) doens't allow functions, only
           * objects.  Thus the function needs to be inside an object. */
       handleInputChange(e)
-      console.log("target value",target)
       setFilterFn({
         fn: items => {
            if (target.value == 0 || items.length === 0)
              /* no search text */
              return items
            else
-            console.log("itemsssssss",items)
              return items.filter(x => x.temaTramiteID == target.value)
 
         }
@@ -239,6 +235,7 @@ export default function DashboardSoli(props) {
 
     //#endregion
     
+
 
     /* push data to DB.  Does some error handling. */
     function add (solicitud, resetForm) {
@@ -276,7 +273,28 @@ export default function DashboardSoli(props) {
           console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
         })
     }
+    const [valueFecha, setValueFecha] = React.useState([null, null]);
 
+   /*  React.useEffect(() => {
+        const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
+        const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
+        setFilterFn({
+          fn: items => {
+            console.log(items)
+            if (valueFecha[0]== null && valueFecha[1] == null)
+              return items
+            if (valueFecha[1]==null)
+              return items.filter(x => 
+                fechaIni <= moment(x.tracking.fecha_enviado).format('DD/MM/YYYY')
+              )
+            else{
+              return items.filter(x => 
+                 moment(x.tracking.fecha_enviado).isBetween(fechaIni,fechaFin)
+              )
+            }
+          }
+        })
+    }, [valueFecha]) */
     return (
       <Form>
         <ContentHeader text={title} cbo={false} />
@@ -297,7 +315,10 @@ export default function DashboardSoli(props) {
             />
           </div>
           <div style={{ width: "360px", marginRight: "50px" }}>
-            <Controls.RangeTimePicker />
+            <Controls.RangeTimePicker 
+              value = {valueFecha}
+              setValue= {setValueFecha}
+            />
           </div>
         </div>
         {/* Filtrados */}
@@ -319,7 +340,7 @@ export default function DashboardSoli(props) {
               label="Estado de Solicitud"
               value={values.estadoID}
               onChange={handleSearchEstados}
-              options={getEstadoSolicitud(delegado)}
+              options={getEstadoSolicitud(delegado,rol)}
             />
           </div>
           <div style={{ width: "80vw", textAlign: "right" }}>
