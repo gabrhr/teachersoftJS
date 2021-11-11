@@ -44,11 +44,11 @@ import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTe
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
-  { requireRoles: [0], path: "/admin", page: GestionUsuarios },
-  { requireRoles: [0], path: "/admin/mantenimiento", page: GestionUsuarios },
-  { requireRoles: [0], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
-  { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
-  { requireRoles: [0], path: "/admin/mantenimiento/sec", page: GestionSeccion },
+  { requireRoles: [0,2,8], path: "/admin", page: GestionUsuarios },
+  { requireRoles: [0,2,8], path: "/admin/mantenimiento", page: GestionUsuarios },
+  { requireRoles: [0,2,8], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
+  { requireRoles: [0,2,8], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
+  { requireRoles: [0,2,8], path: "/admin/mantenimiento/sec", page: GestionSeccion },
   { requireRoles: [0], path: "/admin/mantenimiento/per", page: Vacio },
   { requireRoles: [0,1,2,3,4,5,6,7,8], path: "/admin/showcase", page: Showcase },
   { requireRoles: [0], path: "/admin/index", page: TestIndex },
