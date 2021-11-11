@@ -47,9 +47,9 @@ const GoogleLoginButton = () => {
                 return history.push("/cord");
             case 4:
                 return history.push("/ad"); 
-            case 4:
+            case 5:
                 return history.push("/jd"); 
-            case 4:
+            case 6:
                 return history.push("/secretaria");
             default:
                 return history.push("/noRoles");
