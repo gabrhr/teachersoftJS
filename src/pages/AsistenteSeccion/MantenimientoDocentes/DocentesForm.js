@@ -5,9 +5,9 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
-import HorarioCursos from './HorarioCursos'
+import ListaDocentes from './ListaDocentes'
 import Popup from '../../../components/util/Popup'
-import ModalAsignacionCarga from './ModalAsignacionCarga';
+//import ModalCursos from './ModalCursos';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import { getHorarios, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
@@ -30,7 +30,7 @@ const usuarios2 = [
 ]
 
 
-export default function AsistenteSeccion() {
+export default function DocentesForm() {
 
     
     const [horario, setHorario] = useState([]);
@@ -43,71 +43,9 @@ export default function AsistenteSeccion() {
     useEffect(() => {
         //Obtenemos las secciones
         
-        getHorario();
+        //getHorario();
   
       }, [horario])
-    /*
-    let xlsx = '';
-
-    function getHorario (input){
-        setOpenPopup(false)
-        xlsx = input
-        setValueXlsx(xlsx)
-        if (xlsx.length > 1){
-            setNewFile(1)
-        }
-        console.log(valueXlsx)
-        window.localStorage.setItem('xlsx', xlsx)
-    }*/
-    function transformarHorarios (request){
-        const recordsX = []
-        if(request){
-          request.map(hor => {
-              recordsX.push({
-                  "Clave": hor.curso.codigo,
-                  "Nombre": hor.curso.nombre,
-                  "Unidad": hor.curso.seccion.departamento.unidad.nombre,
-                  "Creditos": hor.curso.creditos,
-                  "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                  "Horario": hor.codigo,
-                  "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                  "Horas": hor.sesiones[0].horas
-              })
-              if(hor.sesiones[1]){
-                  recordsX.push({
-                      "Clave": hor.curso.codigo,
-                      "Nombre": hor.curso.nombre,
-                      "Unidad": hor.curso.seccion.departamento.unidad.nombre,
-                      "Creditos": hor.curso.creditos,
-                      "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                      "Horario": hor.codigo,
-                      "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
-                      "Horas": hor.sesiones[1].horas
-                  })
-              }
-          })
-        }
-        return recordsX;
-    }
-
-    async function getHorario (input){
-        setOpenPopup(false)
-        const request = await getHorarios();
-        const recordsX = transformarHorarios(request);
-        setCargaH(recordsX);
-        //listHorario = input
-        //setHorario(listHorario);
-        //setHorario(listHorario)
-        //console.log(horario)
-        //window.localStorage.setItem('listHorario', listHorario) 
-    }
-    
-    /*FUNCION QUE LLAMA AL BACK (SERVICES)*/ 
-    let listHorario = [
-        formatHorario('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-        formatHorario('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-        formatHorario('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-      ];
     
     /*Bota tu ga nomás*/
     
@@ -150,8 +88,8 @@ export default function AsistenteSeccion() {
     return (
         <>
             <ContentHeader 
-                text="Gestión de la carga de horarios"
-                cbo= {true}
+                text="Listado de docentes"
+                cbo= {false}
             />
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
@@ -159,7 +97,7 @@ export default function AsistenteSeccion() {
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
                         </Link>
-                        &nbsp;para subir la carga de horario de un determinado curso.
+                        &nbsp;para subir los datos de los docentes.
                     </Typography>
                 </Grid>
                 <Grid item xs={3} align="right" m={1}>
@@ -169,8 +107,6 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                     <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}/>
                     {/* <Controls.Button
                         text="Exportar"
                         size="large"
@@ -181,7 +117,7 @@ export default function AsistenteSeccion() {
             </Grid>
             {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
-                <HorarioCursos records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                <ListaDocentes records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
             </Paper>
             <Popup
@@ -193,8 +129,8 @@ export default function AsistenteSeccion() {
 
                </ModalAsignacionCarga>*/}
               
-               < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
-                cargaH = {cargaH}/>
+               {/*< ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH}
+                cargaH = {cargaH}/>*/}
             </Popup>  
         </>
     )
