@@ -106,8 +106,8 @@ function getTiposTramites(setTipoTramite) {
 }
 
 
-function getEstadoSolicitud(delegado) {
-    if(delegado==true){
+function getEstadoSolicitud(delegado,rol) {
+    if(delegado==true && rol!=6){
       return ([
         { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
         { id: 2, title: 'Delegado', icon: <HowToRegOutlinedIcon sx={{ color: "#FF7A00", mr: 2 }} /> },
@@ -314,7 +314,7 @@ export default function DashboardSoli(props) {
               label="Estado de Solicitud"
               value={values.estadoID}
               onChange={handleSearchEstados}
-              options={getEstadoSolicitud(delegado)}
+              options={getEstadoSolicitud(delegado,rol)}
             />
           </div>
           <div style={{ width: "80vw", textAlign: "right" }}>
