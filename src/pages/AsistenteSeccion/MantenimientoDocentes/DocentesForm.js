@@ -6,6 +6,7 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
 import ListaDocentes from './ListaDocentes'
+import CargaMasivaDocente from './CargaMasivaDocente'
 import Popup from '../../../components/util/Popup'
 //import ModalCursos from './ModalCursos';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
@@ -125,9 +126,9 @@ export default function DocentesForm() {
                 setOpenPopup={setOpenPopup}
                 title="Carga Masiva de Cursos y Horarios"
             >
-               {/*<ModalAsignacionCarga horario = {listHorario} getHorario = {getHorario}>
+               <CargaMasivaDocente setOpenPopUp = {setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                cargaH = {cargaH}/>
 
-               </ModalAsignacionCarga>*/}
               
                {/*< ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH}
                 cargaH = {cargaH}/>*/}

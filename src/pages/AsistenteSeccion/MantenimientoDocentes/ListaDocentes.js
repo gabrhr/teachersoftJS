@@ -32,12 +32,6 @@ const tableHeaders = [
       numeric: false,
       sortable: true
     },
-    {
-      id: 'acciones',
-      label: 'Acciones',
-      numeric: false,
-      sortable: true
-    },
     /* {
       id: 'bono',
       label: 'Bonos',
@@ -277,7 +271,7 @@ export default function ListaDocentes() {
                 />
             </Popup>
             <Popup
-                openPopup={openDelAllPopup}
+                openPopup={openDelAllPopup }
                 setOpenPopup={setDelAllPopup}
                 title={`Eliminar docente: `}
                 size = "sm"
