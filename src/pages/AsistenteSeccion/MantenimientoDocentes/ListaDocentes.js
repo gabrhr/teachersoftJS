@@ -53,7 +53,7 @@ export default function ListaDocentes() {
     const [openDelOnePopup, setDelOnePopup] = useState(false)
     const [indexDelete, setIndexDelete] = useState(-1)
     const [indexEdit, setIndexEdit] = useState(-1)
-
+    
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const {
@@ -94,7 +94,6 @@ export default function ListaDocentes() {
 
     const getProfesores = async () =>{
         const request = await personaService.getPersonasxTipo(1);
-        
         const recordsX = transformarDocentes(request)
         setRecords(recordsX)
     }
@@ -120,12 +119,14 @@ export default function ListaDocentes() {
     };
 
     const handleDelete = async item => {
-        await setIndexDelete(records.indexOf(item))
-        console.log(records.indexOf(item))
-        console.log(item)
-        console.log(indexDelete)
-        console.log(records[indexDelete].id)
-        setDelOnePopup(true)
+        const timer = setTimeout(async () => {
+            await setIndexDelete(records.indexOf(item))
+            console.log(records.indexOf(item))
+            console.log(item)
+            console.log(indexDelete)
+            console.log(records[indexDelete].id)
+            setDelOnePopup(true)
+          }, 1000);
     }
 
     const handleEdit = item => {
