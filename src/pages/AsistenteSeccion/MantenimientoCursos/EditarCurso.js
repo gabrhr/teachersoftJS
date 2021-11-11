@@ -14,10 +14,10 @@ const initialFieldValues = {
     id: 0,
     nombre: '',
     codigo: '',
-    creditos: '',
+    creditos: 0,
 }
 
-export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
+export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
 
     const [departamento, setDepartamentos] = React.useState([]);
 
@@ -51,23 +51,20 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(initialFieldValues, true, validate);
+    } = useForm(item, true, validate);
 
     const handleSubmit = e => {
       e.preventDefault();
-      if (validate()){
-        const seccion = JSON.parse(window.localStorage.getItem("user"));
-        console.log(seccion);
-        const curso = {
-          "codigo": values.codigo,
-          "nombre": values.nombre,
-          "creditos": parseInt(values.creditos),
-          "seccion": {
-            "id": seccion.persona.seccion.id,
-          }
-        }
-        agregarCurso(curso);
+      const seccion = JSON.parse(window.localStorage.getItem("user"));
+      //console.log(seccion);
+      const curso = {
+        "id": item.id,
+        "codigo": values.codigo,
+        "nombre": values.nombre,
+        "creditos": parseInt(values.creditos),
+        "seccion": seccion.persona.seccion,
       }
+      editarCurso(curso);
     }
 
     return (
@@ -95,8 +92,8 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
                         <Controls.Input
                             name="creditos"
                             label="Créditos"
-                            type= "number"
                             value={values.creditos}
+                            type= "number"
                             onChange = {handleInputChange}
                             error={errors.creditos}
                         />
@@ -109,7 +106,7 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
                         // disabled={true}
                         variant="disabled"
                         text="Cancelar"
-                        onClick={()=> setOpenAddPopup(false)}
+                        onClick={()=> setOpenEditPopup(false)}
                         />
                     <Controls.Button
                         // variant="contained"

@@ -80,7 +80,7 @@ export default function CursosForm() {
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
                         </Link>
-                        &nbsp;para subir los cursos de .
+                        &nbsp;para subir los cursos.
                     </Typography>
                 </Grid>
                 <Grid item xs={3} align="right" m={1}>

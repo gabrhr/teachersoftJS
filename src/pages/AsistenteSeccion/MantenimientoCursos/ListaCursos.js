@@ -15,10 +15,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-
+import moment from 'moment';
 import EliminarCurso from './EliminarCurso'
 import EliminarCursos from './EliminarCursos'
 import AgregarCurso from './AgregarCurso.js'
+import EditarCurso from './EditarCurso.js'
 
 const initialFieldValues = {
     searchText: ''
@@ -80,11 +81,13 @@ export default function ListaCursos({records, setRecords}) {
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
     const [openAddPopup, setOpenAddPopup] = useState(false);
+    const [openEditPopup, setOpenEditPopup] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openOnePopup, setOpenOnePopup] = useState(false)
     const [openAllPopup, setOpenAllPopup] = useState(false)
-    const [indexDelete, setIndexDelete] = useState(0)
+    const [indexDelete, setIndexDelete] = useState(-1)
+    const [indexEdit, setIndexEdit] = useState(-1)
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -122,15 +125,21 @@ export default function ListaCursos({records, setRecords}) {
               /* no search text */
               return items
             else
-              return items.filter(x => x.curso.nombre.toLowerCase()
+              return items.filter(x => x.nombre.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
       }
 
     const guardarIndex = item => {
-      setIndexDelete(item.id)
+      setIndexDelete(records.indexOf(item))
       setOpenOnePopup(true)
+    }
+
+    const guardarIndexforEdit = item => {
+      setIndexEdit(records.indexOf(item))
+      console.log(item.id , "equivale a: ", indexEdit);
+      setOpenEditPopup(true)
     }
 
     const eliminarCursos = () =>{
@@ -141,25 +150,36 @@ export default function ListaCursos({records, setRecords}) {
       setOpenAllPopup(false)
     }
 
-    const agregarCurso = (newCurso) =>{
+    const agregarCurso = async (newCurso) =>{
       //Agregamos el curso
-      CursoService.registerCurso(newCurso);
-      setRecords(prevRecords => prevRecords.concat(newCurso))
-      console.log("Nuevo records: ", records);
+      const rpta = await CursoService.registerCurso(newCurso);
+      if(rpta !== "Error") {
+        console.log(rpta);
+        const cursoNew = await CursoService.getCursosxCodigoNombre(newCurso.codigo);
+        setRecords(prevRecords => prevRecords.concat(cursoNew))
+      }
       setOpenAddPopup(false)
     }
+
+    const editarCurso = async (editCurso) =>{
+      //Agregamos el curso
+      const rpta = await CursoService.updateCurso(editCurso);
+      if(rpta !== "Error"){
+        console.log(rpta);
+        records[indexEdit] = editCurso;
+      }
+      //setRecords(prevRecords => prevRecords.concat(editCurso))
+
+      setOpenEditPopup(false)
+      setIndexEdit(-1)
+    }
     
-    const eliminarCurso = () =>{
-      console.log(indexDelete);
-      //Funcion para elimianr el Curso seleccionado
-      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
-      records.splice(pos,1);
-      pos = 0;
-      //De nuevo, solo para comprobar que existen ambos campos en pantalla - solo en pantalla.
-      pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
-      records.splice(pos,1);
+    const eliminarCurso = async () =>{
+      const rpta = await CursoService.deleteCurso(records[indexDelete].id);
+      const oldIndex = indexDelete;
+      await setIndexDelete(-1);
+      if (rpta !== "Error") records.splice(oldIndex,1);
       //setRecords(); 
-      CursoService.deleteHorario(indexDelete);
       setOpenOnePopup(false)
     }
 
@@ -180,27 +200,27 @@ export default function ListaCursos({records, setRecords}) {
                             type="search"
                             size="small"
                             sx = {{
-                                maxWidth: .7
+                              maxWidth: .7
                             }}
                         />
                         {/* <Controls.Button  
                             text={<SearchIcon/>}
                             size="small"
                             sx = {{
-                                // display: "inline",
-                                maxWidth: .05
+                              // display: "inline",
+                              maxWidth: .05
                             }}
-                        /> */}
+                          /> */}
                     </Stack>
                 </Grid>
                 {/* FIX:  left align */}
                 <Grid item xs={4} align="right">
+                          <Controls.AddButton 
+                              title="Nuevo Curso"
+                              variant="iconoTexto"
+                              onClick = {() => {setOpenAddPopup(true);}}
+                          />
                     {/* FIX:  DT IconButton */}
-                    <Controls.AddButton 
-                        title="Nuevo Curso"
-                        variant="iconoTexto"
-                        onClick = {() => {setOpenAddPopup(true); setRecordForEdit(null)}}
-                    />
                 </Grid>
             </Grid>
             <BoxTbl>
@@ -220,12 +240,12 @@ export default function ListaCursos({records, setRecords}) {
                             <TableCell>{item.nombre}</TableCell>
                             <TableCell>{item.seccion.departamento.unidad.nombre}</TableCell>
                             <TableCell>{item.creditos}</TableCell>
-                            <TableCell>{item.fecha_modificacion}</TableCell>
+                            <TableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</TableCell>
                             <TableCell>
                               {/* Accion editar */}
                               <Controls.ActionButton
                                 color="warning"
-                                onClick={ () => {guardarIndex(item)}}
+                                onClick={ () => {guardarIndexforEdit(item)}}
                               >
                                 <EditOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
@@ -260,7 +280,8 @@ export default function ListaCursos({records, setRecords}) {
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
-                title={`Eliminar el curso ${indexDelete.nombre}`}
+                title={indexDelete > 0?`Eliminar el curso: ${records[indexDelete].codigo}`:`Eliminar curso`}
+                size = "sm"
             >
               <EliminarCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
@@ -268,6 +289,7 @@ export default function ListaCursos({records, setRecords}) {
                 openPopup={openAllPopup}
                 setOpenPopup={setOpenAllPopup}
                 title="Eliminar todos los cursos"
+                size = "sm"
             >
               <EliminarCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
             </Popup>
@@ -275,8 +297,17 @@ export default function ListaCursos({records, setRecords}) {
                 openPopup={openAddPopup}
                 setOpenPopup={setOpenAddPopup}
                 title="Agregar nuevo curso"
+                size = "sm"
             >
               <AgregarCurso setOpenAddPopup = {setOpenAddPopup} agregarCurso = {agregarCurso}/>
+            </Popup>
+            <Popup
+                openPopup={openEditPopup}
+                setOpenPopup={setOpenEditPopup}
+                title={indexEdit > 0 ?`Editar el curso: ${records[indexEdit].codigo}`:`Editar curso`}
+                size = "sm"
+            >
+              <EditarCurso setOpenEditPopup = {setOpenEditPopup} editarCurso = {editarCurso} item = {records[indexEdit]}/>
             </Popup>
         </Form>
     )
