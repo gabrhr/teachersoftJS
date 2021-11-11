@@ -50,8 +50,8 @@ export default function ListaDocentes() {
     const [openPopupAdd, setOpenPopupAdd] = useState(false)
     const [openPopupEdit, setOpenPopupEdit] = useState(false)
     const [recordForEdit, setRecordForEdit] = useState(null)
+    const [recordForDel, setRecordForDel] = useState(null)
     const [openDelOnePopup, setDelOnePopup] = useState(false)
-    const [indexDelete, setIndexDelete] = useState(-1)
     const [indexEdit, setIndexEdit] = useState(-1)
     
     const [records, setRecords] = useState([])
@@ -67,7 +67,7 @@ export default function ListaDocentes() {
     useEffect(() => {
         //Obtenemos las secciones
         getProfesores()
-      }, [openPopupEdit])
+      }, [openPopupEdit, openDelOnePopup])
 
     function transformarDocentes (request){
         const recordsX = []
@@ -119,14 +119,9 @@ export default function ListaDocentes() {
     };
 
     const handleDelete = async item => {
-        const timer = setTimeout(async () => {
-            await setIndexDelete(records.indexOf(item))
-            console.log(records.indexOf(item))
-            console.log(item)
-            console.log(indexDelete)
-            console.log(records[indexDelete].id)
-            setDelOnePopup(true)
-          }, 1000);
+        console.log(item)
+        setRecordForDel(item)
+        setDelOnePopup(true)
     }
 
     const handleEdit = item => {
@@ -134,17 +129,6 @@ export default function ListaDocentes() {
        setRecordForEdit(item)
        setOpenPopupEdit(true)
     }
-
-    const eliminarDocente = async () =>{
-        const rpta = await personaService.deletePersona(records[indexDelete].id);
-        console.log(rpta)
-        console.log(records[indexDelete].id)
-        const oldIndex = indexDelete;
-        await setIndexDelete(-1);
-        if (rpta !== "Error") records.splice(oldIndex,1);
-        //setRecords(); 
-        setDelOnePopup(false)
-      }
 
     return (
         <>
@@ -260,10 +244,13 @@ export default function ListaDocentes() {
             <Popup
                 openPopup={openDelOnePopup}
                 setOpenPopup={setDelOnePopup}
-                title={indexDelete > 0?`Eliminar el Docente: ${records[indexDelete].codigo}`:`Eliminar docente`}
+                title={`Eliminar docente: `}
                 size = "sm"
             >
-              <EliminarDocente setOpenOnePopup = {setDelOnePopup} eliminarDocente = {eliminarDocente}/>
+              <EliminarDocente 
+                    setOpenOnePopup = {setDelOnePopup}
+                    recordForDel = {recordForDel} 
+                />
             </Popup>
         </>
     )
