@@ -14,7 +14,7 @@ export const MenuSecretaria = [
                 indice: 0,
             },
             {
-                text: 'Mantenimiento Tema de Trámites',
+                text: 'Tema de Trámites',
                 path: '/secretaria/mesaPartes/mantenimiento/temaTramite',
                 indice: 1,
             }

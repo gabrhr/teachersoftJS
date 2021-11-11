@@ -14,7 +14,7 @@ export const MenuDocente = [
                 indice: 0,
             },
             {
-                text: 'Solicitudes delegadas a mí',
+                text: 'Delegadas a mí',
                 path: '/doc/misDelegados',
                 indice: 1,
             }

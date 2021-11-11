@@ -14,8 +14,11 @@ export function useForm(initialFieldValues, validateOnChange=false, validate) {
     const [errors, setErrors] = useState({});
 
     const handleInputChange = e => {
-        /* retrieve values from "Default" event */
+        /* retrieve values from React's "synthetic event" (wrapper for 
+            HTML DOM Event Object) */
         const { name, value } = e.target
+        /* NuevaSolicitudForm passes numeric id as prop.name */
+        if (typeof name === 'number') name = name.toString()
         setValues({
             /* use current value of other properties */
             ...values,
