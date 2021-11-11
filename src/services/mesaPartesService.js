@@ -31,7 +31,7 @@ const config = {
 }
 
 //#region Funciones auxiliares
-function strcmp(s1, s2) {
+export function strcmp(s1, s2) {
     if (s1 < s2) return -1
     else if (s1 > s2) return 1
     else return 0

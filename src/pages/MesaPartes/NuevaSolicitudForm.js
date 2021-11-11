@@ -83,37 +83,6 @@ function getTipoTramites() {
 }
 /* -----end of BACK FAKE----- */
 
-// function getUnidades(setComboData) {
-//     UnidadService.getUnidades()
-//         .then(data => {
-//             setComboData(data ?? [])
-//         })
-// }
-// function getDepartamentos(setComboData) {
-//     DepartamentoService.getDepartamentos()
-//         .then(data => {
-//             setComboData(data ?? [])
-//         })
-// }
-// function getSecciones(setComboData) {
-//     SeccionService.getSecciones()
-//         .then(data => {
-//             setComboData(data ?? [])
-//         })
-// }
-// function getTemaTramites(setComboData) {
-//     MesaPartesService.getTemas()
-//         .then(data => {
-//             setComboData(data ?? [])
-//         })
-// }
-// function getTipoTramites(setComboData) {
-//     MesaPartesService.getTipos()
-//         .then(data => {
-//             setComboData(data ?? [])
-//         })
-// }
-
 const initialFieldValues = {
     /* SOLICITUD */
     id: 0,
@@ -144,7 +113,8 @@ const initialFieldValues = {
 
 function ActualForm(props) {
     const { values, setValues, errors,
-        handleInputChange, handleSubmit } = props
+        handleInputChange, handleSubmit,
+        comboData } = props
     /* data de los comboboxes */
     const [disable, setDisable] = React.useState({
         departamentoID: true,
@@ -152,22 +122,6 @@ function ActualForm(props) {
         temaTramiteID: true,
         tipoTramiteID: true
     })
-    const [comboData, setComboData] = React.useState({
-        unidad: [],
-        departamento: [],
-        seccion: [],
-        temaTramite: [],
-        tipoTramite: []
-    })
-
-    /* Retrieve Back API data */
-    // React.useEffect(() => {
-    //     getUnidades(setComboData)
-    //     getDepartamentos(setComboData)
-    //     getSecciones(setComboData)
-    //     getTemaTramites(setComboData)
-    //     getTipoTramites(setComboData)
-    // }, [])
 
     /* Cadenita de combobox
      * Unidad > Departamento > Seccion > TemaTramite > TipoTramite 
@@ -186,6 +140,10 @@ function ActualForm(props) {
     React.useEffect(() => check('seccionID', 'temaTramiteID'), [values.seccionID])
     React.useEffect(() => check('temaTramiteID', 'tipoTramiteID'), [values.temaTramiteID])
 
+    React.useEffect(() => {
+        console.log("NuevaSoli:", comboData)
+    }, [comboData])
+
     return (
         <Form onSubmit={handleSubmit}>
             {/* seleccion de tema y tipo tramite */}
@@ -196,7 +154,9 @@ function ActualForm(props) {
                         label="Unidad"
                         value={values.unidadID}
                         onChange={handleInputChange}
-                        options={getUnidades()}
+                        options={[{ id: 0, nombre: "Seleccionar"}]
+                            .concat(comboData.unidad)
+                        }
                         error={errors.unidadID}
                     />
                     <Controls.Select
@@ -204,7 +164,8 @@ function ActualForm(props) {
                         label="Departamento"
                         value={values.departamentoID}
                         onChange={handleInputChange}
-                        options={getDepartamentos()
+                        options={[{ id: 0, unidad: { id: 0 }, nombre: "Seleccionar"}]
+                            .concat(comboData.departamento)
                             .filter(x => x.unidad.id === values.unidadID || 
                                          x.id === 0
                             )
@@ -217,10 +178,10 @@ function ActualForm(props) {
                         label="Sección"
                         value={values.seccionID}
                         onChange={handleInputChange}
-                        options={getSecciones()
-                            .filter(x => 
-                                x.departamento.id === values.departamentoID || 
-                                x.id === 0
+                        options={[{ id: 0, departamento: { id: 0 }, nombre: "Seleccionar"}]
+                            .concat(comboData.seccion)
+                            .filter(x => x.departamento.id === values.departamentoID || 
+                                         x.id === 0
                             )
                         }
                         disabled={disable.seccionID}
@@ -233,10 +194,11 @@ function ActualForm(props) {
                         label="Tema de Trámite"
                         value={values.temaTramiteID}
                         onChange={handleInputChange}
-                        options={getTemaTramites()
-                            .filter(x => 
-                                x.seccion.id === values.seccionID || 
-                                x.id === 0
+                        /* ojo que este ya no es seccion.id sino seccionID */
+                        options={[{ id: 0, seccionID: 0, nombre: "Seleccionar"}]
+                            .concat(comboData.temaTramite)
+                            .filter(x => x.seccionID === values.seccionID || 
+                                         x.id === 0
                             )
                         }
                         disabled={disable.temaTramiteID}
@@ -247,10 +209,10 @@ function ActualForm(props) {
                         label="Tipo de Trámite"
                         value={values.tipoTramiteID}
                         onChange={handleInputChange}
-                        options={getTipoTramites()
-                            .filter(x => 
-                                x.temaTramite.id === values.temaTramiteID || 
-                                x.id === 0
+                        options={[{ id: 0, temaTramiteID: 0, nombre: "Seleccionar"}]
+                            .concat(comboData.tipoTramite)
+                            .filter(x => x.temaTramiteID === values.temaTramiteID || 
+                                         x.id === 0
                             )
                         }
                         disabled={disable.tipoTramiteID}
@@ -299,7 +261,7 @@ function ActualForm(props) {
 
 
 export default function NuevaSolicitudForm(props) {
-    const { add } = props
+    const { add, comboData } = props
 
     const {
         values,
@@ -343,6 +305,7 @@ export default function NuevaSolicitudForm(props) {
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
                 errors={errors}
+                comboData={comboData}
             />
         </div>
     )

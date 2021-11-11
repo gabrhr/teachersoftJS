@@ -58,8 +58,8 @@ const tableHeaders = [
 ]
 
 const initialFieldValues = {
-    departmentID: '0',
-    estadoID: '4'
+    temaTramiteID: 0,
+    estadoID: 4
 }
 
 export const getTemaTramites = () => ([
@@ -80,7 +80,11 @@ function getEstadoSolicitud() {
 }
 
 export default function DashboardSoli(props) {
-    const {title,records, setRecords, updateRecords, user} =props
+    const {
+      title,
+      records, setRecords, updateRecords, 
+      user, 
+      comboData } = props
     const { rol} = useContext(UserContext);
     /* Abrir Nueva Solicitud Form (in popup) */
     const [openNuevo, setOpenNuevo] = useState(false)
@@ -88,9 +92,6 @@ export default function DashboardSoli(props) {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
 
-    /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
-     * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
-     * cambia records. */
     const {
         TblContainer,
         TblHead,
@@ -107,6 +108,11 @@ export default function DashboardSoli(props) {
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues);
+
+    /* Initial data retrieved */
+    // React.useEffect(() => {
+    //   console.log("DashBoardSoli: ", comboData)
+    // }, [comboData])
 
     const handleSearch = e => {
         let target = e.target;
@@ -142,7 +148,7 @@ export default function DashboardSoli(props) {
     }
 
     /* push data to DB.  Does some error handling. */
-    function add (solicitud, restForm) {
+    function add (solicitud, resetForm) {
       if (!user || !user.persona || !user.persona.id)
         return 
       
@@ -161,7 +167,7 @@ export default function DashboardSoli(props) {
               message: 'Registro de Solicitud Exitosa',
               type: 'success'
           })
-          updateRecords()
+          updateRecords(setRecords, user)
         })
         .catch(err => {
           /* error :( */
@@ -170,7 +176,8 @@ export default function DashboardSoli(props) {
               message: 'Estamos teniendo problemas de conexion.  Consulte a un administrador.',
               type: 'error'
           })
-          console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
+          console.log(err)
+          // console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
         })
     }
 
@@ -199,13 +206,15 @@ export default function DashboardSoli(props) {
         </div>
         {/* Filtrados */}
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-          <div style={{ width: "400px", marginRight: "50px" }}>
+          <div style={{ width: "700px", marginRight: "50px" }}>
             <Controls.Select
-              name="departmentID"
+              name="temaTramiteID"
               label="Tema de Tramite"
-              value={values.departmentID}
+              value={values.temaTramiteID}
               onChange={handleInputChange}
-              options={getTemaTramites()}
+              options={[{id: 0, nombre: "Todos los temas"}]
+                .concat(comboData.temaTramite
+                  .sort((x1, x2) => x1.nombre - x2.nombre))}
             />
           </div>
           <div style={{ width: "400px", marginRight: "50px" }}>
@@ -244,7 +253,7 @@ export default function DashboardSoli(props) {
           setOpenPopup={setOpenNuevo}
           title="Mesa de Partes"
         >
-          <NuevaSolicitudForm add={add} />
+          <NuevaSolicitudForm add={add} comboData={comboData}/>
         </Popup>
         <Notification notify={notify} setNotify={setNotify} />
       </Form>
