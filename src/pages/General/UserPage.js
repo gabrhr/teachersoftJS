@@ -18,7 +18,6 @@ import ProtectedRoute from './RouterProtected';
 import Vacio from '../Dev/Vacio'
 import { Assistant } from '@mui/icons-material';
 import GestionUsuarios from '../Administrador/GestionUsuarios/GestionUsuarios';
-import CargaDocenteHorarios from '../AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import DeudaYDescarga from '../AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -85,7 +84,7 @@ export default function UserPage() {
         <ProtectedRoute exact path="/as/solicitudDocencia" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/docentes" idRoles={[2]} component={Vacio} />
         <ProtectedRoute exact path="/as/mesaPartes" idRoles={[2]} component={Vacio} />
-
+        
       </Switch>
     </Box>
   )
