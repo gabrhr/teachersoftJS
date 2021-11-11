@@ -37,9 +37,10 @@ function getSolicitudes(setRecords, user) {
     console.log(user)
     MesaPartesService.getSolicitudesByIdSol(user.persona.id) 
         .then(data => {
+            data = data ?? []       // fixes el error raro de mala conexion
             data.sort((x1, x2) => 
                 0 - (new Date(x1.tracking.fecha_enviado) - new Date(x2.tracking.fecha_enviado)))
-            setRecords(data ?? [])      // por si acasito
+            setRecords(data)
         })
 }
 
