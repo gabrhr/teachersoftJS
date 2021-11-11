@@ -66,10 +66,8 @@ export default function ListaDocentes() {
     
     useEffect(() => {
         //Obtenemos las secciones
-        
-        getProfesores();
-  
-      }, [records])
+        getProfesores()
+      }, [openPopupEdit])
 
     function transformarDocentes (request){
         const recordsX = []
