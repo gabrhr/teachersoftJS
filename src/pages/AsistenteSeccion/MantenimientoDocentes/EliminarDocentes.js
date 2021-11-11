@@ -1,7 +1,7 @@
 import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 
-export default function EliminarTodosLosDocentes({eliminarDocentes, setOpenAllPopup}){
+export default function EliminarTodosLosDocentes({setDelAllPopup, eliminarDocentes}){
     return(
         <>
             < Typography variant="h4" mb={2} >
@@ -13,7 +13,7 @@ export default function EliminarTodosLosDocentes({eliminarDocentes, setOpenAllPo
             />
             <Controls.Button
                 text="No"
-                onClick={()=>{setOpenAllPopup(false)}}
+                onClick={()=>{setDelAllPopup(false)}}
             />
         </>
     )

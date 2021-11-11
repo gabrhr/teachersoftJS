@@ -7,6 +7,7 @@ import Popup from '../../../components/util/Popup'
 import EditarDocente from './EditarDocente'
 import AgregarDocente from './AgregarDocente'
 import EliminarDocente from './EliminarDocente'
+import EliminarDocentes from './EliminarDocentes'
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -52,7 +53,7 @@ export default function ListaDocentes() {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [recordForDel, setRecordForDel] = useState(null)
     const [openDelOnePopup, setDelOnePopup] = useState(false)
-    const [indexEdit, setIndexEdit] = useState(-1)
+    const [openDelAllPopup, setDelAllPopup] = useState(false)
     
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -67,7 +68,7 @@ export default function ListaDocentes() {
     useEffect(() => {
         //Obtenemos las secciones
         getProfesores()
-      }, [openPopupEdit, openDelOnePopup])
+      }, [openPopupEdit, openDelOnePopup, openDelAllPopup])
 
     function transformarDocentes (request){
         const recordsX = []
@@ -98,6 +99,14 @@ export default function ListaDocentes() {
         setRecords(recordsX)
     }
 
+    const eliminarDocentes = async () =>{
+        /*records.map(item => {
+            personaService.deletePersona(item.id);
+          })
+          //setRecords([])
+          setDelAllPopup(false)*/
+    }
+
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -117,6 +126,11 @@ export default function ListaDocentes() {
     const handleAdd = (e) => {
         setOpenPopupAdd(true)
     };
+
+    const handleDeleteAll = () =>{
+        setDelAllPopup(true)
+        console.log("Esto debería funcionar")
+    }
 
     const handleDelete = async item => {
         console.log(item)
@@ -223,7 +237,13 @@ export default function ListaDocentes() {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-
+                <Controls.Button
+                text="Eliminar todos los docentes"
+                size = "small"
+                color="warning"
+                endIcon={<DeleteOutlinedIcon fontSize="small"/>}
+                onClick={ () => {handleDeleteAll()}}
+                />
             <Popup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
@@ -254,6 +274,17 @@ export default function ListaDocentes() {
               <EliminarDocente 
                     setOpenOnePopup = {setDelOnePopup}
                     recordForDel = {recordForDel} 
+                />
+            </Popup>
+            <Popup
+                openPopup={openDelAllPopup}
+                setOpenPopup={setDelAllPopup}
+                title={`Eliminar docente: `}
+                size = "sm"
+            >
+              <EliminarDocentes 
+                    setDelAllPopup = {setDelAllPopup}
+                    eliminarDocentes = {eliminarDocentes} 
                 />
             </Popup>
         </>
