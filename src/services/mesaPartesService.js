@@ -27,7 +27,7 @@ const config = {
     headers: {
         Authorization: tokenService.getToken()
     },
-    timeout: 5000   // ms
+    timeout: 8000   // ms
 }
 
 //#region Funciones auxiliares

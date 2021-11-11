@@ -78,7 +78,7 @@ export default function DetalleSoliOrganism(props) {
                     multiline
                     rows={5}
                     disabled
-                    defaultValue=""
+                    defaultValue={`${solicitud.descripcion}`}
                     sx={{
                         pl:"78px",
                         mb:"20px"
