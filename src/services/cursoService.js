@@ -56,7 +56,7 @@ const registerCurso = async newObject => {
   }
 }
 
-const updateCurso = async (newObject, {id}) => {
+const updateCurso = async (newObject, id) => {
   try{
     const request = await axios.put(`${url}/curso/${id}`, tokenService.GetTokenPrueba(), newObject, id);
     return request.then(response => response.data) //Es un valor de true o no
@@ -65,7 +65,7 @@ const updateCurso = async (newObject, {id}) => {
   }
 }
 
-const deleteCurso = async ({id}) => {
+const deleteCurso = async (id) => {
   try{
     await axios.delete(`${url}/curso/${id}`, tokenService.GetTokenPrueba(), id);
     return true;

@@ -22,93 +22,14 @@ function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion
    }
  }
- 
-const usuarios2 = [
-   createData('10', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-   createData('11', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-   createData('12', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
-
 
 export default function CursosForm() {
-
-    
-    const [horario, setHorario] = useState([]);
   
   /*  const [newFile, setNewFile] = useState(0); //0: No new file
     const [count, setCount] = useState(0);
 */
     const [openPopup, setOpenPopup] = useState(false)
 
-    useEffect(() => {
-        //Obtenemos las secciones
-        
-        getHorario();
-  
-      }, [horario])
-    /*
-    let xlsx = '';
-
-    function getHorario (input){
-        setOpenPopup(false)
-        xlsx = input
-        setValueXlsx(xlsx)
-        if (xlsx.length > 1){
-            setNewFile(1)
-        }
-        console.log(valueXlsx)
-        window.localStorage.setItem('xlsx', xlsx)
-    }*/
-    function transformarHorarios (request){
-        const recordsX = []
-        if(request){
-          request.map(hor => {
-              recordsX.push({
-                  "Clave": hor.curso.codigo,
-                  "Nombre": hor.curso.nombre,
-                  "Unidad": hor.curso.seccion.departamento.unidad.nombre,
-                  "Creditos": hor.curso.creditos,
-                  "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                  "Horario": hor.codigo,
-                  "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                  "Horas": hor.sesiones[0].horas
-              })
-              if(hor.sesiones[1]){
-                  recordsX.push({
-                      "Clave": hor.curso.codigo,
-                      "Nombre": hor.curso.nombre,
-                      "Unidad": hor.curso.seccion.departamento.unidad.nombre,
-                      "Creditos": hor.curso.creditos,
-                      "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                      "Horario": hor.codigo,
-                      "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
-                      "Horas": hor.sesiones[1].horas
-                  })
-              }
-          })
-        }
-        return recordsX;
-    }
-
-    async function getHorario (input){
-        setOpenPopup(false)
-        const request = await getHorarios();
-        const recordsX = transformarHorarios(request);
-        setCargaH(recordsX);
-        //listHorario = input
-        //setHorario(listHorario);
-        //setHorario(listHorario)
-        //console.log(horario)
-        //window.localStorage.setItem('listHorario', listHorario) 
-    }
-    
-    /*FUNCION QUE LLAMA AL BACK (SERVICES)*/ 
-    let listHorario = [
-        formatHorario('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-        formatHorario('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-        formatHorario('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-      ];
-    
     /*Bota tu ga nomás*/
     
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -150,7 +71,7 @@ export default function CursosForm() {
     return (
         <>
             <ContentHeader 
-                text="Gestión de la carga de horarios"
+                text="Administración de Cursos"
                 cbo= {false}
             />
             <Grid container spacing={2} maxWidth={1}>

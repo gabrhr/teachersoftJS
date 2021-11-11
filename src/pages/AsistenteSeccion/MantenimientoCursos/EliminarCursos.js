@@ -1,7 +1,7 @@
 import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 
-export default function EliminarTodosLosCursos({eliminarCursos, setOpenAllPopup}){
+export default function EliminarCursos({eliminarCursos, setOpenAllPopup}){
     return(
         <>
             < Typography variant="h4" mb={2} >

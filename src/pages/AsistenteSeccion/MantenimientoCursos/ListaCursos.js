@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
 import { DT } from '../../../components/DreamTeam/DT'
-import HorarioService from '../../../services/horarioService';
+import CursoService from '../../../services/cursoService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
@@ -14,20 +14,17 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+
 import EliminarCurso from './EliminarCurso'
 import EliminarCursos from './EliminarCursos'
+import AgregarCurso from './AgregarCurso.js'
 
 const initialFieldValues = {
     searchText: ''
 }
 
 const tableHeaders = [
-    /*{
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },*/
     {
       id: 'claveCurso',
       label: 'Clave',
@@ -35,38 +32,26 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'cargaHoraria',
-      label: 'Carga',
-      numeric: false,
-      sortable: true
-    },
-    {
-        id: 'Facultad',
-        label: 'Facultad',
-        numeric: false,
-        sortable: true
-    },
-    {
-      id: 'nombreCurso',
+      id: 'nombre',
       label: 'Nombre',
       numeric: false,
       sortable: true
     },
     {
-        id: 'horario',
-        label: 'Horario',
+        id: 'facultad',
+        label: 'Facultad',
         numeric: false,
         sortable: true
-     },
-     {
-        id: 'tipoSesion',
-        label: 'Tipo',
-        numeric: false,
-        sortable: true
-     },
-     {
-        id: 'horaSesion',
-        label: 'Horas',
+    },
+    {
+      id: 'creditos',
+      label: 'Créditos',
+      numeric: false,
+      sortable: true
+    },
+    {
+        id: 'fechaModificación',
+        label: 'Fecha Modificación',
         numeric: false,
         sortable: true
      },
@@ -78,87 +63,28 @@ const tableHeaders = [
     }
 ]
 
-const fillHorarios = async () => {
-  const dataHor = await HorarioService.getHorarios();
+const fillCursos = async () => {
+  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
-  const horarios = [];
-  if(!dataHor)  {
-    console.error("No se puede traer la data del servidor de los horarios")
+  //const horarios = [];
+  if(!dataCur)  {
+    console.error("No se puede traer la data del servidor de los cursos")
     return [];
   }
-  for (let hor of dataHor){
-    //console.log(hor.id);
-    //console.log(hor.sesiones[0].secuencia);
-    //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
-    //console.log(sesion1);
-    horarios.push({
-      "id": hor.id,
-      "codigo": hor.codigo,
-      "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-      ciclo:{
-        "id": hor.ciclo.id,
-      },
-      curso:{
-        "id": hor.curso.id,
-        "codigo": hor.curso.codigo,
-        "nombre": hor.curso.nombre,
-        "creditos": hor.curso.creditos,
-        "unidad": hor.curso.unidad,
-        "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
-      },
-      sesiones:{
-        "secuencia": hor.sesiones[0].secuencia,
-        "sesiones_dictado": [],
-        "hora_sesion": hor.sesiones[0].horas,
-      },
-    })
-    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
-    if(hor.sesiones[1]){
-      //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
-      //console.log(sesion2);
-      horarios.push({
-        "id": hor.id,
-        "codigo": hor.codigo,
-        "tipo": hor.sesiones[0].secuencia,
-        "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-        ciclo:{
-          "id": hor.ciclo.id,
-        },
-        curso:{
-          "id": hor.curso.id,
-          "codigo": hor.curso.codigo,
-          "nombre": hor.curso.nombre,
-          "creditos": hor.curso.creditos,
-          "unidad": hor.curso.unidad,
-          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-'
-        },
-        sesiones:{
-          "secuencia": hor.sesiones[1].secuencia,
-          "sesiones_dictado": [],
-          "hora_sesion": hor.sesiones[1].horas,
-        },
-      })
-    }
-  }
-  return horarios;
 
+  return dataCur;
 }
 
-export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
+export default function ListaCursos({records, setRecords}) {
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
-    //const [openPopup, setOpenPopup] = useState(false);
-    //const [recordsX, setRecordsX] = useState([]); //Se debe colocar el ID
-    //const [columns, setColumns] = useState([]);
-    //const [data, setData] = useState([]);
-    //const [open, setOpen] = React.useState(false);
+    const [openAddPopup, setOpenAddPopup] = useState(false);
+    const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openOnePopup, setOpenOnePopup] = useState(false)
     const [openAllPopup, setOpenAllPopup] = useState(false)
     const [indexDelete, setIndexDelete] = useState(0)
-    const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -175,19 +101,14 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
         handleInputChange
     } = useForm(initialFieldValues);
 
-    //Le pasamos los horarios
-
     React.useEffect(() => {
-      //Obtenemos las secciones
-      fillHorarios()
-      .then (newHorarios =>{
-        //setRecordsX(newHorarios); //Se quiere actualizar todo
-        setRecords(newHorarios);
-        setCargaH(records);
+      fillCursos()
+      .then (newCur =>{
+        setRecords(newCur);
+        console.log(newCur);
       });
-      
     }, [])
-  
+
     //console.log(records);
     //console.log(indexDelete);
 
@@ -206,9 +127,6 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
           }
         })
       }
-    const handleClick = (e) => {
-        history.push("/as/asignacionCarga/cursos");
-    };
 
     const guardarIndex = item => {
       setIndexDelete(item.id)
@@ -217,12 +135,20 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
 
     const eliminarCursos = () =>{
       records.map(item => {
-        HorarioService.deleteHorario(item.id);
+        CursoService.deleteCurso(item.id);
       })
       setRecords([])
       setOpenAllPopup(false)
     }
 
+    const agregarCurso = (newCurso) =>{
+      //Agregamos el curso
+      CursoService.registerCurso(newCurso);
+      setRecords(prevRecords => prevRecords.concat(newCurso))
+      console.log("Nuevo records: ", records);
+      setOpenAddPopup(false)
+    }
+    
     const eliminarCurso = () =>{
       console.log(indexDelete);
       //Funcion para elimianr el Curso seleccionado
@@ -233,7 +159,7 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
       pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
       records.splice(pos,1);
       //setRecords(); 
-      HorarioService.deleteHorario(indexDelete);
+      CursoService.deleteHorario(indexDelete);
       setOpenOnePopup(false)
     }
 
@@ -242,7 +168,7 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
             <Typography variant="h4"
                 color="primary.light" style={SubtitulosTable}
             >
-                Horario de Cursos
+                Listado de Cursos
             </Typography>
             <Grid container>
                 <Grid item xs={8}>
@@ -271,9 +197,9 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
                 <Grid item xs={4} align="right">
                     {/* FIX:  DT IconButton */}
                     <Controls.AddButton 
-                        title="Agregar Nuevo Curso"
+                        title="Nuevo Curso"
                         variant="iconoTexto"
-                        onClick = {(event) => handleClick(event)}
+                        onClick = {() => {setOpenAddPopup(true); setRecordForEdit(null)}}
                     />
                 </Grid>
             </Grid>
@@ -290,17 +216,23 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
                             >
                             {item.clave}
                             </TableCell>*/}
-                            <TableCell>{item.curso.codigo}</TableCell>
-                            <TableCell>{item.horas_semanales}</TableCell>
-                            <TableCell>{item.curso.facultad}</TableCell>
-                            <TableCell>{item.curso.nombre}</TableCell>
                             <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
-                            <TableCell>{item.sesiones.hora_sesion}</TableCell>
+                            <TableCell>{item.nombre}</TableCell>
+                            <TableCell>{item.seccion.departamento.unidad.nombre}</TableCell>
+                            <TableCell>{item.creditos}</TableCell>
+                            <TableCell>{item.fecha_modificacion}</TableCell>
                             <TableCell>
+                              {/* Accion editar */}
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {guardarIndex(item)}}
+                              >
+                                <EditOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
                               {/* Accion eliminar */}
                               <Controls.ActionButton
                                 color="warning"
+                                
                                 onClick={ () => {guardarIndex(item)}}
                               >
                                 <DeleteOutlinedIcon fontSize="small" />
@@ -319,7 +251,7 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
                 <TblPagination />
             </BoxTbl>
                 <Controls.Button
-                text="Eliminar todos los horarios"
+                text="Eliminar todos los cursos"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
@@ -328,16 +260,23 @@ export default function ListaCursos({records, setRecords, setCargaH, cargaH}) {
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
-                title="Eliminar horario"
+                title={`Eliminar el curso ${indexDelete.nombre}`}
             >
               <EliminarCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
             <Popup
                 openPopup={openAllPopup}
                 setOpenPopup={setOpenAllPopup}
-                title="Eliminar todos los horarios"
+                title="Eliminar todos los cursos"
             >
               <EliminarCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
+            </Popup>
+            <Popup
+                openPopup={openAddPopup}
+                setOpenPopup={setOpenAddPopup}
+                title="Agregar nuevo curso"
+            >
+              <AgregarCurso setOpenAddPopup = {setOpenAddPopup} agregarCurso = {agregarCurso}/>
             </Popup>
         </Form>
     )
