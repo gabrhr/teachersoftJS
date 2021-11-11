@@ -34,6 +34,7 @@ import { WindowSharp } from '@mui/icons-material';
 
 const initialFieldValues = {
   temaID: '',
+  //nombreTipo:''
 }
 
 const tableHeaders = [
@@ -45,27 +46,41 @@ const tableHeaders = [
     }
 ]
 
-const getTipoTramite = async ( id_tema = 1 ) => {
+const getTipoTramite = async (id_tema) => {
 
   //SE DEBE CAMBIAR ESTA FUNCIÓN. SOLAMENTE ES PARA LA PRUEBA DEL FORMULARIO
   //ESTO DEBIDO A QUE SE CARGA AUTOMÁTICAMENTE CON EL PRIMER ID
   // DE TEMA TRÁMITE
   
-  let auxTipos = tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
+  let auxTipos = await tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
   auxTipos = auxTipos ?? [];
   console.log(auxTipos);
  
   let roles = DTLocalServices.getAllRoles();
   const tipos = [];
-  
-  for (let i = 0; i < auxTipos.length; i++){
+  if(auxTipos){
+    for (let i = 0; i < auxTipos.length; i++){
+      console.log(auxTipos[i]);
+      console.log(auxTipos[i].id);
+      console.log(auxTipos[i].nombre);
+      console.log(auxTipos[i].temaID);
+      console.log(auxTipos[i].id_tema);
+      console.log("id");
+      console.log(auxTipos[i].temaTramiteMesaDePartes.id);
+      console.log(auxTipos[i].temaTramiteMesaDePartes.nombre);  
       tipos.push({
-          id: auxTipos[i].id.toString(),
-          nombre: auxTipos[i].nombre,
-          id_tramite: auxTipos[i].id_tema
-      })
+            id: auxTipos[i].id.toString(),
+            nombre: auxTipos[i].nombre,
+            temaTramiteMesaDePartes:{
+              id:auxTipos[i].temaTramiteMesaDePartes.id,
+              nombre:auxTipos[i].temaTramiteMesaDePartes.nombre
+            },
+            id_tema: auxTipos[i].temaTramiteMesaDePartes.id
+        })
+    }
+  }else{
+    console.log("No existen Tipos");
   }
-
   /*
   auxTipos.map( tema => (
 
@@ -77,7 +92,9 @@ const getTipoTramite = async ( id_tema = 1 ) => {
   ));
   */
   window.localStorage.setItem('listTipos', JSON.stringify(auxTipos));
+  console.log(tipos);
   return tipos;
+  
 }
 
   export default function GestionTemaTramiteDetails(props){
@@ -136,6 +153,9 @@ const getTipoTramite = async ( id_tema = 1 ) => {
       const dataTipoTramite = {
           id: tipoTramite.id,
           nombre: tipoTramite.nombre,
+          temaTramiteMesaDePartes: {
+            id:tipoTramite.temaTramiteMesaDePartes.id
+          },
           id_tema: tipoTramite.id_tema
       }
 
@@ -230,7 +250,7 @@ const getTipoTramite = async ( id_tema = 1 ) => {
                           <DeleteIcon
                           color="warning"
                           onClick={() => {
-                            onDelete(item.id)
+                            //onDelete(item.id)
                             setConfirmDialog({
                               isOpen: true,
                               title: '¿Eliminar tipo permanentemente?',

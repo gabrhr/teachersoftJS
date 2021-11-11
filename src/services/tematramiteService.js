@@ -2,8 +2,6 @@ import axios from 'axios';
 import url from '../config.js';
 import tokenService from './tokens.js';
 
-
-
 function fillTemas() {
     let temas = [];
     const tema1 = { id: 1 , nombre: 'Tema 1', seccion: { id: 1, nombre: 'Seccion 1' } };
@@ -28,7 +26,9 @@ let listTemas = fillTemas();
 
 const getTemaTramites = async () => {
     try{
-        const request = await axios.get(`${url}/tema/`, tokenService.GetTokenPrueba());
+        const request = await axios.get(
+            `${url}/tema/`,
+            tokenService.GetTokenPrueba());
         //console.log(request)
         return request.data;
     }catch(err){
@@ -41,7 +41,10 @@ const getTemaTramites = async () => {
 
  const getTemaTramite = async (id) => {
     try{
-        const request = await axios.get(`${url}/tema/${id}`, tokenService.GetTokenPrueba(), id)
+        const request = await axios.get(
+            `${url}/tema/${id}`,
+            tokenService.GetTokenPrueba(),
+            id);
         //console.log(request.data);
         return request.data;
     }catch (err) {
@@ -53,7 +56,10 @@ const getTemaTramites = async () => {
 const getTemaTramitexSeccion = async (id_seccion) => {
 
     try{
-        const request = await axios.get(`${url}/tema/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+        const request = await axios.get(
+            `${url}/tema/idseccion=${id_seccion}`,
+            tokenService.GetTokenPrueba(),
+            id_seccion);
         //console.log(request.data);
         return request.data;
     }catch (err) {
@@ -64,29 +70,36 @@ const getTemaTramitexSeccion = async (id_seccion) => {
 const registerTemaTramite =  async (newObject) => {
     
     try{
-        const request = axios.post(`${url}/tema/`, newObject, tokenService.GetTokenPrueba());
-        console.log(request.data);
+        const request = axios.post(`${url}/tema/`,
+            newObject,
+            tokenService.GetTokenPrueba());
+        //console.log(request.data);
         return request.data;
     }
     catch(exception){
         console.error(exception);
     }
-
 }
 
-export const updateTemaTramite = async (newObject, id) => {
+const updateTemaTramite = async (newObject, id) => {
     try{
-        const request = await axios.put(`${url}/tema/`, newObject, tokenService.GetTokenPrueba());
-        return request. data;
+        const request = await axios.put(
+            `${url}/tema/`,
+            newObject,
+            tokenService.GetTokenPrueba());
+        return request.data;
     }catch(err){
         console.error(err);
     }
 }
 
 
-export const deleteTemaTramite =  async (id) => {
+const deleteTemaTramite =  async (id) => {
     try {
-        const request = await axios.delete(`${url}/tema/${id}`,tokenService.GetTokenPrueba());
+        const request = await axios.delete(
+            `${url}/tema/${id}`,
+            tokenService.GetTokenPrueba(),
+            id);
         return request.data;
     }catch(err) {
         console.error(err);

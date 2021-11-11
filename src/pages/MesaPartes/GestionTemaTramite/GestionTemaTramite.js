@@ -20,6 +20,7 @@ import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 /*SERVICES*/ 
 import temaTramiteService from '../../../services/tematramiteService';
+import tipoTramiteService from '../../../services/tipotramiteService';
 import * as DTLocalServices from '../../../services/DTLocalServices';
 import GestionTemaTramiteForm from './GestionTemaTramiteForm';
 import GestionTipoTramite from './GestionTipoTramite';
@@ -53,11 +54,7 @@ const getTemaTramites = async () => {
 
     let auxTemas = await temaTramiteService.getTemaTramites();  
     auxTemas = auxTemas ?? [];
-    let var1= await temaTramiteService.getTemaTramite(2);
-    //console.log(var1);
-    let var2 = await temaTramiteService.getTemaTramitexSeccion(3);
-    //console.log(var2);
-    console.log(auxTemas);
+    //console.log(auxTemas);
     var str,std,stl,ape1,ape2
     let roles = DTLocalServices.getAllRoles();
     const temas = [];
@@ -77,6 +74,17 @@ const getTemaTramites = async () => {
     }else {
       console.log("No existen Temas")
     }
+    //Probando Funciones
+    //let var1= await temaTramiteService.getTemaTramite(2);
+    //console.log(var1);
+    //let var2 = await temaTramiteService.getTemaTramitexSeccion(3);
+    //console.log(var2);
+    //let var3 = await tipoTramiteService.getTipoTramites();
+    //console.log(var3);
+    //let var4 = await tipoTramiteService.getTipoTramite(2);
+    //console.log(var4);
+    //let var5 = await tipoTramiteService.getTipoTramitexTemaTramite(2);
+    //console.log(var5);
     /*
     auxTemas.map( tema => (
 
@@ -219,8 +227,6 @@ export default function GestionTemaTramite() {
 
 
     const onView = (id_tramite) => {
-  
-        
         selectedID = id_tramite;
         localStorage.setItem("id_tramite", id_tramite);
         console.log( 'Padre:  ' + id_tramite);

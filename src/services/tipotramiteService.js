@@ -30,81 +30,79 @@ let listTipos = fillTipos();
 
 /*Funciones "hardcodeadas*/
 
-export const getTipoTramites = () => {
-
-    return listTipos;
-
-}
-
-export const getTipoTramite = (id) => {
-
-    let tipos = listTipos;
-    let tipo = null;
-
-    for (let i = 0; i < tipos.length; i++){
-        if (tipos[i].id == id){
-            tipo = tipos[i];
-            break;
-        }
+const getTipoTramites = async () => {
+    try{
+        const request = await axios.get(`${url}/tipo/`, tokenService.GetTokenPrueba());
+        //console.log(request);
+        return request.data;
+    }catch(err){
+        console.error(err);
     }
-    return tipo;
 }
 
-const getTipoTramitexTemaTramite =  (id_tramite) => {
+const getTipoTramite = async (idTipoTramite) => {
 
-    if (listTipos.length <= 0)
-        listTipos = fillTipos();
-    let auxTipos = [];
-    let auxTipo;
-    for (let i = 0; i < listTipos.length; i++){
-        if (id_tramite == listTipos[i].id_tema){
-            auxTipo = listTipos[i]
-            auxTipos.push(auxTipo);
-        }
-    }   
-    return auxTipos;
+    try{
+        const request = await axios.get(
+            `${url}/tipo/${idTipoTramite}`,
+            tokenService.GetTokenPrueba(),
+            idTipoTramite);
+        return request.data;
+    }catch(err){
+        console.error(err);
+    } 
+}
+
+const getTipoTramitexTemaTramite =  async (id_tramite) => {
+    try{
+        const request = await axios.get(
+            `${url}/tipo/idtema=${id_tramite}`,
+            tokenService.GetTokenPrueba(),
+            id_tramite);
+        return request.data;
+    }catch(err){
+        console.log(err);
+    }
 }
 
  
-export const registerTipoTramite =  newObject => {
-    
+const registerTipoTramite =  async (newObject) => {
     try{
-        newObject.id = listTipos.length;
-        listTipos.push(newObject)
-        return true;
+        const request = await axios.put(
+            `${url}/tipo/`,
+            newObject,
+            tokenService.GetTokenPrueba());
+        return request.data;
     }
     catch(exception){
         console.error(exception);
-        return false;
+        //return false;
     }
- 
 }
 
-export const updateTipoTramite = (newObject, id) => {
- 
-    let auxTipo = null;
-    for (let i = 0; i < listTipos.length; i++){
-        if (id == listTipos[i].id){
-            auxTipo = listTipos[i];
-            auxTipo = newObject;
-            listTipos[i] = auxTipo;
-            return true;
-        }
-    }   
-    return false;
+export const updateTipoTramite = async (newObject, id) => {
+    try{
+        const request = await axios.put(
+            `${url}/tipo/`,
+            newObject,
+            tokenService.GetTokenPrueba());
+        return request.data;
+    }catch(err){
+        console.error(err);
+    }
+
 }
 
-
-export const deleteTipoTramite =  (id) => {
-    
-    let auxTipo = null;
-    for (let i = 0; i < listTipos.length; i++){
-        if (id == listTipos[i].id){
-            listTipos.splice(i,1);
-            return true;
-        }
-    }   
-    return false;
+export const deleteTipoTramite = async (idTipo) => {
+    try {
+        const request = await axios.delete(
+            `${url}/tipo/${idTipo}`,
+            tokenService.GetTokenPrueba(),
+            idTipo);
+        return request.data;
+    }catch(err) {
+        console.error(err);
+    }
 
 }
 
