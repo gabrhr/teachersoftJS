@@ -110,8 +110,9 @@ export default function Router1(props) {
     <Router>
       <Switch>
         {/* Rutas protegidas */}
-        {privateroutes.map(r =>
+        {privateroutes.map((r,index) =>
           <PrivateRoute 
+            key={index}
             exact path={r.path} 
             requireRoles={r.requireRoles}
             component={() =>
