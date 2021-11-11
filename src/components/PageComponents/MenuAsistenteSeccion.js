@@ -30,7 +30,7 @@ export const MenuAsistenteSeccion = [
             }
         ]
     },
-    
+    /*
     {
         text: 'Docentes',
         path: '/as/docentes',
@@ -54,5 +54,5 @@ export const MenuAsistenteSeccion = [
                 indice: 1,
             }
         ]
-    }
+    }*/
 ];
