@@ -221,14 +221,12 @@ export default function DashboardSoli(props) {
         /* React "state object" (useState()) doens't allow functions, only
           * objects.  Thus the function needs to be inside an object. */
       handleInputChange(e)
-      console.log("target value",target)
       setFilterFn({
         fn: items => {
            if (target.value == 0 || items.length === 0)
              /* no search text */
              return items
            else
-            console.log("itemsssssss",items)
              return items.filter(x => x.temaTramiteID == target.value)
 
         }
@@ -237,6 +235,7 @@ export default function DashboardSoli(props) {
 
     //#endregion
     
+
 
     /* push data to DB.  Does some error handling. */
     function add (solicitud, resetForm) {
@@ -271,7 +270,21 @@ export default function DashboardSoli(props) {
           console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
         })
     }
+    const [valueFecha, setValueFecha] = React.useState([null, null]);
 
+    React.useEffect(() => {
+        console.log(valueFecha[0])
+        console.log(valueFecha[1])
+        setFilterFn({
+          fn: items => {
+             if (valueFecha[0]== null && valueFecha[1] === null)
+               return items
+             else
+               return items.filter(x => x.tracking.fecha_enviado >= valueFecha[0])
+  
+          }
+        })
+    }, [valueFecha])
     return (
       <Form>
         <ContentHeader text={title} cbo={false} />
@@ -292,7 +305,10 @@ export default function DashboardSoli(props) {
             />
           </div>
           <div style={{ width: "360px", marginRight: "50px" }}>
-            <Controls.RangeTimePicker />
+            <Controls.RangeTimePicker 
+              value = {valueFecha}
+              setValue= {setValueFecha}
+            />
           </div>
         </div>
         {/* Filtrados */}
