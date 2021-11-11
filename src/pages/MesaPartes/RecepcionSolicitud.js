@@ -31,21 +31,12 @@ export default function MisSolicitudes() {
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
-    const idUser = JSON.parse(localStorage.getItem("user")).id;
-    //console.log(usuarioActual);
-    
-    
     function getSolicitudes() {
-                //FUNCIONES
-        //MesaPartesService.getSolicitudesByDep(3) 
-        //MesaPartesService.getSolicitudesByIdDel(44) 
-        //MesaPartesService.getSolicitudesByIdSol(44) 
-        MesaPartesService.getSolicitudesByIdSol(idUser)
+        MesaPartesService.getSolicitudes()
             .then(data => {
                 setRecords(data ?? [])
             })
     }
-
     /* ¿Cuando se ejecuta? */
     React.useEffect(() => {
         getSolicitudes()

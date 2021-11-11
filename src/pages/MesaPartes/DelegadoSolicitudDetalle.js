@@ -16,8 +16,7 @@ import { Box } from '@mui/system';
 import { DT } from '../../components/DreamTeam/DT';
 import ResultadoSolicitud from './ResultadoSolicitud';
 
-
-export default function SolicitudDetalle() {
+export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
     const {solicitud}=location.state
     const { rol} = useContext(UserContext);
@@ -52,6 +51,20 @@ export default function SolicitudDetalle() {
             <Paper variant="outlined" sx={PaperStyle}>
                 {/* Tabla de solicitud y tracking */}
                 <DetalleSoliOrganism solicitud={solicitud}/>
+                {/* Posibilidades de Atención
+                    - Secretaria de Sección(rol=6) -> Boton Atender y Delegar
+                    - Usuarios Delegado (rol!=6) -> Boton Atender
+                */}
+                <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
+                    <Stack mt={2} mb={2}>
+                            <Controls.Button
+                                text="Atender"
+                                type="submit"   // html property (not component)
+                            />
+                    </Stack>
+                </Box>
+                
+                {/* Respuesta */}
                 {/* Respuesta */}
                 { solicitud.resultado==0? <> </>:
                     <ResultadoSolicitud solicitud={solicitud}/>

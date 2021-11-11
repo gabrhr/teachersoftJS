@@ -167,7 +167,7 @@ export default function GestionCargaCursos() {
         <> 
             <ContentHeader 
                 text="Gestión de la carga de cursos"
-                cbo= {true}
+                cbo= {false}
             />
             <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '1%'}}>
                 <Grid item xs={5}>

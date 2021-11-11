@@ -37,6 +37,8 @@ import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTe
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 import NoAsignado from './NoAsignado'
+import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
+import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -90,9 +92,11 @@ const privateroutes = [
   { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
   { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [5], path: "/jd/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [5], path: "/jd/mesaPartes/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   /* Secretario de D */
   { requireRoles: [6], path: "/secretaria", page: Vacio },
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: Vacio },
+  { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
   { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: Vacio },  
   /* Externo */
   /* rol sin asignar */
@@ -109,13 +113,12 @@ export default function Router1(props) {
       <Switch>
         {/* Rutas protegidas */}
         {privateroutes.map(r =>
-          <PrivateRoute exact path={r.path} 
-          requireRoles={r.requireRoles}
-          component={() =>
-            <HeaderUser
-            pagina={r.page}
-            />
-          }
+          <PrivateRoute 
+            exact path={r.path} 
+            requireRoles={r.requireRoles}
+            component={() =>
+              <HeaderUser pagina={r.page} />
+            }
           >
           </PrivateRoute>
         )}
