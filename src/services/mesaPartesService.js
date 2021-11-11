@@ -265,7 +265,6 @@ export function getSolicitud(id) {
 }
 
 export function getSolicitudesByIdSol(idPersona) {
-    let solicitud = null;
     return axios({
         method: 'get',
         url: `${url}/mesa/idsolicitador=${idPersona}`,
@@ -281,7 +280,6 @@ export function getSolicitudesByIdSol(idPersona) {
         return res.data
     })
     .catch(err => console.error(err));
-
 }
 
 export function getSolicitudesByIdDel(idPersona) {
