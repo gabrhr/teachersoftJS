@@ -19,6 +19,11 @@ import CursoService from "../../services/cursoService";
 import HorarioService from "../../services/horarioService";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
+import { SettingsPowerSharp } from "@mui/icons-material";
+import Popup from "../../components/util/Popup";
+import AsignarCursosCiclo from "./ModalAsignarCursosCiclo";
 
 const getSeccionCollection = [
     { id: '1', title: 'Todas las Facultades' },
@@ -72,14 +77,17 @@ const getSeccionCollection = [
 
 export default function CargaDocenteCursos(){
 
-  const [openBackDrop, setOpenBackDrop] = useState(false);
+  const [cursosCargados, setCursosCargados] = useState(false)
+  const [OPP, setOPP] = useState(false)
 
   //LLENADO DE LA LISTA DE CURSOS1
   const fillCursos = async () => {
-    setOpenBackDrop(true)
+    setCursosCargados(false)
     //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
     let dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
+    console.log(dataCur)
     const ciclo = window.localStorage.getItem("ciclo"); 
+    console.log(ciclo)
     let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
     //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
     const cursos = [];
@@ -87,6 +95,7 @@ export default function CargaDocenteCursos(){
     for(let cur of dataCur) {
       horCiclo = [];  //se reinician los horarios
       horarios = await HorarioService.listarPorCursoCiclo(cur.id , ciclo);
+      console.log(horarios)
       if(!horarios)  continue; //Si se retorna un promise vacio - no se lista el curso
       
       //Adicionalmente a esto
@@ -129,7 +138,7 @@ export default function CargaDocenteCursos(){
   
     }
     console.log(cursos);
-    setOpenBackDrop(false)
+    setCursosCargados(true)
     return cursos;
   }
 
@@ -200,11 +209,6 @@ export default function CargaDocenteCursos(){
 
     return(
       <>
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                  open={openBackDrop}
-        >
-          <CircularProgress color="inherit"/>
-        </Backdrop>
         <Form>
             <ContentHeader text={horarios?"Carga docente - Curso":"Carga docente"} cbo={false}/>
             {horarios? (
@@ -276,14 +280,15 @@ export default function CargaDocenteCursos(){
                             Preferencias de dictado por curso
                         </Typography>
                         <BoxTbl>
-                        <TblContainer>
-                            <TblHead />
+                        {cursosCargados ? (
+                          <TblContainer>
+                          <TblHead />
                             <colgroup>
-                                <col style={{ width: '5%' }} />
-                                <col style={{ width: '30%' }} />
-                                <col style={{ width: '25%' }} />
-                                <col style={{ width: '12%' }} />
-                                <col style={{ width: '23%' }} />
+                              <col style={{ width: '5%' }} />
+                              <col style={{ width: '30%' }} />
+                              <col style={{ width: '25%' }} />
+                              <col style={{ width: '12%' }} />
+                              <col style={{ width: '23%' }} />
                             </colgroup>
                             <TableBody>
                             {
@@ -302,18 +307,32 @@ export default function CargaDocenteCursos(){
 
                                     </IconButton>
                                     </StyledTableCell>
-
+                                  <LinearProgress />
                                 </StyledTableRow>
                                 ))
                             }
                             </TableBody>
-                        </TblContainer>
-                        <TblPagination />
+                            </TblContainer>
+                        ) : (
+                          <Box sx={{ width: '100%' }}>
+                            <LinearProgress />
+                          </Box>
+                        )}
                         </BoxTbl>
+                        <TblPagination />
                     </>
                 )}
             </Paper>
+            <Controls.Button onClick = {()=>setOPP(true)}/>
         </Form>
+        <Popup
+            openPopup={OPP}
+            setOpenPopup={setOPP}
+            title="Cursos asignados"
+            size = "Cursos asignados"
+            >
+              <AsignarCursosCiclo setOPP = {setOPP}/>
+            </Popup>
       </>
     )
 }
