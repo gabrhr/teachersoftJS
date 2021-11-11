@@ -10,6 +10,8 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { useHistory } from 'react-router-dom'
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
+
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -65,7 +67,7 @@ const tableHeaders = [
 ]
 
 const fillCursos = async () => {
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
+  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(JSON.parse(window.localStorage.getItem("user")).persona.seccion.id,"");
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   //const horarios = [];
   if(!dataCur)  {
@@ -77,7 +79,7 @@ const fillCursos = async () => {
 }
 
 export default function ListaCursos({records, setRecords}) {
-
+    const facu = JSON.parse(window.localStorage.getItem("user")).persona.seccion.departamento.unidad.nombre;
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
     const [openAddPopup, setOpenAddPopup] = useState(false);
@@ -226,22 +228,30 @@ export default function ListaCursos({records, setRecords}) {
             <BoxTbl>
                 <TblContainer>
                     <TblHead />
+                    <colgroup>
+                      <col style={{ width: '10%' }} />
+                      <col style={{ width: '30%' }} />
+                      <col style={{ width: '20%' }} />
+                      <col style={{ width: '5%' }} />
+                      <col style={{ width: '15%' }} />
+                      <col style={{ width: '10%' }} />
+                    </colgroup>
                     <TableBody>
                     {/*console.log(records)*/}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id}>
+                        <StyledTableRow key={item.id}>
                             {/*<TableCell
                             align="right"
                             >
                             {item.clave}
                             </TableCell>*/}
-                            <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.nombre}</TableCell>
-                            <TableCell>{item.seccion.departamento.unidad.nombre}</TableCell>
-                            <TableCell>{item.creditos}</TableCell>
-                            <TableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</TableCell>
-                            <TableCell>
+                            <StyledTableCell>{item.codigo}</StyledTableCell>
+                            <StyledTableCell>{item.nombre}</StyledTableCell>
+                            <StyledTableCell>{item.seccion.departamento ? item.seccion.departamento.unidad.nombre : facu}</StyledTableCell>
+                            <StyledTableCell>{item.creditos}</StyledTableCell>
+                            <StyledTableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</StyledTableCell>
+                            <StyledTableCell>
                               {/* Accion editar */}
                               <Controls.ActionButton
                                 color="warning"
@@ -257,8 +267,8 @@ export default function ListaCursos({records, setRecords}) {
                               >
                                 <DeleteOutlinedIcon fontSize="small" />
                               </Controls.ActionButton>
-                            </TableCell>
-                        </TableRow>
+                            </StyledTableCell>
+                        </StyledTableRow>
                         ))
                         :   (
                             <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
