@@ -243,7 +243,9 @@ export function getSolicitudes() {
             res.data.forEach((x, i) => {
                 res.data[i] = b2fSolicitud(x)
             });
-            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+            // res.data.sort((x1, x2) => 
+            //     0 - (new Date(x1.tracking.fecha_enviado) - new Date(x2.tracking.fecha_enviado)))
+            // res.data.reverse()
             return res.data
         })
         .catch(err => console.error(err));

@@ -62,12 +62,12 @@ const initialFieldValues = {
     estadoID: 4
 }
 
-export const getTemaTramites = () => ([
-    { id: 0, title: 'Todos los temas' },
-    { id: 1, title: 'Tema 1' },
-    { id: 2, title: 'Tema 2' },
-    { id: 3, title: 'Tema 3' },
-])
+// export const getTemaTramites = () => ([
+//     { id: 0, title: 'Todos los temas' },
+//     { id: 1, title: 'Tema 1' },
+//     { id: 2, title: 'Tema 2' },
+//     { id: 3, title: 'Tema 3' },
+// ])
 
 function getEstadoSolicitud() {
     return ([
@@ -177,7 +177,7 @@ export default function DashboardSoli(props) {
               type: 'error'
           })
           console.log(err)
-          // console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
+          console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
         })
     }
 
