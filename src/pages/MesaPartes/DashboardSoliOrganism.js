@@ -32,7 +32,18 @@ export default function DashboardSoliOrganism(props) {
     function getRow({ ...props }) {
         setRow(props)
     }
+
+    function formatoFecha(fecha){
+        if(fecha!=null){
+            return (fecha.slice(8,10) +'/'
+                    +fecha.slice(5,7) +'/'
+                    +fecha.slice(0,4) + "\xa0\xa0\xa0"
+                    +fecha.slice(11,19)
+            )
+        }
+    }
     return (
+        //#region TABLA DE CADA SOLICITUD
         <div>
             <BoxTbl>
                 <TblContainer>
@@ -42,16 +53,21 @@ export default function DashboardSoliOrganism(props) {
                             recordsAfterPagingAndSorting().map(item => (
                                 <TableRow key={item.id}>
                                     <TableCell >
-                                        <div >
-                                            Fecha de Creación: {item.fecha}
-                                        </div>
-                                        <Typography >
+                                        <Typography display="inline">
+                                            Fecha de Enviado: {'\u00A0'}
+                                        </Typography>
+                                        <Typography display="inline" sx={{color:"primary.light"}}>
+                                        {formatoFecha(item.tracking.fecha_enviado)}
+                                        </Typography>
+                                        <Typography fontWeight='bold'>
                                             {item.asunto}
                                         </Typography>
-                                        <div >
-                                            Autor: {item.solicitador.fullName}
-                                        </div>
-
+                                        <Typography display="inline">
+                                            Autor: {'\u00A0'}
+                                        </Typography>
+                                        <Typography display="inline" sx={{color:"primary.light"}}>
+                                            {item.solicitador.fullName}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell sx={{maxWidth:"300px"}} >
                                         <Typography paragraph>
@@ -88,16 +104,16 @@ export default function DashboardSoliOrganism(props) {
                 <TblPagination />
             </BoxTbl>
         </div>
+        //#endregion
     )
 }
 
 function getTipoDetalle(item,user,rol){
     if(rol==6){
         return "/secretaria/mesaPartes/solicitudDetalle"
-    } else if(item.solicitadorID== user.id){
-        return "/doc/solicitudDetalle"
-    } else if (item.delegadoID== user.id){
-        return "/jd/mesaPartes/solicitudDetalle"
+    } else if(item.solicitadorID== user.id){ //MisSolicitudes
+        if(rol==1) return "/doc/solicitudDetalle"
+    } else if (item.delegadoID== user.id){ //Delegados
+        if(rol==1) return "/doc/misDelegados/solicitudDetalle"
     }
-    return "/doc/solicitudDetalle"
 }
