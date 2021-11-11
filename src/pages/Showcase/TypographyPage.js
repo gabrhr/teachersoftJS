@@ -39,6 +39,12 @@ export default function TypographyPage() {
             <Typography variant="overline" color="yellow">
                 overline: The quick brown fox jumps over the lazy dog
             </Typography>
+            <Typography display="inline">
+                Cantidad de Descargas Aceptadas:{'\u00A0'}
+            </Typography>
+            <Typography display="inline" sx={{color:"#41B9E4"}}>
+                nop 
+            </Typography>  
         </>
     )
 }

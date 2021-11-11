@@ -32,7 +32,8 @@ export default function MisSolicitudes() {
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
     function getSolicitudes() {
-        MesaPartesService.getSolicitudes()
+
+        MesaPartesService.getSolicitudesByDep(3)
             .then(data => {
                 setRecords(data ?? [])
             })
@@ -43,7 +44,7 @@ export default function MisSolicitudes() {
     }, [])
 
     return (
-        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"solicitudes Generales a Mesa de Partes"} records={records} setRecords={setRecords}/>
     )
 }
 

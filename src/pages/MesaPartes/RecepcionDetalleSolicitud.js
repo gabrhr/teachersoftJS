@@ -23,7 +23,9 @@ export default function RecepcionDetalleSolicitud() {
     const {solicitud}=location.state
     const { rol} = useContext(UserContext);
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
-
+    function retornar(){
+        window.history.back();
+    }
     return (
         <>
             {/* Encabezado y boton de regreso */}
@@ -40,14 +42,13 @@ export default function RecepcionDetalleSolicitud() {
                 alignItems="center"
             >
             <Grid item xs={6} md={1} mb={3}>
-                <Link to={'/doc/misSolicitudes'}  style={{ textDecoration: 'none' }}> 
                     <Controls.Button
                         variant="outlined"
                         text="Regresar"
                         size="small"
                         startIcon={<ArrowBackIcon />}
+                        onClick={retornar}
                     />
-                </Link>
             </Grid>
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>

@@ -10,12 +10,12 @@ export default function SolicitudesDelegadasAMi() {
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
-    const idUser = JSON.parse(localStorage.getItem("user")).id;
+    const usuario = JSON.parse(localStorage.getItem("user"));
     //console.log(usuarioActual);
     
     
     function getSolicitudes() {
-        MesaPartesService.getSolicitudesByIdDel(idUser)
+        MesaPartesService.getSolicitudesByIdDel(usuario.persona.id)
             .then(data => {
                 setRecords(data ?? [])
             })
@@ -27,6 +27,6 @@ export default function SolicitudesDelegadasAMi() {
     }, [])
 
     return (
-        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"Solicitudes delegadas por Mesa de Partes"} records={records} setRecords={setRecords}/>
     )
 }
