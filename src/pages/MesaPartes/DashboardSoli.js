@@ -30,6 +30,11 @@ import { Link, Redirect } from 'react-router-dom';
 import DashboardSoliOrganism from './DashboardSoliOrganism'
 import { UserContext } from '../../constants/UserContext'
 
+// services
+import * as UnidadService from '../../services/unidadService';
+import DepartamentoService from '../../services/departamentoService'
+import SeccionService from '../../services/seccionService'
+
 
 const tableHeaders = [
     {
@@ -69,6 +74,38 @@ const initialFieldValues = {
 //     { id: 3, title: 'Tema 3' },
 // ])
 
+function getUnidades(setUnidad) {
+    UnidadService.getUnidades()
+        .then(us => {
+            setUnidad(us)
+        })
+}
+function getDepartamentos(setDepartamento) {
+    DepartamentoService.getDepartamentos()
+        .then(ds => {
+            setDepartamento(ds)
+        })
+}
+function getSecciones(setSeccion) {
+    SeccionService.getSecciones()
+        .then(secs => {
+            setSeccion(secs)
+        })
+}
+function getTemaTramites(setTemaTramite) {
+    MesaPartesService.getTemas()
+        .then(temas => {
+            setTemaTramite(temas)
+        })
+}
+function getTiposTramites(setTipoTramite) {
+    MesaPartesService.getTipos()
+        .then(tipos => {
+            setTipoTramite(tipos)
+        })
+}
+
+
 function getEstadoSolicitud() {
     return ([
         { id: 4, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
@@ -83,14 +120,37 @@ export default function DashboardSoli(props) {
     const {
       title,
       records, setRecords, updateRecords, 
-      user, 
-      comboData } = props
+      user } = props
     const { rol} = useContext(UserContext);
     /* Abrir Nueva Solicitud Form (in popup) */
     const [openNuevo, setOpenNuevo] = useState(false)
     
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+
+    /* data para mostrar en los combobox */
+    const [unidad, setUnidad] = React.useState([])
+    const [departamento, setDepartamento] = React.useState([])
+    const [seccion, setSeccion] = React.useState([])
+    const [temaTramite, setTemaTramite] = React.useState([])
+    const [tipoTramite, setTipoTramite] = React.useState([])
+    const comboData = 
+        {
+            unidad: unidad,
+            departamento: departamento,
+            seccion: seccion,
+            temaTramite: temaTramite,
+            tipoTramite: tipoTramite
+        }
+
+    React.useEffect(() => {
+        getUnidades(setUnidad)
+        getDepartamentos(setDepartamento)
+        getSecciones(setSeccion)
+        getTemaTramites(setTemaTramite)
+        getTiposTramites(setTipoTramite)
+        /* note:  estados no tiene porque solo es un numero codigo */
+    }, [])
 
     const {
         TblContainer,

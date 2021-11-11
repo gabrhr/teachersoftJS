@@ -12,9 +12,6 @@ import DashboardSoli from './DashboardSoli'
 
 // services
 import * as MesaPartesService from '../../services/mesaPartesService';
-import * as UnidadService from '../../services/unidadService';
-import DepartamentoService from '../../services/departamentoService'
-import SeccionService from '../../services/seccionService'
 
 /* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
     return {
@@ -46,77 +43,22 @@ function getSolicitudes(setRecords, user) {
         })
 }
 
-function getUnidades(setUnidad) {
-    UnidadService.getUnidades()
-        .then(us => {
-            setUnidad(us)
-        })
-}
-function getDepartamentos(setDepartamento) {
-    DepartamentoService.getDepartamentos()
-        .then(ds => {
-            setDepartamento(ds)
-        })
-}
-function getSecciones(setSeccion) {
-    SeccionService.getSecciones()
-        .then(secs => {
-            setSeccion(secs)
-        })
-}
-function getTemaTramites(setTemaTramite) {
-    MesaPartesService.getTemas()
-        .then(temas => {
-            setTemaTramite(temas)
-        })
-}
-function getTiposTramites(setTipoTramite) {
-    MesaPartesService.getTipos()
-        .then(tipos => {
-            setTipoTramite(tipos)
-        })
-}
-
-// function getUnidades(comboData, setComboData)
-
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
 
     const {user, rol} = useContext(UserContext);
     // const usuarioLogeado=JSON.parse(localStorage.getItem("user"))
-    
-    /* data para mostrar en los combobox */
-    const [unidad, setUnidad] = React.useState([])
-    const [departamento, setDepartamento] = React.useState([])
-    const [seccion, setSeccion] = React.useState([])
-    const [temaTramite, setTemaTramite] = React.useState([])
-    const [tipoTramite, setTipoTramite] = React.useState([])
-    const comboData = 
-        {
-            unidad: unidad,
-            departamento: departamento,
-            seccion: seccion,
-            temaTramite: temaTramite,
-            tipoTramite: tipoTramite
-        }
 
     /* Retrieve initial data from  Back API on first component render */
     React.useEffect(() => {
         getSolicitudes(setRecords, user)
-        getUnidades(setUnidad)
-        getDepartamentos(setDepartamento)
-        getSecciones(setSeccion)
-        getTemaTramites(setTemaTramite)
-        getTiposTramites(setTipoTramite)
-        /* note:  estados no tiene porque solo es un numero codigo */
     }, [])
 
     return (
         <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
             records={records} setRecords={setRecords} updateRecords={getSolicitudes}
             user={user}
-            comboData={comboData}
         />
     )
 }
