@@ -23,7 +23,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 import { SettingsPowerSharp } from "@mui/icons-material";
 import Popup from "../../components/util/Popup";
-import AsignarCursosCiclo from "./ModalAsignarCursosCiclo";
+import AsignarCursosCiclo from "../AsistenteSeccion/MantenimientoCursos/ModalAsignarCursosCiclo";
 
 const getSeccionCollection = [
     { id: '1', title: 'Todas las Facultades' },

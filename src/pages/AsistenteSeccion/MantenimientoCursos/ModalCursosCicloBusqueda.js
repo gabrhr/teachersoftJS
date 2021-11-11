@@ -1,12 +1,12 @@
-import { useForm, Form } from "../../components/useForm"
-import Popup from "../../components/util/Popup";
-import { Controls } from "../../components/controls/Controls"
+import { useForm, Form } from "../../../components/useForm"
+import Popup from "../../../components/util/Popup";
+import { Controls } from "../../../components/controls/Controls"
 import { Alert, Grid, InputAdornment, Paper, TableBody, Typography } from '@mui/material'
 import React, {useState} from 'react'
-import Button from '../../components/controls/Button';
+import Button from '../../../components/controls/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import { StyledTableRow, StyledTableCell } from '../../components/controls/StyledTable';
-import useTable from "../../components/useTable"
+import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
+import useTable from "../../../components/useTable"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const SubtitulosTable={display:"flex"}

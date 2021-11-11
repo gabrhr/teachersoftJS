@@ -8,6 +8,7 @@ import { Controls } from '../../../components/controls/Controls'
 import ListaCursos from './ListaCursos'
 import Popup from '../../../components/util/Popup'
 import ModalCursos from './ModalCursos';
+import ModalAsignarCursosCiclo from './ModalAsignarCursosCiclo';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import { getHorarios, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
@@ -29,6 +30,7 @@ export default function CursosForm() {
     const [count, setCount] = useState(0);
 */
     const [openPopup, setOpenPopup] = useState(false)
+    const [openAsignarPopup, setOpenAsignarPopup] = useState(false)
 
     /*Bota tu ga nomás*/
     
@@ -74,7 +76,7 @@ export default function CursosForm() {
                 text="Administración de Cursos"
                 cbo= {false}
             />
-            <Grid container spacing={2} maxWidth={1}>
+            <Grid container spacing={0} maxWidth={1}>
                 <Grid item xs>
                     <Typography variant="body1"> Puedes&nbsp;
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
@@ -89,6 +91,12 @@ export default function CursosForm() {
                         size="large"
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
+                    />
+                    <Controls.Button
+                        text="Asignar"
+                        size="large"
+                        endIcon={<CloudDownloadOutlinedIcon/>}
+                        onClick = {() => setOpenAsignarPopup(true)}
                     />
                     {/* <Controls.Button
                         text="Exportar"
@@ -114,6 +122,13 @@ export default function CursosForm() {
               
                < ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
+            </Popup>  
+            <Popup
+                openPopup={openAsignarPopup}
+                setOpenPopup={setOpenAsignarPopup}
+                title="Carga Masiva de Cursos y Horarios"
+            >
+               < ModalAsignarCursosCiclo setOPP={setOpenAsignarPopup}/>
             </Popup>  
         </>
     )

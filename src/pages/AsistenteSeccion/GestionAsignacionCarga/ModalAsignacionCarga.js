@@ -58,38 +58,19 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   if(otroHorario === 1){  //Si otorHorario = 1 - entonces si es nuevo horario
     //const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
     console.log(hor.curso.codigo)
-    await cursoService.getCursosxCodigoNombre(hor.curso.codigo)
+    await cursoService.getCursoCicloxCicloxCodigoNombre(hor.ciclo.id, hor.curso.codigo)
       .then(request => {
         postHorario = {
           "codigo": hor.codigo,
-          //"tipo_sesion_excel": hor.tipo, //Si es clase es 0 - si es laboratorio 1
-          //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
-          //"horas_semanales": parseFloat(hor.horas_semanales), //Horas_semanales: cargaHoraria
-          ciclo:{
-            //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
-            "id": hor.ciclo.id,
+          "curso_ciclo":{
+            "id": request[0].id
           },
-          curso:{
-            "id": request[0].id,
-          },
-          /*
-          unidad:{
-            "id": request_uni[0].id,
-          }
-          */
-          //"sesiones_excel": hor.sesiones_excel,
-          //teorico - carga_horaria: suma de horas_sesiones 
           sesiones:[{
             "secuencia": hor.tipo,
-            //"sesiones_dictado": null,
-              //"persona": - es uno de los docente - es un objeto - objeto persona
-              //"hora_sesion_docente:" - lo que dicta este docente - entero 
             "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
           }]
         }
-        //Analizamos si el siguiente item es el mismo horario pero otro tipo
         otroHorario = 0; // Entonces cambiamos el valor a 0 - para continuar en la siguiente i
-        //horarioService.registerHorario(postHorario);
       })
   }
   
@@ -98,14 +79,11 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
 
     postHorario.sesiones.push({
       "secuencia": hor.tipo,
-      //"sesiones_dictado": null,
-        //"persona": - es uno de los docente - es un objeto - objeto persona
-        //"hora_sesion_docente:" - lo que dicta este docente - entero 
       "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
     })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
-  //console.log(postHorario);
+  console.log(postHorario);
   return [otroHorario, postHorario];
 }
 

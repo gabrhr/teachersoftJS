@@ -1,12 +1,39 @@
-import { useForm, Form } from "../../components/useForm"
+import { useForm, Form } from "../../../components/useForm"
 import { useState } from "react";
 import React from "react";
-import Popup from "../../components/util/Popup";
-import { Controls } from "../../components/controls/Controls"
+import Popup from "../../../components/util/Popup";
+import { Controls } from "../../../components/controls/Controls"
 import { Alert, Grid, InputAdornment, Paper, TableBody, Typography } from '@mui/material'
 import ModalCursosCicloAsignados from './ModalCursosCicloAsignados'
 import ModalCursosCicloBusqueda from "./ModalCursosCicloBusqueda";
-import CursoService from '../../services/cursoService';
+import CursoService from '../../../services/cursoService';
+import cursoService from "../../../services/cursoService";
+
+const guardarCursos = async (recordsAsig) => {
+  //FUNCION PARA PODER ASIGNAR LOS CURSOS
+  const ciclo = window.localStorage.getItem("ciclo"); 
+  for(let cc of recordsAsig){
+    //Previamente, verificamos que la data no esté ingresada 
+    await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, cc.codigo)
+      .then(data => {
+        if(data.length === 0){
+          console.log("Si ingresa la data");
+          const cursoCic ={
+            "curso":{
+              "id": cc.id
+            },
+            "ciclo":{
+              "id": ciclo
+            },
+            "cantidad_horarios": 0,
+            "estado_tracking": 0
+          }
+          console.log(cursoCic);
+          CursoService.registerCursoCiclo(cursoCic)
+        }
+    });
+  }
+}
 
 
 
@@ -99,7 +126,7 @@ export default function AsignarCursosCiclo({setOPP}){
                         // size="large"
                         text="Guardar"
                         type="submit"
-                        onClick = {()=>setOPP(false)}
+                        onClick = {()=> {guardarCursos(recordsAsig); setOPP(false)}}
                     >
                     </Controls.Button>
                 </div>
