@@ -6,6 +6,7 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import { DT } from '../../../components/DreamTeam/DT'
 import { Controls } from '../../../components/controls/Controls'
 import ListaDocentes from './ListaDocentes'
+import CargaMasivaDocente from './CargaMasivaDocente'
 import Popup from '../../../components/util/Popup'
 //import ModalCursos from './ModalCursos';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
@@ -57,7 +58,7 @@ export default function DocentesForm() {
 
         const ws = XLSX.utils.json_to_sheet(csvData);
 
-        const wb = { Sheets: { 'Carga_Horaria': ws }, SheetNames: ['Carga_Horaria'] };
+        const wb = { Sheets: { 'Docente': ws }, SheetNames: ['Docente'] };
 
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
@@ -68,15 +69,15 @@ export default function DocentesForm() {
     }
 
     const vacio = [{
-        "Clave": " ",
-        "Nombre": " ",
-        "Unidad": " ",
-        "Creditos": " ",
-        "Carga_Horaria": " ",
-        "Horario": " ",
-        "Tipo": " ",
-        "Horas": " "
-    }];
+            "nombres": "",
+            "apellidos": "",
+            "seccion_nombre": "",
+            "correo_pucp": "",
+            "telefono": "",
+            "codigo_pucp": "",
+            "numero_documento": "",
+            "foto_URL": "",
+          }];
 
     //let listHorario = getHorario(-1);
       //LO DE GABRIELA
@@ -123,11 +124,11 @@ export default function DocentesForm() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Carga Masiva de Cursos y Horarios"
+                title="Carga Masiva de Docentes"
             >
-               {/*<ModalAsignacionCarga horario = {listHorario} getHorario = {getHorario}>
+               <CargaMasivaDocente setOpenPopUp = {setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                cargaH = {cargaH}/>
 
-               </ModalAsignacionCarga>*/}
               
                {/*< ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH}
                 cargaH = {cargaH}/>*/}

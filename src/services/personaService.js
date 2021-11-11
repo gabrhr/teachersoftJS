@@ -60,7 +60,7 @@ const updatePersona = async (newObject, id) => {
 
 const deletePersona = async (id) => {
   try{
-    const request = await axios.delete(`${url}/persona/${id}`, id, tokenService.GetTokenPrueba());
+    const request = await axios.delete(`${url}/persona/${id}`, tokenService.GetTokenPrueba(), id);
     return request.then(response => response.data) //Es un valor de true o no
   }catch(exception){
     console.error(exception);

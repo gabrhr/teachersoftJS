@@ -37,7 +37,7 @@ const tableHeaders = [
       label: 'Acciones',
       numeric: false,
       sortable: true
-    },
+    }
     /* {
       id: 'bono',
       label: 'Bonos',
@@ -68,7 +68,7 @@ export default function ListaDocentes() {
     useEffect(() => {
         //Obtenemos las secciones
         getProfesores()
-      }, [openPopupEdit, openDelOnePopup, openDelAllPopup])
+      }, [openPopupEdit, openDelOnePopup, openPopupAdd])
 
     function transformarDocentes (request){
         const recordsX = []
@@ -100,11 +100,11 @@ export default function ListaDocentes() {
     }
 
     const eliminarDocentes = async () =>{
-        /*records.map(item => {
+        records.map(item => {
             personaService.deletePersona(item.id);
           })
-          //setRecords([])
-          setDelAllPopup(false)*/
+        setRecords([])
+        setDelAllPopup(false)
     }
 
     const handleSearch = e => {
@@ -277,7 +277,7 @@ export default function ListaDocentes() {
                 />
             </Popup>
             <Popup
-                openPopup={openDelAllPopup}
+                openPopup={openDelAllPopup }
                 setOpenPopup={setDelAllPopup}
                 title={`Eliminar docente: `}
                 size = "sm"
