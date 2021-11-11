@@ -133,4 +133,5 @@ function getTipoDetalle(item,user,rol){
     } else if (item.delegadoID== user.id){ //Delegados
         if(rol==1) return "/doc/misDelegados/solicitudDetalle"
     }
+    return "/doc/solicitudDetalle"
 }
