@@ -91,6 +91,9 @@ export default function GestionTemaTramiteForm(props){
           const newTipo = {
             id: values.id,
             nombre: values.nombre,
+            temaTramiteMesaDePartes: {
+              id:localStorage.getItem("id_tramite")
+            },
             id_tema: localStorage.getItem("id_tramite")
           }
           
@@ -124,7 +127,7 @@ export default function GestionTemaTramiteForm(props){
 
                     <Grid item xs={12} sx={styles.columnGridItem}>
                         <Typography variant="h4" mb={2}>
-                            DAATOS DEL TIPO DE TRÁMITE
+                            DATOS DEL TIPO DE TRÁMITE
                         </Typography>
                         <Controls.Input
                             name="nombre"
