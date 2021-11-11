@@ -52,14 +52,15 @@ export default function DashboardSoliOrganism(props) {
                         {
                             recordsAfterPagingAndSorting().map(item => (
                                 <TableRow key={item.id}>
-                                    <TableCell >
+                                    <TableCell sx={{maxWidth:"260px"}}  >
                                         <Typography display="inline">
                                             Fecha de Enviado: {'\u00A0'}
                                         </Typography>
                                         <Typography display="inline" sx={{color:"primary.light"}}>
-                                        {formatoFecha(item.tracking.fecha_enviado)}
+                                            {formatoFecha(item.tracking.fecha_enviado)}
                                         </Typography>
-                                        <Typography fontWeight='bold'>
+                                        <div/>
+                                        <Typography fontWeight='bold' fontSize={18}>
                                             {item.asunto}
                                         </Typography>
                                         <Typography display="inline">
@@ -69,9 +70,16 @@ export default function DashboardSoliOrganism(props) {
                                             {item.solicitador.fullName}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell sx={{maxWidth:"300px"}} >
-                                        <Typography paragraph>
-                                            Descripcion: {item.descripcion}
+                                    <TableCell sx={{maxWidth:"250px"}} >
+                                        <Typography fontWeight='bold'>
+                                            {item.temaTramite} 
+                                        </Typography>
+                                        <div/>
+                                        <Typography display="inline">
+                                            Descripción: {'\u00A0'}
+                                        </Typography>
+                                        <Typography paragraph display="inline" sx={{color:"primary.light"}}>
+                                            {item.descripcion}
                                         </Typography>
                                     </TableCell>
                                     <TableCell  align="center"  >
@@ -81,6 +89,13 @@ export default function DashboardSoliOrganism(props) {
                                                 item.estado == 2 ? "delegado" : "atendido"
                                             }
                                         />
+                                        <div/>
+                                        { item.estado==2? 
+                                            <Typography paragraph display="inline" sx={{color:"primary.light"}}>
+                                               {item.delegado.fullName}
+                                            </Typography> : <> </>
+
+                                        }
                                     </TableCell>
                                     <TableCell>
                                         <Link to ={{
