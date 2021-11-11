@@ -27,7 +27,7 @@ const styles = {
 const initialFieldValues = {
     id: 0,
     nombre: '',
-    seccionId: '',
+    seccionId: 0,
     nombreSeccion: '',
     seccion: {
         id: '',
@@ -78,14 +78,19 @@ export default function GestionTemaTramiteForm(props){
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
+        let defaultError = "Este campo es requerido"
         if ('nombre' in fieldValues)
           if (fieldValues.nombre.length === 0)
             temp.nombre = "Campo requerido"
           else
             temp.nombre = DTLocalServices.requiredField(fieldValues.nombre)
       
-        if ('seccion' in fieldValues)
-            temp.seccion = DTLocalServices.requiredField(fieldValues.seccion)
+        if(recordForEdit){
+
+          temp.idSeccion = values.idSeccion!=0? "": defaultError
+        }else{
+          temp.seccionId = values.seccionId!=0? "": defaultError
+        }
     
         setErrors({
           ...temp
@@ -183,7 +188,8 @@ export default function GestionTemaTramiteForm(props){
                             label="Seccion Principal"
                             value={recordForEdit ? values.idSeccion : values.seccionId}
                             onChange={handleInputChange}
-                            options={seccion}
+                            options={[{ id: 0, nombre: "Seleccionar"}].concat(seccion)}
+                            error={recordForEdit ? errors.idSeccion: errors.seccionId}
                         />
                     </Grid>
         
