@@ -82,16 +82,18 @@ export default function DashboardSoliOrganism(props) {
                                             {item.descripcion}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell  align="center"  >
+                                    <TableCell align="center" sx={{maxWidth:"200px"}}>
+
                                         <DT.Etiqueta
                                             type={item.estado == 0 ? "enviado" :
                                                 item.estado == 1 ? "enRevision" :
                                                 item.estado == 2 ? "delegado" : "atendido"
                                             }
+                                            sx={{marginLeft:"70px", marginRight:"10px", marginBottom:"4px"}}
                                         />
                                         <div/>
                                         { item.estado==2? 
-                                            <Typography paragraph display="inline" sx={{color:"primary.light"}}>
+                                            <Typography paragraph display="inline" sx={{color:"primary.light", mt:2, ml:"10px"}}>
                                                {item.delegado.fullName}
                                             </Typography> : <> </>
 

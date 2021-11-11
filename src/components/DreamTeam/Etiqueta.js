@@ -47,6 +47,7 @@ export default function Etiqueta(props) {
             <Alert
                 severity={type}
                 sx={{
+                    ...sx,
                     pt: 0,
                     pb: 0,
                     minWidth: "140px",
