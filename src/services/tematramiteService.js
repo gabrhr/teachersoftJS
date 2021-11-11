@@ -26,82 +26,72 @@ let listTemas = fillTemas();
 
 /*Funciones "hardcodeadas*/
 
-export const getTemaTramites = () => {
-
-    return listTemas;
-
-}
-
-export const getTemaTramite = (id) => {
-
-    let temas = listTemas;
-    let tema = null;
-
-    for (let i = 0; i < temas.length; i++){
-        if (temas[i].id == id){
-            tema = temas[i];
-            break;
-        }
+const getTemaTramites = async () => {
+    try{
+        const request = await axios.get(`${url}/tema/`, tokenService.GetTokenPrueba());
+        //console.log(request)
+        return request.data;
+    }catch(err){
+        console.error(err);
     }
-    return tema;
+    //console.log(listTemas);
 }
 
-const getTemaTramitexSeccion =  (id_seccion) => {
+//const getTemaTramites = ()
 
-    let auxTemas = [];
-    let auxTema;
-    for (let i = 0; i < listTemas.length; i++){
-        if (id_seccion == listTemas[i].seccion.id){
-            auxTema = listTemas[i]
-            auxTemas.push(auxTema);
-        }
-    }   
-    return auxTemas;
+ const getTemaTramite = async (id) => {
+    try{
+        const request = await axios.get(`${url}/tema/${id}`, tokenService.GetTokenPrueba(), id)
+        //console.log(request.data);
+        return request.data;
+    }catch (err) {
+        console.log(err);
+    }
+
 }
 
-export const registerTemaTramite =  newObject => {
+const getTemaTramitexSeccion = async (id_seccion) => {
+
+    try{
+        const request = await axios.get(`${url}/tema/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+        //console.log(request.data);
+        return request.data;
+    }catch (err) {
+        console.log(err);
+    }
+}
+
+const registerTemaTramite =  async (newObject) => {
     
     try{
-        newObject.id = listTemas.length;
-        listTemas.push(newObject)
-        return true;
+        const request = axios.post(`${url}/tema/`, newObject, tokenService.GetTokenPrueba());
+        console.log(request.data);
+        return request.data;
     }
     catch(exception){
         console.error(exception);
-        return false;
     }
 
-
-    
 }
 
-export const updateTemaTramite = (newObject, id) => {
- 
-    let auxTema = null;
-    for (let i = 0; i < listTemas.length; i++){
-        if (id == listTemas[i].id){
-            auxTema = listTemas[i];
-            auxTema.nombre = newObject.nombre;
-            auxTema.seccion.id = newObject.seccion.id;
-            auxTema.seccion.nombre = newObject.seccion.nombre;
-            listTemas[i] = auxTema;
-            return true;
-        }
-    }   
-    return false;
+export const updateTemaTramite = async (newObject, id) => {
+    try{
+        const request = await axios.put(`${url}/tema/`, newObject, tokenService.GetTokenPrueba());
+        return request. data;
+    }catch(err){
+        console.error(err);
+    }
 }
 
 
-export const deleteTemaTramite =  (id) => {
-    
-    let auxTema = null;
-    for (let i = 0; i < listTemas.length; i++){
-        if (id == listTemas[i].id){
-            listTemas.splice(i,1);
-            return true;
-        }
-    }   
-    return false;
+export const deleteTemaTramite =  async (id) => {
+    try {
+        const request = await axios.delete(`${url}/tema/${id}`,tokenService.GetTokenPrueba());
+        return request.data;
+    }catch(err) {
+        console.error(err);
+    }
+
 
 }
 

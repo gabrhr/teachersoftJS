@@ -11,6 +11,7 @@ import * as DTLocalServices from '../../../services/DTLocalServices';
  
 import { Box } from '@mui/system';
 import tematramiteService from '../../../services/tematramiteService';
+import seccionService from '../../../services/seccionService';
 
 
  
@@ -38,12 +39,14 @@ const initialFieldValues = {
 
 const getSecciones = async () => {
 
-    const dataSecc = [ { id: 1, nombre: 'Seccion 1' }, 
-                       { id: 2, nombre: 'Seccion 2' },
-                       { id: 3, nombre: 'Seccion 3' },
-                       { id: 4, nombre: 'Seccion 4' }]
-
-    const secciones = dataSecc;                    
+    const dataSecc = await seccionService.getSecciones();
+    const secciones = []
+    dataSecc.map(secc=> (
+      secciones.push({
+      id:secc.id.toString(),
+      nombre:secc.nombre,
+      })
+    ));                 
     /*
     const dataSecc = await SeccionService.getSecciones();
     //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
