@@ -185,7 +185,11 @@ export default function ListaDocentes() {
                                     {item.especialidad}
                                 </Typography>
                                 <div >
-                                    {item.correo}
+                                    {(item.tipo_docente === 0) ? "No asignado" : 
+                                     (item.tipo_docente === 1) ? "Docencia a tiempo completo" :
+                                     (item.tipo_docente === 2) ? "Docencia a tiempo parcial convencional" :
+                                                                 "Docencia a tiempo parcial por asignaturas"
+                                    }
                                 </div>
                             </TableCell>
                             <TableCell>
