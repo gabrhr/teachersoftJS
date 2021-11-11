@@ -95,13 +95,6 @@ export default function DashboardSoli(props) {
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
-    function getSolicitudes() {
-        MesaPartesService.getSolicitudes()
-            .then(data => {
-                setRecords(data ?? [])
-            })
-    }
-
     const {
         TblContainer,
         TblHead,
@@ -151,12 +144,6 @@ export default function DashboardSoli(props) {
           }
         })
     }
-
-    /* ¿Cuando se ejecuta? */
-    React.useEffect(() => {
-        getSolicitudes()
-    }, [])
-
     /* push data to DB */
     function add (solicitud) {
         //MesaPartesService.registerDepartamento(solicitud)
@@ -170,8 +157,6 @@ export default function DashboardSoli(props) {
             type: 'success'
         })
     }
-
-    
 
     return (
       <Form>

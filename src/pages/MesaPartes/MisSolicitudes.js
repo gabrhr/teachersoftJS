@@ -5,7 +5,8 @@
  * - Ver detalle de una solicitud.
  * "/doc/misSolicitudes"
  */
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
+import { UserContext } from '../../constants/UserContext';
 import * as MesaPartesService from '../../services/mesaPartesService'
 //Iconos Mesa de Partes
 import DashboardSoli from './DashboardSoli'
@@ -31,16 +32,20 @@ export default function MisSolicitudes() {
     /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
-    const idUser = JSON.parse(localStorage.getItem("user")).id;
-    //console.log(usuarioActual);
+    const {user, rol} = useContext(UserContext);
+    const usuarioLogeado=JSON.parse(localStorage.getItem("user"))
+    console.log("usuarioActual", user.id);
+    console.log("usuarioActual LOCAL", usuarioLogeado.id);
     
     
     function getSolicitudes() {
                 //FUNCIONES
         //MesaPartesService.getSolicitudesByDep(3) 
         //MesaPartesService.getSolicitudesByIdDel(44) 
-        //MesaPartesService.getSolicitudesByIdSol(44) 
-        MesaPartesService.getSolicitudesByIdSol(idUser)
+        //MesaPartesService.getSolicitud(33)
+        //MesaPartesService.getSolicitudesByIdSol(user.id)
+        //MesaPartesService.getSolicitudes() 
+        MesaPartesService.getSolicitudesByIdSol(usuarioLogeado.persona.id) 
             .then(data => {
                 setRecords(data ?? [])
             })
