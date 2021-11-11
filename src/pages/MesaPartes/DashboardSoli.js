@@ -10,7 +10,7 @@ import { Avatar, Grid, InputAdornment, Box, TableCell, TableRow, Typography, Div
 import { Controls } from '../../components/controls/Controls'
 import useTable from '../../components/useTable'
 import Notification from '../../components/util/Notification'
-
+import moment from 'moment'
 
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
@@ -272,19 +272,26 @@ export default function DashboardSoli(props) {
     }
     const [valueFecha, setValueFecha] = React.useState([null, null]);
 
-    React.useEffect(() => {
-        console.log(valueFecha[0])
-        console.log(valueFecha[1])
+   /*  React.useEffect(() => {
+        const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
+        const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
         setFilterFn({
           fn: items => {
-             if (valueFecha[0]== null && valueFecha[1] === null)
-               return items
-             else
-               return items.filter(x => x.tracking.fecha_enviado >= valueFecha[0])
-  
+            console.log(items)
+            if (valueFecha[0]== null && valueFecha[1] == null)
+              return items
+            if (valueFecha[1]==null)
+              return items.filter(x => 
+                fechaIni <= moment(x.tracking.fecha_enviado).format('DD/MM/YYYY')
+              )
+            else{
+              return items.filter(x => 
+                 moment(x.tracking.fecha_enviado).isBetween(fechaIni,fechaFin)
+              )
+            }
           }
         })
-    }, [valueFecha])
+    }, [valueFecha]) */
     return (
       <Form>
         <ContentHeader text={title} cbo={false} />

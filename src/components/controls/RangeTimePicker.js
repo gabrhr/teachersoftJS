@@ -11,8 +11,8 @@ import { Controls } from './Controls';
 import { set } from 'date-fns';
 
 export default function RangeTimePicker(props) {
-  let {fechaInicio, fechaFin} = props
-  const [value, setValue] = React.useState([null, null]);
+  let {value, setValue} = props
+  /* const [value, setValue] = React.useState([null, null]); */
 
   const styleField = {
     size:"small",
