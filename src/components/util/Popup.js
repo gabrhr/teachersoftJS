@@ -6,12 +6,12 @@ import CloseIcon from '@mui/icons-material/Close';
 
 export default function Popup(props) {
 
-  const { title, children, openPopup, setOpenPopup, handleClose } = props;
+  const { title, children, openPopup, setOpenPopup, handleClose, size } = props;
 
   return (
     // Outer invisible box
     <Dialog open={openPopup} onClose={handleClose}
-      maxWidth="lg"
+      maxWidth= {size ? `${size}` : "lg"}
       fullWidth
       sx={{
         minHeight: "400px",
