@@ -31,7 +31,7 @@ const registerDepartamento = async newObject => {
 
 const updateDepartamento = async (newObject,id) => {
     try{
-        console.log(newObject)
+        //console.log(newObject)
         //const request = await axios.put(`${url}/departamento/${id}`, tokenService.getToken(),id);
         const request = await axios.put(`${url}/departamento/`,newObject, tokenService.GetTokenPrueba());
         return request.data;
