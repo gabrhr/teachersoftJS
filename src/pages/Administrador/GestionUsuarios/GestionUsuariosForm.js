@@ -114,11 +114,12 @@ export default function GestionUsuariosForm(props) {
 
   // const [confirmDialog, setConfirmDialog] = useState({isOpen: false, title: '', message: '', type: ''})
   const [fotoPerfil, setFotoPerfil] = React.useState(null);
-  const [archivo, setArchivo] = React.useState(null);
-  const [fileFoto, setFileFoto] = React.useState(null);
-  const [cambio, setCambio] = React.useState(false);
-  const [nombArch, setNombArch] = React.useState(null);
-
+  //const [archivo, setArchivo] = React.useState(null);
+  //const [archivos, setArchivos] = React.useState([]);
+  //const [fileFoto, setFileFoto] = React.useState(null);
+  //const [cambio, setCambio] = React.useState(false);
+  //const [nombArch, setNombArch] = React.useState([]);
+  //const [codigos, setCodigos] = React.useState([]);
 
   // const onSubmit = id => {
   //     setConfirmDialog({
@@ -209,7 +210,7 @@ export default function GestionUsuariosForm(props) {
         fecha_creacion: fechaCreacion,
         fecha_modificacion: null,
         foto: fotoPerfil ? fotoPerfil : values.foto_URL,
-        file: archivo
+        //file: archivo
         //~~~foto: --queda pendiente
       }
       console.log(newUsr);
@@ -276,13 +277,21 @@ export default function GestionUsuariosForm(props) {
       });
   };*/
 
-  function download(ImageBase64){
-    console.log(nombArch)
+  /*function download(ImageBase64){
+    
+    for(var i=0;i<archivos.length;i++){
+      console.log(codigos[i])
+      var a = document.createElement("a"); //Create <a>
+      a.href = codigos[i]; //Image Base64 Goes here
+      a.download = nombArch[i]; //File name Here
+      a.click(); //Downloaded file
+    }
+    
     /*var a = document.createElement("a"); //Create <a>
     a.href = "data:application/*;base64," + ImageBase64; //Image Base64 Goes here
     a.download = nombArch; //File name Here
     a.click(); //Downloaded file*/
-  }
+  //}
 
   return (
     <>
@@ -413,15 +422,38 @@ export default function GestionUsuariosForm(props) {
               value={values.foto_URL}
               onChange={handleInputChange}
             />
+            {/*
             <label htmlFor="contained-button-file">
+              <input type="file" multiple onChange={(event) => {
+                  const files = event.target.files
+
+                  console.log(files);
+                  setArchivos(files)
+                  //setFileFoto(files[0])
+                  //setNombArch(files[1].name)
+                  setCambio(true)
+                  
+                  if (files) {
+                    for(var i=0;i<files.length;i++){
+                      var reader = new FileReader();
+                      nombArch.push(files[i].name)
+                      reader.onload = function (e) {
+                        codigos.push(e.target.result)
+                        console.log(e.target.result)
+                      };
+                      reader.readAsDataURL(files[i]);
+                    }
+                  }
+                }}/>
+              
               <Input accept="application/pdf" id="contained-button-file"
                 type="file" sx={{ display: 'none' }}
-                value = {values.fileFoto}
+                //value = {values.fileFoto}
                 onChange={(event) => {
                   const files = event.target.files
 
-                  console.log(files[0]);
-                  setFileFoto(files[0])
+                  console.log(files);
+                  //setFileFoto(files[0])
                   setNombArch(files[0].name)
                   setCambio(true)
 
@@ -453,6 +485,7 @@ export default function GestionUsuariosForm(props) {
               />
               
             </label>
+            */}
           </Grid>
         </Grid>
         {/* <Grid align="right" marginY={5} > */}

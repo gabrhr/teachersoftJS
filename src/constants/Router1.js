@@ -36,6 +36,7 @@ import MisSolicitudes from '../pages/MesaPartes/MisSolicitudes';
 import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 import NoAsignado from './NoAsignado'
+import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -63,6 +64,7 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/docentes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
+  { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
   /* CS*/
   { requireRoles: [3, 8], path: "/cord", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
