@@ -24,27 +24,38 @@ const usuarios2 = [
 ]
  */
 
+function getSolicitudes(setRecords, departamentoID) {
+            //FUNCIONES
+    //MesaPartesService.getSolicitudesByDep(3) 
+    //MesaPartesService.getSolicitudesByIdDel(44) 
+    //MesaPartesService.getSolicitud(33)
+    //MesaPartesService.getSolicitudesByIdSol(user.id)
+    //MesaPartesService.getSolicitudes() 
+    // console.log(user)
+    MesaPartesService.getSolicitudesByDep(departamentoID) 
+        .then(data => {
+            data = data ?? []       // fixes el error raro de mala conexion
+            data.sort((x1, x2) => 
+                0 - (new Date(x1.tracking.fecha_enviado) - new Date(x2.tracking.fecha_enviado)))
+            setRecords(data)
+        })
+}
+
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
 
-    /* Solo puede devolver promesa.  El .then() anterior devuelve lo que recibe
-     * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
-     * cambia records. */
-    function getSolicitudes() {
-
-        MesaPartesService.getSolicitudesByDep(3)
-            .then(data => {
-                setRecords(data ?? [])
-            })
-    }
-    /* ¿Cuando se ejecuta? */
     React.useEffect(() => {
-        getSolicitudes()
+        /* se deberia mandar user.departamento.id */
+        getSolicitudes(setRecords, 3)
     }, [])
 
     return (
-        <DashboardSoli title={"solicitudes Generales a Mesa de Partes"} delegado={true} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"Solicitudes Generales a Mesa de Partes"} 
+            delegado={true} 
+            records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
+            // user={user}    /* FIXME */
+        />
     )
 }
 
