@@ -318,7 +318,6 @@ export function getSolicitudesByDep(idDepartamento) {
     .catch(err => console.error(err));
 }
 
-/* TODO: work-in-progress */
 export function registerSolicitud(soli) {
     return axios({
         method: 'post',
@@ -328,6 +327,9 @@ export function registerSolicitud(soli) {
         },
         ...config
     })
-        // .then(res => console.log("MPservice: registerSoli:", res))
+        .then(res => {
+            // console.log("MPservice: registerSoli:", res)
+            return res.data.id
+        })
         // .catch(err => console.error(err));
 }

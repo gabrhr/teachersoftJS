@@ -29,6 +29,8 @@ import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
 import Vacio from '../pages/Dev/Vacio'
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
+import CursosForm from '../pages/AsistenteSeccion/MantenimientoCursos/CursosForm';
+import DocentesForm from '../pages/AsistenteSeccion/MantenimientoDocentes/DocentesForm';
 import { RouterSharp } from '@mui/icons-material';
 import HeaderUser from '../components/PageComponents/HeaderUser';
 import { UserContext } from './UserContext';
@@ -40,6 +42,7 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
+import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -63,10 +66,11 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
-  { requireRoles: [2, 6,8], path: "/as/gestiontematramite", page: GestionTemaTramite },
-  { requireRoles: [2], path: "/as/docentes", page: Vacio },
+  { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
+  { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
+  { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },

@@ -126,7 +126,7 @@ function getEstadoSolicitud(delegado,rol) {
 export default function DashboardSoli(props) {
     const {
       title, delegado,
-      records, setRecords, updateRecords, 
+      records, setRecords, getSolicitudes, 
       user } = props
     const { rol} = useContext(UserContext);
     /* Abrir Nueva Solicitud Form (in popup) */
@@ -246,7 +246,7 @@ export default function DashboardSoli(props) {
       solicitud.solicitadorID = user.persona.id     // required
 
       MesaPartesService.registerSolicitud(solicitud)
-        .then((res) => {
+        .then((id) => {
           /* success */
           /* cerrar popup */
           resetForm()
@@ -257,7 +257,10 @@ export default function DashboardSoli(props) {
               message: 'Registro de Solicitud Exitosa',
               type: 'success'
           })
-          updateRecords(setRecords, user)
+          getSolicitudes(setRecords, user)
+
+          /* insertar archivos relacionados */
+          // window.alert(`Se inserto la soli con id=${id}`)
         })
         .catch(err => {
           /* error :( */
