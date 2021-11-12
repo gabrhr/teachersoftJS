@@ -15,7 +15,7 @@ const initialFieldValues = {
     id: 0,
     nombre: '',
     correo: '',
-    departmentId: '',
+    departmentId: 0,
     nombreDepartamento: '',
     foto: '',
 }
@@ -53,12 +53,19 @@ export default function AgregarEditarSeccion(props) {
     }
     const validate = (fieldValues = values) => {
         let temp = {...errors}
+        let defaultError = "Este campo es requerido"
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido."
+        // temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError
+        if(recordForEdit){
+          temp.idDepartamento = values.idDepartamento !== 0 ? "" : defaultError;
+        } else{
+          temp.departmentId = values.departmentId !== 0 ? "":defaultError;
+        }    
         setErrors({
             ...temp
         })
@@ -185,6 +192,10 @@ export default function AgregarEditarSeccion(props) {
                         value={recordForEdit? values.idDepartamento : values.departmentId}
                         onChange={handleInputChange}
                         options={departamento}
+                        options={[{ id: 0, nombre: "Seleccionar" }]
+                          .concat(departamento)
+                        }
+                        error={recordForEdit ? errors.idDepartamento : errors.departmentId}
                     />
                 </Grid>
                 {/*
