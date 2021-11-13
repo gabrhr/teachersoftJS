@@ -12,6 +12,7 @@ import EliminarDocentes from './EliminarDocentes'
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const tableHeaders = [
     {
@@ -75,7 +76,7 @@ export default function ListaDocentes() {
         request.map(doc => {
             recordsX.push({
                 "id": doc.id,
-                "url_foto": doc.foto_URL ? doc.foto_URL : 'static/images/avatar/1.jpg',
+                "url_foto": doc.foto_URL ? doc.foto_URL : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
                 "nombres": doc.nombres,
                 "apellidos": doc.apellidos,
                 "especialidad": doc.seccion.nombre,
@@ -143,7 +144,7 @@ export default function ListaDocentes() {
        setRecordForEdit(item)
        setOpenPopupEdit(true)
     }
-
+    console.log(records);
     return (
         <>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
@@ -178,7 +179,10 @@ export default function ListaDocentes() {
                             <Grid container>
                                 <Grid item pl={.5}>
                                 <Avatar>
-                                    <img height = "125%" width = "125%" text-align ="center" src={item.url_foto} alt=""></img>
+                                    {item.url_foto !== ("static/images/avatar/1.jpg" || "")
+                                      ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                                        src={item.url_foto}></img>
+                                      :  <AccountCircleIcon/>}
                                 </Avatar>
                                 </Grid>
                                 <Grid item sm>

@@ -15,6 +15,8 @@ import { formatHorario, formatHorarioCursos } from '../../../components/auxFunct
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Link } from '@mui/material';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion) {
@@ -77,15 +79,15 @@ export default function CursosForm() {
                 cbo= {false}
             />
             <Grid container spacing={0} maxWidth={1}>
-                <Grid item xs>
+                {/*<Grid item xs>
                     <Typography variant="body1"> Puedes&nbsp;
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
                         </Link>
                         &nbsp;para subir los cursos.
                     </Typography>
-                </Grid>
-                <Grid item xs={3} align="right" m={1}>
+                </Grid>*/}
+                <Grid item xs={12} align="right" m={1}>
                     <Controls.Button
                         text="Importar"
                         size="large"
@@ -95,7 +97,7 @@ export default function CursosForm() {
                     <Controls.Button
                         text="Asignar"
                         size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}
+                        endIcon={<CompareArrowsIcon/>}
                         onClick = {() => setOpenAsignarPopup(true)}
                     />
                     {/* <Controls.Button

@@ -51,9 +51,16 @@ export default function AsignarCursosCiclo({setOPP}){
         }
         console.log(rec)
     }
+    const setRecordsCheckedAsig = (rec, setRec, cursos) => {
+        //setRec([])
+        for(let i in cursos){
+            rec.push(false)
+        }
+        console.log(rec)
+    }
 
     const fillCursos = async () => {
-        let dataCur = await CursoService.getCursos();
+        let dataCur = await CursoService.listarCursosNoAsignados(window.localStorage.getItem("ciclo"),"");
         console.log(dataCur) 
         //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
         if(!dataCur) dataCur = []
@@ -70,6 +77,28 @@ export default function AsignarCursosCiclo({setOPP}){
         ));
 
         setRecordsChecked(recordsBusqChecked, setRecordsBusqChecked, cursos)
+        //console.log(cursos);
+        return cursos;
+      }
+
+    const fillCursosAsignados = async () => {
+        let dataCur = await CursoService.getCursoCicloxCicloxCodigoNombre(window.localStorage.getItem("ciclo"),"");
+        console.log(dataCur) 
+        //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+        if(!dataCur) dataCur = []
+        const cursos = [];
+        dataCur.map(cur => (
+          cursos.push({
+            id: cur.curso.id.toString(),
+            nombre: cur.curso.nombre,
+            codigo: cur.curso.codigo,
+            creditos: cur.curso.creditos,
+            seccion: cur.curso.seccion,
+            selected: false
+          })
+        ));
+        
+        setRecordsCheckedAsig(recordsAsigChecked, setRecordsAsigChecked, cursos)
         //console.log(cursos);
         return cursos;
       }
@@ -100,6 +129,13 @@ export default function AsignarCursosCiclo({setOPP}){
         fillCursos()
         .then (newCurs =>{
           setRecordsBusq(prevRecords => prevRecords.concat(newCurs));
+          //console.log(newSeccion);
+          
+          //console.log(records);
+        });
+        fillCursosAsignados()
+        .then (newCurs =>{
+          setRecordsAsig(prevRecords => prevRecords.concat(newCurs));
           //console.log(newSeccion);
           
           //console.log(records);

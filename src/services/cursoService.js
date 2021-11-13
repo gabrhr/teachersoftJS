@@ -145,5 +145,17 @@ const deleteCursoCiclo = async (id) => {
   }
 }
 
+const  listarCursosNoAsignados = async (id_ciclo,codigo_nombre) => {
+  //console.log("EL codigo pasado es: ",codigo_nombre);
+  const token = tokenService.GetTokenPrueba();
+  //console.log(token);
+  try{
+    const request = await axios.get(`${url}/cursociclo/unasigned/idciclo=${id_ciclo}/codigonombre=${codigo_nombre}`, token  , id_ciclo, codigo_nombre, { allowCredentials: false });  //Normalmente es un string
+    return request.data;  //Es un dato
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 export default {getCursos, getCursosxCodigoNombre, getCursosxSeccionCodigoNombre, getCurso, registerCurso, updateCurso, deleteCurso, 
-  getCursoCicloxCicloxCodigoNombre, getCursosCiclos, getCursoCiclo, registerCursoCiclo, updateCursoCiclo, deleteCursoCiclo}
+  getCursoCicloxCicloxCodigoNombre, getCursosCiclos, getCursoCiclo, registerCursoCiclo, updateCursoCiclo, deleteCursoCiclo, listarCursosNoAsignados}

@@ -43,6 +43,7 @@ export const MenuAsistenteSeccion = [
         icon: <PeopleAltOutlinedIcon />,
         indice: 1,
     },
+    /*
     {
         text: 'Mesa de Partes',
         path: '',
@@ -61,4 +62,5 @@ export const MenuAsistenteSeccion = [
             }
         ]
     }
+    */
 ];
