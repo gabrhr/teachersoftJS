@@ -7,11 +7,15 @@ import { DT } from '../../components/DreamTeam/DT'
 import { Grid, IconButton, Typography, Box } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
+// import CargaArchivos from './CargaArchivos';
+
+// services 
 import * as MesaPartesService from '../../services/mesaPartesService';
 import * as UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
 
+// icons
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
@@ -171,6 +175,8 @@ function ActualForm(props) {
                 minRows={6}
                 maxRows={12}
             />
+            {/* ARCHIVOS */}
+            {/* <CargaArchivos /> */}
 
             {/* botones */}
             <Box display="flex" justifyContent="flex-end">

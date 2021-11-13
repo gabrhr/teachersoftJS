@@ -25,7 +25,7 @@ import { UserContext } from '../../constants/UserContext'
 
 //Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
-    const {BoxTbl,TblContainer, TableBody, 
+    const {BoxTbl,TblContainer, 
         recordsAfterPagingAndSorting, TblPagination} = props
     const [row, setRow] = useState(false)
     const {user, rol} = useContext(UserContext);
@@ -71,9 +71,9 @@ export default function DashboardSoliOrganism(props) {
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{maxWidth:"250px"}} >
-                                        <Typography fontWeight='bold'>
+                                        <Typography fontWeight='bold' display="inline">
                                             {item.temaTramite} 
-                                        </Typography>
+                                        </Typography >
                                         <div/>
                                         <Typography display="inline">
                                             Descripción: {'\u00A0'}
@@ -82,16 +82,18 @@ export default function DashboardSoliOrganism(props) {
                                             {item.descripcion}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell  align="center"  >
+                                    <TableCell align="center" sx={{maxWidth:"200px"}}>
+
                                         <DT.Etiqueta
                                             type={item.estado == 0 ? "enviado" :
                                                 item.estado == 1 ? "enRevision" :
                                                 item.estado == 2 ? "delegado" : "atendido"
                                             }
+                                            sx={{marginLeft:"70px", marginRight:"10px", marginBottom:"4px"}}
                                         />
                                         <div/>
                                         { item.estado==2? 
-                                            <Typography paragraph display="inline" sx={{color:"primary.light"}}>
+                                            <Typography paragraph display="inline" sx={{color:"primary.light", mt:2, ml:"10px"}}>
                                                {item.delegado.fullName}
                                             </Typography> : <> </>
 

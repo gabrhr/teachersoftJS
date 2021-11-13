@@ -4,6 +4,7 @@ import { Controls } from '../../components/controls/Controls'
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell,InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { DT } from '../../components/DreamTeam/DT';
+// import moment from 'moment'
 
 /*ICONS*/
 import { Link } from 'react-router-dom';
@@ -78,7 +79,7 @@ export default function DetalleSoliOrganism(props) {
                     multiline
                     rows={5}
                     disabled
-                    defaultValue=""
+                    defaultValue={`${solicitud.descripcion}`}
                     sx={{
                         pl:"78px",
                         mb:"20px"

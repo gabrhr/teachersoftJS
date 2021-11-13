@@ -27,6 +27,6 @@ export default function SolicitudesDelegadasAMi() {
     }, [])
 
     return (
-        <DashboardSoli title={"Solicitudes delegadas por Mesa de Partes"} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"Solicitudes delegadas por Mesa de Partes"} delegado={true} records={records} setRecords={setRecords}/>
     )
 }

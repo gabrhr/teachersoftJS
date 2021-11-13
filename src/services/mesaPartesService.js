@@ -27,7 +27,7 @@ const config = {
     headers: {
         Authorization: tokenService.getToken()
     },
-    timeout: 5000   // ms
+    timeout: 8000   // ms
 }
 
 //#region Funciones auxiliares
@@ -265,7 +265,6 @@ export function getSolicitud(id) {
 }
 
 export function getSolicitudesByIdSol(idPersona) {
-    let solicitud = null;
     return axios({
         method: 'get',
         url: `${url}/mesa/idsolicitador=${idPersona}`,
@@ -281,7 +280,6 @@ export function getSolicitudesByIdSol(idPersona) {
         return res.data
     })
     .catch(err => console.error(err));
-
 }
 
 export function getSolicitudesByIdDel(idPersona) {
@@ -320,7 +318,6 @@ export function getSolicitudesByDep(idDepartamento) {
     .catch(err => console.error(err));
 }
 
-/* TODO: work-in-progress */
 export function registerSolicitud(soli) {
     return axios({
         method: 'post',
@@ -330,6 +327,9 @@ export function registerSolicitud(soli) {
         },
         ...config
     })
-        // .then(res => console.log("MPservice: registerSoli:", res))
+        .then(res => {
+            // console.log("MPservice: registerSoli:", res)
+            return res.data.id
+        })
         // .catch(err => console.error(err));
 }
