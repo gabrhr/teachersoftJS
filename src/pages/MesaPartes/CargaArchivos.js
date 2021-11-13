@@ -1,3 +1,7 @@
+/* Author: Angel
+ *
+ */
+
 import React, { useEffect, useState } from 'react'
 import { Controls } from '../../components/controls/Controls'
 import archivoService from '../../services/archivoService';
@@ -26,6 +30,7 @@ const tableHeaders = [
   }
 ]
 
+/* get files from DB (downloads content too!) */
 const getArchivos = async () =>{
     var archivo = await archivoService.getArchivos();
     archivo = archivo ?? []
@@ -48,7 +53,7 @@ export default function CargaArchivos(){
     const [agregados, setAgregados] = React.useState([]);
     const [eliminados, setEliminados] = React.useState([]);
     const [cambio, setCambio] = React.useState(false);
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
     const [changeData, setChangeData] = React.useState(false);
     const [addData, setAddData] = React.useState(false);
     const [deleteData, setDeleteData] = React.useState(false);
@@ -65,6 +70,7 @@ export default function CargaArchivos(){
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
 
+    /* download selected file */
     function download(){
     
         for(var i=0;i<records.length;i++){
@@ -111,6 +117,7 @@ export default function CargaArchivos(){
         setChangeData(true);
     }
 
+    /* agregar archivo a la tabla (aun no lo sube) */
     function add(){
         var arr
         console.log("G")

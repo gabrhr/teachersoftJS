@@ -77,31 +77,31 @@ const initialFieldValues = {
 function getUnidades(setUnidad) {
     UnidadService.getUnidades()
         .then(us => {
-            setUnidad(us)
+            setUnidad(us ?? [])
         })
 }
 function getDepartamentos(setDepartamento) {
     DepartamentoService.getDepartamentos()
         .then(ds => {
-            setDepartamento(ds)
+            setDepartamento(ds ?? [])
         })
 }
 function getSecciones(setSeccion) {
     SeccionService.getSecciones()
         .then(secs => {
-            setSeccion(secs)
+            setSeccion(secs ?? [])
         })
 }
 function getTemaTramites(setTemaTramite) {
     MesaPartesService.getTemas()
         .then(temas => {
-            setTemaTramite(temas)
+            setTemaTramite(temas ?? [])
         })
 }
 function getTiposTramites(setTipoTramite) {
     MesaPartesService.getTipos()
         .then(tipos => {
-            setTipoTramite(tipos)
+            setTipoTramite(tipos ?? [])
         })
 }
 
@@ -315,10 +315,10 @@ export default function DashboardSoli(props) {
             />
           </div>
           <div style={{ width: "360px", marginRight: "50px" }}>
-            <Controls.RangeTimePicker 
+            {/* <Controls.RangeTimePicker 
               value = {valueFecha}
               setValue= {setValueFecha}
-            />
+            /> */}
           </div>
         </div>
         {/* Filtrados */}
