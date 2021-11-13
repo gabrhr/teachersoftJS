@@ -71,8 +71,8 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
-  { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
+  { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: SolicitudDetalle },
   /* CS*/
   { requireRoles: [3, 8], path: "/cord", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
