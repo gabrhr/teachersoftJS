@@ -42,6 +42,8 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
+//import NoAsignado from './NoAsignado'
+import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 /* Todos menos el login que es especial porque settea al usuario */
@@ -82,8 +84,8 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
 
   /* AD */
-  
-  { requireRoles: [4], path: "/ad/asignacionCarga", page: Vacio },
+  { requireRoles: [0, 1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
+  { requireRoles: [0, 1, 2, 4, 8], path: "/ad/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [4], path: "/ad/docentes", page: Vacio },
   { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
   { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
