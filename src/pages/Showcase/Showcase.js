@@ -72,7 +72,7 @@ export default function Employees() {
             <Paper sx={{...paperCSS}} elevation={24}>
                 <Typography align="center" children="test zone Gabriela" />
                 <Typography children="Picker en un rango determinado"/>
-                <TimePickerPage/>
+                {/* <TimePickerPage/> */}
             </Paper>
 
             {/* TESTS Manuel */}

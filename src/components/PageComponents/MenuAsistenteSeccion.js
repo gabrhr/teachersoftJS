@@ -30,11 +30,17 @@ export const MenuAsistenteSeccion = [
             }
         ]
     },
-    /*
+
     {
         text: 'Docentes',
         path: '/as/docentes',
         icon: <AccountBoxOutlinedIcon />,
+        indice: 1,
+    },
+    {
+        text: 'Cursos',
+        path: '/as/cursos',
+        icon: <PeopleAltOutlinedIcon />,
         indice: 1,
     },
     {
@@ -54,5 +60,5 @@ export const MenuAsistenteSeccion = [
                 indice: 1,
             }
         ]
-    }*/
+    }
 ];

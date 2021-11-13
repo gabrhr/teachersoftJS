@@ -26,7 +26,7 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    {
+  {
     id: 'fullName',
     label: 'Nombre Completo',
     numeric: false,
@@ -75,7 +75,7 @@ const getUsuario = async () => {
   let usuario = await UserService.getUsuarios();
   usuario = usuario ?? []
   console.log(usuario)
-  var str,std,stl,ape1,ape2
+  var str, std, stl, ape1, ape2
   let roles = DTLocalServices.getAllRoles();
   const usuarios = [];
 
@@ -83,7 +83,7 @@ const getUsuario = async () => {
     ape1 = '',
     ape2 = '',
     str = usr.persona.apellidos ? usr.persona.apellidos : -1,
-    std = str!=-1 ? str.indexOf(' ') : -1,
+    std = str != -1 ? str.indexOf(' ') : -1,
     stl = std >= 0 ? usr.persona.apellidos.split(" ") : -1,
     stl != -1 ? (ape1 = stl[0], ape2 = stl[1]) : (ape1 = usr.persona.apellidos, ape2 = ''),
     usuarios.push({
@@ -102,7 +102,7 @@ const getUsuario = async () => {
       nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
       foto_URL: usr.persona.foto_URL
     })
-    ));
+  ));
   //console.log(usuarios)
   window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
   return usuarios;
@@ -146,28 +146,28 @@ export default function GestionUsuarios() {
   }
 
   const handleSearchSeccion = e => {
-        let target = e.target;
-        handleInputChange(e)
-        setFilterFn({
-           fn: items => {
-            //4 es el valor escrito en bruto para listar todo
-            if (target.value == "" || items.length === 0)
-              return items
-            else
-               return items.filter(x => x.nombreSeccion
-                   .includes(target.value))
-          }
-        })
-    }
+    let target = e.target;
+    handleInputChange(e)
+    setFilterFn({
+      fn: items => {
+        //4 es el valor escrito en bruto para listar todo
+        if (target.value == "" || items.length === 0)
+          return items
+        else
+          return items.filter(x => x.nombreSeccion
+            .includes(target.value))
+      }
+    })
+  }
 
   useEffect(() => {
     getUsuario()
-    .then (newUsr =>{
-      setRecords(newUsr);
-      setDeleteData(false);
-      setChangeData(false);
-    });
-  }, [recordForEdit,changeData, deleteData])
+      .then(newUsr => {
+        setRecords(newUsr);
+        setDeleteData(false);
+        setChangeData(false);
+      });
+  }, [recordForEdit, changeData, deleteData])
 
   const addOrEdit = (usuario, resetForm) => {
 
@@ -216,11 +216,11 @@ export default function GestionUsuarios() {
     }
 
     recordForEdit
-        ? personaService.updatePersona(dataPer, usuario.idPersona)
-        : UserService.registerUsuario(dataUsr)
-          .then(idUsuario => {
-            if(recordForEdit)
-              setRecordForEdit(null);
+      ? personaService.updatePersona(dataPer, usuario.idPersona)
+      : UserService.registerUsuario(dataUsr)
+        .then(idUsuario => {
+          if (recordForEdit)
+            setRecordForEdit(null);
 
         })
     //window.location.replace('')
@@ -255,7 +255,7 @@ export default function GestionUsuarios() {
     setOpenPopup(true)
   }
 
-  const onDelete = (idPersona,id) => {
+  const onDelete = (idPersona, id) => {
     // if (!window.confirm('Are you sure to delete this record?'))
     //   return
     setConfirmDialog({
@@ -288,7 +288,7 @@ export default function GestionUsuarios() {
 
   /* FORM
    * ==== */
-  
+
   return (
     <>
       <ContentHeader
@@ -323,14 +323,14 @@ export default function GestionUsuarios() {
                 </InputAdornment>
               )
             }}
-            sx={{ width: .75}}
+            sx={{ width: .75 }}
             onChange={handleSearch}
             type="search"
           />
           <Controls.AddButton
             title="Nuevo Usuario"
             variant="iconoTexto"
-            onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+            onClick={() => { setOpenPopup(true); setRecordForEdit(null) }}
           />
           {/* </Toolbar> */}
         </div>
@@ -344,7 +344,7 @@ export default function GestionUsuarios() {
                 recordsAfterPagingAndSorting().map(item => (
                   <StyledTableRow key={item.id}>
                     <StyledTableCell>
-                    {item.nombre.toUpperCase()} {item.apellidoPaterno.toUpperCase()} {item.apellidoMaterno.toUpperCase()}
+                      {item.nombre ? item.nombre.toUpperCase() : ""} {item.apellidoPaterno ? item.apellidoPaterno.toUpperCase() : ""} {item.apellidoMaterno ? item.apellidoMaterno.toUpperCase() : ""}
                     </StyledTableCell>
                     <StyledTableCell>{item.documento}</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
@@ -354,22 +354,22 @@ export default function GestionUsuarios() {
                     <StyledTableCell>
                       <Controls.ActionButton
                         color="warning"
-                        onClick={ () => {openInPopup(item)}}
+                        onClick={() => { openInPopup(item) }}
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </Controls.ActionButton>
                       <IconButton aria-label="delete">
                         <DeleteIcon
-                        color="warning"
-                        onClick={() => {
-                          // onDelete(item.id)
-                          setConfirmDialog({
-                            isOpen: true,
-                            title: '¿Eliminar usuario permanentemente?',
-                            subTitle: 'No es posible deshacer esta accion',
-                            onConfirm: () => {onDelete(item.idPersona,item.id)}
-                          })
-                        }}/>
+                          color="warning"
+                          onClick={() => {
+                            // onDelete(item.id)
+                            setConfirmDialog({
+                              isOpen: true,
+                              title: '¿Eliminar usuario permanentemente?',
+                              subTitle: 'No es posible deshacer esta accion',
+                              onConfirm: () => { onDelete(item.idPersona, item.id) }
+                            })
+                          }} />
                       </IconButton>
                     </StyledTableCell>
                   </StyledTableRow>
@@ -383,7 +383,7 @@ export default function GestionUsuarios() {
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        title={recordForEdit ? "Editar Usuario": "Registrar Usuario"}
+        title={recordForEdit ? "Editar Usuario" : "Registrar Usuario"}
       >
         {/* <EmployeeForm /> */}
         <GestionUsuariosForm

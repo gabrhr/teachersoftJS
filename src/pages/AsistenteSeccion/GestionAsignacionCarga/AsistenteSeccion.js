@@ -61,30 +61,32 @@ export default function AsistenteSeccion() {
     }*/
     function transformarHorarios (request){
         const recordsX = []
-        request.map(hor => {
-            recordsX.push({
-                "Clave": hor.curso.codigo,
-                "Nombre": hor.curso.nombre,
-                "Unidad": hor.curso.seccion.departamento.unidad.nombre,
-                "Creditos": hor.curso.creditos,
-                "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                "Horario": hor.codigo,
-                "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                "Horas": hor.sesiones[0].horas
-            })
-            if(hor.sesiones[1]){
-                recordsX.push({
-                    "Clave": hor.curso.codigo,
-                    "Nombre": hor.curso.nombre,
-                    "Unidad": hor.curso.seccion.departamento.unidad.nombre,
-                    "Creditos": hor.curso.creditos,
-                    "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                    "Horario": hor.codigo,
-                    "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
-                    "Horas": hor.sesiones[1].horas
-                })
-            }
-        })
+        if(request){
+          request.map(hor => {
+              recordsX.push({
+                  "Clave": hor.curso.codigo,
+                  "Nombre": hor.curso.nombre,
+                  "Unidad": hor.curso.seccion.departamento.unidad.nombre,
+                  "Creditos": hor.curso.creditos,
+                  "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                  "Horario": hor.codigo,
+                  "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
+                  "Horas": hor.sesiones[0].horas
+              })
+              if(hor.sesiones[1]){
+                  recordsX.push({
+                      "Clave": hor.curso.codigo,
+                      "Nombre": hor.curso.nombre,
+                      "Unidad": hor.curso.seccion.departamento.unidad.nombre,
+                      "Creditos": hor.curso.creditos,
+                      "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                      "Horario": hor.codigo,
+                      "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
+                      "Horas": hor.sesiones[1].horas
+                  })
+              }
+          })
+        }
         return recordsX;
     }
 

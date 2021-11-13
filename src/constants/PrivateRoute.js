@@ -14,6 +14,7 @@ export default function PrivateRoute(props) {
     
     const history=useHistory();
     let rol = JSON.parse(localStorage.getItem("rol"))
+    /* que hace `permiso`? */
     let permiso=0
     console.log(rol)  
     /*   if(rol){
@@ -22,12 +23,12 @@ export default function PrivateRoute(props) {
     */
     if(requireRoles.includes(rol)){
         permiso=1
-        console.log(permiso)
+        // console.log(permiso)
     }
     if(rol==null){
         permiso=2
     }
-    console.log(permiso)
+    // console.log(permiso)
 
     return (
         <Route
@@ -57,7 +58,7 @@ export default function PrivateRoute(props) {
                   return <Component {...props} />;   
               default:
                   return (
-                    <Redirect to={{pathname: "/"}}/>
+                    <Redirect to={{pathname: "/login"}}/>
                   );
             }
         }}  />
