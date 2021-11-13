@@ -42,6 +42,8 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
+//import NoAsignado from './NoAsignado'
+import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 /* Todos menos el login que es especial porque settea al usuario */
@@ -62,43 +64,43 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [0,1,8], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
   /* AS */
-  { requireRoles: [0,2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [0,2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [0,2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [0,2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
-  { requireRoles: [0,2, 8], path: "/as/docentes", page: DocentesForm },
-  { requireRoles: [0,2, 8], path: "/as/cursos", page: CursosForm  },
-  { requireRoles: [0,2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [0,2], path: "/as/mesaPartes/misDelegados", page: Vacio },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
+  { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
+  { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
+  { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
+  { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
   /* CS*/
-  { requireRoles: [0,3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [0,3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },
-  { requireRoles: [0,3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [0,3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
-  { requireRoles: [0,3], path: "/cord/solicitudDocencia", page: Vacio },
-  { requireRoles: [0,3], path: "/cord/docentes", page: Vacio },
-  { requireRoles: [0,3], path: "/cord/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [0,3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
+  { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
+  { requireRoles: [3], path: "/cord/docentes", page: Vacio },
+  { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: Vacio },
+  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
 
   /* AD */
-  
-  { requireRoles: [0,4], path: "/ad/asignacionCarga", page: Vacio },
-  { requireRoles: [0,4], path: "/ad/docentes", page: Vacio },
-  { requireRoles: [0,4], path: "/ad/panelIndicadores", page: Vacio },
-  { requireRoles: [0,4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [0,4], path: "/ad/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [0, 1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
+  { requireRoles: [0, 1, 2, 4, 8], path: "/ad/asignacionCarga", page: CargaDocenteCursos },
+  { requireRoles: [4], path: "/ad/docentes", page: Vacio },
+  { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
+  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
+  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: Vacio },  
   /* JD */
-  { requireRoles: [0,5], path: "/jd/asignacionCarga", page: Vacio },
-  { requireRoles: [0,5], path: "/jd/docentes", page: Vacio },
-  { requireRoles: [0,5], path: "/jd/panelIndicadores", page: Vacio },
-  { requireRoles: [0,5], path: "/jd/mesaPartes/misSolicitudes", page: MisSolicitudes },
-  { requireRoles: [0,5], path: "/jd/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
-  { requireRoles: [0,5], path: "/jd/mesaPartes/solicitudDetalle", page: DelegadoSolicitudDetalle },  
+  { requireRoles: [5], path: "/jd/asignacionCarga", page: Vacio },
+  { requireRoles: [5], path: "/jd/docentes", page: Vacio },
+  { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
+  { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [5], path: "/jd/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
+  { requireRoles: [5], path: "/jd/mesaPartes/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   /* Secretario de D */
-  { requireRoles: [0,6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: RecepcionSolicitud },
-  { requireRoles: [0,6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
-  { requireRoles: [0,6], path: "/secretaria/mantenimiento/temaTramite", page: GestionTemaTramite },  
+  { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: RecepcionSolicitud },
+  { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
+  { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: GestionTemaTramite },  
   /* Externo */
   /* rol sin asignar */
 ]

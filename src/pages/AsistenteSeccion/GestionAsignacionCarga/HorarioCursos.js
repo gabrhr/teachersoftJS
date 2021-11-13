@@ -96,16 +96,19 @@ const fillHorarios = async () => {
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
       "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-      ciclo:{
-        "id": hor.ciclo.id,
-      },
-      curso:{
-        "id": hor.curso.id,
-        "codigo": hor.curso.codigo,
-        "nombre": hor.curso.nombre,
-        "creditos": hor.curso.creditos,
-        "unidad": hor.curso.unidad,
-        "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
+      "curso_ciclo":{
+        "id": hor.curso_ciclo.id,
+        ciclo:{
+          "id": hor.curso_ciclo.ciclo.id,
+        },
+        curso:{
+          "id": hor.curso_ciclo.curso.id,
+          "codigo": hor.curso_ciclo.curso.codigo,
+          "nombre": hor.curso_ciclo.curso.nombre,
+          "creditos": hor.curso_ciclo.curso.creditos,
+          "unidad": hor.curso_ciclo.curso.unidad,
+          "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
+        },
       },
       sesiones:{
         "secuencia": hor.sesiones[0].secuencia,
@@ -122,16 +125,19 @@ const fillHorarios = async () => {
         "codigo": hor.codigo,
         "tipo": hor.sesiones[0].secuencia,
         "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-        ciclo:{
-          "id": hor.ciclo.id,
-        },
-        curso:{
-          "id": hor.curso.id,
-          "codigo": hor.curso.codigo,
-          "nombre": hor.curso.nombre,
-          "creditos": hor.curso.creditos,
-          "unidad": hor.curso.unidad,
-          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-'
+        "curso_ciclo":{
+          "id": hor.curso_ciclo.id,
+          ciclo:{
+            "id": hor.curso_ciclo.ciclo.id,
+          },
+          curso:{
+            "id": hor.curso_ciclo.curso.id,
+            "codigo": hor.curso_ciclo.curso.codigo,
+            "nombre": hor.curso_ciclo.curso.nombre,
+            "creditos": hor.curso_ciclo.curso.creditos,
+            "unidad": hor.curso_ciclo.curso.unidad,
+            "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
+          },
         },
         sesiones:{
           "secuencia": hor.sesiones[1].secuencia,
@@ -290,10 +296,10 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                             >
                             {item.clave}
                             </TableCell>*/}
-                            <TableCell>{item.curso.codigo}</TableCell>
+                            <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
                             <TableCell>{item.horas_semanales}</TableCell>
-                            <TableCell>{item.curso.facultad}</TableCell>
-                            <TableCell>{item.curso.nombre}</TableCell>
+                            <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
+                            <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
                             <TableCell>{item.codigo}</TableCell>
                             <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
                             <TableCell>{item.sesiones.hora_sesion}</TableCell>
@@ -328,7 +334,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
-                title="Eliminar horario"
+                title={`Eliminar horario`}
             >
               <EliminarUnCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
