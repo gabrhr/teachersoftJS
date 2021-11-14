@@ -67,7 +67,6 @@ export default function ListaDocentes() {
     } = useTable(records, tableHeaders, filterFn);
     
     useEffect(() => {
-        //Obtenemos las secciones
         getProfesores()
       }, [openPopupEdit, openDelOnePopup, openPopupAdd])
 
