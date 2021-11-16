@@ -90,6 +90,11 @@ function Item(props){
         }
     }
 
+    function getResultado(r){
+        return (
+            r==1? "Aceptado": "Rechazado"
+        )
+    }
     return(
         <>
         <Grid container >
@@ -114,12 +119,12 @@ function Item(props){
                 </Typography>
                 <Typography variant="body1" style={{color:"primary.light"}}>
                     {estado==2? "de Mesa de Partes":
-                        estado==3? "a " + item.contenido: 
+                        estado==3 && completado? "a " + item.contenido: 
                         ""
                     }
                 </Typography>
                 <Typography variant="body2" >
-                    {item.fecha}
+                    {estado==5? getResultado(item.fecha) : item.fecha} 
                 </Typography>
             </Grid>
         </Grid>
