@@ -108,7 +108,6 @@ export default function GestionTemaTramite() {
     const [changeData, setChangeData] = useState(false);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openPopup, setOpenPopup] = useState(false)
-    const [openTipo, setOpenTipo] = useState(false)
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
@@ -227,14 +226,15 @@ export default function GestionTemaTramite() {
 
 
 
-    const onView = (id_tramite,nombre) => {
+    const onView = (id_tramite) => {
         selectedID = id_tramite;
         localStorage.setItem("id_tramite", id_tramite);
-        localStorage.setItem("nomb_tramite", nombre);
         console.log( 'Padre:  ' + id_tramite);
         setDetail(true);
-        setOpenTipo(true);
-
+        //this.forceUpdate();
+          //tematramiteService.deleteTemaTramite(id_tramite);
+        
+   
     }
 
     /*Styles*/ 
@@ -318,8 +318,9 @@ export default function GestionTemaTramite() {
                       <IconButton aria-label="view">
                         <ViewHeadlineIcon
                         color="warning"
-                        onClick={() => { onView(item.id, item.nombre)}}
-                      />
+                        onClick={() => {
+                          onView(item.id)
+                        }}/>
                       </IconButton>
                     </StyledTableCell>
                   </StyledTableRow>
@@ -329,6 +330,15 @@ export default function GestionTemaTramite() {
           </TblContainer>
           <TblPagination />
         </BoxTbl>
+        </Grid>
+        <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+        <Grid item xs={3.5} md={3.5} mb={4}>
+            <Typography variant="h4" style={SubtitulosTable} >
+                    Detalles del Tema de Trámite
+            </Typography>
+            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
+            <GestionTipoTramite idTramite={selectedID} detail = {detail} setDetail = {setDetail}/>
+ 
         </Grid>
       </Grid>
       </Paper>
@@ -343,14 +353,6 @@ export default function GestionTemaTramite() {
           addOrEdit={addOrEdit}
           setOpenPopup={setOpenPopup}
         />
-      </Popup>
-      <Popup
-        openPopup={openTipo}
-        setOpenPopup={setOpenTipo}
-        title={"Tipo de Trámite"}
-      >
-        {/* <EmployeeForm /> */}
-        <GestionTipoTramite idTramite={selectedID} detail = {detail} setDetail = {setDetail}/>
       </Popup>
       <Notification
         notify={notify}

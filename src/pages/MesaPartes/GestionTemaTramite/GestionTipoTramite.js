@@ -43,13 +43,7 @@ const tableHeaders = [
         label: 'Tipo de Trámite',
         numeric: false,
         sortable: true
-    },
-    {
-      id: 'actions',
-      label: 'Acciones',
-      numeric: false,
-      sortable: true
-  }
+    }
 ]
 
 const getTipoTramite = async (id_tema) => {
@@ -226,8 +220,7 @@ const getTipoTramite = async (id_tema) => {
     return(
         <>
          <Paper variant="outlined" sx={PaperStyle}>
-            <DT.Title size="medium" text={(localStorage.getItem("nomb_tramite"))} />
-            
+            Tema del Trámite: {tematramiteService.getTemaTramite(idTramite).nombre}
             <Controls.AddButton
               title="Nuevo Tipo de Trámite"
               variant="iconoTexto"
@@ -246,7 +239,7 @@ const getTipoTramite = async (id_tema) => {
                     <StyledTableRow key={item.id}>
                         {console.log(item)}
                       <StyledTableCell>{item.nombre}</StyledTableCell>
-                      <StyledTableCell sx={{maxWidth:"100px"}}>
+                      <StyledTableCell>
                         <Controls.ActionButton
                           color="warning"
                           onClick={ () => {openInPopup(item)}}
