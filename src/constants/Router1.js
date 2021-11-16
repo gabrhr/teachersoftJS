@@ -46,6 +46,7 @@ import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
+import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
