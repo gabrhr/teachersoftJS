@@ -8,6 +8,7 @@ import { Grid, IconButton, Typography, Box } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 // import CargaArchivos from './CargaArchivos';
+import FileUpload1 from '../../components/MesaPartes/FileUpload1'
 
 // services 
 import * as MesaPartesService from '../../services/mesaPartesService';
@@ -176,17 +177,10 @@ function ActualForm(props) {
                 maxRows={12}
             />
             {/* ARCHIVOS */}
-            {/* <CargaArchivos /> */}
+            <FileUpload1 />
 
             {/* botones */}
             <Box display="flex" justifyContent="flex-end">
-                {/* YA NO VA */}
-                {/* <Controls.Button
-                    variant="disabled"
-                    text="Cancelar"
-                    onClick={regresa}
-                    endIcon={<CancelOutlinedIcon />}
-                /> */}
                 <Controls.Button
                     text="Enviar"
                     type="submit"
