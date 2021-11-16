@@ -11,6 +11,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ModalDocenteClasesAsignados from "./ModalDocenteClasesAsignados";
 import ModalDocenteClasesBusqueda from "./ModalDocenteClasesBusqueda"
 import HorarioService from '../../../services/horarioService';
+import CursoService from '../../../services/cursoService';
 import PersonaService from '../../../services/personaService';
 
 const fillDocentes = async() => {
@@ -24,10 +25,9 @@ const fillDocentes = async() => {
     return [];
   }
   for(let doc of dataDoc){
-    if(!doc.tipo_docente)
-      continue; //Se esquiva al docente - no se enlista porque no está asignado como tal.
+    if(doc.tipo_docente)
+      docentes.push( doc ); //Se esquiva al docente - no se enlista porque no está asignado como tal.
   }
-    docentes = dataDoc;
   
   console.log(docentes);
   return docentes
@@ -67,7 +67,7 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
       }
 
       let sesionesActual;
-
+      console.log(horario);
       //Ingresamos las sesiones - dependiendo del tiipo de secuencia
       if(tipo){ //Es 1 - laboratorio
         sesionesActual = [{
@@ -107,13 +107,13 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
         }
       }
 
+      //const ciclo = await CursoService.getCursoCicloxCicloxCodigoNombre
       const horUpdate ={
         "id": horario.id,
         "codigo": horario.codigo,
-        "ciclo": {
-          "id": parseInt(horario.ciclo.id),
+        "curso_ciclo": {
+          "id": horario.curso_ciclo,
         },
-        "curso": horario.curso,
         "sesiones": sesionesActual
       }
 

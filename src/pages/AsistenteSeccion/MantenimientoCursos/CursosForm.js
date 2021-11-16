@@ -8,12 +8,15 @@ import { Controls } from '../../../components/controls/Controls'
 import ListaCursos from './ListaCursos'
 import Popup from '../../../components/util/Popup'
 import ModalCursos from './ModalCursos';
+import ModalAsignarCursosCiclo from './ModalAsignarCursosCiclo';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import { getHorarios, registerHorario, updateHorario, deleteHorario } from '../../../services/horarioService';
 import { formatHorario, formatHorarioCursos } from '../../../components/auxFunctions';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Link } from '@mui/material';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion) {
@@ -29,6 +32,7 @@ export default function CursosForm() {
     const [count, setCount] = useState(0);
 */
     const [openPopup, setOpenPopup] = useState(false)
+    const [openAsignarPopup, setOpenAsignarPopup] = useState(false)
 
     /*Bota tu ga nomás*/
     
@@ -74,21 +78,27 @@ export default function CursosForm() {
                 text="Administración de Cursos"
                 cbo= {false}
             />
-            <Grid container spacing={2} maxWidth={1}>
-                <Grid item xs>
+            <Grid container spacing={0} maxWidth={1}>
+                {/*<Grid item xs>
                     <Typography variant="body1"> Puedes&nbsp;
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
                         </Link>
                         &nbsp;para subir los cursos.
                     </Typography>
-                </Grid>
-                <Grid item xs={3} align="right" m={1}>
+                </Grid>*/}
+                <Grid item xs={12} align="right" m={1}>
                     <Controls.Button
                         text="Importar"
                         size="large"
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
+                    />
+                    <Controls.Button
+                        text="Asignar"
+                        size="large"
+                        endIcon={<CompareArrowsIcon/>}
+                        onClick = {() => setOpenAsignarPopup(true)}
                     />
                     {/* <Controls.Button
                         text="Exportar"
@@ -114,6 +124,13 @@ export default function CursosForm() {
               
                < ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
+            </Popup>  
+            <Popup
+                openPopup={openAsignarPopup}
+                setOpenPopup={setOpenAsignarPopup}
+                title="Carga Masiva de Cursos y Horarios"
+            >
+               < ModalAsignarCursosCiclo setOPP={setOpenAsignarPopup}/>
             </Popup>  
         </>
     )

@@ -18,7 +18,6 @@ import ProtectedRoute from './RouterProtected';
 import Vacio from '../Dev/Vacio'
 import { Assistant } from '@mui/icons-material';
 import GestionUsuarios from '../Administrador/GestionUsuarios/GestionUsuarios';
-import CargaDocenteHorarios from '../AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import DeudaYDescarga from '../AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
 import GestionTemaTramite from '../MesaPartes/GestionTemaTramite/GestionTemaTramite'
 

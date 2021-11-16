@@ -42,8 +42,11 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
+//import NoAsignado from './NoAsignado'
+import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
+import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -61,6 +64,10 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [0,1,8], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [0,1,8], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
+  
+  // PRUEBA DRAG DROP MULTIPLE FILES //
+  { requireRoles: [0,8], path: "/dragdrop", page: DragDropArchivos},
+  
   /* AS */
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
@@ -82,8 +89,8 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
 
   /* AD */
-  
-  { requireRoles: [4], path: "/ad/asignacionCarga", page: Vacio },
+  { requireRoles: [0, 1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
+  { requireRoles: [0, 1, 2, 4, 8], path: "/ad/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [4], path: "/ad/docentes", page: Vacio },
   { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
   { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
