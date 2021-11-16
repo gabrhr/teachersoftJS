@@ -34,6 +34,7 @@ import { UserContext } from '../../constants/UserContext'
 import * as UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
+import fileService from '../../services/fileService'
 
 
 const tableHeaders = [
@@ -246,7 +247,7 @@ export default function DashboardSoli(props) {
       solicitud.solicitadorID = user.persona.id     // required
 
       MesaPartesService.registerSolicitud(solicitud)
-        .then((id) => {
+        .then((solicitudID) => {
           /* success */
           /* cerrar popup */
           resetForm()
@@ -258,9 +259,15 @@ export default function DashboardSoli(props) {
               type: 'success'
           })
           getSolicitudes(setRecords, user)
-
+          
+          console.log('Solicitud', solicitud.archivos)
           /* insertar archivos relacionados */
-          // window.alert(`Se inserto la soli con id=${id}`)
+          for (var i = 0; i < solicitud.archivos.length; i++) {
+            solicitud.archivos[i].solicitud = { id: solicitudID }
+            fileService.registerArchivo(solicitud.archivos[i]);
+          }
+          // console.log(solicitud)
+          window.alert(`Se inserto la soli con id=${solicitudID}`)
         })
         .catch(err => {
           /* error :( */

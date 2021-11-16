@@ -1,3 +1,7 @@
+/* Author: Sergio
+ * 
+ * (copia de una funcion de archivoService.js del Gato)
+ */
 import axios from 'axios'
 import url from '../config'
 import tokenService from './tokens.js';
