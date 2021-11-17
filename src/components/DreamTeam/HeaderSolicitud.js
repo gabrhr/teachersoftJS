@@ -10,13 +10,18 @@ export default function HeaderSolicitud(props) {
                     solicitud.solicitador.foto_URL: solicitud.delegado.foto_URL }/>
             </Grid>
             <Grid item sx={{mt:"9px"}}>
-                <Typography variant="h4">
-                    {solicitador==false? "Atendido por: \xa0" + `${solicitud.delegado.fullName}`:
-                        "Enviado por:\xa0" + `${solicitud.solicitador.fullName}`}
+                <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                    {solicitador==false? "Atendido por: \xa0": "Enviado por:\xa0"}
                 </Typography>
-                <Typography variant="body1">
-                    {solicitador==false? "Para: \xa0" + `${solicitud.solicitador.fullName}`:
-                        "Para: Mesa de Partes"}
+                <Typography variant="h4"   display="inline">
+                    {solicitador==false? `${solicitud.delegado.fullName}`: `${solicitud.solicitador.fullName}`}
+                </Typography>
+                <div/>
+                <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                    {"Para: \xa0"}
+                </Typography>
+                <Typography variant="body1"  display="inline">
+                    {solicitador==false? `${solicitud.solicitador.fullName}`: "Mesa de Partes"}
                 </Typography>
             </Grid>
         </Grid>

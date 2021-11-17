@@ -333,7 +333,7 @@ export default function DashboardSoli(props) {
           <div style={{ width: "700px", marginRight: "50px" }}>
             <Controls.Select
               name="temaTramiteID"
-              label="Tema de Tramite"
+              label="Tema de Trámite"
               value={values.temaTramiteID}
               onChange={handleSearchTemas}
               options={[{id: 0, nombre: "Todos los temas"}]
@@ -368,6 +368,7 @@ export default function DashboardSoli(props) {
           TblContainer={TblContainer}
           recordsAfterPagingAndSorting={recordsAfterPagingAndSorting}
           TblPagination={TblPagination}
+          delegado={delegado}
         />
         {/* "MODALS" */}
         {/* Agregar nueva solicitud */}

@@ -4,10 +4,13 @@ import { Controls } from '../../components/controls/Controls'
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell,InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { DT } from '../../components/DreamTeam/DT';
+import { Link } from 'react-router-dom';
+import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es');
 // import moment from 'moment'
 
 /*ICONS*/
-import { Link } from 'react-router-dom';
 
 function crearEstado(estado, titulo, contenido,fecha, completado) {
     return {
@@ -22,15 +25,9 @@ function estadoCompletado(fecha){
 }
 function formatoFecha(fecha){
     if(fecha!=null){
-        return ("Fecha: "
-                +fecha.slice(8,10) +'/'
-                +fecha.slice(5,7) +'/'
-                +fecha.slice(0,4)
-                +"- Hora: "
-                +fecha.slice(11,19)
-        )
+        return (moment.utc(fecha).format('[Fecha] DD MMM YYYY [- Hora: ] h:mm a'))
     }
-    return ('Fecha: \xa0--/--/--'+'\xa0\xa0\xa0\xa0' + 'Hora: \xa0--:--')
+    return (" ")
 }
 
 function estadosTrackingInit(solicitud){
@@ -45,7 +42,7 @@ function estadosTrackingInit(solicitud){
         crearEstado(2, 'En revisión',"", formatoFecha(fecha2), estadoCompletado(fecha2)),
         crearEstado(3, 'Delegado',`${delegado}`,formatoFecha(fecha3), estadoCompletado(fecha3)),
         crearEstado(4, 'Atendido',"" ,formatoFecha(fecha4), estadoCompletado(fecha4)),
-        crearEstado(5, 'Resultado',"",fecha4==null?"-":`${resultado}`, true),
+        crearEstado(5, 'Resultado',"",fecha4==null?" ":`${resultado}`, true),
     ]
 } 
 export default function DetalleSoliOrganism(props) {
@@ -56,7 +53,7 @@ export default function DetalleSoliOrganism(props) {
     const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit(solicitud))
     return (
         <>
-         <Grid container spacing={2}>
+         <Grid container spacing={2} ml={".3px"}>
             <Grid item xs={4} md={7.4}>
                 <Box>
                     <DT.Title size="medium" text={'Trámite: ' + `${solicitud.temaTramite}`+' - '+ `${solicitud.tipoTramite}`} />
@@ -64,7 +61,7 @@ export default function DetalleSoliOrganism(props) {
                         Sección: {solicitud.seccion} 
                     </Typography>
                 </Box>
-                <Divider  flexItem/>
+                <Divider  flexItem />
                 <DT.HeaderSolicitud solicitud={solicitud} solicitador={true}/>
                 <Box ml="75px">
                     <Controls.DreamTitle
@@ -110,8 +107,7 @@ export default function DetalleSoliOrganism(props) {
                 <DT.Tracking estadosTracking={estadosTracking}/>
             </Grid>
         </Grid>
-        <Grid item xl={6} md={6} sm={12} xs={12}>
-            
+        <Grid item xl={6} md={6} sm={12} xs={12}>    
         </Grid>
  
          </>

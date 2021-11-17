@@ -15,6 +15,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box } from '@mui/system';
 import { DT } from '../../components/DreamTeam/DT';
 import ResultadoSolicitud from './ResultadoSolicitud';
+import AtenderSolicitudForm from './AtenderSolicitudForm';
+import Popup from '../../components/util/Popup';
+import DelegarForm from './DelegarForm';
 
 
 
@@ -22,6 +25,8 @@ export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
     const {solicitud}=location.state
     const { rol} = useContext(UserContext);
+    const [atender, setAtender]= React.useState(false)
+    const [openPopup, setOpenPopup]= React.useState(false)
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
     function retornar(){
         window.history.back();
@@ -58,11 +63,15 @@ export default function RecepcionDetalleSolicitud() {
                     - Secretaria de Sección(rol=6) -> Boton Atender y Delegar
                     - Usuarios Delegado (rol!=6) -> Boton Atender
                 */}
-                <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
-                    <Stack mt={2} mb={2}>
+
+                { atender? 
+                    <AtenderSolicitudForm setAtender={setAtender}/>:
+                    <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
+                        <Stack mt={2} mb={2}>
                             <Controls.Button
                                 text="Atender"
                                 type="submit"   // html property (not component)
+                                onClick={() => {setAtender(true)}}
                             />
                             <Typography variant="body1" textAlign="center">
                                 o
@@ -70,14 +79,23 @@ export default function RecepcionDetalleSolicitud() {
                             <Controls.Button
                                 text="Delegar"
                                 type="submit"   // html property (not component)
+                                onClick={() => {setOpenPopup(true)}}
                             />
-                    </Stack>
-                </Box>
+                        </Stack>
+                    </Box>
+                }
                 {/* Respuesta */}
                 { solicitud.resultado==0? <> </>:
                     <ResultadoSolicitud solicitud={solicitud}/>
                 }
             </Paper>
+            <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                title={"Seleccionar Destinatario"}
+            >
+               <DelegarForm/>
+            </Popup>
         </>
     )
 }

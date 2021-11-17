@@ -6,6 +6,7 @@
  * "/doc/misSolicitudes"
  */
 import React, { useState } from 'react'
+import { UserContext } from '../../constants/UserContext'
 import * as MesaPartesService from '../../services/mesaPartesService'
 //Iconos Mesa de Partes
 import DashboardSoli from './DashboardSoli'
@@ -44,7 +45,7 @@ function getSolicitudes(setRecords, departamentoID) {
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
-
+    const {user, rol} = React.useContext(UserContext);
     React.useEffect(() => {
         /* se deberia mandar user.departamento.id */
         getSolicitudes(setRecords, 3)
@@ -54,7 +55,7 @@ export default function MisSolicitudes() {
         <DashboardSoli title={"Solicitudes Generales a Mesa de Partes"} 
             delegado={true} 
             records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
-            // user={user}    /* FIXME */
+            user={user}    /* FIXME */
         />
     )
 }
