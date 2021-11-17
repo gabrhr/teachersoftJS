@@ -21,6 +21,28 @@ function getBase64(file) {
     })
 }
 
+async function setArchivoSinID(archivo, values, setValues){
+    var arr = archivo.name.split(".")
+    var fileObject = {
+        nombre: arr[0],
+        extension: arr[1],
+        contenido_b64: await getBase64(archivo)
+    }
+    values.archivos.push(fileObject);
+    setValues(values);
+}
+
+async function unsetArchivoSinID(archivo, values, setValues){
+    var index = (values.archivos).map(function(e) { return e.nombre; }).indexOf((archivo.name.split("."))[0]);
+    console.log(index);
+    values.archivos.splice(index, 1);
+    setValues(values)
+}
+
+/* A fin de utilizar solo un boton en el modal principal se omite el Submit de react-dropzone-upload
+    y se debe crear una funcion que haga set a cada archivo apenas se dropee o seleccione
+    (handleChangeStatus)
+    EN DESUSO*/
 async function setArchivosSinID(files, values, setValues) {
     var arrNombre = [], arrExtension = [];
     for (var i = 0; i < files.length; i++) {
@@ -63,6 +85,14 @@ export default function DragDropArchivos(props) {
 
     const handleChangeStatus = ({ meta, file }, status) => {
         /* Notificacion si extension o tamaño incorrecto */
+        if(status=="done"){
+            setArchivoSinID(file, values, setValues);
+            console.log(values.archivos)
+        }
+        if(status=="removed"){
+            unsetArchivoSinID(file, values, setValues);
+            console.log(values.archivos)
+        }
     }
 
     const handleSubmit = (files, allFiles) => {
@@ -112,8 +142,8 @@ export default function DragDropArchivos(props) {
         <Dropzone
             getUploadParams={getUploadParams}
             onChangeStatus={handleChangeStatus}
-            submitButtonContent={"Subir archivos"}
-            onSubmit={handleSubmit}
+            // submitButtonContent={"Subir archivos"}
+            // onSubmit={handleSubmit}
             InputComponent={InputChooseFile}
             getFilesFromEvent={getFilesFromEvent}
             classNames
