@@ -79,7 +79,11 @@ export default function DetalleSoliOrganism(props) {
                     defaultValue={`${solicitud.descripcion}`}
                     sx={{
                         pl:"78px",
-                        mb:"20px"
+                        mb:"20px",
+            
+                        ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
+                            WebkitTextFillColor:"black"
+                        }
                     }}
                 />
                 <Grid item xs={0.3} md={0.3}/>
