@@ -60,7 +60,7 @@ export default function ResultadoSolicitud(props) {
                     fullWidth
                     multiline
                     rows={5}
-                    defaultValue={solicitud.observacion}
+                    value={solicitud.observacion}
                     disabled
                     sx={{
                         ml:"75px",

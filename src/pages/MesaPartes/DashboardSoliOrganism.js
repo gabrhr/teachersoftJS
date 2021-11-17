@@ -98,7 +98,7 @@ export default function DashboardSoliOrganism(props) {
                                         <Link to ={{
                                             pathname:getTipoDetalle(item,user,rol),
                                             state:{
-                                                solicitud: item
+                                                solicitudinit: item
                                             }
                                         }}  style={{ textDecoration: 'none' }}>
                                         <Controls.Button

@@ -19,9 +19,7 @@ function crearEstado(estado, titulo, contenido,fecha, completado) {
 }
 
 function estadoCompletado(fecha){
-    if(fecha==null) 
-        return false
-    return true
+    return fecha !== null
 }
 function formatoFecha(fecha){
     if(fecha!=null){
@@ -51,6 +49,11 @@ export default function DetalleSoliOrganism(props) {
     const SubtitulosTable = { display: "flex" }
     
     const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit(solicitud))
+
+    React.useEffect(() => {
+        setEstadosTracking(estadosTrackingInit(solicitud))
+    }, [solicitud])
+
     return (
         <>
          <Grid container spacing={2} ml={".3px"}>
@@ -80,7 +83,7 @@ export default function DetalleSoliOrganism(props) {
                     sx={{
                         pl:"78px",
                         mb:"20px",
-            
+                        /* magia negra de gabs */
                         ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
                             WebkitTextFillColor:"black"
                         }

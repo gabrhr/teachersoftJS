@@ -23,11 +23,10 @@ import Notification from '../../components/util/Notification'
 // services
 import * as MesaPartesService from '../../services/mesaPartesService'
 
-
-
-export default function RecepcionDetalleSolicitud() {
+export default function RecepcionDetalleSolicitudFuncion() {
     const location= useLocation()
-    const {solicitud}=location.state
+    const {solicitudinit} = location.state
+    const [solicitud, setSolicitud] = React.useState(solicitudinit)         // <---- NO SIRVE
     const {user} = useContext(UserContext);
     const [atender, setAtender]= React.useState(false)
     const [openPopup, setOpenPopup]= React.useState(false)
@@ -47,39 +46,79 @@ export default function RecepcionDetalleSolicitud() {
         window.history.back();
     }
 
-    function submitAtencion(atencion) {
-        /* respuesta de la solicitud por Secretario Departamento */
-        // solicitud.delegado.id = user.persona.id
-        solicitud.delegadoID = user.persona.id
-        solicitud.delegado = {
-            fullName: user.persona.nombres + " " + user.persona.apellidos,
-            foto_URL: user.persona.foto_URL
+    React.useEffect(() => {
+        window.alert('Se modifico `solicitud` revisar consola')
+        console.log(solicitud)
+        if (solicitud.estado === '1') {
+            /* secretario entra a la solicitud detalle (cabios listos) */
+            window.alert('estado actualizado a "En revision')
+            MesaPartesService.updateSolicitud(solicitud)
+                .catch(err => {console.error(err)})
+        } else if (solicitud.estado === '3') {
+            /* secreatrio responde en lugar del delegado */
+            window.alert('estado actualizado a "Atendido"')
+            console.log("submitAtencion", solicitud)
+            MesaPartesService.updateSolicitud(solicitud)
+                .then(id => {
+                    // window.alert(`Se actualizo la solicitud con id=${id}`)
+                    setNotify({
+                        isOpen: true,
+                        message: 'Registro de atencion exitoso',
+                        type: 'success'
+                    })
+                    setAtender(false)
+                })
+                .catch(err => {
+                    /* error :( */
+                    console.error(err)
+                    console.log("Error: submitAtencion:", 
+                        MesaPartesService.f2bSolicitud(solicitud))
+                    setNotify({
+                        isOpen: true,
+                        message: 'Estamos teniendo problemas de conexión.  Consulte a un administrador.',
+                        type: 'error'
+                    })
+                })
         }
-        solicitud.observacion = atencion.observacion
-        solicitud.resultado = atencion.resultadoID
-        solicitud.tracking.fecha_delegado = new Date().toJSON()
-        console.log("submitAtencion", solicitud)
-        MesaPartesService.updateSolicitud(solicitud)
-            .then(id => {
-                window.alert(`Se actualizo la solicitud con id=${id}`)
-                setNotify({
-                    isOpen: true,
-                    message: 'Registro de atencion exitoso',
-                    type: 'success'
-                })
-                setAtender(false)
-            })
-            .catch(err => {
-                /* error :( */
-                console.error(err)
-                console.log("Error: submitAtencion:", 
-                    MesaPartesService.f2bSolicitud(solicitud))
-                setNotify({
-                    isOpen: true,
-                    message: 'Estamos teniendo problemas de conexión.  Consulte a un administrador.',
-                    type: 'error'
-                })
-            })
+    }, [solicitud])
+
+    /* Secretario entra a la solicitud detalle */
+    React.useEffect(() => {
+        /* set estado "En revision" (estado=1) */
+        if (solicitud.estado === '0') {
+            setSolicitud(solicitud => ({
+                ...solicitud,
+                estado: '1',
+                tracking: {
+                    ...solicitud.tracking,
+                    fecha_revision: new Date().toJSON()
+                }
+            }))
+        }
+        // console.log('hola', solicitud)
+    }, [])
+
+    /* secreatrio responde en lugar del delegado */
+    function submitAtencion(atencion) {
+        /* FIXME:  Respuesta de la solicitud Observacion no se actualiza luego de
+         *         hacer submit aqui.  Tiene que salir y volver a entrar a
+         *         RecepcionDetalleSolicitud */
+        setSolicitud(solicitud => ({
+            ...solicitud, 
+            /* data faltante de la respuesta de soli por Secretario Dpto. */
+            delegadoID: user.persona.id,
+            delgado: {
+                fullName: user.persona.nombres + " " + user.persona.apellidos,
+                foto_URL: user.persona.foto_URL,
+            },
+            estado: '3',
+            tracking: {
+                ...solicitud.tracking,
+                fecha_atendido: new Date().toJSON()
+            },
+            observacion: atencion.observacion,
+            resultado: atencion.resultadoID,
+        }))
     }
 
     return (
