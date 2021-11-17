@@ -18,19 +18,70 @@ import ResultadoSolicitud from './ResultadoSolicitud';
 import AtenderSolicitudForm from './AtenderSolicitudForm';
 import Popup from '../../components/util/Popup';
 import DelegarForm from './DelegarForm';
+import Notification from '../../components/util/Notification'
+
+// services
+import * as MesaPartesService from '../../services/mesaPartesService'
 
 
 
 export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
     const {solicitud}=location.state
-    const { rol} = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const [atender, setAtender]= React.useState(false)
     const [openPopup, setOpenPopup]= React.useState(false)
-    const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
+
+    const [notify, setNotify] = React.useState({ 
+        isOpen: false, message: '', type: '' 
+    })
+
+    const PaperStyle = { 
+        borderRadius: '20px', 
+        pb: 4, pt: 2, px: 2, 
+        color: "primary.light", 
+        elevatio: 0 
+    }
+
     function retornar(){
         window.history.back();
     }
+
+    function submitAtencion(atencion) {
+        /* respuesta de la solicitud por Secretario Departamento */
+        // solicitud.delegado.id = user.persona.id
+        solicitud.delegadoID = user.persona.id
+        solicitud.delegado = {
+            fullName: user.persona.nombres + " " + user.persona.apellidos,
+            foto_URL: user.persona.foto_URL
+        }
+        solicitud.observacion = atencion.observacion
+        solicitud.resultado = atencion.resultadoID
+        solicitud.tracking.fecha_delegado = new Date().toJSON()
+        console.log("submitAtencion", solicitud)
+        MesaPartesService.updateSolicitud(solicitud)
+            .then(id => {
+                window.alert(`Se actualizo la solicitud con id=${id}`)
+                setNotify({
+                    isOpen: true,
+                    message: 'Registro de atencion exitoso',
+                    type: 'success'
+                })
+                setAtender(false)
+            })
+            .catch(err => {
+                /* error :( */
+                console.error(err)
+                console.log("Error: submitAtencion:", 
+                    MesaPartesService.f2bSolicitud(solicitud))
+                setNotify({
+                    isOpen: true,
+                    message: 'Estamos teniendo problemas de conexión.  Consulte a un administrador.',
+                    type: 'error'
+                })
+            })
+    }
+
     return (
         <>
             {/* Encabezado y boton de regreso */}
@@ -65,7 +116,12 @@ export default function RecepcionDetalleSolicitud() {
                 */}
 
                 { atender? 
-                    <AtenderSolicitudForm setAtender={setAtender}/>:
+                    <AtenderSolicitudForm 
+                        setAtender={setAtender}
+                        solicitud={solicitud}
+                        submitAtencion={submitAtencion}
+                    /> :
+                    /* ACCIONES */
                     <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
                         <Stack mt={2} mb={2}>
                             <Controls.Button
@@ -84,18 +140,20 @@ export default function RecepcionDetalleSolicitud() {
                         </Stack>
                     </Box>
                 }
-                {/* Respuesta */}
+                {/* Respuesta (en recepcion aun no hay respuesta) */}
                 { solicitud.resultado==0? <> </>:
                     <ResultadoSolicitud solicitud={solicitud}/>
                 }
             </Paper>
+            {/* MODALS */}
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title={"Seleccionar Destinatario"}
             >
-               <DelegarForm/>
+               <DelegarForm solicitud={solicitud}/>
             </Popup>
+            <Notification notify={notify} setNotify={setNotify} />
         </>
     )
 }

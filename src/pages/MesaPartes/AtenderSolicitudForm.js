@@ -11,9 +11,8 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ClearIcon from '@mui/icons-material/Clear';
 
 const initialFieldValues = {
-    asunto: '',
-    descripcion: '',
-    resultadoID:4
+    observacion: '',        // (antes se llamaba `descripcion`)
+    resultadoID: 0
 }
 
 function getColorIcon(resultado){
@@ -23,38 +22,39 @@ function getColorIcon(resultado){
 
 }
 
-function obtenerResultadoBox(resultado){
-    return (
-        <Box
-            sx={{
-                width:"180px",
-                height: "40px",
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                borderRadius: "50px",
-                padding:"2px"
-            }}
-        >
-            <Stack direction="row" spacing={2} p={1} ml={2}>
-                <PanoramaFishEyeIcon sx={getColorIcon(resultado)}/>
-                <Typography variant="body2" style={{pt:"20px"}}>
-                    {resultado==1? "Aprobado":"Rechazado"}
-                </Typography> 
-            </Stack>
-        </Box> 
-    )
-}
+/* solo se utiliza en DelegadasAMi */
+// function obtenerResultadoBox(resultado){
+//     return (
+//         <Box
+//             sx={{
+//                 width:"180px",
+//                 height: "40px",
+//                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+//                 borderRadius: "50px",
+//                 padding:"2px"
+//             }}
+//         >
+//             <Stack direction="row" spacing={2} p={1} ml={2}>
+//                 <PanoramaFishEyeIcon sx={getColorIcon(resultado)}/>
+//                 <Typography variant="body2" style={{pt:"20px"}}>
+//                     {resultado==1? "Aprobado":"Rechazado"}
+//                 </Typography> 
+//             </Stack>
+//         </Box> 
+//     )
+// }
 
 function getEstadoResultado() {
     return ([
-        { id: 4, title: 'Seleccionar', icon: <div style={{ mr: 2 }} /> },
-        { id: 0, title: 'Aceptado', icon: <PanoramaFishEyeIcon sx={{ color: "#43DB7F", mr: 2, }} /> },
-        { id: 1, title: 'Rechazado', icon: <PanoramaFishEyeIcon sx={{ color: "#DC395F", mr: 2 }} /> },
+        { id: 0, title: 'Seleccionar', icon: <div style={{ mr: 2 }} /> },
+        { id: 1, title: 'Aceptado', icon: <PanoramaFishEyeIcon sx={{ color: "#43DB7F", mr: 2, }} /> },
+        { id: 2, title: 'Rechazado', icon: <PanoramaFishEyeIcon sx={{ color: "#DC395F", mr: 2 }} /> },
     ])
 }
 
 
 export default function AtenderSolicitudForm(props) {
-    const {setAtender}=props
+    const { setAtender, solicitud, submitAtencion }=props
     const {
         values,
         setValues,
@@ -67,9 +67,9 @@ export default function AtenderSolicitudForm(props) {
     function validate() {
         let temp = {...errors}
         let defaultError = "Este campo es requerido"
-        temp.resultadoID = values.resultadoID !== 4 ? "" : defaultError
+        temp.resultadoID = values.resultadoID !== 0 ? "" : defaultError
 
-        temp.descripcion = values.descripcion ? "" : defaultError
+        temp.observacion = values.observacion ? "" : defaultError
         setErrors({
             ...temp
         })
@@ -79,7 +79,7 @@ export default function AtenderSolicitudForm(props) {
     function handleSubmit(e) {
         e.preventDefault()
         if (validate()) {
-            
+            submitAtencion(values)
         }
     }
 
@@ -123,9 +123,9 @@ export default function AtenderSolicitudForm(props) {
                         Observación de la Solicitud
                     </Typography>
                     <Controls.Input
-                        name="descripcion"
+                        name="observacion"
                         label=""
-                        value={values.descripcion}
+                        value={values.observacion}
                         onChange={handleInputChange}
                         multiline
                         minRows={6}
@@ -134,7 +134,7 @@ export default function AtenderSolicitudForm(props) {
                             ml:"75px",
                             mr: "20px"
                         }}
-                        error={errors.descripcion}
+                        error={errors.observacion}
                     />
                 </Grid>
             </div>

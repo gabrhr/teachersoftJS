@@ -34,6 +34,9 @@ function obtenerResultadoBox(resultado){
 }
 
 export default function ResultadoSolicitud(props) {
+    // TODO: display:
+    // - solicitud.fecha_atendido
+    // - solicitud.delegado.rolName
     const {solicitud}=props
     return (
         <div style={{marginTop:"5px"}}>
@@ -57,7 +60,7 @@ export default function ResultadoSolicitud(props) {
                     fullWidth
                     multiline
                     rows={5}
-                    defaultValue=""
+                    defaultValue={solicitud.observacion}
                     disabled
                     sx={{
                         ml:"75px",

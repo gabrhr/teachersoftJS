@@ -79,7 +79,7 @@ export default function DetalleSoliOrganism(props) {
                     defaultValue={`${solicitud.descripcion}`}
                     sx={{
                         pl:"78px",
-                        mb:"20px"
+                        mb:"20px",
                     }}
                 />
                 <Grid item xs={0.3} md={0.3}/>
