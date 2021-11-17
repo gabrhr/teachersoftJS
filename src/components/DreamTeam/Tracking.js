@@ -118,7 +118,7 @@ function Item(props){
                     {item.titulo}
                 </Typography>
                 <Typography variant="body1" style={{color:"primary.light"}}>
-                    {estado==2? "de Mesa de Partes":
+                    {estado==2? "Mesa de Partes":
                         estado==3 && completado? "a " + item.contenido: 
                         ""
                     }

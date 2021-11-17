@@ -22,6 +22,8 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Link, Redirect } from 'react-router-dom';
 import { UserContext } from '../../constants/UserContext'
 import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es');
 
 //Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
@@ -35,7 +37,7 @@ export default function DashboardSoliOrganism(props) {
 
     function formatoFecha(fecha){
         if(fecha!=null){
-            return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
+            return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
     return (

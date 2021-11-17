@@ -25,7 +25,7 @@ function estadoCompletado(fecha){
 }
 function formatoFecha(fecha){
     if(fecha!=null){
-        return moment(fecha).format('[Fecha: ] DD MMM YYYY [- Hora: ] h:mm a')
+        return (moment.utc(fecha).format('[Fecha] DD MMM YYYY [- Hora: ] h:mm a'))
     }
     return (" ")
 }
@@ -53,7 +53,7 @@ export default function DetalleSoliOrganism(props) {
     const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit(solicitud))
     return (
         <>
-         <Grid container spacing={2}>
+         <Grid container spacing={2} ml={".3px"}>
             <Grid item xs={4} md={7.4}>
                 <Box>
                     <DT.Title size="medium" text={'Trámite: ' + `${solicitud.temaTramite}`+' - '+ `${solicitud.tipoTramite}`} />
@@ -61,7 +61,7 @@ export default function DetalleSoliOrganism(props) {
                         Sección: {solicitud.seccion} 
                     </Typography>
                 </Box>
-                <Divider  flexItem/>
+                <Divider  flexItem />
                 <DT.HeaderSolicitud solicitud={solicitud} solicitador={true}/>
                 <Box ml="75px">
                     <Controls.DreamTitle
