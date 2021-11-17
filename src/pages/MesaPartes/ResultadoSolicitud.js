@@ -57,14 +57,14 @@ export default function ResultadoSolicitud(props) {
             <Grid  md={11}>
                 <TextField
                     id="outlined-multiline-static"
-                    fullWidth
                     multiline
-                    rows={5}
+                    rows={6}
                     value={solicitud.observacion}
                     disabled
                     sx={{
                         ml:"75px",
-                        mr: "20px"
+                        mr: "20px",
+                        width: "62.5%"
                     }}
                 />
             </Grid>

@@ -93,7 +93,7 @@ export default function AtenderSolicitudForm(props) {
                             Atención de Solicitud
                         </Typography>
                     </Grid>
-                    <Grid xs/>
+                    <Grid item xs/>
                     <Grid item mr={5}>
                         <Controls.Button
                             variant="outlined"
@@ -108,18 +108,18 @@ export default function AtenderSolicitudForm(props) {
                         />
                     </Grid>
                 </Grid>
-                <Stack direction="column" spacing={2} p={1} ml={"62px"} sx={{width:"250px"}} >
-                    <Controls.Select
-                        name="resultadoID"
-                        label="Resultado"
-                        value={values.resultadoID}
-                        onChange={handleInputChange}
-                        options={getEstadoResultado()}
-                        error={errors.resultadoID}
-                    />
-                </Stack>
-                <Grid  md={11}>
-                    <Typography fontWeight={"500"} fontSize= {17} mx={2} mt={2} ml={"72px"}>
+                <Box pl="95px" width="62.5%">
+                    <Stack direction="column" spacing={2} sx={{width:"250px"}} >
+                        <Controls.Select
+                            name="resultadoID"
+                            label="Resultado"
+                            value={values.resultadoID}
+                            onChange={handleInputChange}
+                            options={getEstadoResultado()}
+                            error={errors.resultadoID}
+                        />
+                    </Stack>
+                    <Typography fontWeight={"500"} fontSize= {17}>
                         Observación de la Solicitud
                     </Typography>
                     <Controls.Input
@@ -128,15 +128,10 @@ export default function AtenderSolicitudForm(props) {
                         value={values.observacion}
                         onChange={handleInputChange}
                         multiline
-                        minRows={6}
-                        maxRows={12}
-                        sx={{
-                            ml:"75px",
-                            mr: "20px"
-                        }}
+                        rows={6}
                         error={errors.observacion}
                     />
-                </Grid>
+                </Box>
             </div>
         </Form>
     )
