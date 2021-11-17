@@ -1,5 +1,8 @@
 import { Avatar, Grid, Typography } from '@mui/material'
 import React from 'react'
+import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es');
 
 export default function HeaderSolicitud(props) {
     const {solicitud, solicitador} = props
@@ -14,7 +17,8 @@ export default function HeaderSolicitud(props) {
                     {solicitador==false? "Atendido por: \xa0": "Enviado por:\xa0"}
                 </Typography>
                 <Typography variant="h4"   display="inline">
-                    {solicitador==false? `${solicitud.delegado.fullName}`: `${solicitud.solicitador.fullName}`}
+                    {solicitador==false? `${solicitud.delegado.fullName}` + " - " +`${solicitud.delegado.rolName}`
+                    : `${solicitud.solicitador.fullName}`}
                 </Typography>
                 <div/>
                 <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -23,6 +27,10 @@ export default function HeaderSolicitud(props) {
                 <Typography variant="body1"  display="inline">
                     {solicitador==false? `${solicitud.solicitador.fullName}`: "Mesa de Partes"}
                 </Typography>
+            </Grid>
+            <Grid xs/>
+            <Grid item textAlign="right" mr={6}>
+                {moment.utc(solicitud.tracking.fecha_atendido).format('DD MMM YYYY [-] h:mm a')}
             </Grid>
         </Grid>
     )
