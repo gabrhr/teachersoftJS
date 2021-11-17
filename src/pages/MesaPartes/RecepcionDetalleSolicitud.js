@@ -150,6 +150,7 @@ export default function RecepcionDetalleSolicitud() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title={"Seleccionar Destinatario"}
+                
             >
                <DelegarForm solicitud={solicitud}/>
             </Popup>
