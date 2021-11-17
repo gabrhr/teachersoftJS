@@ -47,20 +47,22 @@ export default function RecepcionDetalleSolicitudFuncion() {
     }
 
     React.useEffect(() => {
-        window.alert('Se modifico `solicitud` revisar consola')
-        console.log(solicitud)
         if (solicitud.estado === '1') {
-            /* secretario entra a la solicitud detalle (cabios listos) */
-            window.alert('estado actualizado a "En revision')
+            /* secretario entra a la solicitud detalle (cabios listos) 
+             * estado: Enviado -> En Revision */
             MesaPartesService.updateSolicitud(solicitud)
+                .then(() => {
+                    setNotify({
+                        isOpen: true,
+                        message: 'El estado de la solicitud cambió a "En Revision"',
+                        type: 'success'
+                    })
+                })
                 .catch(err => {console.error(err)})
         } else if (solicitud.estado === '3') {
             /* secreatrio responde en lugar del delegado */
-            window.alert('estado actualizado a "Atendido"')
-            console.log("submitAtencion", solicitud)
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
-                    // window.alert(`Se actualizo la solicitud con id=${id}`)
                     setNotify({
                         isOpen: true,
                         message: 'Registro de atencion exitoso',
