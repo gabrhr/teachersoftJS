@@ -255,7 +255,7 @@ export default function DashboardSoli(props) {
           /* notify and update table */
           setNotify({
               isOpen: true,
-              message: 'Registro de Solicitud Exitosa',
+              message: 'Registro de Solicitud Exitoso',
               type: 'success'
           })
           getSolicitudes(setRecords, user)
