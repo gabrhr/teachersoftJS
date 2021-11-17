@@ -115,34 +115,34 @@ export default function RecepcionDetalleSolicitud() {
                     - Usuarios Delegado (rol!=6) -> Boton Atender
                 */}
 
-                { atender? 
-                    <AtenderSolicitudForm 
-                        setAtender={setAtender}
-                        solicitud={solicitud}
-                        submitAtencion={submitAtencion}
-                    /> :
-                    /* ACCIONES */
-                    <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
-                        <Stack mt={2} mb={2}>
-                            <Controls.Button
-                                text="Atender"
-                                type="submit"   // html property (not component)
-                                onClick={() => {setAtender(true)}}
-                            />
-                            <Typography variant="body1" textAlign="center">
-                                o
-                            </Typography>
-                            <Controls.Button
-                                text="Delegar"
-                                type="submit"   // html property (not component)
-                                onClick={() => {setOpenPopup(true)}}
-                            />
-                        </Stack>
-                    </Box>
-                }
                 {/* Respuesta (en recepcion aun no hay respuesta) */}
-                { solicitud.resultado==0? <> </>:
-                    <ResultadoSolicitud solicitud={solicitud}/>
+                { solicitud.resultado!=0? 
+                    <ResultadoSolicitud solicitud={solicitud}/> :
+                    atender? 
+                        <AtenderSolicitudForm 
+                            setAtender={setAtender}
+                            solicitud={solicitud}
+                            submitAtencion={submitAtencion}
+                        /> :
+                        /* ACCIONES */
+                        <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
+                            <Stack mt={2} mb={2}>
+                                <Controls.Button
+                                    text="Atender"
+                                    type="submit"   // html property (not component)
+                                    onClick={() => {setAtender(true)}}
+                                />
+                                <Typography variant="body1" textAlign="center">
+                                    o
+                                </Typography>
+                                <Controls.Button
+                                    text="Delegar"
+                                    type="submit"   // html property (not component)
+                                    onClick={() => {setOpenPopup(true)}}
+                                />
+                            </Stack>
+                        </Box>
+                    
                 }
             </Paper>
             {/* MODALS */}

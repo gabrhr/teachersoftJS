@@ -64,7 +64,10 @@ export default function ResultadoSolicitud(props) {
                     disabled
                     sx={{
                         ml:"75px",
-                        mr: "20px"
+                        mr: "20px",
+                        ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
+                            WebkitTextFillColor:"black"
+                        }
                     }}
                 />
             </Grid>

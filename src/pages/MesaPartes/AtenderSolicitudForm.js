@@ -47,7 +47,7 @@ function getColorIcon(resultado){
 function getEstadoResultado() {
     return ([
         { id: 0, title: 'Seleccionar', icon: <div style={{ mr: 2 }} /> },
-        { id: 1, title: 'Aceptado', icon: <PanoramaFishEyeIcon sx={{ color: "#43DB7F", mr: 2, }} /> },
+        { id: 1, title: 'Aprobado', icon: <PanoramaFishEyeIcon sx={{ color: "#43DB7F", mr: 2, }} /> },
         { id: 2, title: 'Rechazado', icon: <PanoramaFishEyeIcon sx={{ color: "#DC395F", mr: 2 }} /> },
     ])
 }

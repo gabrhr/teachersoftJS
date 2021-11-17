@@ -77,10 +77,11 @@ export default function DetalleSoliOrganism(props) {
                     rows={5}
                     disabled
                     defaultValue={`${solicitud.descripcion}`}
+                    minRows={6}
+                    maxRows={6}
                     sx={{
                         pl:"78px",
                         mb:"20px",
-            
                         ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
                             WebkitTextFillColor:"black"
                         }
