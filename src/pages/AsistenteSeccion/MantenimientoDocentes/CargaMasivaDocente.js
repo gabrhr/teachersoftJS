@@ -12,7 +12,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
-import horarioService from '../../../services/horarioService';
+import personaService from '../../../services/personaService';
 import cursoService from '../../../services/cursoService';
 
 const tableHeaders = [
@@ -97,7 +97,7 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   return [otroHorario, postHorario];
 }
 
-export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
+export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, setCargaH, cargaH}) {
     let auxHorario
     //const {horario, getHorario, isNewFile } = props
     const [xFile, setXFile] = useState('');
@@ -132,36 +132,35 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         event.target.value = ''
     }
 
-    const datosHorarios = listHorarios => {
+    const datosDocente = listDocentes => {
       //const dataSesiones = defragmentarSesiones(listHorarios);
-      const horarios = []
-      listHorarios.map(hor => (
-        horarios.push({
-        "codigo": hor.Horario,
-        "tipo": hor.Tipo === "Clase" ? 0 : 1, //Si es clase es 0 - si es laboratorio 1
-        //MEJOR MANEJEMOSLO ASI - CON LAS HORAS SEPARADAS POR EL TIPO DE HORARIO
-        "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
-        ciclo:{
-          //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
-          "id": parseInt(window.localStorage.getItem('ciclo')),
-        },
-        curso:{
-          "codigo": hor.Clave, //INF...
-          "nombre": hor.Nombre, //NOMBRE DEL CURSO
-          //"creditos": hor.Creditos, //Creditos del Curso
-          //"unidad": hor.Unidad, //Creditos del Curso
-          //"carga": hor.Carga_Horaria, //Creditos del Curso
-        },
-        //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos: 
-        profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
-        //"sesiones_excel": hor.Hora_Sesion
-          //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
-        /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/ 
-        //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
+      const docentes = []
+      listDocentes.map(doc => (
+        docentes.push({
+          "foto_URL": doc.foto_URL ? doc.foto_URL : 'static/images/avatar/1.jpg',
+          "nombres": doc.nombres,
+          "apellidos": doc.apellidos,
+          "tipo_persona": 1,
+          "tipo_docente": doc.tipo_docente ? doc.tipo_docente: 0, //Agregar al excel
+          "seccion": {
+              "id": 3,
+              "nombre": doc.seccion_nombre,
+          },
+          "departamento": {
+              "id": 3,
+              "unidad": {
+                  "id": 1,
+              }
+          },
+          "correo_pucp": doc.correo_pucp,
+          "telefono": doc.telefono,
+          "codigo_pucp": doc.codigo_pucp,
+          "numero_documento": doc.numero_documento,
+          "tipo_documento": 0
+        
       })
-      ));  
-      //horario = horarios;
-      return horarios;
+      ));
+      return docentes;
     }
 
 
@@ -189,7 +188,6 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         obj[headers[j]] = d;
                     }
                 }
-
                 // remove the blank rows
                 if (Object.values(obj).filter(x => x).length > 0) {
                     list.push(obj);
@@ -215,9 +213,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         }
 
         //Hacemos el paso de los datos a un objeto
-        const horarios = datosHorarios(listaCorrectos)
+        const docentes = datosDocente(listaCorrectos)
+        console.log(docentes)
 
-        setRecordsX(prevRecords => prevRecords.concat(horarios));
+        setRecordsX(prevRecords => prevRecords.concat(docentes));
     };
 
     const handleUploadFile = e => {
@@ -246,22 +245,19 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     };
 
     const actualizarDatos = async e => { 
-      let otroHorario = 1;
       let permission = 1;
-      let postHorario = {}; //Para poder usar el horario en una segunda vuelta
-      //Servicio para cargar los horarios
-      for (let hor of recordsX) {
-        
+      //Servicio para cargar los docentes
+      console.log("Lista de docentes del excel")
+      for (let doc of recordsX) {
+          if(personaService.registerPersona(doc))
+            permission = 0;
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       if(permission)  {
         setRecords(recordsX);
         setCargaH(records);
-        console.log(records);
       }
-      setOpenPopup(false) 
-      console.log(postHorario);
-       /*  setRecords(employeeService.getAllEmployees()) */
+      setOpenPopUp(false)
     }
     
     const handleSubmit = e => {
@@ -272,7 +268,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //window.localStorage.setItem("listHorario", recordsX);
         setRecords(recordsX)
         handleClose()
-        setOpenPopup(false) 
+        setOpenPopUp(false) 
        /*  setRecords(employeeService.getAllEmployees()) */
     }
 
@@ -311,7 +307,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                             <Grid container>
                                 <Grid item pl={.5}>
                                 <Avatar>
-                                    <img height = "125%" width = "125%" text-align ="center" src={item.url_foto} alt=""></img>
+                                    <img height = "125%" width = "125%" text-align ="center" src={item.foto_URL} alt=""></img>
                                 </Avatar>
                                 </Grid>
                                 <Grid item sm>
@@ -319,7 +315,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                         {`${item.apellidos}, ${item.nombres}`}
                                     </Typography>
                                     <div style={{paddingLeft:20}}>
-                                        Código PUCP: {item.codigo}
+                                        Código PUCP: {item.codigo_pucp}
                                     </div>
                                     <div style={{paddingLeft:20}}>
                                         DNI: {item.numero_documento}
@@ -329,19 +325,19 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    {item.especialidad}
+                                    {item.seccion.nombre}
                                 </Typography>
                                 <div >
-                                    {(item.tipo_docente === 0) ? "No asignado" : 
-                                     (item.tipo_docente === 1) ? "Docencia a tiempo completo" :
-                                     (item.tipo_docente === 2) ? "Docencia a tiempo parcial convencional" :
+                                    {(item.tipo_docente === "0") ? "No asignado" : 
+                                     (item.tipo_docente === "1") ? "Docencia a tiempo completo" :
+                                     (item.tipo_docente === "2") ? "Docencia a tiempo parcial convencional" :
                                                                  "Docencia a tiempo parcial por asignaturas"
                                     }
                                 </div>
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    Correo: {item.correo}
+                                    Correo: {item.correo_pucp}
                                 </Typography>
                                 <div >
                                     Teléfono: {item.telefono}

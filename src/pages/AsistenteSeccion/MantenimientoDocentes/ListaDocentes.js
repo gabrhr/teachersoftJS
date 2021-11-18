@@ -47,7 +47,7 @@ const tableHeaders = [
     } */
 ]
   
-export default function ListaDocentes() {
+export default function ListaDocentes({openPopup}) {
 
     const [openPopupAdd, setOpenPopupAdd] = useState(false)
     const [openPopupEdit, setOpenPopupEdit] = useState(false)
@@ -68,7 +68,7 @@ export default function ListaDocentes() {
     
     useEffect(() => {
         getProfesores()
-      }, [openPopupEdit, openDelOnePopup, openPopupAdd])
+      }, [openPopupEdit, openDelOnePopup, openPopupAdd, openPopup])
 
     function transformarDocentes (request){
         const recordsX = []
