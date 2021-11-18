@@ -17,7 +17,7 @@ export default function HeaderSolicitud(props) {
                     {solicitador==false? "Atendido por: \xa0": "Enviado por:\xa0"}
                 </Typography>
                 <Typography variant="h4"   display="inline">
-                    {solicitador==false? `${solicitud.delegado.fullName}` + " - " +`${solicitud.delegado.rolName}`
+                    {solicitador==false? `${solicitud.delegado.fullName}` + " - " +`${solicitud.delegado.rolName}` 
                     : `${solicitud.solicitador.fullName}`}
                 </Typography>
                 <div/>
@@ -27,10 +27,9 @@ export default function HeaderSolicitud(props) {
                 <Typography variant="body1"  display="inline">
                     {solicitador==false? `${solicitud.solicitador.fullName}`: "Mesa de Partes"}
                 </Typography>
-            </Grid>
-            <Grid xs/>
-            <Grid item textAlign="right" mr={6}>
-                {moment.utc(solicitud.tracking.fecha_atendido).format('DD MMM YYYY [-] h:mm a')}
+                <Typography variant="body1" marginBottom={2}>
+                    {solicitador==false? moment.utc(solicitud.tracking.fecha_atendido).format('DD MMM YYYY [-] h:mm a'): <></>}
+                </Typography>
             </Grid>
         </Grid>
     )

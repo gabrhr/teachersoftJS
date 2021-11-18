@@ -46,12 +46,12 @@ export default function ResultadoSolicitud(props) {
             </Typography>
             <DT.HeaderSolicitud solicitud={solicitud} solicitador={false}/>
             <Stack direction="row" spacing={2} p={1} ml={"52px"}>
-                <Typography variant="body1" mx={2} mt={1}>
+                <Typography variant="body1" mx={2} mt={1} fontWeight="550">
                     Resultado:
                 </Typography>
                 {obtenerResultadoBox(solicitud.resultado)}
             </Stack>
-            <Typography variant="body1" mx={2} my={1} ml={"76px"}>
+            <Typography variant="body1" mx={2} my={1} ml={"76px"} fontWeight="550">
                     Observación a la Solicitud:
             </Typography>
             <Grid  md={11}>
