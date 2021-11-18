@@ -126,6 +126,7 @@ const fillCursos = async () => {
     }
     //Adicionalmente a esto
     for(let hor of horarios){
+      console.log(hor);
       horCiclo.push({
         "id": hor.id,
         "codigo": hor.codigo,
@@ -135,6 +136,7 @@ const fillCursos = async () => {
         "curso":{
           "id": cur.id,
         },
+        "curso_ciclo": hor.curso_ciclo.id,
         "sesiones": hor.sesiones
       })
     }

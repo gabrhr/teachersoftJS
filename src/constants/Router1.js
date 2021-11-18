@@ -42,7 +42,7 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-import CargaDocenteCursos from '../pages/AsistenteDepartamento/CargaDocenteCursos';
+import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
