@@ -25,6 +25,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CargaDocenteHorarios from '../../AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import CursoService from '../../../services/cursoService';
 import HorarioService from '../../../services/horarioService';
+import Fab from '@mui/material/Fab';
+import CheckIcon from '@mui/icons-material/Check';
+import Popup from '../../../components/util/Popup';
+import ModalValidarYEnviarSolicitud from './ModalValidarYEnviarSolicitud';
+import { useLocation } from 'react-router';
 
 const tableHeaders = [
   // {
@@ -166,6 +171,11 @@ const fillCursos = async () => {
 
 
 export default function CargaDocente() {
+  // const location= useLocation()
+  // const {solicitud}=location.state
+  const [asunto, setAsunto] = useState("")
+  const [cuerpo, setCuerpo] = useState("")
+  const [openValYEnvSolPopup, setOpenValYEnvSolPopup] = useState(false)
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const SubtitulosTable = { display: "flex" }
   const [recordsForEdit, setRecordForEdit] = useState()
@@ -334,6 +344,24 @@ export default function CargaDocente() {
           )
         }
       </Paper>
+      <Fab color="primary" aria-label="add" variant = "extended" 
+            sx={{position:'fixed',
+	          height:'40px',
+	          bottom:'20px',
+	          right:'40px',
+	          textAlign: 'center'}} onClick = {()=>{setOpenValYEnvSolPopup(true)}}>
+        Validar y enviar
+        <CheckIcon />
+      </Fab>
+      <Popup
+                openPopup={openValYEnvSolPopup}
+                setOpenPopup={setOpenValYEnvSolPopup}
+                title="Validar y enviar solicitud a la facultad"
+            >
+               <ModalValidarYEnviarSolicitud /*solicitud = {solicitud}*/asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto}
+                                            setCuerpo={setCuerpo} setOpenValYEnvSolPopup = {setOpenValYEnvSolPopup}
+                                            openValYEnvSolPopup = {openValYEnvSolPopup}/>
+      </Popup>
     </Form>
   )
 }
