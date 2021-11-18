@@ -1,12 +1,39 @@
-import { useForm, Form } from "../../components/useForm"
+import { useForm, Form } from "../../../components/useForm"
 import { useState } from "react";
 import React from "react";
-import Popup from "../../components/util/Popup";
-import { Controls } from "../../components/controls/Controls"
+import Popup from "../../../components/util/Popup";
+import { Controls } from "../../../components/controls/Controls"
 import { Alert, Grid, InputAdornment, Paper, TableBody, Typography } from '@mui/material'
 import ModalCursosCicloAsignados from './ModalCursosCicloAsignados'
 import ModalCursosCicloBusqueda from "./ModalCursosCicloBusqueda";
-import CursoService from '../../services/cursoService';
+import CursoService from '../../../services/cursoService';
+import cursoService from "../../../services/cursoService";
+
+const guardarCursos = async (recordsAsig) => {
+  //FUNCION PARA PODER ASIGNAR LOS CURSOS
+  const ciclo = window.localStorage.getItem("ciclo"); 
+  for(let cc of recordsAsig){
+    //Previamente, verificamos que la data no esté ingresada 
+    await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, cc.codigo)
+      .then(data => {
+        if(data.length === 0){
+          console.log("Si ingresa la data");
+          const cursoCic ={
+            "curso":{
+              "id": cc.id
+            },
+            "ciclo":{
+              "id": ciclo
+            },
+            "cantidad_horarios": 0,
+            "estado_tracking": 0
+          }
+          console.log(cursoCic);
+          CursoService.registerCursoCiclo(cursoCic)
+        }
+    });
+  }
+}
 
 
 
@@ -24,9 +51,16 @@ export default function AsignarCursosCiclo({setOPP}){
         }
         console.log(rec)
     }
+    const setRecordsCheckedAsig = (rec, setRec, cursos) => {
+        //setRec([])
+        for(let i in cursos){
+            rec.push(false)
+        }
+        console.log(rec)
+    }
 
     const fillCursos = async () => {
-        let dataCur = await CursoService.getCursos();
+        let dataCur = await CursoService.listarCursosNoAsignados(window.localStorage.getItem("ciclo"),"");
         console.log(dataCur) 
         //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
         if(!dataCur) dataCur = []
@@ -43,6 +77,28 @@ export default function AsignarCursosCiclo({setOPP}){
         ));
 
         setRecordsChecked(recordsBusqChecked, setRecordsBusqChecked, cursos)
+        //console.log(cursos);
+        return cursos;
+      }
+
+    const fillCursosAsignados = async () => {
+        let dataCur = await CursoService.getCursoCicloxCicloxCodigoNombre(window.localStorage.getItem("ciclo"),"");
+        console.log(dataCur) 
+        //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+        if(!dataCur) dataCur = []
+        const cursos = [];
+        dataCur.map(cur => (
+          cursos.push({
+            id: cur.curso.id.toString(),
+            nombre: cur.curso.nombre,
+            codigo: cur.curso.codigo,
+            creditos: cur.curso.creditos,
+            seccion: cur.curso.seccion,
+            selected: false
+          })
+        ));
+        
+        setRecordsCheckedAsig(recordsAsigChecked, setRecordsAsigChecked, cursos)
         //console.log(cursos);
         return cursos;
       }
@@ -77,6 +133,13 @@ export default function AsignarCursosCiclo({setOPP}){
           
           //console.log(records);
         });
+        fillCursosAsignados()
+        .then (newCurs =>{
+          setRecordsAsig(prevRecords => prevRecords.concat(newCurs));
+          //console.log(newSeccion);
+          
+          //console.log(records);
+        });
       }, [])
 
     return(
@@ -99,7 +162,7 @@ export default function AsignarCursosCiclo({setOPP}){
                         // size="large"
                         text="Guardar"
                         type="submit"
-                        onClick = {()=>setOPP(false)}
+                        onClick = {()=> {guardarCursos(recordsAsig); setOPP(false)}}
                     >
                     </Controls.Button>
                 </div>

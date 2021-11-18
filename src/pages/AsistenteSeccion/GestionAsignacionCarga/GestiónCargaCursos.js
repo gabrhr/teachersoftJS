@@ -139,34 +139,39 @@ export default function GestionCargaCursos() {
     const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroCursos");
 
     const guardarHorario = async() => {
-        let arrayCadenas = dValuNombre.split(" ");
-        const request = await cursoService.getCursosxCodigoNombre(arrayCadenas[0]);
-        console.log(request);
-        const postHorario = {
-            "codigo": horario,
-            ciclo:{
-              "id": parseInt(window.localStorage.getItem('ciclo')),
-            },
-            curso:{
-              "id": request[0].id,
-            },
-            sesiones:[{
-              "secuencia": (records[0].tipo === "Laboratorio") ? 1 : 0, 
-              "horas": parseFloat(records[0].sesion),
-            }]
-        }
-        if(records[1]){
-            postHorario.sesiones.push({
-                    "secuencia": (records[1].tipo === "Laboratorio") ? 1 : 0,
-                    "horas": parseFloat(records[1].sesion),
-            })
-        }
-        console.log(postHorario);
-        horarioService.registerHorario(postHorario);
-        resetPage();
-        setOpenGuardarPopup(false);
-        setOpenRegistroExitoso(true);
-    }
+      let arrayCadenas = dValuNombre.split(" ");
+      const ciclo = await window.localStorage.getItem("ciclo");
+      console.log(ciclo, arrayCadenas);
+      await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
+        .then(request => {
+          if(request[0]){          
+              const postHorario = {
+              "codigo": horario,
+              "curso_ciclo": {
+                "id": request[0].id,
+              },
+              "sesiones":[{
+                "secuencia": (records[0].tipo === "Laboratorio") ? 1 : 0, 
+                "horas": parseFloat(records[0].sesion),
+              }]
+            }
+            if(records[1]){
+                postHorario.sesiones.push({
+                        "secuencia": (records[1].tipo === "Laboratorio") ? 1 : 0,
+                        "horas": parseFloat(records[1].sesion),
+                })
+            }
+            console.log(postHorario);
+            horarioService.registerHorario(postHorario);
+            setOpenRegistroExitoso(true);
+          }
+          else{
+            console.error("No se puede registrar un curso que no está asignado al ciclo");
+          }
+          resetPage();
+          setOpenGuardarPopup(false);
+          });
+      }
 
     return (
         <> 

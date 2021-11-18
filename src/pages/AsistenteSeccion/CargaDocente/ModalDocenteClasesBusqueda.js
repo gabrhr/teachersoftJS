@@ -63,12 +63,13 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
         let target = e.target;
         setFilterFn({
           fn: items => {
+            console.log(items);
             if (target.value === "")
               /* no search text */
               return items
             else
               return items
-                .filter(x => x.nombre.toLowerCase()
+                .filter(x => x.nombres.toLowerCase()
                 .includes(target.value.toLowerCase()))
           }
         })

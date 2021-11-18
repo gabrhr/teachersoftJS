@@ -46,6 +46,7 @@ import CargaDocenteCursos from '../pages/AsistenteDepartamento/CargaDocenteCurso
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
+//import NoAsignado from './NoAsignado'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */

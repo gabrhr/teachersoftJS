@@ -12,6 +12,7 @@ import EliminarDocentes from './EliminarDocentes'
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const tableHeaders = [
     {
@@ -37,7 +38,7 @@ const tableHeaders = [
       label: 'Acciones',
       numeric: false,
       sortable: true
-    },
+    }
     /* {
       id: 'bono',
       label: 'Bonos',
@@ -68,14 +69,14 @@ export default function ListaDocentes() {
     useEffect(() => {
         //Obtenemos las secciones
         getProfesores()
-      }, [openPopupEdit, openDelOnePopup, openDelAllPopup])
+      }, [openPopupEdit, openDelOnePopup, openPopupAdd])
 
     function transformarDocentes (request){
         const recordsX = []
         request.map(doc => {
             recordsX.push({
                 "id": doc.id,
-                "url_foto": doc.foto_URL ? doc.foto_URL : 'static/images/avatar/1.jpg',
+                "url_foto": doc.foto_URL ? doc.foto_URL : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
                 "nombres": doc.nombres,
                 "apellidos": doc.apellidos,
                 "especialidad": doc.seccion.nombre,
@@ -100,11 +101,11 @@ export default function ListaDocentes() {
     }
 
     const eliminarDocentes = async () =>{
-        /*records.map(item => {
+        records.map(item => {
             personaService.deletePersona(item.id);
           })
-          //setRecords([])
-          setDelAllPopup(false)*/
+        setRecords([])
+        setDelAllPopup(false)
     }
 
     const handleSearch = e => {
@@ -143,7 +144,7 @@ export default function ListaDocentes() {
        setRecordForEdit(item)
        setOpenPopupEdit(true)
     }
-
+    console.log(records);
     return (
         <>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
@@ -178,7 +179,10 @@ export default function ListaDocentes() {
                             <Grid container>
                                 <Grid item pl={.5}>
                                 <Avatar>
-                                    <img height = "125%" width = "125%" text-align ="center" src={item.url_foto} alt=""></img>
+                                    {item.url_foto !== ("static/images/avatar/1.jpg" || "")
+                                      ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                                        src={item.url_foto}></img>
+                                      :  <AccountCircleIcon/>}
                                 </Avatar>
                                 </Grid>
                                 <Grid item sm>
@@ -277,7 +281,7 @@ export default function ListaDocentes() {
                 />
             </Popup>
             <Popup
-                openPopup={openDelAllPopup}
+                openPopup={openDelAllPopup }
                 setOpenPopup={setDelAllPopup}
                 title={`Eliminar docente: `}
                 size = "sm"
