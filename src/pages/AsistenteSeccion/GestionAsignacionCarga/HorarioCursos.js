@@ -91,36 +91,7 @@ const fillHorarios = async () => {
     //console.log(hor.sesiones[0].secuencia);
     //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
     //console.log(sesion1);
-    console.log(hor)
-    horarios.push({
-      "id": hor.id,
-      "codigo": hor.codigo,
-      "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-      "curso_ciclo":{
-        "id": hor.curso_ciclo.id,
-        ciclo:{
-          "id": hor.curso_ciclo.ciclo.id,
-        },
-        curso:{
-          "id": hor.curso_ciclo.curso.id,
-          "codigo": hor.curso_ciclo.curso.codigo,
-          "nombre": hor.curso_ciclo.curso.nombre,
-          "creditos": hor.curso_ciclo.curso.creditos,
-          "unidad": hor.curso_ciclo.curso.unidad,
-          "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
-        },
-      },
-      sesiones:{
-        "secuencia": hor.sesiones[0].secuencia,
-        "sesiones_dictado": [],
-        "hora_sesion": hor.sesiones[0].horas,
-      },
-    })
-    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
-    if(hor.sesiones[1]){
-      //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
-      //console.log(sesion2);
+    if(hor.curso_ciclo){
       horarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
@@ -141,12 +112,42 @@ const fillHorarios = async () => {
           },
         },
         sesiones:{
-          "secuencia": hor.sesiones[1].secuencia,
+          "secuencia": hor.sesiones[0].secuencia,
           "sesiones_dictado": [],
-          "hora_sesion": hor.sesiones[1].horas,
+          "hora_sesion": hor.sesiones[0].horas,
         },
       })
-    }
+      //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
+      if(hor.sesiones[1]){
+        //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+        //console.log(sesion2);
+        horarios.push({
+          "id": hor.id,
+          "codigo": hor.codigo,
+          "tipo": hor.sesiones[0].secuencia,
+          "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
+          "curso_ciclo":{
+            "id": hor.curso_ciclo.id,
+            ciclo:{
+              "id": hor.curso_ciclo.ciclo.id,
+            },
+            curso:{
+              "id": hor.curso_ciclo.curso.id,
+              "codigo": hor.curso_ciclo.curso.codigo,
+              "nombre": hor.curso_ciclo.curso.nombre,
+              "creditos": hor.curso_ciclo.curso.creditos,
+              "unidad": hor.curso_ciclo.curso.unidad,
+              "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
+            },
+          },
+          sesiones:{
+            "secuencia": hor.sesiones[1].secuencia,
+            "sesiones_dictado": [],
+            "hora_sesion": hor.sesiones[1].horas,
+          },
+        })
+      }
+    }//FIN DE LA VERIFICACION
   }
   return horarios;
 

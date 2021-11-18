@@ -65,6 +65,7 @@ export default function AsistenteSeccion() {
         const recordsX = []
         if(request){
           request.map(hor => {
+            if(hor.curso_ciclo){
               recordsX.push({
                   "Clave": hor.curso_ciclo.curso.codigo,
                   "Nombre": hor.curso_ciclo.curso.nombre,
@@ -87,6 +88,7 @@ export default function AsistenteSeccion() {
                       "Horas": hor.sesiones[1].horas
                   })
               }
+            }
           })
         }
         return recordsX;

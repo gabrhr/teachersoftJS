@@ -9,11 +9,28 @@ import ModalCursosCicloBusqueda from "./ModalCursosCicloBusqueda";
 import CursoService from '../../../services/cursoService';
 import cursoService from "../../../services/cursoService";
 
-const guardarCursos = async (recordsAsig) => {
+const guardarCursos = async (recordsAsig, recordsDelete) => {
   //FUNCION PARA PODER ASIGNAR LOS CURSOS
+  console.log(recordsAsig);
+  console.log(recordsDelete);
   const ciclo = window.localStorage.getItem("ciclo"); 
+
+  for(let cc of recordsDelete){
+    //Previamente, verificamos que el curso no esté ingresado
+    await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, cc.codigo)
+      .then(data => {
+        if(data.length === 0){
+          console.log("No existe el curso");
+        }
+        else{ //Ya se ingreso previamente - no se hace nada
+          console.log("Se elimina el curso");
+          CursoService.deleteCursoCiclo(parseInt(data[0].id));
+        }
+    });
+  }
+
   for(let cc of recordsAsig){
-    //Previamente, verificamos que la data no esté ingresada 
+    //Previamente, verificamos que el curso no esté ingresado
     await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, cc.codigo)
       .then(data => {
         if(data.length === 0){
@@ -31,6 +48,9 @@ const guardarCursos = async (recordsAsig) => {
           console.log(cursoCic);
           CursoService.registerCursoCiclo(cursoCic)
         }
+        else{ //Ya se ingreso previamente - no se hace nada
+          console.log("Se actualiza la data");
+        }
     });
   }
 }
@@ -41,6 +61,7 @@ export default function AsignarCursosCiclo({setOPP}){
 
     const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState([])
+    const [recordsDelete, setRecordsDelete] = useState([])
     const [recordsBusqChecked, setRecordsBusqChecked]  = useState([])
     const [recordsAsigChecked, setRecordsAsigChecked]  = useState([])
 
@@ -147,7 +168,7 @@ export default function AsignarCursosCiclo({setOPP}){
             <Form onSubmit={handleSubmit}>
             <Paper> 
                 <ModalCursosCicloAsignados records = {recordsAsig} setRecords = {setRecordsAsig} recordsBusq = {setRecordsBusq} 
-                                           setRecordsBusq = {setRecordsBusq}/>
+                                           setRecordsBusq = {setRecordsBusq} recordsDel = {recordsDelete} setRecordsDel = {setRecordsDelete}/>
                 <Grid cointainer align="right" mt={2.5} />   
                 <hr color = "#636e9a"/> 
                 <Grid cointainer align="right" mt={2.5} />
@@ -162,7 +183,7 @@ export default function AsignarCursosCiclo({setOPP}){
                         // size="large"
                         text="Guardar"
                         type="submit"
-                        onClick = {()=> {guardarCursos(recordsAsig); setOPP(false)}}
+                        onClick = {()=> {guardarCursos(recordsAsig, recordsDelete); setOPP(false)}}
                     >
                     </Controls.Button>
                 </div>

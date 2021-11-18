@@ -280,13 +280,14 @@ export default function ListaCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            {/*}
                 <Controls.Button
                 text="Eliminar todos los cursos"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {setOpenAllPopup(true)}}
-                />
+            />*/}
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
@@ -295,14 +296,14 @@ export default function ListaCursos({records, setRecords}) {
             >
               <EliminarCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
-            <Popup
+            {/*<Popup
                 openPopup={openAllPopup}
                 setOpenPopup={setOpenAllPopup}
                 title="Eliminar todos los cursos"
                 size = "sm"
             >
               <EliminarCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
-            </Popup>
+            </Popup>*/}
             <Popup
                 openPopup={openAddPopup}
                 setOpenPopup={setOpenAddPopup}
