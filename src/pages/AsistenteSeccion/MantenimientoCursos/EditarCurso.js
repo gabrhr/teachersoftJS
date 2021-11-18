@@ -69,36 +69,37 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container>
-                <Grid item sx={6} style={ColumnGridItemStyle}>
+            <Grid container rowSpacing = {0}>
+                <Grid item xs = {12} >   
                     < Typography variant="h4" mb={2} >
                            DATOS DEL CURSO
-                    </Typography>
-
+                    </Typography>        
                         <Controls.Input
                             name="codigo"
                             label="Clave"
                             value={values.codigo}
                             onChange = {handleInputChange}
                             error={errors.codigo}
-                        />
+                        />  
                         <Controls.Input
                             name="nombre"
                             label="Nombre"
                             value={values.nombre}
                             onChange = {handleInputChange}
                             error={errors.nombre}
-                        />
+                        /> 
+                </Grid>
+                <Grid item xs = {4}>  
                         <Controls.Input
+                            md={10}
                             name="creditos"
                             label="Créditos"
                             value={values.creditos}
-                            type= "number"
+                            type="number"
                             onChange = {handleInputChange}
                             error={errors.creditos}
                         />
                 </Grid>
-
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>

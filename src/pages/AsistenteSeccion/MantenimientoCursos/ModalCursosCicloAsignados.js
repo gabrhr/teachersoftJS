@@ -14,7 +14,7 @@ const tableHeaders = [
     {
       id: 'clave',
       label: 'Clave',
-      numeric: true,
+      numeric: false,
       sortable: true
     },
     {
@@ -45,7 +45,7 @@ const tableHeaders = [
 
 const SubtitulosTable={display:"flex"}
 
-export default function ModalCursosCicloAsignados({records, setRecords, recordsBusq, setRecordsBusq}){
+export default function ModalCursosCicloAsignados({records, setRecords, recordsBusq, setRecordsBusq, recordsDel, setRecordsDel}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordsABo, setRecordsABo] = useState([])
 
@@ -69,13 +69,13 @@ export default function ModalCursosCicloAsignados({records, setRecords, recordsB
     }
 
     const deleteCursos = () => {
-
+      
         let curFil = records.filter((cur) => cur.selected===true)
-        console.log('curfil: ',curFil)
 
         let items = records.filter((row) => row.selected===false);
-        console.log(items)
+
         setRecords(items)
+        setRecordsDel(curFil) //Le metemos los eliminados a los que se van a deletear.
 
         for(let cur of curFil){
             cur.selected = false
@@ -83,8 +83,6 @@ export default function ModalCursosCicloAsignados({records, setRecords, recordsB
 
         setRecordsBusq(recordsBusq=>[...recordsBusq, ...curFil])
 
-
-        console.log("adasd", recordsBusq)
     }
 
     return(

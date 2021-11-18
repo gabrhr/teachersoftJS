@@ -129,6 +129,8 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
     }
 
 
+    console.log(horario);
+
     return(
         
         <Form onSubmit={handleSubmit}>

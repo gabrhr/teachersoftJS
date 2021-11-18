@@ -128,7 +128,7 @@ export default function CursosForm() {
             <Popup
                 openPopup={openAsignarPopup}
                 setOpenPopup={setOpenAsignarPopup}
-                title="Carga Masiva de Cursos y Horarios"
+                title="Asignar Cursos al Ciclo"
             >
                < ModalAsignarCursosCiclo setOPP={setOpenAsignarPopup}/>
             </Popup>  
