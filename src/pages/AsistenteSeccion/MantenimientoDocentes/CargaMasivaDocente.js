@@ -222,7 +222,11 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
     const handleUploadFile = e => {
         try {
             const file = e.target.files[0];
-            //console.log(file)
+            let extension = file.name.split('.')
+            if(extension[extension.length - 1] !== "xlsx" && extension[extension.length - 1] !== "xls"){
+                alert("Solo se pueden importar archivos .xlsx y .xls")
+                return
+            }
             const reader = new FileReader();
             reader.onload = evt => {
                 /* Parse data */
