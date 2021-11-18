@@ -6,6 +6,7 @@ moment.locale('es');
 
 export default function HeaderSolicitud(props) {
     const {solicitud, solicitador} = props
+
     return (
         <Grid container spacing={{ xs: "10px" }} >
             <Grid item sx={{mt:"10px", mb:"10px", ml:2}}>
