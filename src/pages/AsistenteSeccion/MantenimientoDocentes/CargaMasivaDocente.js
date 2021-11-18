@@ -103,6 +103,46 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
       return docentes;
     }
 
+    function validateEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
+
+    function isNumeric(num){
+      return !isNaN(num)
+    } 
+
+    const validate = (obj) => {
+      if(obj.nombres === ""){
+        alert("Error en la plantilla - Campo nombres")
+        return false
+      }
+      if(obj.apellidos === ""){
+        alert("Error en la plantilla - Campo apellidos")
+        return false
+      }
+      if(obj.seccion_nombre === ""){
+        alert("Error en la plantilla - Campo seccion_nombre")
+        return false
+      }
+      if (!validateEmail(obj.correo_pucp) || obj.correo_pucp === "") {
+        alert("Error en la plantilla - Campo correo_pucp")
+        return false
+      }
+      if(!isNumeric(obj.codigo_pucp) || obj.codigo_pucp.length !== 8 || obj.codigo_pucp === ""){
+        alert("Error en la plantilla - Campo codigo_pucp")
+        return false
+      }
+      if(!isNumeric(obj.numero_documento) || obj.numero_documento.length !== 8 || obj.numero_documento === ""){
+        alert("Error en la plantilla - Campo numero_documento")
+        return false
+      }
+      if(!isNumeric(obj.telefono) || (obj.telefono.length !== 9 && obj.telefono.length !== 7) || obj.telefono === ""){
+        alert("Error en la plantilla - Campo telefono")
+        return false
+      }
+      return true
+    }
 
     const processData = dataString => {
         
@@ -127,6 +167,9 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
                     if (headers[j]) {
                         obj[headers[j]] = d;
                     }
+                }
+                if(!validate(obj)){
+                  return
                 }
                 // remove the blank rows
                 if (Object.values(obj).filter(x => x).length > 0) {

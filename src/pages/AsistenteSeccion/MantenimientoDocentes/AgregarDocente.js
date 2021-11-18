@@ -91,7 +91,7 @@ export default function EditarDocente(props) {
             setErrorApellidos(true)
             errores++;
         }
-        if(!isNumeric(newCodigo) || newCodigo.length != 8){
+        if(!isNumeric(newCodigo) || newCodigo.length !== 8){
             setErrorCodigo(true)
             errores++;
         }
@@ -99,7 +99,7 @@ export default function EditarDocente(props) {
             setErrorEspecialidad(true)
             errores++;
         }
-        if(!isNumeric(newTelefono) || newTelefono.length != 9){
+        if(!isNumeric(newTelefono) || newTelefono.length !== 9){
             setErrorTelefono(true)
             errores++;
         }
@@ -110,7 +110,7 @@ export default function EditarDocente(props) {
         if(errorCorreo){
             errores++;
         }
-        if(!isNumeric(newDocumento) || newDocumento.length != 8){
+        if(!isNumeric(newDocumento) || newDocumento.length !== 8){
             setErrorDocumento(true)
             errores++;
         }
