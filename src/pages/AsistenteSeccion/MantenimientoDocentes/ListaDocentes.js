@@ -47,7 +47,7 @@ const tableHeaders = [
     } */
 ]
   
-export default function ListaDocentes() {
+export default function ListaDocentes({openPopup}) {
 
     const [openPopupAdd, setOpenPopupAdd] = useState(false)
     const [openPopupEdit, setOpenPopupEdit] = useState(false)
@@ -67,9 +67,8 @@ export default function ListaDocentes() {
     } = useTable(records, tableHeaders, filterFn);
     
     useEffect(() => {
-        //Obtenemos las secciones
         getProfesores()
-      }, [openPopupEdit, openDelOnePopup, openPopupAdd])
+      }, [openPopupEdit, openDelOnePopup, openPopupAdd, openPopup])
 
     function transformarDocentes (request){
         const recordsX = []

@@ -116,6 +116,29 @@ export default function ModalCursos({setOpenPopup, records, setRecords, setCarga
       return cursos;
     }
 
+    function isNumeric(num){
+        return !isNaN(num)
+      } 
+  
+    const validate = (obj) => {
+        if(obj.Codigo === "" || obj.Codigo.length !== 6){
+            alert("Error en la plantilla - Campo Clave")
+            return false
+        }
+        if(obj.Nombre_Curso === ""){
+           alert("Error en la plantilla - Campo Nombre")
+           return false
+        }
+        if(obj.Unidad === ""){
+           alert("Error en la plantilla - Campo Unidad")
+           return false
+        }
+        if(!isNumeric(obj.Creditos) || obj.Creditos === ""){
+            alert("Error en la plantilla - Campo Creditos")
+            return false
+        }
+        return true
+     }
 
     const processData = dataString => {
         
@@ -141,7 +164,9 @@ export default function ModalCursos({setOpenPopup, records, setRecords, setCarga
                         obj[headers[j]] = d;
                     }
                 }
-
+                if(!validate(obj)){
+                    return
+                  }
                 // remove the blank rows
                 if (Object.values(obj).filter(x => x).length > 0) {
                     list.push(obj);

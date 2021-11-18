@@ -31,8 +31,8 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
         let temp = {...errors}
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
-        if ('clave' in fieldValues)
-            temp.clave = fieldValues.clave ? "" : "Este campo es requerido."
+        if ('codigo' in fieldValues)
+            temp.codigo = fieldValues.codigo ? "" : "Este campo es requerido."
         if ('créditos' in fieldValues)
             temp.clave = fieldValues.créditos ? "" : "Este campo es requerido."
         setErrors({
@@ -64,7 +64,8 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
         "creditos": parseInt(values.creditos),
         "seccion": seccion.persona.seccion,
       }
-      editarCurso(curso);
+      console.log(curso)
+      //editarCurso(curso);
     }
 
     return (
@@ -90,8 +91,7 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
                         /> 
                 </Grid>
                 <Grid item xs = {4}>  
-                        <Controls.Input
-                            md={10}
+                        <Controls.NumberPicker
                             name="creditos"
                             label="Créditos"
                             value={values.creditos}

@@ -60,7 +60,7 @@ export default function GestionCargaCursos() {
     const [openFaltaSesionPopup, setOpenFaltaSesionPopup] = useState(false)
     const [openRegistroExitoso, setOpenRegistroExitoso] = useState(false)
 
-    const [vTipo, setVTipo] = useState('')
+    const [vTipo, setVTipo] = useState('Clase')
     const [dataSes, setDataSes] = useState([])
 
     const [cantSes, setCantSes] = useState(0);
@@ -73,6 +73,9 @@ export default function GestionCargaCursos() {
     const [horario, setHorario] = useState('')
     const [sesion, setSesion] = useState('')
     const classes = useStyles()
+
+    const [errorHorario, setErrorHorario] = useState(false)
+    const [errorHoraSesion, setErrorHoraSesion] = useState(false)
 
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
@@ -131,13 +134,47 @@ export default function GestionCargaCursos() {
         }
     }
 
-    const changeHorario = e => {setHorario(e.target.value)}
+    const changeHorario = e => {
+        setHorario(e.target.value)
+        if(e.target.value.length == 0){
+            setErrorHorario(false)
+            return
+        }
+        if(e.target.value.length != 4){
+            setErrorHorario(true)
+        }else{
+            setErrorHorario(false)
+        }
+    }
+
+    const changeHoraSesion = e => {
+        setSesion(e.target.value)
+        if(e.target.value.length == 0){
+            setErrorHoraSesion(false)
+            return
+        }
+        if(e.target.value == 0){
+            setErrorHoraSesion(true)
+        }else{
+            setErrorHoraSesion(false)
+        }
+    }
+
+    const validate = () =>{
+        if(errorHorario || errorHoraSesion || cantSes === 0){
+            console.log("Cagaste")
+            return false
+        }
+        console.log("No cagaste")
+        return true;
+    }
 
     const guardarHorario = async() => {
       let arrayCadenas = dValuNombre.split(" ");
       const ciclo = await window.localStorage.getItem("ciclo");
       console.log(ciclo, arrayCadenas);
-      await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
+      if(validate()){
+          await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
         .then(request => {
           if(request[0]){          
               const postHorario = {
@@ -167,6 +204,8 @@ export default function GestionCargaCursos() {
           setOpenGuardarPopup(false);
           });
       }
+      
+    }
 
     return (
         <> 
@@ -216,6 +255,8 @@ export default function GestionCargaCursos() {
                             value={horario} 
                             onChange = {changeHorario}
                             size= 'small'
+                            error = {errorHorario}
+                            helperText = {errorHorario && "El horario debe tener 4 dígitos"}
                         />
                     </Stack>
                 </Grid>
@@ -236,9 +277,9 @@ export default function GestionCargaCursos() {
                             name="horaSesion"
                             label="Horas - Sesión"
                             value={sesion}
-                            onChange={(e)=>{
-                                setSesion(e.target.value)
-                            }}
+                            onChange={changeHoraSesion}
+                            error = {errorHoraSesion}
+                            helperText = {errorHoraSesion && "El valor no puede ser 0"}
                             />
                             <AddButton onClick = {() => addSession(vTipo, sesion)} title = "Agregar horario"/>  
                         </Stack>

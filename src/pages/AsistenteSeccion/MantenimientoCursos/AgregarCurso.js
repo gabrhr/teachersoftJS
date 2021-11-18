@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid , Input, Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useTheme } from '@mui/material/styles'
-import { Controls } from "../../../components/controls/Controls"
+import { Controls} from "../../../components/controls/Controls"
 /* fake BackEnd */
 import DepartamentoService from '../../../services/departamentoService.js';
 
@@ -19,7 +19,7 @@ const initialFieldValues = {
 
 export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
 
-    const [departamento, setDepartamentos] = React.useState([]);
+    const [departamento, setDepartamentos] = useState([]);
 
     const theme = useTheme();
     const ColumnGridItemStyle = {
@@ -31,8 +31,8 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
         let temp = {...errors}
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
-        if ('clave' in fieldValues)
-            temp.clave = fieldValues.clave ? "" : "Este campo es requerido."
+        if ('codigo' in fieldValues)
+            temp.codigo = fieldValues.codigo ? "" : "Este campo es requerido."
         if ('créditos' in fieldValues)
             temp.clave = fieldValues.créditos ? "" : "Este campo es requerido."
         setErrors({
@@ -66,7 +66,8 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
             "id": seccion.persona.seccion.id,
           }
         }
-        agregarCurso(curso);
+        console.log(curso)
+        //agregarCurso(curso);
       }
     }
 
@@ -92,7 +93,7 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
                             onChange = {handleInputChange}
                             error={errors.nombre}
                         />
-                        <Controls.Input
+                        <Controls.NumberPicker
                             name="creditos"
                             label="Créditos"
                             type= "number"
