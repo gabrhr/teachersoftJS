@@ -22,12 +22,13 @@ import Notification from '../../components/util/Notification'
 
 // services
 import * as MesaPartesService from '../../services/mesaPartesService'
+import * as DTLocalServices from '../../services/DTLocalServices'
 
 export default function RecepcionDetalleSolicitudFuncion() {
     const location= useLocation()
     const {solicitudinit} = location.state
     const [solicitud, setSolicitud] = React.useState(solicitudinit)         // <---- NO SIRVE
-    const {user} = useContext(UserContext);
+    const {user, rol} = useContext(UserContext);
     const [atender, setAtender]= React.useState(false)
     const [openPopup, setOpenPopup]= React.useState(false)
 
@@ -47,6 +48,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
     }
 
     React.useEffect(() => {
+        // console.log("actualizada: ", solicitud)
         if (solicitud.estado === '1') {
             /* secretario entra a la solicitud detalle (cabios listos) 
              * estado: Enviado -> En Revision */
@@ -60,7 +62,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 })
                 .catch(err => {console.error(err)})
         } else if (solicitud.estado === '3') {
-            /* secreatrio responde en lugar del delegado */
+            /* secretario responde en lugar del delegado */
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
                     setNotify({
@@ -105,13 +107,17 @@ export default function RecepcionDetalleSolicitudFuncion() {
         /* FIXME:  Respuesta de la solicitud Observacion no se actualiza luego de
          *         hacer submit aqui.  Tiene que salir y volver a entrar a
          *         RecepcionDetalleSolicitud */
+        // console.log("antes", solicitud)
         setSolicitud(solicitud => ({
             ...solicitud, 
             /* data faltante de la respuesta de soli por Secretario Dpto. */
             delegadoID: user.persona.id,
-            delgado: {
+            /* ANTES DECIA DELGADO!!!!! */
+            // delgado: {
+            delegado: {
                 fullName: user.persona.nombres + " " + user.persona.apellidos,
                 foto_URL: user.persona.foto_URL,
+                rolName: DTLocalServices.getRolName(rol)
             },
             estado: '3',
             tracking: {
@@ -121,6 +127,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
             observacion: atencion.observacion,
             resultado: atencion.resultadoID,
         }))
+        // console.log("despues", solicitud)
     }
 
     return (

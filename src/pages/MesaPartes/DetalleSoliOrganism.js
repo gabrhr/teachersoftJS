@@ -57,7 +57,7 @@ export default function DetalleSoliOrganism(props) {
     return (
         <>
             <Grid container spacing={2} ml={".3px"}>
-                <Grid item xs={4} md={7.4}>
+                <Grid item xs={7.4}>
                     <Box>
                         <DT.Title size="medium" text={'Trámite: ' + `${solicitud.temaTramite}` + ' - ' + `${solicitud.tipoTramite}`} />
                         <Typography variant="subtitle1">
@@ -89,7 +89,7 @@ export default function DetalleSoliOrganism(props) {
                             }
                         }}
                     />
-                    <Grid item xs={0.3} md={0.3} />
+                    <Grid item xs={0.3}/>
                     <Divider flexItem pl="20px" />
                     <Box ml="76px" display="none">
                         <Controls.DreamTitle
@@ -103,7 +103,7 @@ export default function DetalleSoliOrganism(props) {
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={0.3} md={0.3} />
+                <Grid item xs={0.3}/>
                 <Divider orientation="vertical" flexItem sx={{ marginTop: '20px', mr: "10px", ml: "20px", mb: "10px" }} />
                 <Grid item xs={6} md={4}>
                     <Controls.DreamTitle
@@ -114,9 +114,6 @@ export default function DetalleSoliOrganism(props) {
                     <DT.Tracking estadosTracking={estadosTracking} />
                 </Grid>
             </Grid>
-            <Grid item xl={6} md={6} sm={12} xs={12}>
-            </Grid>
-
         </>
     )
 }

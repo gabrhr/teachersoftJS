@@ -38,6 +38,7 @@ export default function ResultadoSolicitud(props) {
     // - solicitud.fecha_atendido
     // - solicitud.delegado.rolName
     const {solicitud}=props
+
     return (
         <div style={{marginTop:"5px"}}>
             <Controls.Divider/>
@@ -54,23 +55,22 @@ export default function ResultadoSolicitud(props) {
             <Typography variant="body1" mx={2} my={1} ml={"76px"} fontWeight="550">
                     Observación a la Solicitud:
             </Typography>
-            <Grid  md={11}>
-                <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    rows={6}
-                    value={solicitud.observacion}
-                    disabled
-                    sx={{
-                        ml:"75px",
-                        mr: "20px",
-                        width: "62.5%",
-                        ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
-                            WebkitTextFillColor:"black"
-                        }
-                    }}
-                />
-            </Grid>
+            <TextField
+                id="outlined-multiline-static"
+                multiline
+                rows={6}
+                // value={solicitud.observacion}
+                defaultValue={solicitud.observacion}
+                disabled
+                sx={{
+                    ml:"75px",
+                    mr: "20px",
+                    width: "62.5%",
+                    ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
+                        WebkitTextFillColor:"black"
+                    }
+                }}
+            />
         </div>
     )
 }
