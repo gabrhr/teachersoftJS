@@ -49,7 +49,7 @@ const tableHeaders = [
 
     const SubtitulosTable={display:"flex"}
 
-export default function ModalDocenteClasesAsignados({records, setRecords}){
+export default function ModalDocenteClasesAsignados({records, setRecords, recordsBusq, setRecordsBusq}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [selectedRow, setSelectedRow] = useState(records.length+1)
     const [borrarDisabled, setBorrarDisabled] = useState(true)
@@ -127,8 +127,9 @@ export default function ModalDocenteClasesAsignados({records, setRecords}){
         // console.log(recAux)
         // setRecords(recAux)
         // console.log(records)
-        let items = records.filter((row) => row.docente.codigo !== profDelete.docente.codigo);
-
+        setRecordsBusq(recordsBusq => [...recordsBusq, profDelete.docente])
+        let items = records.filter((row) => row.docente.codigo_pucp !== profDelete.docente.codigo_pucp);
+        console.log('records: ', records)
         setRecords(items);
         setSelectedRow(records.length+1)
         setBorrarDisabled(true)

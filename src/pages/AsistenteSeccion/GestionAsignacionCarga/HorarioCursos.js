@@ -91,22 +91,23 @@ const fillHorarios = async () => {
     //console.log(hor.sesiones[0].secuencia);
     //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
     //console.log(sesion1);
+    console.log(hor)
     horarios.push({
       "id": hor.id,
       "codigo": hor.codigo,
       "tipo": hor.sesiones[0].secuencia,
       "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-      ciclo:{
-        "id": hor.ciclo.id,
-      },
-      curso:{
-        "id": hor.curso.id,
-        "codigo": hor.curso.codigo,
-        "nombre": hor.curso.nombre,
-        "creditos": hor.curso.creditos,
-        "unidad": hor.curso.unidad,
-        "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
-      },
+      // ciclo:{
+      //   "id": hor.ciclo.id,
+      // },
+      // curso:{
+      //   "id": hor.curso.id,
+      //   "codigo": hor.curso.codigo,
+      //   "nombre": hor.curso.nombre,
+      //   "creditos": hor.curso.creditos,
+      //   "unidad": hor.curso.unidad,
+      //   "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-',
+      // },
       sesiones:{
         "secuencia": hor.sesiones[0].secuencia,
         "sesiones_dictado": [],
@@ -122,17 +123,17 @@ const fillHorarios = async () => {
         "codigo": hor.codigo,
         "tipo": hor.sesiones[0].secuencia,
         "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-        ciclo:{
-          "id": hor.ciclo.id,
-        },
-        curso:{
-          "id": hor.curso.id,
-          "codigo": hor.curso.codigo,
-          "nombre": hor.curso.nombre,
-          "creditos": hor.curso.creditos,
-          "unidad": hor.curso.unidad,
-          "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-'
-        },
+        // ciclo:{
+        //   "id": hor.ciclo.id,
+        // },
+        // curso:{
+        //   "id": hor.curso.id,
+        //   "codigo": hor.curso.codigo,
+        //   "nombre": hor.curso.nombre,
+        //   "creditos": hor.curso.creditos,
+        //   "unidad": hor.curso.unidad,
+        //   "facultad": (hor.curso.seccion.departamento.unidad) ? hor.curso.seccion.departamento.unidad.nombre : '-'
+        // },
         sesiones:{
           "secuencia": hor.sesiones[1].secuencia,
           "sesiones_dictado": [],
@@ -290,10 +291,10 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                             >
                             {item.clave}
                             </TableCell>*/}
-                            <TableCell>{item.curso.codigo}</TableCell>
+                            {/* <TableCell>{item.curso.codigo}</TableCell> */}
                             <TableCell>{item.horas_semanales}</TableCell>
-                            <TableCell>{item.curso.facultad}</TableCell>
-                            <TableCell>{item.curso.nombre}</TableCell>
+                            {/* <TableCell>{item.curso.facultad}</TableCell> */}
+                            {/* <TableCell>{item.curso.nombre}</TableCell> */}
                             <TableCell>{item.codigo}</TableCell>
                             <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
                             <TableCell>{item.sesiones.hora_sesion}</TableCell>

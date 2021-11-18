@@ -87,14 +87,15 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     }
 
     const addProf = () => {
-        console.log(profAdd)
+        console.log('profadd: ', profAdd)
         let sesion_docente = {
           "docente" : profAdd,
           "horas_dictado_docente_sesion": 0,
         }
         setRecordsAsig(recordsAsig => [...recordsAsig, sesion_docente])
-        let items = records.filter((row) => row.codigo !== profAdd.codigo);
-
+        console.log('records: ',records)
+        let items = records.filter((row) => row.codigo_pucp !== profAdd.codigo_pucp);
+        console.log('items: ', items)
         setRecords(items);
         setSelectedRow(records.length+1)
         setAsignarDisabled(true)
