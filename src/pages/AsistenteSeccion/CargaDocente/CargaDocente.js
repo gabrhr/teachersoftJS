@@ -103,58 +103,28 @@ function GetRow({ ...props }) {
 // //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
-  const ciclo = window.localStorage.getItem("ciclo"); 
-  let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
+  const ciclo = await window.localStorage.getItem("ciclo");
+  let dataCur = await CursoService.getCursoCicloxCicloxCodigoNombre(ciclo,"");
+  if(!dataCur) dataCur = [];
+  //let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
   let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const cursos = [];
   for(let cur of dataCur) {
-    horCiclo = [];  //se reinician los horarios
-    horarios = await HorarioService.listarPorCursoCiclo(cur.id , ciclo);
-    if(!horarios)  continue; //Si se retorna un promise vacio - no se lista el curso
-    for(let hor of horarios){
-      if (hor.sesiones.sesion_docente) {
-        estado = 'Asignados'
-        tipo= 'atendido'
-      }
-      else  {
-        estado = 'Por asignar'
-        tipo= 'pendiente'
-        break;
-      }
-    }
-    //Adicionalmente a esto
-    for(let hor of horarios){
-      console.log(hor);
-      horCiclo.push({
-        "id": hor.id,
-        "codigo": hor.codigo,
-        "ciclo":{
-          "id": ciclo,
-        } ,
-        "curso":{
-          "id": cur.id,
-        },
-        "curso_ciclo": hor.curso_ciclo.id,
-        "sesiones": hor.sesiones
-      })
-    }
     //Hacemos la creación y verificación de los estados
     cursos.push({
-      "id": cur.id,
-      "nombre": cur.nombre,
-      "codigo": cur.codigo,
-      "creditos": cur.creditos,
+      "id": cur.curso.id,
+      "nombre": cur.curso.nombre,
+      "codigo": cur.curso.codigo,
+      "creditos": cur.curso.creditos,
       "seccion": {
-        "id": cur.seccion.id,
-        "nombre": cur.seccion.nombre,
+        "id": cur.curso.seccion.id,
+        "nombre": cur.curso.seccion.nombre,
         "departamento":{
-          "id":cur.seccion.departamento.id,
-          "nombre":cur.seccion.departamento.nombre,
+          "id":cur.curso.seccion.departamento.id,
+          "nombre":cur.curso.seccion.departamento.nombre,
         }
       },
-      "horarios": horCiclo,
       "estado": estado,
       "type": tipo
     })
@@ -223,7 +193,7 @@ export default function CargaDocente() {
     <Form>
       <ContentHeader
         text="Registro de Carga Docente"
-        cbo={horarios ? false : true}
+        cbo={true}
       />
       {horarios ? (
         <>

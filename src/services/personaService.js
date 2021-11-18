@@ -48,7 +48,7 @@ const registerPersona = async newObject => {
   }
 }
 
-const updatePersona = async (newObject, id) => {
+const updatePersona = async (newObject) => {
   try{
     console.log(newObject)
     const request = await axios.put(`${url}/persona/`, newObject, tokenService.GetTokenPrueba());

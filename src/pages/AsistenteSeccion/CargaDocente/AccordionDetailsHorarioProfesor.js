@@ -13,6 +13,8 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import Popup from '../../../components/util/Popup'
 import ModalBusquedaDocente from './ModalBusquedaDocente'
 import ModalDocenteClases from './ModalDocenteClases'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 function generateRow(docente) {
   let tipoDoc = 1;
@@ -34,9 +36,12 @@ function generateRow(docente) {
         <>
             <Grid container>
                 <Grid item xs={1}>
-                    <Avatar>
-                        <img height = "125%" width = "125%" text-align ="center" src={docente.foto_URL ? docente.foto_URL : 'static/images/avatar/1.jpg'} alt=""></img>
-                    </Avatar>
+                  <Avatar>
+                      {docente.foto_URL !== ("static/images/avatar/1.jpg" || "")
+                        ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                          src={docente.foto_URL}></img>
+                        :  <AccountCircleIcon/>}
+                  </Avatar>
                 </Grid>
                 <Grid item xs={3}>
                     <Typography>

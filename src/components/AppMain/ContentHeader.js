@@ -74,7 +74,7 @@ function CboCiclo(props) {
     /*UNA VEZ ACTUALIZAMOS LOS DATOS DE VALUES - LE PASAMOS EL CICLOACTUAL PARA QUE SEA EL DEFAULT */
 
     React.useEffect(()=>{
-      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(values.id)))
+        window.localStorage.setItem('cicloSeleccionado', JSON.stringify(parseInt(values.id)))
     },[values])
     
 

@@ -51,6 +51,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     const [asignarDisabled, setAsignarDisabled] = useState(true)
     const [profAdd, setProfAdd] = useState({})
 
+
     const {
         TblContainer,
         TblHead,
@@ -92,9 +93,10 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
         let sesion_docente = {
           "docente" : profAdd,
           "horas_dictado_docente_sesion": 0,
+          "selected": false,
         }
         setRecordsAsig(recordsAsig => [...recordsAsig, sesion_docente])
-        let items = records.filter((row) => row.codigo !== profAdd.codigo);
+        let items = records.filter((row) => row.codigo_pucp !== profAdd.codigo_pucp);
 
         setRecords(items);
         setSelectedRow(records.length+1)
