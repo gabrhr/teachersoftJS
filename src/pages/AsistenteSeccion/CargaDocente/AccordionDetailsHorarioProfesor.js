@@ -86,7 +86,6 @@ export default function AccordionDetailsHorarioProfesor(props) {
         console.log(seleccionadosP)
     }
 
-    console.log("Sesion:", horario);
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     //if(!clase.sesion_docentes) clase.sesion_docentes = []
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
@@ -114,26 +113,28 @@ export default function AccordionDetailsHorarioProfesor(props) {
                     />
                 </Grid>
                 {clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
-                <Grid container>
-                    <Grid item xs={10}>
-                        <Typography
-                            variant="h4"
-                            py="4px"
-                            color="primary"
-                        >
-                            Lista de Docentes de Laboratorios
-                        </Typography>
-                    </Grid>
-                    <Controls.Button
-                        variant="outlined"
-                        text="Editar"
-                        size="small"
-                        endIcon={<EditOutlinedIcon />}
-                        onClick={() => {setOpenEditarPracticasPopup(true)}}
-                    />
-                </Grid>
-                {laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
-            </Paper>
+                {laboratorio[0] ?
+                  <Grid container>
+                      <Grid item xs={10}>
+                          <Typography
+                              variant="h4"
+                              py="4px"
+                              color="primary"
+                          >
+                              Lista de Docentes de Laboratorios
+                          </Typography>
+                      </Grid>
+                      <Controls.Button
+                          variant="outlined"
+                          text="Editar"
+                          size="small"
+                          endIcon={<EditOutlinedIcon />}
+                          onClick={() => {setOpenEditarPracticasPopup(true)}}
+                      />
+                  </Grid>
+                  : <Grid container></Grid> }
+                  {laboratorio[0] ? laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)) : []}
+              </Paper>
             <Popup
             openPopup={openEditarClasesPopup}
             setOpenPopup={setOpenEditarClasesPopup}

@@ -136,7 +136,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
         let valueAnt = horasAsig; 
         setHorasAsig(`${e.target.value}`)
         records[selectedRow].horas_dictado_docente_sesion = parseInt(e.target.value===''?0: e.target.value)
-        records[selectedRow].docente.cargaDocente = parseInt(cargaHorIni)-parseInt(horasAsigIni) + records[selectedRow].horas_dictado_docente_sesion
+        records[selectedRow].docente.cargaDocente = parseInt(cargaHorIni)-parseInt(horasAsigIni ? horasAsigIni : 0) + records[selectedRow].horas_dictado_docente_sesion
         setCargaHor(records[selectedRow].docente.cargaDocente)
 
         records[selectedRow].docente.deuda_docente = parseInt(deudaHorIni) + ( (records[selectedRow].docente.cargaDocente>= maxHoras ) ? (maxHoras - records[selectedRow].docente.cargaDocente) : 0)

@@ -113,7 +113,6 @@ const publicroutes = [
 export default function Router1(props) {
   const  user = JSON.parse(localStorage.getItem("user"))
   const  rol = JSON.parse(localStorage.getItem("rol"))
-  window.localStorage.setItem('ciclo', JSON.stringify(parseInt(2)))
 
   function generateRouteRol(rol){
     switch (rol) {
