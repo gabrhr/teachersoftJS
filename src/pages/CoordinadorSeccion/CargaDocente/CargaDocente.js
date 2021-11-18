@@ -173,6 +173,7 @@ const fillCursos = async () => {
 export default function CargaDocente() {
   // const location= useLocation()
   // const {solicitud}=location.state
+  const [openConfVal, setOpenConfVal] = useState(false)
   const [asunto, setAsunto] = useState("")
   const [cuerpo, setCuerpo] = useState("")
   const [openValYEnvSolPopup, setOpenValYEnvSolPopup] = useState(false)
@@ -360,7 +361,8 @@ export default function CargaDocente() {
             >
                <ModalValidarYEnviarSolicitud /*solicitud = {solicitud}*/asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto}
                                             setCuerpo={setCuerpo} setOpenValYEnvSolPopup = {setOpenValYEnvSolPopup}
-                                            openValYEnvSolPopup = {openValYEnvSolPopup}/>
+                                            openValYEnvSolPopup = {openValYEnvSolPopup} openConfVal={openConfVal}
+                                            setOpenConfVal={setOpenConfVal}/>
       </Popup>
     </Form>
   )

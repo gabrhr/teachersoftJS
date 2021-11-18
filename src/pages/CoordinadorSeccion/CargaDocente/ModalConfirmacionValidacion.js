@@ -21,14 +21,6 @@ export default function ModalConfirmacionValidacion({ asunto, setAsunto, cuerpo,
                     setOpenConfVal(false)
                 }}
             />
-            <Popup
-                openPopup={openValYEnvSolPopup}
-                setOpenPopup={setOpenValYEnvSolPopup}
-                title="Validar y enviar solicitud a la facultad"
-            >
-               <ModalValidarYEnviarSolicitud /*solicitud = {solicitud}*/asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto}
-                                            setCuerpo={setCuerpo} setOpenValYEnvSolPopup = {setOpenValYEnvSolPopup}/>
-            </Popup>
         </>
     )
 }

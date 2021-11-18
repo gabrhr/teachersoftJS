@@ -8,10 +8,10 @@ import ModalConfirmacionValidacion from './ModalConfirmacionValidacion';
 import { useState } from 'react';
 
 export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsunto, cuerpo, setCuerpo, setOpenValYEnvSolPopup,
-                                                    openValYEnvSolPopup}){
+                                                    openValYEnvSolPopup, openConfVal, setOpenConfVal}){
     const correo = "@efekoefkeof"
     const seccion = "Ingeniería - Informática"
-    const [openConfVal, setOpenConfVal] = useState(false)
+    // const [openConfVal, setOpenConfVal] = useState(false)
     return(
         <>
             <DT.Title size="medium" text={'Correo de la unidad: ' + `${correo}`} />
@@ -79,24 +79,29 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                             // size="large"
                             text="Enviar y validar"
                             endIcon = {<EmailOutlinedIcon/>}
-                            onClick = {()=>{
-                                setOpenConfVal(true)
-                                setOpenValYEnvSolPopup(false)
-                            }}
+                            onClick = {()=>{setOpenConfVal(true)}}
                         >
                         </Controls.Button>
                     </div>
+                    {openConfVal ? (
+                        <Box sx={{paddingRight: '3%'}}>
+                        <Typography variant = "subtitle1" sx={{color: 'red', paddingRight: '5%'}}>
+                            ¿Está seguro?
+                        </Typography>
+                        <Controls.Button
+                            text="Sí"
+                            onClick={() => {setOpenConfVal(false)}}
+                        />
+                        <Controls.Button
+                            text="No"
+                            onClick={()=>{
+                                setOpenConfVal(false)
+                            }}
+                        />
+                        </Box>
+                    ) : (<></>)}
                 </Grid>
             </Grid>
-            <Popup
-                openPopup={openConfVal}
-                setOpenPopup={setOpenConfVal}
-                title="Confirmación"
-            >
-               <ModalConfirmacionValidacion asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto} setCuerpo={setCuerpo}
-                                            setOpenValYEnvSolPopup={setOpenValYEnvSolPopup} setOpenConfVal={setOpenConfVal}
-                                            openValYEnvSolPopup={openValYEnvSolPopup}/>
-            </Popup>
         </>
     )
 }
