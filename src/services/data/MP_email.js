@@ -92,7 +92,6 @@ Cordialmente,<br/>
 <b>Departamento Académico de Ciencias</b>
         </p>
 `
-    console.log('soliDelegada: ', actualcontent)
     return pucpformat(actualcontent)
 }
 
