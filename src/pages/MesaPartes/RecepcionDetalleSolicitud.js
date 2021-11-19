@@ -23,11 +23,22 @@ import Notification from '../../components/util/Notification'
 // services
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
+import * as EmailService from '../../services/emailService'
+
+function sendEmailNotification(solicitud) {
+    EmailService.emailSolicitor2(solicitud)
+        .then(data => {
+            return data
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
 
 export default function RecepcionDetalleSolicitudFuncion() {
     const location= useLocation()
     const {solicitudinit} = location.state
-    const [solicitud, setSolicitud] = React.useState(solicitudinit)         // <---- NO SIRVE
+    const [solicitud, setSolicitud] = React.useState(solicitudinit) // <---- NO SIRVE
     const {user, rol} = useContext(UserContext);
     const [atender, setAtender]= React.useState(false)
     const [openPopup, setOpenPopup]= React.useState(false)
@@ -48,8 +59,8 @@ export default function RecepcionDetalleSolicitudFuncion() {
     }
 
     React.useEffect(() => {
-        // console.log("actualizada: ", solicitud)
-        if (solicitud.estado === '1') {
+        console.log("actualizada: ", solicitud)
+        if (solicitud.estado === '1' && solicitud.cambioEstado) {
             /* secretario entra a la solicitud detalle (cabios listos) 
              * estado: Enviado -> En Revision */
             MesaPartesService.updateSolicitud(solicitud)
@@ -61,7 +72,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                     })
                 })
                 .catch(err => {console.error(err)})
-        } else if (solicitud.estado === '3') {
+        } else if (solicitud.estado === '3' && solicitud.cambioEstado) {
             /* secretario responde en lugar del delegado */
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
@@ -71,6 +82,8 @@ export default function RecepcionDetalleSolicitudFuncion() {
                         type: 'success'
                     })
                     setAtender(false)
+                    /* Send notification to solicitador */
+                    sendEmailNotification(solicitud)
                 })
                 .catch(err => {
                     /* error :( */
@@ -96,7 +109,10 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 tracking: {
                     ...solicitud.tracking,
                     fecha_revision: new Date().toJSON()
-                }
+                },
+
+                /* only for FrontEnd */
+                cambioEstado: true
             }))
         }
         // console.log('hola', solicitud)
@@ -126,6 +142,9 @@ export default function RecepcionDetalleSolicitudFuncion() {
             },
             observacion: atencion.observacion,
             resultado: atencion.resultadoID,
+
+            /* only for FrontEnd */
+            cambioEstado: true
         }))
         // console.log("despues", solicitud)
     }
