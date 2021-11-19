@@ -20,6 +20,7 @@ import AtenderSolicitudForm from './AtenderSolicitudForm';
 // services
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
+import Notification from '../../components/util/Notification';
 
 export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
@@ -29,6 +30,7 @@ export default function RecepcionDetalleSolicitud() {
     const [atender, setAtender]= React.useState(false)
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
     
+
     const [notify, setNotify] = React.useState({ 
         isOpen: false, message: '', type: '' 
     })
@@ -123,7 +125,7 @@ export default function RecepcionDetalleSolicitud() {
                 */}
                 
                 {/* Respuesta */}
-                { solicitud.resultado!=0?
+                { solicitud.resultado!=0? 
                     <ResultadoSolicitud solicitud={solicitud}/> :
                     atender? 
                         <AtenderSolicitudForm 
@@ -131,17 +133,18 @@ export default function RecepcionDetalleSolicitud() {
                             solicitud={solicitud}
                             submitAtencion={submitAtencion}
                         /> :
-                        <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
-                            <Stack mt={2} mb={2}>
-                                <Controls.Button
-                                    text="Atender"
-                                    type="submit"   // html property (not component)
-                                    onClick={() => {setAtender(true)}}
-                                />
-                            </Stack>
+                        /* ACCIONES */
+                        <Box  mr={"210px"} mt={2} mb={2} sx={{display: "flex", justifyContent: 'flex-end'}}> 
+                            <Controls.Button
+                                text="Atender"
+                                type="submit"   // html property (not component)
+                                onClick={() => {setAtender(true)}}
+                            />
                         </Box>
+                    
                 }
             </Paper>
+            <Notification notify={notify} setNotify={setNotify} />
         </>
     )
 }

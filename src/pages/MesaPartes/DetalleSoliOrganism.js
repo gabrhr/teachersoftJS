@@ -22,6 +22,7 @@ function crearEstado(estado, titulo, contenido, fecha, completado) {
 function estadoCompletado(fecha) {
     return fecha !== null
 }
+
 function formatoFecha(fecha) {
     if (fecha != null) {
         return (moment.utc(fecha).format('[Fecha] DD MMM YYYY [- Hora: ] h:mm a'))
