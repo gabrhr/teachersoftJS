@@ -71,10 +71,13 @@ a:link, a:visited, a:hover, a:active {
 
 export function soliDelegada(s) {
     let resultado = ""
+    let color = "black"
     if (s.resultado === 1) {
         resultado = "Aceptado"
+        color = "green"
     } else if (s.resultado === 2) {
         resultado = "Rechazado"
+        color = "red"
     }
     let actualcontent = `<p>
             Estimado:<br/>
@@ -88,7 +91,10 @@ export function soliDelegada(s) {
             <p style="white-space:pre-wrap;">${s.descripcion}</p>
         </blockquote>
         <p>
-            Respuesta: <b>${resultado}</b>
+            Respuesta: 
+                <span style="color: ${color};">
+                    <b>${resultado}</b>
+                </span>
         </p>
         <blockquote>
             <p style="white-space:pre-wrap;">${s.observacion}</p>

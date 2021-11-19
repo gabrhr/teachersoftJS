@@ -59,7 +59,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
     }
 
     React.useEffect(() => {
-        console.log("actualizada: ", solicitud)
+        // console.log("actualizada: ", solicitud)
         if (solicitud.estado === '1' && solicitud.cambioEstado) {
             /* secretario entra a la solicitud detalle (cabios listos) 
              * estado: Enviado -> En Revision */
@@ -216,7 +216,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title={"Seleccionar Destinatario"}
+                title={"Delegar a:"}
                 
             >
                <DelegarForm solicitud={solicitud}/>

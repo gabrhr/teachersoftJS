@@ -31,7 +31,7 @@ export function emailSolicitor2(s) {
         url: `${url}/email/`,
         data: dataemail(
             s.solicitador.correo,
-            `Su solicitud #${s.id} fue atendida`,
+            `Su solicitud con id #${s.id} fue atendida`,
             MP_email.soliDelegada(s)
         ),
         ...config

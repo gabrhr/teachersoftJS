@@ -201,7 +201,10 @@ export default function Router1(props) {
         {/* Login */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/">
-          {user?.id>0 ? <Redirect to={generateRouteRol(rol)} /> : <Redirect to="/login"/> }
+          {user
+            ?.id>0 
+            ? <Redirect to={generateRouteRol(rol)} /> 
+            : <Redirect to="/login"/> }
         </Route>
       </Switch>
     </Router>
