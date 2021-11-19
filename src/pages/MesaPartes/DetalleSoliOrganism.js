@@ -122,7 +122,7 @@ export default function DetalleSoliOrganism(props) {
                     />
                     <Grid item xs={0.3}/>
                     <Divider flexItem pl="20px" />
-                    <Box ml="76px" display="none">
+                    <Box ml="76px" >
                         <Controls.DreamTitle
                             title={'Archivos Adjuntos: '}
                             size='20px'
