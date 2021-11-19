@@ -59,6 +59,8 @@ const theme = createTheme({
         light:"#7b61ff"
       },
       adjuntar:{
+        main: "#7B61FF",
+        dark: "#7B61FF",
         light:"#432DB4"
       }
     },

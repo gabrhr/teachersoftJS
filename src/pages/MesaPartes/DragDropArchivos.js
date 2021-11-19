@@ -10,6 +10,7 @@ import { Grid, Box } from '@material-ui/core'
 import Dropzone from 'react-dropzone-uploader'
 import 'react-dropzone-uploader/dist/styles.css'
 import { getDroppedOrSelectedFiles } from 'html5-file-selector'
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 
 function getBase64(file) {
     return new Promise(function (resolve) {
@@ -117,29 +118,57 @@ export default function DragDropArchivos(props) {
             color: '#fff',
             cursor: 'pointer',
             padding: 15,
-            borderRadius: 0
+            borderRadius: "20px",
+            marginTop:"20px"
         }
 
         return (
-            <label style={buttonStyle}>
-                {text}
-                <input
-                    style={{ display: 'none' }}
-                    type="file"
-                    accept={accept}
-                    multiple
-                    onChange={e => {
-                        getFilesFromEvent(e).then(chosenFiles => {
-                            onFiles(chosenFiles)
-                        })
-                    }}
-                />
-            </label>
+            <>
+                {
+                    files.length > 0 ?
+                    <div marginBottom={"10px"}> </div>:
+                    <div align="center">
+                        <CloudUploadOutlinedIcon sx={{ fontSize: 60, color:"#BBBBBB", mt:"50px"}}/>
+                        <p> Arrastre y suelte los archivos aquí <br/> o</p> 
+                    </div>
+                }    
+                <label style={buttonStyle}>
+                    {text}
+                    <input
+                        style={{ display: 'none' }}
+                        type="file"
+                        accept={accept}
+                        multiple
+                        onChange={e => {
+                            getFilesFromEvent(e).then(chosenFiles => {
+                                onFiles(chosenFiles)
+                            })
+                        }}
+                    />
+                </label>
+            </>
         )
     }
 
+    const dropzoneStyle = {
+        dropzone:{
+
+            width  : "100%",
+            height : "350px",
+            borderStyle: "dotted",
+            borderWidth: "thick",
+            overflowX: "hidden",
+            marginBottom:"20px",
+            margintop:"10px"
+        },
+        preview:{
+
+        }
+    };
+
     return (
         <Dropzone
+            styles={dropzoneStyle}
             getUploadParams={getUploadParams}
             onChangeStatus={handleChangeStatus}
             // submitButtonContent={"Subir archivos"}

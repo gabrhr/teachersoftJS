@@ -18,6 +18,8 @@ import axios from 'axios'
 import url from '../config'
 import tokenService from './tokens.js';
 
+import * as DTLocalServices from './DTLocalServices'
+
 /* para la funcioncita especial */
 // import DepartamentoService from './departamentoService';
 // import SeccionService from './seccionService';
@@ -89,6 +91,7 @@ function f2bTipoTramite(x) {
 function b2fPersona(x) {
     return {
         fullName: x.nombres + ' ' + x.apellidos,
+        rolName: DTLocalServices.getRolName(x.tipo_persona),
         correo: x.correo_pucp,
         foto_URL: x.foto_URL,
         seccionDepartamento: x.seccion.departamento.nombre + ' - ' + x.seccion.nombre,
@@ -113,27 +116,34 @@ function personaInit() {
 }
 
 function b2fSolicitud(x) {
-    const { id, nombre: tipoTramite, ...other } = b2fTipoTramite(x.tipoTramiteMesaDePartes)
+    const { id, nombre: tipoTramite, ...other } = b2fTipoTramite(
+        x.tipoTramiteMesaDePartes)
     return {
         id: x.id,
+        /* nueva solicitud */
         asunto: x.asunto,
         descripcion: x.descripcion,
         solicitador: b2fPersona(x.solicitador ?? personaInit()),
-        archivos: x.archivos,       // CUIDADO AL MANDAR A BACK
-        delegado: b2fPersona(x.delegado ?? personaInit()),
-        tracking: {
-            fecha_enviado: x.fecha_creacion,
-            fecha_revision: x.fecha_recepcion,
-            fecha_delegado: x.fecha_delegacion,
-            fecha_atendido: x.fecha_atencion
+        // archivos: x.archivos,       // ya no se usa
+
+        /* tracking */
+        estado: x.estado_tracking.toString(),       // valor
+        tracking: {                                 // -----
+            fecha_enviado: x.fecha_creacion,        // 0
+            fecha_revision: x.fecha_recepcion,      // 1
+            fecha_delegado: x.fecha_delegacion,     // 2
+            fecha_atendido: x.fecha_atencion        // 3
         },
-        estado: x.estado_tracking.toString(),  // del tracking
-        resultado: x.resultado,
+
+        /* respuesta */
+        delegado: b2fPersona(x.delegado ?? personaInit()),
+        resultado: x.resultado,         // 0: pend, 1: acep, 2: rechazado
+        observacion: x.observacion,
 
         tipoTramite: tipoTramite,
         ...other,
 
-        /* RELACIONES (necesario para back) */
+        /* RELACIONES (redundant easy access) */
         solicitadorID: x.solicitador ? x.solicitador.id : null,     // personaID
         delegadoID: x.delegado ? x.delegado.id : null,              // personaID
         tipoTramiteID: x.tipoTramiteMesaDePartes
@@ -142,24 +152,38 @@ function b2fSolicitud(x) {
 
 /* NO TOCAR */
 export function f2bSolicitud(x) {
-    return {
-        // id: x.id,    
+    let soliback = {
+        id: x.id ? x.id : undefined,
+        /* nueva solicitud */
         asunto: x.asunto,
         descripcion: x.descripcion,
         solicitador: { id: x.solicitadorID },   // requerido
-        // archivos: x.archivos,
+
+
+        /* tracking */
+        estado_tracking: parseInt(x.estado, 10),
+        fecha_creacion: x.tracking.fecha_enviado 
+            ? x.tracking.fecha_enviado 
+            : undefined,
+        fecha_recepcion: x.tracking.fecha_revision 
+            ? x.tracking.fecha_revision 
+            : undefined,
+        fecha_delegacion: x.tracking.fecha_delegado 
+            ? x.tracking.fecha_delegado 
+            : undefined,
+        fecha_atencion: x.tracking.fecha_atendido 
+            ? x.tracking.fecha_atendido 
+            : undefined,
+
+        /* respuesta */
         delegado: x.delegadoID ? { id: x.delegadoID } : undefined,
-
-        estado_tracking: x.estado,
-        fecha_creacion: x.tracking.fecha_enviado,
-        fecha_recepcion: x.tracking.fecha_recepcion,
-        fecha_delegacion: x.tracking.fecha_revision,
-        fecha_atencion: x.tracking.fecha_delegado,
-
         resultado: x.resultado,
+        observacion: x.observacion,
 
-        tipoTramiteMesaDePartes: { id: x.tipoTramiteID }    // requerido
+        // tipoTramiteMesaDePartes: { id: x.tipoTramiteID }    // requerido
+        tipoTramiteMesaDePartes: { id: 1 }    // requerido
     }
+    return soliback
 }
 //#endregion
 
@@ -324,6 +348,22 @@ export function registerSolicitud(soli) {
         url: `${url}/mesa/`,
         data: {
             ...f2bSolicitud(soli)
+        },
+        ...config
+    })
+        .then(res => {
+            // console.log("MPservice: registerSoli:", res)
+            return res.data.id
+        })
+        // .catch(err => console.error(err));
+}
+
+export function updateSolicitud(soli) {
+    return axios({
+        method: 'put',
+        url: `${url}/mesa/`,
+        data: {
+            ...f2bSolicitud(soli),
         },
         ...config
     })

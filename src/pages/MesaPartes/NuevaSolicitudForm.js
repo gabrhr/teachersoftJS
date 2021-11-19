@@ -178,6 +178,11 @@ function ActualForm(props) {
                 maxRows={6}
             />
             {/* ARCHIVOS */}
+            <Controls.DreamTitle
+                title ={'Archivos Adjuntos: '}
+                size = '20px'
+                lineheight = '300%'
+            />
             <DragDropArchivos values={values} setValues={setValues} />
 
             {/* botones */}
