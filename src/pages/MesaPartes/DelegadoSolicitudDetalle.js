@@ -16,11 +16,24 @@ import { Box } from '@mui/system';
 import { DT } from '../../components/DreamTeam/DT';
 import ResultadoSolicitud from './ResultadoSolicitud';
 import AtenderSolicitudForm from './AtenderSolicitudForm';
+import Notification from '../../components/util/Notification';
 
 // services
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
-import Notification from '../../components/util/Notification';
+import * as EmailService from '../../services/emailService'
+
+function sendEmailNotification(solicitud) {
+    EmailService.emailSolicitor2(solicitud)
+        .then(data => {
+            return data
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
+
+
 
 export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
@@ -37,7 +50,7 @@ export default function RecepcionDetalleSolicitud() {
 
     React.useEffect(() => {
         // console.log("actualizada: ", solicitud)
-        if (solicitud.estado === '3') {
+        if (solicitud.estado === '3' && solicitud.cambioEstado) {
             /* secretario responde en lugar del delegado */
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
@@ -47,6 +60,8 @@ export default function RecepcionDetalleSolicitud() {
                         type: 'success'
                     })
                     setAtender(false)
+                    /* Send notification to solicitador */
+                    sendEmailNotification(solicitud)
                 })
                 .catch(err => {
                     /* error :( */
@@ -85,6 +100,8 @@ export default function RecepcionDetalleSolicitud() {
             },
             observacion: atencion.observacion,
             resultado: atencion.resultadoID,
+            /* only for FrontEnd */
+            cambioEstado: true
         }))
         // console.log("despues", solicitud)
     }

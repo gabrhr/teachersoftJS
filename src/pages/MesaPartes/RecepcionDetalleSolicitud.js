@@ -48,6 +48,46 @@ function sendEmailNotification(solicitud, tipo) {
         console.error("tipo invalido", tipo)
 }
 
+function accionesSegunResultado (s, atender, setAtender,
+        submitAtencion, setOpenPopup
+    ){
+    if(s.resultado != 0){
+        return <ResultadoSolicitud solicitud={s} />
+    }
+
+    if(s.estado==0 || s.estado==1){
+        return(
+            atender ?
+            <AtenderSolicitudForm
+                setAtender={setAtender}
+                solicitud={s}
+                submitAtencion={submitAtencion}
+            /> :
+            /* ACCIONES */
+            <Box mr={"210px"} sx={{ display: "flex", justifyContent: 'flex-end' }}>
+                <Stack mt={2} mb={2}>
+                    <Controls.Button
+                        text="Atender"
+                        type="submit"   // html property (not component)
+                        onClick={() => { setAtender(true) }}
+                    />
+                    <Typography variant="body1" textAlign="center">
+                        o
+                    </Typography>
+                    <Controls.Button
+                        text="Delegar"
+                        type="submit"   // html property (not component)
+                        onClick={() => { setOpenPopup(true) }}
+                    />
+                </Stack>
+            </Box>
+        )
+    }
+
+    return (<></>)
+
+}
+
 export default function RecepcionDetalleSolicitudFuncion() {
     const location = useLocation()
     const { solicitudinit } = location.state
@@ -238,34 +278,8 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 */}
 
                 {/* Respuesta (en recepcion aun no hay respuesta) */}
-                {solicitud.resultado != 0 ?
-                    <ResultadoSolicitud solicitud={solicitud} /> :
-                    atender ?
-                        <AtenderSolicitudForm
-                            setAtender={setAtender}
-                            solicitud={solicitud}
-                            submitAtencion={submitAtencion}
-                        /> :
-                        /* ACCIONES */
-                        <Box mr={"210px"} sx={{ display: "flex", justifyContent: 'flex-end' }}>
-                            <Stack mt={2} mb={2}>
-                                <Controls.Button
-                                    text="Atender"
-                                    type="submit"   // html property (not component)
-                                    onClick={() => { setAtender(true) }}
-                                />
-                                <Typography variant="body1" textAlign="center">
-                                    o
-                                </Typography>
-                                <Controls.Button
-                                    text="Delegar"
-                                    type="submit"   // html property (not component)
-                                    onClick={() => { setOpenPopup(true) }}
-                                />
-                            </Stack>
-                        </Box>
-
-                }
+                { accionesSegunResultado(solicitud, atender, setAtender,
+                    submitAtencion, setOpenPopup)}
             </Paper>
             {/* MODALS */}
             <Popup
