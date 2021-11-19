@@ -62,7 +62,7 @@ const tableHeaders = [
 
 const initialFieldValues = {
     temaTramiteID: 0,
-    estadoID: 4
+    estadoID: 4 //FIXME :(
 }
 
 // export const getTemaTramites = () => ([
@@ -147,16 +147,6 @@ export default function DashboardSoli(props) {
             temaTramite: temaTramite,
             tipoTramite: tipoTramite
         }
-
-    React.useEffect(() => {
-        getUnidades(setUnidad)
-        getDepartamentos(setDepartamento)
-        getSecciones(setSeccion)
-        getTemaTramites(setTemaTramite)
-        getTiposTramites(setTipoTramite)
-        /* note:  estados no tiene porque solo es un numero codigo */
-    }, [])
-
     const {
         TblContainer,
         TblHead,
@@ -173,6 +163,25 @@ export default function DashboardSoli(props) {
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues);
+
+    React.useEffect(() => {
+        getUnidades(setUnidad)
+        getDepartamentos(setDepartamento)
+        getSecciones(setSeccion)
+        getTemaTramites(setTemaTramite)
+        getTiposTramites(setTipoTramite)
+        /* note:  estados no tiene porque solo es un numero codigo */
+        
+    }, [])
+
+/*     React.useEffect( () =>{
+      setFilterFn({
+        fn: items => {
+          return items.filter(x => x.estado
+            .includes(0))
+        }
+     })
+    }, []) */
 
     /* Initial data retrieved */
     // React.useEffect(() => {
