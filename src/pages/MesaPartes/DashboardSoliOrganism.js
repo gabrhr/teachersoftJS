@@ -1,3 +1,7 @@
+/* Author: Gabriela
+ * 
+ * Listado de las solicitudes + boton para abrir detalle
+ */
 import React, { useState,useContext } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Controls } from '../../components/controls/Controls'

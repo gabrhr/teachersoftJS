@@ -1,9 +1,6 @@
 /* Author: Gabriela
  * 
- * Se muestran "Mis Solicitudes".  Desde aqui se puede:
- * - Generar una nueva solicitud.
- * - Ver detalle de una solicitud.
- * "/doc/misSolicitudes"
+ * Para los combos y el filtrado de DashboardSoliOrganism.js
  */
 import React, { useState, useContext } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableCell, TableRow, Typography, Divider } from '@mui/material'
