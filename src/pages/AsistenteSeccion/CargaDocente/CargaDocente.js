@@ -21,8 +21,6 @@ import { Link } from 'react-router-dom';
 import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DT } from '../../../components/DreamTeam/DT'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CargaDocenteHorarios from './CargaDocenteHorarios';
 import CursoService from '../../../services/cursoService';
 import HorarioService from '../../../services/horarioService';
 
@@ -103,58 +101,28 @@ function GetRow({ ...props }) {
 // //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
-  const ciclo = window.localStorage.getItem("ciclo"); 
-  let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
+  const ciclo = await window.localStorage.getItem("ciclo");
+  let dataCur = await CursoService.getCursoCicloxCicloxCodigoNombre(ciclo,"");
+  if(!dataCur) dataCur = [];
+  //let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
   let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const cursos = [];
   for(let cur of dataCur) {
-    horCiclo = [];  //se reinician los horarios
-    horarios = await HorarioService.listarPorCursoCiclo(cur.id , ciclo);
-    if(!horarios)  continue; //Si se retorna un promise vacio - no se lista el curso
-    for(let hor of horarios){
-      if (hor.sesiones.sesion_docente) {
-        estado = 'Asignados'
-        tipo= 'atendido'
-      }
-      else  {
-        estado = 'Por asignar'
-        tipo= 'pendiente'
-        break;
-      }
-    }
-    //Adicionalmente a esto
-    for(let hor of horarios){
-      console.log(hor);
-      horCiclo.push({
-        "id": hor.id,
-        "codigo": hor.codigo,
-        "ciclo":{
-          "id": ciclo,
-        } ,
-        "curso":{
-          "id": cur.id,
-        },
-        "curso_ciclo": hor.curso_ciclo.id,
-        "sesiones": hor.sesiones
-      })
-    }
     //Hacemos la creación y verificación de los estados
     cursos.push({
-      "id": cur.id,
-      "nombre": cur.nombre,
-      "codigo": cur.codigo,
-      "creditos": cur.creditos,
+      "id": cur.curso.id,
+      "nombre": cur.curso.nombre,
+      "codigo": cur.curso.codigo,
+      "creditos": cur.curso.creditos,
       "seccion": {
-        "id": cur.seccion.id,
-        "nombre": cur.seccion.nombre,
+        "id": cur.curso.seccion.id,
+        "nombre": cur.curso.seccion.nombre,
         "departamento":{
-          "id":cur.seccion.departamento.id,
-          "nombre":cur.seccion.departamento.nombre,
+          "id":cur.curso.seccion.departamento.id,
+          "nombre":cur.curso.seccion.departamento.nombre,
         }
       },
-      "horarios": horCiclo,
       "estado": estado,
       "type": tipo
     })
@@ -171,6 +139,8 @@ export default function CargaDocente() {
   const [recordsForEdit, setRecordForEdit] = useState()
   const [records, setRecord] = useState([])
   const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
+  const [row, setRow] = useState(false) //Sacamos la linea seleccionada
+  
   // en lugar de la de cursos
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
   const {
@@ -178,6 +148,10 @@ export default function CargaDocente() {
     // setValues,
     handleInputChange
   } = useForm(getEstadoCollection[0]);
+
+    function getRow({ ...props }) {
+        setRow(props)
+    }
 
   const {
     TblContainer,
@@ -223,28 +197,8 @@ export default function CargaDocente() {
     <Form>
       <ContentHeader
         text="Registro de Carga Docente"
-        cbo={horarios ? false : true}
+        cbo={true}
       />
-      {horarios ? (
-        <>
-          <Controls.Button
-            variant="outlined"
-            text="Regresar"
-            size="small"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => { setHorarios(false) }}
-          />
-          <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}>
-            <Controls.Input
-              label="Curso"
-              value={`${recordsForEdit.codigo} - ${recordsForEdit.nombre}`}
-              disabled
-            />
-          </div>
-        </>
-      )
-        : (<> </>)
-      }
       {/* <Toolbar> */}
       <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
@@ -265,7 +219,7 @@ export default function CargaDocente() {
         <Grid item xs={.3} />
         <Grid item xs={3} sx={{ marginRight: theme.spacing(3) }}>
           <Box sx={{ width: "200px", align: "right" }}>
-            <Controls.Select
+            {/* <Controls.Select
               name="id"
               label="Estados"
               value={values.id}
@@ -273,7 +227,7 @@ export default function CargaDocente() {
               options={getEstadoCollection}
               type="contained"
             // displayNoneOpt
-            />
+            /> */}
           </Box>
         </Grid>
       </Grid>
@@ -284,8 +238,6 @@ export default function CargaDocente() {
               <Typography variant="h4" style={SubtitulosTable}>
                 Lista de Horarios
               </Typography>
-              {console.log(recordsForEdit)}
-              <CargaDocenteHorarios recordForEdit = {recordsForEdit} setRecordForEdit = {setRecordForEdit} />
             </>
           ) 
           : (
@@ -315,12 +267,19 @@ export default function CargaDocente() {
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
                         <StyledTableCell>
+                          <Link to ={{
+                              pathname:`/as/asignacionCarga/registroCarga/horarios`,
+                              state:{
+                                  curso: item
+                              }
+                          }}  style={{ textDecoration: 'none' }}>
                           <IconButton size="small"
-                            onClick={() => { openInPopup(item) }}
+                            onClick={() => { getRow(item) }}
                           >
                             <ArrowForwardIosIcon fontSize="small" />
 
                           </IconButton>
+                          </Link>
                         </StyledTableCell>
 
                       </StyledTableRow>

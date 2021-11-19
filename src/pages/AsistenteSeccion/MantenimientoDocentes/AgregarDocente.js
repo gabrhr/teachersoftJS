@@ -44,14 +44,30 @@ const tipos_docente = [
 
 export default function EditarDocente(props) {
     const {setOpenPopup} = props
+
     const [newNombre, setNombre] = useState('');
+    const [errorNombre, setErrorNombre] = useState(false);
+    
     const [newApellidos, setApellidos] = useState('');
+    const [errorApellidos, setErrorApellidos] = useState(false);
+    
     const [newCodigo, setCodigo] = useState('');
+    const [errorCodigo, setErrorCodigo] = useState(false);
+    
     const [newEspecialidad, setEspecialidad] = useState('');
+    const [errorEspecialidad, setErrorEspecialidad] = useState(false);
+    
     const [newTipoDoc, setTipoDoc] = useState(0);
+    
     const [newTelefono, setTelefono] = useState('');
+    const [errorTelefono, setErrorTelefono] = useState(false);
+    
     const [newCorreo, setCorreo] = useState('');
+    const [errorCorreo, setErrorCorreo] = useState(false);
+    
     const [newDocumento, setDocumento] = useState('');
+    const [errorDocumento, setErrorDocumento] = useState(false);
+    
     const [newURL, setURL] = useState('');
 
     const theme = useTheme();
@@ -60,36 +76,63 @@ export default function EditarDocente(props) {
         align:"left",
 
     }
-    const validate = (fieldValues = values) => {
-        let temp = {...errors}
-        if ('nombre' in fieldValues)
-            temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
-        if ('correo' in fieldValues)
-            //temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
-            temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-                    .test(fieldValues.correo) ? ""
-                    : "Este correo no es válido"
-        setErrors({
-            ...temp
-        })
 
-        if (fieldValues == values)
-            return Object.values(temp).every(x => x === "")
-        // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+    function isNumeric(num){
+        return !isNaN(num)
+    } 
+
+    const validate = () => {
+        let errores = 0;
+        if(newNombre === ""){
+            setErrorNombre(true);
+            errores++;
+        }
+        if(newApellidos === ""){
+            setErrorApellidos(true)
+            errores++;
+        }
+        if(!isNumeric(newCodigo) || newCodigo.length !== 8){
+            setErrorCodigo(true)
+            errores++;
+        }
+        if(newEspecialidad === ""){
+            setErrorEspecialidad(true)
+            errores++;
+        }
+        if(!isNumeric(newTelefono) || newTelefono.length !== 9){
+            setErrorTelefono(true)
+            errores++;
+        }
+        //temp.correo = (/^$|[A-Za-z_]+@[A-Za-z_]+\.[A-Za-z_\.]+$/)
+        (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+                .test(newCorreo) ? setErrorCorreo(false)
+                : setErrorCorreo(true)
+        if(errorCorreo){
+            errores++;
+        }
+        if(!isNumeric(newDocumento) || newDocumento.length !== 8){
+            setErrorDocumento(true)
+            errores++;
+        }
+        if(errores){
+            return false
+        }else{
+            return true
+        }
     }
 
-    const {
+    /*const {
         values,
         setValues,
         errors,
         setErrors,
         handleInputChange,
-    } = useForm(initialFieldValues, true, validate);
+    } = useForm(initialFieldValues, true, validate);*/
 
     const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault();
-        if (1/*validate()*/){
+        if (validate()){
           const newDoc = {
             "foto_URL": newURL ? newURL : 'static/images/avatar/1.jpg',
             "nombres": newNombre,
@@ -117,8 +160,6 @@ export default function EditarDocente(props) {
           console.log(rpta);
           setOpenPopup(false)
         }
-//        if (validate())
-//            addOrEdit(values,resetForm)
     }
 
     return (
@@ -135,6 +176,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setNombre(e.target.value)
                             }}
+                            error = {errorNombre}
+                            helperText = {errorNombre && "Este campo está vacío"}
                         />
                         <Controls.Input
                             name="apellido"
@@ -143,6 +186,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setApellidos(e.target.value)
                             }}
+                            error = {errorApellidos}
+                            helperText = {errorApellidos && "Este campo está vacío"}
                         />
                         <Controls.Input
                             name="codigo"
@@ -151,6 +196,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setCodigo(e.target.value)
                             }}
+                            error = {errorCodigo}
+                            helperText = {errorCodigo && "Este campo es incorrecto"}
                         />
                         <Controls.Input
                             name="especialidad"
@@ -159,11 +206,13 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setEspecialidad(e.target.value)
                             }}
+                            error = {errorEspecialidad}
+                            helperText = {errorEspecialidad && "Este campo está vacío"}
                         />
                         <Controls.Select
                             name="tipo_doc"
                             label="Tipo Docente"
-                            defaultValue=""
+                            defaultValue={0}
                             onChange = {(e)=>{
                                 setTipoDoc(e.target.value)
                             }}
@@ -181,6 +230,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setTelefono(e.target.value)
                             }}
+                            error = {errorTelefono}
+                            helperText = {errorTelefono && "Este campo es incorrecto"}
                         />
                         <Controls.Input
                             name="correo"
@@ -189,6 +240,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setCorreo(e.target.value)
                             }}
+                            error = {errorCorreo}
+                            helperText = {errorCorreo && "Este campo es incorrecto"}
                         />
                         <Controls.Input
                             name="documento"
@@ -197,6 +250,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setDocumento(e.target.value)
                             }}
+                            error = {errorDocumento}
+                            helperText = {errorDocumento && "Este campo es incorrecto"}
                         />
                         <Controls.Input
                             name="url_foto"

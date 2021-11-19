@@ -76,6 +76,7 @@ export default function DocentesForm() {
             "telefono": "",
             "codigo_pucp": "",
             "numero_documento": "",
+            "tipo_docente": "",
             "foto_URL": "",
           }];
 
@@ -93,7 +94,7 @@ export default function DocentesForm() {
                 cbo= {false}
             />
             <Grid container spacing={2} maxWidth={1}>
-                {/*<Grid item xs>
+                <Grid item xs>
                     <Typography variant="body1"> Puedes&nbsp;
                         <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
                         descargar la plantilla en Excel
@@ -108,17 +109,17 @@ export default function DocentesForm() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                     <Controls.Button
+                     {/*<Controls.Button
                         text="Exportar"
                         size="large"
                         endIcon={<CloudDownloadOutlinedIcon/>}
-                    /> - ESTO SE COMENTA - TODO EL BOTON
+                     />*/}
                     
-                </Grid>*/}
+                </Grid>
             </Grid>
             {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
-                <ListaDocentes records={records} setRecords={setRecords} setCargaH = {setCargaH} 
+                <ListaDocentes openPopup = {openPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
             </Paper>
             <Popup
