@@ -5,6 +5,7 @@ import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { DT } from '../../components/DreamTeam/DT';
 import { Link } from 'react-router-dom';
+import archivoService from '../../services/archivoService';
 import moment from 'moment'
 import 'moment/locale/es'
 moment.locale('es');
@@ -42,10 +43,33 @@ function estadosTrackingInit(solicitud) {
         crearEstado(4, 'Atendido', "", formatoFecha(fecha4), estadoCompletado(fecha4)),
         crearEstado(5, 'Resultado', "", fecha4 == null ? " " : `${resultado}`, true),
     ]
+} 
+
+const onDownload = (item) => {
+    var a = document.createElement("a"); //Create <a>
+    a.href = item.base64; //Image Base64 Goes here
+    a.download = item.nombre; //File name Here
+    a.click(); //Downloaded file
 }
+
+const listarArchivos = async (id) =>{
+    var archivosAsignados = await archivoService.getArchivosSolicitud(id);
+    archivosAsignados = archivosAsignados ?? []
+    const archivosAsignadosObj = [];
+    archivosAsignados.map(archivo => (
+        archivosAsignadosObj.push({
+          id: archivo.id.toString(),
+          nombre: archivo.nombre + '.' + archivo.extension,
+          base64: archivo.contenido_b64
+        })
+    ));
+    return archivosAsignadosObj;
+}
+
+
 export default function DetalleSoliOrganism(props) {
     const { solicitud } = props
-    const [records, setRecords] = useState()
+    const [records, setRecords] = useState([])
     const SubtitulosTable = { display: "flex" }
 
     const [estadosTracking, setEstadosTracking] = useState(estadosTrackingInit(solicitud))
@@ -53,6 +77,13 @@ export default function DetalleSoliOrganism(props) {
     React.useEffect(() => {
         setEstadosTracking(estadosTrackingInit(solicitud))
     }, [solicitud])
+
+    useEffect(() => {
+        listarArchivos(solicitud.id)
+        .then (archivosAsignadosObj =>{
+           setRecords(archivosAsignadosObj ?? []);
+        });
+    }, [])
 
     return (
         <>
@@ -97,10 +128,22 @@ export default function DetalleSoliOrganism(props) {
                             size='20px'
                             lineheight='300%'
                         />
-                        <DT.FileButton
-                            text="Archivo de prueba"
-                            type="addFile"
-                        />
+                        {
+                        records.map(archivo => (
+                            <DT.FileButton
+                                text={
+                                    archivo.nombre.length <= 20
+                                    ? archivo.nombre
+                                    : archivo.nombre.substring(0,18) + "..."
+                                }
+                                onClick={() => {
+                                    onDownload(archivo);
+                                }}
+                                type="addFile"
+                            />
+                        ))
+                        
+                        }
                     </Box>
                 </Grid>
                 <Grid item xs={0.3}/>
@@ -111,7 +154,7 @@ export default function DetalleSoliOrganism(props) {
                         size='18px'
                         lineheight='150%'
                     />
-                    <DT.Tracking estadosTracking={estadosTracking} />
+                    <DT.Tracking estadosTracking={estadosTracking}/>
                 </Grid>
             </Grid>
         </>
