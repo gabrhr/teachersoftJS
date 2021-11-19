@@ -43,6 +43,7 @@ function getUnidades(setUnidad) {
 function getDepartamentos(setDepartamento) {
     DepartamentoService.getDepartamentos()
         .then(ds => {
+            console.log("Dep: ", ds)
             setDepartamento(ds ?? [])
         })
 }
