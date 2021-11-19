@@ -184,7 +184,8 @@ export default function HeaderUser(props) {
   }else if (rol == 6) {
     rolName = "Secretaria de Departamento"
     listaMenu = MenuSecretaria
-  }   else if(rol == 8) {
+    /* FALTA USUARIO EXTERNO (rol=7) */
+  } else if(rol == 8) {
     rolName = "Asistente de Sección"  // arreglar
     listaMenu = MenuAdministrador
   }

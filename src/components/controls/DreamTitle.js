@@ -32,7 +32,7 @@ import {makeStyles} from '@mui/styles';
     const classes = useStyles();
 
     return (
-        <Grid direction="row" justifyContent="flex-start">
+        <Grid container direction="row" justifyContent="flex-start">
             <Box className={classes.letter}>
                     {title}
             </Box>

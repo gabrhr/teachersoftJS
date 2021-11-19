@@ -14,6 +14,30 @@ import { data } from "./data/curso-horario"
 /* LIB
  * ======================= */
 
+export function getRolName(rolID) {
+    let rolName
+    if (rolID == 0) {
+        rolName = "Administrador"
+    } else if (rolID == 1) {
+        rolName = "Docente"
+    } else if (rolID == 2) {
+        rolName = "Asistente de Sección"
+    } else if (rolID == 3) {
+        rolName = "Coordinador de Sección"
+    } else if (rolID == 4) {
+        rolName = "Asistente de Departamento"
+    } else if (rolID == 5) {
+        rolName = "Jefe de Departamento"
+    } else if (rolID == 6) {
+        rolName = "Secretaria de Departamento"
+    } else if (rolID == 7) {
+        rolName = "Usuario Externo"
+    } else if (rolID == 8) {
+        rolName = "Usuario Nuevo"
+    }
+    return rolName
+}
+
 /* Filter array `items` by `items[i].key` for substring searchText.
  * Ignores case and accents */
 export function filter(items, key, searchText) {
@@ -285,7 +309,7 @@ export function getAllCursos() {
     let cursos = JSON.parse(localStorage.getItem(KEYS.cursos));
     /* Do any data transformations here (e.g., lookup ID's create new attributes
      * based on that) */
-    return cursos.map( x => ({
+    return cursos.map(x => ({
         // ...x,
         id: x.id,
         clave: x.curso.codigo,
