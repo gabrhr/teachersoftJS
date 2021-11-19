@@ -14,17 +14,17 @@ export const MenuAsistenteSeccion = [
         indice: 0,
         subNav: [
             {
-                text: 'Registro de Cursos',
+                text: 'Registro de Horarios',
                 path: '/as/asignacionCarga/registroCursos',
                 indice: 0,
             },
             {
-                text: 'Registrar Carga',
+                text: 'Carga Docente',
                 path: '/as/asignacionCarga/registroCarga',
                 indice: 1,
             },
             {
-                text: 'Deudas y Descarga',
+                text: 'Deudas',
                 path: '/as/asignacionCarga/deudaYDescarga',
                 indice: 2,
             }

@@ -67,13 +67,12 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
     const [profDelete, setProfDelete] = useState({})
     const [maxHoras, setMaxHoras] = useState(6);
     const [isSelected, setIsSelected] = useState(false); 
-    const [tipoDic, setTipoDictado] = useState(tipo_dictado);
+    //const [tipoDic, setTipoDictado] = useState(tipo_dictado);
 
 
     const handleChangeSwitch = async e =>{
-      await tipoDic ? tipo_dictado = 0 : tipo_dictado = 1;
-      await setTipoDictado(tipo_dictado);
-      await setTipoDic(tipoDic);
+      await tipo_dictado ? setTipoDic(0) : setTipoDic(1)
+
     }
 
     console.log("Asignados: ", records, " \n tipo_dicatdo:", tipo_dictado);
@@ -251,12 +250,12 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                     <FormControlLabel 
                       control={
                         <Switch sx 
-                        defaultChecked = { tipoDic ? true : false}
+                        defaultChecked = { tipo_dictado ? true : false}
                         disabled = {records.length ? true : false}
                         onChange = {handleChangeSwitch}
                         disableRipple = {false} 
                       />} 
-                        label= { tipoDic ? "Co-Dictado" : "Compartido"} 
+                        label= { tipo_dictado ? "Co-Dictado" : "Compartido"} 
                     />
 
                   </FormGroup>

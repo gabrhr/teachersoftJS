@@ -73,6 +73,7 @@ export default function ListaDocentes({openPopup}) {
     function transformarDocentes (request){
         const recordsX = []
         request.map(doc => {
+          if(doc.codigo_pucp)
             recordsX.push({
                 "id": doc.id,
                 "url_foto": doc.foto_URL ? doc.foto_URL : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",

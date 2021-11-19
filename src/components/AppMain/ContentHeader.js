@@ -51,6 +51,8 @@ function CboCiclo(props) {
     const [ciclos, setCiclos] = useState([]);
     const [cicloActual, setCicloActual] = useState();
     const cbo = props.cbo;
+    const records = props.records;
+    const setRecords = props.setRecords;
     const theme= useTheme();
 
     const {
@@ -74,6 +76,11 @@ function CboCiclo(props) {
     /*UNA VEZ ACTUALIZAMOS LOS DATOS DE VALUES - LE PASAMOS EL CICLOACTUAL PARA QUE SEA EL DEFAULT */
 
     React.useEffect(()=>{
+        if(records)  setRecords(values.id);
+        else{
+          let cicloActual = window.localStorage.getItem("ciclo");
+          if (setRecords) setRecords(cicloActual)
+        }  
         window.localStorage.setItem('cicloSeleccionado', JSON.stringify(parseInt(values.id)))
     },[values])
     
@@ -93,7 +100,6 @@ function CboCiclo(props) {
                     onChange={handleInputChange}
                     options={ciclos}
                     type="contained"
-
                 />
             </Box>
         </Grid>
@@ -103,8 +109,8 @@ function CboCiclo(props) {
     }
 }
 
-export default function ContentHeader({text, cbo}) {
-
+export default function ContentHeader({text, cbo, records, setRecords}) {
+    console.log(records)
     // console.log("ContentHeader: ")
     // console.log(DTLocalServices.getAllCiclos())
     
@@ -115,7 +121,7 @@ export default function ContentHeader({text, cbo}) {
                     <DT.Title size="big" text={text} />
                 </Grid>
                 <Grid item sm/>
-                <CboCiclo cbo={cbo}/>
+                <CboCiclo cbo={cbo} records = {records} setRecords = {setRecords}/>
             </Grid>
         </Form>
     )

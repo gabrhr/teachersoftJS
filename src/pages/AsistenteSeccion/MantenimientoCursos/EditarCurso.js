@@ -21,6 +21,18 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
 
     const [departamento, setDepartamentos] = React.useState([]);
 
+
+    const handleInputChangeNumber = async (e) => {
+        const pattern = /^[0-9]*$/;   
+        console.log(e.target.value)
+        //let inputChar = String.fromCharCode(event.charCode)
+        if (!pattern.test(e.target.value)) {
+          e.target.value = await e.target.value.replace(/[^0-9]/g, "");
+          // invalid character, prevent input
+        }
+        handleInputChange(e)
+    }
+
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),

@@ -78,8 +78,8 @@ const tableHeaders = [
     }
 ]
 
-const fillHorarios = async () => {
-  const dataHor = await HorarioService.getHorarios();
+const fillHorarios = async (ciclo) => {
+  const dataHor = await HorarioService.buscarPorCiclo(ciclo);
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const horarios = [];
   if(!dataHor)  {
@@ -153,7 +153,7 @@ const fillHorarios = async () => {
 
 }
 
-export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) {
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo}) {
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
@@ -187,14 +187,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
 
     React.useEffect(() => {
       //Obtenemos las secciones
-      fillHorarios()
+      fillHorarios(ciclo)
       .then (newHorarios =>{
         //setRecordsX(newHorarios); //Se quiere actualizar todo
         setRecords(newHorarios);
         setCargaH(records);
       });
       
-    }, [])
+    }, [ciclo])
   
     //console.log(records);
     //console.log(indexDelete);
@@ -245,6 +245,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
       setOpenOnePopup(false)
     }
 
+    console.log(ciclo)
+
     return (
         <Form>            
             <Typography variant="h4"
@@ -252,8 +254,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
             >
                 Horario de Cursos
             </Typography>
-            <Grid container>
-                <Grid item xs={8}>
+            <Grid container spacing = {0}>
+                <Grid item xs={5}>
                     <Stack direction="row" align="left" spacing={0}>
                         <Controls.Input
                             name="searchText"
@@ -261,9 +263,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                             onChange={handleSearch}
                             type="search"
                             size="small"
-                            sx = {{
-                                maxWidth: .7
-                            }}
+
                         />
                         {/* <Controls.Button  
                             text={<SearchIcon/>}
@@ -276,7 +276,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                     </Stack>
                 </Grid>
                 {/* FIX:  left align */}
-                <Grid item xs={4} align="right">
+                <Grid item xs={10} align="right">
                     {/* FIX:  DT IconButton */}
                     <Controls.AddButton 
                         title="Agregar Nuevo Horario"
