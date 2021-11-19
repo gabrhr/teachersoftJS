@@ -64,6 +64,7 @@ const GoogleLoginButton = () => {
                 headers: {
                     Authorization: `${response.accessToken}`
                 },
+                timeout: 10000
             };
             const data = {
             

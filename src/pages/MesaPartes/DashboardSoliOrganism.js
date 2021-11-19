@@ -105,11 +105,11 @@ export default function DashboardSoliOrganism(props) {
                                                 solicitudinit: item
                                             }
                                         }}  style={{ textDecoration: 'none' }}>
-                                        <Controls.Button
-                                            text="Detalle"
-                                            type="submit"
-                                            onClick={() => { getRow(item) }}
-                                        />
+                                            <Controls.Button
+                                                text="Detalle"
+                                                type="submit"
+                                                onClick={() => { getRow(item) }}
+                                            />
                                         </Link>
                                     </TableCell>
                                 </TableRow>

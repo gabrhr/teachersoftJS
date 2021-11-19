@@ -281,7 +281,6 @@ export default function DashboardSoli(props) {
     React.useEffect(() => {
         const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
         const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
-        console.log("fechas", fechaIni,fechaFin)
         setFilterFn({
           fn: items => {
             console.log(items)
