@@ -79,6 +79,7 @@ const tableHeaders = [
 ]
 
 const fillHorarios = async (ciclo) => {
+  if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
   const dataHor = await HorarioService.buscarPorCiclo(ciclo);
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const horarios = [];

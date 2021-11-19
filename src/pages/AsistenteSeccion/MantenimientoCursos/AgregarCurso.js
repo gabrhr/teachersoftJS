@@ -66,8 +66,8 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
             "id": seccion.persona.seccion.id,
           }
         }
-        console.log(curso)
-        //agregarCurso(curso);
+
+        agregarCurso(curso);
       }
     }
 

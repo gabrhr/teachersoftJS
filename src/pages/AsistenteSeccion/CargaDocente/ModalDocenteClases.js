@@ -33,7 +33,7 @@ const fillDocentes = async() => {
   return docentes
 }
 
-export default function ModalDocenteClases({docentesAsig, horario, tipo, actHorario, setActHorario}){
+export default function ModalDocenteClases({docentesAsig, horario, tipo, actHorario, setActHorario, openPopUp, setOpenPopUp}){
     const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
     const [tipoDic, setTipoDic] = useState(tipo ? horario.sesiones[1].tipo_dictado : horario.sesiones[0].tipo_dictado);
@@ -171,12 +171,10 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
         console.log(dataPer);
       }
 
-      // const selec = records.map(profesor =>
-      //   seleccionados[records.indexOf(profesor)] ? profesor : null
-      // )
-      // getListDocentes(selec)
-      //setActHorario(dataHor);
-      //window.location.reload();
+      if(dataHor){
+        setActHorario(dataHor);
+        setOpenPopUp(false)
+      } 
     }
 
     return(

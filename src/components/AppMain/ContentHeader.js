@@ -47,7 +47,7 @@ const initialFieldValues = {
     title: ''
 }
 
-function CboCiclo(props) {
+function CboCiclo (props) {
     const [ciclos, setCiclos] = useState([]);
     const [cicloActual, setCicloActual] = useState();
     const cbo = props.cbo;

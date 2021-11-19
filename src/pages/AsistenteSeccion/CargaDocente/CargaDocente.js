@@ -21,8 +21,6 @@ import { Link } from 'react-router-dom';
 import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DT } from '../../../components/DreamTeam/DT'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CargaDocenteHorarios from './CargaDocenteHorarios';
 import CursoService from '../../../services/cursoService';
 import HorarioService from '../../../services/horarioService';
 
@@ -141,6 +139,8 @@ export default function CargaDocente() {
   const [recordsForEdit, setRecordForEdit] = useState()
   const [records, setRecord] = useState([])
   const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
+  const [row, setRow] = useState(false) //Sacamos la linea seleccionada
+  
   // en lugar de la de cursos
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
   const {
@@ -148,6 +148,10 @@ export default function CargaDocente() {
     // setValues,
     handleInputChange
   } = useForm(getEstadoCollection[0]);
+
+    function getRow({ ...props }) {
+        setRow(props)
+    }
 
   const {
     TblContainer,
@@ -195,26 +199,6 @@ export default function CargaDocente() {
         text="Registro de Carga Docente"
         cbo={true}
       />
-      {horarios ? (
-        <>
-          <Controls.Button
-            variant="outlined"
-            text="Regresar"
-            size="small"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => { setHorarios(false) }}
-          />
-          <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}>
-            <Controls.Input
-              label="Curso"
-              value={`${recordsForEdit.codigo} - ${recordsForEdit.nombre}`}
-              disabled
-            />
-          </div>
-        </>
-      )
-        : (<> </>)
-      }
       {/* <Toolbar> */}
       <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
@@ -235,7 +219,7 @@ export default function CargaDocente() {
         <Grid item xs={.3} />
         <Grid item xs={3} sx={{ marginRight: theme.spacing(3) }}>
           <Box sx={{ width: "200px", align: "right" }}>
-            <Controls.Select
+            {/* <Controls.Select
               name="id"
               label="Estados"
               value={values.id}
@@ -243,7 +227,7 @@ export default function CargaDocente() {
               options={getEstadoCollection}
               type="contained"
             // displayNoneOpt
-            />
+            /> */}
           </Box>
         </Grid>
       </Grid>
@@ -254,8 +238,6 @@ export default function CargaDocente() {
               <Typography variant="h4" style={SubtitulosTable}>
                 Lista de Horarios
               </Typography>
-              {console.log(recordsForEdit)}
-              <CargaDocenteHorarios recordForEdit = {recordsForEdit} setRecordForEdit = {setRecordForEdit} />
             </>
           ) 
           : (
@@ -285,12 +267,19 @@ export default function CargaDocente() {
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
                         <StyledTableCell>
+                          <Link to ={{
+                              pathname:`/as/asignacionCarga/registroCarga/horarios`,
+                              state:{
+                                  curso: item
+                              }
+                          }}  style={{ textDecoration: 'none' }}>
                           <IconButton size="small"
-                            onClick={() => { openInPopup(item) }}
+                            onClick={() => { getRow(item) }}
                           >
                             <ArrowForwardIosIcon fontSize="small" />
 
                           </IconButton>
+                          </Link>
                         </StyledTableCell>
 
                       </StyledTableRow>

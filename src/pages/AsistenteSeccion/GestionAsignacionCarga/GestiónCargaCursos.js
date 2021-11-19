@@ -223,7 +223,7 @@ export default function GestionCargaCursos() {
             text="Regresar"
             size="small"
             startIcon={<ArrowBackIcon />}
-            onClick={() => { setOpenCancelarPopup(true) }}
+            onClick={() => {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ?  setOpenCancelarPopup(true) : regresarPantalla()}}
           />
             <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '0.31%', paddingTop: '1%'}}>
                 <Grid item xs={5}>
@@ -315,11 +315,12 @@ export default function GestionCargaCursos() {
                 </Grid>
             </Grid>
             <Grid conteiner >
-                <Grid item align="right" marginY={3} >
+                <Grid item align = "right" marginX = {32} marginY={0} >
                     <Controls.Button
                         text="guardar"
                         type="submit" 
-                        endIcon={<SaveIcon/>}
+                        endIcon={<SaveIcon/>} 
+                        disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
                         onClick = {()=>setOpenGuardarPopup(true)}  
                         />
                 </Grid>
@@ -328,6 +329,7 @@ export default function GestionCargaCursos() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title="Buscar Curso"
+                size = "md"
             >
                <BuscarCurso getRow = {getRow}/>
             </Popup>
@@ -335,6 +337,7 @@ export default function GestionCargaCursos() {
                 openPopup={openCancelarPopup}
                 setOpenPopup={setOpenCancelarPopup}
                 title="Regresar"
+                size = "sm"
             >
                <ModalCancelarHorarioCurso regresar = {regresarPantalla} setOpenCancelarPopup={setOpenCancelarPopup}/>
             </Popup> 
@@ -342,6 +345,7 @@ export default function GestionCargaCursos() {
                 openPopup={openGuardarPopup}
                 setOpenPopup={setOpenGuardarPopup}
                 title="Guardar"
+                size = "sm"
             >
                <ModalGuardarHorarioCurso setOpenGuardarPopup = {setOpenGuardarPopup} guardarHorario = {guardarHorario}/>
             </Popup>
@@ -349,6 +353,7 @@ export default function GestionCargaCursos() {
                 openPopup={openSesionesFullPopup}
                 setOpenPopup={setOpenSesionesFullPopup}
                 title="Atención"
+                size = "sm"
             >
                <ModalSesionesLlenas setOpenSesionesFullPopup = {setOpenSesionesFullPopup}/>
             </Popup>
@@ -356,6 +361,7 @@ export default function GestionCargaCursos() {
                 openPopup={openFaltaSesionPopup}
                 setOpenPopup={setOpenFaltaSesionPopup}
                 title="Atención"
+                size = "sm"
             >
                <ModalFaltaSesion setOpenFaltaClasePopup = {setOpenFaltaSesionPopup} sesionFaltante = {vTipo}/>
             </Popup>
@@ -363,6 +369,7 @@ export default function GestionCargaCursos() {
                 openPopup={openRegistroExitoso}
                 setOpenPopup={setOpenRegistroExitoso}
                 title="Atención"
+                size = "sm"
             >
                <ModalRegistroExitoso setOpenRegistroExitoso = {setOpenRegistroExitoso}/>
             </Popup>    

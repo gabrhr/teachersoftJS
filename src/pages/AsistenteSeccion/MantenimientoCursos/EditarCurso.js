@@ -77,7 +77,7 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
         "seccion": seccion.persona.seccion,
       }
       console.log(curso)
-      //editarCurso(curso);
+      editarCurso(curso);
     }
 
     return (
