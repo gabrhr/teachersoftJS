@@ -23,7 +23,7 @@ export default function FileButton(props) {
         other.color= "file"
     }
     else if (type === "addFile") { //Para los usuarios que envian solicitud      
-        text="Adjuntar Archivos"
+        // text="Adjuntar Archivos"
         other.color= "adjuntar"
     }
 

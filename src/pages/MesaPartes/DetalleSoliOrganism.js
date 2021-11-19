@@ -2,8 +2,12 @@ import React, {useState, useEffect} from 'react'
 import {makeStyles} from '@mui/styles'
 import { Controls } from '../../components/controls/Controls'
 import ContentHeader from '../../components/AppMain/ContentHeader';
+import archivoService from '../../services/archivoService';
 import { Box, Paper, Divider, TableRow, TableCell,InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { DT } from '../../components/DreamTeam/DT';
+/*Importaciones temporales, hasta descubrir como llamar directamente al evento desde el DT.FileButton */
+import { IconButton, Toolbar } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
 // import moment from 'moment'
 
 /*ICONS*/
@@ -48,12 +52,41 @@ function estadosTrackingInit(solicitud){
         crearEstado(5, 'Resultado',"",fecha4==null?"-":`${resultado}`, true),
     ]
 } 
+
+const onDownload = (item) => {
+    var a = document.createElement("a"); //Create <a>
+    a.href = item.base64; //Image Base64 Goes here
+    a.download = item.nombre; //File name Here
+    a.click(); //Downloaded file
+}
+
+const listarArchivos = async (id) =>{
+    var archivosAsignados = await archivoService.getArchivosSolicitud(id);
+    archivosAsignados = archivosAsignados ?? []
+    const archivosAsignadosObj = [];
+    archivosAsignados.map(archivo => (
+        archivosAsignadosObj.push({
+          id: archivo.id.toString(),
+          nombre: archivo.nombre + '.' + archivo.extension,
+          base64: archivo.contenido_b64
+        })
+    ));
+    return archivosAsignadosObj;
+}
+
 export default function DetalleSoliOrganism(props) {
     const {solicitud} = props
-    const [records, setRecords] = useState()
+    const [records, setRecords] = useState([])
     const SubtitulosTable = { display: "flex" }
-    
     const [estadosTracking, setEstadosTracking ] = useState(estadosTrackingInit(solicitud))
+
+    useEffect(() => {
+        listarArchivos(solicitud.id)
+        .then (archivosAsignadosObj =>{
+           setRecords(archivosAsignadosObj);
+        });
+    }, [])
+
     return (
         <>
          <Grid container spacing={2}>
@@ -87,16 +120,28 @@ export default function DetalleSoliOrganism(props) {
                 />
                 <Grid item xs={0.3} md={0.3}/>
                 <Divider  flexItem pl="20px"/>
-                <Box ml="76px" display="none">
+                <Box ml="76px">
                     <Controls.DreamTitle
                         title ={'Archivos Adjuntos: '}
                         size = '20px'
                         lineheight = '300%'
                     />
-                    <DT.FileButton
-                        text="Archivo de prueba"
-                        type="addFile"
-                    />
+                    {
+                        records.map(archivo => (
+                            <DT.FileButton
+                                text={
+                                    archivo.nombre.length <= 20
+                                    ? archivo.nombre
+                                    : archivo.nombre.substring(0,18) + "..."
+                                }
+                                onClick={() => {
+                                    onDownload(archivo);
+                                }}
+                                type="addFile"
+                            />
+                        ))
+                        
+                    }
                 </Box>
             </Grid>
             <Grid item xs={0.3} md={0.3}/>
