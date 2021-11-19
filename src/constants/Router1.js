@@ -46,6 +46,7 @@ import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCurso
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
+import SolPreferenciaDocentes from '../pages/AsistenteSeccion/PreferenciaDocente/SolPreferenciaDocentes';
 //import NoAsignado from './NoAsignado'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -71,6 +72,7 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
+  { requireRoles: [2, 8], path: "/as/preferencias", page: SolPreferenciaDocentes  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
