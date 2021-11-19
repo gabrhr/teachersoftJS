@@ -1,9 +1,6 @@
 /* Author: Gabriela
  * 
- * Se muestran "Mis Solicitudes".  Desde aqui se puede:
- * - Generar una nueva solicitud.
- * - Ver detalle de una solicitud.
- * "/doc/misSolicitudes"
+ * Para los combos y el filtrado de DashboardSoliOrganism.js
  */
 import React, { useState, useContext } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableCell, TableRow, Typography, Divider } from '@mui/material'
@@ -34,6 +31,7 @@ import { UserContext } from '../../constants/UserContext'
 import * as UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
+import fileService from '../../services/fileService'
 
 
 const tableHeaders = [
@@ -77,31 +75,31 @@ const initialFieldValues = {
 function getUnidades(setUnidad) {
     UnidadService.getUnidades()
         .then(us => {
-            setUnidad(us)
+            setUnidad(us ?? [])
         })
 }
 function getDepartamentos(setDepartamento) {
     DepartamentoService.getDepartamentos()
         .then(ds => {
-            setDepartamento(ds)
+            setDepartamento(ds ?? [])
         })
 }
 function getSecciones(setSeccion) {
     SeccionService.getSecciones()
         .then(secs => {
-            setSeccion(secs)
+            setSeccion(secs ?? [])
         })
 }
 function getTemaTramites(setTemaTramite) {
     MesaPartesService.getTemas()
         .then(temas => {
-            setTemaTramite(temas)
+            setTemaTramite(temas ?? [])
         })
 }
 function getTiposTramites(setTipoTramite) {
     MesaPartesService.getTipos()
         .then(tipos => {
-            setTipoTramite(tipos)
+            setTipoTramite(tipos ?? [])
         })
 }
 
@@ -246,7 +244,7 @@ export default function DashboardSoli(props) {
       solicitud.solicitadorID = user.persona.id     // required
 
       MesaPartesService.registerSolicitud(solicitud)
-        .then((id) => {
+        .then((solicitudID) => {
           /* success */
           /* cerrar popup */
           resetForm()
@@ -254,13 +252,18 @@ export default function DashboardSoli(props) {
           /* notify and update table */
           setNotify({
               isOpen: true,
-              message: 'Registro de Solicitud Exitosa',
+              message: 'Registro de Solicitud Exitoso',
               type: 'success'
           })
           getSolicitudes(setRecords, user)
-
+          
           /* insertar archivos relacionados */
-          // window.alert(`Se inserto la soli con id=${id}`)
+          for (var i = 0; i < solicitud.archivos.length; i++) {
+            solicitud.archivos[i].solicitud = { id: solicitudID }
+            fileService.registerArchivo(solicitud.archivos[i]);
+          }
+          // console.log(solicitud)
+          window.alert(`Se inserto la soli con id=${solicitudID}`)
         })
         .catch(err => {
           /* error :( */
@@ -275,9 +278,10 @@ export default function DashboardSoli(props) {
     }
     const [valueFecha, setValueFecha] = React.useState([null, null]);
 
-   /*  React.useEffect(() => {
+    React.useEffect(() => {
         const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
         const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
+        console.log("fechas", fechaIni,fechaFin)
         setFilterFn({
           fn: items => {
             console.log(items)
@@ -288,13 +292,14 @@ export default function DashboardSoli(props) {
                 fechaIni <= moment(x.tracking.fecha_enviado).format('DD/MM/YYYY')
               )
             else{
-              return items.filter(x => 
-                 moment(x.tracking.fecha_enviado).isBetween(fechaIni,fechaFin)
+              return items.filter((x) => fechaIni <= moment(x.tracking.fecha_enviado).format('DD/MM/YYYY') &&
+                  moment(x.tracking.fecha_enviado).format('DD/MM/YYYY') <= fechaFin
               )
             }
           }
         })
-    }, [valueFecha]) */
+    }, [valueFecha])
+
     return (
       <Form>
         <ContentHeader text={title} cbo={false} />
@@ -315,10 +320,10 @@ export default function DashboardSoli(props) {
             />
           </div>
           <div style={{ width: "360px", marginRight: "50px" }}>
-            <Controls.RangeTimePicker 
+             <Controls.RangeTimePicker 
               value = {valueFecha}
               setValue= {setValueFecha}
-            />
+            /> 
           </div>
         </div>
         {/* Filtrados */}
@@ -326,7 +331,7 @@ export default function DashboardSoli(props) {
           <div style={{ width: "700px", marginRight: "50px" }}>
             <Controls.Select
               name="temaTramiteID"
-              label="Tema de Tramite"
+              label="Tema de Trámite"
               value={values.temaTramiteID}
               onChange={handleSearchTemas}
               options={[{id: 0, nombre: "Todos los temas"}]
@@ -346,14 +351,14 @@ export default function DashboardSoli(props) {
           <div style={{ width: "80vw", textAlign: "right" }}>
             {delegado? 
               <></>:
-                  <Controls.AddButton
-                  variant="iconoTexto"
-                  text="Nueva Solicitud"
-                  onClick={() => {
-                      setOpenNuevo(true);
-                  }}
-                  />
-                }
+              <Controls.AddButton
+                variant="iconoTexto"
+                text="Nueva Solicitud"
+                onClick={() => {
+                    setOpenNuevo(true);
+                }}
+              />
+            }
           </div>
         </div>
         <DashboardSoliOrganism
@@ -361,6 +366,7 @@ export default function DashboardSoli(props) {
           TblContainer={TblContainer}
           recordsAfterPagingAndSorting={recordsAfterPagingAndSorting}
           TblPagination={TblPagination}
+          delegado={delegado}
         />
         {/* "MODALS" */}
         {/* Agregar nueva solicitud */}
