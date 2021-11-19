@@ -8,6 +8,8 @@ import { Grid, IconButton, Typography, Box } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 // import CargaArchivos from './CargaArchivos';
+//import FileUpload1 from '../../components/MesaPartes/FileUpload1'
+import DragDropArchivos from './DragDropArchivos';
 
 // services 
 import * as MesaPartesService from '../../services/mesaPartesService';
@@ -25,7 +27,7 @@ const initialFieldValues = {
     asunto: '',
     descripcion: '',
     //solicitador
-    // archivos: [],        // YA NO SE USA ASI  (consulatar con Christian)
+    archivos: [],        // se va a completar en DragDropArchivos
     //delegado
 
     tracking: {
@@ -76,9 +78,9 @@ function ActualForm(props) {
     React.useEffect(() => check('seccionID', 'temaTramiteID'), [values.seccionID])
     React.useEffect(() => check('temaTramiteID', 'tipoTramiteID'), [values.temaTramiteID])
 
-    React.useEffect(() => {
-        console.log("NuevaSoli:", comboData)
-    }, [comboData])
+    // React.useEffect(() => {
+    //     console.log("NuevaSoli:", comboData)
+    // }, [comboData])
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -173,20 +175,13 @@ function ActualForm(props) {
                 onChange={handleInputChange}
                 multiline
                 minRows={6}
-                maxRows={12}
+                maxRows={6}
             />
             {/* ARCHIVOS */}
-            {/* <CargaArchivos /> */}
+            <DragDropArchivos values={values} setValues={setValues} />
 
             {/* botones */}
             <Box display="flex" justifyContent="flex-end">
-                {/* YA NO VA */}
-                {/* <Controls.Button
-                    variant="disabled"
-                    text="Cancelar"
-                    onClick={regresa}
-                    endIcon={<CancelOutlinedIcon />}
-                /> */}
                 <Controls.Button
                     text="Enviar"
                     type="submit"

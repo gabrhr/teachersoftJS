@@ -34,6 +34,7 @@ import { UserContext } from '../../constants/UserContext'
 import * as UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
+import fileService from '../../services/fileService'
 
 
 const tableHeaders = [
@@ -77,31 +78,31 @@ const initialFieldValues = {
 function getUnidades(setUnidad) {
     UnidadService.getUnidades()
         .then(us => {
-            setUnidad(us)
+            setUnidad(us ?? [])
         })
 }
 function getDepartamentos(setDepartamento) {
     DepartamentoService.getDepartamentos()
         .then(ds => {
-            setDepartamento(ds)
+            setDepartamento(ds ?? [])
         })
 }
 function getSecciones(setSeccion) {
     SeccionService.getSecciones()
         .then(secs => {
-            setSeccion(secs)
+            setSeccion(secs ?? [])
         })
 }
 function getTemaTramites(setTemaTramite) {
     MesaPartesService.getTemas()
         .then(temas => {
-            setTemaTramite(temas)
+            setTemaTramite(temas ?? [])
         })
 }
 function getTiposTramites(setTipoTramite) {
     MesaPartesService.getTipos()
         .then(tipos => {
-            setTipoTramite(tipos)
+            setTipoTramite(tipos ?? [])
         })
 }
 
@@ -246,7 +247,7 @@ export default function DashboardSoli(props) {
       solicitud.solicitadorID = user.persona.id     // required
 
       MesaPartesService.registerSolicitud(solicitud)
-        .then((id) => {
+        .then((solicitudID) => {
           /* success */
           /* cerrar popup */
           resetForm()
@@ -258,9 +259,15 @@ export default function DashboardSoli(props) {
               type: 'success'
           })
           getSolicitudes(setRecords, user)
-
+          
+          console.log('Solicitud', solicitud.archivos)
           /* insertar archivos relacionados */
-          // window.alert(`Se inserto la soli con id=${id}`)
+          for (var i = 0; i < solicitud.archivos.length; i++) {
+            solicitud.archivos[i].solicitud = { id: solicitudID }
+            fileService.registerArchivo(solicitud.archivos[i]);
+          }
+          // console.log(solicitud)
+          window.alert(`Se inserto la soli con id=${solicitudID}`)
         })
         .catch(err => {
           /* error :( */
@@ -315,10 +322,10 @@ export default function DashboardSoli(props) {
             />
           </div>
           <div style={{ width: "360px", marginRight: "50px" }}>
-            <Controls.RangeTimePicker 
+            {/* <Controls.RangeTimePicker 
               value = {valueFecha}
               setValue= {setValueFecha}
-            />
+            /> */}
           </div>
         </div>
         {/* Filtrados */}
