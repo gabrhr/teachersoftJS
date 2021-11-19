@@ -70,6 +70,33 @@ a:link, a:visited, a:hover, a:active {
 }
 
 export function soliDelegada(s) {
+    let actualcontent = `<p>
+            Estimado:<br/>
+            ${s.delegado.fullName}
+        </p>
+        <p>Se le ha delegado la siguiente solicitud:</p>
+        <p>
+            Solicitud Original: <b>${s.asunto}</b>
+        </p>
+        <blockquote>
+            <p style="white-space:pre-wrap;">${s.descripcion}</p>
+        </blockquote>
+        <p>
+            Solicitador: ${s.solicitador.fullName}
+        </p>
+        <p>
+            Por favor atienda esta solicitud ingresando a nuestro sistema
+            <a href="http://front.teachersoft.solutions">TeacherSoft</a>.
+        </p>
+Cordialmente,<br/>
+<b>Departamento Académico de Ciencias</b>
+        </p>
+`
+    console.log('soliDelegada: ', actualcontent)
+    return pucpformat(actualcontent)
+}
+
+export function soliAtendidaMP(s) {
     let resultado = ""
     let color = "black"
     if (s.resultado === 1) {

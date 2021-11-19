@@ -4,7 +4,7 @@
  * URL: localhost:3000/doc/solicitudDetalle
  */
 import { Grid, Paper, Stack, TextField, Typography } from '@mui/material';
-import React, {useContext} from 'react'
+import React, { useContext } from 'react'
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import ContentHeader from '../../components/AppMain/ContentHeader';
@@ -25,36 +25,49 @@ import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
 
-function sendEmailNotification(solicitud) {
-    EmailService.emailSolicitor2(solicitud)
-        .then(data => {
-            return data
-        })
-        .catch(err => {
-            console.error(err)
-        })
+function sendEmailNotification(solicitud, tipo) {
+    console.log(solicitud)
+    if (tipo === 'atendidoMP') 
+        EmailService.emailSolicitor2(solicitud)
+            .then(data => {
+                return data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    else if (tipo === 'delegado')
+        EmailService.emailDelegado(solicitud)
+            .then(data => {
+                console.log("email delegado: ", data)
+                return data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    else 
+        console.error("tipo invalido", tipo)
 }
 
 export default function RecepcionDetalleSolicitudFuncion() {
-    const location= useLocation()
-    const {solicitudinit} = location.state
+    const location = useLocation()
+    const { solicitudinit } = location.state
     const [solicitud, setSolicitud] = React.useState(solicitudinit) // <---- NO SIRVE
-    const {user, rol} = useContext(UserContext);
-    const [atender, setAtender]= React.useState(false)
-    const [openPopup, setOpenPopup]= React.useState(false)
+    const { user, rol } = useContext(UserContext);
+    const [atender, setAtender] = React.useState(false)
+    const [openPopup, setOpenPopup] = React.useState(false)
 
-    const [notify, setNotify] = React.useState({ 
-        isOpen: false, message: '', type: '' 
+    const [notify, setNotify] = React.useState({
+        isOpen: false, message: '', type: ''
     })
 
-    const PaperStyle = { 
-        borderRadius: '20px', 
-        pb: 4, pt: 2, px: 2, 
-        color: "primary.light", 
-        elevatio: 0 
+    const PaperStyle = {
+        borderRadius: '20px',
+        pb: 4, pt: 2, px: 2,
+        color: "primary.light",
+        elevatio: 0
     }
 
-    function retornar(){
+    function retornar() {
         window.history.back();
     }
 
@@ -71,24 +84,50 @@ export default function RecepcionDetalleSolicitudFuncion() {
                         type: 'success'
                     })
                 })
-                .catch(err => {console.error(err)})
+                /* FIXME: make handleSecretariaError (repeated code) */
+                .catch(err => { console.error(err) })
         } else if (solicitud.estado === '3' && solicitud.cambioEstado) {
             /* secretario responde en lugar del delegado */
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
                     setNotify({
                         isOpen: true,
-                        message: 'Registro de atencion exitoso',
+                        message: 'La solicitud fue atendida',
                         type: 'success'
                     })
                     setAtender(false)
                     /* Send notification to solicitador */
-                    sendEmailNotification(solicitud)
+                    sendEmailNotification(solicitud, 'atendidoMP')
                 })
                 .catch(err => {
                     /* error :( */
                     console.error(err)
-                    console.log("Error: submitAtencion:", 
+                    console.log("Error: submitAtencion:",
+                        MesaPartesService.f2bSolicitud(solicitud))
+                    setNotify({
+                        isOpen: true,
+                        message: 'Estamos teniendo problemas de conexión.  Consulte a un administrador.',
+                        type: 'error'
+                    })
+                })
+        } else if (solicitud.estado === '2' && solicitud.cambioEstado) {
+            /* secretario delega solicitud */
+            MesaPartesService.updateSolicitud(solicitud)
+                .then(id => {
+                    setNotify({
+                        isOpen: true,
+                        message: 'La solicitud fue delegada',
+                        type: 'success'
+                    })
+                    setAtender(false)
+                    /* Send notification to solicitador */
+                    sendEmailNotification(solicitud, 'delegado')
+                    setOpenPopup(false)
+                })
+                .catch(err => {
+                    /* error :( */
+                    console.error(err)
+                    console.log("Error: submitDelegar:",
                         MesaPartesService.f2bSolicitud(solicitud))
                     setNotify({
                         isOpen: true,
@@ -120,22 +159,16 @@ export default function RecepcionDetalleSolicitudFuncion() {
 
     /* secreatrio responde en lugar del delegado */
     function submitAtencion(atencion) {
-        /* FIXME:  Respuesta de la solicitud Observacion no se actualiza luego de
-         *         hacer submit aqui.  Tiene que salir y volver a entrar a
-         *         RecepcionDetalleSolicitud */
-        // console.log("antes", solicitud)
         setSolicitud(solicitud => ({
-            ...solicitud, 
+            ...solicitud,
             /* data faltante de la respuesta de soli por Secretario Dpto. */
             delegadoID: user.persona.id,
-            /* ANTES DECIA DELGADO!!!!! */
-            // delgado: {
             delegado: {
                 fullName: user.persona.nombres + " " + user.persona.apellidos,
                 foto_URL: user.persona.foto_URL,
                 rolName: DTLocalServices.getRolName(rol)
             },
-            estado: '3',
+            estado: '3',    // atendida
             tracking: {
                 ...solicitud.tracking,
                 fecha_atendido: new Date().toJSON()
@@ -146,7 +179,29 @@ export default function RecepcionDetalleSolicitudFuncion() {
             /* only for FrontEnd */
             cambioEstado: true
         }))
-        // console.log("despues", solicitud)
+    }
+
+    /* delegado (persona) */
+    function submitDelegar(delegado) {
+        setSolicitud(solicitud => ({
+            ...solicitud,
+            /* data que viene de DelegarForm */
+            delegadoID: delegado.id,
+            delegado: {
+                fullName: delegado.fullName,
+                foto_URL: delegado.foto_URL,
+                rolName: delegado.rolName,
+                correo: delegado.correo
+            },
+            estado: '2',        // delegada
+            tracking: {
+                ...solicitud.tracking,
+                fecha_delegado: new Date().toJSON()
+            },
+
+            /* only for FrontEnd */
+            cambioEstado: true
+        }))
     }
 
     return (
@@ -164,7 +219,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 justifyContent="flex-start"
                 alignItems="center"
             >
-            <Grid item xs={6} md={1} mb={3}>
+                <Grid item xs={6} md={1} mb={3}>
                     <Controls.Button
                         variant="outlined"
                         text="Regresar"
@@ -172,32 +227,32 @@ export default function RecepcionDetalleSolicitudFuncion() {
                         startIcon={<ArrowBackIcon />}
                         onClick={retornar}
                     />
-            </Grid>
+                </Grid>
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
                 {/* Tabla de solicitud y tracking */}
-                <DetalleSoliOrganism solicitud={solicitud}/>
+                <DetalleSoliOrganism solicitud={solicitud} />
                 {/* Posibilidades de Atención
                     - Secretaria de Sección(rol=6) -> Boton Atender y Delegar
                     - Usuarios Delegado (rol!=6) -> Boton Atender
                 */}
 
                 {/* Respuesta (en recepcion aun no hay respuesta) */}
-                { solicitud.resultado!=0? 
-                    <ResultadoSolicitud solicitud={solicitud}/> :
-                    atender? 
-                        <AtenderSolicitudForm 
+                {solicitud.resultado != 0 ?
+                    <ResultadoSolicitud solicitud={solicitud} /> :
+                    atender ?
+                        <AtenderSolicitudForm
                             setAtender={setAtender}
                             solicitud={solicitud}
                             submitAtencion={submitAtencion}
                         /> :
                         /* ACCIONES */
-                        <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
+                        <Box mr={"210px"} sx={{ display: "flex", justifyContent: 'flex-end' }}>
                             <Stack mt={2} mb={2}>
                                 <Controls.Button
                                     text="Atender"
                                     type="submit"   // html property (not component)
-                                    onClick={() => {setAtender(true)}}
+                                    onClick={() => { setAtender(true) }}
                                 />
                                 <Typography variant="body1" textAlign="center">
                                     o
@@ -205,11 +260,11 @@ export default function RecepcionDetalleSolicitudFuncion() {
                                 <Controls.Button
                                     text="Delegar"
                                     type="submit"   // html property (not component)
-                                    onClick={() => {setOpenPopup(true)}}
+                                    onClick={() => { setOpenPopup(true) }}
                                 />
                             </Stack>
                         </Box>
-                    
+
                 }
             </Paper>
             {/* MODALS */}
@@ -217,9 +272,12 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title={"Delegar a:"}
-                
+
             >
-               <DelegarForm solicitud={solicitud}/>
+                <DelegarForm
+                    solicitud={solicitud}
+                    submitDelegar={submitDelegar}
+                />
             </Popup>
             <Notification notify={notify} setNotify={setNotify} />
         </>

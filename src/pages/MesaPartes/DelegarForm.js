@@ -64,10 +64,6 @@ function getPersonas(setRecords, rolID) {
         })
 }
 
-function delegarSolicitud(delegadoID) {
-    console.log("delegarSolicitud: ", delegadoID)
-}
-
 /* ================================== TABLE ================================= */
 
 const tableHeaders = [
@@ -86,14 +82,15 @@ const tableHeaders = [
 ]
 
 function PersonaTableRow(props) {
-    const { item } = props
+    const { item, submitDelegar } = props
     return (
         <TableRow key={item.id}>
             <TableCell>{item.fullName} - {item.seccionDepartamento}</TableCell>
             <TableCell>
                 <Controls.ActionButton
                     color="info"
-                    onClick={() => { delegarSolicitud(item.id) }}
+                    /* this one is defined in RecepcionDetalleSolicitud.js */
+                    onClick={() => { submitDelegar(item) }}
                 >
                     <SendIcon fontSize="small" />
                 </Controls.ActionButton>
@@ -118,7 +115,8 @@ function PersonaTableRow(props) {
 
 function PersonasTable(props) {
     const { records, setRecords,
-        selectedDepartmentID
+        selectedDepartmentID,
+        submitDelegar
     } = props
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const {
@@ -181,14 +179,13 @@ function PersonasTable(props) {
                         {
                             recordsAfterPagingAndSorting()
                                 .filter(item => {
-                                    if (selectedDepartmentID === 0)
-                                        /* not yet selected */
-                                        return true
                                     return item.departamentoID === selectedDepartmentID
                                 })
                                 .map(item => {
                                     return (
-                                        <PersonaTableRow item={item} />
+                                        <PersonaTableRow item={item} 
+                                            submitDelegar={submitDelegar}
+                                        />
                                     )
                                 })
                         }
@@ -210,7 +207,8 @@ const initialFieldValues = {
     seccionID: 0
 }
 
-export default function DelegarForm() {
+export default function DelegarForm(props) {
+    const { submitDelegar } = props
     /* GENERAL (should be in a parent function) */
     const [records, setRecords] = useState([{ id: 1, fullName: "Mitsuo" }])
 
@@ -243,6 +241,7 @@ export default function DelegarForm() {
         resetForm
     } = useForm(initialFieldValues);
 
+    /* load personas by rol */
     React.useEffect(() => {
         if (values.rolID === 0)
             setRecords([])
@@ -350,6 +349,7 @@ export default function DelegarForm() {
             </Form>
             <PersonasTable records={records} setRecords={setRecords} 
                 selectedDepartmentID={values.departamentoID}
+                submitDelegar={submitDelegar}
             />
         </>
     )
