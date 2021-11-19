@@ -88,13 +88,18 @@ function f2bTipoTramite(x) {
     }
 }
 
-function b2fPersona(x) {
+/* all of these should've been placed in DTLocalServices,  now it's too late */
+export function b2fPersona(x) {
     return {
+        id: x.id,
         fullName: x.nombres + ' ' + x.apellidos,
         rolName: DTLocalServices.getRolName(x.tipo_persona),
         correo: x.correo_pucp,
         foto_URL: x.foto_URL,
         seccionDepartamento: x.seccion.departamento.nombre + ' - ' + x.seccion.nombre,
+        
+        /* extra */
+        departamentoID: x.seccion.departamento.id,
     }
 }
 

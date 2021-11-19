@@ -89,6 +89,12 @@ export default function TablePage() {
         <>
             <TblContainer>
                 <TblHead />
+                <colgroup>
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '50%' }} />
+                    <col style={{ width: '20%' }} />
+                    <col style={{ width: '20%' }} />
+                </colgroup>
                 <TableBody>
                     { generateRows(recordsAfterPagingAndSorting()) }
                 </TableBody>
