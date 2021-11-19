@@ -81,7 +81,7 @@ export default function DetalleSoliOrganism(props) {
     useEffect(() => {
         listarArchivos(solicitud.id)
         .then (archivosAsignadosObj =>{
-           setRecords(archivosAsignadosObj ?? []);
+           setRecords(archivosAsignadosObj);
         });
     }, [])
 
@@ -122,28 +122,32 @@ export default function DetalleSoliOrganism(props) {
                     />
                     <Grid item xs={0.3}/>
                     <Divider flexItem pl="20px" />
-                    <Box ml="76px" >
+                    <Box ml="76px" width="100%" mb="50px"> 
                         <Controls.DreamTitle
                             title={'Archivos Adjuntos: '}
                             size='20px'
                             lineheight='300%'
                         />
+                        <Grid 
+                            container
+                            direction="row"
+                        >
                         {
-                        records.map(archivo => (
-                            <DT.FileButton
-                                text={
-                                    archivo.nombre.length <= 20
-                                    ? archivo.nombre
-                                    : archivo.nombre.substring(0,18) + "..."
-                                }
-                                onClick={() => {
-                                    onDownload(archivo);
-                                }}
-                                type="addFile"
-                            />
-                        ))
-                        
+                            records.map(archivo => (
+                                <DT.FileButton
+                                    text={
+                                        archivo.nombre.length <= 19
+                                        ? archivo.nombre
+                                        : archivo.nombre.substring(0,17) + "..."
+                                    }
+                                    onClick={() => {
+                                        onDownload(archivo);
+                                    }}
+                                    type="addFile"
+                                />
+                            ))
                         }
+                        </Grid>
                     </Box>
                 </Grid>
                 <Grid item xs={0.3}/>

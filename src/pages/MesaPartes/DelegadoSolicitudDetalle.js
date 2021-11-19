@@ -105,13 +105,13 @@ export default function RecepcionDetalleSolicitud() {
                 alignItems="center"
             >
             <Grid item xs={6} md={1} mb={3}>
-                    <Controls.Button
-                        variant="outlined"
-                        text="Regresar"
-                        size="small"
-                        startIcon={<ArrowBackIcon />}
-                        onClick={retornar}
-                    />
+                <Controls.Button
+                    variant="outlined"
+                    text="Regresar"
+                    size="small"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={retornar}
+                />
             </Grid>
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
