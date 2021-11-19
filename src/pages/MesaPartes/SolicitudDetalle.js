@@ -19,7 +19,7 @@ import ResultadoSolicitud from './ResultadoSolicitud';
 
 export default function SolicitudDetalle() {
     const location= useLocation()
-    const {solicitud}=location.state
+    const {solicitudinit}=location.state
     const { rol} = useContext(UserContext);
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
     function retornar(){
@@ -52,10 +52,10 @@ export default function SolicitudDetalle() {
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
                 {/* Tabla de solicitud y tracking */}
-                <DetalleSoliOrganism solicitud={solicitud}/>
+                <DetalleSoliOrganism solicitud={solicitudinit}/>
                 {/* Respuesta */}
-                { solicitud.resultado==0? <> </>:
-                    <ResultadoSolicitud solicitud={solicitud}/>
+                { solicitudinit.resultado==0? <> </>:
+                    <ResultadoSolicitud solicitud={solicitudinit}/>
                 }
             </Paper>
         </>
