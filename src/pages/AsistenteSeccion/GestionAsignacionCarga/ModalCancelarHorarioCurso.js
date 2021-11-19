@@ -1,15 +1,16 @@
 import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 
-export default function ModalCancelarHorarioCurso({cancelar, setOpenCancelarPopup}){
+export default function ModalCancelarHorarioCurso({regresar, setOpenCancelarPopup}){
     return(
         <>
             < Typography variant="h4" mb={2} >
-                ¿Está seguro de cancelar la configuración del horario para el curso??
+                ¿Está seguro de regresar a la pantalla de Gestión de carga de horarios?
+                El progreso no guardado se perderá.
             </Typography>
             <Controls.Button
                 text="Sí"
-                onClick={cancelar}
+                onClick={(event) => regresar(event)}
             />
             <Controls.Button
                 text="No"

@@ -42,10 +42,11 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-//import NoAsignado from './NoAsignado'
 import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
+import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
+//import NoAsignado from './NoAsignado'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -74,8 +75,8 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
   /* CS*/
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },

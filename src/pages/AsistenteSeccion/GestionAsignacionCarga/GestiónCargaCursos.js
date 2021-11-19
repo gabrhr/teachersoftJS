@@ -23,6 +23,8 @@ import ModalSesionesLlenas from './ModalSesionesLlenas';
 import ModalFaltaSesion from './ModalFaltaSesion';
 import ModalRegistroExitoso from './ModalRegistroExitoso';
 import cursoService from '../../../services/cursoService';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -52,6 +54,7 @@ const tipo = [
 
 export default function GestionCargaCursos() {
 
+    const history = useHistory()
     
     const [openPopup, setOpenPopup] = useState(false)
     const [openCancelarPopup, setOpenCancelarPopup] = useState(false)
@@ -169,6 +172,8 @@ export default function GestionCargaCursos() {
         return true;
     }
 
+    const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroCursos");
+
     const guardarHorario = async() => {
       let arrayCadenas = dValuNombre.split(" ");
       const ciclo = await window.localStorage.getItem("ciclo");
@@ -213,7 +218,14 @@ export default function GestionCargaCursos() {
                 text="Gestión de la carga de cursos"
                 cbo= {false}
             />
-            <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '1%'}}>
+            <Controls.Button
+            variant="outlined"
+            text="Regresar"
+            size="small"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => { setOpenCancelarPopup(true) }}
+          />
+            <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '0.31%', paddingTop: '1%'}}>
                 <Grid item xs={5}>
                     <Stack>
                         <Controls.Input 
@@ -305,13 +317,6 @@ export default function GestionCargaCursos() {
             <Grid conteiner >
                 <Grid item align="right" marginY={3} >
                     <Controls.Button
-                        variant="outlined"
-                        text="cancelar"
-                        endIcon={<CloseIcon/>}
-                        onClick = {()=>setOpenCancelarPopup(true)}
-                        />
-                        
-                    <Controls.Button
                         text="guardar"
                         type="submit" 
                         endIcon={<SaveIcon/>}
@@ -329,9 +334,9 @@ export default function GestionCargaCursos() {
             <Popup
                 openPopup={openCancelarPopup}
                 setOpenPopup={setOpenCancelarPopup}
-                title="Cancelar"
+                title="Regresar"
             >
-               <ModalCancelarHorarioCurso cancelar = {resetPage} setOpenCancelarPopup={setOpenCancelarPopup}/>
+               <ModalCancelarHorarioCurso regresar = {regresarPantalla} setOpenCancelarPopup={setOpenCancelarPopup}/>
             </Popup> 
             <Popup
                 openPopup={openGuardarPopup}

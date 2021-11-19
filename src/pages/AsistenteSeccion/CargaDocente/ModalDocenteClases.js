@@ -189,7 +189,7 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
                 <Grid cointainer align="right" mt={2.5} />   
                 <hr color = "#636e9a"/> 
                 <Grid cointainer align="right" mt={2.5} />
-                <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {setRecordsAsig} setRecordsAsig = {setRecordsAsig}/>
+                <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {recordsAsig} setRecordsAsig = {setRecordsAsig}/>
             </Paper>
             <Grid cointainer align="right" mt={5}>
                 <div>

@@ -89,7 +89,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     }
 
     const addProf = () => {
-        console.log(profAdd)
+        console.log('profadd: ', profAdd)
         let sesion_docente = {
           "docente" : profAdd,
           "horas_dictado_docente_sesion": 0,
