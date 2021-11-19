@@ -110,7 +110,7 @@ function CboCiclo(props) {
 }
 
 export default function ContentHeader({text, cbo, records, setRecords}) {
-    console.log(records)
+    //console.log(records)
     // console.log("ContentHeader: ")
     // console.log(DTLocalServices.getAllCiclos())
     

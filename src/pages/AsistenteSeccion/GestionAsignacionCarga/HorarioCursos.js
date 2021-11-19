@@ -245,7 +245,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       setOpenOnePopup(false)
     }
 
-    console.log(ciclo)
+    //console.log(ciclo)
 
     return (
         <Form>            
