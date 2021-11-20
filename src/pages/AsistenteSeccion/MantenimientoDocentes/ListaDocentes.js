@@ -247,13 +247,13 @@ export default function ListaDocentes({openPopup}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-                <Controls.Button
+                {/* <Controls.Button
                 text="Eliminar todos los docentes"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {handleDeleteAll()}}
-                />
+                /> */}
             <Popup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
