@@ -62,7 +62,7 @@ const tableHeaders = [
 
 const initialFieldValues = {
     temaTramiteID: 0,
-    estadoID: 4 //FIXME :(
+    estadoID: 4 // (Todos los estados)
 }
 
 // export const getTemaTramites = () => ([
