@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { UserContext } from '../../constants/UserContext'
 import * as MesaPartesService from '../../services/mesaPartesService'
 //Iconos Mesa de Partes
 import DashboardSoli from './DashboardSoli'
@@ -27,11 +28,12 @@ export default function SolicitudesDelegadasAMi() {
      * este then (res.data  (ya transformada)).  Cuando recibe la respuesta,
      * cambia records. */
     const usuario = JSON.parse(localStorage.getItem("user"));
+    const {user, rol} = React.useContext(UserContext);
     //console.log(usuarioActual);
     
     React.useEffect(() => {
         getSolicitudes(setRecords, usuario)
-    }, [])
+    }, [user])
 
     return (
         <DashboardSoli title={"Solicitudes delegadas por Mesa de Partes"} delegado={true} records={records} setRecords={setRecords}/>
