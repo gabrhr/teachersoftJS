@@ -272,7 +272,7 @@ export default function DashboardSoli(props) {
             fileService.registerArchivo(solicitud.archivos[i]);
           }
           // console.log(solicitud)
-          window.alert(`Se inserto la soli con id=${solicitudID}`)
+          // window.alert(`Se inserto la soli con id=${solicitudID}`)
         })
         .catch(err => {
           /* error :( */
