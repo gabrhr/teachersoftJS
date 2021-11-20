@@ -93,6 +93,18 @@ const getCursoCicloxCicloxCodigoNombre = async (id_ciclo,codigo_nombre) => {
   }
 }
 
+const listarPorCicloPorSeccion = async (id_ciclo,id_seccion) => {
+  //console.log("EL codigo pasado es: ",codigo_nombre);
+  const token = tokenService.GetTokenPrueba();
+  //console.log(token);
+  try{
+    const request = await axios.get(`${url}/cursociclo/idciclo=${id_ciclo}/idseccion=${id_seccion}`, token  , id_ciclo, id_seccion, { allowCredentials: false });  //Normalmente es un string
+    return request.data;  //Es un dato
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 const getCursosCiclos = async () => {
   try{
     const request = await axios.get(`${url}/cursociclo/`, tokenService.GetTokenPrueba());
@@ -157,5 +169,5 @@ const  listarCursosNoAsignados = async (id_ciclo,codigo_nombre) => {
   }
 }
 
-export default {getCursos, getCursosxCodigoNombre, getCursosxSeccionCodigoNombre, getCurso, registerCurso, updateCurso, deleteCurso, 
+export default {listarPorCicloPorSeccion, getCursos, getCursosxCodigoNombre, getCursosxSeccionCodigoNombre, getCurso, registerCurso, updateCurso, deleteCurso, 
   getCursoCicloxCicloxCodigoNombre, getCursosCiclos, getCursoCiclo, registerCursoCiclo, updateCursoCiclo, deleteCursoCiclo, listarCursosNoAsignados}

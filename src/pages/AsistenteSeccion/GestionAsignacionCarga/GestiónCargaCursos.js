@@ -23,6 +23,8 @@ import ModalSesionesLlenas from './ModalSesionesLlenas';
 import ModalFaltaSesion from './ModalFaltaSesion';
 import ModalRegistroExitoso from './ModalRegistroExitoso';
 import cursoService from '../../../services/cursoService';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -52,6 +54,7 @@ const tipo = [
 
 export default function GestionCargaCursos() {
 
+    const history = useHistory()
     
     const [openPopup, setOpenPopup] = useState(false)
     const [openCancelarPopup, setOpenCancelarPopup] = useState(false)
@@ -60,7 +63,7 @@ export default function GestionCargaCursos() {
     const [openFaltaSesionPopup, setOpenFaltaSesionPopup] = useState(false)
     const [openRegistroExitoso, setOpenRegistroExitoso] = useState(false)
 
-    const [vTipo, setVTipo] = useState('')
+    const [vTipo, setVTipo] = useState('Clase')
     const [dataSes, setDataSes] = useState([])
 
     const [cantSes, setCantSes] = useState(0);
@@ -73,6 +76,9 @@ export default function GestionCargaCursos() {
     const [horario, setHorario] = useState('')
     const [sesion, setSesion] = useState('')
     const classes = useStyles()
+
+    const [errorHorario, setErrorHorario] = useState(false)
+    const [errorHoraSesion, setErrorHoraSesion] = useState(false)
 
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({fn: items => { return items; }})
@@ -131,13 +137,49 @@ export default function GestionCargaCursos() {
         }
     }
 
-    const changeHorario = e => {setHorario(e.target.value)}
+    const changeHorario = e => {
+        setHorario(e.target.value)
+        if(e.target.value.length == 0){
+            setErrorHorario(false)
+            return
+        }
+        if(e.target.value.length != 4){
+            setErrorHorario(true)
+        }else{
+            setErrorHorario(false)
+        }
+    }
+
+    const changeHoraSesion = e => {
+        setSesion(e.target.value)
+        if(e.target.value.length == 0){
+            setErrorHoraSesion(false)
+            return
+        }
+        if(e.target.value == 0){
+            setErrorHoraSesion(true)
+        }else{
+            setErrorHoraSesion(false)
+        }
+    }
+
+    const validate = () =>{
+        if(errorHorario || errorHoraSesion || cantSes === 0){
+            console.log("Cagaste")
+            return false
+        }
+        console.log("No cagaste")
+        return true;
+    }
+
+    const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroCursos");
 
     const guardarHorario = async() => {
       let arrayCadenas = dValuNombre.split(" ");
       const ciclo = await window.localStorage.getItem("ciclo");
       console.log(ciclo, arrayCadenas);
-      await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
+      if(validate()){
+          await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
         .then(request => {
           if(request[0]){          
               const postHorario = {
@@ -167,6 +209,8 @@ export default function GestionCargaCursos() {
           setOpenGuardarPopup(false);
           });
       }
+      
+    }
 
     return (
         <> 
@@ -174,7 +218,14 @@ export default function GestionCargaCursos() {
                 text="Gestión de la carga de cursos"
                 cbo= {false}
             />
-            <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '1%'}}>
+            <Controls.Button
+            variant="outlined"
+            text="Regresar"
+            size="small"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ?  setOpenCancelarPopup(true) : regresarPantalla()}}
+          />
+            <Grid container sx={{width:'100%', gridTemplateColumns: '1fr', paddingLeft: '0.31%', paddingTop: '1%'}}>
                 <Grid item xs={5}>
                     <Stack>
                         <Controls.Input 
@@ -216,6 +267,8 @@ export default function GestionCargaCursos() {
                             value={horario} 
                             onChange = {changeHorario}
                             size= 'small'
+                            error = {errorHorario}
+                            helperText = {errorHorario && "El horario debe tener 4 dígitos"}
                         />
                     </Stack>
                 </Grid>
@@ -236,9 +289,9 @@ export default function GestionCargaCursos() {
                             name="horaSesion"
                             label="Horas - Sesión"
                             value={sesion}
-                            onChange={(e)=>{
-                                setSesion(e.target.value)
-                            }}
+                            onChange={changeHoraSesion}
+                            error = {errorHoraSesion}
+                            helperText = {errorHoraSesion && "El valor no puede ser 0"}
                             />
                             <AddButton onClick = {() => addSession(vTipo, sesion)} title = "Agregar horario"/>  
                         </Stack>
@@ -262,18 +315,12 @@ export default function GestionCargaCursos() {
                 </Grid>
             </Grid>
             <Grid conteiner >
-                <Grid item align="right" marginY={3} >
-                    <Controls.Button
-                        variant="outlined"
-                        text="cancelar"
-                        endIcon={<CloseIcon/>}
-                        onClick = {()=>setOpenCancelarPopup(true)}
-                        />
-                        
+                <Grid item align = "right" marginX = {32} marginY={0} >
                     <Controls.Button
                         text="guardar"
                         type="submit" 
-                        endIcon={<SaveIcon/>}
+                        endIcon={<SaveIcon/>} 
+                        disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
                         onClick = {()=>setOpenGuardarPopup(true)}  
                         />
                 </Grid>
@@ -282,20 +329,23 @@ export default function GestionCargaCursos() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title="Buscar Curso"
+                size = "md"
             >
                <BuscarCurso getRow = {getRow}/>
             </Popup>
             <Popup
                 openPopup={openCancelarPopup}
                 setOpenPopup={setOpenCancelarPopup}
-                title="Cancelar"
+                title="Regresar"
+                size = "sm"
             >
-               <ModalCancelarHorarioCurso cancelar = {resetPage} setOpenCancelarPopup={setOpenCancelarPopup}/>
+               <ModalCancelarHorarioCurso regresar = {regresarPantalla} setOpenCancelarPopup={setOpenCancelarPopup}/>
             </Popup> 
             <Popup
                 openPopup={openGuardarPopup}
                 setOpenPopup={setOpenGuardarPopup}
                 title="Guardar"
+                size = "sm"
             >
                <ModalGuardarHorarioCurso setOpenGuardarPopup = {setOpenGuardarPopup} guardarHorario = {guardarHorario}/>
             </Popup>
@@ -303,6 +353,7 @@ export default function GestionCargaCursos() {
                 openPopup={openSesionesFullPopup}
                 setOpenPopup={setOpenSesionesFullPopup}
                 title="Atención"
+                size = "sm"
             >
                <ModalSesionesLlenas setOpenSesionesFullPopup = {setOpenSesionesFullPopup}/>
             </Popup>
@@ -310,6 +361,7 @@ export default function GestionCargaCursos() {
                 openPopup={openFaltaSesionPopup}
                 setOpenPopup={setOpenFaltaSesionPopup}
                 title="Atención"
+                size = "sm"
             >
                <ModalFaltaSesion setOpenFaltaClasePopup = {setOpenFaltaSesionPopup} sesionFaltante = {vTipo}/>
             </Popup>
@@ -317,6 +369,7 @@ export default function GestionCargaCursos() {
                 openPopup={openRegistroExitoso}
                 setOpenPopup={setOpenRegistroExitoso}
                 title="Atención"
+                size = "sm"
             >
                <ModalRegistroExitoso setOpenRegistroExitoso = {setOpenRegistroExitoso}/>
             </Popup>    

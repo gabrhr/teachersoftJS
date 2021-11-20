@@ -3,6 +3,7 @@ import React, { useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import useTable from '../../../components/useTable'
 import personaService from '../../../services/personaService';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -123,9 +124,12 @@ export default function DeudaForm() {
                             <TableCell>
                             <Grid container>
                                 <Grid item pl={.5}>
-                                <Avatar>
-                                    <img height = "125%" width = "125%" text-align ="center" src={item.url_foto} alt=""></img>
-                                </Avatar>
+                            <Avatar>
+                                {item.url_foto !== ("static/images/avatar/1.jpg" || "")
+                                  ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                                    src={item.url_foto}></img>
+                                  :  <AccountCircleIcon/>}
+                            </Avatar>
                                 </Grid>
                                 <Grid item sm>
                                     <Typography sx={{paddingLeft:2.5}}>

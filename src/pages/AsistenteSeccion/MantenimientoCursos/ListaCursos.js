@@ -193,7 +193,7 @@ export default function ListaCursos({records, setRecords}) {
                 Listado de Cursos
             </Typography>
             <Grid container>
-                <Grid item xs={8}>
+                <Grid item xs={5}>
                     <Stack direction="row" align="left" spacing={0}>
                         <Controls.Input
                             name="searchText"
@@ -215,11 +215,12 @@ export default function ListaCursos({records, setRecords}) {
                           /> */}
                     </Stack>
                 </Grid>
+                <Grid item xs={5}/>
                 {/* FIX:  left align */}
-                <Grid item xs={4} align="right">
-                          <Controls.AddButton 
-                              title="Nuevo Curso"
-                              variant="iconoTexto"
+                <Grid item xs={2} align="right">
+                          <Controls.Button 
+                              text="Agregar Nuevo Curso"
+                              variant="text+icon"
                               onClick = {() => {setOpenAddPopup(true);}}
                           />
                     {/* FIX:  DT IconButton */}
@@ -280,13 +281,14 @@ export default function ListaCursos({records, setRecords}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
+            {/*}
                 <Controls.Button
                 text="Eliminar todos los cursos"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {setOpenAllPopup(true)}}
-                />
+            />*/}
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}
@@ -295,14 +297,14 @@ export default function ListaCursos({records, setRecords}) {
             >
               <EliminarCurso setOpenOnePopup = {setOpenOnePopup} eliminarCurso = {eliminarCurso}/>
             </Popup>
-            <Popup
+            {/*<Popup
                 openPopup={openAllPopup}
                 setOpenPopup={setOpenAllPopup}
                 title="Eliminar todos los cursos"
                 size = "sm"
             >
               <EliminarCursos setOpenAllPopup = {setOpenAllPopup} eliminarCursos = {eliminarCursos}/>
-            </Popup>
+            </Popup>*/}
             <Popup
                 openPopup={openAddPopup}
                 setOpenPopup={setOpenAddPopup}

@@ -47,7 +47,7 @@ const tableHeaders = [
     } */
 ]
   
-export default function ListaDocentes() {
+export default function ListaDocentes({openPopup}) {
 
     const [openPopupAdd, setOpenPopupAdd] = useState(false)
     const [openPopupEdit, setOpenPopupEdit] = useState(false)
@@ -67,13 +67,13 @@ export default function ListaDocentes() {
     } = useTable(records, tableHeaders, filterFn);
     
     useEffect(() => {
-        //Obtenemos las secciones
         getProfesores()
-      }, [openPopupEdit, openDelOnePopup, openPopupAdd])
+      }, [openPopupEdit, openDelOnePopup, openPopupAdd, openPopup])
 
     function transformarDocentes (request){
         const recordsX = []
         request.map(doc => {
+          if(doc.codigo_pucp)
             recordsX.push({
                 "id": doc.id,
                 "url_foto": doc.foto_URL ? doc.foto_URL : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
@@ -147,7 +147,8 @@ export default function ListaDocentes() {
     console.log(records);
     return (
         <>
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+            <Grid container >
+                <Grid item xs={5}>
                 {/* <Toolbar> */}
                 <Controls.Input
                     label="Buscar Docentes por Nombre"
@@ -162,12 +163,17 @@ export default function ListaDocentes() {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Controls.AddButton 
-                        title="Agregar Nuevo Docente"
-                        variant="iconoTexto"
+                </Grid>
+                <Grid item xs={5}> </Grid>
+                {/* FIX:  left align */}
+                <Grid item xs={2} align="right">
+                <Controls.Button
+                        variant = "text+icon" 
+                        text="Agregar Nuevo Docente"
                         onClick = {(event) => handleAdd(event)}
                 />
-            </div>
+                </Grid>
+            </Grid>
             <BoxTbl>
                 <TblContainer>
                     <TblHead />
@@ -241,13 +247,13 @@ export default function ListaDocentes() {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-                <Controls.Button
+                {/* <Controls.Button
                 text="Eliminar todos los docentes"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {handleDeleteAll()}}
-                />
+                /> */}
             <Popup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}

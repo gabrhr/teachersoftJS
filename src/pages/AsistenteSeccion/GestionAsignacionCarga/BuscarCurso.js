@@ -38,19 +38,23 @@ const tableHeaders = [
 ]
 
 const fillCursos = async () => {
-  const dataCur = await CursoService.getCursos(); 
+  let dataCur = await CursoService.getCursoCicloxCicloxCodigoNombre(window.localStorage.getItem("ciclo"),"");
+  console.log(dataCur) 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  if(!dataCur) dataCur = []
   const cursos = [];
   dataCur.map(cur => (
     cursos.push({
-      id: cur.id.toString(),
-      nombre: cur.nombre,
-      codigo: cur.codigo,
-      creditos: cur.creditos,
-      seccion: cur.seccion
+      id: cur.curso.id.toString(),
+      nombre: cur.curso.nombre,
+      codigo: cur.curso.codigo,
+      creditos: cur.curso.creditos,
+      seccion: cur.curso.seccion,
+      selected: false
     })
-    ));
-  //console.log(cursos);
+  ));
+  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+
   return cursos;
 }
 
