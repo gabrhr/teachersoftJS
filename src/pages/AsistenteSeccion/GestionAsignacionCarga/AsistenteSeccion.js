@@ -161,14 +161,8 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                     <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}/>
-                    {/* <Controls.Button
-                        text="Exportar"
-                        size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}
-                    /> */}
-                    
+                     {/* <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
+                        endIcon={<CloudDownloadOutlinedIcon/>}/> */}
                 </Grid>
             </Grid>
             {/*LO DE GABRIELA*/}
