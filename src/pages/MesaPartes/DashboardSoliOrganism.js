@@ -127,10 +127,11 @@ export default function DashboardSoliOrganism(props) {
 function getTipoDetalle(item,user,rol){
     if(rol==6){
         return "/secretaria/mesaPartes/solicitudDetalle"
+    } else if (item.delegadoID== user.persona.id){ //Delegados
+        /* ejecutar esta primero por si se la delegan a si mismo */
+        if(rol==1) return "/doc/misDelegados/solicitudDetalle"
     } else if(item.solicitadorID== user.persona.id){ //MisSolicitudes
         if(rol==1) return "/doc/solicitudDetalle"
-    } else if (item.delegadoID== user.persona.id){ //Delegados
-        if(rol==1) return "/doc/misDelegados/solicitudDetalle"
     }
     return "/doc/solicitudDetalle"
 }
