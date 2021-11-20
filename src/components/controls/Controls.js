@@ -12,6 +12,7 @@ import Divider from "./Divider"
 import RowCheckBox from "./RowCheckBox"
 import RangeTimePicker from "./RangeTimePicker"
 import NumberPicker from "./NumberPicker"
+import MinusButton from "./MinusButton"
 
 export const Controls = {
     Input,
@@ -27,5 +28,6 @@ export const Controls = {
     DreamTitle,
     RowCheckBox,
     RangeTimePicker,
-    NumberPicker
+    NumberPicker,
+    MinusButton
 }

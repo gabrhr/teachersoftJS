@@ -47,6 +47,7 @@ import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCurso
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
+import PreferenciaDocenteForm from '../pages/Docente/PreferenciaDocente/PreferenciaDocenteForm'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -64,6 +65,7 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [0,1,8], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [0,1,8], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
+  { requireRoles: [0,1,2,8], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
   { requireRoles: [0,8], path: "/dragdrop", page: DragDropArchivos},
