@@ -51,7 +51,7 @@ export default function useTable(records, headCells, filterFn) {
   const [orderBy, setOrderBy] = useState()
 
   const BoxTbl = props => (
-        <Box border={1} color="#D4D9EC" borderRadius="15px" overflow="hidden" mt={4}>
+        <Box border={1} color="#D4D9EC" borderRadius="15px" overflow="auto" mt={4}>
           {props.children}
         </Box>
   )
