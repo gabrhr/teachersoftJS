@@ -54,7 +54,8 @@ const GoogleLoginButton = () => {
             case 7:
                 return history.push("/invitado");
             default:
-                return history.push("/noRoles");
+                return history.push("/registro");
+                //return history.push("/noRoles");
           }
         }
     }, [loading]);

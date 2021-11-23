@@ -50,6 +50,7 @@ import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDoc
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 import ErrorDireccionamiento from '../pages/Dev/Error404';
+import Registro from '../pages/NuevoUsuario/Registro';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -143,7 +144,8 @@ export default function Router1(props) {
       case 6:
         return "/invitado"
     default:
-        return "/noRoles"
+        //return "/noRoles"
+        return "/registro"
     }
   }
 
@@ -193,6 +195,14 @@ export default function Router1(props) {
           requireRoles={[0,1,2,3,4,5,6,7,8]}
           component={() =>
             <NoAsignado/>
+          }
+          >
+        </PrivateRoute>
+        
+        <PrivateRoute exact path="/registro"
+          requireRoles={[8]}
+          component={() =>
+            <Registro/>
           }
           >
         </PrivateRoute>

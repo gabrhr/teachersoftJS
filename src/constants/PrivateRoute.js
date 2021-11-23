@@ -52,7 +52,8 @@ export default function PrivateRoute(props) {
                         case 6:
                             return history.push("/secretaria");    
                       default:
-                          return history.push("/noRoles");
+                          return history.push("/registro");
+                          //return history.push("/noRoles");
                     }   
               case(1):                             
                   return <Component {...props} />;   
