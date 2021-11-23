@@ -1,6 +1,10 @@
 /* Author: Team MP
  *
  * Llena con datos personales para luego poder enviar solis a MP.
+ * 
+ * CAPTCHA (rtokumori@pucp.edu.pe)
+ * Site key: 6LcKzlQdAAAAAKE-sgUaSteogICfr93SMR0wdhOa
+ * Secret key: 6LcKzlQdAAAAAKiqFD2-koK6mb0jFMtNPBcvbmum
  */
 
 import React from 'react'
@@ -9,6 +13,7 @@ import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 import { UserContext } from '../../constants/UserContext';
 import { DT } from '../../components/DreamTeam/DT'
+import ReCAPTCHA from 'react-google-recaptcha';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
 /* ICONS */
@@ -71,6 +76,11 @@ export default function RegistroForm() {
             nombres: user.persona.nombres
         })
     }, [user])
+
+    function handleChangeCaptcha() {
+        /* success */
+        console.log('reCaptcha')
+    }
 
     return (
         <Form>
@@ -162,6 +172,11 @@ export default function RegistroForm() {
                 label="Acepto"
                 value={values.acepta_politica_privacidad}
                 onChange={handleInputChange}
+            />
+
+            <ReCAPTCHA
+                sitekey="6LcKzlQdAAAAAKE-sgUaSteogICfr93SMR0wdhOa"
+                onChange={handleChangeCaptcha}
             />
 
             <Box sx={{ display: "flex", width: "100%", alignItems: "center"}}>
