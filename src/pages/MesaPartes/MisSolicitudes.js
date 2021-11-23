@@ -12,6 +12,7 @@ import DashboardSoli from './DashboardSoli'
 
 // services
 import * as MesaPartesService from '../../services/mesaPartesService';
+import HeadNotificationMisSolicitudes from '../NuevoUsuario/HeadNotificationMisSolicitudes';
 
 /* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
     return {
@@ -44,6 +45,17 @@ function getSolicitudes(setRecords, user) {
         })
 }
 
+function HeadNotification(props) {
+    const { rol } = props
+    /* checkear el rol, si es NuevoUsuario (sin permisos) mostrar */
+    /* importarlo desde pages/NuevoUsuario/HeadNotificationMisSolicitudes */
+    if (rol === 8)
+        return (
+            <HeadNotificationMisSolicitudes />
+        )
+    return ( <></> )
+}
+
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
@@ -57,11 +69,14 @@ export default function MisSolicitudes() {
     }, [user])
 
     return (
-        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
-            delegado={false}
-            records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
-            user={user}
-        />
+        <>
+            <HeadNotification rol={rol} />
+            <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
+                delegado={false}
+                records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
+                user={user}
+            />
+        </>
     )
 }
 
