@@ -51,6 +51,7 @@ import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDoc
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 import ErrorDireccionamiento from '../pages/Dev/Error404';
 import Registro from '../pages/NuevoUsuario/Registro';
+import LandingPage from '../constants/LandingPage'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
