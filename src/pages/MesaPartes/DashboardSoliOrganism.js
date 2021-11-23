@@ -132,6 +132,7 @@ function getTipoDetalle(item,user,rol){
         if(rol==1) return "/doc/misDelegados/solicitudDetalle"
     } else if(item.solicitadorID== user.persona.id){ //MisSolicitudes
         if(rol==1) return "/doc/solicitudDetalle"
+        else if(rol==7) return "/invitado/mesaPartes/solicitudDetalle" 
     }
     return "/doc/solicitudDetalle"
 }

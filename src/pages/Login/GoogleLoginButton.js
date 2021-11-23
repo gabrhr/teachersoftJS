@@ -51,6 +51,8 @@ const GoogleLoginButton = () => {
                 return history.push("/jd"); 
             case 6:
                 return history.push("/secretaria");
+            case 7:
+                return history.push("/invitado");
             default:
                 return history.push("/noRoles");
           }

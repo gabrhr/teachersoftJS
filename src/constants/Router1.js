@@ -49,6 +49,7 @@ import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTe
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
+import ErrorDireccionamiento from '../pages/Dev/Error404';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -110,7 +111,8 @@ const privateroutes = [
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
   { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: GestionTemaTramite },  
   /* Externo */
-  /* rol sin asignar */
+  { requireRoles: [7], path: "/invitado/mesaPartes/misSolicitudes", page: MisSolicitudes},  
+  { requireRoles: [7], path: "/invitado/mesaPartes/solicitudDetalle", page: SolicitudDetalle },  
 ]
 
 
@@ -138,6 +140,8 @@ export default function Router1(props) {
           return "/jd"
       case 6:
           return "/secretaria"
+      case 6:
+        return "/invitado"
     default:
         return "/noRoles"
     }
@@ -168,6 +172,9 @@ export default function Router1(props) {
         <PrivateRoute exact path="/secretaria" requireRoles={[6]}>
              <Redirect to="/secretaria/mesaPartes/solicitudesGenerales" />
         </PrivateRoute>
+        <PrivateRoute exact path="/invitado" requireRoles={[7]}>
+             <Redirect to="/invitado/mesaPartes/misSolicitudes" />
+        </PrivateRoute>
         {privateroutes.map((r,index) =>
           <PrivateRoute 
             key={index}
@@ -188,27 +195,16 @@ export default function Router1(props) {
             <NoAsignado/>
           }
           >
-          </PrivateRoute>
+        </PrivateRoute>
 
-        {/* Rutas no protegidas */}
-        {/* {publicroutes.map(r =>
-          <Route exact path={r.path} 
-          render={({location}) =>
-          <HeaderUser
-          pagina={r.page}
-          />
-        }
-        >
-          </Route>
-        )} */}
         {/* Login */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/">
-          {user
-            ?.id>0 
-            ? <Redirect to={generateRouteRol(rol)} /> 
+          {user?.id>0? 
+            <Redirect to={generateRouteRol(rol)} /> 
             : <Redirect to="/login"/> }
         </Route>
+        <Route default component={ErrorDireccionamiento} />
       </Switch>
     </Router>
   )
