@@ -65,29 +65,31 @@ export default function AsistenteSeccion() {
         const recordsX = []
         if(request){
           request.map(hor => {
-              recordsX.push({
-                  "Clave": hor.curso_ciclo.curso.codigo,
-                  "Nombre": hor.curso_ciclo.curso.nombre,
-                  "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
-                  "Creditos": hor.curso_ciclo.curso.creditos,
-                  "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                  "Horario": hor.codigo,
-                  "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                  "Horas": hor.sesiones[0].horas
-              })
-              if(hor.sesiones[1]){
-                  recordsX.push({
-                      "Clave": hor.curso_ciclo.curso.codigo,
-                      "Nombre": hor.curso_ciclo.curso.nombre,
-                      "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
-                      "Creditos": hor.curso_ciclo.curso.creditos,
-                      "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                      "Horario": hor.codigo,
-                      "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
-                      "Horas": hor.sesiones[1].horas
-                  })
-              }
-          })
+            if(hor.curso_ciclo){
+                recordsX.push({
+                    "Clave": hor.curso_ciclo.curso.codigo,
+                    "Nombre": hor.curso_ciclo.curso.nombre,
+                    "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
+                    "Creditos": hor.curso_ciclo.curso.creditos,
+                    "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                    "Horario": hor.codigo,
+                    "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
+                    "Horas": hor.sesiones[0].horas
+                })
+                if(hor.sesiones[1]){
+                    recordsX.push({
+                        "Clave": hor.curso_ciclo.curso.codigo,
+                        "Nombre": hor.curso_ciclo.curso.nombre,
+                        "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
+                        "Creditos": hor.curso_ciclo.curso.creditos,
+                        "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                        "Horario": hor.codigo,
+                        "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
+                        "Horas": hor.sesiones[1].horas
+                    })
+                }
+            }
+            })
         }
         return recordsX;
     }
@@ -96,7 +98,9 @@ export default function AsistenteSeccion() {
         setOpenPopup(false)
         const request = await getHorarios();
         const recordsX = transformarHorarios(request);
+        console.log(recordsX)
         setCargaH(recordsX);
+        setRecords(recordsX)
         //listHorario = input
         //setHorario(listHorario);
         //setHorario(listHorario)

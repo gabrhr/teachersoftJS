@@ -198,7 +198,7 @@ export default function ListaPreferenciaDocente({openPopup}) {
                 setOpenPopup={setOpenPopupAdd}
                 title="Agregar Horarios a Preferencias"
             >
-               <AgregarPreferenciaDocente setOpenPopUp = {setOpenPopupAdd}/>
+               <AgregarPreferenciaDocente openPopup = {openPopupAdd} setOpenPopUp = {setOpenPopupAdd}/>
             </Popup>  
         </>
     )

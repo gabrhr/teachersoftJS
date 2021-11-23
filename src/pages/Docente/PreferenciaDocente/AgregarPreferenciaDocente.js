@@ -18,6 +18,7 @@ import personaService from '../../../services/personaService';
 import cursoService from '../../../services/cursoService';
 import { Box } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const tableHeaders = [
     {
@@ -41,18 +42,12 @@ const tableHeaders = [
     {
       id: 'creditos',
       label: 'Créditos',
-      numeric: false,
+      numeric: true,
       sortable: true
     },
     {
       id: 'horario',
       label: 'Horario',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'horaSesion',
-      label: 'Hora - Sesion',
       numeric: false,
       sortable: true
     }
@@ -77,7 +72,7 @@ const tipos_docente = [
     }
 ]
 
-export default function CargaMasivaDocente({setOpenPopUp}) {
+export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const SubtitulosTable={display:"flex"}
@@ -100,7 +95,7 @@ export default function CargaMasivaDocente({setOpenPopUp}) {
         //Obtenemos los horarios
         getHorario();
   
-    }, [recordsX])
+    }, [openPopupAdd])
 
     const handleSearch = e => {
         let target = e.target;
@@ -122,18 +117,20 @@ export default function CargaMasivaDocente({setOpenPopUp}) {
         const recordsX = []
         if(request){
             request.map(hor => {
-                if(hor.sesiones){
-                    recordsX.push({
-                        "Clave": hor.curso_ciclo.curso.codigo,
-                        "Nombre": hor.curso_ciclo.curso.nombre,
-                        "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
-                        "Creditos": hor.curso_ciclo.curso.creditos,
-                        "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                        "Horario": hor.codigo,
-                        "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                        "Horas": hor.sesiones[0].horas
-                    })
-                    if(hor.sesiones[1]){
+                if(hor.sesiones && hor.curso_ciclo){
+                    if(hor.sesiones[0].sesion_docentes.length === 0){
+                        recordsX.push({
+                            "Clave": hor.curso_ciclo.curso.codigo,
+                            "Nombre": hor.curso_ciclo.curso.nombre,
+                            "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
+                            "Creditos": hor.curso_ciclo.curso.creditos,
+                            "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                            "Horario": hor.codigo,
+                            "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
+                            "Horas": hor.sesiones[0].horas
+                        })
+                    }
+                    if(hor.sesiones[1] && hor.sesiones[1].sesion_docentes.length === 0){
                         recordsX.push({
                             "Clave": hor.curso_ciclo.curso.codigo,
                             "Nombre": hor.curso_ciclo.curso.nombre,
@@ -153,7 +150,9 @@ export default function CargaMasivaDocente({setOpenPopUp}) {
 
     const getHorario = async () => {
         const request = await horarioService.getHorarios();
+        console.log(request)
         const recordsX = transformarHorarios(request)
+        console.log(recordsX)
         setRecordsX(recordsX)
     }
 
@@ -173,9 +172,14 @@ export default function CargaMasivaDocente({setOpenPopUp}) {
         console.log("Se agregan los horarios")   
     }
 
+    const addCursoBorrar = (curso) => {
+        //curso.selected = !curso.selected
+        console.log("Se selecciona un horario")
+    }
+
     return (
       <Form onSubmit={handleSubmit}>
-            <Grid container sx={{ mb: 3 }} display={recordsX ? "none" : "flex"}>
+            <Grid container sx={{ mb: 3 }} display="flex">
                 <Grid item xs={8} >
                     <Controls.Input
                         label="Buscar Cursos por Nombre o Clave"
@@ -220,22 +224,28 @@ export default function CargaMasivaDocente({setOpenPopUp}) {
                        recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id} >
                             <TableCell>
-                            <Grid container>
-                                <Grid item sm>
-                                    <Typography sx={{paddingLeft:2.5}}>
-                                        {`${item.nombre}`}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                                <Controls.RowCheckBox onClick = {()=>{addCursoBorrar(item)}}>
+                                    {/*<EditOutlinedIcon fontSize="small" />*/}
+                                </Controls.RowCheckBox>
                             </TableCell>
                             <TableCell>
-                                <Typography >
-                                    {item.creditos}
+                                <Typography>
+                                    {`${item.Clave}`}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    {item.horario}
+                                    {item.Nombre}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography >
+                                    {item.Creditos}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography >
+                                    {item.Horario}
                                 </Typography>
                             </TableCell>
                         </TableRow>
