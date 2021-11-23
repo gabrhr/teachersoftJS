@@ -102,7 +102,8 @@ function GetRow({ ...props }) {
 const fillCursos = async () => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
   const ciclo = await window.localStorage.getItem("ciclo");
-  let dataCur = await CursoService.getCursoCicloxCicloxCodigoNombre(ciclo,"");
+  const seccion = JSON.parse(window.localStorage.getItem("user"));
+  let dataCur = await CursoService.listarPorCicloPorSeccion(ciclo, seccion.persona.seccion.id);
   if(!dataCur) dataCur = [];
   //let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
   let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido

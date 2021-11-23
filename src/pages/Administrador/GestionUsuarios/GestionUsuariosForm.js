@@ -416,12 +416,13 @@ export default function GestionUsuariosForm(props) {
               />
             </label>
               */}
-            <Controls.Input
+            {/* <Controls.Input
               name="foto_URL"
               label="URL de Foto"
               value={values.foto_URL}
               onChange={handleInputChange}
-            />
+              disabled
+            /> */}
             {/*
             <label htmlFor="contained-button-file">
               <input type="file" multiple onChange={(event) => {

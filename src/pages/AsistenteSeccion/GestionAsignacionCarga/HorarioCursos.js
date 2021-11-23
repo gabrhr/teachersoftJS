@@ -255,7 +255,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
             >
                 Horario de Cursos
             </Typography>
-            <Grid container spacing = {0}>
+            <Grid container >
                 <Grid item xs={5}>
                     <Stack direction="row" align="left" spacing={0}>
                         <Controls.Input
@@ -276,12 +276,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                         /> */}
                     </Stack>
                 </Grid>
+                <Grid item xs={5}/>
                 {/* FIX:  left align */}
-                <Grid item xs={10} align="right">
+                <Grid item xs={2} align="right">
                     {/* FIX:  DT IconButton */}
-                    <Controls.AddButton 
+                    <Controls.Button 
                         title="Agregar Nuevo Horario"
-                        variant="iconoTexto"
+                        variant="text+icon"
+                        text = "Agregar Nuevo Horario"
                         onClick = {(event) => handleClick(event)}
                     />
                 </Grid>
@@ -327,13 +329,13 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-                <Controls.Button
+                {/* <Controls.Button
                 text="Eliminar todos los horarios"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {setOpenAllPopup(true)}}
-                />
+                /> */}
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}

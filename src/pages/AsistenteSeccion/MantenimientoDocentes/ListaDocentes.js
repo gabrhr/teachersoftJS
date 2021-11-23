@@ -147,7 +147,8 @@ export default function ListaDocentes({openPopup}) {
     console.log(records);
     return (
         <>
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+            <Grid container >
+                <Grid item xs={5}>
                 {/* <Toolbar> */}
                 <Controls.Input
                     label="Buscar Docentes por Nombre"
@@ -162,12 +163,17 @@ export default function ListaDocentes({openPopup}) {
                     onChange={handleSearch}
                     type="search"
                 />
-                <Controls.AddButton 
-                        title="Agregar Nuevo Docente"
-                        variant="iconoTexto"
+                </Grid>
+                <Grid item xs={5}> </Grid>
+                {/* FIX:  left align */}
+                <Grid item xs={2} align="right">
+                <Controls.Button
+                        variant = "text+icon" 
+                        text="Agregar Nuevo Docente"
                         onClick = {(event) => handleAdd(event)}
                 />
-            </div>
+                </Grid>
+            </Grid>
             <BoxTbl>
                 <TblContainer>
                     <TblHead />
@@ -241,13 +247,13 @@ export default function ListaDocentes({openPopup}) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-                <Controls.Button
+                {/* <Controls.Button
                 text="Eliminar todos los docentes"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {handleDeleteAll()}}
-                />
+                /> */}
             <Popup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
