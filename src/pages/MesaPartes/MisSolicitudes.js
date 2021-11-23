@@ -54,7 +54,7 @@ export default function MisSolicitudes() {
     /* Retrieve initial data from  Back API on first component render */
     React.useEffect(() => {
         getSolicitudes(setRecords, user)
-    }, [])
+    }, [user])
 
     return (
         <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 

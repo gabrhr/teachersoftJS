@@ -62,7 +62,7 @@ const tableHeaders = [
 
 const initialFieldValues = {
     temaTramiteID: 0,
-    estadoID: 4
+    estadoID: 4 // (Todos los estados)
 }
 
 // export const getTemaTramites = () => ([
@@ -147,16 +147,6 @@ export default function DashboardSoli(props) {
             temaTramite: temaTramite,
             tipoTramite: tipoTramite
         }
-
-    React.useEffect(() => {
-        getUnidades(setUnidad)
-        getDepartamentos(setDepartamento)
-        getSecciones(setSeccion)
-        getTemaTramites(setTemaTramite)
-        getTiposTramites(setTipoTramite)
-        /* note:  estados no tiene porque solo es un numero codigo */
-    }, [])
-
     const {
         TblContainer,
         TblHead,
@@ -173,6 +163,25 @@ export default function DashboardSoli(props) {
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues);
+
+    React.useEffect(() => {
+        getUnidades(setUnidad)
+        getDepartamentos(setDepartamento)
+        getSecciones(setSeccion)
+        getTemaTramites(setTemaTramite)
+        getTiposTramites(setTipoTramite)
+        /* note:  estados no tiene porque solo es un numero codigo */
+        
+    }, [])
+
+/*     React.useEffect( () =>{
+      setFilterFn({
+        fn: items => {
+          return items.filter(x => x.estado
+            .includes(0))
+        }
+     })
+    }, []) */
 
     /* Initial data retrieved */
     // React.useEffect(() => {
@@ -263,7 +272,7 @@ export default function DashboardSoli(props) {
             fileService.registerArchivo(solicitud.archivos[i]);
           }
           // console.log(solicitud)
-          window.alert(`Se inserto la soli con id=${solicitudID}`)
+          // window.alert(`Se inserto la soli con id=${solicitudID}`)
         })
         .catch(err => {
           /* error :( */
@@ -281,7 +290,6 @@ export default function DashboardSoli(props) {
     React.useEffect(() => {
         const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
         const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
-        console.log("fechas", fechaIni,fechaFin)
         setFilterFn({
           fn: items => {
             console.log(items)
