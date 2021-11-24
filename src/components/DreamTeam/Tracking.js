@@ -92,9 +92,17 @@ function Item(props){
 
     function getResultado(r){
         return (
-            r==1? "Aceptado": "Rechazado"
+            r===1? "Aceptado":r===2? "Rechazado": "-"
         )
     }
+
+    function getContenido(estado, contenido){
+        if(estado==2) return "Mesa de Partes"
+        else if(estado==3){
+            return contenido
+        }
+    }
+
     return(
         <>
         <Grid container >
@@ -118,10 +126,7 @@ function Item(props){
                     {item.titulo}
                 </Typography>
                 <Typography variant="body1" style={{color:"primary.light"}}>
-                    {estado==2? "Mesa de Partes":
-                        estado==3 && completado? "a " + item.contenido: 
-                        ""
-                    }
+                    {getContenido(estado,item.contenido)}
                 </Typography>
                 <Typography variant="body2" >
                     {estado==5? getResultado(item.fecha) : item.fecha} 

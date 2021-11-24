@@ -6,40 +6,120 @@ import { Form, useForm } from '../../components/useForm';
 import useTable from '../../components/useTable'
 import SearchIcon from '@mui/icons-material/Search';
 
+/* SERVICES */
+import PersonaService from '../../services/personaService'
+import * as MesaPartesService from '../../services/mesaPartesService'
+import * as UnidadService from '../../services/unidadService';
+import DepartamentoService from '../../services/departamentoService'
+import SeccionService from '../../services/seccionService'
+
+/* ICONS */
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import SendIcon from '@mui/icons-material/Send';
+
+/* ================================ SERVICES ================================ */
+
+function getRoles() {
+    return [
+        // {id: 0, title: 'Administrador'},     // ID=0 puede malograr el combo
+        { id: 0, title: 'Seleccionar' },
+        { id: 1, title: 'Docente' },
+        { id: 2, title: 'Asistente Seccion' },
+        { id: 3, title: 'Coordinador Seccion' },
+        { id: 4, title: 'Asistente Departamento' },
+        { id: 5, title: 'Jefe Departamento' },
+        { id: 6, title: 'Secretario Departamento' },
+        // {id: 7, title: 'Usuario Externo'},
+    ]
+}
+
+function getUnidades(setUnidad) {
+    UnidadService.getUnidades()
+        .then(us => {
+            console.log("Unidades: ", us)
+            setUnidad(us ?? [])
+        })
+}
+function getDepartamentos(setDepartamento) {
+    DepartamentoService.getDepartamentos()
+        .then(ds => {
+            console.log("Dep: ", ds)
+            setDepartamento(ds ?? [])
+        })
+}
+function getSecciones(setSeccion) {
+    SeccionService.getSecciones()
+        .then(secs => {
+            setSeccion(secs ?? [])
+        })
+}
+
+function getPersonas(setRecords, rolID) {
+    PersonaService.getPersonasxTipo(rolID)
+        .then(data => {
+            data = data ?? []
+            data.forEach((x, i) => {
+                data[i] = MesaPartesService.b2fPersona(x)
+            })
+            setRecords(data)
+        })
+}
+
+/* ================================== TABLE ================================= */
+
 const tableHeaders = [
     {
-      id: 'nombre',
-      label: '',
-      numeric: false,
-      sortable: true
+        id: 'fullName',
+        label: 'Nombre',
+        numeric: false,
+        sortable: false
     },
     {
-      id: 'delegar',
-      label: '',
-      numeric: false,
-      sortable: false
+        id: 'actions',
+        label: 'Delegar',
+        numeric: false,
+        sortable: false
     },
 ]
 
-const initialFieldValues = {
-    destinatarioID:0,
-    departamentoID: 0,
-    seccionID:0
+function PersonaTableRow(props) {
+    const { item, submitDelegar } = props
+    return (
+        <TableRow key={item.id}>
+            <TableCell>{item.fullName} - {item.seccionDepartamento}</TableCell>
+            <TableCell>
+                <Controls.ActionButton
+                    color="info"
+                    /* this one is defined in RecepcionDetalleSolicitud.js */
+                    onClick={() => { submitDelegar(item) }}
+                >
+                    <SendIcon fontSize="small" />
+                </Controls.ActionButton>
+                {/* <Controls.ActionButton
+                    color="error"
+                    onClick={() => {
+                        // onDelete(item.id)
+                        setConfirmDialog({
+                            isOpen: true,
+                            title: 'Are you sure to delete this record?',
+                            subTitle: 'You can\'t undo this operation',
+                            onConfirm: () => { onDelete(item.id) }
+                        })
+                    }}
+                >
+                    <CloseIcon fontSize="small" />
+                </Controls.ActionButton> */}
+            </TableCell>
+        </TableRow>
+    );
 }
 
-function getDestinatarios() {
-    return ([
-        { id: 0, title: 'Seleccionar'},
-        { id: 1, title: 'Jefe de Departamento'},
-        { id: 2, title: 'Coordinadores de Sección'},
-        { id: 3, title: 'Docentes'},
-    ])
-}
-
-export default function DelegarForm() {
-    const [records, setRecords] = useState([])
+function PersonasTable(props) {
+    const { records, setRecords,
+        selectedDepartmentID,
+        submitDelegar
+    } = props
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-
     const {
         TblContainer,
         TblHead,
@@ -47,6 +127,111 @@ export default function DelegarForm() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
+
+    const handleSearch = e => {
+        /* e.target.value holds contents of searchbox */
+        let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
+        setFilterFn({
+            fn: items => {
+                if (target.value === "")
+                    /* no search text */
+                    return items
+                else
+                    /* search records by "fullName" */
+                    return items.filter(x => x.fullName.toLowerCase()
+                        .includes(target.value.toLowerCase()))
+            }
+        })
+    }
+
+    /* DEBUG */
+    React.useEffect(() => {
+        console.log("Records: ", records)
+    }, [records])
+
+    return (
+        <>
+            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                {/* <Toolbar> */}
+                <Controls.Input
+                    label="Buscar Docentes por Nombre"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )
+                    }}
+                    sx={{ width: .75 }}
+                    onChange={handleSearch}
+                    type="search"
+                />
+            </div>
+            <BoxTbl>
+                <TblContainer>
+                    <TblHead />
+                    <colgroup>
+                        <col style={{ width: '80%' }} />
+                        <col style={{ width: '20%' }} />
+                    </colgroup>
+                    <TableBody>
+                        {
+                            recordsAfterPagingAndSorting()
+                                .filter(item => {
+                                    return item.departamentoID === selectedDepartmentID
+                                })
+                                .map(item => {
+                                    return (
+                                        <PersonaTableRow item={item} 
+                                            submitDelegar={submitDelegar}
+                                        />
+                                    )
+                                })
+                        }
+                    </TableBody>
+                </TblContainer>
+                <TblPagination />
+            </BoxTbl>
+        </>
+    )
+}
+
+/* ============================ FORM ================================== */
+
+/* del delegado para asignar la solicitud */
+const initialFieldValues = {
+    rolID: 0,
+    unidadID: 0,
+    departamentoID: 0,
+    seccionID: 0
+}
+
+export default function DelegarForm(props) {
+    const { submitDelegar } = props
+    /* GENERAL (should be in a parent function) */
+    const [records, setRecords] = useState([{ id: 1, fullName: "Mitsuo" }])
+
+    /* data para mostrar en los combobox */
+    const [unidad, setUnidad] = React.useState([])
+    const [departamento, setDepartamento] = React.useState([])
+    const [seccion, setSeccion] = React.useState([])
+    const comboData =
+    {
+        unidad: unidad,
+        departamento: departamento,
+        seccion: seccion,
+    }
+
+    React.useEffect(() => {
+        // getPersonas(setRecords)
+        getUnidades(setUnidad)
+        getDepartamentos(setDepartamento)
+        getSecciones(setSeccion)
+    }, [])
+
+    /* ------------ end ------------ */
 
     const {
         values,
@@ -57,11 +242,32 @@ export default function DelegarForm() {
         resetForm
     } = useForm(initialFieldValues);
 
+    /* load personas by rol */
+    React.useEffect(() => {
+        if (values.rolID === 0)
+            setRecords([])
+        else 
+            getPersonas(setRecords, values.rolID)
+    }, [values.rolID])
+
+    /* data de los comboboxes */
+    const [disable, setDisable] = React.useState({
+        departamentoID: true,
+        seccionID: true,
+        temaTramiteID: true,
+        tipoTramiteID: true
+    })
+
+    /* onSubmit validation */
     function validate() {
         let temp = {...errors}
         let defaultError = "Este campo es requerido"
-        temp.destinatarioID = values.destinatarioID !== 0 ? "" : defaultError
+        temp.rolID = values.rolID !== 0 ? "" : defaultError
+
+        temp.unidadID = values.unidadID !== 0 ? "" : defaultError
         temp.departamentoID = values.departamentoID !== 0 ? "" : defaultError
+        // temp.seccionID = values.seccionID !== 0 ? "" : defaultError
+
         setErrors({
             ...temp
         })
@@ -71,95 +277,81 @@ export default function DelegarForm() {
     function handleSubmit(e) {
         e.preventDefault()
         if (validate()) {
-            
+            // submit
         }
     }
 
-    const handleSearch = e => {
-        let target = e.target;
-        /* React "state object" (useState()) doens't allow functions, only
-          * objects.  Thus the function needs to be inside an object. */
-        setFilterFn({
-          fn: items => {
-            if (target.value === "")
-              /* no search text */
-              return items
-            else
-              return items.filter(x => x.apellidos.toLowerCase()
-                  .includes(target.value.toLowerCase()))
-          }
-        })
-     }
+    /* Cadenita de combobox
+     * Unidad > Departamento > Seccion > TemaTramite > TipoTramite 
+     */
+    function check(id, nextid) {
+        if (values[id] === 0) {
+            setDisable({...disable, [nextid]: true});
+        }
+        else {
+            setDisable({...disable, [nextid]: false});
+        }
+        setValues({...values, [nextid]: 0})
+    }
+    React.useEffect(() => check('unidadID', 'departamentoID'), [values.unidadID])
+    React.useEffect(() => check('departamentoID', 'seccionID'), [values.departamentoID])
+    React.useEffect(() => check('seccionID', 'temaTramiteID'), [values.seccionID])
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <Controls.Select
-                name="destinatarioID"
-                label="Tipo de Destinatario"
-                value={values.destinatarioID}
-                onChange={handleInputChange}
-                options={getDestinatarios()}
-                error={errors.destinatarioID}
-            />
-            <Controls.Select
-                name="departamentoID"
-                label="Departamento"
-                value={values.departamentoID}
-                onChange={handleInputChange}
-                options={getDestinatarios()}
-                error={errors.departamentoID}
-            />
-            <Controls.Select
-                name="seccionID"
-                label="Sección"
-                value={values.seccionID}
-                onChange={handleInputChange}
-                options={getDestinatarios()}
-                error={errors.seccionID}
-            />
-             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
-                <Controls.Input
-                    label="Buscar Docentes por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
+        <>
+            <Form onSubmit={handleSubmit}>
+                <Controls.Select
+                    name="rolID"
+                    label="Rol del delegado"
+                    value={values.rolID}
+                    onChange={handleInputChange}
+                    options={getRoles()}
+                    error={errors.rolID}
                 />
-            </div>
-            <BoxTbl>
-                <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                       recordsAfterPagingAndSorting().map((item,index) => (
-                            <ItemTable key={index} item={item}/>
-                        ))
+
+                <Controls.Select
+                    name="unidadID"
+                    label="Unidad"
+                    value={values.unidadID}
+                    onChange={handleInputChange}
+                    options={[{ id: 0, nombre: "Seleccionar" }]
+                        .concat(comboData.unidad)
                     }
-                    </TableBody>
-                </TblContainer>
-            </BoxTbl>
-
-        </Form>
+                    error={errors.unidadID}
+                />
+                <Controls.Select
+                    name="departamentoID"
+                    label="Departamento"
+                    value={values.departamentoID}
+                    onChange={handleInputChange}
+                    options={[{ id: 0, unidad: { id: 0 }, nombre: "Seleccionar" }]
+                        .concat(comboData.departamento)
+                        .filter(x => x.unidad.id === values.unidadID ||
+                            x.id === 0
+                        )
+                    }
+                    disabled={disable.departamentoID}
+                    error={errors.departamentoID}
+                />
+                {/* <Controls.Select
+                    name="seccionID"
+                    label="Sección"
+                    value={values.seccionID}
+                    onChange={handleInputChange}
+                    options={[{ id: 0, departamento: { id: 0 }, nombre: "Seleccionar" }]
+                        .concat(comboData.seccion)
+                        .filter(x => x.departamento.id === values.departamentoID ||
+                            x.id === 0
+                        )
+                    }
+                    disabled={disable.seccionID}
+                    error={errors.seccionID}
+                /> */}
+            </Form>
+            <PersonasTable records={records} setRecords={setRecords} 
+                selectedDepartmentID={values.departamentoID}
+                submitDelegar={submitDelegar}
+            />
+        </>
     )
-}
-
-function ItemTable(props){
-    const {item} =props
-    return (
-        <TableRow key={item.id}>
-            <TableCell>
-            hola
-            </TableCell>
-            <TableCell>
-               jeje
-            </TableCell>
-        </TableRow>
-    );
 }

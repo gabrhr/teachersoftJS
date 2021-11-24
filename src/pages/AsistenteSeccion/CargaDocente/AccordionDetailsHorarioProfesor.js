@@ -13,6 +13,8 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import Popup from '../../../components/util/Popup'
 import ModalBusquedaDocente from './ModalBusquedaDocente'
 import ModalDocenteClases from './ModalDocenteClases'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 function generateRow(docente) {
   let tipoDoc = 1;
@@ -31,12 +33,15 @@ function generateRow(docente) {
       break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
     }
     return (
-        <>
+        <Grid >
             <Grid container>
                 <Grid item xs={1}>
-                    <Avatar>
-                        <img height = "125%" width = "125%" text-align ="center" src={docente.foto_URL ? docente.foto_URL : 'static/images/avatar/1.jpg'} alt=""></img>
-                    </Avatar>
+                  <Avatar>
+                      {docente.foto_URL !== ("static/images/avatar/1.jpg" || "")
+                        ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                          src={docente.foto_URL}></img>
+                        :  <AccountCircleIcon/>}
+                  </Avatar>
                 </Grid>
                 <Grid item xs={3}>
                     <Typography>
@@ -66,7 +71,7 @@ function generateRow(docente) {
                     </Typography>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     )
 }
 
@@ -81,7 +86,6 @@ export default function AccordionDetailsHorarioProfesor(props) {
         console.log(seleccionadosP)
     }
 
-    console.log("Sesion:", horario);
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     //if(!clase.sesion_docentes) clase.sesion_docentes = []
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
@@ -100,48 +104,56 @@ export default function AccordionDetailsHorarioProfesor(props) {
                             Lista de Docentes de Clases
                         </Typography>
                     </Grid>
-                    <Controls.Button
-                        variant="outlined"
-                        text="Editar"
-                        size="small"
-                        endIcon={<EditOutlinedIcon />}
-                        onClick={() => {setOpenEditarClasesPopup(true)}}
-                    />
+                    <Grid item xs align = "right">
+                      <Controls.Button
+                          variant="outlined"
+                          text="Editar"
+                          size="small"
+                          endIcon={<EditOutlinedIcon />}
+                          onClick={() => {setOpenEditarClasesPopup(true)}}
+                      />
+                    </Grid>
                 </Grid>
                 {clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
-                <Grid container>
-                    <Grid item xs={10}>
-                        <Typography
-                            variant="h4"
-                            py="4px"
-                            color="primary"
-                        >
-                            Lista de Docentes de Laboratorios
-                        </Typography>
-                    </Grid>
-                    <Controls.Button
-                        variant="outlined"
-                        text="Editar"
-                        size="small"
-                        endIcon={<EditOutlinedIcon />}
-                        onClick={() => {setOpenEditarPracticasPopup(true)}}
-                    />
-                </Grid>
-                {laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
-            </Paper>
+                {laboratorio[0] ?
+                  <Grid container>
+                      <Grid item xs={10}>
+                          <Typography
+                              variant="h4"
+                              py="4px"
+                              color="primary"
+                          >
+                              Lista de Docentes de Laboratorios
+                          </Typography>
+                      </Grid>
+                      <Grid item xs align = "right">
+                        <Controls.Button
+                            variant="outlined"
+                            text="Editar"
+                            size="small"
+                            endIcon={<EditOutlinedIcon />}
+                            onClick={() => {setOpenEditarPracticasPopup(true)}}
+                        />
+                      </Grid>
+                  </Grid>
+                  : <Grid container></Grid> }
+                  {laboratorio[0] ? laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)) : []}
+              </Paper>
             <Popup
             openPopup={openEditarClasesPopup}
             setOpenPopup={setOpenEditarClasesPopup}
             title="Búsqueda de docentes para clases"
             >
-                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {0} actHorario = {actHorario} setActHorario = {setActHorario}/>
+                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {0} actHorario = {actHorario} setActHorario = {setActHorario}
+                            openPopUp = {openEditarClasesPopup} setOpenPopUp = {setOpenEditarClasesPopup}/>
             </Popup>
             <Popup
             openPopup={openEditarPracticasPopup}
             setOpenPopup={setOpenEditarPracticasPopup}
             title="Búsqueda de docentes para prácticas"
             >
-                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {1}  actHorario = {actHorario} setActHorario = {setActHorario}/>
+                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {1}  actHorario = {actHorario} setActHorario = {setActHorario}
+                            openPopUp = {openEditarPracticasPopup} setOpenPopUp = {setOpenEditarPracticasPopup}/>
             </Popup>
         </>
     )

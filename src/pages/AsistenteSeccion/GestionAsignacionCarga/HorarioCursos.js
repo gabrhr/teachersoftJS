@@ -78,8 +78,9 @@ const tableHeaders = [
     }
 ]
 
-const fillHorarios = async () => {
-  const dataHor = await HorarioService.getHorarios();
+const fillHorarios = async (ciclo) => {
+  if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
+  const dataHor = await HorarioService.buscarPorCiclo(ciclo);
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const horarios = [];
   if(!dataHor)  {
@@ -91,35 +92,7 @@ const fillHorarios = async () => {
     //console.log(hor.sesiones[0].secuencia);
     //const sesion1 = await HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio,  hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin);
     //console.log(sesion1);
-    horarios.push({
-      "id": hor.id,
-      "codigo": hor.codigo,
-      "tipo": hor.sesiones[0].secuencia,
-      "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
-      "curso_ciclo":{
-        "id": hor.curso_ciclo.id,
-        ciclo:{
-          "id": hor.curso_ciclo.ciclo.id,
-        },
-        curso:{
-          "id": hor.curso_ciclo.curso.id,
-          "codigo": hor.curso_ciclo.curso.codigo,
-          "nombre": hor.curso_ciclo.curso.nombre,
-          "creditos": hor.curso_ciclo.curso.creditos,
-          "unidad": hor.curso_ciclo.curso.unidad,
-          "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
-        },
-      },
-      sesiones:{
-        "secuencia": hor.sesiones[0].secuencia,
-        "sesiones_dictado": [],
-        "hora_sesion": hor.sesiones[0].horas,
-      },
-    })
-    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
-    if(hor.sesiones[1]){
-      //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
-      //console.log(sesion2);
+    if(hor.curso_ciclo){
       horarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
@@ -140,18 +113,48 @@ const fillHorarios = async () => {
           },
         },
         sesiones:{
-          "secuencia": hor.sesiones[1].secuencia,
+          "secuencia": hor.sesiones[0].secuencia,
           "sesiones_dictado": [],
-          "hora_sesion": hor.sesiones[1].horas,
+          "hora_sesion": hor.sesiones[0].horas,
         },
       })
-    }
+      //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
+      if(hor.sesiones[1]){
+        //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+        //console.log(sesion2);
+        horarios.push({
+          "id": hor.id,
+          "codigo": hor.codigo,
+          "tipo": hor.sesiones[0].secuencia,
+          "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
+          "curso_ciclo":{
+            "id": hor.curso_ciclo.id,
+            ciclo:{
+              "id": hor.curso_ciclo.ciclo.id,
+            },
+            curso:{
+              "id": hor.curso_ciclo.curso.id,
+              "codigo": hor.curso_ciclo.curso.codigo,
+              "nombre": hor.curso_ciclo.curso.nombre,
+              "creditos": hor.curso_ciclo.curso.creditos,
+              "unidad": hor.curso_ciclo.curso.unidad,
+              "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
+            },
+          },
+          sesiones:{
+            "secuencia": hor.sesiones[1].secuencia,
+            "sesiones_dictado": [],
+            "hora_sesion": hor.sesiones[1].horas,
+          },
+        })
+      }
+    }//FIN DE LA VERIFICACION
   }
   return horarios;
 
 }
 
-export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) {
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo}) {
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
@@ -185,14 +188,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
 
     React.useEffect(() => {
       //Obtenemos las secciones
-      fillHorarios()
+      fillHorarios(ciclo)
       .then (newHorarios =>{
         //setRecordsX(newHorarios); //Se quiere actualizar todo
         setRecords(newHorarios);
         setCargaH(records);
       });
       
-    }, [])
+    }, [ciclo])
   
     //console.log(records);
     //console.log(indexDelete);
@@ -243,6 +246,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
       setOpenOnePopup(false)
     }
 
+    //console.log(ciclo)
+
     return (
         <Form>            
             <Typography variant="h4"
@@ -250,8 +255,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
             >
                 Horario de Cursos
             </Typography>
-            <Grid container>
-                <Grid item xs={8}>
+            <Grid container >
+                <Grid item xs={5}>
                     <Stack direction="row" align="left" spacing={0}>
                         <Controls.Input
                             name="searchText"
@@ -259,9 +264,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                             onChange={handleSearch}
                             type="search"
                             size="small"
-                            sx = {{
-                                maxWidth: .7
-                            }}
+
                         />
                         {/* <Controls.Button  
                             text={<SearchIcon/>}
@@ -273,12 +276,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                         /> */}
                     </Stack>
                 </Grid>
+                <Grid item xs={5}/>
                 {/* FIX:  left align */}
-                <Grid item xs={4} align="right">
+                <Grid item xs={2} align="right">
                     {/* FIX:  DT IconButton */}
-                    <Controls.AddButton 
+                    <Controls.Button 
                         title="Agregar Nuevo Horario"
-                        variant="iconoTexto"
+                        variant="text+icon"
+                        text = "Agregar Nuevo Horario"
                         onClick = {(event) => handleClick(event)}
                     />
                 </Grid>
@@ -324,13 +329,13 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH}) 
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-                <Controls.Button
+                {/* <Controls.Button
                 text="Eliminar todos los horarios"
                 size = "small"
                 color="warning"
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {setOpenAllPopup(true)}}
-                />
+                /> */}
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}

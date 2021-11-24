@@ -29,7 +29,7 @@ export default function MisSolicitudes() {
     React.useEffect(() => {
         console.log(user)
         getSolicitudes(setRecords, user.persona.departamento.id)
-    }, [])
+    }, [user])
 
     return (
         <DashboardSoli title={"Solicitudes Generales a Mesa de Partes"} 

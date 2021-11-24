@@ -26,6 +26,7 @@ import GestionCargaCursos from '../pages/AsistenteSeccion/GestionAsignacionCarga
 import GestionDepartamento from '../pages/Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../pages/Administrador/MantenimientoSeccion/GestionSeccion'
 import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
+import CargaDocenteHorarios from '../pages/AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import Vacio from '../pages/Dev/Vacio'
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
@@ -42,10 +43,11 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-//import NoAsignado from './NoAsignado'
 import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
+import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
+//import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -78,9 +80,10 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   /* CS*/
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
@@ -201,7 +204,10 @@ export default function Router1(props) {
         {/* Login */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/">
-          {user?.id>0 ? <Redirect to={generateRouteRol(rol)} /> : <Redirect to="/login"/> }
+          {user
+            ?.id>0 
+            ? <Redirect to={generateRouteRol(rol)} /> 
+            : <Redirect to="/login"/> }
         </Route>
       </Switch>
     </Router>

@@ -22,17 +22,10 @@ function createData(id, claveCurso, nombreCurso, cargaHoraria,
     horario, tipoSesion, horaSesion
    }
  }
- 
-const usuarios2 = [
-   createData('10', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-   createData('11', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-   createData('12', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-]
-
 
 export default function AsistenteSeccion() {
 
-    
+    const [ciclo, setCiclo] = useState ();
     const [horario, setHorario] = useState([]);
   
   /*  const [newFile, setNewFile] = useState(0); //0: No new file
@@ -65,6 +58,7 @@ export default function AsistenteSeccion() {
         const recordsX = []
         if(request){
           request.map(hor => {
+            if(hor.curso_ciclo){
               recordsX.push({
                   "Clave": hor.curso_ciclo.curso.codigo,
                   "Nombre": hor.curso_ciclo.curso.nombre,
@@ -87,6 +81,7 @@ export default function AsistenteSeccion() {
                       "Horas": hor.sesiones[1].horas
                   })
               }
+            }
           })
         }
         return recordsX;
@@ -103,13 +98,6 @@ export default function AsistenteSeccion() {
         //console.log(horario)
         //window.localStorage.setItem('listHorario', listHorario) 
     }
-    
-    /*FUNCION QUE LLAMA AL BACK (SERVICES)*/ 
-    let listHorario = [
-        formatHorario('0', 'INF231','Curso A',  '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-        formatHorario('1', 'INF111', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-        formatHorario('2', 'INF341', 'Curso A', '3 horas', '801', 'Clase', 'Vie 18:00 - 21:00'),
-      ];
     
     /*Bota tu ga nomás*/
     
@@ -154,6 +142,8 @@ export default function AsistenteSeccion() {
             <ContentHeader 
                 text="Gestión de la carga de horarios"
                 cbo= {true}
+                records = {ciclo}
+                setRecords = {setCiclo}
             />
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
@@ -171,20 +161,14 @@ export default function AsistenteSeccion() {
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                     <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}/>
-                    {/* <Controls.Button
-                        text="Exportar"
-                        size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}
-                    /> */}
-                    
+                     {/* <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
+                        endIcon={<CloudDownloadOutlinedIcon/>}/> */}
                 </Grid>
             </Grid>
             {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
                 <HorarioCursos records={records} setRecords={setRecords} setCargaH = {setCargaH} 
-                cargaH = {cargaH}/>
+                        cargaH = {cargaH} ciclo = {ciclo} setCiclo = {setCiclo}/>
             </Paper>
             <Popup
                 openPopup={openPopup}
