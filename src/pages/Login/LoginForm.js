@@ -128,11 +128,11 @@ const Login = () => {
         o
       </Typography>
       <GoogleLoginButton/>
-      <Typography paddingTop="20px" >
+      {/* <Typography paddingTop="20px" >
         <Link to="#" >
           Recuperar contraseña
         </Link>
-      </Typography>
+      </Typography> */}
       {/* </Grid> */}
     </Form>
   )
