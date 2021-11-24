@@ -49,7 +49,7 @@ function HeadNotification(props) {
     const { rol } = props
     /* checkear el rol, si es NuevoUsuario (sin permisos) mostrar */
     /* importarlo desde pages/NuevoUsuario/HeadNotificationMisSolicitudes */
-    if (rol === 8)
+    if (rol === 7)
         return (
             <HeadNotificationMisSolicitudes />
         )

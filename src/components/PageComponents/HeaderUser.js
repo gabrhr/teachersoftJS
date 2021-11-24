@@ -24,6 +24,7 @@ import { MenuSecretaria } from "./MenuSecretaria";
 import { MenuCoordinadorSeccion } from "./MenuCoordinadorSeccion";
 import { MenuAsistenteDepartamento } from "./MenuAsistenteDepartamento";
 import { MenuJefeDepartamento } from "./MenuJefeDepartamento";
+import { MenuExterno } from "./MenuExterno";
 
 function BoxPadding(props) {
   return (
@@ -184,7 +185,9 @@ export default function HeaderUser(props) {
   }else if (rol == 6) {
     rolName = "Secretaria de Departamento"
     listaMenu = MenuSecretaria
-    /* FALTA USUARIO EXTERNO (rol=7) */
+  } else if(rol == 7) {
+    rolName = "Invitado"  // arreglar
+    listaMenu = MenuExterno
   } else if(rol == 8) {
     rolName = "Asistente de Sección"  // arreglar
     listaMenu = MenuAdministrador
