@@ -8,7 +8,8 @@
  */
 
 import React from 'react'
-import { IconButton, Typography, Box, Alert, Grid, Stack } from '@mui/material';
+import { IconButton, Typography, Box, Alert, Grid, 
+    FormHelperText } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 import { UserContext } from '../../constants/UserContext';
@@ -16,6 +17,7 @@ import { DT } from '../../components/DreamTeam/DT'
 import ReCAPTCHA from 'react-google-recaptcha';
 /* fake BackEnd */
 import * as employeeService from '../../services/employeeService';
+import * as DTLocalServices from '../../services/DTLocalServices'
 /* ICONS */
 import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
@@ -27,8 +29,9 @@ const radioGroupValues = [
 
 function getPaises() {
     return [
-        { id: '0', title: 'Perú' },
-        { id: '1', title: 'Extranjero' },
+        { id: 'Seleccionar', title: 'Seleccionar' },
+        { id: 'Perú', title: 'Perú' },
+        { id: 'Extranjero', title: 'Extranjero' },
     ]
 }
 
@@ -39,10 +42,13 @@ const initialFieldValues = {
     segundo_apellido: '',
     nombres: '',
     fecha_nacimiento: new Date(),
-    pais_nacionalidad: '0',
+    pais_nacionalidad: 'Seleccionar',
     sexo: 0,
     dni: '',
-    acepta_politica_privacidad: false,
+    aceptaTyC: false,
+
+    /* extra */
+    captcha: false      /* true iff has passed CAPTCHA */
 }
 
 function printValues(values) {
@@ -80,11 +86,45 @@ export default function RegistroForm() {
     function handleChangeCaptcha() {
         /* success */
         if (captcha.current.getValue()) {   // (returns a token)
+            setValues({
+                ...values,
+                captcha: true
+            })
         }
     }
 
+    function handleSubmit(e) {
+        e.preventDefault()
+        if (validate())
+            window.alert('submitted');
+    }
+
+    /* onSubmit validation */
+    function validate() {
+        let temp = {...errors}
+        let defaultError = "Este campo es requerido"
+        if (values.primer_apellido.length !== 0)
+            temp.primer_apellido = DTLocalServices.validateName(values.primer_apellido)
+        else
+            temp.primer_apellido = defaultError
+        if (values.nombres.length !== 0)
+            temp.nombres = DTLocalServices.validateName(values.nombres)
+        else 
+            temp.nombres = defaultError
+        temp.dni = DTLocalServices.validateDni(values.dni)
+        temp.aceptaTyC = values.aceptaTyC === true ? "" : defaultError
+        temp.pais_nacionalidad = values.pais_nacionalidad !== "Seleccionar" ? "" 
+            : defaultError
+        temp.captcha = values.captcha === true ? "" : defaultError
+
+        setErrors({
+            ...temp
+        })
+        return Object.values(temp).every(x => x === "")
+    }
+
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Box height="250px" overflow="auto" display="none">
                 <Typography sx={{
                     fontFamily: "monospace",
@@ -108,6 +148,7 @@ export default function RegistroForm() {
                         label="Primer apellido"
                         value={values.primer_apellido}
                         onChange={handleInputChange}
+                        error={errors.primer_apellido}
                     />
                     <Controls.Input
                         name="segundo_apellido"
@@ -120,6 +161,7 @@ export default function RegistroForm() {
                         label="Nombres"
                         value={values.nombres}
                         onChange={handleInputChange}
+                        error={errors.nombres}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -128,7 +170,7 @@ export default function RegistroForm() {
                         label="DNI"
                         value={values.dni}
                         onChange={handleInputChange}
-                        required
+                        error={errors.dni}
                     />
                     <Controls.DatePicker
                         name="fecha_nacimiento"
@@ -152,31 +194,37 @@ export default function RegistroForm() {
                         value={values.pais_nacionalidad}
                         onChange={handleInputChange}
                         options={getPaises()}
+                        error={errors.pais_nacionalidad}
                     />
                 </Grid>
             </Grid>
 
             <Alert sx={{ mt: 2 }} variant="outlined" severity="info">
-                Declaro que he leído la Politica de Privacidad y que autorizo a
-                la Pontificia Universidad Católica del Perú a la realización del
-                tratamiento de mis datos personales conforme a los términos y
-                condiciones ahí planteados.
+                Declaro que he leído la{" "}
+                <a href="http://example.com">Politica de Privacidad</a> 
+                {" "}y que autorizo a la Pontificia Universidad Católica del Perú a
+                la realización del tratamiento de mis datos personales conforme
+                a los términos y condiciones ahí planteados.
             </Alert>
             <Controls.Checkbox
-                name="acepta_politica_privacidad"
+                name="aceptaTyC"
                 label="Acepto los Términos y Condiciones"
-                value={values.acepta_politica_privacidad}
+                value={values.aceptaTyC}
                 onChange={handleInputChange}
+                error={errors.aceptaTyC}
             />
             <ReCAPTCHA
                 ref={captcha}
                 sitekey="6LcKzlQdAAAAAKE-sgUaSteogICfr93SMR0wdhOa"
                 onChange={handleChangeCaptcha}
             />
+            {errors.captcha && 
+                <FormHelperText sx={{color: "red"}}>{errors.captcha}</FormHelperText>
+            }
             <Box display="flex" justifyContent="flex-end">
                 <Controls.Button
                     text="Enviar"
-                    // type="submit"
+                    type="submit"
                     endIcon={<SendIcon />}
                 />
             </Box>

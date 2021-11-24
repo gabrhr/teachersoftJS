@@ -76,6 +76,13 @@ export function validateName(name) {
         : "Nombre invalido"
 }
 
+/* dni */
+export function validateDni(s) {
+    return (/^\d{8}$/).test(s)
+        ? ""
+        : "El DNI debe tener 8 dígitos"
+}
+
 /* Returns error message,  */
 export function requiredField(s) {
     return s.length !== 0 ? "" : "Campo requerido"
