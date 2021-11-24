@@ -290,6 +290,7 @@ export default function GestionDepartamento() {
               <TblContainer>
                 <TblHead />
                 <TableBody>
+                  
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
