@@ -91,8 +91,7 @@ const registerUnidad = async (newObject) => {
 
 const updateUnidad = async (newObject, id) => {
     try{
-        const request = await axios.put(`${url}/unidad/${id}`,
-            tokenService.GetTokenPrueba());
+        const request = await axios.put(`${url}/unidad/`,newObject, tokenService.GetTokenPrueba());
         return request.data;
     } catch (err) {
         console.error(err);

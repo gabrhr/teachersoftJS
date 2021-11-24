@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 
 import * as employeeService from '../../../services/employeeService';
-import UnidadService from '../../../services/departamentoService.js';
+import UnidadService from '../../../services/unidadService.js';
 
 const initialFieldValues = {
     id: 0,
@@ -70,10 +70,34 @@ export default function AgregarEditarUnidad(props) {
     return (
         <Form onSubmit={handleSubmit}>
           <Grid container>
-            <Grid item sx={6} style={ColumnGridItemStyle}>
-
+            <Grid  item xs ={12} style={ColumnGridItemStyle}>
+                <Controls.Input
+                    name="nombre"
+                    label="Nombre"
+                    value={values.nombre}
+                    onChange = {handleInputChange}
+                    error={errors.nombre}
+                />
             </Grid>
           </Grid>
+          <Grid cointainer align="right" mt={5}>
+                <div>
+                    <Controls.Button
+                        // disabled={true}
+                        variant="disabled"
+                        text="Cancelar"
+                        onClick={()=> setOpenPopup(false)}
+                        />
+                    <Controls.Button
+                        // variant="contained"
+                        // color="primary"
+                        // size="large"
+                        text="Guardar Cambios"
+                        type="submit"
+                        />
+
+                </div>
+            </Grid>
         </Form>
     );
 }

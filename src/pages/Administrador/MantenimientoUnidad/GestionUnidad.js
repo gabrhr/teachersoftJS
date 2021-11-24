@@ -7,6 +7,7 @@ import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment, Typography }
 
 /*Local y Services*/ 
 import AgregarEditarUnidad from './AgregarEditarUnidad'
+
 import Notification from '../../../components/util/Notification'
 import ConfirmDialog from '../../../components/util/ConfirmDialog';
 import UnidadService from '../../../services/unidadService.js';
@@ -92,8 +93,7 @@ export default function GestionUnidad() {
     const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
 
     const [confirmDialog, setConfirmDialog] = useState(
-        { isOpen: false, title: '', subtitle: '' })
-
+      { isOpen: false, title: '', subtitle: '' })
     const {
         TblContainer,
         TblHead,
@@ -101,7 +101,6 @@ export default function GestionUnidad() {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-
     const handleSearch = e => {
         let target = e.target;
         /* React "state object" (useState()) doens't allow functions, only
@@ -255,7 +254,7 @@ export default function GestionUnidad() {
                                     onClick={() => {
                                     setConfirmDialog({
                                         isOpen: true,
-                                        title: '¿Eliminar departamento permanentemente?',
+                                        title: '¿Eliminar unidad permanentemente?',
                                         subTitle: 'No es posible deshacer esta accion',
                                         onConfirm: () => {onDelete(item.id)
                                     }
@@ -276,13 +275,14 @@ export default function GestionUnidad() {
           <Popup
             openPopup={openPopup}
             setOpenPopup={setOpenPopup}
-            title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
+            title= {recordForEdit ? "Editar Facultad": "Nuevo Facultad"}
           >
-            <AgregarEditarUnidad
+              <AgregarEditarUnidad
                 recordForEdit={recordForEdit}
                 addOrEdit={addOrEdit}
                 setOpenPopup={setOpenPopup}
-            />
+              />
+ 
           </Popup>
           <Notification
             notify={notify}
