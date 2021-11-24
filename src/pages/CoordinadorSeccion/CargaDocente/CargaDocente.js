@@ -182,6 +182,7 @@ export default function CargaDocente() {
   const [recordsForEdit, setRecordForEdit] = useState()
   const [records, setRecord] = useState([])
   const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
+  const [row, setRow] = useState(false) //Sacamos la linea seleccionada
   // en lugar de la de cursos
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
   const {
@@ -189,6 +190,10 @@ export default function CargaDocente() {
     // setValues,
     handleInputChange
   } = useForm(getEstadoCollection[0]);
+
+  function getRow({ ...props }) {
+    setRow(props)
+}
 
   const {
     TblContainer,
@@ -326,12 +331,19 @@ export default function CargaDocente() {
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
                         <StyledTableCell>
-                          <IconButton size="small"
-                            onClick={() => { openInPopup(item) }}
-                          >
-                            <ArrowForwardIosIcon fontSize="small" />
+                          <Link to ={{
+                              pathname:`/cord/asignacionCarga/registroCarga/horarios`,
+                              state:{
+                                  curso: item
+                              }
+                            }}  style={{ textDecoration: 'none' }}>
+                            <IconButton size="small"
+                              onClick={() => { getRow(item) }}
+                            >
+                              <ArrowForwardIosIcon fontSize="small" />
 
-                          </IconButton>
+                            </IconButton>
+                          </Link>
                         </StyledTableCell>
 
                       </StyledTableRow>

@@ -49,6 +49,7 @@ import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTe
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
 import SolPreferenciaDocentes from '../pages/AsistenteSeccion/PreferenciaDocente/SolPreferenciaDocentes';
 import ModalDocenteClases from '../pages/AsistenteSeccion/CargaDocente/ModalDocenteClases'
+import CargaDocenteHorariosCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocenteHorarios'
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 /* Todos menos el login que es especial porque settea al usuario */
@@ -88,6 +89,7 @@ const privateroutes = [
   /* CS*/
   { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
   { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
