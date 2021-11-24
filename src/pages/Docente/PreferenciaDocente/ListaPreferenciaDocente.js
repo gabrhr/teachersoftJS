@@ -11,9 +11,15 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import AgregarPreferenciaDocente from './AgregarPreferenciaDocente';
-
+import EliminarPreferencias from './EliminarPreferencias';
 
 const tableHeaders = [
+    {
+      id: 'seleccionar',
+      label: 'Seleccionar',
+      numeric: false,
+      sortable: true
+    },
     {
       id: 'codigo',
       label: 'Codigo',
@@ -50,8 +56,9 @@ export default function ListaPreferenciaDocente({openPopup}) {
 
     const [openPopupAdd, setOpenPopupAdd] = useState(false)
     const [openPopupEdit, setOpenPopupEdit] = useState(false)
-    
+    const [openPopupDelete, setOpenPopupDelete] = useState(false)
     const [records, setRecords] = useState([])
+    const [idDelRecords, setidDelRecords]  = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const {
         TblContainer,
@@ -62,35 +69,27 @@ export default function ListaPreferenciaDocente({openPopup}) {
     } = useTable(records, tableHeaders, filterFn);
     
     useEffect(() => {
-        //getProfesores()
-      }, [openPopupEdit, openPopupAdd, openPopup])
+        getPreferencias()
+    }, [openPopupEdit, openPopupAdd, openPopup, openPopupDelete])
 
-    function transformarDocentes (request){
+    function transformarPreferencias (request){
         const recordsX = []
         request.map(doc => {
             recordsX.push({
-                "id": doc.id,
-                "url_foto": doc.foto_URL ? doc.foto_URL : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
-                "nombres": doc.nombres,
-                "apellidos": doc.apellidos,
-                "especialidad": doc.seccion.nombre,
-                "correo": doc.correo_pucp,
-                "telefono": doc.telefono,
-                "codigo": doc.codigo_pucp,
-                "dni": doc.numero_documento,
-                "tipo_docente": doc.tipo_docente,
-                "id_seccion": doc.seccion.id,
-                "id_departamento": doc.departamento.id,
-                "id_unidad": doc.departamento.unidad.id,
-                "numero_documento": doc.numero_documento,
+              "Codigo": doc.cursoCiclos[0].curso.codigo,
+              "Nombre": doc.cursoCiclos[0].curso.nombre,
+              "Creditos": doc.cursoCiclos[0].curso.creditos,
+              "Horario": doc.horarios[0].codigo,
+              "ID": doc.id,
+              "selected": false
             })
         })
         return recordsX;
     }
 
-    const getProfesores = async () =>{
-        const request = await personaService.getPersonasxTipo(1);
-        const recordsX = transformarDocentes(request)
+    const getPreferencias = async () =>{
+        const request = await personaService.getPreferencias();
+        const recordsX = transformarPreferencias(request)
         setRecords(recordsX)
     }
 
@@ -109,9 +108,13 @@ export default function ListaPreferenciaDocente({openPopup}) {
           }
         })
      }
-    
-    const handleRemove = (e) => {
-        console.log("Se remueve una(s) preferencia")
+
+    const handleDelete = () => {
+      console.log(idDelRecords)
+      for(let i = 0; i < idDelRecords.length; i++){
+        personaService.deletePreferencia(idDelRecords[i])
+      } 
+      setOpenPopupDelete(false)
     }
 
     const handleAdd = (e) => {
@@ -119,14 +122,23 @@ export default function ListaPreferenciaDocente({openPopup}) {
         setOpenPopupAdd(true)
     }
 
-    const handleDelete = async item => {
-        console.log("Se borra una fila")
-    }
+    const addCursoBorrar = (item) => {
+      item.selected = !item.selected
+      if(item.selected){
+          idDelRecords.push(item.ID)
+          console.log(idDelRecords)
+          console.log("Se agrega un horario")
+      }else{
+          for(let i = 0; i < idDelRecords.length; i++){
+              if(idDelRecords[i] === item.ID){
+                  idDelRecords.splice(i, 1)
+              }
+          }
+          console.log(idDelRecords)
+          console.log("Se quita un horario")
+      }
+    } 
 
-    const handleEdit = item => {
-       console.log("Se edita una fila")
-    }
-    console.log(records);
     return (
         <>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
@@ -150,36 +162,33 @@ export default function ListaPreferenciaDocente({openPopup}) {
                        recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id} >
                             <TableCell>
+                                <Controls.RowCheckBox onClick = {()=>{addCursoBorrar(item)}}>
+                                    {/*<EditOutlinedIcon fontSize="small" />*/}
+                                </Controls.RowCheckBox>
+                            </TableCell>
+                            <TableCell>
                             <Grid container>
                                 <Grid item sm>
                                     <Typography sx={{paddingLeft:2.5}}>
-                                        {`${item.nombre}`}
+                                        {`${item.Codigo}`}
                                     </Typography>
                                 </Grid>
                             </Grid>
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    {item.creditos}
+                                    {item.Nombre}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    {item.horario}
+                                    {item.Creditos}
                                 </Typography>
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {handleEdit(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              {/* Accion eliminar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {handleDelete(item)}}
-                              >
-                                <DeleteOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
+                            </TableCell>
+                            <TableCell>
+                                <Typography >
+                                    {item.Horario}
+                                </Typography>
                             </TableCell>
                         </TableRow>
                         ))
@@ -191,7 +200,7 @@ export default function ListaPreferenciaDocente({openPopup}) {
                 <Controls.MinusButton 
                     title="Eliminar Seleccionados"
                     variant="iconoTexto"
-                    onClick = {(event) => handleRemove(event)}
+                    onClick = {() => setOpenPopupDelete(true)}
                 />
             <Popup
                 openPopup={openPopupAdd}
@@ -199,7 +208,18 @@ export default function ListaPreferenciaDocente({openPopup}) {
                 title="Agregar Horarios a Preferencias"
             >
                <AgregarPreferenciaDocente openPopup = {openPopupAdd} setOpenPopUp = {setOpenPopupAdd}/>
-            </Popup>  
+            </Popup>
+            <Popup
+                openPopup={openPopupDelete}
+                setOpenPopup={setOpenPopupDelete}
+                title={`Eliminar preferencias: `}
+                size = "sm"
+            >
+              <EliminarPreferencias 
+                    setOpenOnePopup = {setOpenPopupDelete}
+                    handleDelete = {handleDelete} 
+                />
+            </Popup>
         </>
     )
 }

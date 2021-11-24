@@ -1,5 +1,5 @@
 import { Avatar, Grid, InputAdornment, ListItem, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import Popup from '../../../components/util/Popup'
 import useTable from "../../../components/useTable"
@@ -15,10 +15,10 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
 import personaService from '../../../services/personaService';
-import cursoService from '../../../services/cursoService';
 import { Box } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import {UserContext} from '../../../constants/UserContext';
 
 const tableHeaders = [
     {
@@ -72,9 +72,12 @@ const tipos_docente = [
     }
 ]
 
-export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
+export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp}) {
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [especialidad, setEspecialidad] = useState(0)
+    let records = []
+    const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0, marginTop: 3}
@@ -94,7 +97,7 @@ export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
     useEffect(() => {
         //Obtenemos los horarios
         getHorario();
-  
+        console.log(user.persona.seccion.id)
     }, [openPopupAdd])
 
     const handleSearch = e => {
@@ -117,7 +120,7 @@ export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
         const recordsX = []
         if(request){
             request.map(hor => {
-                if(hor.sesiones && hor.curso_ciclo){
+                if(hor.sesiones && hor.curso_ciclo && hor.curso_ciclo.curso.seccion.id === user.persona.seccion.id){
                     if(hor.sesiones[0].sesion_docentes.length === 0){
                         recordsX.push({
                             "Clave": hor.curso_ciclo.curso.codigo,
@@ -127,7 +130,11 @@ export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
                             "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
                             "Horario": hor.codigo,
                             "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                            "Horas": hor.sesiones[0].horas
+                            "Horas": hor.sesiones[0].horas,
+                            "ID_Curso_Ciclo": hor.curso_ciclo.id,
+                            "ID_Horario": hor.id,
+                            "ID_Sesion": hor.sesiones[0].id,
+                            "selected": false
                         })
                     }
                     if(hor.sesiones[1] && hor.sesiones[1].sesion_docentes.length === 0){
@@ -139,7 +146,11 @@ export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
                             "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
                             "Horario": hor.codigo,
                             "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
-                            "Horas": hor.sesiones[1].horas
+                            "Horas": hor.sesiones[1].horas,
+                            "ID_Curso_Ciclo": hor.curso_ciclo.id,
+                            "ID_Horario": hor.id,
+                            "ID_Sesion": hor.sesiones[1].id,
+                            "selected": false
                         })
                     }
                 }
@@ -160,21 +171,49 @@ export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
         event.target.value = ''
     }
 
-    const setEspecialidad = e =>{
-        console.log(e.target.value)
-    }
-
     const agregarHorarios = () =>{
-        console.log("Se agregan los horarios")
+        recordsX.map(hor =>{
+            if(hor.selected){
+                const preferencia = {
+                    "docente":{
+                       "id": user.persona.id,
+                    },
+                    "cursoCiclos":[
+                       {
+                       "id": hor.ID_Curso_Ciclo,
+                       }
+                    ],
+                    "horarios":[
+                       {
+                       "id": hor.ID_Horario,
+                       }
+                    ],
+                    "sesiones":[
+                       {
+                       "id": hor.ID_Sesion
+                       }
+                    ]
+                }
+                const resultado = personaService.registerPreferencia(preferencia);
+                console.log(resultado)
+            }
+        })
+        setOpenPopUp(false)
     }
 
     const handleSubmit = () => {
         console.log("Se agregan los horarios")   
     }
 
-    const addCursoBorrar = (curso) => {
-        //curso.selected = !curso.selected
-        console.log("Se selecciona un horario")
+    const addCursoBorrar = (item) => {
+        item.selected = !item.selected
+        if(item.selected){
+            console.log("Se agrega un horario")
+            //setSelected(numSelected + 1)
+        }else{
+            console.log("Se quita un horario")
+            //setSelected(numSelected - 1)
+        }
     }
 
     return (
@@ -262,7 +301,7 @@ export default function CargaMasivaDocente({openPopupAdd, setOpenPopUp}) {
                       // disabled={true}
                       variant="disabled"
                       text="Cancelar"
-                      /* onClick={resetForm} */
+                      onClick={()=>{setOpenPopUp(false)}}
                       />
                   <Controls.Button
                       // variant="contained"
