@@ -155,7 +155,6 @@ export default function HeaderUser(props) {
   /* estado del Drawer */
   const [open, setOpen] = React.useState(true);
 
-
   const classes = useStyles();
   let listaMenu=[];
   const handleDrawerOpen = () => {

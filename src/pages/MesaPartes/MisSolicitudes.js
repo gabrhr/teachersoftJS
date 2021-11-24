@@ -35,7 +35,6 @@ function getSolicitudes(setRecords, user) {
     //MesaPartesService.getSolicitud(33)
     //MesaPartesService.getSolicitudesByIdSol(user.id)
     //MesaPartesService.getSolicitudes() 
-    console.log(user)
     MesaPartesService.getSolicitudesByIdSol(user.persona.id) 
         .then(data => {
             data = data ?? []       // fixes el error raro de mala conexion

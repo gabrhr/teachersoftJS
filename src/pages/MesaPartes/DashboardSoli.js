@@ -292,7 +292,6 @@ export default function DashboardSoli(props) {
         const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
         setFilterFn({
           fn: items => {
-            console.log(items)
             if (valueFecha[0]== null && valueFecha[1] == null)
               return items
             if (valueFecha[1]==null)

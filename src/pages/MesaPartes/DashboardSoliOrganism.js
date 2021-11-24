@@ -90,7 +90,6 @@ export default function DashboardSoliOrganism(props) {
                                             sx={{marginLeft:"20%", marginRight:"10px", marginBottom:"4px"}}
                                         />
                                         <div/>
-                                        {console.log("delegado",delegado)}
                                         { item.estado==2 && !delegado && rol!=6? 
                                             <Typography paragraph display="inline" sx={{color:"primary.light", mt:2, ml:"10px"}}>
                                                {item.delegado.fullName}

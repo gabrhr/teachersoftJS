@@ -3,7 +3,7 @@
  * Menu Item del Drawer (aka. SideMenu, aka. NavBar)
  */
 import React, { useState } from 'react';
-import { Link,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
+import { Redirect,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
 import { List, ListItemIcon, ListItemText, ListItemButton, Collapse } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -26,10 +26,13 @@ const SubMenu = (props) => {
     
     /* "ESTE ES EL SUBNAV" */
     const showSubnav = () => {
+      console.log("ANTES subnavvvvvvvv",subnav)
       setSubnav(!subnav);
+      console.log("subnavvvvvvvv",subnav)
     }
 
     const handleClick = (e, indice, nav, path) => {
+     
       if(nav) {
         showSubnav();
       }else{
@@ -54,8 +57,8 @@ const SubMenu = (props) => {
                 }
             }}
             key={item.index} 
-            selected={location.pathname == item.path ? isSelected : false}
-            onClick={(event) => handleClick(event, item.indice, item.subNav, item.path)}
+            selected={location.pathname === item.path ? isSelected : false}
+            onClick={(event) => {handleClick(event, item.indice, item.subNav, item.path)}}
             >
             <ListItemIcon sx={{color: "primary.main"}}>{item.icon}</ListItemIcon>
             <ListItemText sx={{color: "primary.main"}} primary={item.text} />
@@ -75,8 +78,8 @@ const SubMenu = (props) => {
                           },
                       }}
                           key={index} 
-                          selected={location.pathname == item.path ? selectedIndexI === index : false}
-                          onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
+                          selected={location.pathname === item.path ? selectedIndexI === index : false}
+                          onClick={(event) => {handleListSubItemClick(event, index, item.path)}}
                           >
                           <ListItemText primary={item.text} sx={{pl:4}}/>
                       </ListItemButton>

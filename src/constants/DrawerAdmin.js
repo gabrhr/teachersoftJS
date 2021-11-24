@@ -9,6 +9,7 @@ import { List } from '@mui/material'
 import MuiDrawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import Menu from "../components/PageComponents/Menu";       // relocate?
+import MenuPrueba from '../components/PageComponents/MenuPrueba';
 
 //Drawer props
 const drawerWidth = 300;
@@ -70,6 +71,7 @@ export default function DrawerAdmin(props) {
     return (
         <Drawer variant="permanent" elevation={1} open={open}>
             <DrawerHeader />
+            {/* <MenuPrueba/> */}
             <List >
                 {listaMenu.map((item, index) => {
                     return <Menu open={open} item={item} key={index}
