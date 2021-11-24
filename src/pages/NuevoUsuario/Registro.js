@@ -55,7 +55,7 @@ export default function Registro() {
         message: '', 
         type: ''
     })
-    const { user, setUser, rol, setRol } = React.useContext(UserContext)
+    const {user, setUser, rol, setRol } = React.useContext(UserContext)
 
     
     /* Con valores de registro */
@@ -68,7 +68,6 @@ export default function Registro() {
                 message: 'Registro de Nuevo Usuario Externo externo',
                 type: 'success'
             })
-            
             /* update localstorage and UserContext */
             setUser({...user})
             setRol(user.persona.tipo_persona)
@@ -83,7 +82,6 @@ export default function Registro() {
             })
             console.log("Registro", f2bNuevoUsuarioExterno(values, user))
         })
-        
     }
 
     return (

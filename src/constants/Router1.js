@@ -52,6 +52,7 @@ import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 import ErrorDireccionamiento from '../pages/Dev/Error404';
 import Registro from '../pages/NuevoUsuario/Registro';
 import LandingPage from '../constants/LandingPage'
+import ExternoAtenderSolicitud from '../pages/MesaPartes/ExternoAtenderSolicitud';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -178,6 +179,10 @@ export default function Router1(props) {
         <PrivateRoute exact path="/invitado" requireRoles={[7]}>
              <Redirect to="/invitado/mesaPartes/misSolicitudes" />
         </PrivateRoute>
+        {/* Ver bien la ruta */}
+        <PrivateRoute exact path="/invitado/atender" requireRoles={[8]}>
+             <Redirect to="/invitado/atender/solicitud" />
+        </PrivateRoute>
         {privateroutes.map((r,index) =>
           <PrivateRoute 
             key={index}
@@ -204,6 +209,14 @@ export default function Router1(props) {
           requireRoles={[8]}
           component={() =>
             <Registro/>
+          }
+          >
+        </PrivateRoute>
+        
+        <PrivateRoute exact path="/invitado/atender/solicitud"
+          requireRoles={[8]}
+          component={() =>
+            <ExternoAtenderSolicitud/>
           }
           >
         </PrivateRoute>

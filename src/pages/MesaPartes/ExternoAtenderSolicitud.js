@@ -1,27 +1,19 @@
-/* Author: Manuel
- *
- * Detalle de una solicitud.
- * URL: localhost:3000/doc/solicitudDetalle
- */
-import { Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 import React, {useContext} from 'react'
-import { useLocation } from 'react-router';
-import { Link } from 'react-router-dom';
-import ContentHeader from '../../components/AppMain/ContentHeader';
-import { Controls } from '../../components/controls/Controls';
-import { UserContext } from '../../constants/UserContext';
-import DetalleSoliOrganism from './DetalleSoliOrganism';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box } from '@mui/system';
-import { DT } from '../../components/DreamTeam/DT';
-import ResultadoSolicitud from './ResultadoSolicitud';
-import AtenderSolicitudForm from './AtenderSolicitudForm';
-import Notification from '../../components/util/Notification';
+import { Box } from '@mui/system'
+import { Grid, Paper, Typography } from '@mui/material'
+import ContentHeader from '../../components/AppMain/ContentHeader'
+import { Controls } from '../../components/controls/Controls'
+import { DT } from '../../components/DreamTeam/DT'
+import Header1 from '../../constants/Header1'
+import AtenderSolicitudForm from './AtenderSolicitudForm'
+import DetalleSoliOrganism from './DetalleSoliOrganism'
+import ResultadoSolicitud from './ResultadoSolicitud'
 
-// services
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
+import { UserContext } from '../../constants/UserContext'
+import Notification from '../../components/util/Notification'
 
 function sendEmailNotification(solicitud) {
     EmailService.emailSolicitor2(solicitud)
@@ -33,20 +25,20 @@ function sendEmailNotification(solicitud) {
         })
 }
 
-
-
-export default function RecepcionDetalleSolicitud() {
-    const location= useLocation()
-    const {solicitudinit}=location.state
-    const [solicitud, setSolicitud] = React.useState(solicitudinit)
+export default function ExternoAtenderSolicitud() {
+    
+    const [solicitud, setSolicitud] = React.useState()
     const { user,rol} = useContext(UserContext);
     const [atender, setAtender]= React.useState(false)
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
     
-
     const [notify, setNotify] = React.useState({ 
         isOpen: false, message: '', type: '' 
     })
+
+    React.useEffect(() => {
+        //Hacer el buscar solicitud con el ID del url
+    }, [])
 
     React.useEffect(() => {
         // console.log("actualizada: ", solicitud)
@@ -102,34 +94,21 @@ export default function RecepcionDetalleSolicitud() {
         }))
         // console.log("despues", solicitud)
     }
-    function retornar(){
-        window.history.back();
-    }
+
     return (
         <>
+            <Header1/>
+            <Paper sx={{m: 22, p: 5}}>
+                <DT.Title size="medium" text={"Bienvenido"}/>
+                <Typography>
+                    Ingrese la respuesta a la solicitud
+                </Typography>
             {/* Encabezado y boton de regreso */}
             <ContentHeader
                 text="Mesa de Partes - Detalle de la solicitud"
                 cbo={false}
             />
-            <Grid
-                container
-                ml={-1}
-                mr={0}
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
-            >
-            <Grid item xs={6} md={1} mb={3}>
-                <Controls.Button
-                    variant="outlined"
-                    text="Regresar"
-                    size="small"
-                    startIcon={<ArrowBackIcon />}
-                    onClick={retornar}
-                />
-            </Grid>
-            </Grid>
+            
             <Paper variant="outlined" sx={PaperStyle}>
                 {/* Tabla de solicitud y tracking */}
                 <DetalleSoliOrganism solicitud={solicitud}/>
@@ -159,6 +138,8 @@ export default function RecepcionDetalleSolicitud() {
                 }
             </Paper>
             <Notification notify={notify} setNotify={setNotify} />
+       
+            </Paper>
         </>
     )
 }

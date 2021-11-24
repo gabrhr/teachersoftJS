@@ -8,6 +8,7 @@ import { List, ListItemIcon, ListItemText, ListItemButton, Collapse } from '@mui
 import { makeStyles } from '@mui/styles'
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { UserContext } from '../../constants/UserContext';
 
 const useStyles = makeStyles(themex => ({
   active: {
@@ -18,11 +19,12 @@ const useStyles = makeStyles(themex => ({
 
 const SubMenu = (props) => {
     const { open, item, handleListItemClick, isSelected, ...other } = props
+    const { selectedIndexI, setSelectedIndexI } = React.useContext(UserContext);
     const [subnav, setSubnav] = useState(false)
-    const [selectedIndexI, setSelectedIndexI] = React.useState(0);
-    const history = useHistory()
-    const location = useLocation()
-    let {pathNow} = useRouteMatch();
+    //const [selectedIndexI, setSelectedIndexI] = React.useState(0);
+    const history = useHistory();
+    const location = useLocation();
+    //let {pathNow} = useRouteMatch();
     
     /* "ESTE ES EL SUBNAV" */
     const showSubnav = () => {
@@ -32,13 +34,12 @@ const SubMenu = (props) => {
     }
 
     const handleClick = (e, indice, nav, path) => {
-     
       if(nav) {
         showSubnav();
       }else{
-          handleListItemClick(e, indice)
-            history.push(path)
-        }
+        handleListItemClick(e, indice)
+        history.push(path)
+      }
     }
     const handleListSubItemClick = (e, indice, path) => {
       setSelectedIndexI(indice);
