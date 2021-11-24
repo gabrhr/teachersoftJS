@@ -7,7 +7,8 @@ import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Input, Stack, Paper} from '@mui/material';
 import * as XLSX from 'xlsx'
 import horarioService from '../../../services/horarioService';
-/* ICONS */
+import CursoService from '../../../services/cursoService';
+
 import { useForm, Form } from '../../../components/useForm';
 import { useTheme } from '@mui/material/styles'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -15,6 +16,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
 import personaService from '../../../services/personaService';
+import SeccionService from '../../../services/seccionService';
 import { Box } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -42,7 +44,7 @@ const tableHeaders = [
     {
       id: 'creditos',
       label: 'Créditos',
-      numeric: true,
+      numeric: false,
       sortable: true
     },
     {
@@ -53,29 +55,109 @@ const tableHeaders = [
     }
 ]
 
-const tipos_docente = [
-    {
-        "id": 0,
-        "nombre": "No asignado",
-    },
-    {
-        "id": 1,
-        "nombre": "TC - Tiempo Completo",
-    },
-    {
-        "id": 2,
-        "nombre": "TPC - Tiempo Parcial Convencional",
-    },
-    {
-        "id": 3,
-        "nombre": "TPA - Tiempo Parcial por Asignaturas",
+const getSeccionCollection =  async (user) => {
+  //{ id: '1', title: 'Todas las Secciones' },
+  let dataSecc = await SeccionService.getSeccionxDepartamento(user.persona.departamento.id);
+  
+  if(!dataSecc) dataSecc = [];
+
+  const secciones = [];
+
+  secciones.push({
+    "id": 0,
+    "nombre": "Todas las secciones",
+  })
+  for(let sec of dataSecc) {
+    //Hacemos la creación y verificación de los estados
+    secciones.push({
+      "id": sec.id,
+      "nombre": sec.nombre,
+    })
+  }
+
+  return secciones;
+}
+
+const transformarHorarios = (request, user) => {
+    const recordsX = []
+    
+    if(request){
+        request.map(hor => {
+            if(hor.sesiones && hor.curso_ciclo && hor.curso_ciclo.curso.seccion.id === user.persona.seccion.id){
+                if(hor.sesiones[0].sesion_docentes.length === 0){
+                    recordsX.push({
+                        "Clave": hor.curso_ciclo.curso.codigo,
+                        "Nombre": hor.curso_ciclo.curso.nombre,
+                        "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
+                        "Creditos": hor.curso_ciclo.curso.creditos,
+                        "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                        "Horario": hor.codigo,
+                        "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
+                        "Horas": hor.sesiones[0].horas,
+                        "ID_Curso_Ciclo": hor.curso_ciclo.id,
+                        "ID_Horario": hor.id,
+                        "ID_Sesion": hor.sesiones[0].id,
+                        "selected": false
+                    })
+                }
+                if(hor.sesiones[1] && hor.sesiones[1].sesion_docentes.length === 0){
+                    recordsX.push({
+                        "Clave": hor.curso_ciclo.curso.codigo,
+                        "Nombre": hor.curso_ciclo.curso.nombre,
+                        "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
+                        "Creditos": hor.curso_ciclo.curso.creditos,
+                        "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
+                        "Horario": hor.codigo,
+                        "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
+                        "Horas": hor.sesiones[1].horas,
+                        "ID_Curso_Ciclo": hor.curso_ciclo.id,
+                        "ID_Horario": hor.id,
+                        "ID_Sesion": hor.sesiones[1].id,
+                        "selected": false
+                    })
+                }
+            }
+      })
     }
-]
+    return recordsX;
+}
+
+const getHorario = async (seccion, secciones, user) => {
+
+  const ciclo = await window.localStorage.getItem("ciclo");
+  if(!seccion) seccion = 0;
+  let dataCur = [];
+
+  if(seccion === 0){
+    for(let s of secciones){
+      const curSeccion = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), s.id);
+      if(curSeccion.length) dataCur.push(curSeccion);
+    }
+  }
+  else{
+    const curSeccion = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), seccion);
+    if(curSeccion.length) dataCur.push(curSeccion);
+  }
+  
+  if(!dataCur) dataCur = [];
+  
+  const horarios = [];
+  for(let itemcur of dataCur){
+    for(let cur of itemcur) {
+      const request = await horarioService.listarPorCursoCiclo(cur.curso.id, ciclo.id);
+      if(request.length) horarios.push(request);
+    }
+  }
+    const recordsX = transformarHorarios(horarios, user)
+    console.log(recordsX)
+}
+
 
 export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp}) {
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [especialidad, setEspecialidad] = useState(0)
+    const [secciones, setSecciones] = useState([])
+    const [seccion, setSeccion] = useState()
     let records = []
     const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
     const SubtitulosTable={display:"flex"}
@@ -86,6 +168,29 @@ export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp}) 
     
     const theme = useTheme();
 
+    const initialFieldValues = {
+        id: '',
+        nombre: ''
+    }
+
+    const {
+        values,
+        setValues,
+        handleInputChange
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+    } = useForm(initialFieldValues);
+
+    React.useEffect(() => {
+      getSeccionCollection(user)
+      .then (newSecc =>{
+        if(newSecc){
+          setSecciones(newSecc);
+          setValues(newSecc[0]);  //Para que se coja predeterminado dicho valor
+        }
+      });
+    }, [] )//Solo al inicio para la carga de secciones
+
+
     const {
         TblContainer,
         TblHead,
@@ -94,11 +199,14 @@ export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp}) 
         BoxTbl
     } = useTable(recordsX, tableHeaders, filterFn);
     
-    useEffect(() => {
-        //Obtenemos los horarios
-        getHorario();
-        console.log(user.persona.seccion.id)
-    }, [openPopupAdd])
+  React.useEffect(() => {
+    getHorario(seccion, secciones, user)
+    .then (newHor =>{
+      if(newHor)
+        setRecordsX(newHor);
+
+    });
+  }, [seccion])
 
     const handleSearch = e => {
         let target = e.target;
@@ -114,57 +222,6 @@ export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp}) 
                   .includes(target.value.toLowerCase()))
           }
         })
-    }
-
-    const transformarHorarios = (request) => {
-        const recordsX = []
-        if(request){
-            request.map(hor => {
-                if(hor.sesiones && hor.curso_ciclo && hor.curso_ciclo.curso.seccion.id === user.persona.seccion.id){
-                    if(hor.sesiones[0].sesion_docentes.length === 0){
-                        recordsX.push({
-                            "Clave": hor.curso_ciclo.curso.codigo,
-                            "Nombre": hor.curso_ciclo.curso.nombre,
-                            "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
-                            "Creditos": hor.curso_ciclo.curso.creditos,
-                            "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                            "Horario": hor.codigo,
-                            "Tipo": hor.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-                            "Horas": hor.sesiones[0].horas,
-                            "ID_Curso_Ciclo": hor.curso_ciclo.id,
-                            "ID_Horario": hor.id,
-                            "ID_Sesion": hor.sesiones[0].id,
-                            "selected": false
-                        })
-                    }
-                    if(hor.sesiones[1] && hor.sesiones[1].sesion_docentes.length === 0){
-                        recordsX.push({
-                            "Clave": hor.curso_ciclo.curso.codigo,
-                            "Nombre": hor.curso_ciclo.curso.nombre,
-                            "Unidad": hor.curso_ciclo.curso.seccion.departamento.unidad.nombre,
-                            "Creditos": hor.curso_ciclo.curso.creditos,
-                            "Carga_Horaria": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas : hor.sesiones[0].horas,
-                            "Horario": hor.codigo,
-                            "Tipo": hor.sesiones[1].secuencia ? "Laboratorio" : "Clase",
-                            "Horas": hor.sesiones[1].horas,
-                            "ID_Curso_Ciclo": hor.curso_ciclo.id,
-                            "ID_Horario": hor.id,
-                            "ID_Sesion": hor.sesiones[1].id,
-                            "selected": false
-                        })
-                    }
-                }
-          })
-        }
-        return recordsX;
-    }
-
-    const getHorario = async () => {
-        const request = await horarioService.getHorarios();
-        console.log(request)
-        const recordsX = transformarHorarios(request)
-        console.log(recordsX)
-        setRecordsX(recordsX)
     }
 
     const onInputClick = (event) => {
@@ -242,9 +299,9 @@ export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp}) 
                         label="Especialidad"
                         defaultValue={0}
                         onChange = {(e)=>{
-                            setEspecialidad(e.target.value)
+                            setSeccion(e.target.value)
                         }}
-                        options = {tipos_docente}
+                        options = {secciones}
                         />
                     </Box>
                 </Grid>

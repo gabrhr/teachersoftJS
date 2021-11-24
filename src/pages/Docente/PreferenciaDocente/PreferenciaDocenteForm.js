@@ -23,7 +23,7 @@ export default function PreferenciaDocenteForm() {
       }, [horario])
 
     //let listHorario = getHorario(-1);
-      //LO DE GABRIELA
+
     const [records, setRecords] = useState([])
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -35,41 +35,12 @@ export default function PreferenciaDocenteForm() {
                 text="PREFERENCIA DOCENTE"
                 cbo= {false}
             />
-            {/*<Grid container spacing={2} maxWidth={1}>
-                <Grid item xs={12} align="right" m={1}>
-                    <Typography variant="body1">
-                        Cursos Seleccionados
-                    </Typography>
-                    <Controls.Button
-                        text="Agregar Horario"
-                        size="large"
-                        onClick = {() => setOpenPopup(true)}
-                    />
-                     <Controls.Button
-                        text="Exportar"
-                        size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}
-                     />
-                    
-                </Grid>
-            </Grid>/*}
-            {/*LO DE GABRIELA*/}
+
             <Paper variant="outlined" sx={PaperStyle}>
                 <ListaPreferenciaDocente openPopup = {openPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
             </Paper>
-            {/*<Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title="Carga Masiva de Docentes"
-            >
-               <CargaMasivaDocente setOpenPopUp = {setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH} 
-                cargaH = {cargaH}/>
 
-              
-               {/*< ModalCursos setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setCargaH = {setCargaH}
-                cargaH = {cargaH}/>
-            </Popup>*/}
         </>
     )
 }

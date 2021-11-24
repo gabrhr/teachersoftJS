@@ -143,22 +143,30 @@ export default function ListaPreferenciaDocente({openPopup}) {
         <>
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
                 {/* <Toolbar> */}
-                <Grid item sm>
-                <Typography variant="h5">
-                        Cursos Seleccionados
+            <Grid container alignItems="flex-start">
+              <Grid item xs= {4} >
+                <Typography variant="h4">
+                        Preferencias Registradas
                 </Typography>
-                <Controls.Button
-                        text="Agregar Horario"
-                        size="large"
-                        onClick = {(e) => handleAdd(e)}
-                />
-                </Grid>
+              </Grid>
+              <Grid item xs = {6}/>
+              <Grid item xs = {2} align = "right">
+                  <Controls.Button 
+                      title="Asignar Nuevo Horario"
+                      variant="text+icon"
+                      text = "Asignar Nuevo Horario"
+                      onClick = {(e) => handleAdd(e)}
+                  />
+              </Grid>
+            </Grid>
             </div>
+          {records.length ? 
+          <>
             <BoxTbl>
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    {
+                    { 
                        recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id} >
                             <TableCell>
@@ -196,12 +204,23 @@ export default function ListaPreferenciaDocente({openPopup}) {
                     </TableBody>
                 </TblContainer>
                 <TblPagination />
+              
             </BoxTbl>
                 <Controls.MinusButton 
                     title="Eliminar Seleccionados"
                     variant="iconoTexto"
                     onClick = {() => setOpenPopupDelete(true)}
-                />
+                    />
+          </>
+          : <>
+            <BoxTbl>
+            <Grid item xs= {12} rowSpacing={20} align = "center">
+              <Typography variant="h4" color = "secondary">
+                      Aún no tiene preferencias registradas
+              </Typography>
+            </Grid>
+            </BoxTbl>
+          </>}
             <Popup
                 openPopup={openPopupAdd}
                 setOpenPopup={setOpenPopupAdd}

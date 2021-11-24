@@ -231,7 +231,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       setRecords([])
       setOpenAllPopup(false)
     }
-    console.log(indexDelete);
+
 
     const eliminarCurso = async () =>{
       //Funcion para elimianr el Curso seleccionado
@@ -315,7 +315,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    {/*console.log(records)*/}
+                    {/* {console.log(records)} */}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>

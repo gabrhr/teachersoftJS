@@ -1,8 +1,16 @@
 import React from 'react';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
+
+
 export const MenuDocente = [
-    {
+  {
+      text: 'Preferencias',
+      path: '/doc/preferenciaDocente',
+      icon: <LocalLibraryOutlinedIcon />,
+      indice: 1,
+  },
+  {
         text: 'Mesa de Partes',
         path: '',
         icon: <InboxOutlinedIcon />,
