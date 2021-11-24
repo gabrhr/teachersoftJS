@@ -8,7 +8,7 @@
  */
 
 import React from 'react'
-import { IconButton, Typography, Box, Alert } from '@mui/material';
+import { IconButton, Typography, Box, Alert, Grid, Stack } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 import { UserContext } from '../../constants/UserContext';
@@ -21,15 +21,14 @@ import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
 
 const radioGroupValues = [
-    {id: 0, title: 'Male'},
-    {id: 1, title: 'Female'},
-    {id: 2, title: 'Other'}
+    { id: 0, title: 'Masculino' },
+    { id: 1, title: 'Femenino' }
 ]
 
 function getPaises() {
     return [
-        {id: '0', title: 'Perú'},
-        {id: '1', title: 'Extranjero'},
+        { id: '0', title: 'Perú' },
+        { id: '1', title: 'Extranjero' },
     ]
 }
 
@@ -56,7 +55,8 @@ function printValues(values) {
 }
 
 export default function RegistroForm() {
-    const {user, rol} = React.useContext(UserContext);
+    const { user, rol } = React.useContext(UserContext);
+    const captcha = React.useRef(null);   /* referencia al Componente */
     const {
         values,
         setValues,
@@ -79,7 +79,8 @@ export default function RegistroForm() {
 
     function handleChangeCaptcha() {
         /* success */
-        console.log('reCaptcha')
+        if (captcha.current.getValue()) {   // (returns a token)
+        }
     }
 
     return (
@@ -93,75 +94,69 @@ export default function RegistroForm() {
                 </Typography>
             </Box>
 
-            <Controls.Input 
-                name="correo"
-                label="Correo electrónico"
-                value={values.correo} 
-                onChange = {handleInputChange}
-                disabled
-            />
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <Controls.Input
+                        name="correo"
+                        label="Correo electrónico"
+                        value={values.correo}
+                        onChange={handleInputChange}
+                        disabled
+                    />
+                    <Controls.Input
+                        name="primer_apellido"
+                        label="Primer apellido"
+                        value={values.primer_apellido}
+                        onChange={handleInputChange}
+                    />
+                    <Controls.Input
+                        name="segundo_apellido"
+                        label="Segundo apellido"
+                        value={values.segundo_apellido}
+                        onChange={handleInputChange}
+                    />
+                    <Controls.Input
+                        name="nombres"
+                        label="Nombres"
+                        value={values.nombres}
+                        onChange={handleInputChange}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controls.Input
+                        name="dni"
+                        label="DNI"
+                        value={values.dni}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <Controls.DatePicker
+                        name="fecha_nacimiento"
+                        label="Fecha de nacimiento"
+                        value={values.fecha_nacimiento}
+                        onChange={handleInputChange}
+                        disableFuture
+                        openTo="year"
+                        views={['year', 'month', 'day']}
+                    />
+                    <Controls.RadioGroup
+                        name="sexo"
+                        label="Sexo"
+                        value={values.sexo}
+                        onChange={handleInputChange}
+                        items={radioGroupValues}
+                    />
+                    <Controls.Select
+                        name="pais_nacionalidad"
+                        label="País de nacionalidad"
+                        value={values.pais_nacionalidad}
+                        onChange={handleInputChange}
+                        options={getPaises()}
+                    />
+                </Grid>
+            </Grid>
 
-            <div>
-                <Controls.Input 
-                    name="primer_apellido"
-                    label="Primer apellido"
-                    value={values.primer_apellido} 
-                    onChange = {handleInputChange}
-                    sx={{maxWidth: "30%"}}
-                />
-                <Controls.Input 
-                    name="segundo_apellido"
-                    label="Segundo apellido"
-                    value={values.segundo_apellido} 
-                    onChange = {handleInputChange}
-                    sx={{maxWidth: "30%", mx: 2}}
-                />
-                <Controls.Input 
-                    name="nombres"
-                    label="Nombres"
-                    value={values.nombres} 
-                    onChange = {handleInputChange}
-                    sx={{maxWidth: "35%"}}
-                />
-            </div>
-
-            <div>
-                <Controls.DatePicker
-                    name="fecha_nacimiento"
-                    label="Fecha de nacimiento"
-                    value={values.fecha_nacimiento}
-                    onChange={handleInputChange}
-                    disableFuture
-                    openTo="year"
-                    views={['year', 'month', 'day']}
-                />
-
-                <Controls.Select
-                    name="pais_nacionalidad"
-                    label="País de nacionalidad"
-                    value={values.pais_nacionalidad}
-                    onChange={handleInputChange}
-                    options={getPaises()}
-                />
-
-                <Controls.RadioGroup
-                    name="sexo"
-                    label="Sexo"
-                    value={values.sexo}
-                    onChange={handleInputChange}
-                    items={radioGroupValues}
-                />
-            </div>
-            <Controls.Input 
-                name="dni"
-                label="DNI"
-                value={values.dni} 
-                onChange = {handleInputChange}
-                sx={{maxWidth: "30%"}}
-                required
-            />
-
-            <Alert sx={{ mt: 1 }} variant="outlined" severity="info">
+            <Alert sx={{ mt: 2 }} variant="outlined" severity="info">
                 Declaro que he leído la Politica de Privacidad y que autorizo a
                 la Pontificia Universidad Católica del Perú a la realización del
                 tratamiento de mis datos personales conforme a los términos y
@@ -169,17 +164,16 @@ export default function RegistroForm() {
             </Alert>
             <Controls.Checkbox
                 name="acepta_politica_privacidad"
-                label="Acepto"
+                label="Acepto los Términos y Condiciones"
                 value={values.acepta_politica_privacidad}
                 onChange={handleInputChange}
             />
-
             <ReCAPTCHA
+                ref={captcha}
                 sitekey="6LcKzlQdAAAAAKE-sgUaSteogICfr93SMR0wdhOa"
                 onChange={handleChangeCaptcha}
             />
-
-            <Box sx={{ display: "flex", width: "100%", alignItems: "center"}}>
+            <Box display="flex" justifyContent="flex-end">
                 <Controls.Button
                     text="Enviar"
                     // type="submit"
