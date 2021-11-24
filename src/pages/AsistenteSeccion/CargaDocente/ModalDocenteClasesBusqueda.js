@@ -9,6 +9,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import useTable from "../../../components/useTable"
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { Box } from '@mui/system';
+import ModalDetalleCursosDocente from './ModalDetalleCursosDocente';
+import Popup from '../../../components/util/Popup'
 
 const SubtitulosTable={display:"flex"}
 
@@ -50,7 +53,7 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     const [selectedRow, setSelectedRow] = useState(50) //se tiene que cambiar a records.lenght+1
     const [asignarDisabled, setAsignarDisabled] = useState(true)
     const [profAdd, setProfAdd] = useState({})
-
+    const [openDetallePopup, setOpenDetallePopup] = useState(false)
 
     const {
         TblContainer,
@@ -123,18 +126,30 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
     return(
         <>
             <Grid container>
-                <Grid item xs = {10}>
+                <Grid item xs = {8}>
                     <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Docentes
                     </Typography>
                 </Grid>
-                {!asignarDisabled ? 
-                  <Button
-                    text = "Asignar profesor"
-                    variant= "iconoTexto"
-                    onClick = {()=>addProf()}
-                  />
-                  : <Grid cointainer align="right" mt={10} />    
+                {!asignarDisabled ? (
+                  <>
+                    <Box sx={{paddingRight: '5%', paddingTop: '1.7%'}}>
+                      <Controls.Button
+                        variant="outlined"
+                        text="Ver cursos"
+                        size="small"
+                        onClick={() => {setOpenDetallePopup(true)}}
+                      />
+                    </Box>
+                    <Box>
+                      <Button
+                        text = "Asignar profesor"
+                        variant= "iconoTexto"
+                        onClick = {()=>addProf()}
+                      />  
+                    </Box>
+                  </>
+                ): <Grid cointainer align="right" mt={10} />    
                 }
             </Grid>
             <Controls.Input
@@ -178,6 +193,14 @@ export default function ModalDocenteClasesBusqueda({records, setRecords, records
             </TblContainer>
             <TblPagination />
         </BoxTbl>
+        <Popup
+                openPopup={openDetallePopup}
+                setOpenPopup={setOpenDetallePopup}
+                title="Detalle de cursos"
+                size = "md"
+            >
+               <ModalDetalleCursosDocente docente = {profAdd}/>
+            </Popup>
         </>
     )
 }

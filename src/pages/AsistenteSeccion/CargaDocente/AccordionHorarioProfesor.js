@@ -120,7 +120,7 @@ function generateRow(horario) {
 }
 
 /* Generates a customized row with the data */
-function generateRows(records) {
+function generateRows(records, recordForEdit) {
     return (
         records.map(horario => (
             <Accordion disableGutters>
@@ -132,7 +132,7 @@ function generateRows(records) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario}/>
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario} curso = {recordForEdit}/>
                 </AccordionDetails>
             </Accordion>
         ))
@@ -196,7 +196,7 @@ const fillHorarios = async (curso) => {
 }
 
 
-export default function TestPage(recordForEdit, setRecordForEdit) {
+export default function TestPage(recordForEdit, setRecordForEdit, curso) {
     const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
 
     React.useEffect(() => {
@@ -215,7 +215,8 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
                     <HeaderBoxs headers={headers} />
                 </AccordionSummary>
             </Accordion>
-            {generateRows(records)}
+            {generateRows(records, recordForEdit.recordForEdit)}
+            {console.log("recoooooooord: ",recordForEdit.recordForEdit)}
         </>
     )
 }

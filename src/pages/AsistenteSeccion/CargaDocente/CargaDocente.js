@@ -277,12 +277,12 @@ export default function CargaDocente() {
                                   curso: item
                               }
                           }}  style={{ textDecoration: 'none' }}>
-                          <IconButton size="small"
-                            onClick={() => { getRow(item) }}
-                          >
-                            <ArrowForwardIosIcon fontSize="small" />
+                            <IconButton size="small"
+                              onClick={() => { getRow(item) }}
+                            >
+                              <ArrowForwardIosIcon fontSize="small" />
 
-                          </IconButton>
+                            </IconButton>
                           </Link>
                         </StyledTableCell>
 
