@@ -45,6 +45,9 @@ const initialFieldValues = {
     pais_nacionalidad: 'Seleccionar',
     sexo: 0,
     dni: '',
+    telefono: '',
+    
+    /* local */
     aceptaTyC: false,
 
     /* extra */
@@ -60,7 +63,8 @@ function printValues(values) {
     return s
 }
 
-export default function RegistroForm() {
+export default function RegistroForm(props) {
+    const { submitValues } = props
     const { user, rol } = React.useContext(UserContext);
     const captcha = React.useRef(null);   /* referencia al Componente */
     const {
@@ -96,7 +100,7 @@ export default function RegistroForm() {
     function handleSubmit(e) {
         e.preventDefault()
         if (validate())
-            window.alert('submitted');
+            submitValues(values, user)
     }
 
     /* onSubmit validation */
@@ -112,6 +116,7 @@ export default function RegistroForm() {
         else 
             temp.nombres = defaultError
         temp.dni = DTLocalServices.validateDni(values.dni)
+        temp.telefono = DTLocalServices.validateTelefono(values.telefono)
         temp.aceptaTyC = values.aceptaTyC === true ? "" : defaultError
         temp.pais_nacionalidad = values.pais_nacionalidad !== "Seleccionar" ? "" 
             : defaultError
@@ -162,6 +167,13 @@ export default function RegistroForm() {
                         value={values.nombres}
                         onChange={handleInputChange}
                         error={errors.nombres}
+                    />
+                    <Controls.Input
+                        name="telefono"
+                        label="Número de celular"
+                        value={values.telefono}
+                        onChange={handleInputChange}
+                        error={errors.telefono}
                     />
                 </Grid>
                 <Grid item xs={6}>

@@ -76,11 +76,18 @@ export function validateName(name) {
         : "Nombre invalido"
 }
 
-/* dni */
+/* dni (8 digitos) */
 export function validateDni(s) {
     return (/^\d{8}$/).test(s)
         ? ""
         : "El DNI debe tener 8 dígitos"
+}
+
+/* telefono (9 digitos) */
+export function validateTelefono(s) {
+    return (/^\d{9}$/).test(s)
+        ? ""
+        : "El número de celular debe tener 9 dígitos"
 }
 
 /* Returns error message,  */
