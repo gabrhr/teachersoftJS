@@ -53,6 +53,7 @@ import SolPreferenciaDocentes from '../pages/AsistenteSeccion/PreferenciaDocente
 import ModalDocenteClases from '../pages/AsistenteSeccion/CargaDocente/ModalDocenteClases'
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
+import PreferenciaDocenteForm from '../pages/Docente/PreferenciaDocente/PreferenciaDocenteForm'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -70,6 +71,7 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [0,1,8], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [0,1,8], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
+  { requireRoles: [0,1,2,8], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
   { requireRoles: [0,8], path: "/dragdrop", page: DragDropArchivos},
