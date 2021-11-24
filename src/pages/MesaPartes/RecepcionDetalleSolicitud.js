@@ -24,6 +24,8 @@ import Notification from '../../components/util/Notification'
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
+import personaService from '../../services/personaService';
+import userService from '../../services/userService'
 
 function sendEmailNotification(solicitud, tipo) {
     console.log(solicitud)
@@ -108,6 +110,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
     }
 
     function retornar() {
+        /* "solo gozalo" --gabs */
         window.history.back();
     }
 
@@ -244,6 +247,41 @@ export default function RecepcionDetalleSolicitudFuncion() {
         }))
     }
 
+    /* delegado Externo (necesita crear un usuario primero) */
+    function submitDelegarExterno(delegadofake) {
+        let datausuario = {
+            // id: null,
+            usuario: delegadofake.correo,       // para el login (postlogin)
+            password: null,
+            persona: {
+                // id: null,
+                tipo_persona: 7,    // Usuario Externo
+                codigo_pucp: null,
+                correo_pucp: delegadofake.correo,       // displayed
+                foto_URL: 'static/images/avatar/1.jpg', // no estoy seguro si esto sirva
+                nombres: delegadofake.nombre,
+                apellidos: '',
+                // fechaNac: new Date(),
+                // sexo: 0,
+                // tipo_documento: 0,
+                // numero_documento: "12345678",
+                // telefono: "123456789",
+                // seccion: {id: 3},
+                // departamento: {id: 3},      // (redundante en este caso)
+            }
+        }
+        userService.registerUsuario(datausuario)
+            .then(data => {
+                console.log("Create user: ", data)
+                /* FrontEnd fmt */
+                let nuevaPersona = data.persona
+                nuevaPersona.fullName = delegadofake.nombre
+                nuevaPersona.rolName = "Usuario Externo"
+                nuevaPersona.correo = delegadofake.correo
+                submitDelegar(nuevaPersona)
+            })
+    }
+
     return (
         <>
             {/* Encabezado y boton de regreso */}
@@ -291,6 +329,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 <DelegarForm
                     solicitud={solicitud}
                     submitDelegar={submitDelegar}
+                    submitDelegarExterno={submitDelegarExterno}
                 />
             </Popup>
             <Notification notify={notify} setNotify={setNotify} />

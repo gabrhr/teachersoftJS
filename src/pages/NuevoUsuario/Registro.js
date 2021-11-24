@@ -75,7 +75,7 @@ export default function Registro() {
                 setRol(user.persona.tipo_persona)
 
                 /* redirect to next page */
-                history.push("/invitado/mesaPartes/misSolicitudes")
+                // history.push("/invitado/mesaPartes/misSolicitudes")
             })
             .catch(res => {
                 setNotify({
