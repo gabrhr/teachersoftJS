@@ -3,6 +3,7 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 
 export const MenuCoordinadorSeccion = [
     {
@@ -32,6 +33,12 @@ export const MenuCoordinadorSeccion = [
         text: 'Docentes',
         path: '/cord/docentes',
         icon: <AccountBoxOutlinedIcon />,
+        indice: 1,
+    },
+    {
+        text: 'Cursos',
+        path: '/cord/cursos',
+        icon: <LocalLibraryOutlinedIcon />,
         indice: 1,
     },
     {

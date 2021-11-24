@@ -15,9 +15,10 @@ const getSecciones = async () => {
   }
 }
 
-const getSeccionxDepartamento = async ({id_departamento}) => {
+const getSeccionxDepartamento = async (id_departamento) => {
   try{
     const request = await axios.get(`${url}/seccion/porDepartamento=${id_departamento}`, tokenService.GetTokenPrueba(), id_departamento);  //Es un entero que se pasa
+    console.log(request.data);
     return request.data;
   }catch(exception){
     console.error(exception);

@@ -5,6 +5,7 @@ import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import InboxIcon from '@mui/icons-material/Inbox';
 import CloseIcon from '@mui/icons-material/Close';
+import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 
 export const MenuAsistenteSeccion = [
     {
@@ -40,7 +41,7 @@ export const MenuAsistenteSeccion = [
     {
         text: 'Cursos',
         path: '/as/cursos',
-        icon: <PeopleAltOutlinedIcon />,
+        icon: <LocalLibraryOutlinedIcon />,
         indice: 1,
     },
     /* TIENE PROBLEMAS NO SE PORQUE */

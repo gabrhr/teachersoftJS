@@ -99,11 +99,11 @@ function GetRow({ ...props }) {
 
 
 // //LLENADO DE LA LISTA DE CURSOS
-const fillCursos = async () => {
+const fillCursos = async (ciclo) => {
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const ciclo = await window.localStorage.getItem("ciclo");
+  if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
   const seccion = JSON.parse(window.localStorage.getItem("user"));
-  let dataCur = await CursoService.listarPorCicloPorSeccion(ciclo, seccion.persona.seccion.id);
+  let dataCur = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), seccion.persona.seccion.id);
   if(!dataCur) dataCur = [];
   //let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
   let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
@@ -135,6 +135,7 @@ const fillCursos = async () => {
 
 
 export default function CargaDocente() {
+  const [ciclo, setCiclo] = useState ();
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const SubtitulosTable = { display: "flex" }
   const [recordsForEdit, setRecordForEdit] = useState()
@@ -163,13 +164,13 @@ export default function CargaDocente() {
   } = useTable(records, tableHeaders, filterFn);
 
     React.useEffect(() => {
-      fillCursos()
+      fillCursos(ciclo)
       .then (newCur =>{
         if(newCur)
           setRecord(newCur);
         //console.log(newCur);
       });
-    }, [])
+    }, [ciclo])
 
   const handleSearch = e => {
     let target = e.target;
@@ -196,9 +197,11 @@ export default function CargaDocente() {
 
   return (
     <Form>
-      <ContentHeader
-        text="Registro de Carga Docente"
-        cbo={true}
+      <ContentHeader 
+          text="Gestión de la carga de horarios"
+          cbo= {true}
+          records = {ciclo}
+          setRecords = {setCiclo}
       />
       {/* <Toolbar> */}
       <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
