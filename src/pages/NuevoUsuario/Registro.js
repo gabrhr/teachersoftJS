@@ -23,6 +23,14 @@ import * as MesaPartesService from '../../services/mesaPartesService'
 const clientId = '626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com';
 
 function f2bNuevoUsuarioExterno(values, user) {
+    /* update local storage user */
+    user = {
+        ...user,
+        nombres: values.nombres,
+        apellidos: values.primer_apellido + ' ' + values.segundo_apellido,
+        tipo_persona: 7,
+    }
+
     let persona = {
         ...user.persona,        // recover id to update in DB
         tipo_persona: 7,        // 8 (Nuevo Usuario) -> 7 (Usuario Externo)
@@ -43,15 +51,17 @@ function f2bNuevoUsuarioExterno(values, user) {
 }
 
 export default function Registro() {
+    const history = useHistory()
     const [notify, setNotify] = React.useState({
         isOpen: false, 
         message: '', 
         type: ''
     })
+    const { user, setUser, rol, setRol } = React.useContext(UserContext)
 
     /* Con valores de registro */
     function submitValues(values, user) {
-        personaService.updatePersona(f2bNuevoUsuarioExterno(values, user))
+        personaService.updatePersona2(f2bNuevoUsuarioExterno(values, user))
             .then(res => {
                 /* success */
                 setNotify({
@@ -59,6 +69,13 @@ export default function Registro() {
                     message: 'Registro de Nuevo Usuario Externo externo',
                     type: 'success'
                 })
+                
+                /* update localstorage and UserContext */
+                setUser({...user})
+                setRol(user.persona.tipo_persona)
+
+                /* redirect to next page */
+                history.push("/invitado/mesaPartes/misSolicitudes")
             })
             .catch(res => {
                 setNotify({
@@ -68,7 +85,6 @@ export default function Registro() {
                 })
                 console.log("Registro", f2bNuevoUsuarioExterno(values, user))
             })
-        /* redirect to next page */
     }
 
     return (
