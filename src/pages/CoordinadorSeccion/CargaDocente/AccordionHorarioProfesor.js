@@ -14,6 +14,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
 import HorarioService from '../../../services/horarioService';
+import CursoService from '../../../services/cursoService';
+
 
 import { Controls } from '../../../components/controls/Controls';
 
@@ -44,18 +46,26 @@ function chompDocentes(sesiones) {
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
     return (
         <>
-            <Typography display="inline" whiteSpace="pre">
-                {"Docentes en Clase: "}
-            </Typography>
-            <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {clase[0].sesion_docentes ? clase[0].sesion_docentes.length : 0} {"\n"}
-            </Typography>
-            <Typography display="inline" whiteSpace="pre">
-                {"Docentes en Lab: "}
-            </Typography>
-            <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {laboratorio[0].sesion_docentes ? laboratorio[0].sesion_docentes.length : 0}
-            </Typography>
+          { clase.length ?
+            <>
+              <Typography display="inline" whiteSpace="pre">
+                  {"Docentes en Clase: "}
+              </Typography>
+              <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+                  {clase[0].sesion_docentes ? clase[0].sesion_docentes.length : 0} {"\n"}
+              </Typography>
+            </>
+            : <></>}
+            { laboratorio.length ?
+              <>
+                <Typography display="inline" whiteSpace="pre">
+                    {"Docentes en Lab: "}
+                </Typography>
+                <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+                    {laboratorio[0].sesion_docentes ? laboratorio[0].sesion_docentes.length : 0}
+                </Typography>
+              </>
+            : <></>}
         </>
     )
 }
@@ -169,17 +179,43 @@ const hallarEstado = (sesiones) => {
   return estado;
 }
 
+const actualizarCursoCiclo = async (curso_ciclo)=> {
+
+  if(curso_ciclo.cantidad_horarios !== 2){
+    const newCC = {
+      "id": curso_ciclo.id,
+      "ciclo": {
+        "id": curso_ciclo.ciclo.id,
+      },
+      "curso": {
+        "id": curso_ciclo.curso.id,
+      },
+      "cantidad_horarios": 2, //Se actualiza al nuevo estado
+      "estado_tracking": curso_ciclo.estado_tracking,
+    }
+    
+    const request = await CursoService.updateCursoCiclo(newCC);
+
+  }
+}
+
 
 const fillHorarios = async (curso) => {
-  console.log(curso);
+
   const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , window.localStorage.getItem("ciclo"));
 
   const dataHorarios = [];
+  let horMoment = 0, horTotal = 0;
   for(let hor of dataHor){
       //Haremos el detalle
-      const detalle = hallarDetalle(hor.sesiones);
+      const detalle = await hallarDetalle(hor.sesiones);
       //Haremos el estado
-      const estado = hallarEstado(hor.sesiones);
+      const estado = await hallarEstado(hor.sesiones);
+
+      if(estado === "Horas Asignadas"){
+        //Sumamos un contador que coincida con la cantidad de horarios
+        horMoment++;
+      }
       dataHorarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
@@ -190,8 +226,11 @@ const fillHorarios = async (curso) => {
         "detalle": detalle,
         "estado": estado,
       })
+      horTotal++;
   }
-  console.log(dataHorarios);
+  if(horTotal === horMoment && horTotal > 0)  
+      await actualizarCursoCiclo(dataHor[0].curso_ciclo);
+
   return dataHorarios;
 }
 

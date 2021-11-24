@@ -210,7 +210,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
               /* no search text */
               return items
             else
-              return items.filter(x => x.curso.nombre.toLowerCase()
+              return items.filter(x => x.curso_ciclo.curso.nombre.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
@@ -220,7 +220,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     };
 
     const guardarIndex = item => {
-      setIndexDelete(item.id)
+      setIndexDelete(item)
       setOpenOnePopup(true)
     }
 
@@ -231,18 +231,41 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       setRecords([])
       setOpenAllPopup(false)
     }
+    console.log(indexDelete);
 
-    const eliminarCurso = () =>{
-      console.log(indexDelete);
+    const eliminarCurso = async () =>{
       //Funcion para elimianr el Curso seleccionado
-      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete.id);
       records.splice(pos,1);
       pos = 0;
-      //De nuevo, solo para comprobar que existen ambos campos en pantalla - solo en pantalla.
-      pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
-      records.splice(pos,1);
+      //pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      //records.splice(pos,1);
       //setRecords(); 
-      HorarioService.deleteHorario(indexDelete);
+
+      //Hacemos una verificacion de que se debe de hacer con el horario
+      const hor = await HorarioService.getHorario(indexDelete.id);
+      if(hor.sesiones.length > 1){
+        //Se actualiza
+        const updtHor ={
+          "id": hor.id,
+          "codigo": hor.codigo,
+          "curso_ciclo":{
+            "id": hor.curso_ciclo.id,
+          },
+          sesiones: [{
+            "id": indexDelete.sesiones.secuencia ? hor.sesiones[1].id : hor.sesiones[0].id,
+            "secuencia": indexDelete.sesiones.secuencia ? hor.sesiones[1].secuencia: hor.sesiones[0].secuencia,
+            "sesion_docentes": indexDelete.sesiones.secuencia ? hor.sesiones[1].sesion_docentes: hor.sesiones[0].sesion_docentes,
+            "horas": indexDelete.sesiones.secuencia ? hor.sesiones[1].horas: hor.sesiones[0].horas,
+            "tipo_dictado": indexDelete.sesiones.secuencia ? hor.sesiones[1].tipo_dictado: hor.sesiones[0].tipo_dictado
+          }],
+        }
+        HorarioService.updateHorario(updtHor);
+      }
+      else{
+        //Se elimina
+        HorarioService.deleteHorario(indexDelete.id);
+      }
       setOpenOnePopup(false)
     }
 

@@ -20,6 +20,11 @@ export const MenuAsistenteSeccion = [
                 indice: 0,
             },
             {
+                text: 'Preferencias',
+                path: '/as/asignacionCarga/preferencia',
+                indice: 1,
+            },
+            {
                 text: 'Carga Docente',
                 path: '/as/asignacionCarga/registroCarga',
                 indice: 1,

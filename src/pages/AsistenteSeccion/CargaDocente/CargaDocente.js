@@ -97,6 +97,26 @@ function GetRow({ ...props }) {
   setDefValueCreditos(`${props.credito}`) */
 }
 
+//--------------NUEVO
+const verificarEstado = (cur) =>{
+  let resultado = []  //0 - estado - 1 tipo
+
+  switch (cur.cantidad_horarios) {
+    case 0:
+      resultado[0] = "Sin horarios"; resultado[1] = "error";
+      break;
+    case 1:
+      resultado[0] = "Pendiente"; resultado[1] = "pendiente";
+      break;
+    //Caso contrario es 2 - esta todo bien asignado
+    default:
+      resultado[0] = "Atendido"; resultado[1] = "success";
+      break;
+  }
+
+  return resultado;
+}
+
 
 // //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async (ciclo) => {
@@ -105,12 +125,16 @@ const fillCursos = async (ciclo) => {
   const seccion = JSON.parse(window.localStorage.getItem("user"));
   let dataCur = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), seccion.persona.seccion.id);
   if(!dataCur) dataCur = [];
-  //let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
-  let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
-  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+
+  
   const cursos = [];
   for(let cur of dataCur) {
     //Hacemos la creación y verificación de los estados
+    const resultadoEstados = verificarEstado(cur);
+    console.log(resultadoEstados);
+    let estado = resultadoEstados[0], tipo= resultadoEstados[1]; 
+
+
     cursos.push({
       "id": cur.curso.id,
       "nombre": cur.curso.nombre,
@@ -266,25 +290,27 @@ export default function CargaDocente() {
                         <StyledTableCell>{item.codigo}</StyledTableCell>
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell>{item.seccion ? item.seccion.departamento.nombre : ""}</StyledTableCell>
-                        <StyledTableCell>{item.creditos}</StyledTableCell>  
-                        <StyledTableCell>
+                        <StyledTableCell align = "center">{item.creditos}</StyledTableCell>  
+                        <StyledTableCell align = "left">
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
-                        <StyledTableCell>
-                          <Link to ={{
-                              pathname:`/as/asignacionCarga/registroCarga/horarios`,
-                              state:{
-                                  curso: item
-                              }
-                          }}  style={{ textDecoration: 'none' }}>
-                            <IconButton size="small"
-                              onClick={() => { getRow(item) }}
-                            >
-                              <ArrowForwardIosIcon fontSize="small" />
+                        {item.estado !== "Sin horarios" ?
+                          <StyledTableCell>
+                            <Link to ={{
+                                pathname:`/as/asignacionCarga/registroCarga/horarios`,
+                                state:{
+                                    curso: item
+                                }
+                            }}  style={{ textDecoration: 'none' }}>
+                              <IconButton size="small"
+                                onClick={() => { getRow(item) }}
+                              >
+                                <ArrowForwardIosIcon fontSize="small" />
 
-                            </IconButton>
-                          </Link>
-                        </StyledTableCell>
+                              </IconButton>
+                            </Link>
+                          </StyledTableCell>
+                        : <StyledTableCell></StyledTableCell>  }
 
                       </StyledTableRow>
                     ))

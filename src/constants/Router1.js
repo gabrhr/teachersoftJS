@@ -81,7 +81,7 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
-  { requireRoles: [2, 8], path: "/as/preferencias", page: SolPreferenciaDocentes  },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
@@ -98,6 +98,8 @@ const privateroutes = [
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
+  { requireRoles: [3, 8], path: "/cord/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
+
 
   /* AD */
   { requireRoles: [0, 1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
@@ -169,7 +171,7 @@ export default function Router1(props) {
              <Redirect to="/cord/asignacionCarga/registroCursos" />
         </PrivateRoute>
         <PrivateRoute exact path="/ad" requireRoles={[4]}>
-             <Redirect to="/ad/asignacionCarga" />
+             <Redirect to="/ad/asignacionCarga/cargaDocente" />
         </PrivateRoute>
         <PrivateRoute exact path="/jd" requireRoles={[5]}>
              <Redirect to="/jd/asignacionCarga" />

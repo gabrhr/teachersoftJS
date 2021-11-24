@@ -18,6 +18,11 @@ export const MenuCoordinadorSeccion = [
                 indice: 0,
             },
             {
+                text: 'Preferencias',
+                path: '/cord/asignacionCarga/preferencia',
+                indice: 1,
+            },
+            {
                 text: 'Registrar Carga',
                 path: '/cord/asignacionCarga/registroCarga',
                 indice: 1,
