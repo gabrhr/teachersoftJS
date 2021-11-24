@@ -44,6 +44,14 @@ export default function DashboardSoliOrganism(props) {
             return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
+
+    function verificarExterno(rolName){
+        if(rolName==="Usuario Externo"){
+            return "- Usuario Externo"
+        }
+        return " "
+    }
+
     return (
         //#region TABLA DE CADA SOLICITUD
         <div>
@@ -66,10 +74,13 @@ export default function DashboardSoliOrganism(props) {
                                             {item.asunto}
                                         </Typography>
                                         <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                                            Autor: {'\u00A0'}
+                                            Autor: {'\u00A0'} 
                                         </Typography>
                                         <Typography display="inline" sx={{color:"primary.light"}}>
-                                            {item.solicitador.fullName}
+                                            {item.solicitador.fullName} 
+                                        </Typography>
+                                        <Typography display="inline" fontWeight="530"  sx={{color:"primary.light"}}>
+                                            {verificarExterno(item.solicitador.rolName)}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{maxWidth:"200px"}} >
