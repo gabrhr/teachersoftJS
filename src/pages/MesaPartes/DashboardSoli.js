@@ -28,7 +28,7 @@ import DashboardSoliOrganism from './DashboardSoliOrganism'
 import { UserContext } from '../../constants/UserContext'
 
 // services
-import * as UnidadService from '../../services/unidadService';
+import UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
 import fileService from '../../services/fileService'

@@ -38,7 +38,8 @@ function b2fTemaTramite(x) {
 
 /* -----------fin de funciones auxiliares-------------- */
 //Cambio de export function a const
-export function  getUnidades() {
+/*
+const  getUnidades() {
     return axios({
         method: 'get',
         url: `${url}/unidad/`,
@@ -53,8 +54,8 @@ export function  getUnidades() {
             return res.data
         })
         .catch(err => console.error(err));
-}
-/*
+}*/
+
 const getUnidades = async () => {
     try{
         const request = await axios.get(`${url}/unidad/`,
@@ -64,7 +65,6 @@ const getUnidades = async () => {
         console.error(err);
     }
 }
-*/
 
 
 const getUnidad = async (id) => {
