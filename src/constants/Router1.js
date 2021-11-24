@@ -142,7 +142,7 @@ export default function Router1(props) {
           return "/jd"
       case 6:
           return "/secretaria"
-      case 6:
+      case 7:
         return "/invitado"
     default:
         //return "/noRoles"

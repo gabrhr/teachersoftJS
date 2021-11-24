@@ -24,13 +24,11 @@ const clientId = '626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleuserc
 
 function f2bNuevoUsuarioExterno(values, user) {
     /* update local storage user */
-    user = {
-        ...user,
-        nombres: values.nombres,
-        apellidos: values.primer_apellido + ' ' + values.segundo_apellido,
-        tipo_persona: 7,
-    }
-
+    
+    user.persona.nombre= values.nombres
+    user.persona.apellidos=  values.primer_apellido + ' ' + values.segundo_apellido
+    user.persona.tipo_persona= 7
+    
     let persona = {
         ...user.persona,        // recover id to update in DB
         tipo_persona: 7,        // 8 (Nuevo Usuario) -> 7 (Usuario Externo)
@@ -59,32 +57,33 @@ export default function Registro() {
     })
     const { user, setUser, rol, setRol } = React.useContext(UserContext)
 
+    
     /* Con valores de registro */
     function submitValues(values, user) {
         personaService.updatePersona2(f2bNuevoUsuarioExterno(values, user))
-            .then(res => {
-                /* success */
-                setNotify({
-                    isOpen: true,
-                    message: 'Registro de Nuevo Usuario Externo externo',
-                    type: 'success'
-                })
-                
-                /* update localstorage and UserContext */
-                setUser({...user})
-                setRol(user.persona.tipo_persona)
-
-                /* redirect to next page */
-                history.push("/invitado/mesaPartes/misSolicitudes")
+        .then(res => {
+            /* success */
+            setNotify({
+                isOpen: true,
+                message: 'Registro de Nuevo Usuario Externo externo',
+                type: 'success'
             })
-            .catch(res => {
-                setNotify({
-                    isOpen: true,
-                    message: 'Estamos teniendo problemas de conexión.  Consulte con un administrador por favor.',
-                    type: 'error'
-                })
-                console.log("Registro", f2bNuevoUsuarioExterno(values, user))
+            
+            /* update localstorage and UserContext */
+            setUser({...user})
+            setRol(user.persona.tipo_persona)
+            /* redirect to next page */
+            history.push("/invitado")
+        })
+        .catch(res => {
+            setNotify({
+                isOpen: true,
+                message: 'Estamos teniendo problemas de conexión.  Consulte con un administrador por favor.',
+                type: 'error'
             })
+            console.log("Registro", f2bNuevoUsuarioExterno(values, user))
+        })
+        
     }
 
     return (
