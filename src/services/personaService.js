@@ -68,4 +68,83 @@ const deletePersona = async (id) => {
   }
 }
 
-export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona}
+//FUNCIONALIDAD PREFERENCIA DOCENTE
+
+export const getPreferencias = async () => {
+  try{
+    const request = await axios.get(`${url}/preferencia/`, tokenService.GetTokenPrueba());
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const getPreferencia = async (id) => {
+  try{
+    const request = await axios.get(`${url}/preferencia/${id}`, id, tokenService.GetTokenPrueba());
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const getPreferenciasxDocente = async (id_docente) => {
+  try{
+    const request = await axios.get(`${url}/preferencia/iddocente=${id_docente}`, tokenService.GetTokenPrueba(), id_docente);  //Es un entero que se pasa
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const getPreferenciasxSeccion = async (id_seccion) => {
+  try{
+    const request = await axios.get(`${url}/preferencia/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion);  //Es un entero que se pasa
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const getPreferenciasxDepartamento = async (id_departamento) => {
+  try{
+    const request = await axios.get(`${url}/preferencia/iddepartamento=${id_departamento}`, tokenService.GetTokenPrueba(), id_departamento);  //Es un entero que se pasa
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const registerPreferencia = async newObject => {
+  try{
+    const request = await axios.post(`${url}/preferencia/`, newObject, tokenService.GetTokenPrueba());
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+    return false;
+  }
+}
+
+const updatePreferencia = async (newObject, id) => {
+  try{
+    console.log(newObject)
+    const request = await axios.put(`${url}/preferencia/`, newObject, tokenService.GetTokenPrueba());
+    return request.data //Es un valor de true o no
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const deletePreferencia = async (id) => {
+  try{
+    const request = await axios.delete(`${url}/preferencia/${id}`, tokenService.GetTokenPrueba(), id);
+    return request.then(response => response.data) //Es un valor de true o no
+  }catch(exception){
+    console.error(exception);
+    return false;
+  }
+}
+
+export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona,
+  getPreferencias, getPreferencia, getPreferenciasxDocente, getPreferenciasxSeccion, getPreferenciasxDepartamento, 
+  registerPreferencia, updatePreferencia, deletePreferencia}

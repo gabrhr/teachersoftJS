@@ -52,6 +52,26 @@ const tipo = [
     { id: 'Laboratorio', title: 'Laboratorio' }
 ]
 
+const actualizarCursoCiclo = async (curso_ciclo)=> {
+
+  if(curso_ciclo.cantidad_horarios !== 1){
+    const newCC = {
+      "id": curso_ciclo.id,
+      "ciclo": {
+        "id": curso_ciclo.ciclo.id,
+      },
+      "curso": {
+        "id": curso_ciclo.curso.id,
+      },
+      "cantidad_horarios": 1, //Se actualiza al nuevo estado - con horarios
+      "estado_tracking": curso_ciclo.estado_tracking,
+    }
+    
+    const request = await cursoService.updateCursoCiclo(newCC);
+
+  }
+}
+
 export default function GestionCargaCursos() {
 
     const history = useHistory()
@@ -174,18 +194,26 @@ export default function GestionCargaCursos() {
 
     const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroCursos");
 
-    const guardarHorario = async() => {
+    const guardarHorario = async () => {
       let arrayCadenas = dValuNombre.split(" ");
       const ciclo = await window.localStorage.getItem("ciclo");
       console.log(ciclo, arrayCadenas);
       if(validate()){
-          await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
+        await cursoService.getCursoCicloxCicloxCodigoNombre(ciclo, arrayCadenas[0])
         .then(request => {
           if(request[0]){          
               const postHorario = {
               "codigo": horario,
               "curso_ciclo": {
                 "id": request[0].id,
+                "ciclo": {
+                  "id": request[0].ciclo.id,
+                },
+                "curso": {
+                  "id": request[0].curso.id,
+                },
+                "cantidad_horarios": request[0].cantidad_horarios, 
+                "estado_tracking": request[0].estado_tracking,
               },
               "sesiones":[{
                 "secuencia": (records[0].tipo === "Laboratorio") ? 1 : 0, 
@@ -198,8 +226,13 @@ export default function GestionCargaCursos() {
                         "horas": parseFloat(records[1].sesion),
                 })
             }
-            console.log(postHorario);
-            horarioService.registerHorario(postHorario);
+
+            horarioService.registerHorario(postHorario)
+            .then(requestHor  => {
+              if(requestHor){
+                actualizarCursoCiclo(postHorario.curso_ciclo)
+              }
+            })
             setOpenRegistroExitoso(true);
           }
           else{
@@ -207,7 +240,7 @@ export default function GestionCargaCursos() {
           }
           resetPage();
           setOpenGuardarPopup(false);
-          });
+        });
       }
       
     }

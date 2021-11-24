@@ -63,7 +63,15 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
         postHorario = {
           "codigo": hor.codigo,
           "curso_ciclo":{
-            "id": request[0].id
+            "id": request[0].id,
+            "ciclo": {
+              "id": request[0].ciclo.id,
+            },
+            "curso": {
+              "id": request[0].curso.id,
+            },
+            "cantidad_horarios": request[0].cantidad_horarios, //Se actualiza al nuevo estado
+            "estado_tracking": request[0].estado_tracking,
           },
           sesiones:[{
             "secuencia": hor.tipo,
@@ -76,16 +84,37 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   
   else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
     //const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
-
-    postHorario.sesiones.push({
-      "secuencia": hor.tipo,
-      "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
-    })
+    if(hor.tipo === 1)  //Solo si es laboratorio- sino no se ingresa
+      postHorario.sesiones.push({
+        "secuencia": hor.tipo,
+        "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
+      })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
   console.log(postHorario);
   return [otroHorario, postHorario];
 }
+
+const actualizarCursoCiclo = async (curso_ciclo)=> {
+
+  if(curso_ciclo.cantidad_horarios !== 1){
+    const newCC = {
+      "id": curso_ciclo.id,
+      "ciclo": {
+        "id": curso_ciclo.ciclo.id,
+      },
+      "curso": {
+        "id": curso_ciclo.curso.id,
+      },
+      "cantidad_horarios": 1, //Se actualiza al nuevo estado - con horarios
+      "estado_tracking": curso_ciclo.estado_tracking,
+    }
+    
+    const request = await cursoService.updateCursoCiclo(newCC);
+
+  }
+}
+
 
 export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
     let auxHorario
@@ -309,8 +338,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //Loop finished
         
         if(otroHorario === 1)  {
-          if(horarioService.registerHorario(postHorario))
+          if(horarioService.registerHorario(postHorario)){
+            await actualizarCursoCiclo(postHorario.curso_ciclo);
             permission = 0;
+          }
         }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
