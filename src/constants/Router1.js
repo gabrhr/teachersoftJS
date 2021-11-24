@@ -25,6 +25,7 @@ import AsistenteSeccion from '../pages/AsistenteSeccion/GestionAsignacionCarga/A
 import GestionCargaCursos from '../pages/AsistenteSeccion/GestionAsignacionCarga/GestiónCargaCursos';
 import GestionDepartamento from '../pages/Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../pages/Administrador/MantenimientoSeccion/GestionSeccion'
+import GestionCiclo from '../pages/Administrador/MantenimientoCiclo/GestionCiclo';
 import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
 import CargaDocenteHorarios from '../pages/AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import Vacio from '../pages/Dev/Vacio'
@@ -52,12 +53,14 @@ import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 import ErrorDireccionamiento from '../pages/Dev/Error404';
 import Registro from '../pages/NuevoUsuario/Registro';
 import LandingPage from '../constants/LandingPage'
+import ExternoAtenderSolicitud from '../pages/MesaPartes/ExternoAtenderSolicitud';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
   { requireRoles: [0], path: "/admin/mantenimiento/usr", page: GestionUsuarios },
   { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
   { requireRoles: [0], path: "/admin/mantenimiento/sec", page: GestionSeccion },
+  { requireRoles: [0], path: "/admin/mantenimiento/ciclo", page: GestionCiclo },
   { requireRoles: [0], path: "/admin/mantenimiento/per", page: Vacio },
   { requireRoles: [0,1,2,3,4,5,6,7,8], path: "/admin/showcase", page: Showcase },
   { requireRoles: [0], path: "/admin/index", page: TestIndex },
@@ -142,7 +145,7 @@ export default function Router1(props) {
           return "/jd"
       case 6:
           return "/secretaria"
-      case 6:
+      case 7:
         return "/invitado"
     default:
         //return "/noRoles"
@@ -178,6 +181,10 @@ export default function Router1(props) {
         <PrivateRoute exact path="/invitado" requireRoles={[7]}>
              <Redirect to="/invitado/mesaPartes/misSolicitudes" />
         </PrivateRoute>
+        {/* Ver bien la ruta */}
+        <PrivateRoute exact path="/invitado/atender" requireRoles={[8]}>
+             <Redirect to="/invitado/atender/solicitud" />
+        </PrivateRoute>
         {privateroutes.map((r,index) =>
           <PrivateRoute 
             key={index}
@@ -204,6 +211,14 @@ export default function Router1(props) {
           requireRoles={[8]}
           component={() =>
             <Registro/>
+          }
+          >
+        </PrivateRoute>
+        
+        <PrivateRoute exact path="/invitado/atender/solicitud"
+          requireRoles={[8]}
+          component={() =>
+            <ExternoAtenderSolicitud/>
           }
           >
         </PrivateRoute>

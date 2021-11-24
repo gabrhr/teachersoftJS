@@ -150,11 +150,10 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function HeaderUser(props) {
-  const { user, rol } = React.useContext(UserContext);
+  const { user, rol, open,setOpen } = React.useContext(UserContext);
 
   /* estado del Drawer */
-  const [open, setOpen] = React.useState(true);
-
+  //const [open, setOpen] = React.useState(true);
 
   const classes = useStyles();
   let listaMenu=[];

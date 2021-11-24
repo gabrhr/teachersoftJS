@@ -22,7 +22,6 @@ const GoogleLoginButton = () => {
     }
     const onLogoutFailure = (response) => {
         console.log(response)
-        
     }
     const {signOut} = useGoogleLogout({
         clientId,

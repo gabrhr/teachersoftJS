@@ -3,11 +3,12 @@
  * Menu Item del Drawer (aka. SideMenu, aka. NavBar)
  */
 import React, { useState } from 'react';
-import { Link,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
+import { Redirect,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
 import { List, ListItemIcon, ListItemText, ListItemButton, Collapse } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { UserContext } from '../../constants/UserContext';
 
 const useStyles = makeStyles(themex => ({
   active: {
@@ -18,24 +19,27 @@ const useStyles = makeStyles(themex => ({
 
 const SubMenu = (props) => {
     const { open, item, handleListItemClick, isSelected, ...other } = props
+    const { selectedIndexI, setSelectedIndexI } = React.useContext(UserContext);
     const [subnav, setSubnav] = useState(false)
-    const [selectedIndexI, setSelectedIndexI] = React.useState(0);
-    const history = useHistory()
-    const location = useLocation()
-    let {pathNow} = useRouteMatch();
+    //const [selectedIndexI, setSelectedIndexI] = React.useState(0);
+    const history = useHistory();
+    const location = useLocation();
+    //let {pathNow} = useRouteMatch();
     
     /* "ESTE ES EL SUBNAV" */
     const showSubnav = () => {
+      console.log("ANTES subnavvvvvvvv",subnav)
       setSubnav(!subnav);
+      console.log("subnavvvvvvvv",subnav)
     }
 
     const handleClick = (e, indice, nav, path) => {
       if(nav) {
         showSubnav();
       }else{
-          handleListItemClick(e, indice)
-            history.push(path)
-        }
+        handleListItemClick(e, indice)
+        history.push(path)
+      }
     }
     const handleListSubItemClick = (e, indice, path) => {
       setSelectedIndexI(indice);
@@ -54,8 +58,8 @@ const SubMenu = (props) => {
                 }
             }}
             key={item.index} 
-            selected={location.pathname == item.path ? isSelected : false}
-            onClick={(event) => handleClick(event, item.indice, item.subNav, item.path)}
+            selected={location.pathname === item.path ? isSelected : false}
+            onClick={(event) => {handleClick(event, item.indice, item.subNav, item.path)}}
             >
             <ListItemIcon sx={{color: "primary.main"}}>{item.icon}</ListItemIcon>
             <ListItemText sx={{color: "primary.main"}} primary={item.text} />
@@ -75,8 +79,8 @@ const SubMenu = (props) => {
                           },
                       }}
                           key={index} 
-                          selected={location.pathname == item.path ? selectedIndexI === index : false}
-                          onClick={(event) => handleListSubItemClick(event, item.indice, item.path)}
+                          selected={location.pathname === item.path ? selectedIndexI === index : false}
+                          onClick={(event) => {handleListSubItemClick(event, index, item.path)}}
                           >
                           <ListItemText primary={item.text} sx={{pl:4}}/>
                       </ListItemButton>
