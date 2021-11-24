@@ -7,6 +7,13 @@ moment.locale('es');
 export default function HeaderSolicitud(props) {
     const {solicitud, solicitador} = props
 
+    function verificarExterno(s){
+        if(s.rolName==="Usuario Externo"){
+            return " - " + `${s.correo}` + " (Usuario Externo)"
+        }
+        return " "
+    }
+
     return (
         <Grid container spacing={{ xs: "10px" }} >
             <Grid item sx={{mt:"10px", mb:"10px", ml:2}}>
@@ -20,6 +27,9 @@ export default function HeaderSolicitud(props) {
                 <Typography variant="h4"   display="inline">
                     {solicitador==false? `${solicitud.delegado.fullName}` + " - " +`${solicitud.delegado.rolName}` 
                     : `${solicitud.solicitador.fullName}`}
+                </Typography>
+                <Typography display="inline" fontWeight="530"  sx={{color:"primary.light"}}>
+                    {verificarExterno(solicitud.solicitador)}
                 </Typography>
                 <div/>
                 <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>

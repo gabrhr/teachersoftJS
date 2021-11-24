@@ -96,10 +96,10 @@ export function b2fPersona(x) {
         rolName: DTLocalServices.getRolName(x.tipo_persona),
         correo: x.correo_pucp,
         foto_URL: x.foto_URL,
-        seccionDepartamento: x.seccion.departamento.nombre + ' - ' + x.seccion.nombre,
+        seccionDepartamento: x.seccion? x.seccion.departamento.nombre + ' - ' + x.seccion.nombre: "" ,
         
         /* extra */
-        departamentoID: x.seccion.departamento.id,
+        departamentoID: x.seccion? x.seccion.departamento.id: null,
     }
 }
 
