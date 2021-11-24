@@ -31,7 +31,7 @@ const tableHeaders = [
     {
       id: 'anho',
       label: 'Año',
-      numeric: true,
+      numeric: false,
       sortable: true
     },
     {
@@ -236,26 +236,26 @@ export default function GestionCiclo() {
                      recordsAfterPagingAndSorting().map(item => (
 
                         <StyledTableRow key={item.id}>
-                          <StyledTableCell>{item.anho}</StyledTableCell>
-                          <StyledTableCell>{item.periodo}</StyledTableCell>
-                          {/*<StyledTableCell align="left">
+                          <StyledTableCell align="center-left">{item.anho}</StyledTableCell>
+                          <StyledTableCell align="center">{item.periodo}</StyledTableCell>
+                          <StyledTableCell align="center-left">
                               {
-                                item.fecha_inicio.slice(8,10)
+                                item.fechaInicio.slice(8,10)
                                 +'/'
-                                +item.fecha_inicio.slice(5,7)
+                                +item.fechaInicio.slice(5,7)
                                 +'/'
-                                +item.fecha_inicio.slice(0,4)
+                                +item.fechaInicio.slice(0,4)
                               }
                           </StyledTableCell>
-                          <StyledTableCell align="left">
+                          <StyledTableCell align="center-left">
                               {
-                                item.fecha_fin.slice(8,10)
+                                item.fechaFin.slice(8,10)
                                 +'/'
                                 +item.fechaFin.slice(5,7)
                                 +'/'
                                 +item.fechaFin.slice(0,4)
                               }
-                          </StyledTableCell>*/}
+                          </StyledTableCell>
                           <StyledTableCell>
                           <Controls.ActionButton
                             color="warning"

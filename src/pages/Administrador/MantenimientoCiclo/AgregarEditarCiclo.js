@@ -4,6 +4,7 @@ import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
+import SimpleDatePicker from '../../../components/DreamTeam/SimpleDatePicker';
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
 import CicloService from '../../../services/cicloService.js';
@@ -12,12 +13,15 @@ import * as DTLocalServices from '../../../services/DTLocalServices';
 
 
 const thisYear = new Date().getFullYear();
+const defaultInitDate = thisYear.toString() + '-03-02';
+const defaultEndDate = thisYear.toString() + '-07-02';
 
 let yearList = [];
 
 function populateYearList(){
     yearList = [];
-    for (let i = 0; i < 10; i++){
+    yearList.push({id: 2020 , nombre: (2020).toString()})
+    for (let i = 0; i < 5; i++){
         yearList.push({id: (thisYear + i) , nombre: (thisYear + i).toString()});
     }
 }
@@ -26,8 +30,8 @@ const initialFieldValues = {
     id: 0,
     anho: thisYear.toString(),
     periodo: '1',
-    fechaInicio: '',
-    fechaFin: '',
+    fechaInicio: defaultInitDate,
+    fechaFin: defaultEndDate,
 }
 
 
@@ -83,8 +87,8 @@ export default function AgregarEditarCiclo(props) {
             fecha_modificacion: null,
             anho: values.anho,
             periodo: values.periodo,
-            fecha_inicio: values.fecha_inicio,
-            fecha_fin: values.fecha_fin,
+            fecha_inicio: values.fechaInicio,
+            fecha_fin: values.fechaFin,
           }
 
           addOrEdit(newCiclo,resetForm);
@@ -106,9 +110,7 @@ export default function AgregarEditarCiclo(props) {
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
-                    < Typography variant="h4" mb={2} >
-                           DATOS GENERALES
-                    </Typography>
+                    
                     {populateYearList()}
                     <Controls.Select
                         name="anho"
@@ -129,17 +131,19 @@ export default function AgregarEditarCiclo(props) {
                     
                 </Grid>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
-                    <Controls.DatePicker
+                    <SimpleDatePicker
                         name="fechaInicio"
                         label="Fecha Inicio"
                         value={values.fechaInicio}
+                        year={values.anho}
                         onChange={handleInputChange}
                         error={errors.fechaInicio}
                     />
-                    <Controls.DatePicker
+                    <SimpleDatePicker
                         name="fechaFin"
                         label="Fecha Fin"
                         value={values.fechaFin}
+                        year={values.anho}
                         onChange={handleInputChange}
                         error={errors.fechaFin}
                     />
@@ -147,7 +151,24 @@ export default function AgregarEditarCiclo(props) {
                 </Grid>
                 
             </Grid>
-            
+            <Grid cointainer align="right" mt={5}>
+                <div>
+                    <Controls.Button
+                        // disabled={true}
+                        variant="disabled"
+                        text="Cancelar"
+                        onClick={()=> setOpenPopup(false)}
+                        />
+                    <Controls.Button
+                        // variant="contained"
+                        // color="primary"
+                        // size="large"
+                        text="Guardar Cambios"
+                        type="submit"
+                        />
+
+                </div>
+            </Grid>
         </Form>
     )
 }
