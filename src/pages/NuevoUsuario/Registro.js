@@ -1,3 +1,5 @@
+/* Author: Gabs
+ */
 import React from 'react'
 import { AppBar, Avatar, Grid, Paper, Toolbar, Typography, Box } from '@mui/material'
 import Header1 from '../../constants/Header1'
@@ -11,7 +13,104 @@ import { styled } from "@mui/material/styles";
 import { useGoogleLogout } from 'react-google-login';
 import Divider from '../../components/controls/Divider'
 import { UserContext } from '../../constants/UserContext'
+import Notification from '../../components/util/Notification'
 
+/* SERVICES */
+import personaService from '../../services/personaService'
+import * as MesaPartesService from '../../services/mesaPartesService'
+
+/* para cerrar sesion */
+const clientId = '626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com';
+
+function f2bNuevoUsuarioExterno(values, user) {
+    /* update local storage user */
+    user = {
+        ...user,
+        nombres: values.nombres,
+        apellidos: values.primer_apellido + ' ' + values.segundo_apellido,
+        tipo_persona: 7,
+    }
+
+    let persona = {
+        ...user.persona,        // recover id to update in DB
+        tipo_persona: 7,        // 8 (Nuevo Usuario) -> 7 (Usuario Externo)
+
+        nombres: values.nombres,
+        apellidos: values.primer_apellido + ' ' + values.segundo_apellido,
+        fechaNac: values.fecha_nacimiento,
+        sexo: values.sexo,
+        tipo_documento: 0,      // DNI?
+        numero_documento: values.dni,
+        telefono: values.telefono,
+
+        /* relations */
+        departamento: { id: user.persona.departamento.id },
+        seccion: {id: user.persona.seccion.id }
+    }
+    return persona
+}
+
+export default function Registro() {
+    const history = useHistory()
+    const [notify, setNotify] = React.useState({
+        isOpen: false, 
+        message: '', 
+        type: ''
+    })
+    const { user, setUser, rol, setRol } = React.useContext(UserContext)
+
+    /* Con valores de registro */
+    function submitValues(values, user) {
+        personaService.updatePersona2(f2bNuevoUsuarioExterno(values, user))
+            .then(res => {
+                /* success */
+                setNotify({
+                    isOpen: true,
+                    message: 'Registro de Nuevo Usuario Externo externo',
+                    type: 'success'
+                })
+                
+                /* update localstorage and UserContext */
+                setUser({...user})
+                setRol(user.persona.tipo_persona)
+
+                /* redirect to next page */
+                history.push("/invitado/mesaPartes/misSolicitudes")
+            })
+            .catch(res => {
+                setNotify({
+                    isOpen: true,
+                    message: 'Estamos teniendo problemas de conexión.  Consulte con un administrador por favor.',
+                    type: 'error'
+                })
+                console.log("Registro", f2bNuevoUsuarioExterno(values, user))
+            })
+    }
+
+    return (
+        <>
+            <Header1/>
+            <Header/>
+            <Paper sx={{m: 22, p: 5}}>
+                <HeadNotificationMisSolicitudes
+                    title="Nuevo Usuario Externo"
+                    body="Completa tus datos para terminar con el registro"
+                />
+                <RegistroForm submitValues={submitValues}/>
+            </Paper>
+            {/* "modals" */}
+            <Notification
+                notify={notify}
+                setNotify={setNotify}
+            />
+        </>
+    )
+}
+
+
+
+
+//#region NO MIREN
 const useStyles = makeStyles((themex) => ({
     root: {
         backgroundColor: "#fdfdff",
@@ -22,23 +121,6 @@ const useStyles = makeStyles((themex) => ({
         color: "#00002b",
     },
 }));
-
-
-
-const clientId = '626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com';
-
-export default function Registro() {
-    return (
-        <>
-            <Header1/>
-            <Header/>
-            <Paper sx={{m: 22, p: 5}}>
-                <HeadNotificationMisSolicitudes/>
-                <RegistroForm/>
-            </Paper>
-        </>
-    )
-}
 
 function Header (){
     const { user, rol } = React.useContext(UserContext);
@@ -112,3 +194,4 @@ function Header (){
         </AppBar>
     )
 }
+//#endregion
