@@ -61,7 +61,7 @@ const getTipoTramite = async (id_tema) => {
   let auxTipos = await tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
   let auxTema = await tematramiteService.getTemaTramite(id_tema);
   
-  localStorage.setItem('nombreTema', auxTema.nombre)
+  localStorage.setItem('nombreTema', auxTema? auxTema.nombre:"No seleccionado")
   auxTipos = auxTipos ?? [];
   console.log(auxTipos);
  
@@ -69,14 +69,14 @@ const getTipoTramite = async (id_tema) => {
   const tipos = [];
   if(auxTipos){
     for (let i = 0; i < auxTipos.length; i++){
-      console.log(auxTipos[i]);
+      /* console.log(auxTipos[i]);
       console.log(auxTipos[i].id);
       console.log(auxTipos[i].nombre);
       console.log(auxTipos[i].temaID);
       console.log(auxTipos[i].id_tema);
       console.log("id");
       console.log(auxTipos[i].temaTramiteMesaDePartes.id);
-      console.log(auxTipos[i].temaTramiteMesaDePartes.nombre);  
+      console.log(auxTipos[i].temaTramiteMesaDePartes.nombre);   */
       tipos.push({
             id: auxTipos[i].id.toString(),
             nombre: auxTipos[i].nombre,
@@ -141,6 +141,8 @@ const getTipoTramite = async (id_tema) => {
           }
         })
     }
+
+
 
     useEffect(() => {
       getTipoTramite(id_tramite)
