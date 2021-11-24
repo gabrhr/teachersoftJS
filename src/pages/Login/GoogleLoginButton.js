@@ -22,7 +22,6 @@ const GoogleLoginButton = () => {
     }
     const onLogoutFailure = (response) => {
         console.log(response)
-        
     }
     const {signOut} = useGoogleLogout({
         clientId,
@@ -51,8 +50,11 @@ const GoogleLoginButton = () => {
                 return history.push("/jd"); 
             case 6:
                 return history.push("/secretaria");
+            case 7:
+                return history.push("/invitado");
             default:
-                return history.push("/noRoles");
+                return history.push("/registro");
+                //return history.push("/noRoles");
           }
         }
     }, [loading]);
@@ -64,6 +66,7 @@ const GoogleLoginButton = () => {
                 headers: {
                     Authorization: `${response.accessToken}`
                 },
+                timeout: 10000
             };
             const data = {
             

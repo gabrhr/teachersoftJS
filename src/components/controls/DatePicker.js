@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 
 export default function DatePicker(props) {
 
-    const {name, label, value, onChange } = props;
+    const {name, label, value, onChange, ...other } = props;
 
     /* same as in ./Checkbox */
     const convertToDefaultEventParameter = (name, value) => ({
@@ -21,8 +21,9 @@ export default function DatePicker(props) {
                 label={label}
                 value={value}
                 onChange={date => onChange(convertToDefaultEventParameter(name, date))}
-                renderInput={(params) => <TextField {...params} />}
-                />
+                renderInput={(params) => <TextField {...params} helperText={null}/>}
+                {...other}
+            />
         </LocalizationProvider>
     );
 }

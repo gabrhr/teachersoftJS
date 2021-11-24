@@ -14,7 +14,7 @@ const tableHeaders = [
     {
       id: 'clave',
       label: 'Clave',
-      numeric: true,
+      numeric: false,
       sortable: true
     },
     {

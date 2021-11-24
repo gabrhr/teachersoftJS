@@ -26,6 +26,7 @@ import GestionCargaCursos from '../pages/AsistenteSeccion/GestionAsignacionCarga
 import GestionDepartamento from '../pages/Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../pages/Administrador/MantenimientoSeccion/GestionSeccion'
 import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
+import CargaDocenteHorarios from '../pages/AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import Vacio from '../pages/Dev/Vacio'
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
@@ -42,11 +43,15 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-//import NoAsignado from './NoAsignado'
 import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
+import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
+//import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
+import ErrorDireccionamiento from '../pages/Dev/Error404';
+import Registro from '../pages/NuevoUsuario/Registro';
+import LandingPage from '../constants/LandingPage'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -78,9 +83,10 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   /* CS*/
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocente },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
@@ -107,7 +113,8 @@ const privateroutes = [
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
   { requireRoles: [6], path: "/secretaria/mantenimiento/temaTramite", page: GestionTemaTramite },  
   /* Externo */
-  /* rol sin asignar */
+  { requireRoles: [7], path: "/invitado/mesaPartes/misSolicitudes", page: MisSolicitudes},  
+  { requireRoles: [7], path: "/invitado/mesaPartes/solicitudDetalle", page: SolicitudDetalle },  
 ]
 
 
@@ -135,8 +142,11 @@ export default function Router1(props) {
           return "/jd"
       case 6:
           return "/secretaria"
+      case 6:
+        return "/invitado"
     default:
-        return "/noRoles"
+        //return "/noRoles"
+        return "/registro"
     }
   }
 
@@ -165,6 +175,9 @@ export default function Router1(props) {
         <PrivateRoute exact path="/secretaria" requireRoles={[6]}>
              <Redirect to="/secretaria/mesaPartes/solicitudesGenerales" />
         </PrivateRoute>
+        <PrivateRoute exact path="/invitado" requireRoles={[7]}>
+             <Redirect to="/invitado/mesaPartes/misSolicitudes" />
+        </PrivateRoute>
         {privateroutes.map((r,index) =>
           <PrivateRoute 
             key={index}
@@ -185,24 +198,24 @@ export default function Router1(props) {
             <NoAsignado/>
           }
           >
-          </PrivateRoute>
+        </PrivateRoute>
+        
+        <PrivateRoute exact path="/registro"
+          requireRoles={[8]}
+          component={() =>
+            <Registro/>
+          }
+          >
+        </PrivateRoute>
 
-        {/* Rutas no protegidas */}
-        {/* {publicroutes.map(r =>
-          <Route exact path={r.path} 
-          render={({location}) =>
-          <HeaderUser
-          pagina={r.page}
-          />
-        }
-        >
-          </Route>
-        )} */}
         {/* Login */}
         <Route exact path="/login" children={Login} />
         <Route exact path="/">
-          {user?.id>0 ? <Redirect to={generateRouteRol(rol)} /> : <Redirect to="/login"/> }
+          {user?.id>0? 
+            <Redirect to={generateRouteRol(rol)} /> 
+            : <Redirect to="/login"/> }
         </Route>
+        <Route default component={ErrorDireccionamiento} />
       </Switch>
     </Router>
   )

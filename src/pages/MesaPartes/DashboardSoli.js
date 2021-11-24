@@ -62,7 +62,7 @@ const tableHeaders = [
 
 const initialFieldValues = {
     temaTramiteID: 0,
-    estadoID: 4
+    estadoID: 4 // (Todos los estados)
 }
 
 // export const getTemaTramites = () => ([
@@ -147,16 +147,6 @@ export default function DashboardSoli(props) {
             temaTramite: temaTramite,
             tipoTramite: tipoTramite
         }
-
-    React.useEffect(() => {
-        getUnidades(setUnidad)
-        getDepartamentos(setDepartamento)
-        getSecciones(setSeccion)
-        getTemaTramites(setTemaTramite)
-        getTiposTramites(setTipoTramite)
-        /* note:  estados no tiene porque solo es un numero codigo */
-    }, [])
-
     const {
         TblContainer,
         TblHead,
@@ -173,6 +163,25 @@ export default function DashboardSoli(props) {
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues);
+
+    React.useEffect(() => {
+        getUnidades(setUnidad)
+        getDepartamentos(setDepartamento)
+        getSecciones(setSeccion)
+        getTemaTramites(setTemaTramite)
+        getTiposTramites(setTipoTramite)
+        /* note:  estados no tiene porque solo es un numero codigo */
+        
+    }, [])
+
+/*     React.useEffect( () =>{
+      setFilterFn({
+        fn: items => {
+          return items.filter(x => x.estado
+            .includes(0))
+        }
+     })
+    }, []) */
 
     /* Initial data retrieved */
     // React.useEffect(() => {
@@ -257,14 +266,13 @@ export default function DashboardSoli(props) {
           })
           getSolicitudes(setRecords, user)
           
-          console.log('Solicitud', solicitud.archivos)
           /* insertar archivos relacionados */
           for (var i = 0; i < solicitud.archivos.length; i++) {
             solicitud.archivos[i].solicitud = { id: solicitudID }
             fileService.registerArchivo(solicitud.archivos[i]);
           }
           // console.log(solicitud)
-          window.alert(`Se inserto la soli con id=${solicitudID}`)
+          // window.alert(`Se inserto la soli con id=${solicitudID}`)
         })
         .catch(err => {
           /* error :( */
@@ -279,12 +287,11 @@ export default function DashboardSoli(props) {
     }
     const [valueFecha, setValueFecha] = React.useState([null, null]);
 
-   /*  React.useEffect(() => {
+    React.useEffect(() => {
         const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
         const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
         setFilterFn({
           fn: items => {
-            console.log(items)
             if (valueFecha[0]== null && valueFecha[1] == null)
               return items
             if (valueFecha[1]==null)
@@ -292,13 +299,14 @@ export default function DashboardSoli(props) {
                 fechaIni <= moment(x.tracking.fecha_enviado).format('DD/MM/YYYY')
               )
             else{
-              return items.filter(x => 
-                 moment(x.tracking.fecha_enviado).isBetween(fechaIni,fechaFin)
+              return items.filter((x) => fechaIni <= moment(x.tracking.fecha_enviado).format('DD/MM/YYYY') &&
+                  moment(x.tracking.fecha_enviado).format('DD/MM/YYYY') <= fechaFin
               )
             }
           }
         })
-    }, [valueFecha]) */
+    }, [valueFecha])
+
     return (
       <Form>
         <ContentHeader text={title} cbo={false} />
@@ -319,10 +327,10 @@ export default function DashboardSoli(props) {
             />
           </div>
           <div style={{ width: "360px", marginRight: "50px" }}>
-            {/* <Controls.RangeTimePicker 
+             <Controls.RangeTimePicker 
               value = {valueFecha}
               setValue= {setValueFecha}
-            /> */}
+            /> 
           </div>
         </div>
         {/* Filtrados */}
@@ -350,14 +358,14 @@ export default function DashboardSoli(props) {
           <div style={{ width: "80vw", textAlign: "right" }}>
             {delegado? 
               <></>:
-                  <Controls.AddButton
-                  variant="iconoTexto"
-                  text="Nueva Solicitud"
-                  onClick={() => {
-                      setOpenNuevo(true);
-                  }}
-                  />
-                }
+              <Controls.AddButton
+                variant="iconoTexto"
+                text="Nueva Solicitud"
+                onClick={() => {
+                    setOpenNuevo(true);
+                }}
+              />
+            }
           </div>
         </div>
         <DashboardSoliOrganism

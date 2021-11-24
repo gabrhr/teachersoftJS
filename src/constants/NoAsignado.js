@@ -37,7 +37,6 @@ export default function NoAsignado(props) {
     return (
         <>
             <Header1 />
-
             <Paper sx={{m: 16, p: 2}}>
                 <DT.Title size="big" text="Acceso Denegado" />
                 <Typography>

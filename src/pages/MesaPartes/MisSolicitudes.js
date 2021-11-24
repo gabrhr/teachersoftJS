@@ -12,6 +12,7 @@ import DashboardSoli from './DashboardSoli'
 
 // services
 import * as MesaPartesService from '../../services/mesaPartesService';
+import HeadNotificationMisSolicitudes from '../NuevoUsuario/HeadNotificationMisSolicitudes';
 
 /* function createData(id, asunto, descripcion, fecha, autorNombre, estado) {
     return {
@@ -34,7 +35,6 @@ function getSolicitudes(setRecords, user) {
     //MesaPartesService.getSolicitud(33)
     //MesaPartesService.getSolicitudesByIdSol(user.id)
     //MesaPartesService.getSolicitudes() 
-    console.log(user)
     MesaPartesService.getSolicitudesByIdSol(user.persona.id) 
         .then(data => {
             data = data ?? []       // fixes el error raro de mala conexion
@@ -42,6 +42,17 @@ function getSolicitudes(setRecords, user) {
                 0 - (new Date(x1.tracking.fecha_enviado) - new Date(x2.tracking.fecha_enviado)))
             setRecords(data)
         })
+}
+
+function HeadNotification(props) {
+    const { rol } = props
+    /* checkear el rol, si es NuevoUsuario (sin permisos) mostrar */
+    /* importarlo desde pages/NuevoUsuario/HeadNotificationMisSolicitudes */
+    if (rol === 7)
+        return (
+            <HeadNotificationMisSolicitudes />
+        )
+    return ( <></> )
 }
 
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
@@ -54,14 +65,17 @@ export default function MisSolicitudes() {
     /* Retrieve initial data from  Back API on first component render */
     React.useEffect(() => {
         getSolicitudes(setRecords, user)
-    }, [])
+    }, [user])
 
     return (
-        <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
-            delegado={false}
-            records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
-            user={user}
-        />
+        <>
+            <HeadNotification rol={rol} />
+            <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
+                delegado={false}
+                records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
+                user={user}
+            />
+        </>
     )
 }
 

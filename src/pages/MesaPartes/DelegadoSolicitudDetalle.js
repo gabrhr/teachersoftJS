@@ -16,10 +16,24 @@ import { Box } from '@mui/system';
 import { DT } from '../../components/DreamTeam/DT';
 import ResultadoSolicitud from './ResultadoSolicitud';
 import AtenderSolicitudForm from './AtenderSolicitudForm';
+import Notification from '../../components/util/Notification';
 
 // services
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
+import * as EmailService from '../../services/emailService'
+
+function sendEmailNotification(solicitud) {
+    EmailService.emailSolicitor2(solicitud)
+        .then(data => {
+            return data
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
+
+
 
 export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
@@ -29,13 +43,14 @@ export default function RecepcionDetalleSolicitud() {
     const [atender, setAtender]= React.useState(false)
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
     
+
     const [notify, setNotify] = React.useState({ 
         isOpen: false, message: '', type: '' 
     })
 
     React.useEffect(() => {
         // console.log("actualizada: ", solicitud)
-        if (solicitud.estado === '3') {
+        if (solicitud.estado === '3' && solicitud.cambioEstado) {
             /* secretario responde en lugar del delegado */
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
@@ -45,6 +60,8 @@ export default function RecepcionDetalleSolicitud() {
                         type: 'success'
                     })
                     setAtender(false)
+                    /* Send notification to solicitador */
+                    sendEmailNotification(solicitud)
                 })
                 .catch(err => {
                     /* error :( */
@@ -83,6 +100,8 @@ export default function RecepcionDetalleSolicitud() {
             },
             observacion: atencion.observacion,
             resultado: atencion.resultadoID,
+            /* only for FrontEnd */
+            cambioEstado: true
         }))
         // console.log("despues", solicitud)
     }
@@ -105,13 +124,13 @@ export default function RecepcionDetalleSolicitud() {
                 alignItems="center"
             >
             <Grid item xs={6} md={1} mb={3}>
-                    <Controls.Button
-                        variant="outlined"
-                        text="Regresar"
-                        size="small"
-                        startIcon={<ArrowBackIcon />}
-                        onClick={retornar}
-                    />
+                <Controls.Button
+                    variant="outlined"
+                    text="Regresar"
+                    size="small"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={retornar}
+                />
             </Grid>
             </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
@@ -123,7 +142,7 @@ export default function RecepcionDetalleSolicitud() {
                 */}
                 
                 {/* Respuesta */}
-                { solicitud.resultado!=0?
+                { solicitud.resultado!=0? 
                     <ResultadoSolicitud solicitud={solicitud}/> :
                     atender? 
                         <AtenderSolicitudForm 
@@ -131,17 +150,18 @@ export default function RecepcionDetalleSolicitud() {
                             solicitud={solicitud}
                             submitAtencion={submitAtencion}
                         /> :
-                        <Box  mr={"210px"} sx={{display: "flex", justifyContent: 'flex-end'}}> 
-                            <Stack mt={2} mb={2}>
-                                <Controls.Button
-                                    text="Atender"
-                                    type="submit"   // html property (not component)
-                                    onClick={() => {setAtender(true)}}
-                                />
-                            </Stack>
+                        /* ACCIONES */
+                        <Box  mr={"210px"} mt={2} mb={2} sx={{display: "flex", justifyContent: 'flex-end'}}> 
+                            <Controls.Button
+                                text="Atender"
+                                type="submit"   // html property (not component)
+                                onClick={() => {setAtender(true)}}
+                            />
                         </Box>
+                    
                 }
             </Paper>
+            <Notification notify={notify} setNotify={setNotify} />
         </>
     )
 }

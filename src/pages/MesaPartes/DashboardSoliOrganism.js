@@ -90,7 +90,6 @@ export default function DashboardSoliOrganism(props) {
                                             sx={{marginLeft:"20%", marginRight:"10px", marginBottom:"4px"}}
                                         />
                                         <div/>
-                                        {console.log("delegado",delegado)}
                                         { item.estado==2 && !delegado && rol!=6? 
                                             <Typography paragraph display="inline" sx={{color:"primary.light", mt:2, ml:"10px"}}>
                                                {item.delegado.fullName}
@@ -105,11 +104,11 @@ export default function DashboardSoliOrganism(props) {
                                                 solicitudinit: item
                                             }
                                         }}  style={{ textDecoration: 'none' }}>
-                                        <Controls.Button
-                                            text="Detalle"
-                                            type="submit"
-                                            onClick={() => { getRow(item) }}
-                                        />
+                                            <Controls.Button
+                                                text="Detalle"
+                                                type="submit"
+                                                onClick={() => { getRow(item) }}
+                                            />
                                         </Link>
                                     </TableCell>
                                 </TableRow>
@@ -127,10 +126,12 @@ export default function DashboardSoliOrganism(props) {
 function getTipoDetalle(item,user,rol){
     if(rol==6){
         return "/secretaria/mesaPartes/solicitudDetalle"
-    } else if(item.solicitadorID== user.id){ //MisSolicitudes
-        if(rol==1) return "/doc/solicitudDetalle"
-    } else if (item.delegadoID== user.id){ //Delegados
+    } else if (item.delegadoID== user.persona.id){ //Delegados
+        /* ejecutar esta primero por si se la delegan a si mismo */
         if(rol==1) return "/doc/misDelegados/solicitudDetalle"
+    } else if(item.solicitadorID== user.persona.id){ //MisSolicitudes
+        if(rol==1) return "/doc/solicitudDetalle"
+        else if(rol==7) return "/invitado/mesaPartes/solicitudDetalle" 
     }
     return "/doc/solicitudDetalle"
 }

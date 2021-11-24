@@ -21,6 +21,18 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
 
     const [departamento, setDepartamentos] = React.useState([]);
 
+
+    const handleInputChangeNumber = async (e) => {
+        const pattern = /^[0-9]*$/;   
+        console.log(e.target.value)
+        //let inputChar = String.fromCharCode(event.charCode)
+        if (!pattern.test(e.target.value)) {
+          e.target.value = await e.target.value.replace(/[^0-9]/g, "");
+          // invalid character, prevent input
+        }
+        handleInputChange(e)
+    }
+
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -31,8 +43,8 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
         let temp = {...errors}
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
-        if ('clave' in fieldValues)
-            temp.clave = fieldValues.clave ? "" : "Este campo es requerido."
+        if ('codigo' in fieldValues)
+            temp.codigo = fieldValues.codigo ? "" : "Este campo es requerido."
         if ('créditos' in fieldValues)
             temp.clave = fieldValues.créditos ? "" : "Este campo es requerido."
         setErrors({
@@ -64,41 +76,42 @@ export default function EditarCurso ({setOpenEditPopup, editarCurso, item}) {
         "creditos": parseInt(values.creditos),
         "seccion": seccion.persona.seccion,
       }
+      console.log(curso)
       editarCurso(curso);
     }
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container>
-                <Grid item sx={6} style={ColumnGridItemStyle}>
+            <Grid container rowSpacing = {0}>
+                <Grid item xs = {12} >   
                     < Typography variant="h4" mb={2} >
                            DATOS DEL CURSO
-                    </Typography>
-
+                    </Typography>        
                         <Controls.Input
                             name="codigo"
                             label="Clave"
                             value={values.codigo}
                             onChange = {handleInputChange}
                             error={errors.codigo}
-                        />
+                        />  
                         <Controls.Input
                             name="nombre"
                             label="Nombre"
                             value={values.nombre}
                             onChange = {handleInputChange}
                             error={errors.nombre}
-                        />
-                        <Controls.Input
+                        /> 
+                </Grid>
+                <Grid item xs = {4}>  
+                        <Controls.NumberPicker
                             name="creditos"
                             label="Créditos"
                             value={values.creditos}
-                            type= "number"
+                            type="number"
                             onChange = {handleInputChange}
                             error={errors.creditos}
                         />
                 </Grid>
-
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>

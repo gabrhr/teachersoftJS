@@ -170,9 +170,12 @@ const hallarEstado = (sesiones) => {
 }
 
 
-const fillHorarios = async (horarios) => {
+const fillHorarios = async (curso) => {
+  console.log(curso);
+  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , window.localStorage.getItem("ciclo"));
+
   const dataHorarios = [];
-  for(let hor of horarios){
+  for(let hor of dataHor){
       //Haremos el detalle
       const detalle = hallarDetalle(hor.sesiones);
       //Haremos el estado
@@ -181,8 +184,8 @@ const fillHorarios = async (horarios) => {
         "id": hor.id,
         "codigo": hor.codigo,
         "curso_ciclo": hor.curso_ciclo,
-        "ciclo": hor.ciclo,
-        "curso": hor.curso,
+        "ciclo": hor.curso_ciclo.ciclo,
+        "curso": hor.curso_ciclo.curso,
         "sesiones": hor.sesiones,
         "detalle": detalle,
         "estado": estado,
@@ -197,7 +200,7 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
     const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
 
     React.useEffect(() => {
-      fillHorarios(recordForEdit.recordForEdit.horarios)
+      fillHorarios(recordForEdit.recordForEdit)
         .then(horarios => {
           setRecords(horarios);        
         });  

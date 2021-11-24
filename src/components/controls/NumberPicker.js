@@ -4,8 +4,8 @@
 import React from 'react'
 import { TextField } from '@mui/material'
 
-export default function Input(props) {
-    const {name, label, value, error=null, onChange,...other} = props
+export default function NumberPicker(props) {
+    const {name, label, value, error=null, onChange, ...other} = props
     return (
         <TextField
             variant="outlined"  // The other one is "filled"
@@ -15,6 +15,9 @@ export default function Input(props) {
             onChange = {onChange}
             {...(error && {error: true, helperText: error})}
             {...other}
+            inputProps={{
+                step: "0.25",
+              }}
         />
     )
 }
