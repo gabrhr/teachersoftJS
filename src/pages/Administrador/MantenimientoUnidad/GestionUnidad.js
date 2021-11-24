@@ -272,6 +272,26 @@ export default function GestionUnidad() {
             </BoxTbl>
 
           </Paper>
+
+          <Popup
+            openPopup={openPopup}
+            setOpenPopup={setOpenPopup}
+            title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
+          >
+            <AgregarEditarUnidad
+                recordForEdit={recordForEdit}
+                addOrEdit={addOrEdit}
+                setOpenPopup={setOpenPopup}
+            />
+          </Popup>
+          <Notification
+            notify={notify}
+            setNotify={setNotify}
+          />
+          <ConfirmDialog
+            confirmDialog={confirmDialog}
+            setConfirmDialog={setConfirmDialog}
+          />
         </>
     );
 

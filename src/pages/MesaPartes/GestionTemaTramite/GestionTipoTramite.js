@@ -57,11 +57,15 @@ const getTipoTramite = async (id_tema) => {
   //SE DEBE CAMBIAR ESTA FUNCIÓN. SOLAMENTE ES PARA LA PRUEBA DEL FORMULARIO
   //ESTO DEBIDO A QUE SE CARGA AUTOMÁTICAMENTE CON EL PRIMER ID
   // DE TEMA TRÁMITE
-  
-  let auxTipos = await tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
+
   let auxTema = await tematramiteService.getTemaTramite(id_tema);
+
+  localStorage.setItem('nombreTema', auxTema ? auxTema.nombre: "No seleccionado" )
+
+  let auxTipos = await tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
   
-  localStorage.setItem('nombreTema', auxTema? auxTema.nombre:"No seleccionado")
+  
+
   auxTipos = auxTipos ?? [];
   console.log(auxTipos);
  

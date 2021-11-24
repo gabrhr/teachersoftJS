@@ -9,10 +9,10 @@ import UnidadService from '../../../services/departamentoService.js';
 
 const initialFieldValues = {
     id: 0,
-    nombre: '',
+    nombre: ''
 }
 
-export default AgregarEditarUnidad(props) {
+export default function AgregarEditarUnidad(props) {
 
     const {addOrEdit, recordForEdit, setOpenPopup} = props;
     const theme = useTheme();
@@ -39,6 +39,7 @@ export default AgregarEditarUnidad(props) {
         handleInputChange,
         resetForm
     } = useForm(recordForEdit? recordForEdit: initialFieldValues, true, validate);
+    
     const handleSubmit = async e => {
         e.preventDefault();
         let fechaCreacion= "";
@@ -47,6 +48,32 @@ export default AgregarEditarUnidad(props) {
                 const unid = await UnidadService.getUnidad(values.id);
                 fechaCreacion = unid.fecha_creacion;
             }
+            const newUnid = {
+                id:values.id,
+                nombre: values.nombre,
+                fecha_creacion:fechaCreacion,
+                fecha_modificacion:null,        
+            }
+            addOrEdit(newUnid,resetForm);
         }
     }
+
+    useEffect(() => {
+        if (recordForEdit != null) {
+           
+              setValues({
+                  ...recordForEdit
+              })
+          }
+    }, [recordForEdit])
+  
+    return (
+        <Form onSubmit={handleSubmit}>
+          <Grid container>
+            <Grid item sx={6} style={ColumnGridItemStyle}>
+
+            </Grid>
+          </Grid>
+        </Form>
+    );
 }
