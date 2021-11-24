@@ -38,11 +38,17 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    {
+   {
         id: 'name',
         label: 'Tipo de Trámite',
         numeric: false,
         sortable: true
+    },
+    {
+      id: 'acciones',
+      label: '',
+      numeric: false,
+      sortable: false
     }
 ]
 
@@ -53,6 +59,9 @@ const getTipoTramite = async (id_tema) => {
   // DE TEMA TRÁMITE
   
   let auxTipos = await tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
+  let auxTema = await tematramiteService.getTemaTramite(id_tema);
+  
+  localStorage.setItem('nombreTema', auxTema.nombre)
   auxTipos = auxTipos ?? [];
   console.log(auxTipos);
  
@@ -220,7 +229,7 @@ const getTipoTramite = async (id_tema) => {
     return(
         <>
          <Paper variant="outlined" sx={PaperStyle}>
-            Tema del Trámite: {tematramiteService.getTemaTramite(idTramite).nombre}
+            Tema del Trámite: {localStorage.getItem('nombreTema')}
             <Controls.AddButton
               title="Nuevo Tipo de Trámite"
               variant="iconoTexto"
