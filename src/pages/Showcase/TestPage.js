@@ -9,7 +9,7 @@ import { DT } from '../../components/DreamTeam/DT'
 import HeadNotificationMisSolicitudes from '../NuevoUsuario/HeadNotificationMisSolicitudes'
 import RegistroForm from '../NuevoUsuario/RegistroForm'
 
-function _(str) {
+function _(s) {
     var alphabets =
         [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
@@ -34,9 +34,9 @@ function _(str) {
         ];
 
     var resultStr = [];
-    for (let i = 0; i < str.length; i++) {
+    for (let i = 0; i < s.length; i++) {
         for (let j = 0; j < alphabets.length; j++) {
-            if (str[i] === alphabets[j]) {
+            if (s[i] === alphabets[j]) {
                 resultStr.push(alphabets13[j]);
             }
         }
@@ -44,25 +44,9 @@ function _(str) {
     return resultStr.join("");
 };
 
-function _1(s) {
-    for (let i; i < s.length; i++)
-        s[i] += 13
-    return s
-}
-
-function _2(s) {
-    let s2
-    for (let i; i < s.length; i++)
-        s2 = s[i] -= 13
-    return s
-}
-
 export default function TestPage() {
     // let data = "http://front.teachersoft.solutions/invitado/atender/103&roberto_mitsuo@hotmail.com"
     let data = "103&roberto_mitsuo@hotmail.com"
-
-    let data_1 = _1(data)
-    let data_2 = _2(data_1)
 
     let params = data.split('&')
 
