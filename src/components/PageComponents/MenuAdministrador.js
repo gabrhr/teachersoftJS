@@ -27,6 +27,7 @@ export const MenuAdministrador = [
             text: 'Sección',
             path: '/admin/mantenimiento/sec',
             indice: 2,
-            }]
+            }
+        ]
     },
 ];

@@ -66,7 +66,7 @@ const GoogleLoginButton = () => {
                 headers: {
                     Authorization: `${response.accessToken}`
                 },
-                timeout: 10000
+                timeout: 20000
             };
             const data = {
             
@@ -83,23 +83,15 @@ const GoogleLoginButton = () => {
                 const request = await axios.post(`${url}/usuario/postlogin`, data,secureConfig);
                 if(request){
                     console.log(request.data)
-                    /* localStorage("user",request.data)  */
-                    /*  localStorage.setItem("user", JSON.stringify(request.data.user));
-                    localStorage.setItem("token", JSON.stringify(request.data.token));
-
-                    setCurrent(request.data.user.persona.tipo_persona);*/
                     setUser(request.data.user)
                     setRol(request.data.user.persona.tipo_persona)
                     setToken(request.data.token)
-                    console.log("hola mundo")
-                    const user = await userService.getUsuario(1);
-                    console.log(user);
-                    setLoading(true);
                 }
             } catch(except) {
                 console.error(except)
                 signOut()
             }
+            setLoading(true);
             refreshTokenSetup(response)
         }
     }  

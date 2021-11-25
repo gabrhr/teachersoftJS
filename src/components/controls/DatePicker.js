@@ -1,6 +1,6 @@
 import React from 'react'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import { DateTimePicker as MuiDatePicker, LocalizationProvider } from '@mui/lab'
+import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import { TextField } from '@mui/material';
 import esLocale from 'date-fns/locale/es';
 
@@ -17,8 +17,9 @@ export default function DatePicker(props) {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
-            <MuiDatePicker
+            <DesktopDatePicker
                 name={name}
+                inputFormat="dd/MM/yyyy"
                 label={label}
                 value={value}
                 onChange={date => onChange(convertToDefaultEventParameter(name, date))}

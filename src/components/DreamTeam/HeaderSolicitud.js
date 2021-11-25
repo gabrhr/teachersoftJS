@@ -29,7 +29,7 @@ export default function HeaderSolicitud(props) {
                     : `${solicitud.solicitador.fullName}`}
                 </Typography>
                 <Typography display="inline" fontWeight="530"  sx={{color:"primary.light"}}>
-                    {verificarExterno(solicitud.solicitador)}
+                    {solicitador==false? "": verificarExterno(solicitud.solicitador)}
                 </Typography>
                 <div/>
                 <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
