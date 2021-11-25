@@ -14,7 +14,6 @@ function getSolicitud(s, setSolicitud) {
             console.log(s, solicitudes)
             setSolicitud({
                 ...solicitudes[0],
-                loaded: true
             })
         })
 }
@@ -24,6 +23,7 @@ function Lue({ e, s }) {
     const [solicitud, setSolicitud] = React.useState(
         MesaPartesService.solicitudInit()
     )
+    const [C, setC] = React.useState(() => <></>)
 
     function handleClick() {
         MesaPartesService.lue(e)
@@ -39,15 +39,25 @@ function Lue({ e, s }) {
     }, [])
 
     React.useEffect(() => {
-        getSolicitud(s, setSolicitud)
+        setTimeout(() => {
+            getSolicitud(s, setSolicitud)
+        }, 1000)
     }, [user])
+
+    React.useEffect(() => {
+        /* alldone, render ExternoAtenderSolicitud */
+        setC(
+            () => 
+                <ExternoAtenderSolicitud 
+                    solicitud={solicitud} 
+                    setSolicitud={setSolicitud}
+                />
+        )
+    }, [solicitud])
 
     return (
         <>
-            <ExternoAtenderSolicitud 
-                solicitud={solicitud} 
-                setSolicitud={setSolicitud}
-            />
+            {C}
         </>
     )
 }
