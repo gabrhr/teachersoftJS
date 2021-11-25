@@ -21,15 +21,13 @@ import { Link } from 'react-router-dom';
 import IconButton from '../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DT } from '../../../components/DreamTeam/DT'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CargaDocenteHorarios from '../../AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import CursoService from '../../../services/cursoService';
-import HorarioService from '../../../services/horarioService';
 import Fab from '@mui/material/Fab';
 import CheckIcon from '@mui/icons-material/Check';
 import Popup from '../../../components/util/Popup';
 import ModalValidarYEnviarSolicitud from './ModalValidarYEnviarSolicitud';
-import { useLocation } from 'react-router';
+
+import HorarioService from '../../../services/horarioService';
 
 const tableHeaders = [
   // {
@@ -96,92 +94,88 @@ const getEstadoCollection = [
   { id: '3', title: 'Pendiente' },
 ]
 
-function GetRow({ ...props }) {
-  /*  setOpenPopup(false) */
-  const history = useHistory()
-  history.push("/as/asignacionCarga/registroCarga/horarios")
-  /* setDefValueNombre(`${props.clave} - ${props.nombre}`)
-  setDefValueCreditos(`${props.credito}`) */
+//--------------NUEVO
+const verificarEstado = (cur) =>{
+  let resultado = []  //0 - estado - 1 tipo
+
+  switch (cur.cantidad_horarios) {
+    case 0:
+      resultado[0] = "Sin horarios"; resultado[1] = "error";
+      break;
+    case 1:
+      resultado[0] = "Pendiente"; resultado[1] = "pendiente";
+      break;
+    //Caso contrario es 2 - esta todo bien asignado
+    default:
+      resultado[0] = "Atendido"; resultado[1] = "success";
+      break;
+  }
+
+  return resultado;
 }
 
 
 // //LLENADO DE LA LISTA DE CURSOS
-const fillCursos = async () => {
+const fillCursos = async (ciclo) => {
+  
   //En este caso la seccion sería unicamente el de ing informática - MUST: Hacerlo dinámico
-  const dataCur = await CursoService.getCursosxSeccionCodigoNombre(3,"");
-  const ciclo = window.localStorage.getItem("ciclo"); 
-  let horarios, horCiclo = []; //los horarios y los horarios que se meterán al ciclo
-  let estado = 'Pendiente', tipo= 'Pendiente'; //0 - no atendido - 1 atendido
-  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+  if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
+  const seccion = JSON.parse(window.localStorage.getItem("user"));
+  let dataCur = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), seccion.persona.seccion.id);
+  if(!dataCur) dataCur = [];
+
   const cursos = [];
   for(let cur of dataCur) {
-    horCiclo = [];  //se reinician los horarios
-    horarios = await HorarioService.listarPorCursoCiclo(cur.id , ciclo);
-    if(!horarios)  continue; //Si se retorna un promise vacio - no se lista el curso
-    for(let hor of horarios){
-      if (hor.sesiones.sesion_docente) {
-        estado = 'Asignados'
-        tipo= 'atendido'
-      }
-      else  {
-        estado = 'Por asignar'
-        tipo= 'pendiente'
-        break;
-      }
-    }
-    //Adicionalmente a esto
-    for(let hor of horarios){
-      console.log(hor);
-      horCiclo.push({
-        "id": hor.id,
-        "codigo": hor.codigo,
-        "ciclo":{
-          "id": ciclo,
-        } ,
-        "curso":{
-          "id": cur.id,
-        },
-        "curso_ciclo": hor.curso_ciclo.id,
-        "sesiones": hor.sesiones
-      })
-    }
     //Hacemos la creación y verificación de los estados
+    const resultadoEstados = verificarEstado(cur);
+    //console.log(resultadoEstados);
+    let estado = resultadoEstados[0], tipo= resultadoEstados[1]; 
+
+
     cursos.push({
-      "id": cur.id,
-      "nombre": cur.nombre,
-      "codigo": cur.codigo,
-      "creditos": cur.creditos,
+      "id": cur.curso.id,
+      "nombre": cur.curso.nombre,
+      "codigo": cur.curso.codigo,
+      "creditos": cur.curso.creditos,
       "seccion": {
-        "id": cur.seccion.id,
-        "nombre": cur.seccion.nombre,
+        "id": cur.curso.seccion.id,
+        "nombre": cur.curso.seccion.nombre,
         "departamento":{
-          "id":cur.seccion.departamento.id,
-          "nombre":cur.seccion.departamento.nombre,
+          "id":cur.curso.seccion.departamento.id,
+          "nombre":cur.curso.seccion.departamento.nombre,
         }
       },
-      "horarios": horCiclo,
       "estado": estado,
-      "type": tipo
+      "type": tipo,
+
+      "curso": cur.curso,
+      "ciclo": cur.ciclo,
+      "id_cursociclo":cur.id,
+      "estado_tracking": cur.estado_tracking,
+      "cantidad_horarios": cur.cantidad_horarios,
     })
 
   }
-  console.log(cursos);
+  //console.log(cursos);
   return cursos;
 }
 
 
 export default function CargaDocente() {
-  // const location= useLocation()
-  // const {solicitud}=location.state
+  const [ciclo, setCiclo] = useState ();
+
   const [openConfVal, setOpenConfVal] = useState(false)
   const [asunto, setAsunto] = useState("")
   const [cuerpo, setCuerpo] = useState("")
   const [openValYEnvSolPopup, setOpenValYEnvSolPopup] = useState(false)
+
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const SubtitulosTable = { display: "flex" }
   const [recordsForEdit, setRecordForEdit] = useState()
   const [records, setRecord] = useState([])
   const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
+  const [row, setRow] = useState(false) //Sacamos la linea seleccionada
+  
   // en lugar de la de cursos
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
   const {
@@ -190,6 +184,11 @@ export default function CargaDocente() {
     handleInputChange
   } = useForm(getEstadoCollection[0]);
 
+    function getRow({ ...props }) {
+        setRow(props)
+    }
+
+    console.log(ciclo);
   const {
     TblContainer,
     TblHead,
@@ -199,13 +198,13 @@ export default function CargaDocente() {
   } = useTable(records, tableHeaders, filterFn);
 
     React.useEffect(() => {
-      fillCursos()
+      fillCursos(ciclo)
       .then (newCur =>{
         if(newCur)
           setRecord(newCur);
-        //console.log(newCur);
+        //console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: ", newCur);
       });
-    }, [])
+    }, [ciclo])
 
   const handleSearch = e => {
     let target = e.target;
@@ -232,30 +231,12 @@ export default function CargaDocente() {
 
   return (
     <Form>
-      <ContentHeader
-        text="Registro de Carga Docente"
-        cbo={horarios ? false : true}
+      <ContentHeader 
+          text="Gestión de la carga de horarios"
+          cbo= {true}
+          records = {ciclo}
+          setRecords = {setCiclo}
       />
-      {horarios ? (
-        <>
-          <Controls.Button
-            variant="outlined"
-            text="Regresar"
-            size="small"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => { setHorarios(false) }}
-          />
-          <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}>
-            <Controls.Input
-              label="Curso"
-              value={`${recordsForEdit.codigo} - ${recordsForEdit.nombre}`}
-              disabled
-            />
-          </div>
-        </>
-      )
-        : (<> </>)
-      }
       {/* <Toolbar> */}
       <Grid container sx={{ mb: 3 }} display={horarios ? "none" : "flex"}>
         <Grid item xs={8} >
@@ -276,7 +257,7 @@ export default function CargaDocente() {
         <Grid item xs={.3} />
         <Grid item xs={3} sx={{ marginRight: theme.spacing(3) }}>
           <Box sx={{ width: "200px", align: "right" }}>
-            <Controls.Select
+            {/* <Controls.Select
               name="id"
               label="Estados"
               value={values.id}
@@ -284,7 +265,7 @@ export default function CargaDocente() {
               options={getEstadoCollection}
               type="contained"
             // displayNoneOpt
-            />
+            /> */}
           </Box>
         </Grid>
       </Grid>
@@ -295,8 +276,6 @@ export default function CargaDocente() {
               <Typography variant="h4" style={SubtitulosTable}>
                 Lista de Horarios
               </Typography>
-              {console.log(recordsForEdit)}
-              <CargaDocenteHorarios recordForEdit = {recordsForEdit} setRecordForEdit = {setRecordForEdit} />
             </>
           ) 
           : (
@@ -325,15 +304,23 @@ export default function CargaDocente() {
                         <StyledTableCell>
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
-                        <StyledTableCell>
-                          <IconButton size="small"
-                            onClick={() => { openInPopup(item) }}
-                          >
-                            <ArrowForwardIosIcon fontSize="small" />
+                        {item.estado !== "Sin horarios" ?
+                          <StyledTableCell>
+                            <Link to ={{
+                                pathname:`/cord/asignacionCarga/registroCarga/horarios`,
+                                state:{
+                                    curso: item
+                                }
+                            }}  style={{ textDecoration: 'none' }}>
+                              <IconButton size="small"
+                                onClick={() => { getRow(item) }}
+                              >
+                                <ArrowForwardIosIcon fontSize="small" />
 
-                          </IconButton>
-                        </StyledTableCell>
-
+                              </IconButton>
+                            </Link>
+                          </StyledTableCell>
+                        : <StyledTableCell></StyledTableCell>  }
                       </StyledTableRow>
                     ))
                   }
@@ -345,6 +332,7 @@ export default function CargaDocente() {
           )
         }
       </Paper>
+
       <Fab color="primary" aria-label="add" variant = "extended" 
             sx={{position:'fixed',
 	          height:'40px',
@@ -357,13 +345,16 @@ export default function CargaDocente() {
       <Popup
                 openPopup={openValYEnvSolPopup}
                 setOpenPopup={setOpenValYEnvSolPopup}
-                title="Validar y enviar solicitud a la facultad"
+                title="Validar Carga del Ciclo"
+                size = "sm"
             >
                <ModalValidarYEnviarSolicitud /*solicitud = {solicitud}*/asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto}
                                             setCuerpo={setCuerpo} setOpenValYEnvSolPopup = {setOpenValYEnvSolPopup}
                                             openValYEnvSolPopup = {openValYEnvSolPopup} openConfVal={openConfVal}
-                                            setOpenConfVal={setOpenConfVal}/>
+                                            setOpenConfVal={setOpenConfVal} cursos = {records}/>
       </Popup>
+
+
     </Form>
   )
 }

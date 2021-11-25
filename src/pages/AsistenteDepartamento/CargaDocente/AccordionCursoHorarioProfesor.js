@@ -1,13 +1,21 @@
+/* Author: Mitsuo
+ *
+ * Registro de Carga Docente (asignar docentes a los horarios)
+ * 
+ * Componente donde se muestran los horarios de un curso seleccionado.  Cada
+ * horario se puede expandir y mostrar la lista de docentes actualmente
+ * asignados.
+ */
 import React from 'react'
 import { Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
-import { DT } from '../../components/DreamTeam/DT'
+import { DT } from '../../../components/DreamTeam/DT'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import AccordionDetailsCursoHorarioProfesor from './AccordionDetailsCursoHorarioProfesor'
-import HorarioService from '../../services/horarioService';
+import AccordionDetailsHorarioProfesor from './AccordionDetailsCursoHorarioProfesor'
+import HorarioService from '../../../services/horarioService';
 
-import { Controls } from '../../components/controls/Controls';
+import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
     { id: '1', title: 'Horarios' },
@@ -30,113 +38,6 @@ function HeaderBoxs(props) {
         ))
     )
 }
-/*
-const fillHorarios = async () => {
-  //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
-  const dataHor = await HorarioService.getHorarios();
-  //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
-  const horarios = [];
-  if(!dataHor)  {
-    console.error("No se puede traer la data del servidor de los horarios")
-    return [];
-  }
-  for (let hor of dataHor){
-    await horarios.push({
-      "id": hor.id,
-      "codigo": hor.codigo,
-      "tipo": hor.tipo,
-      "horas_semanales": hor.horas_semanales,
-      ciclo:{
-        "id": hor.ciclo.id,
-      },
-      curso:{
-        "id": hor.curso.id,
-      },
-      docentes:[{
-        clase: [
-        {
-            id: 20201234,
-            nombre: 'Freddy Paz',
-            seccion: 'Ing. Informatica',
-            tipo: 'TC',
-            cargaHoraria: 10,
-            deudaHoraria: 2
-        }
-        ],
-        lab: [
-            {
-                id: 20001234,
-                nombre: 'Andres',
-                seccion: 'Ing. Informatica',
-                tipo: 'TPA',
-                cargaHoraria: 6,
-                deudaHoraria: 0
-            },
-            {
-                id: 20004321,
-                nombre: 'Bruno',
-                seccion: 'Ing. Informatica',
-                tipo: 'TPA',
-                cargaHoraria: 4,
-                deudaHoraria: 0
-            }
-        ]
-      }],
-      hora_sesion: [HorarioService.convertSesiontoString(hor.sesiones[0].dia_semana, 
-        hor.sesiones[0].hora_inicio, hor.sesiones[0].media_hora_inicio, 
-        hor.sesiones[0].hora_fin, hor.sesiones[0].media_hora_fin)],
-      "estado": 'sin Docente'
-    })
-    //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
-
-  }
-
-  console.log(horarios);
-
-  return horarios;
-}
-*/
-
-/*
-    El horaraio se recuperará - de un llamado axios que es - getHorariosxCicloxCurso - 
-    HORARIO{
-        id: numero - identificador,
-        codigo: codigo del horario - 0881 1081
-        curso:{
-            id: cursoid
-            nombre: nombre del curso
-            seccion:{
-                id:
-                departamento:{
-                    
-                }
-            }
-        }
-        ciclo:{
-            id: mismo id que se tiene seleccionado
-        }
-        sesiones:[{
-            //no esta pero para que se enteinda mejor: tipo_sesion: compartida- 0 [suma de profesores = horas] o codictado - 1[horas = horas_de_profesor]: 
-            secuencia: tipo del horario [clase o laboratorio: 0 o 1]
-            horas: hor.sesiones.horas [valor fijo ingresado de las horas que corresponden a la secuencia - Clase ocupa en su dictado 3 horas]
-            sesiones_dictado:[{
-                persona:{
-                    id_persona: es el docente como tal - su id - 
-                    el resto de datos:
-                    ---------------------------------------------------------
-                    PERSONA TAMBIEN CAMBIO
-                    deuda: del ciclo pasado - cuantas horas me debio?
-                    carga_horaria: este es el valor fijo - las horas que debería dictar un docente por cada ciclo - TP O TCA AUTOMTICO - 10 A 6
-                    carga_del_ciclo: 3              |carga: |carga_del_ciclo -> 8 + 3 = 11  > carga_horaria = 10|deuda: 2-1 = 1|
-                }
-                horas_dictadas: 3
-            },
-                {OTRO SESION_DICTADO
-                horas_dictadas: 3}
-        ]
-        }]
-    }
-*/
 
 function chompDocentes(sesiones) {
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
@@ -176,7 +77,7 @@ function chompDetalles(sesiones) {
 
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
-    if(!laboratorio) laboratorio = []
+    //if(!laboratorio) laboratorio = []
     console.log("clase: ", clase, "laboratorio: ", laboratorio);
     return (
         <>
@@ -220,7 +121,6 @@ function generateRow(horario) {
 
 /* Generates a customized row with the data */
 function generateRows(records) {
-    console.log("horarios de curso sel: ", records)
     return (
         records.map(horario => (
             <Accordion disableGutters>
@@ -232,12 +132,12 @@ function generateRows(records) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsCursoHorarioProfesor sesiones={horario.sesiones} />
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario}/>
                 </AccordionDetails>
             </Accordion>
         ))
     )
-}
+} 
 
 const hallarDetalle = (sesiones) => {
   let hor_clases = 0, hor_labs = 0;
@@ -257,11 +157,12 @@ const hallarEstado = (sesiones) => {
     let sumaHorasdoc = 0;
     if(ses.sesion_docentes){
       for (let docente of ses.sesion_docentes){
-        sumaHorasdoc += docente.hora_sesion; 
+        sumaHorasdoc += docente.horas_dictado_docente_sesion; 
       }
     }
     //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
-    (sumaHorasdoc < sesiones.horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+    (sumaHorasdoc >= sesiones[0].horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+
     if(estado === "Faltan Horas") break;
   }
 
@@ -269,9 +170,12 @@ const hallarEstado = (sesiones) => {
 }
 
 
-const fillHorarios = async (horarios) => {
+const fillHorarios = async (curso) => {
+  console.log(curso);
+  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , window.localStorage.getItem("ciclo"));
+
   const dataHorarios = [];
-  for(let hor of horarios){
+  for(let hor of dataHor){
       //Haremos el detalle
       const detalle = hallarDetalle(hor.sesiones);
       //Haremos el estado
@@ -279,8 +183,9 @@ const fillHorarios = async (horarios) => {
       dataHorarios.push({
         "id": hor.id,
         "codigo": hor.codigo,
-        "ciclo": hor.ciclo,
-        "curso": hor.curso,
+        "curso_ciclo": hor.curso_ciclo,
+        "ciclo": hor.curso_ciclo.ciclo,
+        "curso": hor.curso_ciclo.curso,
         "sesiones": hor.sesiones,
         "detalle": detalle,
         "estado": estado,
@@ -295,7 +200,7 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
     const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
 
     React.useEffect(() => {
-      fillHorarios(recordForEdit.recordForEdit.horarios)
+      fillHorarios(recordForEdit.recordForEdit)
         .then(horarios => {
           setRecords(horarios);        
         });  

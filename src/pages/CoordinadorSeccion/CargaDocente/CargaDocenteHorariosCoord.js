@@ -10,7 +10,7 @@ import { Controls } from '../../../components/controls/Controls'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useHistory} from 'react-router-dom'
 
-export default function CargaDocenteHorarios() {
+export default function CargaDocenteHorariosCoord() {
   const history = useHistory()
   const location= useLocation()
   const {curso} = location.state
@@ -18,7 +18,7 @@ export default function CargaDocenteHorarios() {
   const [recordForEdit, setRecordForEdit] = useState(curso)
 
   const handleClick = e =>{
-    history.push("/as/asignacionCarga/registroCarga")
+    history.push("/cord/asignacionCarga/registroCarga")
   }
 
   return (
@@ -42,8 +42,7 @@ export default function CargaDocenteHorarios() {
           />
         </div> */}
         <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}/>
-        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit} curso = {curso}/>
-        {console.log("cursefwerwerwo: ",curso)}
+        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit}/>
       </Form>
   )
 }

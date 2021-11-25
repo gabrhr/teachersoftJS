@@ -13,14 +13,7 @@ import ModalDocenteClasesBusqueda from "./ModalDocenteClasesBusqueda"
 import HorarioService from '../../../services/horarioService';
 import CursoService from '../../../services/cursoService';
 import PersonaService from '../../../services/personaService';
-import {useHistory} from 'react-router-dom'
-import { useLocation } from 'react-router';
-import { Link } from "react-router-dom";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import  ContentHeader from '../../../components/AppMain/ContentHeader';
-import Popup from '../../../components/util/Popup'
-import ModalCancelarAsignarDocentes from "./ModalCancelarAsignarDocentes";
-import ModalGuardarAsignarDocentes from "./ModalGuardarAsignarDocentes";
+
 const fillDocentes = async() => {
   //Llamado del axios para llenar a los docentes - personas con id_rol = 1
   let docentes = [];
@@ -40,12 +33,7 @@ const fillDocentes = async() => {
   return docentes
 }
 
-export default function ModalDocenteClases(){
-    const [openCancelarPopup, setOpenCancelarPopup] = useState(false)
-    const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
-    const history = useHistory()
-    const location= useLocation()
-    const {docentesAsig, horario, tipo, curso} = location.state
+export default function ModalDocenteClases({docentesAsig, horario, tipo, actHorario, setActHorario, openPopUp, setOpenPopUp}){
     const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
     const [tipoDic, setTipoDic] = useState(tipo ? horario.sesiones[1].tipo_dictado : horario.sesiones[0].tipo_dictado);
@@ -183,62 +171,37 @@ export default function ModalDocenteClases(){
         console.log(dataPer);
       }
 
-      // if(dataHor){
-      //   history.push('/as/asignacionCarga/registroCarga/horarios')
-      // } 
-      console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
+      if(dataHor){
+        setActHorario(dataHor);
+        setOpenPopUp(false)
+      } 
     }
 
     return(
-      <>
-        <ContentHeader 
-        text= {tipo?"Búsqeda de docentes para laboratorios":"Búsqeda de docentes para clases"}
-        cbo= {false}
-        />
-        <Controls.Button
-          variant="outlined"
-          text="Regresar"
-          size="small"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => {setOpenCancelarPopup(true)}}
-        />
-          <Form /*onSubmit={handleSubmit}*/>
-                  <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig} tipo_dictado = {tipoDic} setTipoDic = {setTipoDic}
-                                  sesion = {tipo ? horario.sesiones[iLab].horas : horario.sesiones[iClase].horas} recordsBusq = {recordsBusq} setRecordsBusq = {setRecordsBusq}
-                                  recordsDel = {recordsDel} setRecordsDel = {setRecordsDel}/>
-                  <Grid cointainer align="right" mt={2.5} />   
-                  <hr color = "#636e9a"/> 
-                  <Grid cointainer align="right" mt={2.5} />
-                  <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {recordsAsig} setRecordsAsig = {setRecordsAsig}/>
-              <Grid cointainer align="right" mt={5}>
-                  <div>
-                      <Controls.Button
-                          // variant="contained"
-                          // color="primary"
-                          // size="large"
-                          text="Guardar"
-                          onClick={()=>{setOpenGuardarPopup(true)}}
-                      >
-                      </Controls.Button>
-                  </div>
-              </Grid>
-          </Form>
-          <Popup
-                openPopup={openCancelarPopup}
-                setOpenPopup={setOpenCancelarPopup}
-                title="Regresar"
-                size = "sm"
-            >
-               <ModalCancelarAsignarDocentes setOpenCancelarPopup={setOpenCancelarPopup} curso = {curso}/>
-            </Popup> 
-            <Popup
-                openPopup={openGuardarPopup}
-                setOpenPopup={setOpenGuardarPopup}
-                title="Guardar"
-                size = "sm"
-            >
-               <ModalGuardarAsignarDocentes setOpenGuardarPopup = {setOpenGuardarPopup} guardarAsignacion = {handleSubmit}/>
-            </Popup>
-        </>
+        
+        <Form onSubmit={handleSubmit}>
+            <Paper> 
+                <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig} tipo_dictado = {tipoDic} setTipoDic = {setTipoDic}
+                                sesion = {tipo ? horario.sesiones[iLab].horas : horario.sesiones[iClase].horas} recordsBusq = {recordsBusq} setRecordsBusq = {setRecordsBusq}
+                                recordsDel = {recordsDel} setRecordsDel = {setRecordsDel}/>
+                <Grid cointainer align="right" mt={2.5} />   
+                <hr color = "#636e9a"/> 
+                <Grid cointainer align="right" mt={2.5} />
+                <ModalDocenteClasesBusqueda records = {recordsBusq} setRecords = {setRecordsBusq} recordsAsig = {recordsAsig} setRecordsAsig = {setRecordsAsig}/>
+            </Paper>
+            <Grid cointainer align="right" mt={5}>
+                <div>
+                    <Controls.Button
+                        // variant="contained"
+                        // color="primary"
+                        // size="large"
+                        text="Guardar"
+                        type="submit"
+                        onClick={handleSubmit}
+                    >
+                    </Controls.Button>
+                </div>
+            </Grid>
+        </Form>
     )
 }

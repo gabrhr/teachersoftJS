@@ -1,8 +1,5 @@
-/* Author: Gabriela
- */
-
 import React, { useState } from 'react'
-import AccordionHorarioProfesor from './AccordionHorarioProfesor'
+import AccordionHorarioProfesor from '../../AsistenteSeccion/CargaDocente/AccordionHorarioProfesor'
 import { useLocation } from 'react-router';
 import { Form, useForm } from '../../../components/useForm';
 import ContentHeader from '../../../components/AppMain/ContentHeader'
@@ -10,7 +7,7 @@ import { Controls } from '../../../components/controls/Controls'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useHistory} from 'react-router-dom'
 
-export default function CargaDocenteHorarios() {
+export default function CargaDocenteHorariosCoord() {
   const history = useHistory()
   const location= useLocation()
   const {curso} = location.state
@@ -18,7 +15,7 @@ export default function CargaDocenteHorarios() {
   const [recordForEdit, setRecordForEdit] = useState(curso)
 
   const handleClick = e =>{
-    history.push("/as/asignacionCarga/registroCarga")
+    history.push("/cord/asignacionCarga/registroCarga")
   }
 
   return (
