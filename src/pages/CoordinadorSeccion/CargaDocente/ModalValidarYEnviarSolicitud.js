@@ -107,6 +107,7 @@ const validateItems = (cursos) => {
         "cantidad_horarios": cur.cantidad_horarios,
       }
       console.log(cursocicloValidado);
+      let resultado  = CursoService.updateCursoCiclo(cursocicloValidado);
     }
   }
 
