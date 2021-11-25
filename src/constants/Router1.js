@@ -216,21 +216,24 @@ export default function Router1(props) {
           >
         </PrivateRoute>
         
-        <PrivateRoute exact path="/invitado/atender/:detalle"
+         {/* <PrivateRoute exact path="invitado/atender/solicitud"
           requireRoles={[7]}
           component={() =>
             <DelegadoExterno/>
           }
           >
-        </PrivateRoute>
-
+        </PrivateRoute> */}
+       
         {/* Login */}
+       
+        <Route path="/invitado/atenderxemail/" children={DelegadoExterno} />
         <Route exact path="/login" children={Login} />
         <Route exact path="/">
           {user?.id>0? 
             <Redirect to={generateRouteRol(rol)} /> 
             : <Redirect to="/login"/> }
         </Route>
+
         <Route default component={ErrorDireccionamiento} />
       </Switch>
     </Router>

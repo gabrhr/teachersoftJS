@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 /* From https://v5.reactrouter.com/web/example/auth-workflow */
 export default function PrivateRoute(props) {
     const {requireRoles,component: Component, ...rest } = props
-    
+    var pathDelegado = window.location.pathname;
     const history=useHistory();
     let rol = JSON.parse(localStorage.getItem("rol"))
     /* que hace `permiso`? */
