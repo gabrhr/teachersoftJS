@@ -118,10 +118,10 @@ const privateroutes = [
   { requireRoles: [4], path: "/ad/asignacionCarga/Cargadocente/horarios", page: CargaDocenteHorariosAd},
   { requireRoles: [4], path: "/ad/docentes", page: Vacio },
   { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: SolicitudesDelegadasAMi },
+  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: DelegadoSolicitudDetalle },  
   /* JD */
-  { requireRoles: [5], path: "/jd/asignacionCarga", page: Vacio },
+  { requireRoles: [5], path: "/jd/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [5], path: "/jd/docentes", page: Vacio },
   { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
   { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: MisSolicitudes },

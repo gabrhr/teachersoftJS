@@ -205,11 +205,23 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         alert("Error en la plantilla - Campo Clave")
         return false
       }
+      if(obj.Horario === "" || obj.Horario.length !== 4){
+        alert("Error en la plantilla - Campo Horario")
+        return false
+      }
+      if(!isNumeric(obj.Horas) || obj.Horas === ""){
+        alert("Error en la plantilla - Campo Horas")
+        return false
+      }
       if(obj.Nombre === ""){
         alert("Error en la plantilla - Campo Nombre")
         return false
       }
-      if(obj.Unidad === ""){
+      if(obj.Tipo === ""){
+        alert("Error en la plantilla - Campo Tipo")
+        return false
+      }
+      /*if(obj.Unidad === ""){
         alert("Error en la plantilla - Campo Unidad")
         return false
       }
@@ -224,19 +236,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       if(!isNumeric(obj.Carga_Horaria) || obj.Carga_Horaria === ""){
         alert("Error en la plantilla - Campo Carga_Horaria")
         return false
-      }
-      if(obj.Horario === "" || obj.Horario.length !== 4){
-        alert("Error en la plantilla - Campo Horario")
-        return false
-      }
-      if(obj.Tipo === ""){
-        alert("Error en la plantilla - Campo Tipo")
-        return false
-      }
-      if(!isNumeric(obj.Horas) || obj.Horas === ""){
-        alert("Error en la plantilla - Campo Horas")
-        return false
-      }
+      }*/
       return true
     }
 
@@ -264,6 +264,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         obj[headers[j]] = d;
                     }
                 }
+                console.log(obj)
                 if(!validate(obj)){
                   return
                 }
