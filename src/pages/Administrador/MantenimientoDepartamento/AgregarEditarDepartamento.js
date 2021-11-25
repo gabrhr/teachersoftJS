@@ -46,8 +46,8 @@ let initialFieldValues = {
     nombre: '',
     correo: '',
     unidad: {
-        id:  '',
-        nombre:    '',
+        id: dataUni[0] ? dataUni[0].id : '',
+        nombre:  dataUni[0] ? dataUni[0].nombre : '',
     }
 }
 
@@ -70,7 +70,6 @@ export default function AgregarEditarDepartamento(props) {
     }
     const validate = (fieldValues = values) => {
         let temp = {...errors}
-        let defaultError = "Este campo es requerido"
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
         if ('correo' in fieldValues)
@@ -80,12 +79,6 @@ export default function AgregarEditarDepartamento(props) {
                     : "Este correo no es válido"
         if ('unidad' in fieldValues)
             temp.unidad = DTLocalServices.requiredField(fieldValues.unidad)
-
-        if(recordForEdit){
-            temp.idUnidad = values.idUnidad !== 0 ? "" : defaultError;
-            } else{
-            temp.unidadId = values.unidadId !== 0 ? "":defaultError;
-            } 
         setErrors({
             ...temp
         })
@@ -118,6 +111,8 @@ export default function AgregarEditarDepartamento(props) {
             id: values.id,
             nombre: values.nombre,
             correo: values.correo,
+            fecha_creacion: fechaCreacion,
+            fecha_modificacion: null,
             fecha_fundacion: fechaCreacion,
             unidad:{
                 id: recordForEdit ? parseInt(values.idUnidad) : parseInt(values.unidadId),
@@ -184,13 +179,11 @@ export default function AgregarEditarDepartamento(props) {
                   <Controls.Select
                     name={recordForEdit ? "idUnidad" : "unidadId"}
                     label="Facultad"
-                    value={recordForEdit ? values.idUnidad : values.unidadId}
+                    value={recordForEdit ? values.idUnidad : values.unidadId == ('' || 0)? 1 : values.unidadId}
                     onChange={handleInputChange}
                     options={unidad}
-                    options={[{ id: 0, nombre: "Seleccionar" }]
-                    .concat(unidad)
-                  }
-                  error={recordForEdit ? errors.idUnidad : errors.unidadId}
+ 
+         
                   />
                 </Grid>
                 {/*

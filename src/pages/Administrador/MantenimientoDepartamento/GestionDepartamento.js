@@ -49,7 +49,7 @@ const getUnidades = async () => {
     ));
   }
   else console.log("No existen datos en Unidades");
-  window.localStorage.setItem('listUnidades',JSON.stringify(dataUni));
+  window.localStorage.setItem('listUnidades',unidades);
   return unidades;
 }
 
@@ -236,8 +236,8 @@ export default function GestionDepartamento() {
         fecha_creacion:departamento.fechaCreacion,
         fecha_fundacion: departamento.fechaFundacion,
         unidad: {
-          id: departamento.idUnidad,
-          nombre: departamento.nombreUnidad,
+          id: departamento.unidad.idUnidad,
+          nombre: departamento.unidad.nombreUnidad,
         }
       }
       
