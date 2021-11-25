@@ -9,6 +9,7 @@ import AtenderSolicitudForm from './AtenderSolicitudForm'
 import DetalleSoliOrganism from './DetalleSoliOrganism'
 import ResultadoSolicitud from './ResultadoSolicitud'
 
+
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
