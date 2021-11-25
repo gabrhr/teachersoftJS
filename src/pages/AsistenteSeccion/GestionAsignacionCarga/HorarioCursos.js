@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
 import { DT } from '../../../components/DreamTeam/DT'
 import HorarioService from '../../../services/horarioService';
@@ -18,6 +18,7 @@ import EliminarUnCurso from './EliminarUnCurso'
 import EliminarTodosLosCursos from './EliminarTodosLosCursos'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditarHorarioCurso from './EditarHorarioCurso'
+import { UserContext } from '../../../constants/UserContext';
 
 const initialFieldValues = {
     searchText: ''
@@ -165,6 +166,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     //const [columns, setColumns] = useState([]);
     //const [data, setData] = useState([]);
     //const [open, setOpen] = React.useState(false);
+    const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openOnePopup, setOpenOnePopup] = useState(false)
     const [openAllPopup, setOpenAllPopup] = useState(false)
@@ -198,7 +200,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
         setRecords(newHorarios);
         setCargaH(records);
       });
-      
+      console.log("El rol es", rol)
     }, [openPopupEdit])
   
     //console.log(records);
@@ -220,7 +222,12 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
         })
       }
     const handleClick = (e) => {
-        history.push("/as/asignacionCarga/cursos");
+      if(rol === 3){
+        history.push("/cord/asignacionCarga/cursos");
+      }else{
+        history.push("/as/asignadcionCarga/cursos");
+      }
+        
     };
 
     const guardarIndex = item => {
