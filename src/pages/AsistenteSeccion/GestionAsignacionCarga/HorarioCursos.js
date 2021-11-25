@@ -381,6 +381,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
                 title= {"Editar Horario"}
+                size = "sm"
             >
               <EditarHorarioCurso
                 recordForEdit={recordForEdit}

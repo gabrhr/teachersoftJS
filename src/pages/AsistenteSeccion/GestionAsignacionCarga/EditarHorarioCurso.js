@@ -94,8 +94,8 @@ export default function EditarHorarioCurso(props) {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container spacing = {0}>
-                <Grid item sx={4} md = {6} style={ColumnGridItemStyle}>
+            <Grid container spacing = {3} direction = "column">
+                <Grid item sx={6}>
                     < Typography variant="h4" mb={2} >
                            DATOS DEL HORARIO
                     </Typography>
@@ -151,7 +151,7 @@ export default function EditarHorarioCurso(props) {
                         </Typography>
                         
                         </Grid>*/}
-                <Grid sx = {2} item align="right">
+                <Grid item sx = {6} align = "right">
                     <div>
                         <Controls.Button
                             // disabled={true}
