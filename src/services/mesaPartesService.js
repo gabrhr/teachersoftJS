@@ -284,8 +284,8 @@ export function lue(e) {
         data: {
             usuario: e,
             persona: {
-                nombres: "Usuario",
-                apellidos: "Externo",
+                // nombres: "Usuario",
+                // apellidos: "Externo",
                 correo_pucp: e,
                 foto_URL: "http://example.com",     // facil cambiar esto por lo de assets..
             }
