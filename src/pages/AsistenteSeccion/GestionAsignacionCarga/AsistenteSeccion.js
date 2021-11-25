@@ -68,9 +68,6 @@ export default function AsistenteSeccion() {
     const vacio = [{
         "Clave": " ",
         "Nombre": " ",
-        "Unidad": " ",
-        "Creditos": " ",
-        "Carga_Horaria": " ",
         "Horario": " ",
         "Tipo": " ",
         "Horas": " "
