@@ -97,10 +97,10 @@ export function b2fPersona(x) {
         rolName: DTLocalServices.getRolName(x.tipo_persona),
         correo: x.correo_pucp,
         foto_URL: x.foto_URL,
-        seccionDepartamento: x.seccion? x.seccion.departamento.nombre + ' - ' + x.seccion.nombre: "" ,
-        
+        seccionDepartamento: x.seccion ? x.seccion.departamento.nombre + ' - ' + x.seccion.nombre : "",
+
         /* extra */
-        departamentoID: x.seccion? x.seccion.departamento.id: null,
+        departamentoID: x.seccion ? x.seccion.departamento.id : null,
     }
 }
 
@@ -168,17 +168,17 @@ export function f2bSolicitud(x) {
 
         /* tracking */
         estado_tracking: parseInt(x.estado, 10),
-        fecha_creacion: x.tracking.fecha_enviado 
-            ? x.tracking.fecha_enviado 
+        fecha_creacion: x.tracking.fecha_enviado
+            ? x.tracking.fecha_enviado
             : undefined,
-        fecha_recepcion: x.tracking.fecha_revision 
-            ? x.tracking.fecha_revision 
+        fecha_recepcion: x.tracking.fecha_revision
+            ? x.tracking.fecha_revision
             : undefined,
-        fecha_delegacion: x.tracking.fecha_delegado 
-            ? x.tracking.fecha_delegado 
+        fecha_delegacion: x.tracking.fecha_delegado
+            ? x.tracking.fecha_delegado
             : undefined,
-        fecha_atencion: x.tracking.fecha_atendido 
-            ? x.tracking.fecha_atendido 
+        fecha_atencion: x.tracking.fecha_atendido
+            ? x.tracking.fecha_atendido
             : undefined,
 
         /* respuesta */
@@ -195,25 +195,25 @@ export function f2bSolicitud(x) {
 export function _(s) {
     var wimbledon101 =
         [
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
-            " ", "-", "_", ".", "&", 
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            " ", "-", "_", ".", "&",
             "?", "!", "@", "#", "|",
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-            "1", "2", "3", "4", "5", "6", 
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            "1", "2", "3", "4", "5", "6",
             "7", "8", "9", "0", "=", ":",
         ];
     var wimbledon10113 =
         [
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             "?", "!", "@", "#", "|",
-            " ", "-", "_", ".", "&", 
+            " ", "-", "_", ".", "&",
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             "7", "8", "9", "0", "=", ":",
-            "1", "2", "3", "4", "5", "6", 
+            "1", "2", "3", "4", "5", "6",
         ];
 
     var s2 = [];
@@ -226,6 +226,38 @@ export function _(s) {
     }
     return s2.join("");
 };
+
+/* login de usuario externo,  e=email */
+export function lue(e) {
+    const config = {
+        headers: {
+            Authorization: "123"
+        },
+        timeout: 5000
+    }
+    return axios({
+        method: 'post',
+        url: `${url}/usuario/postlogin/`,
+        // url: `${url}/usuario/`,
+        data: {
+            usuario: e,
+            persona: {
+                nombres: "Usuario",
+                apellidos: "Externo",
+                correo_pucp: e,
+                foto_URL: "http://example.com",     // facil cambiar esto por lo de assets..
+            }
+        },
+        ...config,
+    })
+        .then(res => {
+            return res.data
+            // localStorage.setItem("token", res.data.token)
+            // localStorage.setItem("user", JSON.stringify(res.data.user))
+            // showOutput(res)
+        })
+        .catch(err => console.error(err));
+}
 //#endregion
 
 /* tema_tramite CRUD operations
@@ -326,7 +358,7 @@ export function getSolicitud(id) {
             return [solicitud]
         })
         .catch(err => console.error(err));
-    
+
 }
 
 export function getSolicitudesByIdSol(idPersona) {
@@ -335,16 +367,16 @@ export function getSolicitudesByIdSol(idPersona) {
         url: `${url}/mesa/idsolicitador=${idPersona}`,
         ...config
     })
-    .then(res => {
-        res.data.forEach((x, i) => {
-            res.data[i] = b2fSolicitud(x)
-        });
-        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-        // console.log(res.data)
-        // console.log(res)
-        return res.data
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            res.data.forEach((x, i) => {
+                res.data[i] = b2fSolicitud(x)
+            });
+            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+            // console.log(res.data)
+            // console.log(res)
+            return res.data
+        })
+        .catch(err => console.error(err));
 }
 
 export function getSolicitudesByIdDel(idPersona) {
@@ -354,15 +386,15 @@ export function getSolicitudesByIdDel(idPersona) {
         url: `${url}/mesa/iddelegado=${idPersona}`,
         ...config
     })
-    .then(res => {
-        res.data.forEach((x, i) => {
-            res.data[i] = b2fSolicitud(x)
-        });
-        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-        // console.log(res.data)
-        return res.data
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            res.data.forEach((x, i) => {
+                res.data[i] = b2fSolicitud(x)
+            });
+            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+            // console.log(res.data)
+            return res.data
+        })
+        .catch(err => console.error(err));
 }
 
 export function getSolicitudesByDep(idDepartamento) {
@@ -372,15 +404,15 @@ export function getSolicitudesByDep(idDepartamento) {
         url: `${url}/mesa/iddepartamento=${idDepartamento}`,
         ...config
     })
-    .then(res => {
-        res.data.forEach((x, i) => {
-            res.data[i] = b2fSolicitud(x)
-        });
-        // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
-        // console.log(res.data)
-        return res.data
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            res.data.forEach((x, i) => {
+                res.data[i] = b2fSolicitud(x)
+            });
+            // res.data.sort((x1, x2) => strcmp(x1.nombre, x2.nombre))
+            // console.log(res.data)
+            return res.data
+        })
+        .catch(err => console.error(err));
 }
 
 export function registerSolicitud(soli) {
@@ -396,7 +428,7 @@ export function registerSolicitud(soli) {
             // console.log("MPservice: registerSoli:", res)
             return res.data.id
         })
-        // .catch(err => console.error(err));
+    // .catch(err => console.error(err));
 }
 
 export function updateSolicitud(soli) {
@@ -412,5 +444,5 @@ export function updateSolicitud(soli) {
             // console.log("MPservice: registerSoli:", res)
             return res.data.id
         })
-        // .catch(err => console.error(err));
+    // .catch(err => console.error(err));
 }
