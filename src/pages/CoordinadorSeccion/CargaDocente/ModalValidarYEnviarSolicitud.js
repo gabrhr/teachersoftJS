@@ -206,6 +206,7 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                                 // size="large"
                                 text="Generar reporte"
                                 endIcon = {<EmailOutlinedIcon/>}
+                                onClick = {() => {setOpenReporte(!openReporte)}}
                             >
                             </Controls.Button>
                     </div>
