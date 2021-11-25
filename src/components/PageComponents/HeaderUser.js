@@ -150,7 +150,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function HeaderUser(props) {
-  const { user, rol, open,setOpen } = React.useContext(UserContext);
+  const { user, open,setOpen } = React.useContext(UserContext);
 
   /* estado del Drawer */
   //const [open, setOpen] = React.useState(true);
@@ -162,7 +162,8 @@ export default function HeaderUser(props) {
   };
 
   let rolName     // rolname
-  //let listaMenu = [];
+  let rol = JSON.parse(localStorage.getItem("rol"))
+
   if (rol == 0) {
     rolName = "Administrador"
     listaMenu = MenuAdministrador
@@ -189,7 +190,7 @@ export default function HeaderUser(props) {
     listaMenu = MenuExterno
   } else if(rol == 8) {
     rolName = "Asistente de Sección"  // arreglar
-    listaMenu = MenuAdministrador
+    listaMenu =[]
   }
 
   return (

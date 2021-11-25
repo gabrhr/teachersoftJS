@@ -68,14 +68,14 @@ const privateroutes = [
   { requireRoles: [0], path: "/admin/employees", page: Employees },
   /* Docente */
   /* TODO: Remover rol 8 (acceso temporal) */
-  { requireRoles: [0,1,8], path: "/doc/misSolicitudes", page: MisSolicitudes },
-  { requireRoles: [0,1,8], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
-  { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
-  { requireRoles: [0,1,8], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
-  { requireRoles: [0,1,8], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
+  { requireRoles: [1], path: "/doc/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [1], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
+  { requireRoles: [1], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
+  { requireRoles: [1], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
+  { requireRoles: [1], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
-  { requireRoles: [0,8], path: "/dragdrop", page: DragDropArchivos},
+  { requireRoles: [8], path: "/dragdrop", page: DragDropArchivos},
   
   /* AS */
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
@@ -86,11 +86,11 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
-  { requireRoles: [0,8], path: "/aea", page: CargaArchivos },
+  { requireRoles: [8], path: "/aea", page: CargaArchivos },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   /* CS*/
-  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
-  { requireRoles: [3, 8, 2], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
+  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
@@ -99,8 +99,8 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
 
   /* AD */
-  { requireRoles: [0, 1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
-  { requireRoles: [0, 1, 2, 4, 8], path: "/ad/asignacionCarga", page: CargaDocenteCursos },
+  { requireRoles: [1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
+  { requireRoles: [1, 2, 4, 8], path: "/ad/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [4], path: "/ad/docentes", page: Vacio },
   { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
   { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
@@ -132,7 +132,7 @@ export default function Router1(props) {
 
   function generateRouteRol(rol){
     switch (rol) {
-    case 0:
+      case 0:
           return "/admin"
       case 1:
           return "/doc"
@@ -209,7 +209,7 @@ export default function Router1(props) {
         </PrivateRoute>
         
         <PrivateRoute exact path="/registro"
-          requireRoles={[8]}
+          requireRoles={[8,7]}
           component={() =>
             <Registro/>
           }
