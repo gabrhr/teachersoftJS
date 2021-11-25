@@ -6,11 +6,15 @@ import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 import SimpleDatePicker from '../../../components/DreamTeam/SimpleDatePicker';
 import Notification from '../../../components/util/Notification'
+import ValidationBox from '../../../components/DreamTeam/ValidationBox';
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
 import CicloService from '../../../services/cicloService.js';
 import * as DTLocalServices from '../../../services/DTLocalServices';
-
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Collapse from '@mui/material/Collapse';
 
 
 const thisYear = new Date().getFullYear();
@@ -39,7 +43,7 @@ const initialFieldValues = {
 export default function AgregarEditarCiclo(props) {
 
     const {addOrEdit, recordForEdit, setOpenPopup} = props
-    const [open, isOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -61,7 +65,8 @@ export default function AgregarEditarCiclo(props) {
             temp.fechaFin = "La fecha de Fin debe ser mayor a la fecha de Inicio";
         }
         if (fechaMin >= fechaMax){
-            alert("La fecha de Inicio debe ser menor a la fecha Fin");
+            setOpen(true);
+            //alert("La fecha de Inicio debe ser menor a la fecha Fin");
         }
 
         setErrors({
@@ -162,7 +167,11 @@ export default function AgregarEditarCiclo(props) {
                         onChange={handleInputChange}
                         error={errors.fechaFin}
                     />
-                    
+                    <ValidationBox
+                        open = {open}
+                        setOpen = {setOpen}
+                        text = {"Verificar que la fecha de Inicio de ciclo sea menor a la fecha de fin de ciclo."}
+                    />
                 </Grid>
                 
             </Grid>
