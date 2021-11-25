@@ -37,8 +37,9 @@ function b2fTemaTramite(x) {
 }
 
 /* -----------fin de funciones auxiliares-------------- */
-
-export function getUnidades() {
+//Cambio de export function a const
+/*
+const  getUnidades() {
     return axios({
         method: 'get',
         url: `${url}/unidad/`,
@@ -53,5 +54,58 @@ export function getUnidades() {
             return res.data
         })
         .catch(err => console.error(err));
+}*/
+
+const getUnidades = async () => {
+    try{
+        const request = await axios.get(`${url}/unidad/`,
+            tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(err) {
+        console.error(err);
+    }
 }
 
+
+const getUnidad = async (id) => {
+    try{
+        const request = await axios.get(`${url}/unidad/${id}`,
+        tokenService.GetTokenPrueba(),
+        id);
+        return request.data;
+    } catch (err){
+        console.error(err)
+    }
+}
+
+const registerUnidad = async (newObject) => {
+    try{
+        const request = await axios.post(`${url}/unidad/`,
+         newObject,
+         tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+const updateUnidad = async (newObject, id) => {
+    try{
+        const request = await axios.put(`${url}/unidad/`,newObject, tokenService.GetTokenPrueba());
+        return request.data;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+const deleteUnidad = async (id) => {
+    try{
+        const request = await axios.delete(`${url}/unidad/${id}`,
+            tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+export default {getUnidades, getUnidad, registerUnidad, updateUnidad, deleteUnidad}

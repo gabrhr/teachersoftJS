@@ -40,8 +40,8 @@ const initialFieldValues = {
     tipoTramiteID: '0',
 
     /* EXTRA (solo se utilizan en este componente) */
-    unidadID: 0,
-    departamentoID: 0,
+    unidadID: 1,        // FCI
+    departamentoID: 3,  // Ingenieria
     seccionID: 0,
     temaTramiteID: 0,
     /* extra extra (no se usan aqui pero se listan para mantener un orden) */
@@ -55,8 +55,8 @@ function ActualForm(props) {
         comboData } = props
     /* data de los comboboxes */
     const [disable, setDisable] = React.useState({
-        departamentoID: true,
-        seccionID: true,
+        departamentoID: false,      // activado por defecto, igual que unidad
+        seccionID: false,           // como departamento activada, esta tambien
         temaTramiteID: true,
         tipoTramiteID: true
     })

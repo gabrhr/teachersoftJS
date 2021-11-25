@@ -1,9 +1,10 @@
 import { FormControl, FormControlLabel, Checkbox as MuiCheckbox } from '@mui/material';
+import { FormHelperText } from '@mui/material';
 import React from 'react'
 
 export default function Checkbox(props) {
 
-    const { name, label, value, onChange } = props;
+    const { name, label, value, onChange, error } = props;
 
     /* Event Parameters of Radio Button "onChange event" are different from
      * the usual (name:string, value:string).  They need to be converted */
@@ -14,7 +15,9 @@ export default function Checkbox(props) {
     })
 
     return (
-        <FormControl>
+        <FormControl
+            {...(error && {error: true})}
+        >
             <FormControlLabel
                 control = {
                     <MuiCheckbox
@@ -25,10 +28,10 @@ export default function Checkbox(props) {
                         />
                 }
                 label = {label}
-                sx={{width: '40%'}}
+                // sx={{width: '40%'}}
                 >
-
             </FormControlLabel>
+            {error && <FormHelperText>{error}</FormHelperText>}
         </FormControl>
     )
 }

@@ -78,9 +78,6 @@ export default function RecepcionDetalleSolicitud() {
     }, [solicitud])
     
     function submitAtencion(atencion) {
-        /* FIXME:  Respuesta de la solicitud Observacion no se actualiza luego de
-         *         hacer submit aqui.  Tiene que salir y volver a entrar a
-         *         RecepcionDetalleSolicitud */
         // console.log("antes", solicitud)
         setSolicitud(solicitud => ({
             ...solicitud, 
