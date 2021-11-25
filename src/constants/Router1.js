@@ -71,7 +71,7 @@ const privateroutes = [
   { requireRoles: [0,1,8], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [0,1,8], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [0,1,8], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
-  { requireRoles: [0,1,2,8], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
+  { requireRoles: [0,1,8], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
   { requireRoles: [0,8], path: "/dragdrop", page: DragDropArchivos},
