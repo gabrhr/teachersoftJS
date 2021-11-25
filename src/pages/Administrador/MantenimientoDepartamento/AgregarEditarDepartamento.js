@@ -5,17 +5,52 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 /* fake BackEnd */
-import * as employeeService from '../../../services/employeeService';
+import * as DTLocalServices from '../../../services/DTLocalServices';
 import DepartamentoService from '../../../services/departamentoService.js';
+import UnidadService from '../../../services/unidadService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
+const styles = {
+    columnGridItem: {
+      padding: 2
+    }
+  } 
 
-const initialFieldValues = {
+let dataUni = [];
+
+const getUnidades = async () => {
+    
+    dataUni = await UnidadService.getUnidades();
+    dataUni = dataUni ?? []  
+  
+    const unidades = [];
+    if(dataUni){
+      dataUni.map(unid => (
+        unidades.push({
+          id: unid.id.toString(),
+          activo: unid.activo,
+          nombre: unid.nombre,
+          fechaModificacion: unid.fecha_modificacion,
+          fechaCreacion:unid.fecha_creacion,
+        })
+      ));
+    }
+    else console.log("No existen datos en Unidades");
+    window.localStorage.setItem('listUnidades',JSON.stringify(dataUni));
+    return unidades;
+}
+ 
+let initialFieldValues = {
     id: 0,
     nombre: '',
     correo: '',
+    unidad: {
+        id:  '',
+        nombre:    '',
+    }
 }
+
 
 export default function AgregarEditarDepartamento(props) {
     const {addOrEdit, recordForEdit, setOpenPopup} = props
@@ -23,6 +58,9 @@ export default function AgregarEditarDepartamento(props) {
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [departamento, setDepartamentos] = React.useState([]);
+
+    const [unidad, setUnidades] = React.useState([])
+  
 
     const theme = useTheme();
     const ColumnGridItemStyle = {
@@ -32,6 +70,7 @@ export default function AgregarEditarDepartamento(props) {
     }
     const validate = (fieldValues = values) => {
         let temp = {...errors}
+        let defaultError = "Este campo es requerido"
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
         if ('correo' in fieldValues)
@@ -39,6 +78,14 @@ export default function AgregarEditarDepartamento(props) {
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido"
+        if ('unidad' in fieldValues)
+            temp.unidad = DTLocalServices.requiredField(fieldValues.unidad)
+
+        if(recordForEdit){
+            temp.idUnidad = values.idUnidad !== 0 ? "" : defaultError;
+            } else{
+            temp.unidadId = values.unidadId !== 0 ? "":defaultError;
+            } 
         setErrors({
             ...temp
         })
@@ -68,12 +115,14 @@ export default function AgregarEditarDepartamento(props) {
             fechaCreacion = dep.fecha_creacion;
           }
           const newDep = {
-            id:values.id,
+            id: values.id,
             nombre: values.nombre,
             correo: values.correo,
-            fecha_creacion:fechaCreacion,
-            fecha_modificacion:null,
-            fecha_fundacion:fechaCreacion
+            fecha_fundacion: fechaCreacion,
+            unidad:{
+                id: recordForEdit ? parseInt(values.idUnidad) : parseInt(values.unidadId),
+                nombre: null,
+            }
             //foto: null,
           }
           //console.log(newDep);
@@ -87,7 +136,13 @@ export default function AgregarEditarDepartamento(props) {
     }
 
     useEffect(() => {
-      //Llenar Departamentos??
+        getUnidades()
+        .then(newUnidad => {
+          setUnidades(prevRecords => prevRecords.concat(newUnidad));
+  
+     
+  
+        });
         if (recordForEdit != null) {
             /* object is not empty */
             setValues({
@@ -98,8 +153,11 @@ export default function AgregarEditarDepartamento(props) {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container>
-                <Grid item sx={6} style={ColumnGridItemStyle}>
+            <Grid container
+                  sx={{
+                    gridTemplateColumns: "1fr 1fr ",
+                  }}>
+                 <Grid item xs={6} sx={styles.columnGridItem}>
                     < Typography variant="h4" mb={2} >
                            DATOS GENERALES
                     </Typography>
@@ -118,6 +176,22 @@ export default function AgregarEditarDepartamento(props) {
                             onChange = {handleInputChange}
                             error={errors.correo}
                         />
+                </Grid>
+                <Grid item xs={6} sx={styles.columnGridItem}>
+                < Typography variant="h4" mb={2} >
+       
+                    </Typography>
+                  <Controls.Select
+                    name={recordForEdit ? "idUnidad" : "unidadId"}
+                    label="Facultad"
+                    value={recordForEdit ? values.idUnidad : values.unidadId}
+                    onChange={handleInputChange}
+                    options={unidad}
+                    options={[{ id: 0, nombre: "Seleccionar" }]
+                    .concat(unidad)
+                  }
+                  error={recordForEdit ? errors.idUnidad : errors.unidadId}
+                  />
                 </Grid>
                 {/*
                 <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
