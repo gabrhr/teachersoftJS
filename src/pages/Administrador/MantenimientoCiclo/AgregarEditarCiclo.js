@@ -45,13 +45,21 @@ export default function AgregarEditarCiclo(props) {
         align:"left",
     }
 
-    ///////////////////////////
+ 
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('anho' in fieldValues)
             temp.anho = DTLocalServices.requiredField(fieldValues.anho)
         if ('periodo' in fieldValues)
             temp.periodo = DTLocalServices.requiredField(fieldValues.periodo)
+
+        const fechaMin = new Date(fieldValues.fechaInicio);
+        const fechaMax = new Date(fieldValues.fechaFin);
+        if (fechaMin >= fechaMax){
+            temp.fechaInicio = "La fecha de Inicio debe ser menor a la fecha Fin";
+            temp.fechaFin = "La fecha de Fin debe ser mayor a la fecha de Inicio";
+        }
+        
         setErrors({
             ...temp
         })
@@ -59,7 +67,7 @@ export default function AgregarEditarCiclo(props) {
         if (fieldValues == values)
             return Object.values(temp).every(x => x === "")
     }
-    ///////////////////////////
+ 
 
     const {
         values,

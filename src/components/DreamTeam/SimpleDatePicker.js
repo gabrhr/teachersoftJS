@@ -10,7 +10,7 @@ import esLocale from 'date-fns/locale/es';
 
 export default function SimpleDatePicker(props) {
 
-    const {name, label, value, onChange, year, ...other } = props;
+    const {name, label, value, onChange, year, error, ...other } = props;
 
     const convertToDefaultEventParameter = (name, value) => ({
         target: {
@@ -29,6 +29,7 @@ export default function SimpleDatePicker(props) {
                 value={value}
                 minDate={new Date(minimumDate)}
                 maxDate={new Date(maximumDate)}
+                error={error}
                 onChange={date => onChange(convertToDefaultEventParameter(name, date))}
                 renderInput={(params) => <TextField {...params} helperText={null}/>}
                 {...other}
