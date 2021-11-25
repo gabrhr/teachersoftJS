@@ -31,7 +31,7 @@ export default function Header2(props) {
     const history = useHistory();
     const { foto, nombre, idRol, rol, handleDrawerOpen } = props
     const classes = useStyles();
-    console.log("Paso por aquiii 2")
+    //console.log("Paso por aquiii 2")
     const onLogoutSuccess = () => {
         /*  setUser({}); */
         // setRole({});

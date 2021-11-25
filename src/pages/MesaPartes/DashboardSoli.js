@@ -308,8 +308,9 @@ export default function DashboardSoli(props) {
     }, [valueFecha])
 
     return (
+      <>
+      <ContentHeader text={title} cbo={false} />
       <Form>
-        <ContentHeader text={title} cbo={false} />
         {/* Buscador */}
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
           <div style={{ width: "400px", marginRight: "50px" }}>
@@ -386,6 +387,7 @@ export default function DashboardSoli(props) {
         </Popup>
         <Notification notify={notify} setNotify={setNotify} />
       </Form>
+      </>
     );
 }
 

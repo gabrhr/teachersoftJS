@@ -8,13 +8,15 @@ import url from '../../config'
 import { UserContext } from '../../constants/UserContext';
 import { RotateLeftRounded } from '@mui/icons-material';
 import userService from '../../services/userService';
+import useMountedState from 'react-usemountedstate';
 
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 const GoogleLoginButton = () => {
     const history = useHistory();
     const { user, setUser, rol, setRol, setToken } = useContext(UserContext);
+    const useState = useMountedState();	
     const [loading, setLoading] = useState(undefined);
-    const [current, setCurrent] = useState(undefined);
+    //const [current, setCurrent] = useState(undefined);
 
     const onLogoutSuccess = () => {
         localStorage.clear();
@@ -59,14 +61,14 @@ const GoogleLoginButton = () => {
         }
     }, [loading]);
 
-    const onSuccess = async (response) => {
+    const onSuccess = (response) => {
      console.log(response)
         if(response.tokenId){
             let secureConfig = {
                 headers: {
                     Authorization: `${response.accessToken}`
                 },
-                timeout: 20000
+                //timeout: 20000
             };
             const data = {
             
@@ -80,18 +82,21 @@ const GoogleLoginButton = () => {
                     }
             }
 
-            try {
-                const request = await axios.post(`${url}/usuario/postlogin`, data,secureConfig);
-                if(request){
-                    console.log(request.data)
+                axios.post(`${url}/usuario/postlogin`, data,secureConfig)
+                .then( (request) => {
+
+                    console.log("POSTLOGIN",request.data)
                     setUser(request.data.user)
                     setRol(request.data.user.persona.tipo_persona)
                     setToken(request.data.token)
-                }
-            } catch(except) {
-                console.error(except)
-                signOut()
-            }
+                })
+                .catch (
+                    err =>{
+                        console.error(err);
+                        signOut();
+                    }
+                )
+            
             setLoading(true);
             refreshTokenSetup(response)
         }
@@ -108,10 +113,9 @@ const GoogleLoginButton = () => {
             clientId={clientId}
             render={renderProps => (
                 <Controls.Button
-                        variant="outlined"
                         size='small'
-                        fullWidth
-                        text="Iniciar sesión con correo PUCP"
+                        //fullWidth
+                        text="Iniciar sesión"
                         onClick={renderProps.onClick} disabled={renderProps.disabled}
                         />
             )}
