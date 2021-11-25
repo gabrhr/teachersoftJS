@@ -98,6 +98,7 @@ export function b2fPersona(x) {
         correo: x.correo_pucp,
         foto_URL: x.foto_URL,
         seccionDepartamento: x.seccion ? x.seccion.departamento.nombre + ' - ' + x.seccion.nombre : "",
+        tipo_persona: x.tipo_persona,
 
         /* extra */
         departamentoID: x.seccion ? x.seccion.departamento.id : null,
@@ -270,7 +271,9 @@ export function _(s) {
 };
 
 /* login de usuario externo,  e=email */
-export function lue(e) {
+export function lue(p) {
+    p.nombre = p.nombre ?? 'Usuario Externo'
+    p.correo = p.correo ?? 'pepito@rana.org'
     const config = {
         headers: {
             Authorization: "123"
@@ -282,12 +285,16 @@ export function lue(e) {
         url: `${url}/usuario/postlogin/`,
         // url: `${url}/usuario/`,
         data: {
-            usuario: e,
+            usuario: p.correo,
             persona: {
-                // nombres: "Usuario",
-                // apellidos: "Externo",
-                correo_pucp: e,
-                foto_URL: "http://example.com",     // facil cambiar esto por lo de assets..
+                nombres: p.nombre,
+                apellidos: '',
+                correo_pucp: p.correo,
+                foto_URL: "static/images/avatar/1.jpg",
+                tipo_persona: 7,                    // Usuario Externo
+                /* por si acasito */
+                seccion: {id: 3},
+                departamento: {id: 3}
             }
         },
         ...config,
@@ -388,7 +395,7 @@ export function getSolicitudes() {
 }
 
 /* id: int.  Returns array of 1 soli */
-export function getSolicitud(id, secret=false) {
+export function getSolicitud(id) {
     let solicitud = null
     return axios({
         method: 'get',
@@ -396,12 +403,15 @@ export function getSolicitud(id, secret=false) {
         ...config
     })
         .then(res => {
-            if (secret)
-                return res.data
+            console.log("MPservice: response", res)
+            console.log("MPservice: headers", config)
             solicitud = b2fSolicitud(res.data)
             return [solicitud]
         })
-        .catch(err => console.error(err));
+        .catch(err => {
+            console.log("MPservice: headers", config)
+            console.error(err)
+        });
 
 }
 

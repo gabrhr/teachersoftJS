@@ -100,7 +100,7 @@ export default function ExternoAtenderSolicitud(props) {
     return (
         <>
             <Header1/>
-            <HeaderSimple />
+            {/* <HeaderSimple /> */}
             <Paper sx={{my: 20, mx: 10, p: 5}}>
                 <DT.Title size="medium" text={"Bienvenido"}/>
                 <Typography>

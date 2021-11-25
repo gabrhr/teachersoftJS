@@ -75,7 +75,8 @@ const GoogleLoginButton = () => {
                         apellidos: response.profileObj.familyName,
                         nombres: response.profileObj.givenName,
                         correo_pucp: response.profileObj.email,
-                        foto_URL: response.profileObj.imageUrl
+                        foto_URL: response.profileObj.imageUrl,
+                        tipo_persona: 8     // Nuevo Usuario
                     }
             }
 
