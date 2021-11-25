@@ -8,6 +8,7 @@ import Header1 from '../../constants/Header1'
 import AtenderSolicitudForm from './AtenderSolicitudForm'
 import DetalleSoliOrganism from './DetalleSoliOrganism'
 import ResultadoSolicitud from './ResultadoSolicitud'
+import HeaderSimple from '../../constants/HeaderSimple'
 
 
 import * as MesaPartesService from '../../services/mesaPartesService'
@@ -26,9 +27,9 @@ function sendEmailNotification(solicitud) {
         })
 }
 
-export default function ExternoAtenderSolicitud() {
+export default function ExternoAtenderSolicitud(props) {
+    const { solicitud, setSolicitud } = props
     
-    const [solicitud, setSolicitud] = React.useState()
     const { user,rol} = useContext(UserContext);
     const [atender, setAtender]= React.useState(false)
     const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
@@ -99,7 +100,8 @@ export default function ExternoAtenderSolicitud() {
     return (
         <>
             <Header1/>
-            <Paper sx={{m: 22, p: 5}}>
+            <HeaderSimple />
+            <Paper sx={{my: 20, mx: 10, p: 5}}>
                 <DT.Title size="medium" text={"Bienvenido"}/>
                 <Typography>
                     Ingrese la respuesta a la solicitud

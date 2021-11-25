@@ -247,7 +247,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
             cambioEstado: true,
             // email url 
             url: delegado.options === 'delegadoExterno'
-                ? `http://front.teachersoft.solutions/invitado/atender/` + s
+                ? `http://front.teachersoft.solutions/invitado/atenderxemail/` + s
                 : null
         }))
     }
