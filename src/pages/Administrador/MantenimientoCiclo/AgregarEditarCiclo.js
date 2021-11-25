@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid , Input, Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 import SimpleDatePicker from '../../../components/DreamTeam/SimpleDatePicker';
+import Notification from '../../../components/util/Notification'
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
 import CicloService from '../../../services/cicloService.js';
@@ -38,7 +39,7 @@ const initialFieldValues = {
 export default function AgregarEditarCiclo(props) {
 
     const {addOrEdit, recordForEdit, setOpenPopup} = props
-
+    const [open, isOpen] = useState(false);
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -59,7 +60,10 @@ export default function AgregarEditarCiclo(props) {
             temp.fechaInicio = "La fecha de Inicio debe ser menor a la fecha Fin";
             temp.fechaFin = "La fecha de Fin debe ser mayor a la fecha de Inicio";
         }
-        
+        if (fechaMin >= fechaMax){
+            alert("La fecha de Inicio debe ser menor a la fecha Fin");
+        }
+
         setErrors({
             ...temp
         })
