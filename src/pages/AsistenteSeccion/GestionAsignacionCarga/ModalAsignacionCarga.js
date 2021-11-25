@@ -38,19 +38,19 @@ const tableHeaders = [
         id: 'horario',
         label: 'Horario',
         numeric: false,
-        sortable: true
+        sortable: false
      },
      {
         id: 'tipoSesion',
         label: 'Tipo',
         numeric: false,
-        sortable: true
+        sortable: false
      },
     {
-      id: 'cargaHoraria',
-      label: 'Carga Horaria',
+      id: 'horas',
+      label: 'Horas',
       numeric: false,
-      sortable: true
+      sortable: false
     },
 ]
 
@@ -393,6 +393,13 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                 </Typography>
                 <BoxTbl>
                     <TblContainer>
+                      <colgroup>
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '50%' }} />
+                        <col style={{ width: '10%' }} />
+                        <col style={{ width: '20%' }} />
+                        <col style={{ width: '10%' }} />
+                      </colgroup>
                         <TblHead />
                         <TableBody>
                         {
@@ -408,7 +415,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
-                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
                             </TableRow>
                             ))
