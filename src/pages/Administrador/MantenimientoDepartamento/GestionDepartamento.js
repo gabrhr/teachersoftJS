@@ -5,7 +5,8 @@ import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import AgregarEditarDepartamento from './AgregarEditarDepartamento'
-import Notification from '../../../components/util/Notification'
+import Notification from '../../../components/util/Notification';
+import UnidadService from '../../../services/unidadService.js';
 import ConfirmDialog from '../../../components/util/ConfirmDialog';
 /* ICONS */
 
@@ -27,6 +28,31 @@ import { Form } from '../../../components/useForm'
 import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+
+
+
+const getUnidades = async () => {
+  
+  let dataUni = await UnidadService.getUnidades();
+  dataUni = dataUni ?? []  
+
+  const unidades = [];
+  if(dataUni){
+    dataUni.map(unid => (
+      unidades.push({
+        id: unid.id.toString(),
+        activo: unid.activo,
+        nombre: unid.nombre,
+        fechaModificacion: unid.fecha_modificacion,
+        fechaCreacion:unid.fecha_creacion,
+      })
+    ));
+  }
+  else console.log("No existen datos en Unidades");
+  window.localStorage.setItem('listUnidades',unidades);
+  return unidades;
+}
+
 
 const tableHeaders = [
     /*{
@@ -61,6 +87,12 @@ const tableHeaders = [
       sortable: true
     },
     {
+      id: 'unidad',
+      label: 'Facultad',
+      numeric: false,
+      sortable: true
+    },
+    {
       id: 'actions',
       label: 'Acciones',
       numeric: false,
@@ -88,6 +120,7 @@ const getDepartamentos = async () => {
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   //console.log("AQUI ESTA EL DATASECC")
   //console.log(dataDep)
+  
   const departamentos = [];
   if(dataDep){
     dataDep.map(dep => (
@@ -98,6 +131,8 @@ const getDepartamentos = async () => {
         fechaModificacion: dep.fecha_modificacion,
         fechaCreacion:dep.fecha_creacion,
         fechaFundacion: dep.fechaFundacion,
+        idUnidad: dep.unidad ? dep.unidad.id : '',
+        nombreUnidad: dep.unidad ? dep.unidad.nombre : '',
       })
     ));
   }
@@ -192,9 +227,23 @@ export default function GestionDepartamento() {
 
 
     const addOrEdit = (departamento, resetForm) => {
+
+      const dataDep = {
+        id: departamento.id,
+        nombre: departamento.nombre,
+        correo: departamento.correo,
+        fecha_modificacion: departamento.fechaModificacion,
+        fecha_creacion:departamento.fechaCreacion,
+        fecha_fundacion: departamento.fechaFundacion,
+        unidad: {
+          id: departamento.unidad.id,
+          nombre: departamento.unidad.nombre,
+        }
+      }
+      
       recordForEdit
-      ? DepartamentoService.updateDepartamento(departamento,departamento.id)
-      : DepartamentoService.registerDepartamento(departamento)
+      ? DepartamentoService.updateDepartamento(dataDep,dataDep.id)
+      : DepartamentoService.registerDepartamento(dataDep)
       .then(idDepartamento=> {
         if(recordForEdit){
           setRecordForEdit(null);
@@ -258,6 +307,7 @@ export default function GestionDepartamento() {
             text="Gestión de Departamentos"
             cbo={false}
           />
+ 
           <Paper variant="outlined" sx={PaperStyle}>
             <Typography variant="h4" style={SubtitulosTable}>
               Departamentos
@@ -306,6 +356,7 @@ export default function GestionDepartamento() {
                         +item.fechaModificacion.slice(5,7)
                         +'/'
                         +item.fechaModificacion.slice(0,4)}</StyledTableCell>
+                        <StyledTableCell>{item.nombreUnidad}</StyledTableCell>
                         <StyledTableCell>
                           <Controls.ActionButton
                             color="warning"

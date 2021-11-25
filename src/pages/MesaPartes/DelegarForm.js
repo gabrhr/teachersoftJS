@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 /* SERVICES */
 import PersonaService from '../../services/personaService'
 import * as MesaPartesService from '../../services/mesaPartesService'
-import * as UnidadService from '../../services/unidadService';
+import UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
 import * as DTLocalServices from '../../services/DTLocalServices'
