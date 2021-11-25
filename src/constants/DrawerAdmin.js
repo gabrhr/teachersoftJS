@@ -66,7 +66,7 @@ export default function DrawerAdmin(props) {
     const { open, listaMenu } = props
     //const [selectedIndex, setSelectedIndex] = React.useState(0);
     const {selectedIndex, setSelectedIndex} = React.useContext(UserContext);
-    console.log("Soy la lista",listaMenu)
+    
     const handleListItemClick = (e, indice) => {
         setSelectedIndex(indice);
     };
