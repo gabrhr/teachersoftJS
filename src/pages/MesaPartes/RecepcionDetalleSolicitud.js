@@ -226,6 +226,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
 
     /* delegado (persona) */
     function submitDelegar(delegado) {
+        let s = MesaPartesService._(`${solicitud.id}&${delegado.correo}`)
         setSolicitud(solicitud => ({
             ...solicitud,
             /* data que viene de DelegarForm */
@@ -243,7 +244,11 @@ export default function RecepcionDetalleSolicitudFuncion() {
             },
 
             /* only for FrontEnd */
-            cambioEstado: true
+            cambioEstado: true,
+            // email url 
+            url: delegado.options === 'delegadoExterno'
+                ? `http://front.teachersoft.solutions/invitado/atenderxemail/` + s
+                : null
         }))
     }
 
@@ -278,6 +283,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 nuevaPersona.fullName = delegadofake.nombre
                 nuevaPersona.rolName = "Usuario Externo"
                 nuevaPersona.correo = delegadofake.correo
+                nuevaPersona.options = 'delegadoExterno'
                 submitDelegar(nuevaPersona)
             })
     }
