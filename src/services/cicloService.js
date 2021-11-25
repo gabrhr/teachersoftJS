@@ -16,7 +16,7 @@ const getCiclos = async () => {
   }
 }
 
-const getCiclo = async ({id}) => {
+const getCiclo = async (id) => {
   try{
     const request = await axios.get(`${url}/ciclo/${id}`, tokenService.GetTokenPrueba(), id);
     return request.data; 
@@ -41,7 +41,7 @@ const updateCiclo = async (newObject, {id}) => {
   }
 }
 
-const deleteCiclo = async ({id}) => {
+const deleteCiclo = async (id) => {
   try{
     const request = await axios.delete(`${url}/ciclo/${id}`, tokenService.GetTokenPrueba());
     return request.data;   }catch(exception){

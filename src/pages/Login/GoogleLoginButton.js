@@ -22,7 +22,6 @@ const GoogleLoginButton = () => {
     }
     const onLogoutFailure = (response) => {
         console.log(response)
-        
     }
     const {signOut} = useGoogleLogout({
         clientId,
@@ -51,8 +50,11 @@ const GoogleLoginButton = () => {
                 return history.push("/jd"); 
             case 6:
                 return history.push("/secretaria");
+            case 7:
+                return history.push("/invitado");
             default:
-                return history.push("/noRoles");
+                return history.push("/registro");
+                //return history.push("/noRoles");
           }
         }
     }, [loading]);
@@ -64,7 +66,7 @@ const GoogleLoginButton = () => {
                 headers: {
                     Authorization: `${response.accessToken}`
                 },
-                timeout: 10000
+                timeout: 20000
             };
             const data = {
             
@@ -81,23 +83,15 @@ const GoogleLoginButton = () => {
                 const request = await axios.post(`${url}/usuario/postlogin`, data,secureConfig);
                 if(request){
                     console.log(request.data)
-                    /* localStorage("user",request.data)  */
-                    /*  localStorage.setItem("user", JSON.stringify(request.data.user));
-                    localStorage.setItem("token", JSON.stringify(request.data.token));
-
-                    setCurrent(request.data.user.persona.tipo_persona);*/
                     setUser(request.data.user)
                     setRol(request.data.user.persona.tipo_persona)
                     setToken(request.data.token)
-                    console.log("hola mundo")
-                    const user = await userService.getUsuario(1);
-                    console.log(user);
-                    setLoading(true);
                 }
             } catch(except) {
                 console.error(except)
                 signOut()
             }
+            setLoading(true);
             refreshTokenSetup(response)
         }
     }  

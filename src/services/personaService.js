@@ -58,6 +58,32 @@ const updatePersona = async (newObject) => {
   }
 }
 
+/* edit-mitsuo
+ *
+ * Necesitaba un updatePersona que devuelva una promesa para poder hacer el
+ * .catch dentro del modulo.
+ */
+const configmitsuo = {
+    headers: {
+        Authorization: tokenService.getToken()
+    },
+    timeout: 8000   // ms
+}
+
+function updatePersona2(persona) {
+  return axios({
+    method: 'put',
+    url: `${url}/persona/`,
+    data: persona,
+    ...configmitsuo
+  })
+    .then(res => {
+      return res.data
+    })
+}
+
+/* --------- fin edit mitsuo --------- */
+
 const deletePersona = async (id) => {
   try{
     const request = await axios.delete(`${url}/persona/${id}`, tokenService.GetTokenPrueba(), id);

@@ -1,5 +1,6 @@
 import { InsertEmoticonSharp } from '@mui/icons-material';
-import { Grid, InputAdornment, TableBody, TableCell, TableRow } from '@mui/material';
+import { InputAdornment, TableBody, TableCell, TableRow } from '@mui/material';
+import { Typography, Box, Grid } from '@mui/material';
 import React, { useState } from 'react'
 import { Controls } from '../../components/controls/Controls';
 import { Form, useForm } from '../../components/useForm';
@@ -9,9 +10,10 @@ import SearchIcon from '@mui/icons-material/Search';
 /* SERVICES */
 import PersonaService from '../../services/personaService'
 import * as MesaPartesService from '../../services/mesaPartesService'
-import * as UnidadService from '../../services/unidadService';
+import UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
+import * as DTLocalServices from '../../services/DTLocalServices'
 
 /* ICONS */
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -198,19 +200,12 @@ function PersonasTable(props) {
     )
 }
 
-/* ============================ FORM ================================== */
+/* ============================== FORMS ================================== */
 
-/* del delegado para asignar la solicitud */
-const initialFieldValues = {
-    rolID: 0,
-    unidadID: 0,
-    departamentoID: 0,
-    seccionID: 0
-}
+function DelegarInternoForm(props) {
+    const { submitDelegar, setTipoDelegar } = props
 
-export default function DelegarForm(props) {
-    const { submitDelegar } = props
-    /* GENERAL (should be in a parent function) */
+    /* de la tablita de delgados */
     const [records, setRecords] = useState([{ id: 1, fullName: "Mitsuo" }])
 
     /* data para mostrar en los combobox */
@@ -231,7 +226,13 @@ export default function DelegarForm(props) {
         getSecciones(setSeccion)
     }, [])
 
-    /* ------------ end ------------ */
+    /* del delegado para asignar la solicitud */
+    const initialFieldValues = {
+        rolID: 0,
+        unidadID: 0,
+        departamentoID: 0,
+        seccionID: 0
+    }
 
     const {
         values,
@@ -278,6 +279,7 @@ export default function DelegarForm(props) {
         e.preventDefault()
         if (validate()) {
             // submit
+            /* no hay nada aqui,  se hace submit en el boton de PersonaRow */
         }
     }
 
@@ -300,58 +302,186 @@ export default function DelegarForm(props) {
     return (
         <>
             <Form onSubmit={handleSubmit}>
-                <Controls.Select
-                    name="rolID"
-                    label="Rol del delegado"
-                    value={values.rolID}
-                    onChange={handleInputChange}
-                    options={getRoles()}
-                    error={errors.rolID}
-                />
-
-                <Controls.Select
-                    name="unidadID"
-                    label="Unidad"
-                    value={values.unidadID}
-                    onChange={handleInputChange}
-                    options={[{ id: 0, nombre: "Seleccionar" }]
-                        .concat(comboData.unidad)
-                    }
-                    error={errors.unidadID}
-                />
-                <Controls.Select
-                    name="departamentoID"
-                    label="Departamento"
-                    value={values.departamentoID}
-                    onChange={handleInputChange}
-                    options={[{ id: 0, unidad: { id: 0 }, nombre: "Seleccionar" }]
-                        .concat(comboData.departamento)
-                        .filter(x => x.unidad.id === values.unidadID ||
-                            x.id === 0
-                        )
-                    }
-                    disabled={disable.departamentoID}
-                    error={errors.departamentoID}
-                />
-                {/* <Controls.Select
-                    name="seccionID"
-                    label="Sección"
-                    value={values.seccionID}
-                    onChange={handleInputChange}
-                    options={[{ id: 0, departamento: { id: 0 }, nombre: "Seleccionar" }]
-                        .concat(comboData.seccion)
-                        .filter(x => x.departamento.id === values.departamentoID ||
-                            x.id === 0
-                        )
-                    }
-                    disabled={disable.seccionID}
-                    error={errors.seccionID}
-                /> */}
+                <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                        <Controls.Select
+                            name="rolID"
+                            label="Rol del delegado"
+                            value={values.rolID}
+                            onChange={handleInputChange}
+                            options={getRoles()}
+                            error={errors.rolID}
+                        />
+                        <Controls.Select
+                            name="unidadID"
+                            label="Unidad"
+                            value={values.unidadID}
+                            onChange={handleInputChange}
+                            options={[{ id: 0, nombre: "Seleccionar" }]
+                                .concat(comboData.unidad)
+                            }
+                            error={errors.unidadID}
+                        />
+                        <Controls.Select
+                            name="departamentoID"
+                            label="Departamento"
+                            value={values.departamentoID}
+                            onChange={handleInputChange}
+                            options={[{ id: 0, unidad: { id: 0 }, nombre: "Seleccionar" }]
+                                .concat(comboData.departamento)
+                                .filter(x => x.unidad.id === values.unidadID ||
+                                    x.id === 0
+                                )
+                            }
+                            disabled={disable.departamentoID}
+                            error={errors.departamentoID}
+                        />
+                        {/* <Controls.Select
+                            name="seccionID"
+                            label="Sección"
+                            value={values.seccionID}
+                            onChange={handleInputChange}
+                            options={[{ id: 0, departamento: { id: 0 }, nombre: "Seleccionar" }]
+                                .concat(comboData.seccion)
+                                .filter(x => x.departamento.id === values.departamentoID ||
+                                    x.id === 0
+                                )
+                            }
+                            disabled={disable.seccionID}
+                            error={errors.seccionID}
+                        /> */}
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Controls.Button
+                                variant="outlined"
+                                text="Delegar por email"
+                                size="small"
+                                onClick={() => {setTipoDelegar('externo')}}
+                            />
+                        </Box>
+                    </Grid>
+                </Grid>
             </Form>
             <PersonasTable records={records} setRecords={setRecords} 
                 selectedDepartmentID={values.departamentoID}
                 submitDelegar={submitDelegar}
             />
+        </>
+    )
+}
+
+function DelegarExternoForm(props) {
+    const { submitDelegarExterno, setTipoDelegar } = props
+
+    /* del Delegado externo (destinatario) */
+    const initialFieldValues = {
+        id: 0,
+        nombre: '',
+        correo: ''
+    }
+
+    function validate() {
+        let temp = {...errors}
+        let defaultError = "Este campo es requerido"
+
+        temp.rolID = values.rolID !== 0 ? "" : defaultError
+        if (values.nombre.length !== 0)
+            temp.nombre = DTLocalServices.validateName(values.nombre)
+        else
+            temp.nombre = defaultError
+        temp.correo = DTLocalServices.validateEmail(values.correo)
+
+        setErrors({
+            ...temp
+        })
+        return Object.values(temp).every(x => x === "")
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        if (validate()) {
+            const delegadofake = {
+                id: null,
+                nombre: values.nombre,
+                // foto_URL: values.
+                correo: values.correo
+            }
+            submitDelegarExterno(delegadofake)
+        }
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues);
+
+    return (
+        <>
+            <Form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                        <Controls.Button
+                            variant="outlined"
+                            text="Regresar"
+                            size="small"
+                            onClick={() => {setTipoDelegar('interno')}}
+                        />
+                        <Controls.Input 
+                            name="nombre"
+                            label="Nombre del Destinatario"
+                            value={values.nombre} 
+                            onChange = {handleInputChange}
+                            error={errors.nombre}
+                        />
+                        <Controls.Input 
+                            name="correo"
+                            label="Direccion de correo electrónico"
+                            value={values.correo} 
+                            onChange = {handleInputChange}
+                            error={errors.correo}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                    </Grid>
+                </Grid>
+                <Box display="flex" justifyContent="flex-end">
+                    <Controls.Button
+                        text="Enviar"
+                        type="submit"
+                        endIcon={<SendIcon/>}
+                    />
+                </Box>
+            </Form>
+        </>
+    )
+}
+
+export default function DelegarForm(props) {
+    const { submitDelegar, submitDelegarExterno } = props
+
+    const [ tipoDelegar, setTipoDelegar ] = React.useState('interno')
+
+    return (
+        <>
+            { 
+                tipoDelegar === 'interno' &&
+                <DelegarInternoForm 
+                    submitDelegar={submitDelegar} 
+                    setTipoDelegar={setTipoDelegar}
+                />
+            }
+            {
+                tipoDelegar === 'externo' &&
+                <DelegarExternoForm
+                    submitDelegarExterno={submitDelegarExterno}
+                    setTipoDelegar={setTipoDelegar}
+                />
+            }
         </>
     )
 }
