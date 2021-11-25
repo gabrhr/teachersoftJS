@@ -196,7 +196,7 @@ export default function CargaDocente() {
       .then (newCur =>{
         if(newCur)
           setRecord(newCur);
-        //console.log(newCur);
+        console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: ", newCur);
       });
     }, [ciclo])
 
@@ -298,11 +298,10 @@ export default function CargaDocente() {
                         <StyledTableCell>
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
-
                         {item.estado !== "Sin horarios" ?
                           <StyledTableCell>
                             <Link to ={{
-                                pathname:`/as/asignacionCarga/registroCarga/horarios`,
+                                pathname:`/cord/asignacionCarga/registroCarga/horarios`,
                                 state:{
                                     curso: item
                                 }
@@ -345,7 +344,7 @@ export default function CargaDocente() {
                <ModalValidarYEnviarSolicitud /*solicitud = {solicitud}*/asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto}
                                             setCuerpo={setCuerpo} setOpenValYEnvSolPopup = {setOpenValYEnvSolPopup}
                                             openValYEnvSolPopup = {openValYEnvSolPopup} openConfVal={openConfVal}
-                                            setOpenConfVal={setOpenConfVal}/>
+                                            setOpenConfVal={setOpenConfVal} cursos = {records}/>
       </Popup>
 
 

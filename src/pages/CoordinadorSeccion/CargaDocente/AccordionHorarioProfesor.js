@@ -241,7 +241,8 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
     React.useEffect(() => {
       fillHorarios(recordForEdit.recordForEdit)
         .then(horarios => {
-          setRecords(horarios);        
+          setRecords(horarios);
+          console.log("horariossssfFFFFFFFF: ", horarios)        
         });  
     }, [])
 
