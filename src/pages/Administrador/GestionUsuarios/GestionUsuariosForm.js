@@ -28,11 +28,15 @@ const initialFieldValues = {
   apellidoPaterno: '',
   DNI: '',
   correo: '',
-  rol: '',
+
+  //Originalmente, rol aparecía con '', se cambió para que aparezca al menos uno seleccionado
+  
+  rol: 1,
+ 
   foto_URL: '',
-  departamentId: '',
+  departmentId: 0,
   nombreDepartamento: '',
-  seccionId: '',
+  seccionId: 0,
   nombreSeccion: '',
   departamento: {
     id: '',
@@ -131,6 +135,7 @@ export default function GestionUsuariosForm(props) {
   /* for "onChange" validation (real time validation) */
   const validate = (fieldValues = values) => {
     let temp = { ...errors }
+    let defaultError = "Campo es requerido"
     if ('nombre' in fieldValues)
       if (fieldValues.nombre.length === 0)
         temp.nombre = "Campo requerido"
@@ -151,11 +156,19 @@ export default function GestionUsuariosForm(props) {
         : "DNI necesita 8 digitos"
     if ('rol' in fieldValues)
       temp.rol = DTLocalServices.requiredField(fieldValues.rol)
-    if ('departamento' in fieldValues)
-      temp.departamento = DTLocalServices.requiredField(fieldValues.departamento)
-    if ('seccion' in fieldValues)
-      temp.seccion = DTLocalServices.requiredField(fieldValues.seccion)
+ 
 
+      if(recordForEdit){
+        temp.idDepartamento = values.idDepartamento !== 0 ? "" : defaultError;
+      } else{
+        temp.departmentId = values.departmentId !== 0 ? "":defaultError;
+      }  
+
+      if(recordForEdit){
+        temp.idSeccion = values.idSeccion !== 0 ? "" : defaultError;
+      } else{
+        temp.seccionId = values.seccionId !== 0 ? "":defaultError;
+      }  
     setErrors({
       ...temp
     })
@@ -352,7 +365,7 @@ export default function GestionUsuariosForm(props) {
             <Controls.Select
               name="rol"
               label="Rol del Usuario"
-              value={values.rol}
+              value={ values.rol}
               onChange={handleInputChange}
               options={DTLocalServices.getAllRoles()}
               error={errors.rol}
@@ -364,7 +377,10 @@ export default function GestionUsuariosForm(props) {
               value={recordForEdit ? values.idDepartamento : values.departmentId}
               onChange={handleInputChange}
               options={departamento}
-
+              options={[{ id: 0, nombre: "Seleccionar" }]
+              .concat(departamento)
+              }
+              error={recordForEdit ? errors.idDepartamento : errors.departmentId}
             />
             <Controls.Select
               name={recordForEdit ? "idSeccion" : "seccionId"}
@@ -372,7 +388,10 @@ export default function GestionUsuariosForm(props) {
               value={recordForEdit ? values.idSeccion : values.seccionId}
               onChange={handleInputChange}
               options={seccion}
-
+              options={[{ id: 0, nombre: "Seleccionar" }]
+              .concat(seccion)
+              }
+              error={recordForEdit ? errors.idSeccion : errors.seccionId}
             />
 
           </Grid>

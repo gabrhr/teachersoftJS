@@ -27,6 +27,12 @@ const initialFieldValues = {
 
 const tableHeaders = [
   {
+    id: 'foto_URL',
+    label: '',
+    numeric: false,
+    sortable: true
+  },
+  {
     id: 'fullName',
     label: 'Nombre Completo',
     numeric: false,
@@ -343,6 +349,7 @@ export default function GestionUsuarios() {
                 // recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                 recordsAfterPagingAndSorting().map(item => (
                   <StyledTableRow key={item.id}>
+                    <StyledTableCell><Avatar alt="profile pic" src={item.foto_URL} /></StyledTableCell>
                     <StyledTableCell>
                       {item.nombre ? item.nombre.toUpperCase() : ""} {item.apellidoPaterno ? item.apellidoPaterno.toUpperCase() : ""} {item.apellidoMaterno ? item.apellidoMaterno.toUpperCase() : ""}
                     </StyledTableCell>
