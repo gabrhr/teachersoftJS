@@ -236,8 +236,8 @@ export default function GestionDepartamento() {
         fecha_creacion:departamento.fechaCreacion,
         fecha_fundacion: departamento.fechaFundacion,
         unidad: {
-          id: departamento.unidad.idUnidad,
-          nombre: departamento.unidad.nombreUnidad,
+          id: departamento.unidad.id,
+          nombre: departamento.unidad.nombre,
         }
       }
       
