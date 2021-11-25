@@ -96,6 +96,23 @@ const hallarDetalle = (sesiones) => {
     return dataHorarios;
   }
 
+const validateItems = (cursos) => { 
+  for(let cur of cursos){
+    if(cur.estado !== "Sin horarios"){
+      const cursocicloValidado = {
+        "id": cur.id_cursociclo,
+        "curso": cur.curso,
+        "ciclo": cur.ciclo,
+        "estado_tracking": 1,
+        "cantidad_horarios": cur.cantidad_horarios,
+      }
+      console.log(cursocicloValidado);
+    }
+  }
+
+  console.log(cursos);
+}
+
 export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsunto, cuerpo, setCuerpo, setOpenValYEnvSolPopup,
                                                     openValYEnvSolPopup, openConfVal, setOpenConfVal, cursos}){
     const correo = "@efekoefkeof"
@@ -121,7 +138,7 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
         //setCursosHorarios([{curso:{nombre: 'h'}}, {curso:{nombre: 'h2'}}, {curso:{nombre: 'h3'}}])
         setCursosHorarios(oficial)
         
-        console.log("POPEODPEODPSODPASODPSODAPO: ", cursosHorarios)  
+        //console.log("POPEODPEODPSODPASODPSODAPO: ", cursosHorarios)  
       }, [])
 
     return(
@@ -213,17 +230,17 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                     ) : (<></>)}
                 </Grid>
                 <Grid item xs={6} align="right" mt={5}>
-                    {/* <div>
+                    <div>
                         <Controls.Button
                             // variant="contained"
                             // color="primary"
                             // size="large"
                             text="Enviar y validar"
                             endIcon = {<EmailOutlinedIcon/>}
-                            onClick = {()=>{setOpenReporte(!openReporte)}}
+                            onClick = {()=>{validateItems(cursos)}}
                         >
                         </Controls.Button>
-                    </div> */}
+                    </div>
                     {openConfVal ? (
                         <Box sx={{paddingRight: '3%'}}>
                         <Typography variant = "subtitle1" sx={{color: 'red', paddingRight: '5%'}}>
