@@ -226,6 +226,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
 
     /* delegado (persona) */
     function submitDelegar(delegado) {
+        let s = MesaPartesService._(`${solicitud.id}&${delegado.correo}`)
         setSolicitud(solicitud => ({
             ...solicitud,
             /* data que viene de DelegarForm */
@@ -246,7 +247,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
             cambioEstado: true,
             // email url 
             url: delegado.options === 'delegadoExterno'
-                ? `http://front.teachersoft.solutions/invitado/atender/soli=${solicitud.id}&email=${delegado.correo}`
+                ? `http://front.teachersoft.solutions/invitado/atender/` + s
                 : null
         }))
     }

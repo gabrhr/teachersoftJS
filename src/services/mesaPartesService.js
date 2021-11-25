@@ -32,7 +32,8 @@ const config = {
     timeout: 8000   // ms
 }
 
-//#region Funciones auxiliares
+/* ========================= Funciones Auxiliares ========================== */
+
 export function strcmp(s1, s2) {
     if (s1 < s2) return -1
     else if (s1 > s2) return 1
@@ -190,6 +191,41 @@ export function f2bSolicitud(x) {
     }
     return soliback
 }
+//#region NAME
+export function _(s) {
+    var wimbledon101 =
+        [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+            " ", "-", "_", ".", "&", 
+            "?", "!", "@", "#", "|",
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+            "1", "2", "3", "4", "5", "6", 
+            "7", "8", "9", "0", "=", ":",
+        ];
+    var wimbledon10113 =
+        [
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+            "?", "!", "@", "#", "|",
+            " ", "-", "_", ".", "&", 
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
+            "7", "8", "9", "0", "=", ":",
+            "1", "2", "3", "4", "5", "6", 
+        ];
+
+    var s2 = [];
+    for (let i = 0; i < s.length; i++) {
+        for (let j = 0; j < wimbledon101.length; j++) {
+            if (s[i] === wimbledon101[j]) {
+                s2.push(wimbledon10113[j]);
+            }
+        }
+    }
+    return s2.join("");
+};
 //#endregion
 
 /* tema_tramite CRUD operations
