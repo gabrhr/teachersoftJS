@@ -14,24 +14,8 @@ import * as MesaPartesService from '../../services/mesaPartesService'
 
 
 export default function TestPage() {
-    const { user, setUser, rol, setRol, setToken } = React.useContext(UserContext)
-
-    function handleClick() {
-        MesaPartesService.lue("roberto_mitsuo@hotmail.com")
-            .then(data => {
-                setUser(data.user)
-                setRol(data.user.persona.tipo_persona)
-                setToken(data.token)
-            })
-    }
-
     return (
         <>
-            <Controls.Button
-                variant="outlined"
-                text="lue"
-                onClick={() => handleClick()}
-            />
         </>
     )
 }

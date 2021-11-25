@@ -345,8 +345,8 @@ export function getSolicitudes() {
         .catch(err => console.error(err));
 }
 
-/* id: int */
-export function getSolicitud(id) {
+/* id: int.  Returns array of 1 soli */
+export function getSolicitud(id, secret=false) {
     let solicitud = null
     return axios({
         method: 'get',
@@ -354,6 +354,8 @@ export function getSolicitud(id) {
         ...config
     })
         .then(res => {
+            if (secret)
+                return res.data
             solicitud = b2fSolicitud(res.data)
             return [solicitud]
         })

@@ -1,13 +1,58 @@
 import React from 'react'
 import { Typography } from '@mui/material'
 //import { useParams } from "react-router";
+import { Controls } from '../../components/controls/Controls';
+import { UserContext } from '../../constants/UserContext';
+import ExternoAtenderSolicitud from './ExternoAtenderSolicitud';
 
+/* SERVICES */
 import * as MesaPartesService from '../../services/mesaPartesService'
 
+function getSolicitud(s, setSolicitud) {
+    MesaPartesService.getSolicitud(s)
+        .then((solicitudes) => {
+            console.log(s, solicitudes)
+            setSolicitud(solicitudes[0])
+        })
+}
+
+function Lue({ e, s }) {
+    const { user, setUser, rol, setRol, setToken } = React.useContext(UserContext)
+    const [solicitud, setSolicitud] = React.useState({
+        resultado: 0,
+        foto_URL: 'http://example.com'
+    })
+
+    function handleClick() {
+        MesaPartesService.lue(e)
+            .then(data => {
+                setUser(data.user)
+                setRol(data.user.persona.tipo_persona)
+                setToken(data.token)
+            })
+    }
+
+    React.useEffect(() => {
+        handleClick()
+    }, [])
+
+    React.useEffect(() => {
+        getSolicitud(s, setSolicitud)
+    }, [user])
+
+    return (
+        <>
+            {/* <ExternoAtenderSolicitud 
+                solicitud={solicitud} 
+                setSolicitud={setSolicitud}
+            /> */}
+        </>
+    )
+}
+
 export default function DelegadoExterno() {
-    //let {detalle} = useParams()
-    var detalle = window.location.pathname;
-    detalle= detalle.split('/')[3]
+    // shenanigans
+    var detalle = window.location.pathname.split('/')[3];
     let params = MesaPartesService._(detalle).split('&')
 
     let soli = parseInt(params[0])
@@ -15,10 +60,7 @@ export default function DelegadoExterno() {
 
     return (
         <div>
-            {detalle}
-            <Typography children={MesaPartesService._(detalle)} />
-            <Typography children={soli} />
-            <Typography children={email} />
+            <Lue e={email} s={soli} />
         </div>
     )
 }
