@@ -23,6 +23,7 @@
     "jss": "^10.8.0",
     "modules": "^0.4.0",
     "moment": "^2.29.1",
+    "ncrypt-js": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone-uploader": "^2.11.0",
