@@ -54,6 +54,7 @@ import ErrorDireccionamiento from '../pages/Dev/Error404';
 import Registro from '../pages/NuevoUsuario/Registro';
 import LandingPage from '../constants/LandingPage'
 import ExternoAtenderSolicitud from '../pages/MesaPartes/ExternoAtenderSolicitud';
+import DelegadoExterno from '../pages/MesaPartes/DelegadoExterno';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -182,9 +183,9 @@ export default function Router1(props) {
              <Redirect to="/invitado/mesaPartes/misSolicitudes" />
         </PrivateRoute>
         {/* Ver bien la ruta */}
-        <PrivateRoute exact path="/invitado/atender" requireRoles={[8]}>
-             <Redirect to="/invitado/atender/solicitud" />
-        </PrivateRoute>
+        {/* <PrivateRoute exact path="/invitado/atender" requireRoles={[8]}>
+             <Redirect to="/invitado/atender/:solicitud" />
+        </PrivateRoute> */}
         {privateroutes.map((r,index) =>
           <PrivateRoute 
             key={index}
@@ -215,10 +216,10 @@ export default function Router1(props) {
           >
         </PrivateRoute>
         
-        <PrivateRoute exact path="/invitado/atender/solicitud"
-          requireRoles={[8]}
+        <PrivateRoute exact path="/invitado/atender/:detalle"
+          requireRoles={[7]}
           component={() =>
-            <ExternoAtenderSolicitud/>
+            <DelegadoExterno/>
           }
           >
         </PrivateRoute>
