@@ -88,9 +88,9 @@ const getPreferencia = async (id) => {
   }
 }
 
-const getPreferenciasxDocente = async (id_docente) => {
+const listarPorDocente = async (id_docente, id_ciclo) => {
   try{
-    const request = await axios.get(`${url}/preferencia/iddocente=${id_docente}`, tokenService.GetTokenPrueba(), id_docente);  //Es un entero que se pasa
+    const request = await axios.get(`${url}/preferencia/iddocente=${id_docente}/idciclo=${id_ciclo}`, tokenService.GetTokenPrueba(), id_docente, id_ciclo);  //Es un entero que se pasa
     return request.data;
   }catch(exception){
     console.error(exception);
@@ -125,7 +125,7 @@ const registerPreferencia = async newObject => {
   }
 }
 
-const updatePreferencia = async (newObject, id) => {
+const updatePreferencia = async (newObject) => {
   try{
     console.log(newObject)
     const request = await axios.put(`${url}/preferencia/`, newObject, tokenService.GetTokenPrueba());
@@ -146,5 +146,5 @@ const deletePreferencia = async (id) => {
 }
 
 export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona,
-  getPreferencias, getPreferencia, getPreferenciasxDocente, getPreferenciasxSeccion, getPreferenciasxDepartamento, 
+  getPreferencias, getPreferencia, listarPorDocente, getPreferenciasxSeccion, getPreferenciasxDepartamento, 
   registerPreferencia, updatePreferencia, deletePreferencia}

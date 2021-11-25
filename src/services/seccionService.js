@@ -25,6 +25,16 @@ const getSeccionxDepartamento = async (id_departamento) => {
   }
 }
 
+const listarPorCursoCiclo = async (id_departamento, id_ciclo) => {
+  try{
+    const request = await axios.get(`${url}/seccion/vigente/iddepartamento=${id_departamento}/idciclo=${id_ciclo}`, tokenService.GetTokenPrueba(), id_departamento, id_ciclo);  //Es un entero que se pasa
+    console.log(request.data);
+    return request.data;
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 const getSeccion = async (id) => {
   try{
     const request = await axios.get(`${url}/seccion/${id}`, tokenService.GetTokenPrueba(), id);
@@ -68,4 +78,4 @@ const deleteSeccion = async (id) => {
 
 //, tokenService.getToken()
 
-export default {getSecciones, getSeccionxDepartamento, getSeccion, registerSeccion, updateSeccion, deleteSeccion}
+export default {listarPorCursoCiclo, getSecciones, getSeccionxDepartamento, getSeccion, registerSeccion, updateSeccion, deleteSeccion}

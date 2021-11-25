@@ -10,19 +10,22 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+
 import AgregarPreferenciaDocente from './AgregarPreferenciaDocente';
 import EliminarPreferencias from './EliminarPreferencias';
 
 const tableHeaders = [
     {
-      id: 'seleccionar',
-      label: 'Seleccionar',
+      id: '',
+      label: '',
       numeric: false,
-      sortable: true
+      sortable: false
     },
     {
-      id: 'codigo',
-      label: 'Codigo',
+      id: 'clave',
+      label: 'Clave',
       numeric: false,
       sortable: true
     },
@@ -30,26 +33,32 @@ const tableHeaders = [
       id: 'nombre',
       label: 'Nombre',
       numeric: false,
-      sortable: false
+      sortable: true
     },
     {
-      id: 'creditos',
-      label: 'Créditos',
+      id: 'facultad',
+      label: 'Facultad',
       numeric: false,
-      sortable: true
+      sortable: false
     },
     {
       id: 'horario',
       label: 'Horario',
       numeric: false,
-      sortable: true
-    }
-    /* {
-      id: 'bono',
-      label: 'Bonos',
+      sortable: false
+    },
+    {
+      id: 'tipo',
+      label: 'Tipo',
       numeric: false,
       sortable: false
-    } */
+    },
+    {
+      id: 'horas',
+      label: 'Horas',
+      numeric: false,
+      sortable: false
+    }
 ]
   
 export default function ListaPreferenciaDocente({openPopup}) {
@@ -68,29 +77,41 @@ export default function ListaPreferenciaDocente({openPopup}) {
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
     
-    useEffect(() => {
+    React.useEffect(() => {
         getPreferencias()
-    }, [openPopupEdit, openPopupAdd, openPopup, openPopupDelete])
+          .then(pref => {
+            setRecords(pref);
+          })
+    }, [])
 
-    function transformarPreferencias (request){
-        const recordsX = []
-        request.map(doc => {
-            recordsX.push({
-              "Codigo": doc.cursoCiclos[0].curso.codigo,
-              "Nombre": doc.cursoCiclos[0].curso.nombre,
-              "Creditos": doc.cursoCiclos[0].curso.creditos,
-              "Horario": doc.horarios[0].codigo,
-              "ID": doc.id,
+    async function transformarPreferencias (request){
+      const recordsX = [];
+      if(request.length){
+          for(let i = 0; i < request[0].sesiones.length; i++){
+            //Hacemos la verificacion de si es un curso repetido o no
+            const newHor = await request[0].horarios.filter(hor => hor.sesiones.some(ses => ses.id === request[0].sesiones[i].id));
+            recordsX.push ({
+              "ID": request[0].id,
+              "ID_Docente": request[0].docente.id,
+              "ID_Ciclo": request[0].ciclo.id,
+              "Curso_Ciclo": newHor[0].curso_ciclo,
+              "Horario": newHor[0],
+              "Sesion": request[0].sesiones[i],
               "selected": false
             })
-        })
-        return recordsX;
+          }
+        }
+      return recordsX;
     }
 
     const getPreferencias = async () =>{
-        const request = await personaService.getPreferencias();
-        const recordsX = transformarPreferencias(request)
-        setRecords(recordsX)
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      const request = await personaService.listarPorDocente(user.persona.id, parseInt(window.localStorage.getItem("ciclo")));
+      const recordsX = await transformarPreferencias(request)
+      
+      console.log(recordsX);
+
+      return recordsX
     }
 
     const handleSearch = e => {
@@ -110,33 +131,65 @@ export default function ListaPreferenciaDocente({openPopup}) {
      }
 
     const handleDelete = () => {
-      console.log(idDelRecords)
+      let resultado = 0;
+      let prefFil = records.filter((pref) => pref.selected===false)
+      const horarios = [], sesiones = [], cursoCiclos = [];
+
+      for(let i = 0; i < prefFil.length; i++){
+          cursoCiclos.push({
+            "id": prefFil[i].Curso_Ciclo.id,
+          })
+          horarios.push({
+            "id": prefFil[i].Horario.id,
+          })
+          sesiones.push({
+            "id": prefFil[i].Sesion.id,
+          })
+      }
+
+      //Le damos la forma que requiere
+      let preferencia = {
+          "id": prefFil[0].ID,
+          "docente": {
+            "id": prefFil[0].ID_Docente
+          },
+          "ciclo":{
+            "id": prefFil[0].ID_Ciclo
+          },
+          "cursoCiclos": cursoCiclos,
+          "horarios": horarios,
+          "sesiones": sesiones
+      }
+
       for(let i = 0; i < idDelRecords.length; i++){
-        personaService.deletePreferencia(idDelRecords[i])
+        resultado = personaService.updatePreferencia(preferencia)
       } 
+      if(resultado) setRecords(prefFil)
       setOpenPopupDelete(false)
     }
 
     const handleAdd = (e) => {
-        console.log("Se agrega una preferencia (?)")
+        console.log("Se agrega una preferencia")
         setOpenPopupAdd(true)
     }
 
     const addCursoBorrar = (item) => {
       item.selected = !item.selected
+      let idRecords = idDelRecords; 
       if(item.selected){
-          idDelRecords.push(item.ID)
-          console.log(idDelRecords)
-          console.log("Se agrega un horario")
+        console.log("Se agrega un horario")
+        idRecords.push(item.ID)
+
       }else{
-          for(let i = 0; i < idDelRecords.length; i++){
-              if(idDelRecords[i] === item.ID){
-                  idDelRecords.splice(i, 1)
-              }
+        console.log("Se quita un horario")
+        for(let i = 0; i < idRecords.length; i++){
+          if(idRecords[i] === item.ID){
+            idRecords.splice(i, 1)
+            return;
           }
-          console.log(idDelRecords)
-          console.log("Se quita un horario")
+        }
       }
+      setidDelRecords(idRecords);
     } 
 
     return (
@@ -145,7 +198,7 @@ export default function ListaPreferenciaDocente({openPopup}) {
                 {/* <Toolbar> */}
             <Grid container alignItems="flex-start">
               <Grid item xs= {4} >
-                <Typography variant="h4">
+                <Typography variant="h5">
                         Preferencias Registradas
                 </Typography>
               </Grid>
@@ -164,38 +217,53 @@ export default function ListaPreferenciaDocente({openPopup}) {
           <>
             <BoxTbl>
                 <TblContainer>
+                <colgroup>
+                  <col style={{ width: '2%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '40%' }} />
+                  <col style={{ width: '40%' }} />
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '3%' }} />
+                </colgroup>
                     <TblHead />
                     <TableBody>
                     { 
                        recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id} >
+                        <TableRow key={item.Sesion.id} >
                             <TableCell>
-                                <Controls.RowCheckBox onClick = {()=>{addCursoBorrar(item)}}>
+                                <Controls.RowCheckBox 
+                                onClick = {()=>{addCursoBorrar(item)}}>
                                     {/*<EditOutlinedIcon fontSize="small" />*/}
                                 </Controls.RowCheckBox>
                             </TableCell>
                             <TableCell>
-                            <Grid container>
-                                <Grid item sm>
-                                    <Typography sx={{paddingLeft:2.5}}>
-                                        {`${item.Codigo}`}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                            </TableCell>
-                            <TableCell>
-                                <Typography >
-                                    {item.Nombre}
+                                <Typography>
+                                    {item.Curso_Ciclo.curso.codigo}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    {item.Creditos}
+                                    {item.Curso_Ciclo.curso.nombre}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography >
-                                    {item.Horario}
+                                    {item.Curso_Ciclo.curso.seccion.departamento.unidad.nombre}
+                                </Typography>
+                            </TableCell>
+                            <TableCell >
+                                <Typography >
+                                    {item.Horario.codigo}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography >
+                                    {item.Sesion.secuencia ? "Laboratorio" : "Clase"}
+                                </Typography>
+                            </TableCell>
+                            <TableCell align = "center">
+                                <Typography >
+                                    {item.Sesion.horas}
                                 </Typography>
                             </TableCell>
                         </TableRow>
@@ -206,11 +274,14 @@ export default function ListaPreferenciaDocente({openPopup}) {
                 <TblPagination />
               
             </BoxTbl>
-                <Controls.MinusButton 
-                    title="Eliminar Seleccionados"
-                    variant="iconoTexto"
+                <Controls.Button
+                    variant="outlined"
+                    text="Borrar seleccionado"
+                    size="small"
+                    endIcon={<DeleteOutlineOutlinedIcon />}
                     onClick = {() => setOpenPopupDelete(true)}
-                    />
+                    // disabled = {idDelRecords.length ? false : true}
+                />
           </>
           : <>
             <BoxTbl>
@@ -226,7 +297,7 @@ export default function ListaPreferenciaDocente({openPopup}) {
                 setOpenPopup={setOpenPopupAdd}
                 title="Agregar Horarios a Preferencias"
             >
-               <AgregarPreferenciaDocente openPopup = {openPopupAdd} setOpenPopUp = {setOpenPopupAdd}/>
+               <AgregarPreferenciaDocente openPopup = {openPopupAdd} setOpenPopUp = {setOpenPopupAdd} records = {records} setRecords = {setRecords}/>
             </Popup>
             <Popup
                 openPopup={openPopupDelete}
