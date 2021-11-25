@@ -14,7 +14,7 @@ const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleuserc
 const GoogleLoginButton = () => {
     const history = useHistory();
     const { user, setUser, rol, setRol, setToken } = useContext(UserContext);
-    const useState = useMountedState();	
+    // const useState = useMountedState();	
     const [loading, setLoading] = useState(undefined);
     //const [current, setCurrent] = useState(undefined);
 
