@@ -29,6 +29,7 @@ import GestionCiclo from '../pages/Administrador/MantenimientoCiclo/GestionCiclo
 import GestionUnidad from '../pages/Administrador/MantenimientoUnidad/GestionUnidad';
 import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
 import CargaDocenteHorarios from '../pages/AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
+import CargaDocenteHorariosCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocenteHorariosCoord';
 import Vacio from '../pages/Dev/Vacio'
 import GestionUsuarios from '../pages/Administrador/GestionUsuarios/GestionUsuarios';
 import DeudaYDescarga from '../pages/AsistenteSeccion/DeudaYDescarga/DeudaYDescarga';
@@ -45,12 +46,16 @@ import SolicitudDetalle from '../pages/MesaPartes/SolicitudDetalle';
 import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolicitud';
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
-import CargaDocenteCursos from '../pages/AsistenteDepartamento/cargaDocenteCursos';
+import CargaDocenteCursos from '../pages/AsistenteDepartamento/CargaDocente/cargaDocenteCursos';
+import CargaDocenteHorariosAd from '../pages/AsistenteDepartamento/CargaDocente/CargaDocenteCursoHorarios';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
+import SolPreferenciaDocentes from '../pages/AsistenteSeccion/PreferenciaDocente/SolPreferenciaDocentes';
+import ModalDocenteClases from '../pages/AsistenteSeccion/CargaDocente/ModalDocenteClases'
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
+import PreferenciaDocenteForm from '../pages/Docente/PreferenciaDocente/PreferenciaDocenteForm'
 import ErrorDireccionamiento from '../pages/Dev/Error404';
 import Registro from '../pages/NuevoUsuario/Registro';
 import LandingPage from '../constants/LandingPage'
@@ -75,6 +80,7 @@ const privateroutes = [
   { requireRoles: [1], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [1], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [1], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
+  { requireRoles: [1], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
   { requireRoles: [8], path: "/dragdrop", page: DragDropArchivos},
@@ -86,29 +92,36 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
   { requireRoles: [8], path: "/aea", page: CargaArchivos },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
-  { requireRoles: [3], path: "/cord/docentes", page: Vacio },
   { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: Vacio },
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
+  { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
+  { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
+  { requireRoles: [3, 8], path: "/cord/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
+
 
   /* AD */
-  { requireRoles: [1, 2, 4, 8], path: "/ad", page: CargaDocenteCursos },
-  { requireRoles: [1, 2, 4, 8], path: "/ad/asignacionCarga", page: CargaDocenteCursos },
+  { requireRoles: [4], path: "/ad", page: CargaDocenteCursos },
+  { requireRoles: [4], path: "/ad/asignacionCarga/Cargadocente", page: CargaDocenteCursos },
+  { requireRoles: [4], path: "/ad/asignacionCarga/Cargadocente/horarios", page: CargaDocenteHorariosAd},
   { requireRoles: [4], path: "/ad/docentes", page: Vacio },
   { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: SolicitudesDelegadasAMi },
+  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: DelegadoSolicitudDetalle },  
   /* JD */
-  { requireRoles: [5], path: "/jd/asignacionCarga", page: Vacio },
+  { requireRoles: [5], path: "/jd/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [5], path: "/jd/docentes", page: Vacio },
   { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
   { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: MisSolicitudes },
@@ -173,7 +186,7 @@ export default function Router1(props) {
              <Redirect to="/cord/asignacionCarga/registroCursos" />
         </PrivateRoute>
         <PrivateRoute exact path="/ad" requireRoles={[4]}>
-             <Redirect to="/ad/asignacionCarga" />
+             <Redirect to="/ad/asignacionCarga/cargaDocente" />
         </PrivateRoute>
         <PrivateRoute exact path="/jd" requireRoles={[5]}>
              <Redirect to="/jd/asignacionCarga" />

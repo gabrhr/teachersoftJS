@@ -16,6 +16,7 @@ import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
 import HorarioService from '../../../services/horarioService';
 import CursoService from '../../../services/cursoService';
 
+
 import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
@@ -43,7 +44,6 @@ function HeaderBoxs(props) {
 function chompDocentes(sesiones) {
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
-
     return (
         <>
           { clase.length ?
@@ -130,7 +130,7 @@ function generateRow(horario) {
 }
 
 /* Generates a customized row with the data */
-function generateRows(records, recordForEdit) {
+function generateRows(records) {
     return (
         records.map(horario => (
             <Accordion disableGutters>
@@ -142,7 +142,7 @@ function generateRows(records, recordForEdit) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario} curso = {recordForEdit}/>
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario}/>
                 </AccordionDetails>
             </Accordion>
         ))
@@ -235,13 +235,14 @@ const fillHorarios = async (curso) => {
 }
 
 
-export default function TestPage(recordForEdit, setRecordForEdit, curso) {
+export default function TestPage(recordForEdit, setRecordForEdit) {
     const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
 
     React.useEffect(() => {
       fillHorarios(recordForEdit.recordForEdit)
         .then(horarios => {
-          setRecords(horarios);        
+          setRecords(horarios);
+          console.log("horariossssfFFFFFFFF: ", horarios)        
         });  
     }, [])
 
@@ -254,8 +255,7 @@ export default function TestPage(recordForEdit, setRecordForEdit, curso) {
                     <HeaderBoxs headers={headers} />
                 </AccordionSummary>
             </Accordion>
-            {generateRows(records, recordForEdit.recordForEdit)}
-            {console.log("recoooooooord: ",recordForEdit.recordForEdit)}
+            {generateRows(records)}
         </>
     )
 }

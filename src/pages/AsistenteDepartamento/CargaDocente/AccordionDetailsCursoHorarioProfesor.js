@@ -5,16 +5,11 @@
 import React, { useState } from 'react'
 import { Typography, Box, Paper } from '@mui/material'
 import { Grid, Divider, Avatar } from '@mui/material'
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
-import { DT } from '../../../components/DreamTeam/DT'
-import { styled } from '@mui/material/styles';
 import { Controls } from '../../../components/controls/Controls'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import Popup from '../../../components/util/Popup'
-import ModalBusquedaDocente from './ModalBusquedaDocente'
-import ModalDocenteClases from './ModalDocenteClases'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Link } from 'react-router-dom';
+
 
 function generateRow(docente) {
   let tipoDoc = 1;
@@ -76,13 +71,11 @@ function generateRow(docente) {
 }
 
 export default function AccordionDetailsHorarioProfesor(props) {
-    let { sesiones , horario, curso} = props;
+    let { sesiones , horario} = props;
     sesiones = horario.sesiones;
     const [openEditarClasesPopup, setOpenEditarClasesPopup] = useState(false)
     const [openEditarPracticasPopup, setOpenEditarPracticasPopup] = useState(false)
     const [actHorario, setActHorario] = useState(horario);
-
-    const setearActHorario = (horo) => {setActHorario(horo)}
 
     const seleccionarDocentesP = seleccionadosP => {
         console.log(seleccionadosP)
@@ -106,25 +99,6 @@ export default function AccordionDetailsHorarioProfesor(props) {
                             Lista de Docentes de Clases
                         </Typography>
                     </Grid>
-                    <Grid item xs align = "right">
-                        <Link to ={{
-                              pathname:`/as/asignacionCarga/registroCarga/horarios/editar`,
-                              state:{
-                                docentesAsig: clase[0].sesion_docentes.map(sesion_dic => sesion_dic), 
-                                horario: horario, 
-                                tipo: 0,
-                                curso: curso
-                              }
-                          }}  style={{ textDecoration: 'none' }}>
-                            <Controls.Button
-                                variant="outlined"
-                                text="Editar"
-                                size="small"
-                                endIcon={<EditOutlinedIcon />}
-                                onClick={() => {}}
-                            />
-                        </Link>
-                    </Grid>
                 </Grid>
                 {clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
                 {laboratorio[0] ?
@@ -138,29 +112,9 @@ export default function AccordionDetailsHorarioProfesor(props) {
                               Lista de Docentes de Laboratorios
                           </Typography>
                       </Grid>
-                      <Grid item xs align = "right">
-                      <Link to ={{
-                              pathname:`/as/asignacionCarga/registroCarga/horarios/editar`,
-                              state:{
-                                docentesAsig: laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic), 
-                                horario: horario, 
-                                tipo: 1,
-                                curso: curso
-                              }
-                          }}  style={{ textDecoration: 'none' }}>
-                            <Controls.Button
-                                variant="outlined"
-                                text="Editar"
-                                size="small"
-                                endIcon={<EditOutlinedIcon />}
-                                onClick={() => {}}
-                            />
-                        </Link>
-                      </Grid>
                   </Grid>
                   : <Grid container></Grid> }
                   {laboratorio[0] ? laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)) : []}
-                  {console.log("DIOSIDOIDSODISDOSIDODIOSI: ",curso)}
               </Paper>
         </>
     )
