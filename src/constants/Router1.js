@@ -51,7 +51,6 @@ import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTe
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
 import SolPreferenciaDocentes from '../pages/AsistenteSeccion/PreferenciaDocente/SolPreferenciaDocentes';
 import ModalDocenteClases from '../pages/AsistenteSeccion/CargaDocente/ModalDocenteClases'
-import CargaDocenteHorariosCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocenteHorarios'
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 import PreferenciaDocenteForm from '../pages/Docente/PreferenciaDocente/PreferenciaDocenteForm'
