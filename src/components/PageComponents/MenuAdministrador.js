@@ -27,6 +27,16 @@ export const MenuAdministrador = [
             text: 'Sección',
             path: '/admin/mantenimiento/sec',
             indice: 2,
+            },
+            {
+            text: 'Ciclos',
+            path: '/admin/mantenimiento/ciclo',
+            indice:3,
+            },
+            {
+            text: 'Facultades',
+            path: '/admin/mantenimiento/uni',
+            indice: 4,
             }
         ]
     },

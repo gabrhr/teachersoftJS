@@ -26,6 +26,7 @@ import GestionCargaCursos from '../pages/AsistenteSeccion/GestionAsignacionCarga
 import GestionDepartamento from '../pages/Administrador/MantenimientoDepartamento/GestionDepartamento'
 import GestionSeccion from '../pages/Administrador/MantenimientoSeccion/GestionSeccion'
 import GestionCiclo from '../pages/Administrador/MantenimientoCiclo/GestionCiclo';
+import GestionUnidad from '../pages/Administrador/MantenimientoUnidad/GestionUnidad';
 import CargaDocente from '../pages/AsistenteSeccion/CargaDocente/CargaDocente';
 import CargaDocenteHorarios from '../pages/AsistenteSeccion/CargaDocente/CargaDocenteHorarios';
 import Vacio from '../pages/Dev/Vacio'
@@ -62,6 +63,7 @@ const privateroutes = [
   { requireRoles: [0], path: "/admin/mantenimiento/dep", page: GestionDepartamento },
   { requireRoles: [0], path: "/admin/mantenimiento/sec", page: GestionSeccion },
   { requireRoles: [0], path: "/admin/mantenimiento/ciclo", page: GestionCiclo },
+  { requireRoles: [0], path: "/admin/mantenimiento/uni", page: GestionUnidad },
   { requireRoles: [0], path: "/admin/mantenimiento/per", page: Vacio },
   { requireRoles: [0,1,2,3,4,5,6,7,8], path: "/admin/showcase", page: Showcase },
   { requireRoles: [0], path: "/admin/index", page: TestIndex },

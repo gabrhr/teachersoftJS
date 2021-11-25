@@ -269,9 +269,9 @@ export default function GestionTemaTramite() {
 
 
 
-    const onView = (id_tramite) => {
+    const onView = async (id_tramite) => {
         selectedID = id_tramite;
-        localStorage.setItem("id_tramite", id_tramite);
+        await localStorage.setItem("id_tramite", id_tramite);
         //let auxTema = await temaTramiteService.getTemaTramites();  
         console.log( 'Padre:  ' + id_tramite);
         setDetail(true);
