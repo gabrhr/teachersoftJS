@@ -104,20 +104,62 @@ export function b2fPersona(x) {
     }
 }
 
-function personaInit() {
-    const DepartamentoInit = {
-        nombre: "SIN DEPARTAMENTO"
-    }
-    const SeccionInit = {
-        nombre: "SIN SECCION",
-        departamento: DepartamentoInit
-    }
+const DepartamentoInit = {
+    nombre: "SIN DEPARTAMENTO"
+}
+const SeccionInit = {
+    nombre: "SIN SECCION",
+    departamento: DepartamentoInit
+}
+const TemaTramiteInit = {
+    nombre: "SIN TEMA TRAMITE",
+    seccion: SeccionInit
+}
+const TipoTramiteInit = {
+    nombre: "SIN TIPO TRAMITE",
+    temaTramite: TemaTramiteInit        // let's hope it's all good
+}
+export function personaInit() {
 
     return {
         nombres: "SIN PERSONA ASIGNADA", apellidos: "",
         correo_pucp: "",
         foto_URL: "",
         seccion: SeccionInit
+    }
+}
+
+/* llenar con todos los Init.  Que sea a prueba de tontos. */
+export function solicitudInit() {
+    return {
+        //id: x.id,
+        /* nueva solicitud */
+        asunto: '',
+        descripcion: '',
+        solicitador: personaInit(),
+        // archivos: x.archivos,       // ya no se usa
+
+        /* tracking */
+        estado: 0,       // valor
+        tracking: {                                 // -----
+            fecha_enviado: new Date(),
+            fecha_revision: new Date(),
+            fecha_delegado: new Date(),
+            fecha_atendido: new Date(),
+        },
+
+        /* respuesta */
+        delegado: personaInit(),
+        resultado: 0,         // 0: pend, 1: acep, 2: rechazado
+        observacion: '',
+
+        tipoTramite: TipoTramiteInit,
+        // ...other,        // PROBLEMS
+
+        /* RELACIONES (redundant easy access) */
+        solicitadorID: null,     // personaID
+        delegadoID: null,              // personaID
+        tipoTramiteID: null
     }
 }
 

@@ -12,16 +12,18 @@ function getSolicitud(s, setSolicitud) {
     MesaPartesService.getSolicitud(s)
         .then((solicitudes) => {
             console.log(s, solicitudes)
-            setSolicitud(solicitudes[0])
+            setSolicitud({
+                ...solicitudes[0],
+                loaded: true
+            })
         })
 }
 
 function Lue({ e, s }) {
     const { user, setUser, rol, setRol, setToken } = React.useContext(UserContext)
-    const [solicitud, setSolicitud] = React.useState({
-        resultado: 0,
-        foto_URL: 'http://example.com'
-    })
+    const [solicitud, setSolicitud] = React.useState(
+        MesaPartesService.solicitudInit()
+    )
 
     function handleClick() {
         MesaPartesService.lue(e)
@@ -42,10 +44,10 @@ function Lue({ e, s }) {
 
     return (
         <>
-            {/* <ExternoAtenderSolicitud 
+            <ExternoAtenderSolicitud 
                 solicitud={solicitud} 
                 setSolicitud={setSolicitud}
-            /> */}
+            />
         </>
     )
 }
