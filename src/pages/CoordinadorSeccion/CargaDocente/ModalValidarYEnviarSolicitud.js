@@ -126,12 +126,11 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
 
     return(
         <>
-            <DT.Title size="medium" text={'Correo de la unidad: ' + `${correo}`} />
+            {/* <DT.Title size="medium" text={'Correo de la unidad: ' + `${correo}`} />
             <Typography variant = "subtitle1">
                 Sección: {seccion} 
             </Typography>
             <Divider  flexItem/>
-            {/* <DT.HeaderSolicitud solicitud={solicitud} solicitador={true}/> */}
             <Box ml="75px" sx={{paddingTop: '2%'}}>
                 <Grid container>
                     <Grid item xs={0.1}>
@@ -169,7 +168,17 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                 value = {cuerpo}
                 onChange = {(e)=>{setCuerpo(e.target.value)}}
             />
+            <Divider  flexItem/> */}
+             <Typography variant = "h4" color = "primary">
+                Sección: {seccion} 
+            </Typography>
+
             <Divider  flexItem/>
+
+             <Typography variant = "subtitle1" align = "Center">
+                Para la finalización del proceso, se procederá a Generar el Reporte y Validar los horarios asignados. 
+            </Typography>
+
             <Grid container>
                 <Grid item xs={6} align="left" mt={5}>
                     <div>
@@ -180,7 +189,6 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                                 // size="large"
                                 text="Generar reporte"
                                 endIcon = {<EmailOutlinedIcon/>}
-                                onClick = {()=>{setOpenReporte(!openReporte)}}
                             >
                             </Controls.Button>
                     </div>
@@ -205,16 +213,17 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                     ) : (<></>)}
                 </Grid>
                 <Grid item xs={6} align="right" mt={5}>
-                    <div>
+                    {/* <div>
                         <Controls.Button
                             // variant="contained"
                             // color="primary"
                             // size="large"
                             text="Enviar y validar"
                             endIcon = {<EmailOutlinedIcon/>}
+                            onClick = {()=>{setOpenReporte(!openReporte)}}
                         >
                         </Controls.Button>
-                    </div>
+                    </div> */}
                     {openConfVal ? (
                         <Box sx={{paddingRight: '3%'}}>
                         <Typography variant = "subtitle1" sx={{color: 'red', paddingRight: '5%'}}>
