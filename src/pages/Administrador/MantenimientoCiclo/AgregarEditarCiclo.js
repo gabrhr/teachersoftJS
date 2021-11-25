@@ -49,9 +49,9 @@ export default function AgregarEditarCiclo(props) {
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('anho' in fieldValues)
-        temp.anho = DTLocalServices.requiredField(fieldValues.anho)
-      if ('periodo' in fieldValues)
-        temp.periodo = DTLocalServices.requiredField(fieldValues.periodo)
+            temp.anho = DTLocalServices.requiredField(fieldValues.anho)
+        if ('periodo' in fieldValues)
+            temp.periodo = DTLocalServices.requiredField(fieldValues.periodo)
         setErrors({
             ...temp
         })
@@ -90,7 +90,9 @@ export default function AgregarEditarCiclo(props) {
             fecha_inicio: values.fechaInicio,
             fecha_fin: values.fechaFin,
           }
-
+          console.log("FECHA INICIO SUBMIT:",values.fechaInicio)
+        //   if(values.fechaInicio<values.fechaFin) console.log("CORRECTA COMPARACION")
+        //   else console.log("INCORRECTA COMPARACION")
           addOrEdit(newCiclo,resetForm);
 
         }
@@ -131,6 +133,7 @@ export default function AgregarEditarCiclo(props) {
                     
                 </Grid>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
+                    {console.log("FECHA INICIO:",values.fechaInicio)}
                     <SimpleDatePicker
                         name="fechaInicio"
                         label="Fecha Inicio"
