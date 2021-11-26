@@ -63,7 +63,7 @@ function Lue({ e, s }) {
                     loadingstatus: '1'
                 })
             })
-        setC(<>hola</>)
+        setC(<></>)
     }, [])
 
     function getSolicitud() {
