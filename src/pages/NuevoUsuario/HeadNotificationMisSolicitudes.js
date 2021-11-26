@@ -18,8 +18,10 @@ export default function HeadNotificationMisSolicitudes(props) {
     let { title, body } = props
 
     title = title ?? "Nuevo Usuario del Sistema"
-    body = body ?? 
-"Registro de informacion completo, ahora puede enviar su solicitud.  Sin embargo, por motivos de seguridad, solo puede enviar una cantidad limitada de solicitudes." 
+    body = body ??  
+    "Registro de informacion completo, ahora puede enviar su solicitud."
+    /* TODO: restriccion de 3 solicitudes por dia a Usuario Externo */
+// "Registro de informacion completo, ahora puede enviar su solicitud.  Sin embargo, por motivos de seguridad, solo puede enviar una cantidad limitada de solicitudes." 
 
     return (
         <div>

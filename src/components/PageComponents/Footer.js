@@ -5,6 +5,7 @@ export default function Footer() {
     return (
         <div>
              <Grid 
+             container
                 spacing={0} 
                 sx={{
                     width: "100%",

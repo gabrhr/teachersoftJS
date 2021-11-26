@@ -252,18 +252,18 @@ export default function RecepcionDetalleSolicitudFuncion() {
         }))
     }
 
-    /* delegado Externo (necesita crear un usuario primero) */
+    /* delegado Externo (crear nuevo solo si ya existe, postlogin se encarga) */
     function submitDelegarExterno(delegadofake) {
         let datausuario = {
             // id: null,
-            usuario: delegadofake.correo,       // para el login (postlogin)
-            password: null,
+            usuario: delegadofake.correo,       // Back lo lee?  creo que no
+            password: null,                     // Back lo lee?  ni se usa
             persona: {
                 // id: null,
                 tipo_persona: 7,    // Usuario Externo
                 codigo_pucp: null,
-                correo_pucp: delegadofake.correo,       // displayed
-                foto_URL: 'static/images/avatar/1.jpg', // no estoy seguro si esto sirva
+                correo_pucp: delegadofake.correo,
+                foto_URL: 'static/images/avatar/1.jpg',
                 nombres: delegadofake.nombre,
                 apellidos: '',
                 // fechaNac: new Date(),
@@ -275,17 +275,18 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 // departamento: {id: 3},      // (redundante en este caso)
             }
         }
-        userService.registerUsuario(datausuario)
+        MesaPartesService.lue(delegadofake)
             .then(data => {
-                console.log("Create user: ", data)
-                /* FrontEnd fmt */
-                let nuevaPersona = data.persona
+                console.log("lue", data)
+                /* FrontEnd fmt (sorry for verbosity) */
+                let nuevaPersona = data.user.persona
                 nuevaPersona.fullName = delegadofake.nombre
                 nuevaPersona.rolName = "Usuario Externo"
                 nuevaPersona.correo = delegadofake.correo
                 nuevaPersona.options = 'delegadoExterno'
                 submitDelegar(nuevaPersona)
-            })
+            }) 
+            .catch(err => console.error(err));
     }
 
     return (
