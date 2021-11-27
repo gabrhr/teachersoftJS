@@ -5,7 +5,8 @@ const Docentes = ({sesion_docentes}) => {
   return(
     sesion_docentes.map((sesion)=>
       <>
-        <Image src = {`${sesion.docente.foto_URL}`}/>
+        {/* {`${sesion.docente.foto_URL}`} */}
+        <Image src = {"https://eros.pucp.edu.pe/pucp/general/gewpealu/gewpealu?accion=MostrarFoto&codigo=20112728&misdatos=0"} />
         <Text>
           {`${sesion.docente.apellidos}, ${sesion.docente.nombres} ${sesion.docente.numero_documento} 
             ${sesion.docente.seccion.nombre} Carga del ciclo: ${sesion.docente.cargaDocente} 
