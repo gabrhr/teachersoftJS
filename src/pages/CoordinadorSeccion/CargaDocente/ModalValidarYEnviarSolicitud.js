@@ -96,6 +96,24 @@ const hallarDetalle = (sesiones) => {
     return dataHorarios;
   }
 
+const validateItems = (cursos) => { 
+  for(let cur of cursos){
+    if(cur.estado !== "Sin horarios"){
+      const cursocicloValidado = {
+        "id": cur.id_cursociclo,
+        "curso": cur.curso,
+        "ciclo": cur.ciclo,
+        "estado_tracking": 1,
+        "cantidad_horarios": cur.cantidad_horarios,
+      }
+      console.log(cursocicloValidado);
+      let resultado  = CursoService.updateCursoCiclo(cursocicloValidado);
+    }
+  }
+
+  console.log(cursos);
+}
+
 export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsunto, cuerpo, setCuerpo, setOpenValYEnvSolPopup,
                                                     openValYEnvSolPopup, openConfVal, setOpenConfVal, cursos}){
     const correo = "@efekoefkeof"
@@ -121,17 +139,16 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
         //setCursosHorarios([{curso:{nombre: 'h'}}, {curso:{nombre: 'h2'}}, {curso:{nombre: 'h3'}}])
         setCursosHorarios(oficial)
         
-        console.log("POPEODPEODPSODPASODPSODAPO: ", cursosHorarios)  
+        //console.log("POPEODPEODPSODPASODPSODAPO: ", cursosHorarios)  
       }, [])
 
     return(
         <>
-            <DT.Title size="medium" text={'Correo de la unidad: ' + `${correo}`} />
+            {/* <DT.Title size="medium" text={'Correo de la unidad: ' + `${correo}`} />
             <Typography variant = "subtitle1">
                 Sección: {seccion} 
             </Typography>
             <Divider  flexItem/>
-            {/* <DT.HeaderSolicitud solicitud={solicitud} solicitador={true}/> */}
             <Box ml="75px" sx={{paddingTop: '2%'}}>
                 <Grid container>
                     <Grid item xs={0.1}>
@@ -169,7 +186,17 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                 value = {cuerpo}
                 onChange = {(e)=>{setCuerpo(e.target.value)}}
             />
+            <Divider  flexItem/> */}
+             <Typography variant = "h4" color = "primary">
+                Sección: {seccion} 
+            </Typography>
+
             <Divider  flexItem/>
+
+             <Typography variant = "subtitle1" align = "Center">
+                Para la finalización del proceso, se procederá a Generar el Reporte y Validar los horarios asignados. 
+            </Typography>
+
             <Grid container>
                 <Grid item xs={6} align="left" mt={5}>
                     <div>
@@ -180,7 +207,7 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                                 // size="large"
                                 text="Generar reporte"
                                 endIcon = {<EmailOutlinedIcon/>}
-                                onClick = {()=>{setOpenReporte(!openReporte)}}
+                                onClick = {() => {setOpenReporte(!openReporte)}}
                             >
                             </Controls.Button>
                     </div>
@@ -212,6 +239,7 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                             // size="large"
                             text="Enviar y validar"
                             endIcon = {<EmailOutlinedIcon/>}
+                            onClick = {()=>{validateItems(cursos)}}
                         >
                         </Controls.Button>
                     </div>

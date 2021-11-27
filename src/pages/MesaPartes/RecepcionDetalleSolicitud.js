@@ -24,6 +24,8 @@ import Notification from '../../components/util/Notification'
 import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
+import personaService from '../../services/personaService';
+import userService from '../../services/userService'
 
 function sendEmailNotification(solicitud, tipo) {
     console.log(solicitud)
@@ -108,6 +110,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
     }
 
     function retornar() {
+        /* "solo gozalo" --gabs */
         window.history.back();
     }
 
@@ -223,6 +226,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
 
     /* delegado (persona) */
     function submitDelegar(delegado) {
+        let s = MesaPartesService._(`${solicitud.id}&${delegado.correo}`)
         setSolicitud(solicitud => ({
             ...solicitud,
             /* data que viene de DelegarForm */
@@ -240,8 +244,49 @@ export default function RecepcionDetalleSolicitudFuncion() {
             },
 
             /* only for FrontEnd */
-            cambioEstado: true
+            cambioEstado: true,
+            // email url 
+            url: delegado.options === 'delegadoExterno'
+                ? `http://front.teachersoft.solutions/invitado/atenderxemail/` + s
+                : null
         }))
+    }
+
+    /* delegado Externo (crear nuevo solo si ya existe, postlogin se encarga) */
+    function submitDelegarExterno(delegadofake) {
+        let datausuario = {
+            // id: null,
+            usuario: delegadofake.correo,       // Back lo lee?  creo que no
+            password: null,                     // Back lo lee?  ni se usa
+            persona: {
+                // id: null,
+                tipo_persona: 7,    // Usuario Externo
+                codigo_pucp: null,
+                correo_pucp: delegadofake.correo,
+                foto_URL: 'static/images/avatar/1.jpg',
+                nombres: delegadofake.nombre,
+                apellidos: '',
+                // fechaNac: new Date(),
+                // sexo: 0,
+                // tipo_documento: 0,
+                // numero_documento: "12345678",
+                // telefono: "123456789",
+                // seccion: {id: 3},
+                // departamento: {id: 3},      // (redundante en este caso)
+            }
+        }
+        MesaPartesService.lue(delegadofake)
+            .then(data => {
+                console.log("lue", data)
+                /* FrontEnd fmt (sorry for verbosity) */
+                let nuevaPersona = data.user.persona
+                nuevaPersona.fullName = delegadofake.nombre
+                nuevaPersona.rolName = "Usuario Externo"
+                nuevaPersona.correo = delegadofake.correo
+                nuevaPersona.options = 'delegadoExterno'
+                submitDelegar(nuevaPersona)
+            }) 
+            .catch(err => console.error(err));
     }
 
     return (
@@ -291,6 +336,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 <DelegarForm
                     solicitud={solicitud}
                     submitDelegar={submitDelegar}
+                    submitDelegarExterno={submitDelegarExterno}
                 />
             </Popup>
             <Notification notify={notify} setNotify={setNotify} />

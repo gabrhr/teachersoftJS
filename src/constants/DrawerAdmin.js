@@ -9,6 +9,8 @@ import { List } from '@mui/material'
 import MuiDrawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import Menu from "../components/PageComponents/Menu";       // relocate?
+import MenuPrueba from '../components/PageComponents/MenuPrueba';
+import { UserContext } from './UserContext';
 
 //Drawer props
 const drawerWidth = 300;
@@ -62,14 +64,16 @@ const Drawer = styled(MuiDrawer, {
 
 export default function DrawerAdmin(props) {
     const { open, listaMenu } = props
-
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    //const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const {selectedIndex, setSelectedIndex} = React.useContext(UserContext);
+    
     const handleListItemClick = (e, indice) => {
         setSelectedIndex(indice);
     };
     return (
         <Drawer variant="permanent" elevation={1} open={open}>
             <DrawerHeader />
+            {/* <MenuPrueba/> */}
             <List >
                 {listaMenu.map((item, index) => {
                     return <Menu open={open} item={item} key={index}

@@ -28,7 +28,7 @@ import DashboardSoliOrganism from './DashboardSoliOrganism'
 import { UserContext } from '../../constants/UserContext'
 
 // services
-import * as UnidadService from '../../services/unidadService';
+import UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
 import fileService from '../../services/fileService'
@@ -292,7 +292,6 @@ export default function DashboardSoli(props) {
         const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
         setFilterFn({
           fn: items => {
-            console.log(items)
             if (valueFecha[0]== null && valueFecha[1] == null)
               return items
             if (valueFecha[1]==null)
@@ -309,8 +308,9 @@ export default function DashboardSoli(props) {
     }, [valueFecha])
 
     return (
+      <>
+      <ContentHeader text={title} cbo={false} />
       <Form>
-        <ContentHeader text={title} cbo={false} />
         {/* Buscador */}
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
           <div style={{ width: "400px", marginRight: "50px" }}>
@@ -387,6 +387,7 @@ export default function DashboardSoli(props) {
         </Popup>
         <Notification notify={notify} setNotify={setNotify} />
       </Form>
+      </>
     );
 }
 

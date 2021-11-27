@@ -8,13 +8,16 @@ import url from '../../config'
 import { UserContext } from '../../constants/UserContext';
 import { RotateLeftRounded } from '@mui/icons-material';
 import userService from '../../services/userService';
+import useMountedState from 'react-usemountedstate';
+import { Box } from '@mui/material'
 
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 const GoogleLoginButton = () => {
     const history = useHistory();
     const { user, setUser, rol, setRol, setToken } = useContext(UserContext);
+    // const useState = useMountedState();	
     const [loading, setLoading] = useState(undefined);
-    const [current, setCurrent] = useState(undefined);
+    //const [current, setCurrent] = useState(undefined);
 
     const onLogoutSuccess = () => {
         localStorage.clear();
@@ -22,7 +25,6 @@ const GoogleLoginButton = () => {
     }
     const onLogoutFailure = (response) => {
         console.log(response)
-        
     }
     const {signOut} = useGoogleLogout({
         clientId,
@@ -51,20 +53,23 @@ const GoogleLoginButton = () => {
                 return history.push("/jd"); 
             case 6:
                 return history.push("/secretaria");
+            case 7:
+                return history.push("/invitado");
             default:
-                return history.push("/noRoles");
+                return history.push("/registro");
+                //return history.push("/noRoles");
           }
         }
     }, [loading]);
 
-    const onSuccess = async (response) => {
+    const onSuccess = (response) => {
      console.log(response)
         if(response.tokenId){
             let secureConfig = {
                 headers: {
                     Authorization: `${response.accessToken}`
                 },
-                timeout: 10000
+                //timeout: 20000
             };
             const data = {
             
@@ -73,31 +78,27 @@ const GoogleLoginButton = () => {
                         apellidos: response.profileObj.familyName,
                         nombres: response.profileObj.givenName,
                         correo_pucp: response.profileObj.email,
-                        foto_URL: response.profileObj.imageUrl
+                        foto_URL: response.profileObj.imageUrl,
+                        tipo_persona: 8     // Nuevo Usuario
                     }
             }
 
-            try {
-                const request = await axios.post(`${url}/usuario/postlogin`, data,secureConfig);
-                if(request){
-                    console.log(request.data)
-                    /* localStorage("user",request.data)  */
-                    /*  localStorage.setItem("user", JSON.stringify(request.data.user));
-                    localStorage.setItem("token", JSON.stringify(request.data.token));
+                axios.post(`${url}/usuario/postlogin`, data,secureConfig)
+                .then( (request) => {
 
-                    setCurrent(request.data.user.persona.tipo_persona);*/
+                    console.log("POSTLOGIN",request.data)
                     setUser(request.data.user)
                     setRol(request.data.user.persona.tipo_persona)
                     setToken(request.data.token)
-                    console.log("hola mundo")
-                    const user = await userService.getUsuario(1);
-                    console.log(user);
-                    setLoading(true);
-                }
-            } catch(except) {
-                console.error(except)
-                signOut()
-            }
+                })
+                .catch (
+                    err =>{
+                        console.error(err);
+                        signOut();
+                    }
+                )
+            
+            setLoading(true);
             refreshTokenSetup(response)
         }
     }  
@@ -112,13 +113,14 @@ const GoogleLoginButton = () => {
         <GoogleLogin
             clientId={clientId}
             render={renderProps => (
-                <Controls.Button
-                        variant="outlined"
-                        size='small'
-                        fullWidth
-                        text="Iniciar sesión con correo PUCP"
+                <Box mb={3}>
+                    <Controls.Button
+                        size='medium'
+                        //fullWidth
+                        text="Iniciar sesión"
                         onClick={renderProps.onClick} disabled={renderProps.disabled}
-                        />
+                    />
+                </Box>
             )}
             onSuccess={onSuccess}
             onFailure={onFailure}

@@ -93,7 +93,7 @@ const Login = () => {
   }
   return (
     <Form onSubmit={handleSubmit} >
-      <Controls.Input
+      {/* <Controls.Input
         name="username"
         label="Usuario"
         value={values.username}
@@ -126,7 +126,7 @@ const Login = () => {
       />
       <Typography align="center">
         o
-      </Typography>
+      </Typography> */}
       <GoogleLoginButton/>
       {/* <Typography paddingTop="20px" >
         <Link to="#" >

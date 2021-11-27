@@ -38,11 +38,17 @@ const initialFieldValues = {
 }
 
 const tableHeaders = [
-    {
+   {
         id: 'name',
         label: 'Tipo de Trámite',
         numeric: false,
         sortable: true
+    },
+    {
+      id: 'acciones',
+      label: '',
+      numeric: false,
+      sortable: false
     }
 ]
 
@@ -51,8 +57,15 @@ const getTipoTramite = async (id_tema) => {
   //SE DEBE CAMBIAR ESTA FUNCIÓN. SOLAMENTE ES PARA LA PRUEBA DEL FORMULARIO
   //ESTO DEBIDO A QUE SE CARGA AUTOMÁTICAMENTE CON EL PRIMER ID
   // DE TEMA TRÁMITE
-  
+
+  let auxTema = await tematramiteService.getTemaTramite(id_tema);
+
+  localStorage.setItem('nombreTema', auxTema ? auxTema.nombre: "No seleccionado" )
+
   let auxTipos = await tipotramiteService.getTipoTramitexTemaTramite(id_tema);  
+  
+  
+
   auxTipos = auxTipos ?? [];
   console.log(auxTipos);
  
@@ -60,14 +73,14 @@ const getTipoTramite = async (id_tema) => {
   const tipos = [];
   if(auxTipos){
     for (let i = 0; i < auxTipos.length; i++){
-      console.log(auxTipos[i]);
+      /* console.log(auxTipos[i]);
       console.log(auxTipos[i].id);
       console.log(auxTipos[i].nombre);
       console.log(auxTipos[i].temaID);
       console.log(auxTipos[i].id_tema);
       console.log("id");
       console.log(auxTipos[i].temaTramiteMesaDePartes.id);
-      console.log(auxTipos[i].temaTramiteMesaDePartes.nombre);  
+      console.log(auxTipos[i].temaTramiteMesaDePartes.nombre);   */
       tipos.push({
             id: auxTipos[i].id.toString(),
             nombre: auxTipos[i].nombre,
@@ -132,6 +145,8 @@ const getTipoTramite = async (id_tema) => {
           }
         })
     }
+
+
 
     useEffect(() => {
       getTipoTramite(id_tramite)
@@ -220,7 +235,7 @@ const getTipoTramite = async (id_tema) => {
     return(
         <>
          <Paper variant="outlined" sx={PaperStyle}>
-            Tema del Trámite: {tematramiteService.getTemaTramite(idTramite).nombre}
+            Tema del Trámite: {localStorage.getItem('nombreTema')}
             <Controls.AddButton
               title="Nuevo Tipo de Trámite"
               variant="iconoTexto"

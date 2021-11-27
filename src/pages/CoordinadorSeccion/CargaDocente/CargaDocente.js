@@ -128,7 +128,7 @@ const fillCursos = async (ciclo) => {
   for(let cur of dataCur) {
     //Hacemos la creación y verificación de los estados
     const resultadoEstados = verificarEstado(cur);
-    console.log(resultadoEstados);
+    //console.log(resultadoEstados);
     let estado = resultadoEstados[0], tipo= resultadoEstados[1]; 
 
 
@@ -146,11 +146,17 @@ const fillCursos = async (ciclo) => {
         }
       },
       "estado": estado,
-      "type": tipo
+      "type": tipo,
+
+      "curso": cur.curso,
+      "ciclo": cur.ciclo,
+      "id_cursociclo":cur.id,
+      "estado_tracking": cur.estado_tracking,
+      "cantidad_horarios": cur.cantidad_horarios,
     })
 
   }
-  console.log(cursos);
+  //console.log(cursos);
   return cursos;
 }
 
@@ -196,7 +202,7 @@ export default function CargaDocente() {
       .then (newCur =>{
         if(newCur)
           setRecord(newCur);
-        console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: ", newCur);
+        //console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: ", newCur);
       });
     }, [ciclo])
 
@@ -339,7 +345,8 @@ export default function CargaDocente() {
       <Popup
                 openPopup={openValYEnvSolPopup}
                 setOpenPopup={setOpenValYEnvSolPopup}
-                title="Validar y enviar solicitud a la facultad"
+                title="Validar Carga del Ciclo"
+                size = "sm"
             >
                <ModalValidarYEnviarSolicitud /*solicitud = {solicitud}*/asunto={asunto} cuerpo={cuerpo} setAsunto={setAsunto}
                                             setCuerpo={setCuerpo} setOpenValYEnvSolPopup = {setOpenValYEnvSolPopup}

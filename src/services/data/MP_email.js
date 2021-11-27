@@ -86,7 +86,7 @@ export function soliDelegada(s) {
         </p>
         <p>
             Por favor atienda esta solicitud ingresando a nuestro sistema
-            <a href="http://front.teachersoft.solutions">TeacherSoft</a>.
+            <a href=${s.url ?? "http://front.teachersoft.solutions"}>TeacherSoft</a>.
         </p>
 Cordialmente,<br/>
 <b>Departamento Académico de Ciencias</b>

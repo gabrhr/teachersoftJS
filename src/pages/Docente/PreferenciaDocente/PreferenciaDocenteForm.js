@@ -32,7 +32,7 @@ export default function PreferenciaDocenteForm() {
     return (
         <>
             <ContentHeader 
-                text="PREFERENCIA DOCENTE"
+                text="Preferencias del Ciclo"
                 cbo= {false}
             />
 

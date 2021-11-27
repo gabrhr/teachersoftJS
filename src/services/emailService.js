@@ -41,7 +41,7 @@ export function emailDelegado(s) {
         })
 }
 
-/* al ser **delegado** por el Delegado
+/* al ser **atendido** por el Delegado
  * s:  solicitud */
 export function emailSolicitor1(s) {
     return null

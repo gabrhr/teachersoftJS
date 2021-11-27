@@ -85,9 +85,13 @@ const getSeccionCollection =  async () => {
 //LLENADO DE LA LISTA DE CURSOS
 const fillCursos = async (ciclo, seccion, secciones) => {
 
+
   if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
   if(!seccion) seccion = 0;
   let dataCur = [];
+
+  console.log("El ciclo es ", ciclo)
+  console.log("La seccion es ", seccion)
 
   if(seccion === 0){
     for(let s of secciones){

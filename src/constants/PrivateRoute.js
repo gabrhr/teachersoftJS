@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 /* From https://v5.reactrouter.com/web/example/auth-workflow */
 export default function PrivateRoute(props) {
     const {requireRoles,component: Component, ...rest } = props
-    
+    var pathDelegado = window.location.pathname;
     const history=useHistory();
     let rol = JSON.parse(localStorage.getItem("rol"))
     /* que hace `permiso`? */
@@ -52,7 +52,8 @@ export default function PrivateRoute(props) {
                         case 6:
                             return history.push("/secretaria");    
                       default:
-                          return history.push("/noRoles");
+                          return history.push("/registro");
+                          //return history.push("/noRoles");
                     }   
               case(1):                             
                   return <Component {...props} />;   

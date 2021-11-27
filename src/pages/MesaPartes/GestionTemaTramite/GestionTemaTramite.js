@@ -1,4 +1,4 @@
-// URL: localhost:3000/as/gestiontematramite/gestiontematramite 
+// URL: http://localhost:3000/secretaria/mantenimiento/temaTramite
 
 import React, { useState, useEffect } from 'react'
 import ContentHeader from '../../../components/AppMain/ContentHeader';
@@ -11,7 +11,7 @@ import Popup from '../../../components/util/Popup'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
 import useTable from "../../../components/useTable";
 import { useForm, Form } from '../../../components/useForm';
-
+import { makeStyles } from '@mui/styles';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -30,6 +30,21 @@ import { WindowSharp } from '@mui/icons-material';
 
 let selectedID = 1;
 
+const useStyles = makeStyles(theme => ({
+  paper: {
+    textAlign: "center",
+    color: theme.palette.text.secondary
+  },
+  visible: {
+    transitionDuration: "0.0s",
+    display: "none"
+  },
+  hidden: {
+    transitionDuration: "0.0s"
+  },
+  collapsible: { transitionDuration: "0.0s" }
+}));
+
 const initialFieldValues = {
     seccionID: '',
 }
@@ -46,6 +61,12 @@ const initialFieldValues = {
         label: 'Seccion',
         numeric: false,
         sortable: true
+    },
+    {
+      id: 'acciones',
+      label: '',
+      numeric: false,
+      sortable: false
     }
 ]
 
@@ -111,7 +132,14 @@ export default function GestionTemaTramite() {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
-    const [detail, setDetail] = useState(false)
+    const [detail, setDetail] = useState(false);
+    const [isViewActivityMode, setIsViewActivityMode] = useState(true);
+    const [isVisible, setIsVisible] = useState(true);
+    const [selectedRow, setSelectedRow] = useState(50) //Se tiene que cambiar
+
+    const classes = {
+      ...useStyles()
+    };
     
     const {
         TblContainer,
@@ -164,7 +192,22 @@ export default function GestionTemaTramite() {
         });
         
       }, [recordForEdit,changeData, deleteData])
+
+      useEffect(() => {
+        setIsViewActivityMode(prev => !prev);
+      }, [isVisible]);
  
+
+      const handleChange = (id_tramite) => {
+        if (isVisible){
+          setIsVisible(prev => !prev);
+        }
+        else if (id_tramite == localStorage.getItem("id_tramite")){
+          setIsVisible(prev => !prev);
+        }
+        
+      };
+      
     const addOrEdit = (temaTramite, resetForm) => {
 
         const dataTemaTramite = {
@@ -226,9 +269,10 @@ export default function GestionTemaTramite() {
 
 
 
-    const onView = (id_tramite) => {
+    const onView = async (id_tramite) => {
         selectedID = id_tramite;
-        localStorage.setItem("id_tramite", id_tramite);
+        await localStorage.setItem("id_tramite", id_tramite);
+        //let auxTema = await temaTramiteService.getTemaTramites();  
         console.log( 'Padre:  ' + id_tramite);
         setDetail(true);
         //this.forceUpdate();
@@ -252,7 +296,7 @@ export default function GestionTemaTramite() {
           spacing={2}
          >
          
-        <Grid item xs={8} md={8} mb={8}>
+        <Grid item xs={isViewActivityMode ? 6 : 12} className={classes.collapsible} >
             <Typography variant="h4" style={SubtitulosTable} >
             Tipo de Trámite
             </Typography>
@@ -290,8 +334,13 @@ export default function GestionTemaTramite() {
 
                   recordsAfterPagingAndSorting() && recordsAfterPagingAndSorting().map(item => (
                     
-                  <StyledTableRow key={item.id}>
-                      {console.log(item)}
+                  <StyledTableRow key={item.id}
+                  backCl = {(selectedRow === records.indexOf(item))?'#FFF':'#FFF' } 
+                  sx={(selectedRow === records.indexOf(item))?{backgroundColor: '#E9ECF8', '&:hover': {
+                    backgroundColor: '#E9ECF8',}}:{'&:hover': {backgroundColor: '#E9ECF8',}}}
+                  >
+              
+                      
                     <StyledTableCell>{item.nombre}</StyledTableCell>
                     <StyledTableCell>{item.seccion.nombre}</StyledTableCell>
                     <StyledTableCell>
@@ -319,7 +368,8 @@ export default function GestionTemaTramite() {
                         <ViewHeadlineIcon
                         color="warning"
                         onClick={() => {
-                          onView(item.id)
+                          handleChange(item.id);
+                          onView(item.id);
                         }}/>
                       </IconButton>
                     </StyledTableCell>
@@ -332,7 +382,7 @@ export default function GestionTemaTramite() {
         </BoxTbl>
         </Grid>
         <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-        <Grid item xs={3.5} md={3.5} mb={4}>
+        <Grid item xs={5.5} className={isVisible ? classes.visible : classes.hidden} >
             <Typography variant="h4" style={SubtitulosTable} >
                     Detalles del Tema de Trámite
             </Typography>
