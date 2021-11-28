@@ -62,6 +62,7 @@ import LandingPage from '../constants/LandingPage'
 import ExternoAtenderSolicitud from '../pages/MesaPartes/ExternoAtenderSolicitud';
 import DelegadoExterno from '../pages/MesaPartes/DelegadoExterno';
 import DeudasYDescargasJefe from '../pages/JefeDepartamento/DeudasYDescargas/DeudasYDescargasJefe'
+import GestionDescargas from '../pages/JefeDepartamento/DeudasYDescargas/Descargas/GestionDescargas';
 
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
@@ -136,6 +137,7 @@ const privateroutes = [
   { requireRoles: [5], path: "/jd/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
   { requireRoles: [5], path: "/jd/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   { requireRoles: [5], path: "/jd/asignacionCarga/deudaYDescarga", page: DeudasYDescargasJefe },  
+  { requireRoles: [5], path: "/jd/asignacionCarga/proceso/descarga", page: GestionDescargas },  
   /* Secretario de D */
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: RecepcionSolicitud },
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },

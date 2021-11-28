@@ -7,13 +7,16 @@ import Popup from '../../../../components/util/Popup';
 import NuevoProcesoForm from './NuevoProcesoForm';
 import Notification from '../../../../components/util/Notification';
 import IconButton from '../../../../components/controls/IconButton';
+import { Link} from 'react-router-dom';
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const tableHeaders = [
     {
-      id: 'asunto',
-      label: 'Asunto',
+      id: 'proceso',
+      label: 'Proceso',
       numeric: false,
       sortable: true
     },
@@ -24,16 +27,11 @@ const tableHeaders = [
       sortable: false
     },
     {
-      id: 'cantidad',
-      label: 'Cantidad',
+      id: 'acciones',
+      label: 'Acciones',
       numeric: false,
       sortable: true
-    },{
-      id: 'detalle',
-      label: 'Detalle',
-      numeric: false,
-      sortable: true
-    },
+    }
 ]
 
 export default function GestionProcesos() {
@@ -75,7 +73,7 @@ export default function GestionProcesos() {
               /* no search text */
               return items
             else
-              return items.filter(x => x.asunto.toLowerCase()
+              return items.filter(x => x.nombre.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
@@ -139,7 +137,10 @@ export default function GestionProcesos() {
                     <TableBody>
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
-                            <Item key={index} item={item} getRow= {getRow}/>
+                            <Item key={index} item={item} getRow= {getRow}
+                                setRecordForEdit={setRecordForEdit}
+                                setOpenPopup={setOpenPopup}
+                            />
                         ))
                     }
                     </TableBody>
@@ -165,57 +166,45 @@ export default function GestionProcesos() {
 }
 
 function Item(props){
-    const {item,getRow} = props
+    const {item,getRow,setOpenPopup,setRecordForEdit} = props
     return (
         <>
         
             <TableRow>
                 <TableCell sx={{maxWidth:"400px"}}>
-                    <div >
-                        Fecha de Creación: {item.fecha}
-                    </div>
-                    <Typography >
-                        {item.asunto}
+                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        Nombre de Proceso: {'\u00A0'}
                     </Typography>
-                    <div >
-                        Autor: {item.autorNombre}
-                    </div>
-                    
+                    <Typography display="inline" sx={{color:"primary.light"}}>
+                        {item.nombre} 
+                    </Typography >
                 </TableCell>
                 <TableCell sx={{maxWidth:"250px"}}> 
-                    <Typography paragraph>
-                        Descripcion: {item.descripcion}
-                    </Typography>
-                </TableCell>
-                <TableCell >
-                    <Typography display="inline">
-                        Cantidad de Descargas Solicitadas:{'\u00A0'}
-                    </Typography>
-                    <Typography display="inline" sx={{color:"#41B9E4"}}>
-                        {item.descargaSolicitada} 
-                    </Typography>
-                    <div></div>
-                    <Typography display="inline">
-                        Cantidad de Descargas Aceptadas:{'\u00A0'}
-                    </Typography>
-                    <Typography display="inline" sx={{color:"#41B9E4"}}>
-                        {item.descargaAceptada} 
-                    </Typography>                 
-                    
+                    {/* Tracking dibujo */}
                 </TableCell>
                 <TableCell>
-                    
-                    <IconButton size="small"
-                              onClick={() => { getRow(item) }}
-                            >
-                        <ArrowForwardIosIcon fontSize="small" />
+                    <Controls.ActionButton
+                        color="warning"
+                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                    >
+                        <EditOutlinedIcon fontSize="small" />
+                    </Controls.ActionButton>
+                    <Link to ={{
+                        pathname:"/jd/asignacionCarga/proceso/descarga",
+                        state:{
+                            procesoinit: item
+                        }
+                    }}  style={{ textDecoration: 'none' }}>
 
-                    </IconButton>
+                        <IconButton size="small"
+                            onClick={() => { getRow(item) }}
+                        >
+                            <ArrowForwardIosIcon fontSize="small" />
+
+                        </IconButton>
+                    </Link>
                 </TableCell>
-                {/* <TableCell>{item.bono}</TableCell> */}
             </TableRow>
-                        
-
         </>
     );
 }

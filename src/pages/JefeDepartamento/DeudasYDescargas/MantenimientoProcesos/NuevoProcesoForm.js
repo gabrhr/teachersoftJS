@@ -1,9 +1,9 @@
-import { Grid, Typography } from '@mui/material';
 import React, {useState, useEffect} from 'react'
+import { Grid, Typography, Stack } from '@mui/material';
 import { Controls } from '../../../../components/controls/Controls';
 import { Form, useForm } from '../../../../components/useForm';
 
-const defaultDate = new Date().toString();
+const defaultDate = new Date();
 
 const initialFieldValues = {
     /* PROCESO */
@@ -73,58 +73,51 @@ export default function NuevoProcesoForm(props) {
                     <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                         Tiempo del proceso para los Docentes {'\u00A0'}
                     </Typography>
-                    <Controls.DatePicker
-                        name="fechaIniDocente"
-                        label="Fecha Inicio para Docentes"
-                        value={values.fechaIniDocente}
-                        onChange={handleInputChange}
-                        disableFuture
-                        openTo="year"
-                        views={['year', 'month', 'day']}
-                    />
-                    <Controls.DatePicker
-                        name="fechaFinDocente"
-                        label="Fecha Inicio para Docentes"
-                        value={values.fechaFinDocente}
-                        onChange={handleInputChange}
-                        disableFuture
-                        openTo="year"
-                        views={['year', 'month', 'day']}
-                    />
+                    <Stack direction="row" align="left" spacing={4}>
+                        <Controls.DateTimePickerv2
+                            name="fechaIniDocente"
+                            label="Fecha Inicio para Docentes"
+                            value={values.fechaIniDocente}
+                            onChange={handleInputChange}
+                        />
+                        <Controls.DateTimePickerv2
+                            name="fechaFinDocente"
+                            label="Fecha Fin para Docentes"
+                            value={values.fechaFinDocente}
+                            onChange={handleInputChange}
+                        />
+                    </Stack>
                 </Grid>
                 <Grid item  xs={12}>
+                    
                     <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                         Tiempo del proceso para las Secciones {'\u00A0'}
                     </Typography>
-                    <Controls.DatePicker
-                        name="fechaFinSeccion"
-                        label="Fecha Limite para Sección"
-                        value={values.fechaFinSeccion}
-                        onChange={handleInputChange}
-                        disableFuture
-                        openTo="year"
-                        views={['year', 'month', 'day']}
-                    />
+                    <Stack direction="row" align="left" spacing={4}>
+                        <Controls.DateTimePickerv2
+                            name="fechaFinSeccion"
+                            label="Fecha Limite para Sección"
+                            value={values.fechaFinSeccion}
+                            onChange={handleInputChange}
+                        />
+                    </Stack>
                 </Grid>
                 <Grid item  xs={12}>
                     <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                         Tiempo del proceso para el Departamento {'\u00A0'}
                     </Typography>
-                    <Controls.DatePicker
+                    <Controls.DateTimePickerv2
                         name="fechaFinProceso"
                         label="Fecha Limite para Departamento"
                         value={values.fechaFinProceso}
                         onChange={handleInputChange}
-                        disableFuture
-                        openTo="year"
-                        views={['year', 'month', 'day']}
                     />
                 </Grid>
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>
                     <Controls.Button
-                        text="Guardar Cambios"
+                        text="Iniciar Proceso"
                         type="submit"
                     />
 
