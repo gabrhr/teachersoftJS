@@ -42,7 +42,8 @@ export default function CargaDocenteHorarios() {
           />
         </div> */}
         <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}/>
-        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit}/>
+        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit} curso = {curso}/>
+        {console.log("cursefwerwerwo: ",curso)}
       </Form>
   )
 }

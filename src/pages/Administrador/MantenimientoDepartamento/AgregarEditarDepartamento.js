@@ -41,14 +41,13 @@ const getUnidades = async () => {
     return unidades;
 }
  
-let initialFieldValues = {
+const initialFieldValues = {
     id: 0,
     nombre: '',
     correo: '',
-    unidad: {
-        id: dataUni[0] ? dataUni[0].id : '',
-        nombre:  dataUni[0] ? dataUni[0].nombre : '',
-    }
+    unidadId: 0,
+    nombreUnidad: '',
+    
 }
 
 
@@ -77,8 +76,11 @@ export default function AgregarEditarDepartamento(props) {
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido"
-        if ('unidad' in fieldValues)
-            temp.unidad = DTLocalServices.requiredField(fieldValues.unidad)
+        if(recordForEdit){
+          temp.idUnidad = values.idUnidad !== 0 ? "" : "Este campo es requerido";
+        } else{
+          temp.unidadId = values.unidadId !== 0 ? "":"Este campo es requerido";
+        }  
         setErrors({
             ...temp
         })
@@ -179,10 +181,14 @@ export default function AgregarEditarDepartamento(props) {
                   <Controls.Select
                     name={recordForEdit ? "idUnidad" : "unidadId"}
                     label="Facultad"
-                    value={recordForEdit ? values.idUnidad : values.unidadId == ('' || 0)? 1 : values.unidadId}
+                    value={recordForEdit ? values.idUnidad : values.unidadId}
                     onChange={handleInputChange}
                     options={unidad}
- 
+                    options={[{ id: 0, nombre: "Seleccionar" }]
+                    .concat(unidad)
+                     }
+                    error={recordForEdit ? errors.idUnidad : errors.unidadId}
+             
          
                   />
                 </Grid>

@@ -7,24 +7,24 @@ import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 
 export const MenuAsistenteDepartamento = [
     {
-        text: 'Asignación de Carga',
-        path: '/ad/asignacionCarga',
+        text: 'Carga del Ciclo',
+        path: '/ad/asignacionCarga/Cargadocente',
         icon: <CalendarTodayOutlinedIcon />,
         indice: 0,
     },
     
-    {
-        text: 'Docentes',
-        path: '/ad/docentes',
-        icon: <AccountBoxOutlinedIcon />,
-        indice: 1,
-    },
-    {
-        text: 'Panel de Indicadores',
-        path: '/ad/panelIndicadores',
-        icon: <ShowChartOutlinedIcon />,
-        indice: 2,
-    },
+    // {
+    //     text: 'Docentes',
+    //     path: '/ad/docentes',
+    //     icon: <AccountBoxOutlinedIcon />,
+    //     indice: 1,
+    // },
+    // {
+    //     text: 'Panel de Indicadores',
+    //     path: '/ad/panelIndicadores',
+    //     icon: <ShowChartOutlinedIcon />,
+    //     indice: 2,
+    // },
     {
         text: 'Mesa de Partes',
         path: '',

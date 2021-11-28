@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { Grid, Stack, Typography } from '@mui/material';
 import { DT } from '../../../components/DreamTeam/DT'
 import HorarioService from '../../../services/horarioService';
@@ -16,6 +16,9 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EliminarUnCurso from './EliminarUnCurso'
 import EliminarTodosLosCursos from './EliminarTodosLosCursos'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import EditarHorarioCurso from './EditarHorarioCurso'
+import { UserContext } from '../../../constants/UserContext';
 
 const initialFieldValues = {
     searchText: ''
@@ -163,10 +166,13 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     //const [columns, setColumns] = useState([]);
     //const [data, setData] = useState([]);
     //const [open, setOpen] = React.useState(false);
+    const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openOnePopup, setOpenOnePopup] = useState(false)
     const [openAllPopup, setOpenAllPopup] = useState(false)
     const [indexDelete, setIndexDelete] = useState(0)
+    const [recordForEdit, setRecordForEdit] = useState(null)
+    const [openPopupEdit, setOpenPopupEdit] = useState(false)
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
@@ -194,8 +200,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
         setRecords(newHorarios);
         setCargaH(records);
       });
-      
-    }, [ciclo])
+      console.log("El rol es", rol)
+    }, [openPopupEdit])
   
     //console.log(records);
     //console.log(indexDelete);
@@ -210,17 +216,22 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
               /* no search text */
               return items
             else
-              return items.filter(x => x.curso.nombre.toLowerCase()
+              return items.filter(x => x.curso_ciclo.curso.nombre.toLowerCase()
                   .includes(target.value.toLowerCase()))
           }
         })
       }
     const handleClick = (e) => {
-        history.push("/as/asignacionCarga/cursos");
+      if(rol === 3){
+        history.push("/cord/asignacionCarga/cursos");
+      }else{
+        history.push("/as/asignadcionCarga/cursos");
+      }
+        
     };
 
     const guardarIndex = item => {
-      setIndexDelete(item.id)
+      setIndexDelete(item)
       setOpenOnePopup(true)
     }
 
@@ -232,17 +243,47 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       setOpenAllPopup(false)
     }
 
-    const eliminarCurso = () =>{
-      console.log(indexDelete);
+    const handleEdit = async item => {
+      console.log(item)
+      const request = await HorarioService.getHorario(item.id)
+      console.log(request)
+      setRecordForEdit(request)
+      setOpenPopupEdit(true)
+    }
+
+    const eliminarCurso = async () =>{
       //Funcion para elimianr el Curso seleccionado
-      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete.id);
       records.splice(pos,1);
       pos = 0;
-      //De nuevo, solo para comprobar que existen ambos campos en pantalla - solo en pantalla.
-      pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
-      records.splice(pos,1);
+      //pos = records.map(function(e) { return e.id; }).indexOf(indexDelete);
+      //records.splice(pos,1);
       //setRecords(); 
-      HorarioService.deleteHorario(indexDelete);
+
+      //Hacemos una verificacion de que se debe de hacer con el horario
+      const hor = await HorarioService.getHorario(indexDelete.id);
+      if(hor.sesiones.length > 1){
+        //Se actualiza
+        const updtHor ={
+          "id": hor.id,
+          "codigo": hor.codigo,
+          "curso_ciclo":{
+            "id": hor.curso_ciclo.id,
+          },
+          sesiones: [{
+            "id": indexDelete.sesiones.secuencia ? hor.sesiones[1].id : hor.sesiones[0].id,
+            "secuencia": indexDelete.sesiones.secuencia ? hor.sesiones[1].secuencia: hor.sesiones[0].secuencia,
+            "sesion_docentes": indexDelete.sesiones.secuencia ? hor.sesiones[1].sesion_docentes: hor.sesiones[0].sesion_docentes,
+            "horas": indexDelete.sesiones.secuencia ? hor.sesiones[1].horas: hor.sesiones[0].horas,
+            "tipo_dictado": indexDelete.sesiones.secuencia ? hor.sesiones[1].tipo_dictado: hor.sesiones[0].tipo_dictado
+          }],
+        }
+        HorarioService.updateHorario(updtHor);
+      }
+      else{
+        //Se elimina
+        HorarioService.deleteHorario(indexDelete.id);
+      }
       setOpenOnePopup(false)
     }
 
@@ -292,7 +333,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 <TblContainer>
                     <TblHead />
                     <TableBody>
-                    {/*console.log(records)*/}
+                    {/* {console.log(records)} */}
                     {records.length > 0 ? 
                         recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
@@ -309,6 +350,13 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                             <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
                             <TableCell>{item.sesiones.hora_sesion}</TableCell>
                             <TableCell>
+                              {/* Accion editar */}
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {handleEdit(item)}}
+                              >
+                                <EditOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
                               {/* Accion eliminar */}
                               <Controls.ActionButton
                                 color="warning"
@@ -336,6 +384,17 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 endIcon={<DeleteOutlinedIcon fontSize="small"/>}
                 onClick={ () => {setOpenAllPopup(true)}}
                 /> */}
+            <Popup
+                openPopup={openPopupEdit}
+                setOpenPopup={setOpenPopupEdit}
+                title= {"Editar Horario"}
+                size = "sm"
+            >
+              <EditarHorarioCurso
+                recordForEdit={recordForEdit}
+                setOpenPopup={setOpenPopupEdit}
+              />        
+            </Popup>
             <Popup
                 openPopup={openOnePopup}
                 setOpenPopup={setOpenOnePopup}

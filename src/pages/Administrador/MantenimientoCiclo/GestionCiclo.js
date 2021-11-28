@@ -288,6 +288,7 @@ export default function GestionCiclo() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title= {recordForEdit ? "Editar Ciclo": "Nuevo Ciclo"}
+                size="sm"
             >
               <AgregarEditarCiclo
                 recordForEdit={recordForEdit}

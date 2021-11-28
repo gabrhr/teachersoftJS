@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid , Input, Divider, Stack,Typography, Avatar} from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useTheme } from '@mui/material/styles'
 import { Controls } from "../../../components/controls/Controls"
 import SimpleDatePicker from '../../../components/DreamTeam/SimpleDatePicker';
+import Notification from '../../../components/util/Notification'
+import ValidationBox from '../../../components/DreamTeam/ValidationBox';
 /* fake BackEnd */
 import * as employeeService from '../../../services/employeeService';
 import CicloService from '../../../services/cicloService.js';
 import * as DTLocalServices from '../../../services/DTLocalServices';
-
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Collapse from '@mui/material/Collapse';
 
 
 const thisYear = new Date().getFullYear();
@@ -38,20 +43,32 @@ const initialFieldValues = {
 export default function AgregarEditarCiclo(props) {
 
     const {addOrEdit, recordForEdit, setOpenPopup} = props
-
+    const [open, setOpen] = useState(false);
     const theme = useTheme();
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         align:"left",
     }
 
-    ///////////////////////////
+ 
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ('anho' in fieldValues)
             temp.anho = DTLocalServices.requiredField(fieldValues.anho)
         if ('periodo' in fieldValues)
             temp.periodo = DTLocalServices.requiredField(fieldValues.periodo)
+
+        const fechaMin = new Date(fieldValues.fechaInicio);
+        const fechaMax = new Date(fieldValues.fechaFin);
+        if (fechaMin >= fechaMax){
+            temp.fechaInicio = "La fecha de Inicio debe ser menor a la fecha Fin";
+            temp.fechaFin = "La fecha de Fin debe ser mayor a la fecha de Inicio";
+        }
+        if (fechaMin >= fechaMax){
+            setOpen(true);
+            //alert("La fecha de Inicio debe ser menor a la fecha Fin");
+        }
+
         setErrors({
             ...temp
         })
@@ -59,7 +76,7 @@ export default function AgregarEditarCiclo(props) {
         if (fieldValues == values)
             return Object.values(temp).every(x => x === "")
     }
-    ///////////////////////////
+ 
 
     const {
         values,
@@ -150,7 +167,11 @@ export default function AgregarEditarCiclo(props) {
                         onChange={handleInputChange}
                         error={errors.fechaFin}
                     />
-                    
+                    <ValidationBox
+                        open = {open}
+                        setOpen = {setOpen}
+                        text = {"Verificar que la fecha de Inicio de ciclo sea menor a la fecha de fin de ciclo."}
+                    />
                 </Grid>
                 
             </Grid>

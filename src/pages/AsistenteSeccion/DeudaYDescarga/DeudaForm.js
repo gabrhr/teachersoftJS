@@ -24,12 +24,12 @@ const tableHeaders = [
       id: 'carga',
       label: 'Carga Horaria',
       numeric: false,
-      sortable: true
+      sortable: false
     },{
       id: 'deuda',
       label: 'Deuda Horaria',
       numeric: false,
-      sortable: true
+      sortable: false
     },
     /* {
       id: 'bono',
@@ -55,11 +55,12 @@ export default function DeudaForm() {
         
         getProfesores();
   
-      }, [records])
+      }, [])
 
       function transformarDocentes (request){
         const recordsX = []
         request.map(hor => {
+          if(hor.codigo_pucp)
             recordsX.push({
                 "id": hor.id,
                 "url_foto": hor.foto_URL ? hor.foto_URL : 'static/images/avatar/1.jpg',

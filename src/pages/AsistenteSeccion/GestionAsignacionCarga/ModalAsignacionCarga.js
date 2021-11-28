@@ -38,19 +38,19 @@ const tableHeaders = [
         id: 'horario',
         label: 'Horario',
         numeric: false,
-        sortable: true
+        sortable: false
      },
      {
         id: 'tipoSesion',
         label: 'Tipo',
         numeric: false,
-        sortable: true
+        sortable: false
      },
     {
-      id: 'cargaHoraria',
-      label: 'Carga Horaria',
+      id: 'horas',
+      label: 'Horas',
       numeric: false,
-      sortable: true
+      sortable: false
     },
 ]
 
@@ -63,7 +63,15 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
         postHorario = {
           "codigo": hor.codigo,
           "curso_ciclo":{
-            "id": request[0].id
+            "id": request[0].id,
+            "ciclo": {
+              "id": request[0].ciclo.id,
+            },
+            "curso": {
+              "id": request[0].curso.id,
+            },
+            "cantidad_horarios": request[0].cantidad_horarios, //Se actualiza al nuevo estado
+            "estado_tracking": request[0].estado_tracking,
           },
           sesiones:[{
             "secuencia": hor.tipo,
@@ -76,16 +84,37 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   
   else{ //Caso en que no es otro Horario el que se lee- se actualiza [].sesion
     //const dataSes = horarioService.convertStringtoSesion(hor.sesiones_excel);
-
-    postHorario.sesiones.push({
-      "secuencia": hor.tipo,
-      "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
-    })
+    if(hor.tipo === 1)  //Solo si es laboratorio- sino no se ingresa
+      postHorario.sesiones.push({
+        "secuencia": hor.tipo,
+        "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
+      })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
   console.log(postHorario);
   return [otroHorario, postHorario];
 }
+
+const actualizarCursoCiclo = async (curso_ciclo)=> {
+
+  if(curso_ciclo.cantidad_horarios !== 1){
+    const newCC = {
+      "id": curso_ciclo.id,
+      "ciclo": {
+        "id": curso_ciclo.ciclo.id,
+      },
+      "curso": {
+        "id": curso_ciclo.curso.id,
+      },
+      "cantidad_horarios": 1, //Se actualiza al nuevo estado - con horarios
+      "estado_tracking": curso_ciclo.estado_tracking,
+    }
+    
+    const request = await cursoService.updateCursoCiclo(newCC);
+
+  }
+}
+
 
 export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
     let auxHorario
@@ -176,11 +205,23 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         alert("Error en la plantilla - Campo Clave")
         return false
       }
+      if(obj.Horario === "" || obj.Horario.length !== 4){
+        alert("Error en la plantilla - Campo Horario")
+        return false
+      }
+      if(!isNumeric(obj.Horas) || obj.Horas === ""){
+        alert("Error en la plantilla - Campo Horas")
+        return false
+      }
       if(obj.Nombre === ""){
         alert("Error en la plantilla - Campo Nombre")
         return false
       }
-      if(obj.Unidad === ""){
+      if(obj.Tipo === ""){
+        alert("Error en la plantilla - Campo Tipo")
+        return false
+      }
+      /*if(obj.Unidad === ""){
         alert("Error en la plantilla - Campo Unidad")
         return false
       }
@@ -195,19 +236,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       if(!isNumeric(obj.Carga_Horaria) || obj.Carga_Horaria === ""){
         alert("Error en la plantilla - Campo Carga_Horaria")
         return false
-      }
-      if(obj.Horario === "" || obj.Horario.length !== 4){
-        alert("Error en la plantilla - Campo Horario")
-        return false
-      }
-      if(obj.Tipo === ""){
-        alert("Error en la plantilla - Campo Tipo")
-        return false
-      }
-      if(!isNumeric(obj.Horas) || obj.Horas === ""){
-        alert("Error en la plantilla - Campo Horas")
-        return false
-      }
+      }*/
       return true
     }
 
@@ -235,6 +264,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         obj[headers[j]] = d;
                     }
                 }
+                console.log(obj)
                 if(!validate(obj)){
                   return
                 }
@@ -309,8 +339,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //Loop finished
         
         if(otroHorario === 1)  {
-          if(horarioService.registerHorario(postHorario))
+          if(horarioService.registerHorario(postHorario)){
+            await actualizarCursoCiclo(postHorario.curso_ciclo);
             permission = 0;
+          }
         }
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
@@ -361,6 +393,13 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                 </Typography>
                 <BoxTbl>
                     <TblContainer>
+                      <colgroup>
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '50%' }} />
+                        <col style={{ width: '10%' }} />
+                        <col style={{ width: '20%' }} />
+                        <col style={{ width: '10%' }} />
+                      </colgroup>
                         <TblHead />
                         <TableBody>
                         {
@@ -376,7 +415,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                                 <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
                                 <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
-                                <TableCell>{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
                                 {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
                             </TableRow>
                             ))

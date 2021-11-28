@@ -8,7 +8,7 @@ import url from '../../config'
 import { UserContext } from '../../constants/UserContext';
 import { RotateLeftRounded } from '@mui/icons-material';
 import userService from '../../services/userService';
-import useMountedState from 'react-usemountedstate';
+import { Box } from '@mui/material'
 
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 const GoogleLoginButton = () => {
@@ -77,7 +77,8 @@ const GoogleLoginButton = () => {
                         apellidos: response.profileObj.familyName,
                         nombres: response.profileObj.givenName,
                         correo_pucp: response.profileObj.email,
-                        foto_URL: response.profileObj.imageUrl
+                        foto_URL: response.profileObj.imageUrl,
+                        tipo_persona: 8     // Nuevo Usuario
                     }
             }
 
@@ -111,12 +112,14 @@ const GoogleLoginButton = () => {
         <GoogleLogin
             clientId={clientId}
             render={renderProps => (
-                <Controls.Button
-                        size='small'
+                <Box mb={3}>
+                    <Controls.Button
+                        size='medium'
                         //fullWidth
                         text="Iniciar sesión"
                         onClick={renderProps.onClick} disabled={renderProps.disabled}
-                        />
+                    />
+                </Box>
             )}
             onSuccess={onSuccess}
             onFailure={onFailure}

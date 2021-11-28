@@ -56,9 +56,10 @@ export default function Login() {
                     <Typography
                         variant="h2"
                         component="div"
-                        paddingTop="50px"
+                        paddingTop="150px"
                         paddingBottom="20px"
                         align="center"
+                        fontWeight="500"
                         >
                         Bienvenido
                     </Typography>
@@ -67,14 +68,18 @@ export default function Login() {
                         align="center"
                         >
                         <Typography align="center" fontWeight="530" my={1}>
-                            TeacherSoft es una plataforma que permite 
-                            administrar los docentes etc etc
+                            {/* TeacherSoft es una plataforma que permite 
+                            administrar los docentes etc etc */}
+                            TeacherSoft es una plataforma orientada a los procesos para docentes y personal administrativo de la PUCP.
                         </Typography>
                         <img  src='assets/img/landing.jpg' style={{ height: "220px", maxWidth:"100%"}}/>
                         <LoginForm />
                         <Typography align="left" mt={1} fontSize={13.5} ml={1}>
-                            *Si desea comunicarse con el Departamento de Ingeniería, 
-                            puede acceder a Mesa de Partes como "Usuario externo"
+                            {/* *Si desea comunicarse con el Departamento de Ingeniería, 
+                            puede acceder a Mesa de Partes como "Usuario externo" */}
+
+                            * Si desea comunicarse con el Departamento de Ingeniería, 
+                            puede acceder a Mesa de Partes iniciando sesion su cuenta de Gmail
                         </Typography>
                     </Grid>
                 </Grid>
