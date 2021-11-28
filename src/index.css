@@ -6,6 +6,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* didn't work :( */
+  /* make high res mandatory >:) */
+  min-width: 1700px;
+  overflow: 'auto';
   overflow-y: scroll;
 }
 

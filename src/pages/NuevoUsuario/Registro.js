@@ -35,8 +35,8 @@ function f2bNuevoUsuarioExterno(values, user) {
         telefono: values.telefono,
 
         /* relations */
-        departamento: { id: user.persona.departamento.id },
-        seccion: {id: user.persona.seccion.id }
+        departamento: null,
+        seccion: null
     }
     return persona
 }
@@ -53,6 +53,7 @@ export default function Registro() {
     
     /* Con valores de registro */
     function submitValues(values, user) {
+        // console.log("insert", f2bNuevoUsuarioExterno(values, user))
         personaService.updatePersona2(f2bNuevoUsuarioExterno(values, user))
         .then(res => {
             /* success */
