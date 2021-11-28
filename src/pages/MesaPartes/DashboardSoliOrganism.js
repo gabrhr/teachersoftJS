@@ -25,6 +25,7 @@ import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Link, Redirect } from 'react-router-dom';
 import { UserContext } from '../../constants/UserContext'
+import LinearProgress from '@mui/material/LinearProgress';
 import moment from 'moment'
 import 'moment/locale/es'
 moment.locale('es');
@@ -32,6 +33,7 @@ moment.locale('es');
 //Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
     const {BoxTbl,TblContainer, 
+        recordsCargados, setRecordsCargados,
         recordsAfterPagingAndSorting, TblPagination, delegado} = props
     const [row, setRow] = useState(false)
     const {user, rol} = useContext(UserContext);
@@ -56,6 +58,8 @@ export default function DashboardSoliOrganism(props) {
         //#region TABLA DE CADA SOLICITUD
         <div>
             <BoxTbl>
+            {recordsCargados ? (
+                <>
                 <TblContainer>
                     {/* <TblHead />  */}
                     <TableBody>
@@ -128,6 +132,13 @@ export default function DashboardSoliOrganism(props) {
                     </TableBody>
                 </TblContainer>
                 <TblPagination />
+                </>
+            ):
+            (
+                <Box sx={{ width: '100%' }}>
+                  <LinearProgress />
+                </Box>
+              )}
             </BoxTbl>
         </div>
         //#endregion
