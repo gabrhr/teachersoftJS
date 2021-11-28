@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../../components/PageComponents/Header'
-import { Paper, Grid, Typography } from '@mui/material';
+import { Paper, Grid, Typography, Avatar } from '@mui/material';
 import LoginForm from './LoginForm'
 import Footer from '../../components/PageComponents/Footer';
 import { Box } from '@mui/system';
@@ -9,13 +9,14 @@ import { Box } from '@mui/system';
 
 export default function Login() {
     const paperStyle={
-        paddingLeft: 60,
-        paddingRight: 60,
-        paddingTop: 20,
-        paddingBottom: 20,
-        width:"60%",
-        margin:"20px auto",
-
+        //display: "flex",
+        padding: 2,
+        width:"70%",
+        height:"450px",
+        //height: "calc(100vh - 200px)",
+        marginX:"auto",
+        marginTop:"2px",
+        marginBottom:"10px" ,
         borderStyle: 'solid',
         borderColor: 'black',
         borderWidth: '1px',
@@ -55,19 +56,32 @@ export default function Login() {
                     <Typography
                         variant="h2"
                         component="div"
-                        paddingTop="50px"
+                        paddingTop="150px"
                         paddingBottom="20px"
                         align="center"
+                        fontWeight="500"
                         >
                         Bienvenido
                     </Typography>
-                    <Paper
-                        elevation={0}
-                        style={paperStyle}
-                        
+                    <Grid
+                        sx={paperStyle}
+                        align="center"
                         >
+                        <Typography align="center" fontWeight="530" my={1}>
+                            {/* TeacherSoft es una plataforma que permite 
+                            administrar los docentes etc etc */}
+                            TeacherSoft es una plataforma orientada a los procesos para docentes y personal administrativo de la PUCP.
+                        </Typography>
+                        <img  src='assets/img/landing.jpg' style={{ height: "220px", maxWidth:"100%"}}/>
                         <LoginForm />
-                    </Paper>
+                        <Typography align="left" mt={1} fontSize={13.5} ml={1}>
+                            {/* *Si desea comunicarse con el Departamento de Ingeniería, 
+                            puede acceder a Mesa de Partes como "Usuario externo" */}
+
+                            * Si desea comunicarse con el Departamento de Ingeniería, 
+                            puede acceder a Mesa de Partes iniciando sesion su cuenta de Gmail
+                        </Typography>
+                    </Grid>
                 </Grid>
                 <Grid item xs={6}
                     sx={{

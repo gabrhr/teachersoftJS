@@ -63,7 +63,7 @@ export default function HeaderSimple() {
                     alignItems="center"
                 >
                     <Grid item pl={2}>
-                        <Avatar alt="profile pic" src={user.persona.foto_URL} />
+                        <Avatar alt="profile pic" src={user.persona? user.persona.foto_URL:"/broken-image.jpg"} />
                     </Grid>
                     <Grid item sm alignItems="right">
                         <div className={classes.pageIcon}>

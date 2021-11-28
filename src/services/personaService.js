@@ -171,6 +171,6 @@ const deletePreferencia = async (id) => {
   }
 }
 
-export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, deletePersona,
+export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, updatePersona2, deletePersona,
   getPreferencias, getPreferencia, listarPorDocente, getPreferenciasxSeccion, getPreferenciasxDepartamento, 
   registerPreferencia, updatePreferencia, deletePreferencia}

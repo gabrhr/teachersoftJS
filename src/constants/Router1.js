@@ -77,9 +77,9 @@ const privateroutes = [
   /* TODO: Remover rol 8 (acceso temporal) */
   { requireRoles: [1], path: "/doc/misSolicitudes", page: MisSolicitudes },
   { requireRoles: [1], path: "/doc/solicitudDetalle", page: SolicitudDetalle },
-  { requireRoles: [1], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [1], path: "/doc/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [1], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
+  { requireRoles: [1], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [1], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
@@ -92,9 +92,10 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
-  { requireRoles: [2, 8], path: "/as/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
-  { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: Vacio },
+  { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [2], path: "/as/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
+  { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },
+  { requireRoles: [2], path: "/as/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
   { requireRoles: [8], path: "/aea", page: CargaArchivos },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
@@ -104,8 +105,10 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
-  { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: Vacio },
-  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: Vacio },  
+  { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [3], path: "/cord/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
+  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
+  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
@@ -118,15 +121,18 @@ const privateroutes = [
   { requireRoles: [4], path: "/ad/asignacionCarga/Cargadocente/horarios", page: CargaDocenteHorariosAd},
   { requireRoles: [4], path: "/ad/docentes", page: Vacio },
   { requireRoles: [4], path: "/ad/panelIndicadores", page: Vacio },
-  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: SolicitudesDelegadasAMi },
-  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: DelegadoSolicitudDetalle },  
+  { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [4], path: "/ad/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
+  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
+  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   /* JD */
   { requireRoles: [5], path: "/jd/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [5], path: "/jd/docentes", page: Vacio },
   { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
   { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: MisSolicitudes },
+  { requireRoles: [5], path: "/jd/mesaPartes/solicitudDetalle", page: SolicitudDetalle },  
   { requireRoles: [5], path: "/jd/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
-  { requireRoles: [5], path: "/jd/mesaPartes/solicitudDetalle", page: DelegadoSolicitudDetalle },  
+  { requireRoles: [5], path: "/jd/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   /* Secretario de D */
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: RecepcionSolicitud },
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
@@ -241,15 +247,15 @@ export default function Router1(props) {
        
         {/* Login */}
        
-        <Route path="/invitado/atenderxemail/" children={DelegadoExterno} />
-        <Route exact path="/login" children={Login} />
+        <Route path="/invitado/atenderxemail/" render={() => <DelegadoExterno />} />
+        <Route exact path="/login" render={() => <Login />}/>
         <Route exact path="/">
           {user?.id>0? 
             <Redirect to={generateRouteRol(rol)} /> 
             : <Redirect to="/login"/> }
         </Route>
 
-        <Route default component={ErrorDireccionamiento} />
+        <Route default render={() => <ErrorDireccionamiento />} />
       </Switch>
     </Router>
   )
