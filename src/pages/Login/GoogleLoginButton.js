@@ -8,14 +8,13 @@ import url from '../../config'
 import { UserContext } from '../../constants/UserContext';
 import { RotateLeftRounded } from '@mui/icons-material';
 import userService from '../../services/userService';
-import useMountedState from 'react-usemountedstate';
 import { Box } from '@mui/material'
 
 const clientId = "626086626141-gclngcarehd8fhpacb2nrfq64mk6qf5o.apps.googleusercontent.com";
 const GoogleLoginButton = () => {
     const history = useHistory();
     const { user, setUser, rol, setRol, setToken } = useContext(UserContext);
-    // const useState = useMountedState();	
+    //const useState = useMountedState();	
     const [loading, setLoading] = useState(undefined);
     //const [current, setCurrent] = useState(undefined);
 
@@ -86,7 +85,7 @@ const GoogleLoginButton = () => {
                 axios.post(`${url}/usuario/postlogin`, data,secureConfig)
                 .then( (request) => {
 
-                    console.log("POSTLOGIN",request.data)
+                    //console.log("POSTLOGIN",request.data)
                     setUser(request.data.user)
                     setRol(request.data.user.persona.tipo_persona)
                     setToken(request.data.token)

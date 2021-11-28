@@ -30,12 +30,19 @@ export default function SolicitudesDelegadasAMi() {
     const usuario = JSON.parse(localStorage.getItem("user"));
     const {user, rol} = React.useContext(UserContext);
     //console.log(usuarioActual);
-    
+    const [recordsCargados, setRecordsCargados] = useState(false)
+
     React.useEffect(() => {
+        setRecordsCargados(false)
         getSolicitudes(setRecords, usuario)
+        setRecordsCargados(true)
     }, [user])
 
     return (
-        <DashboardSoli title={"Solicitudes delegadas por Mesa de Partes"} delegado={true} records={records} setRecords={setRecords}/>
+        <DashboardSoli title={"Solicitudes delegadas por Mesa de Partes"} delegado={true} 
+        records={records} setRecords={setRecords}
+        user={user}
+        recordsCargados={recordsCargados} setRecordsCargados ={setRecordsCargados}
+        />
     )
 }
