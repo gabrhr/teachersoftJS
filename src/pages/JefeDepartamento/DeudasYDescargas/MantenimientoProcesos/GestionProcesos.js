@@ -93,7 +93,7 @@ export default function GestionProcesos() {
           type: 'success'
         })
     }
-    useEffect(() => {
+    React.useEffect(() => {
         // serviceeeeeeeeeee
        /*  getCiclos()
         .then (newDep =>{
