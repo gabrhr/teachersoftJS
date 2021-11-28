@@ -169,6 +169,8 @@ export default function Router1(props) {
           return "/secretaria"
       case 7:
         return "/invitado"
+      case 9:
+        return "/ai"
     default:
         //return "/noRoles"
         return "/registro"
@@ -202,6 +204,9 @@ export default function Router1(props) {
         </PrivateRoute>
         <PrivateRoute exact path="/invitado" requireRoles={[7]}>
              <Redirect to="/invitado/mesaPartes/misSolicitudes" />
+        </PrivateRoute>
+        <PrivateRoute exact path="/ai" requireRoles={[9]}>
+             <Redirect to="/ai/repoInvestigaciones" />
         </PrivateRoute>
         {/* Ver bien la ruta */}
         {/* <PrivateRoute exact path="/invitado/atender" requireRoles={[8]}>
