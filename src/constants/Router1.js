@@ -61,6 +61,8 @@ import Registro from '../pages/NuevoUsuario/Registro';
 import LandingPage from '../constants/LandingPage'
 import ExternoAtenderSolicitud from '../pages/MesaPartes/ExternoAtenderSolicitud';
 import DelegadoExterno from '../pages/MesaPartes/DelegadoExterno';
+import { MenuAsistenteInvestigacion } from '../components/PageComponents/MenuAsistenteInvestigacion';
+import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacion';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -140,6 +142,10 @@ const privateroutes = [
   /* Externo */
   { requireRoles: [7], path: "/invitado/mesaPartes/misSolicitudes", page: MisSolicitudes},  
   { requireRoles: [7], path: "/invitado/mesaPartes/solicitudDetalle", page: SolicitudDetalle },  
+
+  /* Asistente de Investigación, debe aceptar solamente 1 */ 
+  { requireRoles: [0,1,2,9], path: "/ai/repoInvestigacion", page: GestionTrabajosInvestigacion },  
+
 ]
 
 
