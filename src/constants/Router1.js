@@ -90,6 +90,7 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/preferencia", page: SolPreferenciaDocentes },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
   { requireRoles: [2], path: "/as/mesaPartes/misSolicitudes", page: MisSolicitudes },
