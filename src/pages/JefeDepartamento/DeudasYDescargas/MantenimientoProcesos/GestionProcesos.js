@@ -7,14 +7,15 @@
  * Obtiene los datos de la BD, y los pasa a ItemProcesoActual y
  * ListaProcesosPasados
  */
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Typography } from '@mui/material'
 import { Controls } from '../../../../components/controls/Controls'
 import { DT } from '../../../../components/DreamTeam/DT'
 import Popup from '../../../../components/util/Popup';
 import NuevoProcesoForm from './NuevoProcesoForm';
 import Notification from '../../../../components/util/Notification';
-
+import procesoDescargaService from '../../../../services/procesoDescargaService';
+import {UserContext} from '../../../../constants/UserContext';
 import ItemProcesoActual from './ItemProcesoActual';
 import ListaProcesosPasados from './ListaProcesosPasados';
 import ItemProcesoActualVacio from './ItemProcesoActualVacio';
@@ -34,7 +35,7 @@ const pruebita = [
 
 export default function GestionProcesos() {
     /* contiene los ProcesosDesgarga(Horaria) */
-    const [records, setRecords] = useState(pruebita)
+    const [records, setRecords] = useState([])
     const [procesoActual, setProcesoActual] = useState(null)
 
     const [openPopup, setOpenPopup] = useState(false)
@@ -43,12 +44,54 @@ export default function GestionProcesos() {
     /* de gestion de ciclo */
     const [createData, setCreateData] = useState(false);
     const [updateData, setUpdateData] = useState(false);
-
+    const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
 
-    const addOrEdit = (proceso, resetForm) => {
+    const addOrEdit = async (values, resetForm)=> {
         //Service
-
+        let ciclo, procesoNew, procesoEdit;
+        if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
+        console.log(values)
+        if(recordForEdit === null){
+            procesoNew = {
+                "ciclo":{
+                    "id": ciclo
+                },
+                "fecha_inicio": values.fechaIniDocente,
+                "fecha_fin": values.fechaFinProceso ,
+                "fecha_fin_docente": values.fechaFinDocente,
+                "fecha_fin_seccion": values.fechaFinSeccion,
+                "nombre": values.nombre,
+                "departamento":{
+                    "id": user.persona.seccion.departamento.id
+                },
+                "autor":{
+                    "id": user.persona.id
+                }
+            }
+            procesoDescargaService.registerProcesoDescarga(procesoNew);
+            console.log("Se crea un proceso")
+        }else{
+            procesoEdit = {
+                "id": values.id,
+                "ciclo":{
+                    "id": ciclo
+                },
+                "fecha_inicio": values.fechaIniDocente,
+                "fecha_fin": values.fechaFinProceso ,
+                "fecha_fin_docente": values.fechaFinDocente,
+                "fecha_fin_seccion": values.fechaFinSeccion,
+                "nombre": values.nombre,
+                "departamento":{
+                    "id": user.persona.seccion.departamento.id
+                },
+                "autor":{
+                    "id": user.persona.id
+                }
+            }
+            procesoDescargaService.updateProcesoDescarga(procesoEdit);
+            console.log("Se edita un proceso")
+        }
         resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)
@@ -58,6 +101,13 @@ export default function GestionProcesos() {
             type: 'success'
         })
     }
+
+    const getProcesosDescarga = async() => {
+        const procesos = await procesoDescargaService.getProcesosDescarga()
+        setRecords(procesos)
+        setProcesoActual(records.find(({fecha_inicio,fecha_fin }) => Date.parse(fecha_inicio) < new Date() && new Date() <  Date.parse(fecha_fin) ))
+        console.log("proceso actuallllll",procesos)
+    }   
 
     /* Aqui jala la data de BD? */
     React.useEffect(() => {
@@ -83,7 +133,8 @@ export default function GestionProcesos() {
            setDeleteData(false);
            setCreateData(false);
          }); */
-    }, [recordForEdit, createData])
+         getProcesosDescarga()
+    }, [recordForEdit, createData, openPopup])
 
     return (
         <>
@@ -96,8 +147,10 @@ export default function GestionProcesos() {
                 ? 
                     <ItemProcesoActual
                         procesoActual={procesoActual}
+                        addOrEdit={addOrEdit}
+                        setOpenPopup={setOpenPopup}
                     />
-                :   <ItemProcesoActualVacio
+                   :<ItemProcesoActualVacio
                         addOrEdit={addOrEdit}
                         setOpenPopup={setOpenPopup}
                     />
@@ -121,6 +174,7 @@ export default function GestionProcesos() {
                 <NuevoProcesoForm
                     recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit}
+                    setOpenPopup={setOpenPopup}
                 />
             </Popup>
             <Notification

@@ -34,9 +34,6 @@ const GoogleLoginButton = () => {
     useEffect(() => {
         // if (loading && rol) {
         if (loading) {
-          //console.log(current);
-         /*  if (!current) return history.push("/noRoles");; */
-    
           switch (rol) {
             case 0:
                 return history.push("/admin");
@@ -59,6 +56,9 @@ const GoogleLoginButton = () => {
                 //return history.push("/noRoles");
           }
         }
+        return () => {
+            setLoading(false)
+        };
     }, [loading]);
 
     const onSuccess = (response) => {

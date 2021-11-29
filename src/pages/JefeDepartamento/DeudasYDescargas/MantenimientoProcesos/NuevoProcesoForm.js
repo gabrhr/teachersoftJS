@@ -17,7 +17,7 @@ const initialFieldValues = {
 
 
 export default function NuevoProcesoForm(props) {
-    const { addOrEdit, recordForEdit } = props
+    const { addOrEdit, recordForEdit, } = props
     const {
         values,
         setValues,
@@ -27,7 +27,7 @@ export default function NuevoProcesoForm(props) {
         resetForm
     } = useForm(recordForEdit ? recordForEdit : initialFieldValues);
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault()
         if (validate())
@@ -45,7 +45,7 @@ export default function NuevoProcesoForm(props) {
 
     const validate = () => {
         let temp = {...errors}
-        temp.nombre = values.nombre ? "" : "This field is required."
+        temp.nombre = values.nombre ? "" : "Campo requerido"
         
         setErrors({
             ...temp
