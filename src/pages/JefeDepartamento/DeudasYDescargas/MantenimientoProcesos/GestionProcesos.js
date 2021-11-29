@@ -105,7 +105,15 @@ export default function GestionProcesos() {
     const getProcesosDescarga = async() => {
         const procesos = await procesoDescargaService.getProcesosDescarga()
         setRecords(procesos)
-        setProcesoActual(records.find(({fecha_inicio,fecha_fin }) => Date.parse(fecha_inicio) < new Date() && new Date() <  Date.parse(fecha_fin) ))
+        setProcesoActual(
+            records.find(p => {
+            // console.log("fechas", p)
+            let now = new Date().getTime()        // fecha actual en numerito
+            let r = Date.parse(p.fecha_inicio) < now && 
+                now < Date.parse(p.fecha_fin) 
+            // console.log(r, Date.parse(p.fecha_inicio), new Date().getTime(), Date.parse(p.fecha_fin))
+            return r
+        }))
         console.log("proceso actuallllll",procesos)
     }   
 
