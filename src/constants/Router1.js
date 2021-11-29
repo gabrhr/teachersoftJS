@@ -144,7 +144,7 @@ const privateroutes = [
   { requireRoles: [7], path: "/invitado/mesaPartes/solicitudDetalle", page: SolicitudDetalle },  
 
   /* Asistente de Investigación, debe aceptar solamente 1 */ 
-  { requireRoles: [0,1,2,9], path: "/ai/repoInvestigacion", page: GestionTrabajosInvestigacion },  
+  { requireRoles: [0,1,2,9], path: "/ai/repoInvestigaciones", page: GestionTrabajosInvestigacion },  
 
 ]
 
