@@ -176,7 +176,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevatio:0}
+    color:"primary.light", elevation:0}
     const {
         TblContainer,
         TblHead,
@@ -225,7 +225,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       if(rol === 3){
         history.push("/cord/asignacionCarga/cursos");
       }else{
-        history.push("/as/asignadcionCarga/cursos");
+        history.push("/as/asignacionCarga/cursos");
       }
         
     };
