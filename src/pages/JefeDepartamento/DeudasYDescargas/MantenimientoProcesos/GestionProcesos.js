@@ -1,3 +1,8 @@
+/* Author: Gabs
+ * 
+ * Obtiene los datos de la BD, y los pasa a ItemProcesoActual y
+ * ListaProcesosPasados
+ */
 import React, { useState }  from 'react'
 import useTable from '../../../../components/useTable'
 import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
