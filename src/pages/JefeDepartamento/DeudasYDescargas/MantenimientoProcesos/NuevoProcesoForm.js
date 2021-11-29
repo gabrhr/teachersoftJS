@@ -49,8 +49,7 @@ export default function NuevoProcesoForm(props) {
 
     const validate = (fieldValues = values) => {
         let temp = {...errors}
-        let defaultError = "Campo es requerido"
-        temp.nombre = values.nombre ? "" : "This field is required."
+        temp.nombre = values.nombre ? "" : "Campo requerido"
         
         if ('nombre' in fieldValues)
             if (fieldValues.nombre.length === 0)

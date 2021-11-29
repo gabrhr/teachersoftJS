@@ -114,7 +114,7 @@ export default function DeudasYDescargasJefe() {
                 onChangeIndex={handleChangeIndex}
             >
                 <TabPanel value={value} index={0}>
-                    <DeudaForm/>
+                    <DeudaForm/>    {/* <--- es una lista */}
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <GestionProcesos/>
