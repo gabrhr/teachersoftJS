@@ -151,8 +151,16 @@ function getTipoDetalle(item,user,rol){
     } else if (item.delegadoID== user.persona.id){ //Delegados
         /* ejecutar esta primero por si se la delegan a si mismo */
         if(rol==1) return "/doc/misDelegados/solicitudDetalle"
+        else if(rol==2) return "/as/mesaPartes/misDelegados/solicitudDetalle"
+        else if(rol==3) return "/cord/mesaPartes/misDelegados/solicitudDetalle"
+        else if(rol==4) return "/ad/mesaPartes/misDelegados/solicitudDetalle"
+        else if(rol==5) return "/jd/mesaPartes/misDelegados/solicitudDetalle"
     } else if(item.solicitadorID== user.persona.id){ //MisSolicitudes
         if(rol==1) return "/doc/solicitudDetalle"
+        else if(rol==2) return "/as/mesaPartes/solicitudDetalle" 
+        else if(rol==3) return "/cord/mesaPartes/solicitudDetalle" 
+        else if(rol==4) return "/ad/mesaPartes/solicitudDetalle" 
+        else if(rol==5) return "/jd/mesaPartes/solicitudDetalle" 
         else if(rol==7) return "/invitado/mesaPartes/solicitudDetalle" 
     }
     return "/doc/solicitudDetalle"

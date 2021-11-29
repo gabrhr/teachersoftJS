@@ -88,6 +88,7 @@ const privateroutes = [
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
   { requireRoles: [8], path: "/dragdrop", page: DragDropArchivos},
+  { requireRoles: [8], path: "/aea", page: CargaArchivos },
   
   /* AS */
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
@@ -100,7 +101,6 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
-  { requireRoles: [8], path: "/aea", page: CargaArchivos },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
   /* CS*/
