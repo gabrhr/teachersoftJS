@@ -6,9 +6,15 @@ import { Form, useForm } from '../../../components/useForm';
 const initialFieldValues = {
     /* PROCESO */
     id: 0,
-    bono: '',
+    bonoId: 0,
     justificacion:'',
 }
+
+const getBonos = [
+    {id: 0, bonoId:0, title: 'Seleccionar'},
+    {id: 1, bonoId:1,title: 'Bono de Investigación'},
+    {id: 2, bonoId:2,title: 'Bono de Docencia'}
+]
 
 
 export default function NuevaDescargaDocente(props) {
@@ -40,7 +46,7 @@ export default function NuevaDescargaDocente(props) {
 
     const validate = () => {
         let temp = {...errors}
-        temp.bono = values.bono ? "" : "Este campo es requerido."
+        temp.bonoId = values.bonoId !=0 ? "" : "Este campo es requerido."
         temp.justificacion = values.justificacion ? "" : "Este campo es requerido."
         
         setErrors({
@@ -55,15 +61,16 @@ export default function NuevaDescargaDocente(props) {
     return (
         <Form onSubmit={handleSubmit}>
             {/* seleccion de tema y tipo tramite */}
-            <Grid container spacing={8}>
-                <Grid item xs={6}>
-                    <Controls.Input
-                        name="bono"
-                        label="Bono del Proceso"
-                        value={values.bono}
+            <Grid container spacing={2} algin="center">
+                <Grid item xs={12}>
+                    <Controls.Select
+                        name="bonoId"
+                        label="Bono solicitado"
+                        value={values.bonoId}
                         onChange={handleInputChange}
-                        error={errors.bono}
-                    />  
+                        options={getBonos}
+                        error={errors.bonoId}
+                    />
                     <Controls.Input
                         name="justificacion"
                         label="Justificacion"
@@ -76,7 +83,7 @@ export default function NuevaDescargaDocente(props) {
                     />               
                 </Grid>
             </Grid>
-            <Grid cointainer align="right" mt={5}>
+            <Grid cointainer align="right" mt={3}>
                 <div>
                     <Controls.Button
                         text="Enviar Solicitud"

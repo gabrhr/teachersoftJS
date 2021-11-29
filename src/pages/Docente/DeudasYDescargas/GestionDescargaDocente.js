@@ -133,7 +133,9 @@ export default function GestionDescargaDocente() {
                         <TableBody>
                         {
                         recordsAfterPagingAndSorting().map(item => (
-                                <Item item={item} getRow= {getRow}/>
+                                <Item item={item} getRow= {getRow}
+                                    setOpenPopup={setOpenPopup}
+                                />
                             ))
                         }
                         </TableBody>
@@ -154,7 +156,8 @@ export default function GestionDescargaDocente() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Nueva solicitud de Descarga"
+                title= {recordForEdit ? "Editar Solicitud de Descarga": "Nueva Solicitud de Descarga"}
+                size="sm"
             >
                 <NuevaDescargaDocente 
                     recordForEdit={recordForEdit}
@@ -186,7 +189,9 @@ function Item(props){
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {formatoFecha(item.fecha_enviado)}
+                        {//formatoFecha(item.fecha_enviado)
+                            "fecha"
+                            }
                     </Typography>
                     <div/>
                     <Typography fontWeight='bold' fontSize={18}>
