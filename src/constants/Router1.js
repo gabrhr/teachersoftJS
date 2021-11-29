@@ -63,7 +63,7 @@ import ExternoAtenderSolicitud from '../pages/MesaPartes/ExternoAtenderSolicitud
 import DelegadoExterno from '../pages/MesaPartes/DelegadoExterno';
 import DeudasYDescargasJefe from '../pages/JefeDepartamento/DeudasYDescargas/DeudasYDescargasJefe'
 import GestionDescargas from '../pages/JefeDepartamento/DeudasYDescargas/Descargas/GestionDescargas';
-
+import GestionDescargaDocente from '../pages/Docente/DeudasYDescargas/GestionDescargaDocente'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -84,6 +84,7 @@ const privateroutes = [
   { requireRoles: [1], path: "/doc/misDelegados/solicitudDetalle", page:  DelegadoSolicitudDetalle},
   { requireRoles: [1], path: "/doc/NuevaSolicitudForm", page: NuevaSolicitudForm },
   { requireRoles: [1], path: "/doc/preferenciaDocente", page: PreferenciaDocenteForm},
+  { requireRoles: [1], path: "/doc/descargas", page: GestionDescargaDocente},
   
   // PRUEBA DRAG DROP MULTIPLE FILES //
   { requireRoles: [8], path: "/dragdrop", page: DragDropArchivos},
@@ -188,7 +189,7 @@ export default function Router1(props) {
              <Redirect to="/admin/mantenimiento/usr" />
         </PrivateRoute>
         <PrivateRoute exact path="/doc" requireRoles={[1]}>
-             <Redirect to="/doc/misSolicitudes" />
+             <Redirect to="/doc/preferenciaDocente" />
         </PrivateRoute>
         <PrivateRoute exact path="/as" requireRoles={[2]}>
              <Redirect to="/as/asignacionCarga/registroCursos" />

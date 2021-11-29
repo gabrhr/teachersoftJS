@@ -13,6 +13,7 @@ import NuevoProcesoForm from './NuevoProcesoForm';
 import Notification from '../../../../components/util/Notification';
 import IconButton from '../../../../components/controls/IconButton';
 import { Link} from 'react-router-dom';
+import TrackinDescarga from '../../../../components/DreamTeam/TrackinDescarga'
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
@@ -35,8 +36,26 @@ const tableHeaders = [
       id: 'acciones',
       label: 'Acciones',
       numeric: false,
-      sortable: true
+      sortable: false
+    },
+    {
+        id: 'detalle',
+        label: 'Detalle',
+        numeric: false,
+        sortable: false
+      }
+]
+
+
+function createData(id,nombre , fechaip, fechafp, fechafs, fechafd) {
+    return {
+        id, nombre , fechaip, fechafp, fechafs, fechafd
     }
+  }
+const pruebita = [
+    createData('0', 'proceso 1 2021','2021-09-30 01:14 pm','2021-09-30 01:14 pm','2021-09-30 01:14 pm','2021-09-30 01:14 pm'),
+    createData('1', 'proceso 2 2021','2021-09-30 01:14 pm','2021-09-30 01:14 pm','2021-09-30 01:14 pm','2021-09-30 01:14 pm'),
+    createData('2', 'proceso 3 2021','2021-09-30 01:14 pm','2021-09-30 01:14 pm','2021-09-30 01:14 pm','2021-09-30 01:14 pm'),
 ]
 
 export default function GestionProcesos() {
@@ -44,7 +63,8 @@ export default function GestionProcesos() {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [row, setRow] = useState(false)
     const [createData, setCreateData] = useState(false);
-    const [records, setRecords] = useState([])
+    const [updateData, setUpdateData] = useState(false);
+    const [records, setRecords] = useState(pruebita)
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     /* confirm dialog */
@@ -84,7 +104,7 @@ export default function GestionProcesos() {
         })
     }
 
-    const addOrEdit = (employee, resetForm) => {
+    const addOrEdit = (proceso, resetForm) => {
         //Service
 
         resetForm()
@@ -92,7 +112,7 @@ export default function GestionProcesos() {
         setOpenPopup(false)    
         setNotify({
           isOpen: true,
-          message: 'Submitted Successfully',
+          message: 'Se ha añadido exitosamente',
           type: 'success'
         })
     }
@@ -112,7 +132,7 @@ export default function GestionProcesos() {
         {/* Proceso actual*/}
         <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
             <Controls.AddButton
-                title="Agregar Nueva Solicitud"
+                title="Agregar Nuevo Proceso"
                 variant="iconoTexto"
                 onClick = {() => {setOpenPopup(true);}}
             />
@@ -123,7 +143,7 @@ export default function GestionProcesos() {
         <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
                 {/* <Toolbar> */}
                 <Controls.Input
-                    label="Buscar Solicitud por Nombre"
+                    label="Buscar Proceso por Nombre"
                     InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -176,7 +196,7 @@ function Item(props){
         <>
         
             <TableRow>
-                <TableCell sx={{maxWidth:"400px"}}>
+                <TableCell sx={{maxWidth:"200px"}}>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Nombre de Proceso: {'\u00A0'}
                     </Typography>
@@ -184,16 +204,19 @@ function Item(props){
                         {item.nombre} 
                     </Typography >
                 </TableCell>
-                <TableCell sx={{maxWidth:"250px"}}> 
+                <TableCell > 
                     {/* Tracking dibujo */}
+                    <TrackinDescarga item={item}/>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{maxWidth:"70px"}}> 
                     <Controls.ActionButton
                         color="warning"
                         onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
                     >
                         <EditOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
+                </TableCell>
+                <TableCell sx={{maxWidth:"70px"}}>
                     <Link to ={{
                         pathname:"/jd/asignacionCarga/proceso/descarga",
                         state:{
