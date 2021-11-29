@@ -10,6 +10,10 @@ import moment from 'moment'
 import 'moment/locale/es'
 import Popup from '../../../components/util/Popup';
 import ContentHeader from '../../../components/AppMain/ContentHeader';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+
 moment.locale('es');
 
 
@@ -43,6 +47,8 @@ export default function GestionDescargaDocente() {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+    const [confirmDialog, setConfirmDialog] = useState(
+        { isOpen: false, title: '', subtitle: '' })
     const {
         TblContainer,
         TblHead,
@@ -82,6 +88,29 @@ export default function GestionDescargaDocente() {
           message: 'Se ha añadido exitosamente',
           type: 'success'
         })
+    }
+    const onDelete = (idCiclo) => {
+        // if (!window.confirm('Are you sure to delete this record?'))
+        //   return
+
+        //Serviceeee
+       /*  setDeleteData(true);
+        setConfirmDialog({
+          ...confirmDialog,
+          isOpen: false
+        })
+        console.log(records)
+        console.log(idCiclo)
+        //console.log(id)
+        const nuevaTabla = records.filter(cicloPorEliminar => cicloPorEliminar.id !== idCiclo)
+        console.log(nuevaTabla)
+        CicloService.deleteCiclo(idCiclo);
+ 
+        setNotify({
+          isOpen: true,
+          message: 'Borrado Exitoso',
+          type: 'success'
+        }) */
     }
     React.useEffect(() => {
         // serviceeeeeeeeeee
@@ -135,6 +164,9 @@ export default function GestionDescargaDocente() {
                         recordsAfterPagingAndSorting().map(item => (
                                 <Item item={item} getRow= {getRow}
                                     setOpenPopup={setOpenPopup}
+                                    setRecordForEdit={setRecordForEdit}
+                                    setConfirmDialog={setConfirmDialog}
+                                    onDelete={onDelete}
                                 />
                             ))
                         }
@@ -174,7 +206,7 @@ export default function GestionDescargaDocente() {
 
 
 function Item(props){
-    const {item,getRow} = props
+    const {item,getRow, setOpenPopup,setRecordForEdit, setConfirmDialog, onDelete} = props
     function formatoFecha(fecha){
         if(fecha!=null){
             return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
@@ -214,11 +246,25 @@ function Item(props){
                     </Typography>  
                 </TableCell>
                 <TableCell>
-                    <Controls.Button
-                        text="Detalle"
-                        type="submit"
-                        onClick = {() => {getRow(item)}}
-                    />
+                    <Controls.ActionButton
+                        color="warning"
+                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                    >
+                        <EditOutlinedIcon fontSize="small" />
+                    </Controls.ActionButton>
+                    <IconButton aria-label="delete">
+                            <DeleteIcon
+                            color="warning"
+                            onClick={() => {
+                              
+                              setConfirmDialog({
+                                isOpen: true,
+                                title: '¿Eliminar la solicitud permanentemente?',
+                                subTitle: 'No es posible deshacer esta accion',
+                                onConfirm: () => {onDelete(item.id)}
+                              })
+                            }}/>
+                    </IconButton>
                 </TableCell>
             </TableRow>
                         
