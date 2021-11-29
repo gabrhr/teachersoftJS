@@ -36,6 +36,7 @@
     "react-scripts": "4.0.3",
     "react-swipeable-views": "^0.14.0",
     "react-to-print": "^2.14.1",
+    "react-usemountedstate": "^1.0.3",
     "web-vitals": "^1.1.2",
     "xlsx": "^0.17.3"
   },
