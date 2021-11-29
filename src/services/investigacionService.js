@@ -73,4 +73,12 @@ const deleteDocumento = async (id) => {
     }
 }
 
+const buscarPorAnho = async (anho) => {
+    try{
+        
+    } catch{
+
+    }
+}
+
 export default { getDocumentos, getDocumentosAutor, getDocumentosPagina, contarTodos, getDocumento, registerDocumento, updateDocumento, deleteDocumento };

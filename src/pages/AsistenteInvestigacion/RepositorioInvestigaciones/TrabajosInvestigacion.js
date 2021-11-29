@@ -238,13 +238,13 @@ export default function TrabajosInvestigacion({records, setRecords, setInvestiga
               ? 
               recordsAfterPagingAndSorting().map(item => (
                 <TableRow key={item.id}>
-                  <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
+                  {/* <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
                   <TableCell>{item.horas_semanales}</TableCell>
                   <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
                   <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
                   <TableCell>{item.codigo}</TableCell>
                   <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
-                  <TableCell>{item.sesiones.hora_sesion}</TableCell>
+                  <TableCell>{item.sesiones.hora_sesion}</TableCell> */}
                   <TableCell>
                     <Controls.ActionButton
                       color="warning"
@@ -279,7 +279,7 @@ export default function TrabajosInvestigacion({records, setRecords, setInvestiga
         title = {"Editar trabajo de investigación"}
         size = "sm"
       >
-        <EditarHorarioCurso
+        <EditarTrabajoInvestigacion
           recordForEdit={recordForEdit}
           setOpenPopup={setOpenPopupEdit}
         />        
@@ -289,7 +289,7 @@ export default function TrabajosInvestigacion({records, setRecords, setInvestiga
           setOpenPopup={setOpenOnePopup}
           title={"Eliminar trabajo de investigación"}
       >
-        <EliminarUnCurso
+        <EliminarUnTrabajoInvestigacion
           setOpenOnePopup = {setOpenOnePopup}
           eliminarInvestigacion = {eliminarInvestigacion}
         />

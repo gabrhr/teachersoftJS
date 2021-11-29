@@ -4,7 +4,7 @@ import { StyledTableRow, StyledTableCell } from '../../../components/controls/St
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Link, LBox, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
-
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
@@ -13,6 +13,7 @@ import Popup from '../../../components/util/Popup'
 import Notification from '../../../components/util/Notification';
 import ConfirmDialog from '../../../components/util/ConfirmDialog';
 import TrabajosInvestigacion from './TrabajosInvestigacion'
+import ModalAsignacionTrabajoInvestigacion from './ModalAsignacionTrabajoInvestigacion';
 
 export default function GestionTrabajosInvestigacion() {
   const [anho, setAnho] = useState();
@@ -30,7 +31,7 @@ export default function GestionTrabajosInvestigacion() {
     FileSaver.saveAs(data, fileName + fileExtension);
   }
   const vacio = [{
-      "Clave": " ",
+      "AHHHH": " ",
       "Nombre": " ",
       "Horario": " ",
       "Tipo": " ",
@@ -68,14 +69,14 @@ export default function GestionTrabajosInvestigacion() {
         <TrabajosInvestigacion records={records} setRecords={setRecords} setInvestigaciones = {setInvestigaciones} 
           investigaciones = {investigaciones} anho = {anho} setAnho = {setAnho}/>
       </Paper>
-      {/* <Popup
+      <Popup
             openPopup={openPopup}
             setOpenPopup={setOpenPopup}
             title="Carga masiva de trabajos de investigación"
       >
-        < ModalAsignacionCarga setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setInvestigaciones = {setInvestigaciones} 
+        < ModalAsignacionTrabajoInvestigacion setOpenPopup={setOpenPopup} records={records} setRecords={setRecords} setInvestigaciones = {setInvestigaciones} 
           investigaciones = {investigaciones}/>
-      </Popup> */}
+      </Popup>
     </>
   );
 }
