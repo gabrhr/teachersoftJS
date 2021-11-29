@@ -2,7 +2,7 @@
  *
  * tablita 
  */
-import React from 'react'
+import React, {useState} from 'react'
 import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
 import { Link} from 'react-router-dom';
 import TrackinDescarga from '../../../../components/DreamTeam/TrackinDescarga'
@@ -15,6 +15,9 @@ import IconButton from '../../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import Popup from '../../../../components/util/Popup';
+import ProcesoFinalizadoForm from './ProcesoFinalizadoForm';
 
 const tableHeaders = [
     {
@@ -46,6 +49,7 @@ const tableHeaders = [
 
 function Item(props){
     const {item,getRow,setOpenPopup,setRecordForEdit} = props
+    const [openPopupFinalizado, setOpenPopupFinalizado] = useState(false)
     return (
         <>
             <TableRow>
@@ -64,9 +68,9 @@ function Item(props){
                 <TableCell sx={{maxWidth:"70px"}}> 
                     <Controls.ActionButton
                         color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                        onClick={ () => {setOpenPopupFinalizado(true)}}
                     >
-                        <EditOutlinedIcon fontSize="small" />
+                        <AssignmentOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
                 </TableCell>
                 <TableCell sx={{maxWidth:"70px"}}>
@@ -86,7 +90,15 @@ function Item(props){
                     </Link>
                 </TableCell>
             </TableRow>
+            <Popup
+                openPopup={openPopupFinalizado}
+                setOpenPopup={setOpenPopupFinalizado}
+                title="Detalle de Proceso de Descarga"
+            >
+                <ProcesoFinalizadoForm item={item}/>
+            </Popup>
         </>
+
     );
 }
 

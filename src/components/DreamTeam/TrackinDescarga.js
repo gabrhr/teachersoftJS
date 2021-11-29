@@ -38,14 +38,14 @@ export default function TrackinDescarga(props) {
         borderWidth: "1px",
         borderColor: "#3b4a81"
     }
-    let fechaIniDocente =  new Date();
-    let fechaFinDocente =  new Date();
-    let fechaFinSeccion =  new Date();
-    let fechaFinProceso =   new Date();
+    let fechaIniDocente =  item.fecha_inicio;
+    let fechaFinDocente =  item.fecha_fin_docente;
+    let fechaFinSeccion =  item.fecha_fin_seccion;
+    let fechaFinProceso =   item.fecha_fin;
 
     return (
         <>
-        <Grid container>
+        <Grid container ml={"200px"}>
             <Grid item xs={12} >
                 <Stack direction="row" spacing={2}>
                     <div style={{marginLeft:"10px"}}> </div>

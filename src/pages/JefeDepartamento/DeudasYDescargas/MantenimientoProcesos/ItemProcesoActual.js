@@ -52,29 +52,31 @@ export default function ItemProcesoActual(props) {
     }
 
     return (
-        <>
+        <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
+            padding={2} mb={2}
+        >
              <TableRow>
-                <TableCell sx={{maxWidth:"200px"}}>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                <TableCell sx={{minWidth:"220px",borderBottom: "none"}}>
+                    <Typography  fontWeight="550"  sx={{color:"primary.light"}}>
                         Nombre de Proceso: {'\u00A0'}
                     </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
+                    <Typography  sx={{color:"primary.light"}}>
                         {procesoActual.nombre} 
                     </Typography >
                 </TableCell>
-                <TableCell > 
+                <TableCell  align="center" sx={{borderBottom: "none"}}> 
                     {/* Tracking dibujo */}
                     <TrackinDescarga item={procesoActual}/>
                 </TableCell>
-                <TableCell sx={{maxWidth:"70px"}}> 
+                <TableCell sx={{maxWidth:"70px",borderBottom: "none"}}> 
                     <Controls.ActionButton
                         color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(procesoActual)}}
+                        onClick={ () => {setOpenPopup(true); setRecordForEdit(procesoActual)}}
                     >
                         <EditOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
                 </TableCell>
-                <TableCell sx={{maxWidth:"70px"}}>
+                <TableCell sx={{maxWidth:"70px",borderBottom: "none"}}>
                     <Link to ={{
                         pathname:"/jd/asignacionCarga/proceso/descarga",
                         state:{
@@ -91,6 +93,6 @@ export default function ItemProcesoActual(props) {
                     </Link>
                 </TableCell>
             </TableRow>
-        </>
+        </Box>
     )
 }
