@@ -13,8 +13,8 @@ export const MenuJefeDepartamento = [
         indice: 0,
     },
     {
-        text: 'Docentes',
-        path: '/jd/docentes',
+        text: 'Deudas y Descargas',
+        path: '/jd/asignacionCarga/deudaYDescarga',
         icon: <AccountBoxOutlinedIcon />,
         indice: 1,
     },
