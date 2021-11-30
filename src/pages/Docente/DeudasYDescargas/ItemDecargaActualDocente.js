@@ -4,6 +4,7 @@ import { Controls } from '../../../components/controls/Controls'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import ConfirmDialog from '../../../components/util/ConfirmDialog';
 
 const tableHeaders = [
     {
@@ -103,6 +104,10 @@ export default function ItemDecargaActualDocente(props) {
                     </IconButton>
                 </TableCell>
             </TableRow>
+            <ConfirmDialog
+              confirmDialog={confirmDialog}
+              setConfirmDialog={setConfirmDialog}
+            />
         </Box>
     )
 }
