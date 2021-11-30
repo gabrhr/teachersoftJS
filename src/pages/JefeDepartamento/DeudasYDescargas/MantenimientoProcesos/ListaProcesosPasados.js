@@ -5,7 +5,6 @@
 import React, {useState} from 'react'
 import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider, Avatar } from '@mui/material'
 import { Link} from 'react-router-dom';
-import TrackinDescarga from '../../../../components/DreamTeam/TrackinDescarga'
 import useTable from '../../../../components/useTable'
 import { Controls } from '../../../../components/controls/Controls'
 /* icons */
@@ -13,8 +12,6 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '../../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import Popup from '../../../../components/util/Popup';
 import ProcesoFinalizadoForm from './ProcesoFinalizadoForm';

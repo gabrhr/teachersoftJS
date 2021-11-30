@@ -8,8 +8,6 @@
  * ListaProcesosPasados
  */
 import React, { useState, useContext } from 'react'
-import { Typography } from '@mui/material'
-import { Controls } from '../../../../components/controls/Controls'
 import { DT } from '../../../../components/DreamTeam/DT'
 import Popup from '../../../../components/util/Popup';
 import NuevoProcesoForm from './NuevoProcesoForm';
