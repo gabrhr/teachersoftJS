@@ -5,13 +5,19 @@ import { Form, useForm } from '../../../components/useForm';
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import Divider from '../../../components/controls/Divider';
 import { Box } from '@mui/system';
-import { TextField } from '@mui/material';
+import { TextField, Avatar } from '@mui/material';
 import useTable from '../../../components/useTable';
 import { InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { TableBody } from '@mui/material';
 import { TableRow, TableCell } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import Popup from '../../../components/util/Popup'
+import SolicitudDescargaForm from '../../Docente/DeudasYDescargas/SolicitudDescargaForm';
+import SaveIcon from '@mui/icons-material/Save';
+import ModalGuardarSolicitudActual from './ModalGuardarSolicitudActual'
+import {useHistory} from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const tableHeaders = [
     
@@ -36,6 +42,13 @@ const tableHeaders = [
 ]
 
 export default function NuevoProcesoForm() {
+    const history = useHistory()
+    const handleClick = e =>{
+        history.push("/cord/solicitudes/deudasYDescargas")
+      }
+
+    const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
+    const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
     
     const [records, setRecords] = useState([
         {
@@ -95,11 +108,41 @@ export default function NuevoProcesoForm() {
                 text="Nueva solicitud de descarga"
                 cbo={false}
             />
+            <Controls.Button
+                variant="outlined"
+                text="Regresar"
+                size="small"
+                startIcon={<ArrowBackIcon />}
+                onClick={(e) => {handleClick(e)}}
+            />
             <Divider/>
             <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                 Código: {`${codigo}`}
             </Typography>
             <Divider/>
+            <Grid container spacing={{ xs: "10px" }} >
+                <Grid item sx={{mt:"10px", mb:"10px", ml:1}}>
+                    {/* <Avatar sx={{ width: 50, height: 50}} src={soli}/> */}
+                    <Avatar sx={{ width: 50, height: 50}}/>
+                </Grid>
+                <Grid item sx={{mt:"9px"}}>
+                    <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        {"De: "}
+                    </Typography>
+                    <Typography variant="h4"   display="inline">
+                        {/* Nombre del docente solicitador */}
+                        Docente PUCP (correo)
+                    </Typography>
+                    <div/>
+                    <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        {"Para: \xa0"}
+                    </Typography>
+                    <Typography variant="body1"  display="inline">
+                        {/* Seccion que pertenece */}
+                        Seccion
+                    </Typography>
+                </Grid>
+            </Grid>
             <Box ml="75px">
                 <Controls.DreamTitle
                     title={'Justificación: '}
@@ -175,7 +218,7 @@ export default function NuevoProcesoForm() {
                             <TableCell> 
                                 <Controls.Button
                                     text="Detalle"
-                                    onClick = {()=>{}}
+                                    onClick = {()=>{setOpenSolicitudDescarga(true)}}
                                 />
                             </TableCell>
                         </TableRow>
@@ -185,6 +228,31 @@ export default function NuevoProcesoForm() {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl> 
+            <Grid conteiner >
+                <Grid item align = "right" marginX = {20} marginTop={5} >
+                    <Controls.Button
+                        text="guardar"
+                        endIcon={<SaveIcon/>} 
+                        // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
+                        onClick = {()=>setOpenGuardarPopup(true)}  
+                        />
+                </Grid>
+            </Grid>
+            <Popup
+                openPopup={openSolicitudDescarga}
+                setOpenPopup={setOpenSolicitudDescarga}
+                title="Búsqueda de docentes para prácticas"
+            >
+                <SolicitudDescargaForm />
+            </Popup>
+            <Popup
+                openPopup={openGuardarPopup}
+                setOpenPopup={setOpenGuardarPopup}
+                title="Guardar"
+                size = "sm"
+            >
+               <ModalGuardarSolicitudActual setOpenGuardarPopup = {setOpenGuardarPopup} /*guardarSolicitud = {guardarSolicitud}*//>
+            </Popup>
         </Form>
     )
 }
