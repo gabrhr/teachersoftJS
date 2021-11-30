@@ -198,7 +198,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
     return(
         <>
             <Grid container>
-                <Grid item xs = {9.5}>
+                <Grid item xs = {10}>
                 <Grid cointainer align="right" mt={2.5} />  
                     <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Lista de docentes asignados
@@ -244,8 +244,9 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                     </TblContainer>
                     <TblPagination/>
                 </BoxTbl>
-                <Grid container>
+                <Grid container xs = {12}>
                   <Grid item xs={0.2}></Grid>
+                  <Grid item xs = {1.8}>
                   <FormGroup>
                     <FormControlLabel 
                       control={
@@ -257,8 +258,8 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                       />} 
                         label= { tipo_dictado ? "Co-Dictado" : "Compartido"} 
                     />
-
                   </FormGroup>
+                  </Grid>
                   {isSelected ? 
                     <>
                       <Grid item xs={2.5}></Grid>
@@ -293,6 +294,14 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                     </>
                   : <Grid cointainer align="right" mt={2.5} />    
                 }
+                
+                {records.length ? 
+                    <Grid item xs={12}>
+                      <Typography color = "secondary">
+                        Para cambiar el tipo de dictado, se deben eliminar primero a todos los docentes
+                      </Typography>
+                    </Grid> 
+                : <></>}
                 </Grid>
                 </>
     )

@@ -5,53 +5,7 @@ import React, { useState } from 'react'
 import { Alert, Grid, InputAdornment, Paper, TableBody, Typography } from '@mui/material'
 import TablaPreferenciaDocente from './TablaPreferenciaDocente'
 
-const historico = [
-    {
-        clave: 'INF',
-        nombre: 'Mate',
-        carga: 2,
-        horario: '0881',
-        puntaje: 54.7
-    },
-    {
-        clave: 'INF',
-        nombre: 'Mate1',
-        carga: 2,
-        horario: '0881',
-        puntaje: 54.7
-    },
-    {
-        clave: 'INF',
-        nombre: 'Mate2',
-        carga: 2,
-        horario: '0881',
-        puntaje: 54.7
-    }
-]
-
-const preferencia = [
-    {
-        clave: 'INF',
-        nombre: 'Comu',
-        carga: 2,
-        horario: '0881',
-        puntaje: 54.7
-    },
-    {
-        clave: 'INF',
-        nombre: 'Lengua',
-        carga: 2,
-        horario: '0881',
-        puntaje: 54.7
-    },
-    {
-        clave: 'INF',
-        nombre: 'Lengua2',
-        carga: 2,
-        horario: '0881',
-        puntaje: 54.7
-    }
-]
+import PersonaService from '../../../services/personaService';
 
 const tableHeaders = [
     {
@@ -86,10 +40,26 @@ const tableHeaders = [
     }
   ]
 
+const getHistoricoCiclos = async (docente) => {
+  //FALTA IMPLEMENTAR - REQUEST DEL BACK QUE ME DE EL HISTORICO DE UN PROFESOR
+  // - ID_DOCENTE - EN UN CICLO - ID_CICLO 
+}
+
+
 export default function ModalDetalleCursosDocente({docente}){
-  const [records, setRecord] = useState(historico)
+  const [records, setRecords] = useState([])
+  const [ciclo, setCiclo] = useState()
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     
+  React.useEffect(() => {
+    getHistoricoCiclos(ciclo, docente)
+    .then (newDoc =>{
+      if(newDoc){
+        setRecords(newDoc)
+      }
+
+    });
+  }, [ciclo])
 
     const {
         TblContainer,
@@ -98,12 +68,14 @@ export default function ModalDetalleCursosDocente({docente}){
         recordsAfterPagingAndSorting,
         BoxTbl
       } = useTable(records, tableHeaders, filterFn);
-    
+
     return(
         <>
-            <ContentHeader
+            {/* <ContentHeader
                 text="Histórico de cursos dictados"
                 cbo={true}
+                records ={ciclo}
+                setRecords = {setCiclo}
             />
             <BoxTbl>
                 <TblContainer>
@@ -123,7 +95,7 @@ export default function ModalDetalleCursosDocente({docente}){
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell        align="center">{item.carga}</StyledTableCell>
                         <StyledTableCell        align="center">{item.horario}</StyledTableCell>
-                        <StyledTableCell        align="center">{item.puntaje}</StyledTableCell>
+                        <StyledTableCell        align="center">{item.horas}</StyledTableCell>
                     </StyledTableRow>
                     ))
                     }
@@ -133,9 +105,9 @@ export default function ModalDetalleCursosDocente({docente}){
             </BoxTbl>
             <Grid cointainer align="right" mt={2.5} />   
             <hr color = "#636e9a"/> 
-            <Grid cointainer align="right" mt={2.5} />
+            <Grid cointainer align="right" mt={2.5} /> */}
 
-            <TablaPreferenciaDocente preferencia = {preferencia}/>
+            <TablaPreferenciaDocente docente = {docente}/>
         </>
     )
 }

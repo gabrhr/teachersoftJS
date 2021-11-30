@@ -40,6 +40,15 @@ export const listarPorCursoCiclo = async (id_curso,id_ciclo) => {
   }
 }
 
+export const listarPorDocenteCiclo = async (id_docente,id_ciclo) => {
+  try {
+    const request = await axios.get(`${url}/horario/iddocente=${id_docente}/idciclo=${id_ciclo}`, tokenService.GetTokenPrueba(), id_docente, id_ciclo);
+    return request.data;  //Es un dato.
+  } catch (exception) {
+    console.error(exception);
+  }
+}
+
 const registerHorario = async newObject => {
   try{           
     const request = await axios.post(`${url}/horario/`,newObject, tokenService.GetTokenPrueba());
@@ -68,6 +77,7 @@ const deleteHorario = async (id) => {
     console.error(exception);
   }
 }
+
 
 
 
@@ -164,4 +174,4 @@ const convertSesiontoString = async (dia_semana, hora_ini, media_horaini, hora_f
   return str;
 }
 
-export default { buscarPorCiclo, convertSesiontoString, convertStringtoSesion, getHorarios, getHorario, listarPorCursoCiclo, registerHorario, updateHorario, deleteHorario}
+export default { listarPorDocenteCiclo, buscarPorCiclo, convertSesiontoString, convertStringtoSesion, getHorarios, getHorario, listarPorCursoCiclo, registerHorario, updateHorario, deleteHorario}

@@ -4,7 +4,10 @@ import { Grid, Divider, Avatar } from '@mui/material'
 
 const headers = [
     { id: '1', title: 'Clave' },
-    {id: '2', title: 'Nombre'}
+    {id: '2', title: 'Nombre'},
+    { id: '1', title: 'Créditos' },
+    {id: '2', title: 'Horario'},
+    { id: '1', title: 'Horas' }
 ]
 
 function HeaderBoxs(props) {
@@ -12,7 +15,7 @@ function HeaderBoxs(props) {
     return (
         headers.map(x => (
             <Box
-                width="25%"
+                width="20%"
                 fontSize="15px" fontWeight="500"    // table header style
                 color="#042354"
             >
@@ -26,18 +29,33 @@ function generateRow(curso) {
     return (
         <Grid >
             <Grid container>
-                <Grid item xs={3}>
+                <Grid item xs={2.4}>
                     <Typography>
                         {curso.clave}
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={2.4}>
                     <Typography >
                         {curso.nombre_curso}
                     </Typography>
                 </Grid>
-            </Grid>
-        </Grid>
+                <Grid item xs={2.4}>
+                    <Typography >
+                        {curso.carga}
+                    </Typography>
+                </Grid>
+                <Grid item xs={2.4}>
+                    <Typography >
+                        {curso.horario}
+                    </Typography>
+                </Grid>
+                <Grid item xs={2.4}>
+                    <Typography >
+                        {curso.horas}
+                    </Typography>
+                </Grid>
+              </Grid>
+          </Grid>
     )
 }
 
@@ -47,7 +65,7 @@ export default function AccordionDetailsHorarioProfesor({preferencia}) {
         <>
             <Paper elevation={1} sx={{p: 1}}>
                 <Grid container>
-                    <Grid item xs={10}>
+                    <Grid item xs={12}>
                         <Typography
                             variant="h4"
                             py="4px"
