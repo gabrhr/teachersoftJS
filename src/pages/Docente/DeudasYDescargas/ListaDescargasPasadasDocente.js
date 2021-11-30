@@ -113,7 +113,7 @@ export default function ListaDescargasPasadasDocente(props) {
                 <BoxTbl>
                     <Grid item xs= {12} rowSpacing={20} align = "center">
                         <Typography variant="h4" color = "secondary">
-                                Aún no tiene Solicitudes de Descarga registradas
+                                Aún no ha generado Solicitudes de Descarga registradas
                         </Typography>
                     </Grid>
                 </BoxTbl>

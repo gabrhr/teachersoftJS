@@ -50,7 +50,6 @@ export default function ItemProcesoActual(props) {
         //setOpenDetalle(true)
         setRow(props)
     }
-
     return (
         <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
             padding={2} mb={2}

@@ -17,6 +17,7 @@ import SolicitudDescargaForm from './SolicitudDescargaForm';
 
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import ItemSinProcesoDocente from './ItemSinProcesoDocente';
 
 
 
@@ -33,7 +34,7 @@ export default function GestionDescargaDocente() {
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
         
     const { user } = React.useContext(UserContext)
-    const [procesoActivo, setProcesoActivo] = useState(null)
+    const [procesoActivo, setProcesoActivo] = useState([])
     let procesoActivoNew
 
     const addOrEdit = async(values, resetForm) => {
@@ -125,8 +126,10 @@ export default function GestionDescargaDocente() {
             <ContentHeader text={"Solicitudes de Descarga"} cbo={false} />
             {/* Solicitud actual del año */}
             <Grid container>
-                <Grid item xs={8} sx={{overflow:"scrollY"}}>
-                    { descargaActual? 
+                <Grid item xs={8}>
+                    {   procesoActivo.length===0? 
+                        <ItemSinProcesoDocente/>:                    
+                        descargaActual? 
                         <>
                             <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
                             <ItemDescargaActualDocente
@@ -137,6 +140,7 @@ export default function GestionDescargaDocente() {
                             /> 
                         </>
                         :<ItemDecargaVaciaDocente
+                            proceso={procesoActivo[0]}
                             addOrEdit={addOrEdit}
                             setOpenPopup={setOpenPopup}
                         />

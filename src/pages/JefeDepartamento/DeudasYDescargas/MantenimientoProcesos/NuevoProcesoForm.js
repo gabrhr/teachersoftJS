@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Grid, Typography, Stack } from '@mui/material';
 import { Controls } from '../../../../components/controls/Controls';
 import { Form, useForm } from '../../../../components/useForm';
@@ -17,7 +17,8 @@ const initialFieldValues = {
 
 
 export default function NuevoProcesoForm(props) {
-    const { addOrEdit, recordForEdit, setOpenPopup} = props
+    const { addOrEdit, recordForEdit} = props
+    console.log("El recordsFE",recordForEdit)
     const {
         values,
         setValues,
@@ -30,12 +31,8 @@ export default function NuevoProcesoForm(props) {
     const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault()
-        //console.log(ciclo)
-        //console.log(user)
-        if (validate()){
+        if (validate())
             addOrEdit(values, resetForm)
-            //console.log(newProceso)
-        }
     }
 
     useEffect(() => {
@@ -47,14 +44,10 @@ export default function NuevoProcesoForm(props) {
         }
     }, [recordForEdit])
 
-    const validate = (fieldValues = values) => {
+    const validate = () => {
         let temp = {...errors}
         temp.nombre = values.nombre ? "" : "Campo requerido"
         
-        if ('nombre' in fieldValues)
-            if (fieldValues.nombre.length === 0)
-                temp.nombre = "Campo requerido"
-                
         setErrors({
             ...temp
         })
