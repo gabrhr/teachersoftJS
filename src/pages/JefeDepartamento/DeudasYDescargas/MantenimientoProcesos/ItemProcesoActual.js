@@ -56,7 +56,7 @@ export default function ItemProcesoActual(props) {
             padding={2} mb={2}
         >
              <TableRow>
-                <TableCell sx={{minWidth:"220px",borderBottom: "none"}}>
+                <TableCell sx={{minWidth:"200px",borderBottom: "none"}}>
                     <Typography  fontWeight="550"  sx={{color:"primary.light"}}>
                         Nombre de Proceso: {'\u00A0'}
                     </Typography>
