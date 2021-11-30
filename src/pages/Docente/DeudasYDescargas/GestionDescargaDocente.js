@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import useTable from '../../../components/useTable';
@@ -13,6 +13,9 @@ import ContentHeader from '../../../components/AppMain/ContentHeader';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import procesoDescargaService from '../../../services/procesoDescargaService';
+import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import {UserContext} from '../../../constants/UserContext';
 
 moment.locale('es');
 
@@ -49,6 +52,8 @@ export default function GestionDescargaDocente() {
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
     const [confirmDialog, setConfirmDialog] = useState(
         { isOpen: false, title: '', subtitle: '' })
+    const {user} = useContext(UserContext)
+    let procesoActivo;
     const {
         TblContainer,
         TblHead,
@@ -77,15 +82,51 @@ export default function GestionDescargaDocente() {
         setRow(props)
     }
 
-    const addOrEdit = (proceso, resetForm) => {
+    const addOrEdit = async(values, resetForm) => {
         //Service
-
+        console.log(values)
+        console.log(recordForEdit)
+        let resultado, newTramite, editTramite;
+        if(!recordForEdit){
+            newTramite = {
+                "observacion": values.observacion,
+                "procesoDescarga": {
+                    "id": 10,
+                },
+                "tipo_bono": values.tipo_bono,
+                "persona_seccion": {
+                    "id": 3,
+                },
+                "persona_departamento": null,
+                "departamento": {
+                    "id": 3,
+                },
+            }
+            await tramiteDescargaService.registerTramiteDescarga(newTramite)
+        }else{
+            editTramite = {
+                "id": values.id,
+                "observacion": values.observacion,
+                "procesoDescarga": {
+                    "id": 10,
+                },
+                "tipo_bono": values.tipo_bono,
+                "persona_seccion": {
+                    "id": 3,
+                },
+                "persona_departamento": null,
+                "departamento": {
+                    "id": 3,
+                },
+            }
+            await tramiteDescargaService.updateTramiteDescarga(editTramite)
+        }
         resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)    
         setNotify({
           isOpen: true,
-          message: 'Se ha añadido exitosamente',
+          message: recordForEdit ? 'Se ha editado exitosamente' : 'Se ha añadido exitosamente',
           type: 'success'
         })
     }
@@ -112,16 +153,19 @@ export default function GestionDescargaDocente() {
           type: 'success'
         }) */
     }
+
+    const getTramitesDescargasDocente = async() => {
+        procesoActivo = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        console.log("El proceso activo es ", procesoActivo)
+        const procesos = await tramiteDescargaService.getTramitesDescarga();
+        setRecords(procesos)
+    }
+
     React.useEffect(() => {
-        // serviceeeeeeeeeee
-       /*  getCiclos()
-        .then (newDep =>{
-          setRecords(newDep);
-          console.log(newDep);
-          setDeleteData(false);
-          setCreateData(false);
-        }); */
-    }, [recordForEdit, createData. deleteData])
+        getTramitesDescargasDocente()
+        console.log("El docente pertenece al departamento ", user.persona.departamento.id)
+
+    }, [recordForEdit, createData. deleteData, openPopup])
     
     
     return (
@@ -221,16 +265,14 @@ function Item(props){
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {//formatoFecha(item.fecha_enviado)
-                            "fecha"
-                            }
+                        {formatoFecha(item.fecha_creacion)}
                     </Typography>
                     <div/>
                     <Typography fontWeight='bold' fontSize={18}>
-                         {/* Nombre del proceso */}
+                         {item.procesoDescarga.nombre}
                     </Typography>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Autor: {'\u00A0'} 
+                        Autor: {item.persona_seccion.nombres + " " + item.persona_seccion.apellidos} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
                         {/* Docente de soli */}
@@ -241,14 +283,15 @@ function Item(props){
                         Resultado de Solicitud:{'\u00A0'}
                     </Typography>
                     <Typography display="inline">
-                        {/* Funcion para que sea Aprobado, Rechazada o Pendiente */}
-                        Resultado 
+                        {item.resultado === 0 ? "Pendiente" :
+                         item.resultado === 1 ? "Aprobado" :
+                         "Desaprobado"}
                     </Typography>  
                 </TableCell>
                 <TableCell>
                     <Controls.ActionButton
                         color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item);}}
                     >
                         <EditOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
