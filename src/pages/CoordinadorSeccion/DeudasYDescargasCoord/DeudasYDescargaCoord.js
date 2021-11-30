@@ -7,6 +7,7 @@ import { useTheme } from '@emotion/react';
 
 import DeudaForm from '../../AsistenteSeccion/DeudaYDescarga/DeudaForm'
 import ContentHeader from '../../../components/AppMain/ContentHeader';
+import GestionarDescargaSeccion from './GestionarDescargaSeccion';
 
 const StyledTabs = styled((props) => (
     <Tabs
@@ -114,6 +115,7 @@ export default function DeudasYDescargaCoord() {
             </TabPanel>
             <TabPanel value={value} index={1}>
                {/* Aqui crear tu pagina */}
+                <GestionarDescargaSeccion/>
             </TabPanel>
             </SwipeableViews>
             <Box sx={{ p: 3 }} />
