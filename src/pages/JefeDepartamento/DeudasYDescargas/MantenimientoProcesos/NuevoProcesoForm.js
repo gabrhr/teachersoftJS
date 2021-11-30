@@ -61,6 +61,7 @@ export default function NuevoProcesoForm(props) {
             {/* seleccion de tema y tipo tramite */}
             <Grid container spacing={8}>
                 <Grid item xs={6}>
+                    <div style={{ width: "545px", marginRight: "50px" }}>
                     <Controls.Input
                         name="nombre"
                         label="Nombre del Proceso"
@@ -68,24 +69,27 @@ export default function NuevoProcesoForm(props) {
                         onChange={handleInputChange}
                         error={errors.nombre}
                     />                   
+                    </div>
                 </Grid>
                 <Grid item  xs={12}>
                     <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                         Tiempo del proceso para los Docentes {'\u00A0'}
                     </Typography>
                     <Stack direction="row" align="left" spacing={4}>
-                        <Controls.DateTimePickerv2
-                            name="fechaIniDocente"
-                            label="Fecha Inicio para Docentes"
-                            value={values.fechaIniDocente}
-                            onChange={handleInputChange}
-                        />
+                            <Controls.DateTimePickerv2
+                                name="fechaIniDocente"
+                                label="Fecha Inicio para Docentes"
+                                value={values.fechaIniDocente}
+                                onChange={handleInputChange}
+                                sx={{ width: "500px"}}
+                                />
                         <Controls.DateTimePickerv2
                             name="fechaFinDocente"
                             label="Fecha Fin para Docentes"
                             value={values.fechaFinDocente}
                             onChange={handleInputChange}
-                        />
+                            sx={{ width: "500px"}}
+                            />
                     </Stack>
                 </Grid>
                 <Grid item  xs={12}>
@@ -93,25 +97,27 @@ export default function NuevoProcesoForm(props) {
                     <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                         Tiempo del proceso para las Secciones {'\u00A0'}
                     </Typography>
-                    <Stack direction="row" align="left" spacing={4}>
+                    <div style={{ width: "545px", marginRight: "50px" }}>
                         <Controls.DateTimePickerv2
                             name="fechaFinSeccion"
                             label="Fecha Limite para Sección"
                             value={values.fechaFinSeccion}
                             onChange={handleInputChange}
                         />
-                    </Stack>
+                    </div>
                 </Grid>
                 <Grid item  xs={12}>
                     <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                         Tiempo del proceso para el Departamento {'\u00A0'}
                     </Typography>
-                    <Controls.DateTimePickerv2
-                        name="fechaFinProceso"
-                        label="Fecha Limite para Departamento"
-                        value={values.fechaFinProceso}
-                        onChange={handleInputChange}
-                    />
+                    <div style={{ width: "545px", marginRight: "50px" }}>
+                        <Controls.DateTimePickerv2
+                            name="fechaFinProceso"
+                            label="Fecha Limite para Departamento"
+                            value={values.fechaFinProceso}
+                            onChange={handleInputChange}
+                        />
+                    </div>
                 </Grid>
             </Grid>
             <Grid cointainer align="right" mt={5}>

@@ -98,9 +98,7 @@ export default function GestionProcesos() {
             Date.parse(fecha_inicio) < now && now < Date.parse(fecha_fin) 
             //console.log(r, Date.parse(p.fecha_inicio), new Date().getTime(), Date.parse(p.fecha_fin))
         )
-        console.log("proooo", pro)
         setProcesoActual(pro)
-        console.log("proceso actuallllll",procesoActual)
 
     }   
 
@@ -126,17 +124,21 @@ export default function GestionProcesos() {
     return (
         <>
             {/* Proceso actual*/}
-            <DT.Title size="medium"
-                text="Si existe solicitud ? Proceso de Solicitudes de Descarga Vigente : Nueva Proceso de Descargas  "
-            />
             {/* logica para intercambiar si hay proceso actual */}
             {procesoActual
                 ? 
-                    <ItemProcesoActual
-                        procesoActual={procesoActual}
-                        setRecordForEdit={setRecordForEdit}
-                        setOpenPopup={setOpenPopup}
-                    />
+                    <>
+                        <DT.Title size="medium"
+                            text="Proceso de Descarga Actual"
+                        />
+                        <ItemProcesoActual
+                            procesoActual={procesoActual}
+                            setRecordForEdit={setRecordForEdit}
+                            setOpenPopup={setOpenPopup}
+                        />
+                    
+                    </>
+
                    :<ItemProcesoActualVacio
                         addOrEdit={addOrEdit}
                         setOpenPopup={setOpenPopup}
