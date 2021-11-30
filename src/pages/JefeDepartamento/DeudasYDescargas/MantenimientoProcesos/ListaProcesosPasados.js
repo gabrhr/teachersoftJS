@@ -232,22 +232,33 @@ export default function ListaProcesosPasados(props) {
                     /> 
                 </div>
             </div>
-
+            
             <BoxTbl>
-                <TblContainer>
-                     {/* <TblHead />  */}
-                    <TableBody>
-                    {
-                       recordsAfterPagingAndSorting().map((item,index) => (
-                            <Item key={index} item={item} getRow= {getRow}
-                                setRecordForEdit={setRecordForEdit}
-                                setOpenPopup={setOpenPopup}
-                            />
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
-                <TblPagination />
+                {records.length?
+                    <>
+                        <TblContainer>
+                            {/* <TblHead />  */}
+                            <TableBody>
+                            {
+                            recordsAfterPagingAndSorting().map((item,index) => (
+                                    <Item key={index} item={item} getRow= {getRow}
+                                        setRecordForEdit={setRecordForEdit}
+                                        setOpenPopup={setOpenPopup}
+                                    />
+                                ))
+                            }
+                            </TableBody>
+                        </TblContainer>
+                        <TblPagination />
+
+                    </>:
+                    <Grid item xs= {12} rowSpacing={20} align = "center">
+                        <Typography variant="h4" color = "secondary">
+                                No se presenta con un Histórico de Procesos de Descarga
+                        </Typography>
+                    </Grid>
+
+                }
             </BoxTbl>
         </Form>
     )

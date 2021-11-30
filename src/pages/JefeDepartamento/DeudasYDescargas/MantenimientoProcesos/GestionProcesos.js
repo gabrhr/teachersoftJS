@@ -156,7 +156,7 @@ export default function GestionProcesos() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Nuevo Proceso de Descarga"
+                title={recordForEdit ? "Editar Proceso de Descarga": "Nuevo Proceso de Descarga"}
             >
                 <NuevoProcesoForm
                     recordForEdit={recordForEdit}
