@@ -16,14 +16,6 @@ const initialFieldValues = {
     promedio_horas: ...,
 */
 
-const fillProfesoresTPC = async (id_ciclo,id_seccion) => {
-    
-}
-
-const fillProfesoresTPA = async (id_ciclo,id_seccion) => {
-    
-}
-
 export default function IndicadoresSeccion() {
 
     const [ciclo, setCiclo] = useState();
@@ -31,7 +23,6 @@ export default function IndicadoresSeccion() {
     const [profesorTPC, setProfesorTPC] = useState();
     const [profesorTPA, setProfesorTPA] = useState();
     const theme= useTheme();
-    fillProfesoresTC(2,3);
 
     const fillProfesorTC = async (id_ciclo, id_seccion) => {
         let profesor = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
