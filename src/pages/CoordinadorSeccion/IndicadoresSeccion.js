@@ -2,13 +2,24 @@ import React, {useState, useEffect} from 'react'
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { Controls } from '../../components/controls/Controls'
-import { useForm, Form } from '../../components/useForm';
-import { useTheme } from '@mui/material/styles'
 import IndicadoresService from '../../services/indicadoresService';
 
-const initialFieldValues = {
-    id: '',
-    title: ''
+const fillProfesorTC = async (id_ciclo, id_seccion) => {
+    let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
+    
+    return profesorTC;
+}
+
+const fillProfesorTPC = async (id_ciclo, id_seccion) => {
+    let profesorTPC = await IndicadoresService.getDataProfesoresTPCPorSeccion(id_ciclo, id_seccion);
+    
+    return profesorTPC;
+}
+
+const fillProfesorTPA = async (id_ciclo, id_seccion) => {
+    let profesorTPA = await IndicadoresService.getDataProfesoresTPAPorSeccion(id_ciclo, id_seccion);
+    
+    return profesorTPA;
 }
 
 /*
@@ -19,31 +30,35 @@ const initialFieldValues = {
 export default function IndicadoresSeccion() {
 
     const [ciclo, setCiclo] = useState();
-    const [profesorTC, setProfesorTC] = useState();
-    const [profesorTPC, setProfesorTPC] = useState();
-    const [profesorTPA, setProfesorTPA] = useState();
-    const theme= useTheme();
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
+    const [records, setRecords] = useState([])
+    const [profesorTC, setProfesorTC] = useState([]);
+    const [profesorTPC, setProfesorTPC] = useState([]);
+    const [profesorTPA, setProfesorTPA] = useState([]);
+    
+    useEffect(() => {
+        fillProfesorTC(2,3)
+        .then(newProfTC => {
+            setProfesorTC(newProfTC);
+            
+        });
+    }, [])
 
-    const fillProfesorTC = async (id_ciclo, id_seccion) => {
-        let profesor = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
-        setProfesorTC(profesor);
-    }
+    useEffect(() => {
+        fillProfesorTPC(2,3)
+        .then(newProfTPC => {
+            setProfesorTPC(newProfTPC);
+            
+        });
+    }, [])
 
-    const fillProfesorTPC = async (id_ciclo, id_seccion) => {
-        let profesor = await IndicadoresService.getDataProfesoresTPCPorSeccion(id_ciclo, id_seccion);
-        setProfesorTPC(profesor);
-    }
-
-    const fillProfesorTPA = async (id_ciclo, id_seccion) => {
-        let profesor = await IndicadoresService.getDataProfesoresTPAPorSeccion(id_ciclo, id_seccion);
-        setProfesorTPA(profesor);
-    }
-
-    const {
-        values,
-        setValues,
-        handleInputChange
-    } = useForm(initialFieldValues);
+    useEffect(() => {
+        fillProfesorTPA(2,3)
+        .then(newProfTPA => {
+            setProfesorTPA(newProfTPA);
+            
+        });
+    }, [])
 
     return (
         <>
@@ -57,23 +72,23 @@ export default function IndicadoresSeccion() {
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={3}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Numero de Profesores TC:
+                        Numero de Profesores TC: {profesorTC.cantidad_docentes}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={4}>
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Numero de Profesores TPC:
+                        Numero de Profesores TPC: {profesorTPC.cantidad_docentes}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Horas TPC:
+                        Promedio de Horas TPC: {profesorTPC.promedio_horas}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={4}>
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Numero de Profesores TPA:
+                        Numero de Profesores TPA: {profesorTPA.cantidad_docentes}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Horas TPA:
+                        Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
                     
                 </Grid>
@@ -94,7 +109,7 @@ export default function IndicadoresSeccion() {
             </Grid>
             <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
             <ContentHeader
-                text="aea"
+                text=""
                 cbo={true}
                 records = {ciclo}
                 setRecords = {setCiclo}
