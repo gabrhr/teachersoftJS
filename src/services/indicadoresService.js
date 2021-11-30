@@ -7,7 +7,7 @@ import tokenService from './tokens.js';
 // 3: TPA (tiempo parcial por asignaturas) ???
 
 // Axios para envio de data de cada tipo de profesor por seccion
-export const getDataProfesoresTCPorSeccion = async (id_ciclo,id_seccion) => {
+const getDataProfesoresTCPorSeccion = async (id_ciclo,id_seccion) => {
     try{
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/idseccion=${id_seccion}/tipodocente=1`, tokenService.GetTokenPrueba())
       return request.data;  
@@ -16,7 +16,7 @@ export const getDataProfesoresTCPorSeccion = async (id_ciclo,id_seccion) => {
     }
 }
 
-export const getDataProfesoresTPCPorSeccion = async (id_ciclo,id_seccion) => {
+const getDataProfesoresTPCPorSeccion = async (id_ciclo,id_seccion) => {
     try{
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/idseccion=${id_seccion}/tipodocente=2`, tokenService.GetTokenPrueba())
       return request.data;  
@@ -25,7 +25,7 @@ export const getDataProfesoresTPCPorSeccion = async (id_ciclo,id_seccion) => {
     }
 }
 
-export const getDataProfesoresTPAPorSeccion = async (id_ciclo,id_seccion) => {
+const getDataProfesoresTPAPorSeccion = async (id_ciclo,id_seccion) => {
     try{
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/idseccion=${id_seccion}/tipodocente=3`, tokenService.GetTokenPrueba())
       return request.data;  
@@ -35,7 +35,7 @@ export const getDataProfesoresTPAPorSeccion = async (id_ciclo,id_seccion) => {
 }
 
 // Axios para envio de data de cada tipo de profesor por departamento
-export const getDataProfesoresTCPorDepartamento = async (id_ciclo,id_departamento) => {
+const getDataProfesoresTCPorDepartamento = async (id_ciclo,id_departamento) => {
     try{
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/iddepartamento=${id_departamento}/tipodocente=1`, tokenService.GetTokenPrueba())
       return request.data;  
@@ -44,7 +44,7 @@ export const getDataProfesoresTCPorDepartamento = async (id_ciclo,id_departament
     }
 }
 
-export const getDataProfesoresTPCPorDepartamento = async (id_ciclo,id_departamento) => {
+const getDataProfesoresTPCPorDepartamento = async (id_ciclo,id_departamento) => {
     try{
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/iddepartamento=${id_departamento}/tipodocente=2`, tokenService.GetTokenPrueba())
       return request.data;  
@@ -53,7 +53,7 @@ export const getDataProfesoresTPCPorDepartamento = async (id_ciclo,id_departamen
     }
 }
 
-export const getDataProfesoresTPAPorDepartamento = async (id_ciclo,id_departamento) => {
+const getDataProfesoresTPAPorDepartamento = async (id_ciclo,id_departamento) => {
     try{
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/iddepartamento=${id_departamento}/tipodocente=3`, tokenService.GetTokenPrueba())
       return request.data;  

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { Controls } from '../../components/controls/Controls'
@@ -11,9 +11,10 @@ const initialFieldValues = {
     title: ''
 }
 
-const fillProfesoresTC = async (id_ciclo,id_seccion) => {
-    
-}
+/*
+    cantidad: ...,
+    promedio_horas: ...,
+*/
 
 const fillProfesoresTPC = async (id_ciclo,id_seccion) => {
     
@@ -25,8 +26,27 @@ const fillProfesoresTPA = async (id_ciclo,id_seccion) => {
 
 export default function IndicadoresSeccion() {
 
-    const [ciclo, setCiclo] = React.useState ([]);
+    const [ciclo, setCiclo] = useState();
+    const [profesorTC, setProfesorTC] = useState();
+    const [profesorTPC, setProfesorTPC] = useState();
+    const [profesorTPA, setProfesorTPA] = useState();
     const theme= useTheme();
+    fillProfesoresTC(2,3);
+
+    const fillProfesorTC = async (id_ciclo, id_seccion) => {
+        let profesor = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
+        setProfesorTC(profesor);
+    }
+
+    const fillProfesorTPC = async (id_ciclo, id_seccion) => {
+        let profesor = await IndicadoresService.getDataProfesoresTPCPorSeccion(id_ciclo, id_seccion);
+        setProfesorTPC(profesor);
+    }
+
+    const fillProfesorTPA = async (id_ciclo, id_seccion) => {
+        let profesor = await IndicadoresService.getDataProfesoresTPAPorSeccion(id_ciclo, id_seccion);
+        setProfesorTPA(profesor);
+    }
 
     const {
         values,
