@@ -2,19 +2,27 @@
  *
  * tablita 
  */
-import React from 'react'
-import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
+import React, {useState} from 'react'
+import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider, Avatar } from '@mui/material'
 import { Link} from 'react-router-dom';
 import TrackinDescarga from '../../../../components/DreamTeam/TrackinDescarga'
 import useTable from '../../../../components/useTable'
 import { Controls } from '../../../../components/controls/Controls'
-
 /* icons */
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '../../../../components/controls/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import Popup from '../../../../components/util/Popup';
+import ProcesoFinalizadoForm from './ProcesoFinalizadoForm';
+
+import moment from 'moment'
+import 'moment/locale/es'
+import { Form } from '../../../../components/useForm';
+moment.locale('es');
 
 const tableHeaders = [
     {
@@ -43,30 +51,78 @@ const tableHeaders = [
     }
 ]
 
+function formatoFecha(fecha,e) {
+    if (fecha != null) {
+        if(e>0){
+            return (moment.utc(fecha).subtract(5, 'hours').format('DD MMM YYYY'))
+        }
+        return (moment.utc(fecha).format('DD MMM YYYY'))
+    }
+    return (" ")
+}
+
+function formatoHora(fecha,e) {
+    if (fecha != null) {
+        if(e>0){
+            return (moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
+        }
+        return (moment.utc(fecha).format('h:mm a'))
+    }
+    return (" ")
+}
 
 function Item(props){
     const {item,getRow,setOpenPopup,setRecordForEdit} = props
+    const [openPopupFinalizado, setOpenPopupFinalizado] = useState(false)
     return (
         <>
             <TableRow>
-                <TableCell sx={{maxWidth:"200px"}}>
+                <TableCell sx={{minWidth:"200px"}}>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Nombre de Proceso: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
                         {item.nombre} 
                     </Typography >
+                    <div/>
+                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        Estado: {'\u00A0'}
+                    </Typography>
+                    <Typography display="inline" sx={{color:"red"}}>
+                        Finalizado
+                    </Typography >
                 </TableCell>
                 <TableCell > 
-                    {/* Tracking dibujo */}
-                    <TrackinDescarga item={item}/>
+                    <Grid container>
+                        <Grid item xs={1}>
+                                <Avatar sx={{ bgcolor: "#3B4A81"}}>
+                                    <CalendarTodayOutlinedIcon/>
+                                </Avatar>
+                        </Grid>
+                        <Grid item xs={10}>
+                                <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                                    Fecha de inicio: {'\u00A0'}
+                                </Typography>
+                                <Typography display="inline">
+                                    {"Fecha: " + formatoFecha(item.fecha_inicio) + " Hora: " + formatoHora(item.fecha_inicio)}
+                                </Typography >
+                                <div/>
+                                <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                                    Fecha de fin: {'\u00A0'}
+                                </Typography>
+                                <Typography display="inline">
+                                    {"Fecha: " + formatoFecha(item.fecha_fin) + " Hora: " + formatoHora(item.fecha_fin)}
+                                </Typography >
+                        </Grid>
+                    </Grid>
+
                 </TableCell>
                 <TableCell sx={{maxWidth:"70px"}}> 
                     <Controls.ActionButton
                         color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                        onClick={ () => {setOpenPopupFinalizado(true)}}
                     >
-                        <EditOutlinedIcon fontSize="small" />
+                        <AssignmentOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
                 </TableCell>
                 <TableCell sx={{maxWidth:"70px"}}>
@@ -86,7 +142,15 @@ function Item(props){
                     </Link>
                 </TableCell>
             </TableRow>
+            <Popup
+                openPopup={openPopupFinalizado}
+                setOpenPopup={setOpenPopupFinalizado}
+                title="Detalle de Proceso de Descarga"
+            >
+                <ProcesoFinalizadoForm item={item}/>
+            </Popup>
         </>
+
     );
 }
 
@@ -124,24 +188,54 @@ export default function ListaProcesosPasados(props) {
         })
     }
 
+    const [valueFecha, setValueFecha] = React.useState([null, null]);
+
+    React.useEffect(() => {
+        const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
+        const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
+        setFilterFn({
+          fn: items => {
+            if (valueFecha[0]== null && valueFecha[1] == null)
+              return items
+            if (valueFecha[1]==null)
+              return items.filter(x => 
+                fechaIni <= moment(x.fecha_inicio).format('DD/MM/YYYY')
+              )
+            else{
+              return items.filter((x) => fechaIni <= moment(x.fecha_inicio).format('DD/MM/YYYY') &&
+                  moment(x.fecha_inicio).format('DD/MM/YYYY') <= fechaFin
+              )
+            }
+          }
+        })
+    }, [valueFecha])
+
     return (
-        <div>
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
-                <Controls.Input
-                    label="Buscar Proceso por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
-                />
+        <Form>
+            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                <div style={{ width: "500px", marginRight: "50px" }}>
+                    <Controls.Input
+                        label="Buscar Proceso por Nombre"
+                        InputProps={{
+                            startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                            ),
+                        }}
+                        onChange={handleSearch}
+                        type="search"
+                        fullwidth
+                    />
+                </div>
+                <div style={{ width: "360px", marginRight: "50px" }}>
+                    <Controls.RangeTimePicker 
+                    value = {valueFecha}
+                    setValue= {setValueFecha}
+                    /> 
+                </div>
             </div>
+
             <BoxTbl>
                 <TblContainer>
                      {/* <TblHead />  */}
@@ -158,6 +252,6 @@ export default function ListaProcesosPasados(props) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl>
-        </div>
+        </Form>
     )
 }

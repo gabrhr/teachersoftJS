@@ -47,7 +47,7 @@ export default function GestionDescargas() {
             </Grid>
 
             <Grid container direction="row" spacing={3} mb="40px" mt="5px">
-                <Grid item xs={3}/>
+                <Grid item xs={2}/>
                 <Grid item xs={7} align="center">
                     <TrackinDescarga item={procesoinit}/>
                 </Grid>

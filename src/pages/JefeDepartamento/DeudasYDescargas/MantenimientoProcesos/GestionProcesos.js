@@ -21,18 +21,6 @@ import ListaProcesosPasados from './ListaProcesosPasados';
 import ItemProcesoActualVacio from './ItemProcesoActualVacio';
 
 
-function createData(id, nombre, fechaip, fechafp, fechafs, fechafd) {
-    return {
-        id, nombre, fechaip, fechafp, fechafs, fechafd
-    }
-}
-
-const pruebita = [
-    createData('0', 'proceso 1 2021', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm'),
-    createData('1', 'proceso 2 2021', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm'),
-    createData('2', 'proceso 3 2021', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm', '2021-09-30 01:14 pm'),
-]
-
 export default function GestionProcesos() {
     /* contiene los ProcesosDesgarga(Horaria) */
     const [records, setRecords] = useState([])
@@ -105,16 +93,13 @@ export default function GestionProcesos() {
     const getProcesosDescarga = async() => {
         const procesos = await procesoDescargaService.getProcesosDescarga()
         setRecords(procesos)
-        setProcesoActual(
-            records.find(p => {
-            // console.log("fechas", p)
-            let now = new Date().getTime()        // fecha actual en numerito
-            let r = Date.parse(p.fecha_inicio) < now && 
-                now < Date.parse(p.fecha_fin) 
-            // console.log(r, Date.parse(p.fecha_inicio), new Date().getTime(), Date.parse(p.fecha_fin))
-            return r
-        }))
-        console.log("proceso actuallllll",procesos)
+        let now = new Date().getTime()        // fecha actual en numerito
+        const pro =  procesos.find(({fecha_inicio, fecha_fin}) =>
+            Date.parse(fecha_inicio) < now && now < Date.parse(fecha_fin) 
+            //console.log(r, Date.parse(p.fecha_inicio), new Date().getTime(), Date.parse(p.fecha_fin))
+        )
+        setProcesoActual(pro)
+
     }   
 
     /* Aqui jala la data de BD? */
@@ -132,32 +117,28 @@ export default function GestionProcesos() {
          * Si no existe, puede crear uno. (El boton de crear esta en
          * ItemProcesoActualVacio)
          */
-
-        // serviceeeeeeeeeee
-        /*  getCiclos()
-         .then (newDep =>{
-           setRecords(newDep);
-           console.log(newDep);
-           setDeleteData(false);
-           setCreateData(false);
-         }); */
-         getProcesosDescarga()
+        getProcesosDescarga()
     }, [recordForEdit, createData, openPopup])
+
 
     return (
         <>
             {/* Proceso actual*/}
-            <DT.Title size="medium"
-                text="Si existe solicitud ? Proceso de Solicitudes de Descarga Vigente : Nueva Proceso de Descargas  "
-            />
             {/* logica para intercambiar si hay proceso actual */}
             {procesoActual
                 ? 
-                    <ItemProcesoActual
-                        procesoActual={procesoActual}
-                        addOrEdit={addOrEdit}
-                        setOpenPopup={setOpenPopup}
-                    />
+                    <>
+                        <DT.Title size="medium"
+                            text="Proceso de Descarga Actual"
+                        />
+                        <ItemProcesoActual
+                            procesoActual={procesoActual}
+                            setRecordForEdit={setRecordForEdit}
+                            setOpenPopup={setOpenPopup}
+                        />
+                    
+                    </>
+
                    :<ItemProcesoActualVacio
                         addOrEdit={addOrEdit}
                         setOpenPopup={setOpenPopup}
