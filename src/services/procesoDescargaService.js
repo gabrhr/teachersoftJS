@@ -12,6 +12,16 @@ export const getProcesosDescarga = async () => {
     }
 }
 
+export const getProcesoDescargaActivoxDepartamento = async (id_departamento) => {
+  try{
+    //debugger;
+    const request= await axios.get(`${url}/procesodescarga/iddepartamento=${id_departamento}`,tokenService.GetTokenPrueba());
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 export const getProcesoDescarga = async (id) => {
     try{
       //debugger;
@@ -51,4 +61,5 @@ const deleteProcesoDescarga = async (id) => {
     }
   }
 
-export default {getProcesosDescarga, getProcesoDescarga, registerProcesoDescarga, updateProcesoDescarga, deleteProcesoDescarga}
+  export default {getProcesosDescarga, getProcesoDescarga, registerProcesoDescarga, updateProcesoDescarga, 
+    deleteProcesoDescarga, getProcesoDescargaActivoxDepartamento}
