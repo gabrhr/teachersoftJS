@@ -34,6 +34,50 @@ import GestionTrabajosInvestigacionDetalle from './GestionTrabajosInvestigacionD
 
 let selectedID = 0;
 
+const initialFieldValues = {
+  id: 0,
+  activo: 0,
+  anho_publicacion: '',
+  ciudad:  '',
+  codigo_publicacion:  '',
+  codigo_validacion:  '',
+  divulgacion:  '',
+  doi:  '',
+  edicion:  '',
+  editorial:  '',
+  especialidad_unesco:  '',
+  fecha_creacion:  '',
+  fecha_modificacion:  '',
+  filiacion:  '',
+  identificador_produccion:  '',
+  idioma:  '',
+  indicador_calidad:  '',
+  isbn:  '',
+  issn:  '',
+  medio_publicacion: '',
+  motor_busqueda:  '',
+  nro_revista:  '',
+  observaciones_de_departamento:  '',
+  observaciones_para_departamento:  '',
+  pagina_final:  '',
+  pagina_inicial:  '',
+  pais:  '',
+  palabras_clave:  '',
+  responsabilidad:  '',
+  subtipo_publicacion:  '',
+  tipo_publicacion:  '',
+  tipo_referencia:  '',
+  titulo:  '',
+  url_repositorio:  '',
+  validacion_preliminar:  '',
+  volumen:  '',
+  
+  //autor
+
+  idAutor:  '',
+  nombreAutor: '',
+}
+
 const useStyles = makeStyles(theme => ({
   paper: {
     textAlign: "center",
@@ -138,7 +182,7 @@ const getDocumentos = async () => {
                 volumen: trabajo.volumen,           
                 
                 //autor
-                autor: trabajo.autor,
+                //utor: trabajo.autor,
                 idAutor: trabajo.autor.id,
                 nombreAutor: trabajo.autor.nombres + ' ' + trabajo.autor.apellidos
             })
@@ -159,7 +203,7 @@ export default function GestionTrabajosInvestigacion() {
     const [createData, setCreateData] = useState(false);
     const [updateData, setUpdateData] = useState(false);
     const [records, setRecords] = useState([]);
-    const [recordForView, setRecordForView] = useState(null)
+    const [record, setRecord] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
@@ -182,7 +226,7 @@ export default function GestionTrabajosInvestigacion() {
     // design
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
-    
+    const {values, setValues} = useForm(initialFieldValues);
 
     const classes = {
       ...useStyles()
@@ -285,8 +329,7 @@ export default function GestionTrabajosInvestigacion() {
           ...confirmDialog,
           isOpen: false
         })
-        console.log(records)
-        console.log(idTrabajo)
+
         //console.log(id)
         const nuevaTabla = records.filter(trabajoPorEliminar => trabajoPorEliminar.id !== idTrabajo)
         console.log(nuevaTabla)
@@ -300,11 +343,18 @@ export default function GestionTrabajosInvestigacion() {
         
     }
 
-    const onView = async (trabajo) => {
+    const onView = async (trabajo, id_trabajo) => {
       
-      //await localStorage.setItem("id_trabajo", id_trabajo);
+      //
+      selectedID = id_trabajo;
+      //await localStorage.setItem("localTrabajo", trabajo);
+      await localStorage.setItem("id_trabajo", id_trabajo);
+
+      setValues({
+        ...trabajo
+      })
       //let auxTema = await temaTramiteService.getTemaTramites();  
-      setRecordForView(trabajo);
+      
       setDetail(true);
       //this.forceUpdate();
         //tematramiteService.deleteTemaTramite(id_tramite);
@@ -405,8 +455,8 @@ export default function GestionTrabajosInvestigacion() {
                             <ContactPage
                               color="warning"
                               onClick={() => {
-                              handleChange(item.id);
-                              onView(item);
+                                handleChange(item.id);
+                                onView(item, item.id);
                             }}/>
                       </IconButton>
                         </StyledTableCell>
@@ -425,7 +475,7 @@ export default function GestionTrabajosInvestigacion() {
                     Detalles del Trabajo de Investigación
             </Typography>
             <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
-            <GestionTrabajosInvestigacionDetalle  recordForView = {recordForView} detail = {detail} setDetail = {setDetail}/>
+            <GestionTrabajosInvestigacionDetalle values = {values} detail = {detail} setDetail = {setDetail}/>
  
         </Grid>
 
