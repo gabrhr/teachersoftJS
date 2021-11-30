@@ -5,7 +5,7 @@ import { Controls } from '../../../components/controls/Controls'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Link, LBox, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { Link, LBox, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
 import { useForm, Form } from '../../../components/useForm';
 import { makeStyles } from '@mui/styles'
 import * as XLSX from 'xlsx';
@@ -28,7 +28,7 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { DT } from '../../../components/DreamTeam/DT';
 import { ContactPage } from '@mui/icons-material';
-import Divider from '../../../components/controls/Divider';
+
 import GestionTrabajosInvestigacionDetalle from './GestionTrabajosInvestigacionDetalle';
 
 
@@ -223,9 +223,7 @@ export default function GestionTrabajosInvestigacion() {
       FileSaver.saveAs(data, fileName + fileExtension);
     }
     
-    // design
-    const SubtitulosTable={display:"flex"}
-    const PaperStyle={ borderRadius: '20px', mt: 3,pb:4,pt:2, px:2, color:"primary.light", elevation:0}
+    
     const {values, setValues} = useForm(initialFieldValues);
 
     const classes = {
@@ -361,7 +359,9 @@ export default function GestionTrabajosInvestigacion() {
       
  
   }
-
+  /*Styles*/ 
+  const PaperStyle = { borderRadius: '20x', pb: 4, pt:0.7, px: 0.7, color: "primary.light", elevatio: 0 }
+  const SubtitulosTable = { display: "flex" }
 
 	return (
 		<>
@@ -394,91 +394,97 @@ export default function GestionTrabajosInvestigacion() {
         </Grid>
       </Grid>
       <Paper variant="outlined" sx={PaperStyle}>
-        <Grid item xs={isViewActivityMode ? 6 : 12} className={classes.collapsible} >
-          <Typography variant="h4" style={SubtitulosTable}>
-                Repositorio de Investigación
-          </Typography>
-          <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-            {/* <Toolbar> */}
-            <Controls.Input
-              label="Buscar Trabajos de Investigación por Título"
-              InputProps={{
-                  startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    )
-                  }}
-              sx={{ width: .75 }}
-              onChange={handleSearch}
-              type="search"
-              />
-              <Controls.AddButton
-                title="Añadir Trabajo de Investigación"
-                variant="iconoTexto"
-                onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-              />
-                {/* </Toolbar> */}
-          </div>
-          <BoxTbl>  
-			    <TblContainer>
-            <TblHead />
-              <TableBody>
-              {
-                recordsAfterPagingAndSorting().map(item => (
-                  <StyledTableRow key={item.id}>
-                    <StyledTableCell >{item.codigo_publicacion}</StyledTableCell>
-                    <StyledTableCell >{item.titulo}</StyledTableCell>
-                    <StyledTableCell >{item.nombreAutor}</StyledTableCell>
-                    <StyledTableCell >{item.anho_publicacion}</StyledTableCell>
-                    <StyledTableCell >{item.url_repositorio}</StyledTableCell>
-                    <StyledTableCell>
-                      <Controls.ActionButton
-                        color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
-                      >
-                        <EditOutlinedIcon fontSize="small" />
-                      </Controls.ActionButton>
-                        <IconButton aria-label="delete">
-                          <DeleteIcon
+        <Grid container spacing={2} >
+            <Grid item xs={isViewActivityMode ? 6 :12} className={classes.collapsible} >
+            
+                  <Typography variant="h4" style={SubtitulosTable}>
+                        Repositorio de Investigación
+                  </Typography>
+                  <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
+                    {/* <Toolbar> */}
+                    <Controls.Input
+                      label="Buscar Trabajos de Investigación por Título"
+                      InputProps={{
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                            )
+                          }}
+                      sx={{ width: .75 }}
+                      onChange={handleSearch}
+                      type="search"
+                      />
+                      <Controls.AddButton
+                        title="Añadir Trabajo de Investigación"
+                        variant="iconoTexto"
+                        onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                      />
+                        {/* </Toolbar> */}
+                  </div>
+           
+              <BoxTbl>  
+              <TblContainer>
+                <TblHead />
+                  <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell >{item.codigo_publicacion}</StyledTableCell>
+                        <StyledTableCell >{item.titulo}</StyledTableCell>
+                        <StyledTableCell >{item.nombreAutor}</StyledTableCell>
+                        <StyledTableCell >{item.anho_publicacion}</StyledTableCell>
+                        <StyledTableCell component="a" href={item.url_repositorio.indexOf("http") == 0 ? item.url_repositorio : "http://" + item.url_repositorio }>{item.url_repositorio}</StyledTableCell>
+                        <StyledTableCell>
+                          <Controls.ActionButton
                             color="warning"
-                            onClick={() => {
-                            setConfirmDialog({
-                                    isOpen: true,
-                                    title: '¿Eliminar ciclo permanentemente?',
-                                    subTitle: 'No es posible deshacer esta accion',
-                                    onConfirm: () => {onDelete(item.id)}
-                            })
-                          }}/>  
+                            onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
+                          >
+                            <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                            <IconButton aria-label="delete">
+                              <DeleteIcon
+                                color="warning"
+                                onClick={() => {
+                                setConfirmDialog({
+                                        isOpen: true,
+                                        title: '¿Eliminar ciclo permanentemente?',
+                                        subTitle: 'No es posible deshacer esta accion',
+                                        onConfirm: () => {onDelete(item.id)}
+                                })
+                              }}/>  
+                              </IconButton>
+                              <IconButton aria-label="view">
+                                <ContactPage
+                                  color="warning"
+                                  onClick={() => {
+                                    handleChange(item.id);
+                                    onView(item, item.id);
+                                }}/>
                           </IconButton>
-                          <IconButton aria-label="view">
-                            <ContactPage
-                              color="warning"
-                              onClick={() => {
-                                handleChange(item.id);
-                                onView(item, item.id);
-                            }}/>
-                      </IconButton>
-                        </StyledTableCell>
-                        </StyledTableRow>
-                     ))
-                }
-                </TableBody>
-            </TblContainer>
+                            </StyledTableCell>
+                            </StyledTableRow>
+                        ))
+                    }
+                    </TableBody>
+                </TblContainer>
 
-            </BoxTbl>
-        
-        </Grid>
-        <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-        <Grid item xs={4} className={isVisible ? classes.visible : classes.hidden} >
-            <Typography variant="h4" style={SubtitulosTable} >
-                    Detalles del Trabajo de Investigación
-            </Typography>
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
-            <GestionTrabajosInvestigacionDetalle values = {values} detail = {detail} setDetail = {setDetail}/>
- 
-        </Grid>
-
+                </BoxTbl>
+            
+            </Grid>
+            <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+            <Grid item xs={3} className={isVisible ? classes.visible : classes.hidden} >
+                <br></br>
+                <br></br>
+                <br></br>
+                <Typography variant="h4" style={SubtitulosTable} >
+                        Detalles del Trabajo de Investigación
+                </Typography>
+                <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
+                <GestionTrabajosInvestigacionDetalle values = {values} detail = {detail} setDetail = {setDetail}/>
+    
+            </Grid>
+        </Grid>            
 		  </Paper>
 		</>
 	);
