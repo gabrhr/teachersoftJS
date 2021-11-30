@@ -10,7 +10,7 @@ import {Pie} from 'react-chartjs-2'
     Orange: rgba(255, 159, 64, 0.2)
 */
 
-export default function PieChartTipoDocente(cantidadTC, cantidadTPC, cantidadTPA) {
+function PieChartTipoDocente(cantidadTC, cantidadTPC, cantidadTPA) {
     const data = {
         labels: ["Tiempo completo", "Tiempo parcial convencional", "Tiempo parcial por asignaturas"],
         datasets: [{
@@ -26,7 +26,7 @@ export default function PieChartTipoDocente(cantidadTC, cantidadTPC, cantidadTPA
     )
 }
 
-export default function PieChartDeuda(cantidadDocentes, cantidadDeudores) {
+function PieChartDeuda(cantidadDocentes, cantidadDeudores) {
     const data = {
         labels: ["Deudores","Sin deuda"],
         datasets: [{
@@ -42,7 +42,7 @@ export default function PieChartDeuda(cantidadDocentes, cantidadDeudores) {
     )
 }
 
-export default function PieChartInvestigadores(cantidadDocentes, cantidadInvestigadores) {
+function PieChartInvestigadores(cantidadDocentes, cantidadInvestigadores) {
     const data = {
         labels: ["Investigadores", "No investigadores"],
         datasets: [{
@@ -58,3 +58,4 @@ export default function PieChartInvestigadores(cantidadDocentes, cantidadInvesti
     )
 }
 
+export default {PieChartTipoDocente, PieChartDeuda, PieChartInvestigadores}

@@ -3,6 +3,7 @@ import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
 import { Controls } from '../../components/controls/Controls'
 import IndicadoresService from '../../services/indicadoresService';
+import PieCharts from '../../components/PageComponents/PieCharts';
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
     let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
@@ -90,7 +91,9 @@ export default function IndicadoresSeccion() {
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
-                    
+                    <div>
+                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+                    </div>
                 </Grid>
                 <Grid item xs={0.75}/>
                 <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
