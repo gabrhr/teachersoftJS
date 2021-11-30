@@ -1,4 +1,5 @@
 import React from 'react'
+import {Chart, ArcElement} from 'chart.js'
 import {Pie} from 'react-chartjs-2'
 
 /*  Colores pastel con transparencia
@@ -11,6 +12,7 @@ import {Pie} from 'react-chartjs-2'
 */
 
 function PieChartTipoDocente(cantidadTC, cantidadTPC, cantidadTPA) {
+    Chart.register(ArcElement);
     const data = {
         labels: ["Tiempo completo", "Tiempo parcial convencional", "Tiempo parcial por asignaturas"],
         datasets: [{
@@ -27,6 +29,7 @@ function PieChartTipoDocente(cantidadTC, cantidadTPC, cantidadTPA) {
 }
 
 function PieChartDeuda(cantidadDocentes, cantidadDeudores) {
+    Chart.register(ArcElement);
     const data = {
         labels: ["Deudores","Sin deuda"],
         datasets: [{
@@ -43,6 +46,7 @@ function PieChartDeuda(cantidadDocentes, cantidadDeudores) {
 }
 
 function PieChartInvestigadores(cantidadDocentes, cantidadInvestigadores) {
+    Chart.register(ArcElement);
     const data = {
         labels: ["Investigadores", "No investigadores"],
         datasets: [{

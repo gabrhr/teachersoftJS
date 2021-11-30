@@ -92,7 +92,7 @@ export default function IndicadoresSeccion() {
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+                        {PieCharts.PieChartTipoDocente(1,2,3)}
                     </div>
                 </Grid>
                 <Grid item xs={0.75}/>
