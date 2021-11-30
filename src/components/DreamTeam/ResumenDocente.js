@@ -5,7 +5,6 @@ import { UserContext } from '../../constants/UserContext';
 export default function ResumenDocente(props) {
     let {docente} = props
 
-    console.log("docente",docente)
     function getTipoDocente (tipo){
         if(tipo===0) return "Sin asignar"
         else if(tipo===1) return "Tiempo Completo (TC)"

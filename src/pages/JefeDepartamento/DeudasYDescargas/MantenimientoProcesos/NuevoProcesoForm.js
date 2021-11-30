@@ -17,7 +17,8 @@ const initialFieldValues = {
 
 
 export default function NuevoProcesoForm(props) {
-    const { addOrEdit, recordForEdit, } = props
+    const { addOrEdit, recordForEdit} = props
+    console.log("El recordsFE",recordForEdit)
     const {
         values,
         setValues,

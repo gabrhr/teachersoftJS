@@ -15,6 +15,9 @@ import ResumenDocente from '../../../components/DreamTeam/ResumenDocente';
 import { UserContext } from '../../../constants/UserContext';
 import SolicitudDescargaForm from './SolicitudDescargaForm';
 
+import procesoDescargaService from '../../../services/procesoDescargaService';
+import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import ItemSinProcesoDocente from './ItemSinProcesoDocente';
 
 
 
@@ -22,84 +25,126 @@ export default function GestionDescargaDocente() {
     const [openPopup, setOpenPopup] = useState(false)
     const [openPopupDetalle, setOpenPopupDetalle] = useState(false)
     const [records, setRecords] = useState([])
-    const [descargaActual, setDescargaActual] = useState([])
+    const [descargaActual, setDescargaActual] = useState(null)
     const [deleteData, setDeleteData] = useState(false)
     const [createData, setCreateData] = useState(false);
     const [updateData, setUpdateData] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
+        
     const { user } = React.useContext(UserContext)
-    
-    const addOrEdit = (proceso, resetForm) => {
-        //Service
+    const [procesoActivo, setProcesoActivo] = useState([])
+    let procesoActivoNew
 
+    const addOrEdit = async(values, resetForm) => {
+        //Service
+        let resultado, newTramite, editTramite;
+        if(!recordForEdit){
+            newTramite = {
+                "observacion": values.observacion,
+                "procesoDescarga": {
+                    "id": procesoActivo[0].id,
+                },
+                "tipo_bono": values.tipo_bono,
+                "persona_seccion": null,
+                "persona_departamento": null,
+                "departamento": {
+                    "id": user.persona.departamento.id,
+                },
+                "solicitador": {
+                    "id": user.persona.id,
+                }
+            }
+            await tramiteDescargaService.registerTramiteDescarga(newTramite)
+        }else{
+            editTramite = {
+                "id": values.id,
+                "observacion": values.observacion,
+                "procesoDescarga": {
+                    "id": procesoActivo[0].id,
+                },
+                "tipo_bono": values.tipo_bono,
+                "persona_seccion": null,
+                "persona_departamento": null,
+                "departamento": {
+                    "id": user.persona.departamento.id,
+                },
+                "solicitador": {
+                    "id": user.persona.id,
+                }
+            }
+            await tramiteDescargaService.updateTramiteDescarga(editTramite)
+        }
         resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)    
         setNotify({
           isOpen: true,
-          message: 'Se ha añadido exitosamente',
+          message: recordForEdit ? 'Se ha editado exitosamente' : 'Se ha añadido exitosamente',
           type: 'success'
         })
     }
-    const onDelete = (idCiclo) => {
-        // if (!window.confirm('Are you sure to delete this record?'))
-        //   return
-
+    const onDelete = (idTramite) => {
         //Serviceeee
-       /*  setDeleteData(true);
         setConfirmDialog({
           ...confirmDialog,
           isOpen: false
         })
-        console.log(records)
-        console.log(idCiclo)
-        //console.log(id)
-        const nuevaTabla = records.filter(cicloPorEliminar => cicloPorEliminar.id !== idCiclo)
-        console.log(nuevaTabla)
-        CicloService.deleteCiclo(idCiclo);
- 
+        
+        const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
+        setRecords(nuevaTabla)
+        setDescargaActual(null)
+        tramiteDescargaService.deleteTramiteDescarga(idTramite);
+        setDeleteData(true);
         setNotify({
           isOpen: true,
           message: 'Borrado Exitoso',
           type: 'success'
-        }) */
+        })
     }
+    const getTramitesDescargasDocente = async() => {
+        procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const tramites = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
+        setRecords(tramites)
+        //console.log("El proceso activo es ", procesoActivoNew)
+        //procesoDescarga.id === 10
+        console.log("tramitesss", tramites)
+        const desc =  tramites.find(({procesoDescarga}) =>
+            procesoDescarga.id === procesoActivoNew[0].id
+        )
+        setDescargaActual(desc)
+        await setProcesoActivo(procesoActivoNew)
+    }
+
     React.useEffect(() => {
-        // serviceeeeeeeeeee
-       /*  getCiclos()
-        .then (newDep =>{
-          setRecords(newDep);
-          console.log(newDep);
-          setDeleteData(false);
-          setCreateData(false);
-        }); */
-    }, [recordForEdit, createData. deleteData])
-    
+        getTramitesDescargasDocente()
+    }, [recordForEdit, createData, confirmDialog, openPopup])
     
     return (
         <>
             <ContentHeader text={"Solicitudes de Descarga"} cbo={false} />
             {/* Solicitud actual del año */}
             <Grid container>
-                <Grid item xs={8} sx={{overflow:"scrollY"}}>
-                    <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                        <Controls.AddButton
-                            title="Agregar Nueva Solicitud"
-                            variant="iconoTexto"
-                            onClick = {() => {setOpenPopup(true);}}
+                <Grid item xs={8}>
+                    {   procesoActivo.length===0? 
+                        <ItemSinProcesoDocente/>:                    
+                        descargaActual? 
+                        <>
+                            <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
+                            <ItemDescargaActualDocente
+                                item={descargaActual} setRecordForEdit={setRecordForEdit}
+                                setOpenPopup={setOpenPopup} setOpenPopupDetalle={setOpenPopupDetalle} 
+                                onDelete={onDelete}
+                                setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
+                            /> 
+                        </>
+                        :<ItemDecargaVaciaDocente
+                            proceso={procesoActivo[0]}
+                            addOrEdit={addOrEdit}
+                            setOpenPopup={setOpenPopup}
                         />
-                    </div>
-                    <ItemDescargaActualDocente
-                        descargaActual={descargaActual}
-                        setRecordForEdit={setRecordForEdit}
-                        setOpenPopup={setOpenPopup}
-                        setOpenPopupDetalle={setOpenPopupDetalle}
-                    />
-                    <ItemDecargaVaciaDocente
-                        addOrEdit={addOrEdit}
-                        setOpenPopup={setOpenPopup}
-                    />
+                    }
                 
                     {/* Solicitud Pasada */}
                     <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
@@ -108,6 +153,7 @@ export default function GestionDescargaDocente() {
                         setRecordForEdit={setRecordForEdit}
                         setOpenPopup={setOpenPopup}
                         onDelete={onDelete}
+                        setOpenPopupDetalle={setOpenPopupDetalle}
                     />
                 </Grid>
                 <Divider orientation="vertical" flexItem sx={{mx:2}} />

@@ -59,6 +59,7 @@ export default function DashboardSoliOrganism(props) {
         <div>
             <BoxTbl>
             {recordsCargados ? (
+                recordsAfterPagingAndSorting.length>0? (
                 <>
                 <TblContainer>
                     {/* <TblHead />  */}
@@ -133,6 +134,12 @@ export default function DashboardSoliOrganism(props) {
                 </TblContainer>
                 <TblPagination />
                 </>
+                ):
+                    <Grid item xs= {12} rowSpacing={20} align = "center">
+                        <Typography variant="h4" color = "secondary">
+                                Aún no se han generado Solicitudes
+                        </Typography>
+                    </Grid>
             ):
             (
                 <Box sx={{ width: '100%' }}>

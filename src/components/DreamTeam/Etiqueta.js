@@ -33,6 +33,14 @@ export default function Etiqueta(props) {
         text="Atendido" 
         other.icon = (<TaskAltOutlinedIcon/>)
         other.color= "atendido"
+    }else if(type="pendienteDesc"){ //Para descarga
+        text="Pendiente"
+        other.icon = (<AccessTimeOutlinedIcon/>)
+        other.color= "pendiente"
+    }else if(type="aprobadoDesc"){ //Para descarga
+        text="Aprobado"
+        other.icon = (<TaskAltOutlinedIcon/>)
+        other.color= "atendido"
     }
 
     if (! ["error","info","success","warning"].includes(type)) type = "info"

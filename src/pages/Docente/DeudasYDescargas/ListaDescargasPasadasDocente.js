@@ -31,7 +31,7 @@ const tableHeaders = [
 ]
 
 export default function ListaDescargasPasadasDocente(props) {
-    const { records, setRecordForEdit, setOpenPopup } = props
+    const { records, setRecordForEdit, setOpenPopup,setOpenPopupDetalle } = props
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
     const [confirmDialog, setConfirmDialog] = useState(
@@ -50,6 +50,7 @@ export default function ListaDescargasPasadasDocente(props) {
     function getRow ({...props}){
         //setOpenDetalle(true)
         setRow(props)
+        console.log("Get rowww?", row)
     }
 
     const handleSearch = e => {
@@ -99,6 +100,7 @@ export default function ListaDescargasPasadasDocente(props) {
                                     setOpenPopup={setOpenPopup}
                                     setRecordForEdit={setRecordForEdit}
                                     setConfirmDialog={setConfirmDialog}
+                                    setOpenPopupDetalle={setOpenPopupDetalle}
                                 />
                             ))
                         }
@@ -111,7 +113,7 @@ export default function ListaDescargasPasadasDocente(props) {
                 <BoxTbl>
                     <Grid item xs= {12} rowSpacing={20} align = "center">
                         <Typography variant="h4" color = "secondary">
-                                Aún no tiene Solicitudes de Descarga registradas
+                                Aún no ha generado Solicitudes de Descarga registradas
                         </Typography>
                     </Grid>
                 </BoxTbl>
@@ -123,7 +125,7 @@ export default function ListaDescargasPasadasDocente(props) {
 
 
 function Item(props){
-    const {item,getRow, setOpenPopup,setRecordForEdit, setConfirmDialog, onDelete} = props
+    const {item,getRow, setRecordForEdit, setConfirmDialog, onDelete, setOpenPopupDetalle} = props
     function formatoFecha(fecha){
         if(fecha!=null){
             return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
@@ -138,37 +140,35 @@ function Item(props){
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {//formatoFecha(item.fecha_enviado)
-                            "fecha"
-                            }
+                        {formatoFecha(item.fecha_creacion)}
                     </Typography>
                     <div/>
                     <Typography fontWeight='bold' fontSize={18}>
-                         {/* Nombre del proceso */}
+                         Solicitud de Descarga - {item.procesoDescarga.nombre}
                     </Typography>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Autor: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {/* Docente de soli */}
+                        {item.solicitador.nombres + " " + item.solicitador.apellidos} 
                     </Typography>
                 </TableCell>
                 <TableCell >
-                    <Typography display="inline">
+                    <Typography >
                         Resultado de Solicitud:{'\u00A0'}
                     </Typography>
-                    <Typography display="inline">
-                        {/* Funcion para que sea Aprobado, Rechazada o Pendiente */}
-                        Resultado 
+                    <Typography>
+                        {item.resultado === 0 ? "Pendiente" :
+                         item.resultado === 1 ? "Aprobado" :
+                         "Desaprobado"}
                     </Typography>  
                 </TableCell>
                 <TableCell>
-                    <Controls.ActionButton
-                        color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
-                    >
-                        <EditOutlinedIcon fontSize="small" />
-                    </Controls.ActionButton>
+                    <Controls.Button
+                        text="Ver Solicitud"
+                        type="submit"
+                        onClick={() => { getRow(item); setOpenPopupDetalle(true) }}
+                        />
                 </TableCell>
             </TableRow>
         </>
