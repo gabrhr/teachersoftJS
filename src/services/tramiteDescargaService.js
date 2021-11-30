@@ -32,6 +32,8 @@ export const getTramitesDescargaHistoricoxDocentexCiclo = async (id_docente, id_
   }
 }
 
+
+
 export const getTramiteDescarga = async (id) => {
     try{
       //debugger;
@@ -71,5 +73,5 @@ const deleteTramiteDescarga = async (id) => {
     }
   }
 
-export default {getTramitesDescarga, getTramiteDescarga, registerTramiteDescarga, updateTramiteDescarga, 
-  deleteTramiteDescarga, getTramitesDescargaHistoricoxDocente, getTramitesDescargaHistoricoxDocentexCiclo}
+  export default {getTramitesDescarga, getTramiteDescarga, registerTramiteDescarga, updateTramiteDescarga, 
+    deleteTramiteDescarga, getTramitesDescargaHistoricoxDocente, getTramitesDescargaHistoricoxDocentexCiclo}

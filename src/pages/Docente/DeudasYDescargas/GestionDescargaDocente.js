@@ -1,98 +1,49 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState} from 'react'
 /* ICONS */
-import SearchIcon from '@mui/icons-material/Search';
-import useTable from '../../../components/useTable';
+
 import { Controls } from '../../../components/controls/Controls';
-import { Grid, InputAdornment, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import { Grid, Typography, Divider } from '@mui/material';
 import NuevaDescargaDocente from './NuevaDescargaDocente';
 import Notification from '../../../components/util/Notification';
-import moment from 'moment'
-import 'moment/locale/es'
 import Popup from '../../../components/util/Popup';
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
+import ListaDescargasPasadasDocente from './ListaDescargasPasadasDocente';
+import ItemDescargaActualDocente from './ItemDecargaActualDocente'
+import ItemDecargaVaciaDocente from './ItemDecargaVaciaDocente'
+import { DT } from '../../../components/DreamTeam/DT';
+import ResumenDocente from '../../../components/DreamTeam/ResumenDocente';
+import { UserContext } from '../../../constants/UserContext';
+import SolicitudDescargaForm from './SolicitudDescargaForm';
+
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
-import {UserContext} from '../../../constants/UserContext';
-import ConfirmDialog from '../../../components/util/ConfirmDialog';
-
-moment.locale('es');
 
 
-const tableHeaders = [
-    {
-      id: 'asunto',
-      label: 'Asunto',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'descripcion',
-      label: 'Descripcion',
-      numeric: false,
-      sortable: false
-    },
-    {
-      id: 'cantidad',
-      label: 'Cantidad',
-      numeric: false,
-      sortable: true
-    }
-]
+
 export default function GestionDescargaDocente() {
     const [openPopup, setOpenPopup] = useState(false)
-    const [row, setRow] = useState(false)
+    const [openPopupDetalle, setOpenPopupDetalle] = useState(false)
     const [records, setRecords] = useState([])
+    const [descargaActual, setDescargaActual] = useState(null)
     const [deleteData, setDeleteData] = useState(false)
     const [createData, setCreateData] = useState(false);
     const [updateData, setUpdateData] = useState(false);
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
-    const [confirmDialog, setConfirmDialog] = useState(
-        { isOpen: false, title: '', subtitle: '' })
-    const {user} = useContext(UserContext)
-    let procesoActivo;
-    const {
-        TblContainer,
-        TblHead,
-        TblPagination,
-        recordsAfterPagingAndSorting,
-        BoxTbl
-    } = useTable(records,tableHeaders, filterFn);
-    
-    const handleSearch = e => {
-        let target = e.target;
-        /* React "state object" (useState()) doens't allow functions, only
-          * objects.  Thus the function needs to be inside an object. */
-        setFilterFn({
-          fn: items => {
-            if (target.value == "")
-              /* no search text */
-              return items
-            else
-              return items.filter(x => x.nombre.toLowerCase()
-                  .includes(target.value.toLowerCase()))
-          }
-        })
-    }
-    function getRow ({...props}){
-        //setOpenDetalle(true)
-        setRow(props)
-    }
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
+        
+    const { user } = React.useContext(UserContext)
+    const [procesoActivo, setProcesoActivo] = useState(null)
+    let procesoActivoNew
 
     const addOrEdit = async(values, resetForm) => {
         //Service
-        console.log(values)
-        console.log(recordForEdit)
         let resultado, newTramite, editTramite;
         if(!recordForEdit){
             newTramite = {
                 "observacion": values.observacion,
                 "procesoDescarga": {
-                    "id": 10,
+                    "id": procesoActivo[0].id,
                 },
                 "tipo_bono": values.tipo_bono,
                 "persona_seccion": null,
@@ -110,7 +61,7 @@ export default function GestionDescargaDocente() {
                 "id": values.id,
                 "observacion": values.observacion,
                 "procesoDescarga": {
-                    "id": 10,
+                    "id": procesoActivo[0].id,
                 },
                 "tipo_bono": values.tipo_bono,
                 "persona_seccion": null,
@@ -134,19 +85,15 @@ export default function GestionDescargaDocente() {
         })
     }
     const onDelete = (idTramite) => {
-        // if (!window.confirm('Are you sure to delete this record?'))
-        //   return
-        console.log("Se quiere eliminar algo ga")
         //Serviceeee
         setConfirmDialog({
           ...confirmDialog,
           isOpen: false
         })
-        console.log(records)
-        console.log(idTramite)
-        //console.log(id)
+        
         const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
         setRecords(nuevaTabla)
+        setDescargaActual(null)
         tramiteDescargaService.deleteTramiteDescarga(idTramite);
         setDeleteData(true);
         setNotify({
@@ -155,82 +102,61 @@ export default function GestionDescargaDocente() {
           type: 'success'
         })
     }
-
     const getTramitesDescargasDocente = async() => {
-        procesoActivo = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        console.log("El proceso activo es ", procesoActivo)
-        const procesos = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
-        console.log(user.persona.id)
-        setRecords(procesos)
+        procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const tramites = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
+        setRecords(tramites)
+        //console.log("El proceso activo es ", procesoActivoNew)
+        //procesoDescarga.id === 10
+        console.log("tramitesss", tramites)
+        const desc =  tramites.find(({procesoDescarga}) =>
+            procesoDescarga.id === procesoActivoNew[0].id
+        )
+        setDescargaActual(desc)
+        await setProcesoActivo(procesoActivoNew)
     }
 
     React.useEffect(() => {
         getTramitesDescargasDocente()
-    }, [recordForEdit, createData. confirmDialog, openPopup])
-    
+    }, [recordForEdit, createData, confirmDialog, openPopup])
     
     return (
         <>
-        <ContentHeader text={"Solicitudes de Descarga"} cbo={false} />
-        {/* Solicitud actual del año */}
-        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-            <Controls.AddButton
-                title="Agregar Nueva Solicitud"
-                variant="iconoTexto"
-                onClick = {() => {setOpenPopup(true);}}
-            />
-        </div>
-        {/* Solicitud Pasada */}
-        <Typography variant="h4" >Lista de Solicitudes de Descarga Pasadas</Typography>
-
-        <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                {/* <Toolbar> */}
-                <Controls.Input
-                    label="Buscar Solicitud por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
-                />
-            </div>
-            { records.length?
-             <>
-                <BoxTbl>
-                    <TblContainer>
-                        {/* <TblHead />  */}
-                        <TableBody>
-                        {
-                        recordsAfterPagingAndSorting().map(item => (
-                                <Item item={item} getRow= {getRow}
-                                    setOpenPopup={setOpenPopup}
-                                    setRecordForEdit={setRecordForEdit}
-                                    setConfirmDialog={setConfirmDialog}
-                                    onDelete={onDelete}
-                                    confirmDialog = {confirmDialog}
-                                />
-                            ))
-                        }
-                        </TableBody>
-                    </TblContainer>
-                    <TblPagination />
-                </BoxTbl>
-             </>
-             :
-                <BoxTbl>
-                    <Grid item xs= {12} rowSpacing={20} align = "center">
-                        <Typography variant="h4" color = "secondary">
-                                Aún no tiene Solicitudes de Descarga registradas
-                        </Typography>
-                    </Grid>
-                </BoxTbl>
-
-            }
+            <ContentHeader text={"Solicitudes de Descarga"} cbo={false} />
+            {/* Solicitud actual del año */}
+            <Grid container>
+                <Grid item xs={8} sx={{overflow:"scrollY"}}>
+                    { descargaActual? 
+                        <>
+                            <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
+                            <ItemDescargaActualDocente
+                                item={descargaActual} setRecordForEdit={setRecordForEdit}
+                                setOpenPopup={setOpenPopup} setOpenPopupDetalle={setOpenPopupDetalle} 
+                                onDelete={onDelete}
+                                setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
+                            /> 
+                        </>
+                        :<ItemDecargaVaciaDocente
+                            addOrEdit={addOrEdit}
+                            setOpenPopup={setOpenPopup}
+                        />
+                    }
+                
+                    {/* Solicitud Pasada */}
+                    <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
+                    <ListaDescargasPasadasDocente 
+                        records={records}
+                        setRecordForEdit={setRecordForEdit}
+                        setOpenPopup={setOpenPopup}
+                        onDelete={onDelete}
+                        setOpenPopupDetalle={setOpenPopupDetalle}
+                    />
+                </Grid>
+                <Divider orientation="vertical" flexItem sx={{mx:2}} />
+                <Grid item xs={3}>
+                    <ResumenDocente docente={user}/>
+                </Grid>
+            </Grid>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
@@ -242,81 +168,19 @@ export default function GestionDescargaDocente() {
                     addOrEdit={addOrEdit}
                 />
             </Popup>
+            <Popup
+                openPopup={openPopupDetalle}
+                setOpenPopup={setOpenPopupDetalle}
+                title= {"Solicitud de Descarga"}
+                size="md"
+            >
+                <SolicitudDescargaForm/>
+            </Popup>
             <Notification
               notify={notify}
               setNotify={setNotify}
             />
         </>
     )
-}
-
-
-function Item(props){
-    const {item,getRow, setOpenPopup,setRecordForEdit, setConfirmDialog, onDelete, confirmDialog} = props
-    function formatoFecha(fecha){
-        if(fecha!=null){
-            return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
-        }
-    }
-    return (
-        <>
-        
-            <TableRow key={item.id}>
-                <TableCell sx={{maxWidth:"400px"}}>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Fecha: {'\u00A0'}
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {formatoFecha(item.fecha_creacion)}
-                    </Typography>
-                    <div/>
-                    <Typography fontWeight='bold' fontSize={18}>
-                         {item.procesoDescarga.nombre}
-                    </Typography>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Autor: {item.solicitador.nombres + " " + item.solicitador.apellidos} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {/* Docente de soli */}
-                    </Typography>
-                </TableCell>
-                <TableCell >
-                    <Typography display="inline">
-                        Resultado de Solicitud:{'\u00A0'}
-                    </Typography>
-                    <Typography display="inline">
-                        {item.resultado === 0 ? "Pendiente" :
-                         item.resultado === 1 ? "Aprobado" :
-                         "Desaprobado"}
-                    </Typography>  
-                </TableCell>
-                <TableCell>
-                    <Controls.ActionButton
-                        color="warning"
-                        onClick={ () => {setOpenPopup(true);setRecordForEdit(item);}}
-                    >
-                        <EditOutlinedIcon fontSize="small" />
-                    </Controls.ActionButton>
-                    <IconButton aria-label="delete">
-                            <DeleteIcon
-                            color="warning"
-                            onClick={() => {
-                              setConfirmDialog({
-                                isOpen: true,
-                                title: '¿Eliminar la solicitud permanentemente?',
-                                subTitle: 'No es posible deshacer esta accion',
-                                onConfirm: () => {onDelete(item.id)}
-                              })
-                            }}/>
-                    </IconButton>
-                </TableCell>
-            </TableRow>
-            <ConfirmDialog
-                confirmDialog = {confirmDialog}
-                setConfirmDialog = {setConfirmDialog}
-            />
-
-        </>
-    );
 }
 

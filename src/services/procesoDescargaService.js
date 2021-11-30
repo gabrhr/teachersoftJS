@@ -61,5 +61,5 @@ const deleteProcesoDescarga = async (id) => {
     }
   }
 
-export default {getProcesosDescarga, getProcesoDescarga, registerProcesoDescarga, updateProcesoDescarga, 
-  deleteProcesoDescarga, getProcesoDescargaActivoxDepartamento}
+  export default {getProcesosDescarga, getProcesoDescarga, registerProcesoDescarga, updateProcesoDescarga, 
+    deleteProcesoDescarga, getProcesoDescargaActivoxDepartamento}
