@@ -71,7 +71,7 @@ export default function ModalDetalleCursosDocente({docente}){
 
     return(
         <>
-            {/* <ContentHeader
+            <ContentHeader
                 text="Histórico de cursos dictados"
                 cbo={true}
                 records ={ciclo}
@@ -88,24 +88,27 @@ export default function ModalDetalleCursosDocente({docente}){
                         <col style={{ width: '5%' }} />
                     </colgroup>
                     <TableBody>
-                    {
-                    recordsAfterPagingAndSorting().map(item => (
+                    {(recordsAfterPagingAndSorting().map(item => (
                     <StyledTableRow>
                         <StyledTableCell align="right">{item.clave}</StyledTableCell>
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell        align="center">{item.carga}</StyledTableCell>
                         <StyledTableCell        align="center">{item.horario}</StyledTableCell>
                         <StyledTableCell        align="center">{item.horas}</StyledTableCell>
-                    </StyledTableRow>
+                    </StyledTableRow>)
                     ))
-                    }
-                    </TableBody>
+                  }
+                  </TableBody>
                 </TblContainer>
+                {records.length ? <> </> : 
+                <><Typography color = "secondary" align = "center">  
+                  El docente no tiene cursos dictados en ciclos anteriores.  
+                </Typography></>}
                 <TblPagination />
             </BoxTbl>
             <Grid cointainer align="right" mt={2.5} />   
             <hr color = "#636e9a"/> 
-            <Grid cointainer align="right" mt={2.5} /> */}
+            <Grid cointainer align="right" mt={2.5} />
 
             <TablaPreferenciaDocente docente = {docente}/>
         </>
