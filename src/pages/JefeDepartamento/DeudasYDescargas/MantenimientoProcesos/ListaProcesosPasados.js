@@ -63,7 +63,7 @@ function Item(props){
                 </TableCell>
                 <TableCell > 
                     {/* Tracking dibujo */}
-                    <TrackinDescarga item={item}/>
+                    {/* <TrackinDescarga item={item}/> */}
                 </TableCell>
                 <TableCell sx={{maxWidth:"70px"}}> 
                     <Controls.ActionButton
@@ -73,7 +73,7 @@ function Item(props){
                         <AssignmentOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
                 </TableCell>
-                <TableCell sx={{maxWidth:"70px"}}>
+                {/* <TableCell sx={{maxWidth:"70px"}}>
                     <Link to ={{
                         pathname:"/jd/asignacionCarga/proceso/descarga",
                         state:{
@@ -88,7 +88,7 @@ function Item(props){
 
                         </IconButton>
                     </Link>
-                </TableCell>
+                </TableCell> */}
             </TableRow>
             <Popup
                 openPopup={openPopupFinalizado}

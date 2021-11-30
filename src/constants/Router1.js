@@ -64,6 +64,8 @@ import DelegadoExterno from '../pages/MesaPartes/DelegadoExterno';
 import DeudasYDescargasJefe from '../pages/JefeDepartamento/DeudasYDescargas/DeudasYDescargasJefe'
 import GestionDescargas from '../pages/JefeDepartamento/DeudasYDescargas/Descargas/GestionDescargas';
 import GestionDescargaDocente from '../pages/Docente/DeudasYDescargas/GestionDescargaDocente'
+import DeudasYDescargaCoord from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/DeudasYDescargaCoord'
+import NuevaSolicitudDescarga from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/NuevaSolicitudDescarga'
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -118,6 +120,8 @@ const privateroutes = [
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
+  { requireRoles: [3, 8], path: "/cord/solicitudes/deudasYDescargas", page: DeudasYDescargaCoord  },
+  { requireRoles: [3, 8], path: "/cord/solicitudes/deudasYDescargas/nuevaSolicitud", page: NuevaSolicitudDescarga  },
 
 
   /* AD */
