@@ -212,7 +212,7 @@ export default function Router1(props) {
              <Redirect to="/invitado/mesaPartes/misSolicitudes" />
         </PrivateRoute>
         <PrivateRoute exact path="/ai" requireRoles={[9]}>
-             <Redirect to="/ai/repoInvestigaciones" />
+             <Redirect to="/ai/indicadores" />
         </PrivateRoute>
         {/* Ver bien la ruta */}
         {/* <PrivateRoute exact path="/invitado/atender" requireRoles={[8]}>

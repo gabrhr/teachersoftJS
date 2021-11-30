@@ -22,6 +22,7 @@
     "html5-file-selector": "^2.1.0",
     "i": "^0.3.7",
     "jss": "^10.8.0",
+    "material-dashboard-react": "^1.10.0",
     "modules": "^0.4.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",
