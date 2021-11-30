@@ -29,7 +29,9 @@ const tableHeaders = [
 
 
 export default function ItemDecargaActualDocente(props) {
-    const {descargaActual,setRecordForEdit, setOpenPopup, onDelete } = props
+    const {descargaActual,setRecordForEdit, setOpenPopup, onDelete,
+        setOpenPopupDetalle
+    } = props
     const [row, setRow] = React.useState(false)
     const [confirmDialog, setConfirmDialog] = useState(
         { isOpen: false, title: '', subtitle: '' })
@@ -41,7 +43,7 @@ export default function ItemDecargaActualDocente(props) {
 
     return (
         <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
-            px={4} py={2} mb={2}
+            px={2} py={2} mb={2}
         >
              <TableRow align="center">
                 <TableCell sx={{width: "400px",borderBottom: "none"}}>
@@ -65,7 +67,7 @@ export default function ItemDecargaActualDocente(props) {
                         lasjdklasjdklasdjlkasjdklajsdlkas
                     </Typography>
                 </TableCell>
-                <TableCell sx={{width:"400px",borderBottom: "none"}}>
+                <TableCell sx={{width:"150px",borderBottom: "none"}}>
                     <Typography display="inline">
                         Resultado de Solicitud:{'\u00A0'}
                     </Typography>
@@ -74,11 +76,11 @@ export default function ItemDecargaActualDocente(props) {
                         Resultado 
                     </Typography>  
                 </TableCell>
-                <TableCell sx={{width:"300px",borderBottom: "none"}}>
+                <TableCell sx={{width:"200px",borderBottom: "none"}}>
                     <Controls.Button
                         text="Ver Solicitud"
                         type="submit"
-                        onClick={() => { getRow(descargaActual)}}
+                        onClick={() => { getRow(descargaActual); setOpenPopupDetalle(true) }}
                         />
                 </TableCell>
                 <TableCell sx={{maxWidth:"200px",borderBottom: "none",borderBottom: "none"}}>

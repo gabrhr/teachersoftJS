@@ -13,12 +13,14 @@ import ItemDecargaVaciaDocente from './ItemDecargaVaciaDocente'
 import { DT } from '../../../components/DreamTeam/DT';
 import ResumenDocente from '../../../components/DreamTeam/ResumenDocente';
 import { UserContext } from '../../../constants/UserContext';
+import SolicitudDescargaForm from './SolicitudDescargaForm';
 
 
 
 
 export default function GestionDescargaDocente() {
     const [openPopup, setOpenPopup] = useState(false)
+    const [openPopupDetalle, setOpenPopupDetalle] = useState(false)
     const [records, setRecords] = useState([])
     const [descargaActual, setDescargaActual] = useState([])
     const [deleteData, setDeleteData] = useState(false)
@@ -92,6 +94,7 @@ export default function GestionDescargaDocente() {
                         descargaActual={descargaActual}
                         setRecordForEdit={setRecordForEdit}
                         setOpenPopup={setOpenPopup}
+                        setOpenPopupDetalle={setOpenPopupDetalle}
                     />
                     <ItemDecargaVaciaDocente
                         addOrEdit={addOrEdit}
@@ -122,6 +125,14 @@ export default function GestionDescargaDocente() {
                     recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit}
                 />
+            </Popup>
+            <Popup
+                openPopup={openPopupDetalle}
+                setOpenPopup={setOpenPopupDetalle}
+                title= {"Solicitud de Descarga"}
+                size="md"
+            >
+                <SolicitudDescargaForm/>
             </Popup>
             <Notification
               notify={notify}
