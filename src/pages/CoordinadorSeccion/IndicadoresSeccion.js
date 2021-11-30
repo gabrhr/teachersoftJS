@@ -4,10 +4,23 @@ import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typogra
 import { Controls } from '../../components/controls/Controls'
 import { useForm, Form } from '../../components/useForm';
 import { useTheme } from '@mui/material/styles'
+import IndicadoresService from '../../services/indicadoresService';
 
 const initialFieldValues = {
     id: '',
     title: ''
+}
+
+const fillProfesoresTC = async (id_ciclo,id_seccion) => {
+    
+}
+
+const fillProfesoresTPC = async (id_ciclo,id_seccion) => {
+    
+}
+
+const fillProfesoresTPA = async (id_ciclo,id_seccion) => {
+    
 }
 
 export default function IndicadoresSeccion() {
@@ -33,23 +46,23 @@ export default function IndicadoresSeccion() {
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={3}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Numero de Profesores TC:
+                        Numero de Profesores TC:
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={4}>
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Numero de Profesores TPC:
+                        Numero de Profesores TPC:
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Promedio de Horas TPC:
+                        Promedio de Horas TPC:
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={4}>
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Numero de Profesores TPA:
+                        Numero de Profesores TPA:
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Promedio de Horas TPA:
+                        Promedio de Horas TPA:
                     </Typography>
                     
                 </Grid>
