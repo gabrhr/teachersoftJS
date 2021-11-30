@@ -16,6 +16,7 @@ import IconButton from '@mui/material/IconButton';
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import {UserContext} from '../../../constants/UserContext';
+import ConfirmDialog from '../../../components/util/ConfirmDialog';
 
 moment.locale('es');
 
@@ -94,13 +95,14 @@ export default function GestionDescargaDocente() {
                     "id": 10,
                 },
                 "tipo_bono": values.tipo_bono,
-                "persona_seccion": {
-                    "id": 3,
-                },
+                "persona_seccion": null,
                 "persona_departamento": null,
                 "departamento": {
-                    "id": 3,
+                    "id": user.persona.departamento.id,
                 },
+                "solicitador": {
+                    "id": user.persona.id,
+                }
             }
             await tramiteDescargaService.registerTramiteDescarga(newTramite)
         }else{
@@ -111,13 +113,14 @@ export default function GestionDescargaDocente() {
                     "id": 10,
                 },
                 "tipo_bono": values.tipo_bono,
-                "persona_seccion": {
-                    "id": 3,
-                },
+                "persona_seccion": null,
                 "persona_departamento": null,
                 "departamento": {
-                    "id": 3,
+                    "id": user.persona.departamento.id,
                 },
+                "solicitador": {
+                    "id": user.persona.id,
+                }
             }
             await tramiteDescargaService.updateTramiteDescarga(editTramite)
         }
@@ -130,42 +133,40 @@ export default function GestionDescargaDocente() {
           type: 'success'
         })
     }
-    const onDelete = (idCiclo) => {
+    const onDelete = (idTramite) => {
         // if (!window.confirm('Are you sure to delete this record?'))
         //   return
-
+        console.log("Se quiere eliminar algo ga")
         //Serviceeee
-       /*  setDeleteData(true);
         setConfirmDialog({
           ...confirmDialog,
           isOpen: false
         })
         console.log(records)
-        console.log(idCiclo)
+        console.log(idTramite)
         //console.log(id)
-        const nuevaTabla = records.filter(cicloPorEliminar => cicloPorEliminar.id !== idCiclo)
-        console.log(nuevaTabla)
-        CicloService.deleteCiclo(idCiclo);
- 
+        const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
+        setRecords(nuevaTabla)
+        tramiteDescargaService.deleteTramiteDescarga(idTramite);
+        setDeleteData(true);
         setNotify({
           isOpen: true,
           message: 'Borrado Exitoso',
           type: 'success'
-        }) */
+        })
     }
 
     const getTramitesDescargasDocente = async() => {
         procesoActivo = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         console.log("El proceso activo es ", procesoActivo)
-        const procesos = await tramiteDescargaService.getTramitesDescarga();
+        const procesos = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
+        console.log(user.persona.id)
         setRecords(procesos)
     }
 
     React.useEffect(() => {
         getTramitesDescargasDocente()
-        console.log("El docente pertenece al departamento ", user.persona.departamento.id)
-
-    }, [recordForEdit, createData. deleteData, openPopup])
+    }, [recordForEdit, createData. confirmDialog, openPopup])
     
     
     return (
@@ -211,6 +212,7 @@ export default function GestionDescargaDocente() {
                                     setRecordForEdit={setRecordForEdit}
                                     setConfirmDialog={setConfirmDialog}
                                     onDelete={onDelete}
+                                    confirmDialog = {confirmDialog}
                                 />
                             ))
                         }
@@ -250,7 +252,7 @@ export default function GestionDescargaDocente() {
 
 
 function Item(props){
-    const {item,getRow, setOpenPopup,setRecordForEdit, setConfirmDialog, onDelete} = props
+    const {item,getRow, setOpenPopup,setRecordForEdit, setConfirmDialog, onDelete, confirmDialog} = props
     function formatoFecha(fecha){
         if(fecha!=null){
             return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
@@ -272,7 +274,7 @@ function Item(props){
                          {item.procesoDescarga.nombre}
                     </Typography>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Autor: {item.persona_seccion.nombres + " " + item.persona_seccion.apellidos} 
+                        Autor: {item.solicitador.nombres + " " + item.solicitador.apellidos} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
                         {/* Docente de soli */}
@@ -299,7 +301,6 @@ function Item(props){
                             <DeleteIcon
                             color="warning"
                             onClick={() => {
-                              
                               setConfirmDialog({
                                 isOpen: true,
                                 title: '¿Eliminar la solicitud permanentemente?',
@@ -310,7 +311,10 @@ function Item(props){
                     </IconButton>
                 </TableCell>
             </TableRow>
-                        
+            <ConfirmDialog
+                confirmDialog = {confirmDialog}
+                setConfirmDialog = {setConfirmDialog}
+            />
 
         </>
     );

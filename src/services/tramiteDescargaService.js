@@ -72,4 +72,4 @@ const deleteTramiteDescarga = async (id) => {
   }
 
 export default {getTramitesDescarga, getTramiteDescarga, registerTramiteDescarga, updateTramiteDescarga, 
-  deleteTramiteDescarga, getTramitesDescargaHistoricoxDocentexCiclo, getTramitesDescargaHistoricoxDocentexCiclo}
+  deleteTramiteDescarga, getTramitesDescargaHistoricoxDocente, getTramitesDescargaHistoricoxDocentexCiclo}
