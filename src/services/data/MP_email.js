@@ -69,6 +69,28 @@ a:link, a:visited, a:hover, a:active {
 `
 }
 
+export function soliEnviada(s) {
+    let actualcontent = `<p>
+            Estimado:<br/>
+            ${s.solicitador.fullName}
+        </p>
+        <p>Acaba de enviar la siguiente solicitud</p>
+        <p>
+            Solicitud Original: <b>${s.asunto}</b>
+        </p>
+        <blockquote>
+            <pre>${s.descripcion}</pre>
+        </blockquote>
+        <p>
+            Se le comunicará cuando su solicitud sea revisada, y atendida.
+        </p>
+Cordialmente,<br/>
+<b>Departamento Académico de Ciencias</b>
+        </p>
+`
+    return pucpformat(actualcontent)
+}
+
 export function soliDelegada(s) {
     let actualcontent = `<p>
             Estimado:<br/>
@@ -79,7 +101,7 @@ export function soliDelegada(s) {
             Solicitud Original: <b>${s.asunto}</b>
         </p>
         <blockquote>
-            <p style="white-space:pre-wrap;">${s.descripcion}</p>
+            <pre>${s.descripcion}</pre>
         </blockquote>
         <p>
             Solicitador: ${s.solicitador.fullName}
@@ -95,7 +117,7 @@ Cordialmente,<br/>
     return pucpformat(actualcontent)
 }
 
-export function soliAtendidaMP(s) {
+export function soliAtendida(s) {
     let resultado = ""
     let color = "black"
     if (s.resultado === 1) {
@@ -114,7 +136,7 @@ export function soliAtendidaMP(s) {
             Solicitud Original: <b>${s.asunto}</b>
         </p>
         <blockquote>
-            <p style="white-space:pre-wrap;">${s.descripcion}</p>
+            <pre>${s.descripcion}</pre>
         </blockquote>
         <p>
             Respuesta: 

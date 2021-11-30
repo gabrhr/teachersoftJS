@@ -95,7 +95,7 @@ export default function ModalDocenteClases(){
         }
       }
 
-      console.log("Pasamos la prueba :D")
+      console.log("Pasamos la prueba")
       //console.log(recordsAsig);
       //console.log(horario);
 
@@ -186,7 +186,6 @@ export default function ModalDocenteClases(){
       // if(dataHor){
       //   history.push('/as/asignacionCarga/registroCarga/horarios')
       // } 
-      console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
     }
 
     return(

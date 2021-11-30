@@ -25,6 +25,7 @@ import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Link, Redirect } from 'react-router-dom';
 import { UserContext } from '../../constants/UserContext'
+import LinearProgress from '@mui/material/LinearProgress';
 import moment from 'moment'
 import 'moment/locale/es'
 moment.locale('es');
@@ -32,6 +33,7 @@ moment.locale('es');
 //Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
     const {BoxTbl,TblContainer, 
+        recordsCargados, setRecordsCargados,
         recordsAfterPagingAndSorting, TblPagination, delegado} = props
     const [row, setRow] = useState(false)
     const {user, rol} = useContext(UserContext);
@@ -56,6 +58,9 @@ export default function DashboardSoliOrganism(props) {
         //#region TABLA DE CADA SOLICITUD
         <div>
             <BoxTbl>
+            {recordsCargados ? (
+                recordsAfterPagingAndSorting.length>0? (
+                <>
                 <TblContainer>
                     {/* <TblHead />  */}
                     <TableBody>
@@ -128,6 +133,19 @@ export default function DashboardSoliOrganism(props) {
                     </TableBody>
                 </TblContainer>
                 <TblPagination />
+                </>
+                ):
+                    <Grid item xs= {12} rowSpacing={20} align = "center">
+                        <Typography variant="h4" color = "secondary">
+                                Aún no se han generado Solicitudes
+                        </Typography>
+                    </Grid>
+            ):
+            (
+                <Box sx={{ width: '100%' }}>
+                  <LinearProgress />
+                </Box>
+              )}
             </BoxTbl>
         </div>
         //#endregion
@@ -140,8 +158,16 @@ function getTipoDetalle(item,user,rol){
     } else if (item.delegadoID== user.persona.id){ //Delegados
         /* ejecutar esta primero por si se la delegan a si mismo */
         if(rol==1) return "/doc/misDelegados/solicitudDetalle"
+        else if(rol==2) return "/as/mesaPartes/misDelegados/solicitudDetalle"
+        else if(rol==3) return "/cord/mesaPartes/misDelegados/solicitudDetalle"
+        else if(rol==4) return "/ad/mesaPartes/misDelegados/solicitudDetalle"
+        else if(rol==5) return "/jd/mesaPartes/misDelegados/solicitudDetalle"
     } else if(item.solicitadorID== user.persona.id){ //MisSolicitudes
         if(rol==1) return "/doc/solicitudDetalle"
+        else if(rol==2) return "/as/mesaPartes/solicitudDetalle" 
+        else if(rol==3) return "/cord/mesaPartes/solicitudDetalle" 
+        else if(rol==4) return "/ad/mesaPartes/solicitudDetalle" 
+        else if(rol==5) return "/jd/mesaPartes/solicitudDetalle" 
         else if(rol==7) return "/invitado/mesaPartes/solicitudDetalle" 
     }
     return "/doc/solicitudDetalle"

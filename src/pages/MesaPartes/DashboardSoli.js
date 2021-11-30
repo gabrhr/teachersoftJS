@@ -125,6 +125,7 @@ export default function DashboardSoli(props) {
     const {
       title, delegado,
       records, setRecords, getSolicitudes, 
+      recordsCargados, setRecordsCargados,
       user } = props
     const { rol} = useContext(UserContext);
     /* Abrir Nueva Solicitud Form (in popup) */
@@ -172,7 +173,7 @@ export default function DashboardSoli(props) {
         getTiposTramites(setTipoTramite)
         /* note:  estados no tiene porque solo es un numero codigo */
         
-    }, [])
+    }, [recordsCargados])
 
 /*     React.useEffect( () =>{
       setFilterFn({
@@ -375,6 +376,7 @@ export default function DashboardSoli(props) {
           recordsAfterPagingAndSorting={recordsAfterPagingAndSorting}
           TblPagination={TblPagination}
           delegado={delegado}
+          recordsCargados={recordsCargados} setRecordsCargados ={setRecordsCargados}
         />
         {/* "MODALS" */}
         {/* Agregar nueva solicitud */}

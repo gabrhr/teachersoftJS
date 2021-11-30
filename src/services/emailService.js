@@ -23,44 +23,54 @@ function dataemail(dest, subject, body) {
 /* Mesa de Partes
  * ===================================*/
 
-/* al ser **delegado** por Mesa Partes
- * s:  solicitud */
-export function emailDelegado(s) {
+function sendEmail(dataemail) {
     return axios({
         method: 'post',
         url: `${url}/email/`,
-        data: dataemail(
-            s.delegado.correo,
-            `Tiene una solicitud con id #${s.id} de Mesa Partes pendiente`,
-            MP_email.soliDelegada(s)
-        ),
+        data: dataemail,
         ...config
     })
         .then(res => {
             return res.data
         })
+}
+
+/* al recien enviar la solicitud
+ * s: solicitud */
+export function emailConfirmacionEnvio(s) {
+    return sendEmail(dataemail(
+        s.delegado.correo,
+        `Acaba de enviar una solicitud a Mesa Partes`,
+        MP_email.soliEnviada(s)
+    ))
+}
+
+/* al ser **delegado** por Mesa Partes
+ * s:  solicitud */
+export function emailDelegado(s) {
+    return sendEmail(dataemail(
+        s.delegado.correo,
+        `Tiene una solicitud de Mesa Partes pendiente`,
+        MP_email.soliDelegada(s)
+    ))
 }
 
 /* al ser **atendido** por el Delegado
  * s:  solicitud */
 export function emailSolicitor1(s) {
-    return null
+    return sendEmail(dataemail(
+        s.solicitador.correo,
+        `Su solicitud fue atendida por ${s.delegado.fullName}`,
+        MP_email.soliAtendida(s)
+    ))
 }
 
 /* al ser **atendido** por Mesa Partes
  * s:  solicitud */
 export function emailSolicitor2(s) {
-    return axios({
-        method: 'post',
-        url: `${url}/email/`,
-        data: dataemail(
-            s.solicitador.correo,
-            `Su solicitud con id #${s.id} fue atendida`,
-            MP_email.soliAtendidaMP(s)
-        ),
-        ...config
-    })
-        .then(res => {
-            return res.data
-        })
+    return sendEmail(dataemail(
+        s.solicitador.correo,
+        `Su solicitud fue atendida por Mesa de Partes`,
+        MP_email.soliAtendida(s)
+    ))
 }

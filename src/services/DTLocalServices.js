@@ -183,7 +183,7 @@ export function getAllRoles() {
         { id: 2, nombre: 'Asistente de Seccion' },
         { id: 3, nombre: 'Coordinador de Seccion' },
         { id: 4, nombre: 'Asistente de Departamento' },
-        { id: 5, nombre: 'Coordinador de Departamento' },
+        { id: 5, nombre: 'Jefe de Departamento' },
         { id: 6, nombre: 'Secretario de Departamento' },
         { id: 7, nombre: 'Externo' },
         { id: 8, nombre: 'Nuevo Usuario' },
