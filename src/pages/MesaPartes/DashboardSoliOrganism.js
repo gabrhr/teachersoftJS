@@ -126,7 +126,7 @@ function MyTableRow(props) {
 //Componente de solo la tabla con cada una de las solicitudes
 export default function DashboardSoliOrganism(props) {
     const { BoxTbl, TblContainer,
-        recordsCargados, setRecordsCargados,
+        recordsCargados, setRecordsCargados, records,
         recordsAfterPagingAndSorting, TblPagination, delegado } = props
 
     return (
@@ -142,10 +142,10 @@ export default function DashboardSoliOrganism(props) {
                             />
                         ))}
                     </TableBody>
+                    {records.length !== 0 && <TblPagination /> }
                 </TblContainer>
-                <TblPagination />
                 {(recordsCargados || <LinearProgress/>) &&
-                    recordsAfterPagingAndSorting().length === 0 &&
+                    records.length === 0 &&
                     <Typography 
                         variant="h4" 
                         color="secondary"

@@ -379,6 +379,7 @@ export default function DashboardSoli(props) {
           TblPagination={TblPagination}
           delegado={delegado}
           recordsCargados={recordsCargados} setRecordsCargados ={setRecordsCargados}
+          records={records}
         />
         {/* "MODALS" */}
         {/* Agregar nueva solicitud */}
