@@ -67,6 +67,7 @@ import GestionDescargaDocente from '../pages/Docente/DeudasYDescargas/GestionDes
 import DeudasYDescargaCoord from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/DeudasYDescargaCoord'
 import NuevaSolicitudDescarga from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/NuevaSolicitudDescarga'
 import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacion';
+import IndicadoresTrabajoInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/IndicadoresTrabajoInvestigacion';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -154,6 +155,7 @@ const privateroutes = [
 
   /*AsistenteInvestigacion*/ 
   { requireRoles: [9], path: "/ai/repoInvestigaciones", page: GestionTrabajosInvestigacion },  
+  { requireRoles: [9], path: "/ai/indicadoresInvestigaciones", page: IndicadoresTrabajoInvestigacion },  
 ]
 
 

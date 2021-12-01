@@ -11,7 +11,7 @@ export const MenuInvestigacion = [
     },
     {
         text: 'Estadísticas',
-        path: '/ai/estadisticas',
+        path: '/ai/indicadoresInvestigaciones',
         icon: <ShowChartOutlinedIcon />,
         indice: 1,
     }
