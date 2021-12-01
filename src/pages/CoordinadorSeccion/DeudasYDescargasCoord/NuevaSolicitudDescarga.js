@@ -280,11 +280,6 @@ export default function NuevoProcesoForm() {
                     </div>
                 </div>
                 </Grid>
-                <Grid>
-                    
-                </Grid>
-                
-                
             </Grid>
             
             <BoxTbl>
@@ -315,7 +310,7 @@ export default function NuevoProcesoForm() {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl> 
-            <Grid conteiner >
+            <Grid container >
                 <Grid item align = "right" marginX = {20} marginTop={5} >
                     <Controls.Button
                         text="guardar"

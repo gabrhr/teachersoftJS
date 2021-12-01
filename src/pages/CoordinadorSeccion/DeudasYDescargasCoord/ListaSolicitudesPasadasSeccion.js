@@ -121,7 +121,7 @@ function Item(props){
 }
 
 export default function ListaProcesosPasadosSeccion(props) {
-    const { records, setRecordForEdit } = props
+    const { records } = props
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
     const [openAprobados, setOpenAprobados] = useState(false)
