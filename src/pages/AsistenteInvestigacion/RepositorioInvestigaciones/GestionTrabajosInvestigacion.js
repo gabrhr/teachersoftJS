@@ -473,7 +473,7 @@ export default function GestionTrabajosInvestigacion() {
             
             </Grid>
             <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-            <Grid item xs={3} className={isVisible ? classes.visible : classes.hidden} >
+            <Grid item xs={5.5} className={isVisible ? classes.visible : classes.hidden} >
                 <br></br>
                 <br></br>
                 <br></br>

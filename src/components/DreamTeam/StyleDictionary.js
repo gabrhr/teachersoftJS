@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 
 export default function StyleDictionary(props) {
     let { title, text } = props;
@@ -14,16 +14,22 @@ export default function StyleDictionary(props) {
 
     return (
 
-    <div style={stylish}>
-        <Typography style={SubtitulosTable} > {title} </Typography>
-        <Typography style={SubtitulosTable} > {text} </Typography>
+    <Grid item xs={12}>
+        <Grid container   spacing={2}>
+           <Grid item xs={4}>
+            <Typography  fontWeight="550" my={1}  sx={{color:"primary.light"}} > {title } </Typography>
+           </Grid> 
+           <Grid item xs={8}>
+            <Typography style={{ wordWrap: "break-word" }} my={1} sx={{color:"primary.light"}}> {text} </Typography>
+           </Grid> 
         {
         /* o es Typography o <p>
         <p > {title} </p>
         <p >{text}</p>
         */
-        }    
-    </div>
+        }  
+        </Grid>
+    </Grid>
     );
 
 
