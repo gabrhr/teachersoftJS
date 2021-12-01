@@ -15,6 +15,7 @@ import { TableRow, TableCell } from '@mui/material';
 import Popup from '../../../../components/util/Popup'
 import SolicitudDescargaForm from '../../../CoordinadorSeccion/DeudasYDescargasCoord/SolicitudDescargaForm';
 import tramiteDescargaService from '../../../../services/tramiteDescargaService'
+import tramiteSeccionDescargaService from '../../../../services/tramiteSeccionDescargaService'
 import procesoDescargaService from '../../../../services/procesoDescargaService'
 import { UserContext } from '../../../../constants/UserContext';
 
@@ -69,8 +70,8 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
     const validate = () => {
         let temp = {...errors}
         temp.aprobados = values.aprobados<0? "Debe ser número positivo"
-                        :values.aprobados<=solicitados? 
-                        "": "Puede aprobar máximo " + solicitados + " solicitados."
+                        :values.aprobados<=recordForView.cantidad_solicitada? 
+                        "": "Puede aprobar máximo " + recordForView.cantidad_solicitada + " solicitados."
         
         setErrors({
             ...temp
@@ -84,8 +85,23 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
         /* e is a "default parameter" */
         e.preventDefault()
         if (validate()){
-
+            //Se modifica el tramite sección
+            recordForView.cantidad_aprobada = values.aprobados
+            recordForView.persona_departamento = {
+                "id": user.persona.id
+            }
+            recordForView.resultado = 1
+            await tramiteSeccionDescargaService.updateTramitesSeccionDescarga(recordForView)
+            //Se modifican los tramites docente
+            for(let i = 0; i < records.length; i++){
+                records[i].persona_departamento = {
+                    "id": user.persona.id
+                }
+                await tramiteDescargaService.updateTramiteDescarga(records[i])
+            }
+            //Se realizan los cambios ^^
         }
+        setOpenDetalle(false)
             // addOrEdit(values, resetForm)
     }
 
