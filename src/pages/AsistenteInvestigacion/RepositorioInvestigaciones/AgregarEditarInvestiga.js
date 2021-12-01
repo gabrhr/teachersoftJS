@@ -10,6 +10,8 @@ import DepartamentoService from '../../../services/departamentoService.js';
 import UnidadService from '../../../services/unidadService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { useRadioGroup } from '@mui/material/RadioGroup';
+
 
 let selectedID = 0;
 
@@ -57,22 +59,9 @@ const initialFieldValues = {
   nombreAutor: '',
 }
 
-import React, { useEffect} from 'react'
-import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
-import { useForm, Form } from '../../../components/useForm';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { useTheme } from '@mui/material/styles'
-import { Controls } from "../../../components/controls/Controls"
-/* fake BackEnd */
-import * as employeeService from '../../../services/employeeService';
-import SeccionService from '../../../services/seccionService.js';
-import DepartamentoService from '../../../services/departamentoService.js';
-
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 
-
-export default function AgregarEditarAsistenteInvestiga(props) {
+export default function AgregarEditarInvestiga(props) {
     const {addOrEdit, recordForEdit, setOpenPopup} = props
     const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
@@ -88,15 +77,19 @@ export default function AgregarEditarAsistenteInvestiga(props) {
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         let defaultError = "Este campo es requerido"
-        if ('nombre' in fieldValues)
-            temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido"
+        if ('titulo' in fieldValues)
+            temp.titulo = fieldValues.nombre ? "" : "Este campo es requerido"
+        if ('anho_publicacion' in fieldValues)
+            temp.anho_publicacion = fieldValues.nombre ? "" : "Este campo es requerido"
+        if ('codigo_publicacion' in fieldValues)
+            temp.codigo_publicacion = fieldValues.nombre ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido."
         // temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError
         if(recordForEdit){
-          temp.idDepartamento = values.idDepartamento !== 0 ? "" : defaultError;
+          temp.idAutor = values.idDepartamento !== 0 ? "" : defaultError;
         } else{
           temp.departmentId = values.departmentId !== 0 ? "":defaultError;
         }    
@@ -123,19 +116,21 @@ export default function AgregarEditarAsistenteInvestiga(props) {
         let fechaCreacion= "";
         //Definicio de validaciones
         if (validate()){
-
             //console.log("Esto es sección");
-            if(values.id) {
-              const secc= await SeccionService.getSeccion(values.id);
+            /*if(values.id) {
+              const secc= await InvestigaService.getInvestiga(values.id);
               fechaCreacion = secc.fecha_creacion;
             }
+            */
             //console.log(fechaCreacion);
           //Este pasa como la nueva seccion o la seccion editada
-          const newSecc = {
+          const newTrabjo = {
             id: values.id,
-            nombre: values.nombre,
-            correo: values.correo,
-            departamento: {
+            cod_publicacion: values.cod_publicacion,
+            titulo:values.titulo,
+            anho_publicacion: values.anho_publicacion,
+            doi: values.doi,
+            autor: {
               id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
               nombre: recordForEdit ? parseInt(values.idDepartamento) : null,
             },
@@ -145,10 +140,10 @@ export default function AgregarEditarAsistenteInvestiga(props) {
             fecha_fundacion: null
             //~~~foto: --queda pendiente
           }
-          console.log(newSecc);
+          console.log(newTrabjo);
           //const rpta = await SeccionService.registerSeccion(newSecc);
           //console.log(rpta);
-          addOrEdit(newSecc,resetForm)
+          addOrEdit(newTrabjo,resetForm)
           //resetForm()
         }
     }
@@ -169,7 +164,7 @@ export default function AgregarEditarAsistenteInvestiga(props) {
       return departamentos;
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
       FillDepartamentos()
       .then (newDep =>{
         setDepartamentos(prevDep => prevDep.concat(newDep));
@@ -186,8 +181,8 @@ export default function AgregarEditarAsistenteInvestiga(props) {
 
       <Form onSubmit={handleSubmit}>
 
-            <Grid container>
-                <Grid item sx={6} style={ColumnGridItemStyle}>
+            <Grid container spacing={8}>
+                <Grid item sx={6}>
                     < Typography variant="h4" mb={2} >
                            DATOS GENERALES
                     </Typography>
@@ -263,7 +258,7 @@ export default function AgregarEditarAsistenteInvestiga(props) {
                         onChange = {handleInputChange}
                         error={errors.edicion}
                     />
-
+                    {/*    
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Filiacion</FormLabel>
                         <RadioGroup
@@ -276,6 +271,7 @@ export default function AgregarEditarAsistenteInvestiga(props) {
                         
                         </RadioGroup>
                     </FormControl>
+                    */}
 
                     <Controls.Input
                         name="identificador_produccion"
@@ -295,10 +291,10 @@ export default function AgregarEditarAsistenteInvestiga(props) {
 
                     <Controls.Input
                         name="indicador_calidad"
-                        label="Idioma"
-                        value={values.idioma}
+                        label="Indicador de Calidad"
+                        value={values.indicador_calidad}
                         onChange = {handleInputChange}
-                        error={errors.idioma}
+                        error={errors.indicador_calidad}
                     />
                      <Controls.Input
                         name="isbn"
@@ -338,7 +334,7 @@ export default function AgregarEditarAsistenteInvestiga(props) {
                         onChange = {handleInputChange}
                         error={errors.nro_revista}
                     /> 
-
+            
                     <Controls.Input
                         name="observaciones_de_departamento"
                         label="Observaciones de Departamento"
@@ -466,7 +462,16 @@ export default function AgregarEditarAsistenteInvestiga(props) {
                         onChange = {handleInputChange}
                         error={errors.volumen}
                     />
-
+                    {/*
+                    <Controls.Select
+                        name="rolID"
+                        label="Rol del delegado"
+                        value={values.rolID}
+                        onChange={handleInputChange}
+                        options={getDocentes()}
+                        error={errors.rolID} 
+                    />
+                    */}
                     <Controls.Input
                         name="id_autor"
                         label="ID Autor"

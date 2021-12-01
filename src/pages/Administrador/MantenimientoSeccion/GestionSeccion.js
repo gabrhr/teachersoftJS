@@ -282,7 +282,7 @@ export default function GestionSeccion() {
                 addOrEdit={addOrEdit}
                 recordForEdit={recordForEdit}
                 setOpenPopup={setOpenPopup}
-                />
+              />
 
               {/*  <AgregarEditarSeccion/> */}
             </Popup>
