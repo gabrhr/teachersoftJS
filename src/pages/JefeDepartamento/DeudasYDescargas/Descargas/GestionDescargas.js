@@ -136,6 +136,9 @@ export default function GestionDescargas() {
                     </div>
                 </div>
                 <ListaSolicitudes seccion = ""/>
+                <Grid conteiner >
+                
+            </Grid>
             </Paper>
 
         </>
