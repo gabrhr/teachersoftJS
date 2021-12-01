@@ -63,7 +63,7 @@ export default function MisSolicitudes() {
     const {user, rol} = useContext(UserContext);
     //let isRendered = useRef(false)
     // const usuarioLogeado=JSON.parse(localStorage.getItem("user"))
-    console.log("ya entre aqui jeje")
+    // console.log("ya entre aqui jeje")
     /* Retrieve initial data from  Back API on first component render */
     React.useEffect(() => {
         let isRendered=false;

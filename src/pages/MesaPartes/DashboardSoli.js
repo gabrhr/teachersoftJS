@@ -3,6 +3,7 @@
  * Para los combos y el filtrado de DashboardSoliOrganism.js
  * 
  * P: MisSolicitudes.js
+ * P: RecepcionSolicitud.js
  */
 import React, { useState, useContext } from 'react'
 import { Avatar, Grid, InputAdornment, Box, TableCell, TableRow, Typography, Divider } from '@mui/material'
@@ -34,6 +35,7 @@ import UnidadService from '../../services/unidadService';
 import DepartamentoService from '../../services/departamentoService'
 import SeccionService from '../../services/seccionService'
 import fileService from '../../services/fileService'
+import * as EmailService from '../../services/emailService'
 
 
 const tableHeaders = [
@@ -142,14 +144,13 @@ export default function DashboardSoli(props) {
     const [seccion, setSeccion] = React.useState([])
     const [temaTramite, setTemaTramite] = React.useState([])
     const [tipoTramite, setTipoTramite] = React.useState([])
-    const comboData = 
-        {
-            unidad: unidad,
-            departamento: departamento,
-            seccion: seccion,
-            temaTramite: temaTramite,
-            tipoTramite: tipoTramite
-        }
+    const comboData = {
+        unidad: unidad,
+        departamento: departamento,
+        seccion: seccion,
+        temaTramite: temaTramite,
+        tipoTramite: tipoTramite
+    }
     const {
         TblContainer,
         TblHead,
@@ -256,7 +257,7 @@ export default function DashboardSoli(props) {
       solicitud.solicitadorID = user.persona.id     // required
 
       MesaPartesService.registerSolicitud(solicitud)
-        .then((solicitudID) => {
+        .then((soliBack) => {
           /* success */
           /* cerrar popup */
           resetForm()
@@ -271,13 +272,13 @@ export default function DashboardSoli(props) {
           
           /* insertar archivos relacionados */
           for (var i = 0; i < solicitud.archivos.length; i++) {
-            solicitud.archivos[i].solicitud = { id: solicitudID }
+            solicitud.archivos[i].solicitud = { id: soliBack.id }
             fileService.registerArchivo(solicitud.archivos[i]);
           }
           // console.log(solicitud)
           // window.alert(`Se inserto la soli con id=${solicitudID}`)
-        })
-        .catch(err => {
+          return soliBack
+        }).catch(err => {
           /* error :( */
           setNotify({
               isOpen: true,
@@ -285,7 +286,18 @@ export default function DashboardSoli(props) {
               type: 'error'
           })
           console.log(err)
-          console.log("DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
+          console.log("E: DashboardSoli: add: ", solicitud, MesaPartesService.f2bSolicitud(solicitud))
+        }).then(soliBack => {
+          /* send email notification to  solicitADOR  */
+          EmailService.sendemailMP(soliBack, 'solicitador,envia')
+        }).catch(err => {
+          /* error :( */
+          setNotify({
+              isOpen: true,
+              message: 'No se le pudo enviar el correo de confirmacion.',
+              type: 'info'
+          })
+          console.log(err)
         })
     }
     const [valueFecha, setValueFecha] = React.useState([null, null]);

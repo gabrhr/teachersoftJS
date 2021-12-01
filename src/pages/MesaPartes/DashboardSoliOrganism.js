@@ -142,8 +142,8 @@ export default function DashboardSoliOrganism(props) {
                             />
                         ))}
                     </TableBody>
-                    {records.length !== 0 && <TblPagination /> }
                 </TblContainer>
+                {records.length !== 0 && <TblPagination /> }
                 {(recordsCargados || <LinearProgress/>) &&
                     records.length === 0 &&
                     <Typography 
