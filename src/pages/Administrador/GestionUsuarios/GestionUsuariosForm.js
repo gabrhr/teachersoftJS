@@ -86,7 +86,9 @@ const getDepartamento = async () => {
 
 const getSecciones = async (departmentId) => {
 
-  const dataSecc = await SeccionService.getSeccionxDepartamento(departmentId);
+  let dataSecc = await SeccionService.getSeccionxDepartamento(parseInt(departmentId));
+  
+  if (!dataSecc) dataSecc = []; 
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -257,10 +259,10 @@ export default function GestionUsuariosForm(props) {
       })
     }
 
-  }, [recordForEdit])
+  }, [])
 
   useEffect(() => {
-    getSecciones(values.departmentId)
+    getSecciones(recordForEdit ? values.idDepartamento : values.departmentId)
       .then(newSecc => {
         setSecciones(newSecc);
 
@@ -275,7 +277,7 @@ export default function GestionUsuariosForm(props) {
       })
     }
 
-  }, [values.departmentId])
+  }, [recordForEdit ? values.idDepartamento : values.departmentId ])
 
   /*useEffect(() => {
     getSecciones()
@@ -305,6 +307,7 @@ export default function GestionUsuariosForm(props) {
     a.click(); //Downloaded file*/
   //}
 
+  console.log(values);
   return (
     <>
       <Form onSubmit={handleSubmit}>

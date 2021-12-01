@@ -102,7 +102,7 @@ const getUsuario = async () => {
       correo: usr.persona.correo_pucp,
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
       rol: usr.persona.tipo_persona,
-      idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : '',
+      idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : 0,
       nombreDepartamento: usr.persona.departamento ? usr.persona.departamento.nombre : '',
       idSeccion: usr.persona.seccion ? usr.persona.seccion.id : '',
       nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
@@ -217,8 +217,8 @@ export default function GestionUsuarios() {
         nombre: usuario.seccion.nombre
       }}),
       departamento: {
-        id: usuario.departamento.id,
-        nombre: usuario.departamento.nombre
+        id: usuario.departamento,
+        nombre: usuario.departamento
       },
       foto_URL: usuario.foto
     }
