@@ -19,8 +19,6 @@ import procesoDescargaService from '../../../services/procesoDescargaService';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import ItemSinProcesoDocente from './ItemSinProcesoDocente';
 
-
-
 export default function GestionDescargaDocente() {
     const [openPopup, setOpenPopup] = useState(false)
     const [openPopupDetalle, setOpenPopupDetalle] = useState(false)
@@ -97,6 +95,7 @@ export default function GestionDescargaDocente() {
         setDescargaActual(null)
         tramiteDescargaService.deleteTramiteDescarga(idTramite);
         setDeleteData(true);
+        setRecordForEdit(null)
         setNotify({
           isOpen: true,
           message: 'Borrado Exitoso',
@@ -127,15 +126,15 @@ export default function GestionDescargaDocente() {
             {/* Solicitud actual del año */}
             <Grid container>
                 <Grid item xs={8}>
-                    {   procesoActivo.length===0? 
+                    {   procesoActivo?.length===0? 
                         <ItemSinProcesoDocente/>:                    
                         descargaActual? 
                         <>
-                            <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
+                            <DT.Title size="medium" text="Solicitud de Descarga Actual"/>
                             <ItemDescargaActualDocente
                                 item={descargaActual} setRecordForEdit={setRecordForEdit}
                                 setOpenPopup={setOpenPopup} setOpenPopupDetalle={setOpenPopupDetalle} 
-                                onDelete={onDelete}
+                                onDelete={onDelete} procesoActivo={procesoActivo[0]}
                                 setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
                             /> 
                         </>
@@ -147,7 +146,7 @@ export default function GestionDescargaDocente() {
                     }
                 
                     {/* Solicitud Pasada */}
-                    <DT.Title size="medium" text="Lista de Solicitudes de Descarga Pasadas"/>
+                    <DT.Title size="medium" text="Histórico de Solicitudes de Descarga Pasadas"/>
                     <ListaDescargasPasadasDocente 
                         records={records}
                         setRecordForEdit={setRecordForEdit}
@@ -178,7 +177,7 @@ export default function GestionDescargaDocente() {
                 title= {"Solicitud de Descarga"}
                 size="md"
             >
-                <SolicitudDescargaForm/>
+                <SolicitudDescargaForm recordForView = {recordForEdit}/>
             </Popup>
             <Notification
               notify={notify}

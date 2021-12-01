@@ -4,6 +4,7 @@ import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, 
 import { Controls } from '../../../../components/controls/Controls'
 import Popup from '../../../../components/util/Popup'
 import ModalDetalleSolicitudDescarga from './ModalDetalleSolicitudDescarga'
+import Notification from '../../../../components/util/Notification'
 
 const tableHeaders = [
     {
@@ -134,8 +135,12 @@ export default function ListaSolicitudes({seccion}){
     ])
 
     const [openDetalle, setOpenDetalle] = useState(false)
-
+    const [recordForEdit, setRecordForEdit] = useState(null)
+    /* de gestion de ciclo */
+    const [createData, setCreateData] = useState(false);
+    const [updateData, setUpdateData] = useState(false);
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
+    const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
 
     const {
         TblContainer,
@@ -144,6 +149,28 @@ export default function ListaSolicitudes({seccion}){
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
+
+    const addOrEdit = async (values, resetForm) => {
+        //Service
+        let ciclo, procesoNew, procesoEdit;
+        
+        if(recordForEdit === null){
+            console.log("Se crea un ")
+        }else{
+            console.log("Se edita un ")
+        }
+        resetForm()
+        setRecordForEdit(null)
+        setNotify({
+            isOpen: true,
+            message: 'Se ha añadido exitosamente',
+            type: 'success'
+        })
+    }
+
+    React.useEffect(() => {
+        //Service
+    }, [recordForEdit, createData, openDetalle])
 
 
     return(
@@ -170,11 +197,15 @@ export default function ListaSolicitudes({seccion}){
             <Popup
                 openPopup={openDetalle}
                 setOpenPopup={setOpenDetalle}
-                title= {`Nueva solicitud de descarga - Sección ${seccion}`}
-                size = "md"
+                title= {`Solicitud de descarga - Sección ${seccion}`}
+                size="md"
             >
                <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} /*guardarSolicitud = {guardarSolicitud}*//>
             </Popup>
+            <Notification
+                notify={notify}
+                setNotify={setNotify}
+            />
         </>
     )
 }
