@@ -47,7 +47,7 @@ export default function NuevaDescargaDocente(props) {
 
     const validate = () => {
         let temp = {...errors}
-        temp.tipo_bono = values.tipo_bono !==0 ? "" : "Este campo es requerido."
+        temp.tipo_bono = values.tipo_bono !=0 ? "" : "Este campo es requerido."
         temp.observacion = values.observacion ? "" : "Este campo es requerido."
         
         setErrors({
@@ -87,7 +87,7 @@ export default function NuevaDescargaDocente(props) {
             <Grid cointainer align="right" mt={3}>
                 <div>
                     <Controls.Button
-                        text="Enviar Solicitud"
+                        text={recordForEdit? "Guardar cambios":"Enviar Solicitud"}
                         type="submit"
                     />
 

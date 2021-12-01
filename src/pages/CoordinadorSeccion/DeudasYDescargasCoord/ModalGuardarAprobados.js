@@ -8,7 +8,7 @@ export default function ModalGuardarHorarioCurso({guardarSolicitudActual, setOpe
     return(
         <>
             < Typography variant="h4" mb={2} >
-                ¿Está seguro de guardar la solicitud?
+                ¿Está seguro de guardar los aprobados?
             </Typography>
             <Controls.Button
                 text="Sí"

@@ -7,20 +7,16 @@ moment.locale('es');
 
 function formatoFecha(fecha,e) {
     if (fecha != null) {
-        if(e>0){
-            return (moment.utc(fecha).subtract(5, 'hours').format('DD MMM YYYY'))
-        }
-        return (moment.utc(fecha).format('DD MMM YYYY'))
+        return (moment(fecha).format('DD MMM YYYY'))
+        //return (moment.utc(fecha).format('DD MMM YYYY'))
     }
     return (" ")
 }
 
 function formatoHora(fecha,e) {
     if (fecha != null) {
-        if(e>0){
-            return (moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
-        }
-        return (moment.utc(fecha).format('h:mm a'))
+        //return (moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
+        return (moment(fecha).format('h:mm a'))
     }
     return (" ")
 }
@@ -41,7 +37,7 @@ export default function TrackinDescarga(props) {
     let fechaIniDocente =  item.fecha_inicio;
     let fechaFinDocente =  item.fecha_fin_docente;
     let fechaFinSeccion =  item.fecha_fin_seccion;
-    let fechaFinProceso =   item.fecha_fin;
+    let fechaFinProceso =  item.fecha_fin;
 
     return (
         <>

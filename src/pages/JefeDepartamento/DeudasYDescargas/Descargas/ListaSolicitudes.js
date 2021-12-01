@@ -1,13 +1,9 @@
 import React, {useState} from 'react'
+import useTable from '../../../../components/useTable'
 import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
-import { Link} from 'react-router-dom';
-import TrackinDescarga from '../../../components/DreamTeam/TrackinDescarga'
-import useTable from '../../../components/useTable'
-import { Controls } from '../../../components/controls/Controls'
-import Popup from '../../../components/util/Popup'
-import ModalAprobados from './ModalAprobados'
-/* icons */
-import SearchIcon from '@mui/icons-material/Search';
+import { Controls } from '../../../../components/controls/Controls'
+import Popup from '../../../../components/util/Popup'
+import ModalDetalleSolicitudDescarga from './ModalDetalleSolicitudDescarga'
 
 const tableHeaders = [
     {
@@ -36,9 +32,8 @@ const tableHeaders = [
     }
 ]
 
-
 function Item(props){
-    const {item,getRow,setOpenAprobados} = props
+    const {item,setOpenDetalle} = props
     return (
         <>
             <TableRow>
@@ -104,14 +99,10 @@ function Item(props){
                         {item.solicitudes_aprobadas} 
                     </Typography>
                 </TableCell>
-                <TableCell sx={{maxWidth:"300px"}}> 
+                <TableCell sx={{maxWidth:"300px"}}>
                     <Controls.Button
                         text="Detalle"
-                    />
-                    <div/>
-                    <Controls.Button
-                        text="Aprobados"
-                        onClick={()=>{setOpenAprobados(true)}} 
+                        onClick={()=>{setOpenDetalle(true)}} 
                     />
                 </TableCell>
             </TableRow>
@@ -120,12 +111,31 @@ function Item(props){
     );
 }
 
-export default function ListaProcesosPasadosSeccion(props) {
-    const { records, setRecordForEdit } = props
-    const [row, setRow] = React.useState(false)
-    const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
-    const [openAprobados, setOpenAprobados] = useState(false)
+export default function ListaSolicitudes({seccion}){
 
+    const [records, setRecords] = useState([
+        {
+            fecha_enviado: '1/1/1',
+            asunto: 'AYUDA',
+            seccion: {
+                nombre: 'Ingeniería Informática'
+            },
+            solicitador: {
+                fullName: 'Yo'
+            },
+            estado: 'No atendido',
+            proceso: {
+                nombre: 'Proceso 1'
+            },
+            solicitudes_recibidas: 10,
+            solicitudes_enviadas: 8,
+            solicitudes_aprobadas: 1
+        }
+    ])
+
+    const [openDetalle, setOpenDetalle] = useState(false)
+
+    const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
 
     const {
         TblContainer,
@@ -135,66 +145,36 @@ export default function ListaProcesosPasadosSeccion(props) {
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
-    function getRow ({...props}){
-        //setOpenDetalle(true)
-        setRow(props)
-    }
 
-    const handleSearch = e => {
-        let target = e.target;
-        /* React "state object" (React.useState()) doens't allow functions, only
-          * objects.  Thus the function needs to be inside an object. */
-        setFilterFn({
-          fn: items => {
-            if (target.value == "")
-              /* no search text */
-              return items
-            else
-              return items.filter(x => x.nombre.toLowerCase()
-                  .includes(target.value.toLowerCase()))
-          }
-        })
-    }
-
-    return (
-        <div>
-            <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
-                <Controls.Input
-                    label="Buscar Solicitud por Nombre"
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
-                    }}
-                    sx={{ width: .75 }}
-                    onChange={handleSearch}
-                    type="search"
-                />
-            </div>
+    return(
+        <>
+            <Grid>
+                <Typography fontWeight="550" fontSize="20px" sx={{color:"primary.light", paddingTop: '1%'}}>
+                    Solicitudes recibidas: {`${records.length}`}
+                </Typography>
+            </Grid>
             <BoxTbl>
                 <TblContainer>
                     <TableBody>
-                    {
-                       recordsAfterPagingAndSorting().map((item,index) => (
-                            <Item key={index} item={item} getRow= {getRow}
-                                setOpenAprobados={setOpenAprobados}
-                            />
+                        {
+                        recordsAfterPagingAndSorting().map((item,index) => (
+                                <Item key={index} item={item}
+                                setOpenDetalle={setOpenDetalle}
+                        />
                         ))
                     }
                     </TableBody>
                 </TblContainer>
                 <TblPagination />
-            </BoxTbl> 
+            </BoxTbl>
             <Popup
-                openPopup={openAprobados}
-                setOpenPopup={setOpenAprobados}
-                title="Aprobados"
+                openPopup={openDetalle}
+                setOpenPopup={setOpenDetalle}
+                title= {`Nueva solicitud de descarga - Sección ${seccion}`}
                 // size = "m"
             >
-               <ModalAprobados setOpenAprobados = {setOpenAprobados} /*guardarSolicitud = {guardarSolicitud}*//>
+               <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} /*guardarSolicitud = {guardarSolicitud}*//>
             </Popup>
-        </div>
+        </>
     )
 }

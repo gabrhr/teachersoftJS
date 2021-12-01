@@ -62,6 +62,10 @@ const theme = createTheme({
         main: "#7B61FF",
         dark: "#7B61FF",
         light:"#432DB4"
+      },
+      rechazado:{
+        main: "#E01E5A",
+        light:"#E01E5A"
       }
     },
     typography: {

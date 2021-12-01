@@ -6,13 +6,14 @@ import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
-
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export default function Etiqueta(props) {
     let { text, type, sx, ...other } = props
 
     /* Carga Docente */
     if (type === "pendiente") {
+        text="Pendiente"
         other.icon = (<AccessTimeOutlinedIcon/>)
         other.color= "pendiente"
     }
@@ -33,14 +34,15 @@ export default function Etiqueta(props) {
         text="Atendido" 
         other.icon = (<TaskAltOutlinedIcon/>)
         other.color= "atendido"
-    }else if(type="pendienteDesc"){ //Para descarga
-        text="Pendiente"
-        other.icon = (<AccessTimeOutlinedIcon/>)
-        other.color= "pendiente"
-    }else if(type="aprobadoDesc"){ //Para descarga
+    }else if(type==="aprobado"){ //Para descarga
         text="Aprobado"
         other.icon = (<TaskAltOutlinedIcon/>)
         other.color= "atendido"
+    }
+    else if(type==="desaprobado"){ //Para descarga
+        text="Desaprobado"
+        other.icon = (<CancelOutlinedIcon/>)
+        other.color= "rechazado"
     }
 
     if (! ["error","info","success","warning"].includes(type)) type = "info"

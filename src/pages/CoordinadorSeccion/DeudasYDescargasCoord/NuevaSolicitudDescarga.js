@@ -87,10 +87,7 @@ export default function NuevoProcesoForm() {
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
-    function getRow ({...props}){
-        //setOpenDetalle(true)
-        setRow(props)
-    }
+    
 
     const agregarCampo = (request) =>{
         for(let i = 0; i < request.length; i++){
@@ -282,7 +279,7 @@ export default function NuevoProcesoForm() {
             >
                 <SolicitudDescargaForm recordForView = {recordForView}/>
             </Popup>
-            <Popup
+            <Popup  
                 openPopup={openGuardarPopup}
                 setOpenPopup={setOpenGuardarPopup}
                 title="Guardar"
