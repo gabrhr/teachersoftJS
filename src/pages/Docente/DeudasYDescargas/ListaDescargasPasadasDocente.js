@@ -129,7 +129,7 @@ function Item(props){
     const {item,getRow, setRecordForEdit, setConfirmDialog, onDelete, setOpenPopupDetalle} = props
     function formatoFecha(fecha){
         if(fecha!=null){
-            return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
+            return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
     return (
