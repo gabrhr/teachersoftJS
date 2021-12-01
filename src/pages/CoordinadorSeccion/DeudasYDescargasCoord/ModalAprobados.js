@@ -19,7 +19,7 @@ import ModalGuardarSolicitudActual from './ModalGuardarSolicitudActual'
 import {useHistory} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ModalGuardarAprobados from './ModalGuardarAprobados'
-
+import { Alert } from '@mui/material';
 const tableHeaders = [
     
     {
@@ -49,19 +49,22 @@ export default function ModalAprobados({setOpenAprobados}){
             nombre: 'Perez',
             correo: '@perez.com',
             justificacion: 'Por favor',
-            seleccionado: true
+            seleccionado: true,
+            tipo_bono: 1
         },
         {
             nombre: 'José',
             correo: '@gmail.com',
             justificacion: 'Por favor1',
-            seleccionado: true
+            seleccionado: true,
+            tipo_bono: 2
         },
         {
             nombre: 'Otro José',
             correo: '@puke.com',
             justificacion: 'Por favor2',
-            seleccionado: true
+            seleccionado: true,
+            tipo_bono: 1
         }
     ])
 
@@ -112,7 +115,7 @@ export default function ModalAprobados({setOpenAprobados}){
     return (
         <>
                 <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                    <div style={{ width: "700px", marginRight: "50px" }}>
+                    <div style={{ width: "480px", marginRight: "1px" }}>
                         <Controls.Input
                                 label="Buscar Solicitud por Nombre"
                                 
@@ -123,7 +126,7 @@ export default function ModalAprobados({setOpenAprobados}){
                                     </InputAdornment>
                                 )
                                 }}
-                                sx={{ width: .75 }}
+                                sx={{ width: .9 }}
                                 onChange={handleSearch}
                                 type="search"
                             />
@@ -156,15 +159,16 @@ export default function ModalAprobados({setOpenAprobados}){
                                     <EditOutlinedIcon fontSize="small" />
                                 </Controls.RowCheckBox>
                             </TableCell>
-                            <TableCell sx = {{width: '1200px'}}>
+                            <TableCell sx = {{width: '533px'}}>
                                 {item.nombre}
                             </TableCell>
-                            {/* <TableCell> 
-                                <Controls.Button
-                                    text="Detalle"
-                                    onClick = {()=>{setOpenSolicitudDescarga(true)}}
-                                />
-                            </TableCell> */}
+                            <TableCell> 
+                                <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
+                                    {
+                                        item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"
+                                    }
+                                </Alert>
+                            </TableCell>
                         </TableRow>
                         ))
                     }

@@ -191,7 +191,7 @@ export default function ListaProcesosPasadosSeccion(props) {
                 openPopup={openAprobados}
                 setOpenPopup={setOpenAprobados}
                 title="Aprobados"
-                // size = "m"
+                size = "md"
             >
                <ModalAprobados setOpenAprobados = {setOpenAprobados} /*guardarSolicitud = {guardarSolicitud}*//>
             </Popup>
