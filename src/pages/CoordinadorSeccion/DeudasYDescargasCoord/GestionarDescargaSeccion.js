@@ -11,6 +11,7 @@ import ItemSolicitudActualVacio from './ItemSolicitudActualVacio';
 import ListaSolicitudesPasadasSeccion from "./ListaSolicitudesPasadasSeccion"
 import tramiteDescargaService from '../../../services/tramiteDescargaService'
 import procesoDescargaService from '../../../services/procesoDescargaService'
+import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService'
 
 export default function GestionarDescargaSeccion() {
     /* contiene los ProcesosDesgarga(Horaria) */
@@ -21,7 +22,7 @@ export default function GestionarDescargaSeccion() {
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
     const { user } = React.useContext(UserContext)
-    /* de gestion de ciclo */
+    const [procesoActivo, setProcesoActivo] = useState([])
     
     const onDelete = (idTramite) => {
         //Serviceeee
@@ -30,23 +31,27 @@ export default function GestionarDescargaSeccion() {
           isOpen: false
         })
         
-        //const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
-        //setRecords(nuevaTabla)
-        //tramiteDescargaService.deleteTramiteDescarga(idTramite);
-        //Solo se descomenta la línea de arriba
+        const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
         setSolicitudActual(null)
         setRecordForEdit(null)
+        setRecords(nuevaTabla)
+        tramiteSeccionDescargaService.deleteTramitesSeccionDescarga(idTramite);
+        //Solo se descomenta la línea de arriba
         setNotify({
-          isOpen: true,
-          message: 'Borrado Exitoso',
-          type: 'success'
+            isOpen: true,
+            message: 'Borrado Exitoso',
+            type: 'success'
         })
     }
-
+    
     const getTramitesDescargasDocente = async () => {
         let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
-
+        //const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
+        //const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescarga();
+        
+        //console.log("tramites?", tramites)
+        //setRecords(tramites)
+        await setProcesoActivo(procesoActivoNew)
     }
 
     React.useEffect(() => {

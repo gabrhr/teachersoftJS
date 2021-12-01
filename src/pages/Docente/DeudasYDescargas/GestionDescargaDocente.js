@@ -74,6 +74,9 @@ export default function GestionDescargaDocente() {
                 "departamento": {
                     "id": user.persona.departamento.id,
                 },
+                "seccion":{
+                    "id": user.persona.seccion.id,
+                },
                 "solicitador": {
                     "id": user.persona.id,
                 }

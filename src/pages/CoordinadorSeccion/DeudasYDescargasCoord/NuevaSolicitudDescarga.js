@@ -103,7 +103,9 @@ export default function NuevoProcesoForm() {
             "observacion": justificacion,
             "estado_tracking": 0,
             "resultado": 0,
-            "seccion": null,
+            "seccion": {
+                "id": user.persona.seccion.id,
+            },
             "ciclo": {
                 "id": window.localStorage.getItem("ciclo"),
             },
