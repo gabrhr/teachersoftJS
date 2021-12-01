@@ -73,7 +73,7 @@ export function validateEmail(email) {
 
 /* nombre de persona (Peru) */
 export function validateName(name) {
-    return (/^$|^[A-Za-záéíóúñ -]+$/).test(name)
+    return (/^$|^[A-ZÁÉÍÓÚÑa-záéíóúñ -]+$/).test(name)
         ? ""
         : "Nombre invalido"
 }

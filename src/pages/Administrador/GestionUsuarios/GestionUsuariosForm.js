@@ -228,7 +228,6 @@ export default function GestionUsuariosForm(props) {
         //~~~foto: --queda pendiente
       }
 
-      console.log(values);
       addOrEdit(newUsr, resetForm)
     }
   }
@@ -252,7 +251,7 @@ export default function GestionUsuariosForm(props) {
         //console.log(newSeccion);
 
       });
-    if (recordForEdit != null) {
+    if (recordForEdit) {
       /* object is not empty */
       setValues({
         ...recordForEdit
@@ -270,12 +269,6 @@ export default function GestionUsuariosForm(props) {
 
 
       });
-    if (recordForEdit != null) {
-      /* object is not empty */
-      setValues({
-        ...recordForEdit
-      })
-    }
 
   }, [recordForEdit ? values.idDepartamento : values.departmentId ])
 
@@ -307,7 +300,7 @@ export default function GestionUsuariosForm(props) {
     a.click(); //Downloaded file*/
   //}
 
-  console.log(values);
+  //console.log(values);
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -398,13 +391,13 @@ export default function GestionUsuariosForm(props) {
               />
               : <> </>
             }
-            <Controls.Input
+            {/* <Controls.Input
               name="foto_URL"
               label="Enlace para Foto"
               value={values.foto_URL}
               onChange={handleInputChange}
               error={errors.foto_URL}
-            />
+            /> */}
 
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mt: 9, mb: 2, mx: 1 }} />
