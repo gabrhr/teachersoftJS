@@ -50,20 +50,16 @@ const tableHeaders = [
 
 function formatoFecha(fecha,e) {
     if (fecha != null) {
-        if(e>0){
-            return (moment.utc(fecha).subtract(5, 'hours').format('DD MMM YYYY'))
-        }
-        return (moment.utc(fecha).format('DD MMM YYYY'))
+           // return (moment.utc(fecha).subtract(5, 'hours').format('DD MMM YYYY'))
+        return (moment(fecha).format('DD MMM YYYY'))
     }
     return (" ")
 }
 
 function formatoHora(fecha,e) {
     if (fecha != null) {
-        if(e>0){
-            return (moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
-        }
-        return (moment.utc(fecha).format('h:mm a'))
+        //return (moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
+        return (moment(fecha).format('h:mm a'))
     }
     return (" ")
 }
@@ -101,14 +97,14 @@ function Item(props){
                                     Fecha de inicio: {'\u00A0'}
                                 </Typography>
                                 <Typography display="inline">
-                                    {"Fecha: " + formatoFecha(item.fecha_inicio) + " Hora: " + formatoHora(item.fecha_inicio)}
+                                    {formatoFecha(item.fecha_inicio) + " a las " + formatoHora(item.fecha_inicio)}
                                 </Typography >
                                 <div/>
                                 <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                                     Fecha de fin: {'\u00A0'}
                                 </Typography>
                                 <Typography display="inline">
-                                    {"Fecha: " + formatoFecha(item.fecha_fin) + " Hora: " + formatoHora(item.fecha_fin)}
+                                    {formatoFecha(item.fecha_fin) + " a las " + formatoHora(item.fecha_fin)}
                                 </Typography >
                         </Grid>
                     </Grid>
@@ -122,7 +118,7 @@ function Item(props){
                         <AssignmentOutlinedIcon fontSize="small" />
                     </Controls.ActionButton>
                 </TableCell>
-                {/* <TableCell sx={{maxWidth:"70px"}}>
+                 <TableCell sx={{maxWidth:"70px"}}>
                     <Link to ={{
                         pathname:"/jd/asignacionCarga/proceso/descarga",
                         state:{
@@ -137,7 +133,7 @@ function Item(props){
 
                         </IconButton>
                     </Link>
-                </TableCell> */}
+                </TableCell>
             </TableRow>
             <Popup
                 openPopup={openPopupFinalizado}
@@ -234,7 +230,7 @@ export default function ListaProcesosPasados(props) {
             </div>
             
             <BoxTbl>
-                {records.length?
+                {records.length>0?
                     <>
                         <TblContainer>
                             {/* <TblHead />  */}

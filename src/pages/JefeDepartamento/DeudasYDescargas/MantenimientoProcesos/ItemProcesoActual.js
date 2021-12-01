@@ -52,7 +52,7 @@ export default function ItemProcesoActual(props) {
     }
     return (
         <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
-            padding={2} mb={2}
+            padding={2}  mb={10} mt={2}
         >
              <TableRow>
                 <TableCell sx={{minWidth:"200px",borderBottom: "none"}}>
@@ -92,6 +92,10 @@ export default function ItemProcesoActual(props) {
                     </Link>
                 </TableCell>
             </TableRow>
+            <Typography sx={{color:"primary.light", pl:2}}>
+                <b>Nota: </b> Los docentes y coordinadores de sección tendrán visibilidad del proceso según 
+                las fechas asignadas.
+            </Typography>
         </Box>
     )
 }
