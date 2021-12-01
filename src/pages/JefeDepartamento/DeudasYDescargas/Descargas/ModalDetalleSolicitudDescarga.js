@@ -6,15 +6,52 @@ import Divider from '../../../../components/controls/Divider';
 import { Box } from '@mui/system';
 import { TextField, Avatar } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import { Form, useForm } from '../../../../components/useForm';
+
+const initialFieldValues = {
+    justificacion: '',
+    aprobados: 0
+}
 
 export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
     const codigo = '23233421'
     const solicitados = '10'
 
-    const [aprobados, setAprobados] = useState(0)
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues);
+
+    const validate = () => {
+        let temp = {...errors}
+        temp.aprobados = values.aprobados<0? "Debe ser número positivo"
+                        :values.aprobados<=solicitados? 
+                        "": "Puede aprobar máximo " + solicitados + " solicitados."
+        
+        setErrors({
+            ...temp
+        })
+
+        return Object.values(temp).every(x => x === "")
+        // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+    }
+
+    const handleSubmit = async e => {
+        /* e is a "default parameter" */
+        e.preventDefault()
+        if (validate()){
+
+        }
+            // addOrEdit(values, resetForm)
+    }
 
     return(
         <>
+        <Form onSubmit={handleSubmit}>
             <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                 Código: {`${codigo}`}
             </Typography>
@@ -42,16 +79,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                     </Typography>
                 </Grid>
             </Grid>
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20, marginBottom: 10 }}>
-                    <div style={{ width: "650px", marginRight: "50px" }}>
-                        <Box ml="75px">
-                            <Controls.DreamTitle
-                                title={'Justificación: '}
-                                size='20px'
-                                lineheight='300%'
-                            />
-                        </Box>
-                    </div>
+            <div style={{ display: "flex", paddingLeft: "165px", marginTop: 20, marginBottom: 10 }}>
                     <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
                             <Controls.DreamTitle
                                 title={`Solicitados: ${solicitados}`}
@@ -59,50 +87,32 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                                 lineheight='100%'
                                 />
                     </div>
-                    <div style={{ width: "120px", marginLeft: "50px", paddingTop:'25px' }}>
+                    <div style={{ width: "120px", marginLeft: "110px", paddingTop:'25px' }}>
                             <Controls.DreamTitle
                                 title={`Aprobados: `}
                                 size='20px'
                                 lineheight='100%'
                             />
                     </div>
-                    <div style={{ width: "150px", marginLeft: "2px", paddingTop:'10px' }}>
+                    <div style={{ width: "150px", marginLeft: "2px", paddingTop:'3px' }}>
                             <Controls.Input
-                                // label="Buscar Solicitud por Nombre"
-                                defaultValue = {aprobados}
+                                name="aprobados"
+                                value={values.aprobados}
+                                type="number"
+                                onChange={handleInputChange}
                                 sx={{ width: .4 }}
-                                onChange={(e)=>{setAprobados(e.target.value)}}
+                                error={errors.aprobados}
                             />
                     </div>
                 </div>
-            <TextField
-                id="outlined-multiline-static"
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={""}
-                sx={{
-                    pl: "78px",
-                    mb: "20px",
-                    width: "95%",
-                    /* magia negra de gabs */
-                    ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-                        WebkitTextFillColor: "black"
-                    }
-                }}
-            />
             <Grid item align = "right" marginTop={5} >
                 <Controls.Button
                     text="Guardar"
                     endIcon={<SaveIcon/>} 
-                    // disabled = {descargas !== solicitados}
-                    onClick={(e)=>{
-                        // guardarSolicitudActual()
-                        setOpenDetalle(false)
-                        // history.push("/cord/asignacionCarga/deudaYDescarga");
-                    }} 
+                    type="submit"
                     />
             </Grid>
+            </Form>
         </>
     )
 }
