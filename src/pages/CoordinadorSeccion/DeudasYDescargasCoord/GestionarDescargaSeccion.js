@@ -9,7 +9,8 @@ import {UserContext} from '../../../constants/UserContext';
 import ItemSolicitudActual from './ItemSolicitudActual';
 import ItemSolicitudActualVacio from './ItemSolicitudActualVacio';
 import ListaSolicitudesPasadasSeccion from "./ListaSolicitudesPasadasSeccion"
-
+import tramiteDescargaService from '../../../services/tramiteDescargaService'
+import procesoDescargaService from '../../../services/procesoDescargaService'
 
 export default function GestionarDescargaSeccion() {
     /* contiene los ProcesosDesgarga(Horaria) */
@@ -19,6 +20,7 @@ export default function GestionarDescargaSeccion() {
     const [createData, setCreateData] = useState(false);
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subtitle: '' })
+    const { user } = React.useContext(UserContext)
     /* de gestion de ciclo */
     
     const onDelete = (idTramite) => {
@@ -31,6 +33,7 @@ export default function GestionarDescargaSeccion() {
         //const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
         //setRecords(nuevaTabla)
         //tramiteDescargaService.deleteTramiteDescarga(idTramite);
+        //Solo se descomenta la línea de arriba
         setSolicitudActual(null)
         setRecordForEdit(null)
         setNotify({
@@ -40,10 +43,15 @@ export default function GestionarDescargaSeccion() {
         })
     }
 
+    const getTramitesDescargasDocente = async () => {
+        let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
+
+    }
+
     React.useEffect(() => {
-        //proceso actual activo
         //listar todos tramites
-        //getTramitesDescargasDocente()
+        getTramitesDescargasDocente()
     }, [recordForEdit, createData, confirmDialog])
 
     return (
