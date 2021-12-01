@@ -48,7 +48,7 @@ export default function ItemDecargaActualDocente(props) {
                 * Publicación de Resultados desde las {formatoFechaProceso(procesoActivo.fecha_fin)} 
             </Typography>
             <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
-                px={2} pl={2}  mb={10} mt={2}
+                px={2} mb={10} mt={2}
             >
                 <TableRow align="center">
                     <TableCell sx={{width: "400px",borderBottom: "none"}}>
