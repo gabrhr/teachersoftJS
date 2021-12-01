@@ -94,12 +94,6 @@ export default function NuevoProcesoForm() {
         let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         console.log("El id del proceso activo es ", procesoActivoNew[0].id)
         const newTramiteSeccion = {
-            "fecha_creacion": "2021-11-29T23:07:23.000+00:00",
-            "fecha_modificacion": "2021-11-29T23:07:23.000+00:00",
-            "fecha_recepcion": null,
-            "fecha_atencion": null,
-            "asunto": null,
-            "descripcion": null,
             "observacion": justificacion,
             "estado_tracking": 0,
             "resultado": 0,

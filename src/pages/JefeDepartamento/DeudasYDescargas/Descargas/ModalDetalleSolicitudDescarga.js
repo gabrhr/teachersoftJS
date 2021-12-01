@@ -91,7 +91,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
 
     const getTramitesDocente = async() => {
         let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
+        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id, 0);
         setRecords(request)
     }
 
