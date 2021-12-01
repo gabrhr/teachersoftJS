@@ -2,10 +2,10 @@
 
  
 import React, {useState,useEffect, Component } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
-import BarraDocumentosXAutor from '../../../components/PageComponents/BarCharts';
 import InvestigacionService from '../../../services/investigacionService';
+import BarChartAutores from '../../../components/PageComponents/BarCharts';
 
 const autoresIndicadores = async () => {
     let indicadoresAutores = await InvestigacionService.getIndicadoresAutores();
@@ -13,10 +13,14 @@ const autoresIndicadores = async () => {
     return indicadoresAutores;
 }
 
-const estandarizarAutoresInd = arr => {
+const estandarizarAutoresInd = (arr) => {
     let arrEstandarizado=[];
     arr.forEach(element => {
-        arrEstandarizado.push([element[0].nombres+element[0].apellidos,element[1]]);
+        let primerNombre=(element[0].nombres.split(" "))[0];
+        primerNombre=primerNombre[0].toUpperCase() + primerNombre.slice(1).toLowerCase();
+        let primerApellido=(element[0].apellidos.split(" "))[0];
+        primerApellido=primerApellido[0].toUpperCase() + primerApellido.slice(1).toLowerCase();
+        arrEstandarizado.push([primerNombre+" "+primerApellido,element[1]]);
     });
     return arrEstandarizado;
 }
@@ -30,15 +34,15 @@ export default function CantidadTrabajosXAutor(){
         .then(newAutorIndicador => {
             setAutoresInd(newAutorIndicador);
         });
-        setAutoresInd(estandarizarAutoresInd(autoresInd));
     }, [])
-
-    /* {BarraDocumentosXAutor.BarChartAutores()} */
-
+    
     return(
 
         <div>
-           {console.log(autoresInd)}
+            <Typography variant="body1" color={"#00008B"} my={.5}>
+                Investigadores con mayor record de publicaciones
+            </Typography>
+            {BarChartAutores(estandarizarAutoresInd(autoresInd))}
         </div>
 
     )

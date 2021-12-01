@@ -1,5 +1,7 @@
 import React from 'react';
-import {HorizontalBar} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
+import {CategoryScale} from 'chart.js';
+import Chart from 'chart.js/auto';
 
 function separarAutores(arr){
     let autores=[]
@@ -22,23 +24,39 @@ function separarNumPublicaciones(arr){
     Orange: rgba(255, 159, 64, 0.2)
 */
 
-function BarChartAutores(cabecera, arr){
+export default function BarChartAutores(arr){
+    Chart.register(CategoryScale);
+    console.log("Data para BarChart: ",arr);
     const data = {
         labels: separarAutores(arr),
         datasets: [{
-            label: cabecera,
-            data: separarAutores(arr),
-            backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
+            label: "Número de publicaciones emitidas",
+            data: separarNumPublicaciones(arr),
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
             borderWidth: 1,
         }],
     }
+    const options = {
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                },
+                gridLines: {
+                    display: false
+                }
+            }]
+        }
+    }
     return (
         <div>
-            <HorizontalBar data={data}/>
+            <Bar data={data} options={options}/>
         </div>
     );
-    
 }
-
-export default {BarChartAutores}
  
