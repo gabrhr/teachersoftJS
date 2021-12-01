@@ -37,21 +37,7 @@ export default function BarChartAutores(arr){
         }],
     }
     const options = {
-        scales: {
-            xAxes: [{
-                gridLines: {
-                    display: false
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                    stepSize: 1,
-                },
-                gridLines: {
-                    display: false
-                }
-            }]
-        }
+        indexAxis: 'y',
     }
     return (
         <div>
