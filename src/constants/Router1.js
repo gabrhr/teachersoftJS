@@ -68,6 +68,7 @@ import DeudasYDescargaCoord from '../pages/CoordinadorSeccion/DeudasYDescargasCo
 import NuevaSolicitudDescarga from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/NuevaSolicitudDescarga'
 import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacion';
 import IndicadoresTrabajoInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/IndicadoresTrabajoInvestigacion';
+import IndicadoresSeccion from '../pages/CoordinadorSeccion/IndicadoresSeccion';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -108,6 +109,7 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
+  { requireRoles: [2, 8], path: "/as/indicadores", page: IndicadoresSeccion},
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
