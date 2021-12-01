@@ -8,15 +8,41 @@ import { TextField, Avatar } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { Form, useForm } from '../../../../components/useForm';
 
+//Cosas borrables 
+import useTable from '../../../../components/useTable';
+import { TableBody } from '@mui/material';
+import { TableRow, TableCell } from '@mui/material';
+import Popup from '../../../../components/util/Popup'
+import SolicitudDescargaForm from '../../../CoordinadorSeccion/DeudasYDescargasCoord/SolicitudDescargaForm';
+import tramiteDescargaService from '../../../../services/tramiteDescargaService'
+import procesoDescargaService from '../../../../services/procesoDescargaService'
+import { UserContext } from '../../../../constants/UserContext';
+
 const initialFieldValues = {
     justificacion: '',
     aprobados: 0
 }
 
-export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
+const tableHeaders = [
+    
+    {
+        id: 'nombre',
+        label: 'Nombre del docente',
+        numeric: false,
+        sortable: true
+    },
+    {
+        id: 'justificacion',
+        label: 'Justificación',
+        numeric: false,
+        sortable: false
+    },
+]
+
+export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordForView}){
     const codigo = '23233421'
     const solicitados = '10'
-
+    console.log(recordForView)
     const {
         values,
         setValues,
@@ -25,6 +51,20 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
         handleInputChange,
         resetForm
     } = useForm(initialFieldValues);
+
+    const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
+    const [records, setRecords] = React.useState([])
+    const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
+    const [recordForViewDetalle, setRecordForViewDetalle] = useState(null)
+    const { user } = React.useContext(UserContext)
+
+    const {
+        TblContainer,
+        TblHead,
+        TblPagination,
+        recordsAfterPagingAndSorting,
+        BoxTbl
+    } = useTable(records,tableHeaders, filterFn);
 
     const validate = () => {
         let temp = {...errors}
@@ -49,6 +89,16 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
             // addOrEdit(values, resetForm)
     }
 
+    const getTramitesDocente = async() => {
+        let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
+        setRecords(request)
+    }
+
+    React.useEffect(() => {
+        getTramitesDocente()
+    }, [recordForView])
+
     return(
         <>
         <Form onSubmit={handleSubmit}>
@@ -67,7 +117,8 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                     </Typography>
                     <Typography variant="h4"   display="inline">
                         {/* Nombre del docente solicitador */}
-                        Docente PUCP (correo)
+                        {recordForView.solicitador.apellidos + ", " + recordForView.solicitador.nombres + 
+                        "(" + recordForView.solicitador.correo_pucp + ")"}
                     </Typography>
                     <div/>
                     <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -75,14 +126,15 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                     </Typography>
                     <Typography variant="body1"  display="inline">
                         {/* Seccion que pertenece */}
-                        Seccion
+                        {recordForView.solicitador.departamento.nombre + " (" + 
+                        recordForView.solicitador.departamento.correo + ")" }
                     </Typography>
                 </Grid>
             </Grid>
             <div style={{ display: "flex", paddingLeft: "165px", marginTop: 20, marginBottom: 10 }}>
                     <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
                             <Controls.DreamTitle
-                                title={`Solicitados: ${solicitados}`}
+                                title={`Solicitados: ${recordForView.cantidad_solicitada}`}
                                 size='20px'
                                 lineheight='100%'
                                 />
@@ -105,6 +157,29 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                             />
                     </div>
                 </div>
+                <BoxTbl>
+                <TblContainer>
+                    <TblHead/>
+                    <TableBody>
+                    {
+                       recordsAfterPagingAndSorting().map((item,index) => (
+                        <TableRow>
+                            <TableCell sx = {{width: '1200px'}}>
+                                {item.solicitador.nombres + " " + item.solicitador.apellidos}
+                            </TableCell>
+                            <TableCell> 
+                                <Controls.Button
+                                    text="Detalle"
+                                    onClick = {()=>{setOpenSolicitudDescarga(true);console.log(item);setRecordForViewDetalle(item);}}
+                                />
+                            </TableCell>
+                        </TableRow>
+                        ))
+                    }
+                    </TableBody>
+                </TblContainer>
+                <TblPagination />
+            </BoxTbl>
             <Grid item align = "right" marginTop={5} >
                 <Controls.Button
                     text="Guardar"
@@ -112,6 +187,13 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                     type="submit"
                     />
             </Grid>
+            <Popup
+                openPopup={openSolicitudDescarga}
+                setOpenPopup={setOpenSolicitudDescarga}
+                title="Detalle Solicitud"
+            >
+                <SolicitudDescargaForm recordForView = {recordForViewDetalle}/>
+            </Popup>
             </Form>
         </>
     )

@@ -5,6 +5,9 @@ import { Controls } from '../../../../components/controls/Controls'
 import Popup from '../../../../components/util/Popup'
 import ModalDetalleSolicitudDescarga from './ModalDetalleSolicitudDescarga'
 import Notification from '../../../../components/util/Notification'
+import tramiteSeccionDescargaService from '../../../../services/tramiteSeccionDescargaService'
+import moment from 'moment'
+import 'moment/locale/es'
 
 const tableHeaders = [
     {
@@ -34,7 +37,7 @@ const tableHeaders = [
 ]
 
 function Item(props){
-    const {item,setOpenDetalle} = props
+    const {item,setOpenDetalle, setRecordForView} = props
     return (
         <>
             <TableRow>
@@ -43,31 +46,33 @@ function Item(props){
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.fecha_enviado}
+                        {moment.utc(item.fecha_creacion).format('DD MMM YYYY [-] h:mm a')}
                     </Typography>
                     <div/>
-                    <Typography fontWeight='bold' fontSize={18}>
-                        {item.asunto}
-                    </Typography>
+                    {/*<Typography fontWeight='bold' fontSize={18}>
+                        {"ASUNTO? xd"}
+                    </Typography>*/}
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Seccion: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.seccion.nombre}
+                        {item.solicitador.seccion.nombre}
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Autor: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitador.fullName} 
+                        {item.solicitador.apellidos + ", " + item.solicitador.nombres} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Estado: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.estado} 
+                        {item.resultado === 0 ? "Pendiente": 
+                         item.resultado === 1 ? "Aprobado":
+                         "Rechazado"} 
                     </Typography>
                 </TableCell>
                 <TableCell>
@@ -75,35 +80,35 @@ function Item(props){
                         Nombre del proceso: {'\u00A0'} 
                     </Typography>
                     <Typography fontWeight='bold' fontSize={16}>
-                        {item.proceso.nombre}
+                        {item.procesoDescarga.nombre}
                     </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                    {/*<Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes recibidas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_recibidas} 
-                    </Typography>
+                        {"wadafá"} 
+                    </Typography>*/}
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes enviadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_enviadas} 
+                        {item.cantidad_solicitada} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes aprobadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_aprobadas} 
+                        {item.cantidad_aprobada} 
                     </Typography>
                 </TableCell>
                 <TableCell sx={{maxWidth:"300px"}}>
                     <Controls.Button
                         text="Detalle"
-                        onClick={()=>{setOpenDetalle(true)}} 
+                        onClick={()=>{setOpenDetalle(true);setRecordForView(item)}} 
                     />
                 </TableCell>
             </TableRow>
@@ -113,9 +118,9 @@ function Item(props){
 }
 
 export default function ListaSolicitudes({seccion}){
-
+    const [recordForView, setRecordForView] = useState(null)
     const [records, setRecords] = useState([
-        {
+        /*{
             fecha_enviado: '1/1/1',
             asunto: 'AYUDA',
             seccion: {
@@ -131,7 +136,7 @@ export default function ListaSolicitudes({seccion}){
             solicitudes_recibidas: 10,
             solicitudes_enviadas: 8,
             solicitudes_aprobadas: 1
-        }
+        }*/
     ])
 
     const [openDetalle, setOpenDetalle] = useState(false)
@@ -168,8 +173,14 @@ export default function ListaSolicitudes({seccion}){
         })
     }
 
+    const getTramitesSeccionActivos = async() => {
+        const request = await tramiteSeccionDescargaService.getTramitesSeccionDescarga()
+        console.log(request)
+        setRecords(request)
+    }
+
     React.useEffect(() => {
-        //Service
+        getTramitesSeccionActivos()
     }, [recordForEdit, createData, openDetalle])
 
 
@@ -187,6 +198,7 @@ export default function ListaSolicitudes({seccion}){
                         recordsAfterPagingAndSorting().map((item,index) => (
                                 <Item key={index} item={item}
                                 setOpenDetalle={setOpenDetalle}
+                                setRecordForView = {setRecordForView}
                         />
                         ))
                     }
@@ -200,7 +212,7 @@ export default function ListaSolicitudes({seccion}){
                 title= {`Solicitud de descarga - Sección ${seccion}`}
                 size="md"
             >
-               <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} /*guardarSolicitud = {guardarSolicitud}*//>
+               <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} recordForView = {recordForView}/>
             </Popup>
             <Notification
                 notify={notify}
