@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import useTable from '../../../components/useTable';
 import moment from 'moment'
 import 'moment/locale/es'
+import { DT } from '../../../components/DreamTeam/DT';
 moment.locale('es');
 
 const tableHeaders = [
@@ -113,7 +114,7 @@ export default function ListaDescargasPasadasDocente(props) {
                 <BoxTbl>
                     <Grid item xs= {12} rowSpacing={20} align = "center">
                         <Typography variant="h4" color = "secondary">
-                                Aún no ha generado Solicitudes de Descarga registradas
+                                Aún no ha generado Solicitudes de Descarga
                         </Typography>
                     </Grid>
                 </BoxTbl>
@@ -154,14 +155,15 @@ function Item(props){
                     </Typography>
                 </TableCell>
                 <TableCell >
-                    <Typography >
-                        Resultado de Solicitud:{'\u00A0'}
+                    <Typography fontWeight="550" sx={{color:"primary.light"}}>
+                        Resultado de la solicitud:{'\u00A0'}
                     </Typography>
-                    <Typography>
-                        {item.resultado === 0 ? "Pendiente" :
-                         item.resultado === 1 ? "Aprobado" :
-                         "Desaprobado"}
-                    </Typography>  
+                    <DT.Etiqueta
+                        type={item.resultado === 0 ? "pendiente" :
+                        item.resultado === 1 ? "aprobado" :
+                        "desaprobado"}
+                        sx={{ marginBottom:"4px"}}
+                    />
                 </TableCell>
                 <TableCell>
                     <Controls.Button
