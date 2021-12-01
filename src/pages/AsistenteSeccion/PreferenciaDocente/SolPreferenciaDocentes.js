@@ -12,99 +12,82 @@ const getPreferencias =  async (ciclo) => {
   //{ id: '1', title: 'Todas las Secciones' },
   const seccion = JSON.parse(window.localStorage.getItem("user"));
   if(!ciclo) ciclo = parseInt(window.localStorage.getItem("ciclo"));
-  let dataPref = await PersonaService.getPreferenciasxSeccion(seccion.persona.seccion.id); //comentarle al back que sea por ciclo
+  let dataPref = await PersonaService.getPreferenciasxSeccion(seccion.persona.seccion.id, ciclo); //comentarle al back que sea por ciclo
   
   if(!dataPref) dataPref = [];
 
-  const preferencias = [];
+  const docentes = [];
+  for(let doc of dataPref) {
+    const preferencias = [];
 
-  console.log(dataPref);
-  dataPref.map(doc => {
-      preferencias.push({
-        "ID": doc.id,
-        "foto_URL": doc.id,
-        "Codigo": doc.cursoCiclos[0].curso.codigo,
-        "Nombre": doc.cursoCiclos[0].curso.nombre,
-        "Facultad": doc.cursoCiclos[0].curso.seccion.departamento.unidad.nombre,
-        "Creditos": doc.cursoCiclos[0].curso.creditos,
-        "Horario": doc.horarios[0].codigo,
-        "Tipo": doc.sesiones[0].secuencia ? "Laboratorio" : "Clase",
-        "Horas": doc.sesiones[0].horas,
-        "ID_Horario": doc.horarios[0].id,
-        "selected": false
+    for(let i = 0; i < doc.sesiones.length; i++){
+      //Hacemos la verificacion de si es un curso repetido o no
+      const newHor = await doc.horarios.filter(hor => hor.sesiones.some(ses => ses.id === doc.sesiones[i].id));
+      preferencias.push ({
+        "clave": newHor[0].curso_ciclo.curso.codigo,
+        "nombre_curso": newHor[0].curso_ciclo.curso.nombre,
+        "carga": newHor[0].curso_ciclo.curso.creditos,
+        "horario": newHor[0].codigo,
+        "horas": doc.sesiones[i].horas,
+        //"Horario": newHor[0],
+        "Sesion": doc.sesiones[i].secuencia ? "Laboratorio" : "Clase",
       })
-  })
+    }
 
-  return preferencias;
+    docentes.push({
+      "id": doc.id,
+      "foto_URL": doc.docente.foto_URL,
+      "nombres": doc.docente.nombres,
+      "apellidos": doc.docente.apellidos,
+      "codigo_pucp": doc.docente.codigo_pucp ? doc.docente.codigo_pucp : "No tiene",
+      "seccion": {
+        "nombre": doc.docente.seccion.nombre,
+      },
+      "tipo_docente": doc.docente.tipo_docente,
+      "preferencia": preferencias,
+    })
+  }
+
+    console.log("lista de docntes: ", docentes);
+
+  return docentes;
 }
 
 
 export default function SolPreferenciaDocentes(){
   const [records, setRecords] = useState([]);
   const [ciclo, setCiclo] = useState();
+  const [profesoresMostrar, setProfesoresMostrar] = useState([])
 
-    React.useEffect(() => {
-      getPreferencias(ciclo)
-      .then (newPref =>{
-        if(newPref){
-          setRecords(newPref);
-        }
-      });
-    }, [ciclo] )
-
-    const [profesores, setProfesores] = useState([
-        {
-            foto_URL: '',
-            nombres: 'holo',
-            apellidos: 'k',
-            codigo_pucp: '1',
-            seccion: {
-                nombre: 'Ingeniería Informática'
-            },
-            tipo_docente: 1,
-            preferencia: [
-                {
-                    clave: '22',
-                    nombre_curso: 'MATES'
-                }, 
-                {
-                    clave: '222',
-                    nombre_curso: 'MATES 5'
-                }
-            ]
-        },
-        {
-            foto_URL: '',
-            nombres: 'asdasdas',
-            apellidos: 'kd',
-            codigo_pucp: '13',
-            seccion: {
-                nombre: 'Ingeniería Informática'
-            },
-            tipo_docente: 2,
-            preferencia: [
-                {
-                    clave: '22',
-                    nombre_curso: 'MATES'
-                }, 
-                {
-                    clave: '222',
-                    nombre_curso: 'MATES 5'
-                },
-                {
-                    clave: '22342',
-                    nombre_curso: 'TUTORÍA'
-                }
-            ]
-        }
-    ])
-
-    const [profesoresMostrar, setProfesoresMostrar] = useState(profesores)
-
-
+  
+  React.useEffect(() => {
+    getPreferencias(ciclo)
+    .then (newPref =>{
+      if(newPref){
+        setProfesoresMostrar(newPref);
+        setRecords(newPref);
+      }
+    });
+  }, [ciclo] )
+  
     const handleSearch = e => {
-        const nuevosProfesores = profesores.filter(x => x.nombres.toLowerCase().includes(e.target.value.toLowerCase()))
-        setProfesoresMostrar(nuevosProfesores)
+      let target = e.target;
+      /* React "state object" (useState()) doens't allow functions, only
+        * objects.  Thus the function needs to be inside an object. */
+      if (target.value === ""){
+        console.log("ingreso if")
+        setProfesoresMostrar(records)
+        return profesoresMostrar
+      }
+      else{
+        console.log("ingreso else")
+        const profMostrar = profesoresMostrar.filter(x => `${x.nombres.toLowerCase()}, ${x.apellidos.toLowerCase()}`
+          .includes(target.value.toLowerCase()))
+
+        console.log(profMostrar);
+        setProfesoresMostrar(profMostrar);
+        return profesoresMostrar;
+      }
     }
        
 

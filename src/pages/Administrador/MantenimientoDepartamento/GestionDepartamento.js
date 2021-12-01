@@ -390,6 +390,7 @@ export default function GestionDepartamento() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
+                size="sm"
                 title= {recordForEdit ? "Editar Departamento": "Nuevo Departamento"}
             >
               <AgregarEditarDepartamento

@@ -123,9 +123,9 @@ const listarPorDocente = async (id_docente, id_ciclo) => {
   }
 }
 
-const getPreferenciasxSeccion = async (id_seccion) => {
+const getPreferenciasxSeccion = async (id_seccion, id_ciclo) => {
   try{
-    const request = await axios.get(`${url}/preferencia/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion);  //Es un entero que se pasa
+    const request = await axios.get(`${url}/preferencia/idseccion=${id_seccion}/idciclo=${id_ciclo}`, tokenService.GetTokenPrueba(), id_seccion, id_ciclo);  //Es un entero que se pasa
     return request.data;
   }catch(exception){
     console.error(exception);

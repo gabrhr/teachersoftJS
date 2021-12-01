@@ -102,9 +102,9 @@ const getUsuario = async () => {
       correo: usr.persona.correo_pucp,
       rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
       rol: usr.persona.tipo_persona,
-      idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : '',
+      idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : 0,
       nombreDepartamento: usr.persona.departamento ? usr.persona.departamento.nombre : '',
-      idSeccion: usr.persona.seccion ? usr.persona.seccion.id : '',
+      idSeccion: usr.persona.seccion ? usr.persona.seccion.id : 0,
       nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
       foto_URL: usr.persona.foto_URL
     })
@@ -142,11 +142,12 @@ export default function GestionUsuarios() {
     setFilterFn({
       fn: items => {
         if (target.value === "")
-          /* no search text */
-          return items
-        else
-          return items.filter(x => x.nombre.toLowerCase()
+        /* no search text */
+        return items
+        else{
+          return items.filter(x => `${x.nombre.toLowerCase()} ${x.apellidoPaterno.toLowerCase()} ${x.apellidoMaterno.toLowerCase()}`
             .includes(target.value.toLowerCase()))
+        }
       }
     })
   }
@@ -190,10 +191,11 @@ export default function GestionUsuarios() {
         correo_pucp: usuario.correo,
         numero_documento: usuario.DNI,
         tipo_persona: usuario.rol,
-        seccion: {
+        ...(usuario.seccion  && 
+        {seccion: {
           id: usuario.seccion.id,
           nombre: usuario.seccion.nombre
-        },
+        }}),
         departamento: {
           id: usuario.departamento.id,
           nombre: usuario.departamento.nombre
@@ -210,16 +212,19 @@ export default function GestionUsuarios() {
       correo_pucp: usuario.correo,
       numero_documento: usuario.DNI,
       tipo_persona: usuario.rol,
-      seccion: {
+      ...(usuario.seccion  && 
+      {seccion: {
         id: usuario.seccion.id,
         nombre: usuario.seccion.nombre
-      },
+      }}),
       departamento: {
         id: usuario.departamento.id,
         nombre: usuario.departamento.nombre
       },
       foto_URL: usuario.foto
     }
+
+    console.log(recordForEdit ? `Data persona ${dataPer} `: `Data usuario ${dataUsr}`);
 
     recordForEdit
       ? personaService.updatePersona(dataPer, usuario.idPersona)
@@ -353,11 +358,11 @@ export default function GestionUsuarios() {
                     <StyledTableCell>
                       {item.nombre ? item.nombre.toUpperCase() : ""} {item.apellidoPaterno ? item.apellidoPaterno.toUpperCase() : ""} {item.apellidoMaterno ? item.apellidoMaterno.toUpperCase() : ""}
                     </StyledTableCell>
-                    <StyledTableCell>{item.documento}</StyledTableCell>
+                    <StyledTableCell>{item.documento ? item.documento : '-' }</StyledTableCell>
                     <StyledTableCell>{item.correo}</StyledTableCell>
                     <StyledTableCell>{item.rolName}</StyledTableCell>
-                    <StyledTableCell>{item.nombreSeccion}</StyledTableCell>
-                    <StyledTableCell>{item.nombreDepartamento}</StyledTableCell>
+                    <StyledTableCell>{item.nombreSeccion ? item.nombreSeccion : '-'}</StyledTableCell>
+                    <StyledTableCell>{item.nombreDepartamento ? item.nombreDepartamento : '-'}</StyledTableCell>
                     <StyledTableCell>
                       <Controls.ActionButton
                         color="warning"

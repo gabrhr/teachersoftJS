@@ -34,6 +34,8 @@ export function getRolName(rolID) {
         rolName = "Usuario Externo"
     } else if (rolID == 8) {
         rolName = "Usuario Nuevo"
+    } else if (rolID == 9) {
+        rolName = "Asistente de Investigación"
     }
     return rolName
 }
@@ -71,7 +73,7 @@ export function validateEmail(email) {
 
 /* nombre de persona (Peru) */
 export function validateName(name) {
-    return (/^$|^[A-Za-záéíóúñ -]+$/).test(name)
+    return (/^$|^[A-ZÁÉÍÓÚÑa-záéíóúñ -]+$/).test(name)
         ? ""
         : "Nombre invalido"
 }
@@ -183,10 +185,11 @@ export function getAllRoles() {
         { id: 2, nombre: 'Asistente de Seccion' },
         { id: 3, nombre: 'Coordinador de Seccion' },
         { id: 4, nombre: 'Asistente de Departamento' },
-        { id: 5, nombre: 'Coordinador de Departamento' },
+        { id: 5, nombre: 'Jefe de Departamento' },
         { id: 6, nombre: 'Secretario de Departamento' },
         { id: 7, nombre: 'Externo' },
         { id: 8, nombre: 'Nuevo Usuario' },
+        { id: 9, nombre: 'Asistente de Investigación' },
     ])
 }
 
