@@ -8,6 +8,11 @@ import Popup from '../../../components/util/Popup'
 import ModalAprobados from './ModalAprobados'
 /* icons */
 import SearchIcon from '@mui/icons-material/Search';
+import { DT } from '../../../components/DreamTeam/DT';
+import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es');
+
 
 const tableHeaders = [
     {
@@ -39,6 +44,11 @@ const tableHeaders = [
 
 function Item(props){
     const {item,getRow,setOpenAprobados} = props
+    function formatoFecha(fecha){
+        if(fecha!=null){
+            return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
+        }
+    }
     return (
         <>
             <TableRow>
@@ -47,12 +57,16 @@ function Item(props){
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.fecha_enviado}
+                        {formatoFecha(item.fecha_creacion)}
                     </Typography>
                     <div/>
-                    <Typography fontWeight='bold' fontSize={18}>
-                        {item.asunto}
+                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        Proceso: {'\u00A0'} 
                     </Typography>
+                    <Typography display="inline" fontWeight='bold' fontSize={16}>
+                        {item.procesoDescarga.nombre}
+                    </Typography>
+                    <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Seccion: {'\u00A0'} 
                     </Typography>
@@ -64,44 +78,40 @@ function Item(props){
                         Autor: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitador.fullName} 
+                        {item.solicitador.nombres+ " " + item.solicitador.apellidos}
                     </Typography>
                     <div/>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Estado: {'\u00A0'} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.estado} 
-                    </Typography>
                 </TableCell>
                 <TableCell>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Nombre del proceso: {'\u00A0'} 
+                        Estado: {'\u00A0'} 
                     </Typography>
-                    <Typography fontWeight='bold' fontSize={16}>
-                        {item.proceso.nombre}
-                    </Typography>
+                    <DT.Etiqueta
+                            type={item.resultado === 0 ? "pendiente" :
+                            "atendido"}
+                            sx={{ marginBottom:"4px"}}
+                        />
                 </TableCell>
                 <TableCell>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes recibidas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_recibidas} 
+                        {item.cantidad_recibidas} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes enviadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_enviadas} 
+                        {item.cantidad_solicitada} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes aprobadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_aprobadas} 
+                        {item.cantidad_aprobada} 
                     </Typography>
                 </TableCell>
                 <TableCell sx={{maxWidth:"300px"}}> 
@@ -188,7 +198,15 @@ export default function ListaProcesosPasadosSeccion(props) {
                     }
                     </TableBody>
                 </TblContainer>
-                <TblPagination />
+                {records.length !== 0 && <TblPagination /> }
+                {records.length === 0 &&
+                    <Typography 
+                        variant="h4" 
+                        color="secondary"
+                        textAlign="center"
+                        children="Aún no se presenta un histórico de solicitudes"
+                    />
+                }
             </BoxTbl> 
             <Popup
                 openPopup={openAprobados}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, Typography, Stack } from '@mui/material';
+import { Grid, Typography, Paper, Alert, LinearProgress } from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 import { Form, useForm } from '../../../components/useForm';
 import ContentHeader from '../../../components/AppMain/ContentHeader';
@@ -22,6 +22,7 @@ import { UserContext } from '../../../constants/UserContext';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
 import procesoDescargaService from '../../../services/procesoDescargaService';
+import { useLocation } from 'react-router';
 
 const tableHeaders = [
     
@@ -32,8 +33,20 @@ const tableHeaders = [
         sortable: false
     },
     {
+        id: 'foto',
+        label: '',
+        numeric: false,
+        sortable: false
+    },
+    {
         id: 'nombre',
         label: 'Nombre del docente',
+        numeric: false,
+        sortable: true
+    },
+    {
+        id: 'bono',
+        label: 'Bono solicitado',
         numeric: false,
         sortable: true
     },
@@ -46,6 +59,9 @@ const tableHeaders = [
 ]
 
 export default function NuevoProcesoForm() {
+    const location= useLocation()
+    const {recordForEdit,procesoActual}=location.state
+    console.log("ReocrdforEdit??????", recordForEdit)
     const history = useHistory()
     const handleClick = e =>{
         window.history.back();
@@ -56,28 +72,10 @@ export default function NuevoProcesoForm() {
     const { user } = React.useContext(UserContext)
     const [recordForView, setRecordForView] = useState(null)
     const [justificacion, setJustificacion] = useState("")
-
-    const [records, setRecords] = useState([
-        {
-            "nombres": 'José',
-            "apellidos": 'Pérez',
-            "solicitador": {
-                "apellidos": 'Becerra Menacho',
-                "nombres": "Marcelo Martín",
-                "correo_pucp": "marcelo.becerra@pucp.edu.pe",
-                "seccion": {
-                    "nombre": "Ingeniería Informática"
-                }
-            },
-            "correo": '@perez.com',
-            "justificacion": 'Por favor',
-            "seleccionado": false,
-            "fecha_creacion": "2021-11-29T23:07:23.000+00:00",
-            "tipo_bono": 1,
-            "observacion": "Por favor funciona"
-        }
-    ])
-
+    const PaperStyle = { borderRadius: '20px',  mx:5,pb: 4, pt: 2, px: 5, color: "primary.light", elevatio: 0, mt:3 }
+    //Records es solo la lista de Solicitudes de los DOCENTES
+    const [records, setRecords] = useState([])
+    
     const [row, setRow] = React.useState(false)
     const [solicitados, setSolicitados] = React.useState(0)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
@@ -91,8 +89,8 @@ export default function NuevoProcesoForm() {
     } = useTable(records,tableHeaders, filterFn);
 
     const guardarSolicitud = async() =>{
-        let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        console.log("El id del proceso activo es ", procesoActivoNew[0].id)
+        //let  = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        //console.log("El iprocesoActivoNewd del proceso activo es ", procesoActivoNew[0].id)
         const newTramiteSeccion = {
             "observacion": justificacion,
             "estado_tracking": 0,
@@ -107,7 +105,7 @@ export default function NuevoProcesoForm() {
                 "id": user.persona.id,
             },
             "procesoDescarga": {
-                "id": procesoActivoNew[0].id,
+                "id": procesoActual,
             },
             "cantidad_solicitada": solicitados,
             "persona_departamento": null,
@@ -146,8 +144,8 @@ export default function NuevoProcesoForm() {
     }
 
     const getTramitesDescargasSeccion = async() =>{
-        let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
+        //let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual, user.persona.seccion.id,0);
         console.log(request)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
@@ -155,7 +153,7 @@ export default function NuevoProcesoForm() {
 
     React.useEffect(() => {
         getTramitesDescargasSeccion()
-    }, [openSolicitudDescarga, openSolicitudDescarga])
+    }, [openSolicitudDescarga])
 
     const handleSearch = e => {
         let target = e.target;
@@ -173,8 +171,6 @@ export default function NuevoProcesoForm() {
           }
         })
     }
-
-    const codigo = '20180000'
 
     const addDocente = (docente) => {
         docente.seleccionado = !docente.seleccionado
@@ -197,125 +193,149 @@ export default function NuevoProcesoForm() {
                 startIcon={<ArrowBackIcon />}
                 onClick={(e) => {handleClick(e)}}
             />
-            <Divider/>
-            <Typography fontWeight="550"  sx={{color:"primary.light"}}>
-                Código: {user.persona.codigo_pucp ? user.persona.codigo_pucp : `${codigo}`}
-            </Typography>
-            <Divider/>
-            <Grid container spacing={{ xs: "10px" }} >
-                <Grid item sx={{mt:"10px", mb:"10px", ml:1}}>
-                    {/* <Avatar sx={{ width: 50, height: 50}} src={soli}/> */}
-                    <Avatar sx={{ width: 50, height: 50}}/>
+            <Paper variant="outlined" sx={PaperStyle}>
+                {/* Encabezado y Justificación */}
+                <Grid container spacing={{ xs: "10px" }} >
+                    <Grid item sx={{mt:"10px", mb:"10px", ml:1}}>
+                        <Avatar sx={{ width: 50, height: 50}} src={user.persona.foto_URL}/>
+                    </Grid>
+                    <Grid item sx={{mt:"9px"}}>
+                        <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                            {"De: "}
+                        </Typography>
+                        <Typography variant="h4"   display="inline">
+                            {/* Nombre del docente solicitador */}
+                            {user.persona.nombres + " " + user.persona.apellidos + " (" + user.persona.correo_pucp + ")"}
+                        </Typography>
+                        <div/>
+                        <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                            {"Para: \xa0"}
+                        </Typography>
+                        <Typography variant="body1"  display="inline">
+                            {/* Seccion que pertenece */}
+                            {"Jefe de Departamento de " + user.persona.seccion.nombre}
+                        </Typography>
+                    </Grid>
                 </Grid>
-                <Grid item sx={{mt:"9px"}}>
-                    <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        {"De: "}
-                    </Typography>
-                    <Typography variant="h4"   display="inline">
-                        {/* Nombre del docente solicitador */}
-                        {user.persona.nombres + " " + user.persona.apellidos + " (" + user.persona.correo_pucp + ")"}
-                    </Typography>
-                    <div/>
-                    <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        {"Para: \xa0"}
-                    </Typography>
-                    <Typography variant="body1"  display="inline">
-                        {/* Seccion que pertenece */}
-                        {"Jefe de Departamento de " + user.persona.seccion.nombre}
-                    </Typography>
-                </Grid>
-            </Grid>
-            <Box ml="75px">
-                <Controls.DreamTitle
-                    title={'Justificación: '}
-                    size='20px'
-                    lineheight='300%'
-                    />
-            </Box>
-            <TextField
-                id="outlined-multiline-static"
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={justificacion}
-                onChange={(e) => {setJustificacion(e.target.value)}}
-                sx={{
-                    pl: "78px",
-                    mb: "20px",
-                    width: "62.5%",
-                    /* magia negra de gabs */
-                    ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-                        WebkitTextFillColor: "black"
-                    }
-                }}
-            />
-            <Grid container>
-                <Grid item >
-                <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                    <div style={{ width: "500px", marginRight: "50px" }}>
-                        <Controls.Input
-                                label="Buscar Solicitud por Nombre"
-                                InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                )
-                                }}
-                                sx={{ width: .2 }}
-                                onChange={handleSearch}
-                                type="search"
-                            />
-                    </div>
-                    <div style={{ width: "140px", marginLeft: "850px", paddingTop:'25px' }}>
-                            <Controls.DreamTitle
-                                title={`Solicitados: ${solicitados}`}
-                                size='20px'
-                                lineheight='100%'
-                                />
-                    </div>
-                </div>
-                </Grid>
-            </Grid>
-            
-            <BoxTbl>
-                <TblContainer>
-                    <TblHead/>
-                    <TableBody>
-                    {
-                       recordsAfterPagingAndSorting().map((item,index) => (
-                        <TableRow>
-                            <TableCell sx = {{width: '70px'}}>
-                                <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
-                                    <EditOutlinedIcon fontSize="small" />
-                                </Controls.RowCheckBox>
-                            </TableCell>
-                            <TableCell sx = {{width: '1200px'}}>
-                                {item.solicitador.nombres + " " + item.solicitador.apellidos}
-                            </TableCell>
-                            <TableCell> 
-                                <Controls.Button
-                                    text="Detalle"
-                                    onClick = {()=>{setOpenSolicitudDescarga(true);console.log(item);setRecordForView(item);}}
-                                />
-                            </TableCell>
-                        </TableRow>
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
-                <TblPagination />
-            </BoxTbl> 
-            <Grid container >
-                <Grid item align = "right" marginX = {20} marginTop={5} >
-                    <Controls.Button
-                        text="guardar"
-                        endIcon={<SaveIcon/>} 
-                        // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
-                        onClick = {()=>setOpenGuardarPopup(true)}  
+                <Box ml="75px">
+                    <Controls.DreamTitle
+                        title={'Justificación: '}
+                        size='20px'
+                        lineheight='300%'
                         />
+                </Box>
+                <TextField
+                    id="outlined-multiline-static"
+                    fullWidth
+                    multiline
+                    rows={6}
+                    defaultValue={justificacion}
+                    onChange={(e) => {setJustificacion(e.target.value)}}
+                    sx={{
+                        pl: "78px",
+                        mb: "20px",
+                        width: "20%",
+                        /* magia negra de gabs */
+                        ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+                            WebkitTextFillColor: "black"
+                        }
+                    }}
+                />
+                {/* Buscador y #solicitados */}
+                <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
+                   <b> Lista de Solicitudes de Descarga de los Docentes </b>
+                </Typography>
+                <Grid container ml="75px">
+                    <Grid item >
+                        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                            <div style={{ width: "500px", marginRight: "50px" }}>
+                                <Controls.Input
+                                        label="Buscar Solicitud por Nombre"
+                                        InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        )
+                                        }}
+                                        sx={{ width: .2 }}
+                                        onChange={handleSearch}
+                                        type="search"
+                                />
+                            </div>
+                        </div>
+                    </Grid>
+                    <Grid item xs/>
+                    <Grid item  align = "right" mr= {10} marginTop={5} >
+                        <Typography variant="h4" sx={{color:"primary.light"}}>
+                            Solicitados: <b> {solicitados}</b>
+                        </Typography>
+                    </Grid>
                 </Grid>
-            </Grid>
+                {/* Tabla de Docentes y sus solicitudes */}
+                <Grid container  pl={"75px"}>
+                    <Grid item xs={12}>
+                        <BoxTbl>
+                            {recordsAfterPagingAndSorting().length>0? (
+                                <>
+                                    <TblContainer>
+                                        <TblHead/>
+                                        <TableBody>
+                                        
+                                        {
+                                            recordsAfterPagingAndSorting().map((item,index) => (
+                                                <TableRow>
+                                                <TableCell sx = {{width: '70px'}}>
+                                                    <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
+                                                        <EditOutlinedIcon fontSize="small" />
+                                                    </Controls.RowCheckBox>
+                                                </TableCell>
+                                                <TableCell sx = {{width: '70px'}}> 
+                                                    <Avatar alt="profile pic" src={item.solicitador.foto_URL} />
+                                                </TableCell>
+                                                <TableCell sx = {{maxWidth: '400px'}}>
+                                                    {item.solicitador.nombres + " " + item.solicitador.apellidos}
+                                                </TableCell>
+                                                <TableCell sx = {{width: '250px'}}>
+                                                    <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
+                                                        {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                                                    </Alert>
+                                                </TableCell>
+                                                <TableCell sx = {{maxWidth: '200px'}}> 
+                                                    <Controls.Button
+                                                        text="Detalle"
+                                                        onClick = {()=>{setOpenSolicitudDescarga(true);console.log(item);setRecordForView(item);}}
+                                                        />
+                                                </TableCell>
+                                            </TableRow>
+                                            ))
+                                        }
+                                        </TableBody>
+                                    </TblContainer>
+                                    <TblPagination />
+                                </>
+                            ):
+                            
+                            (
+                                    <LinearProgress />
+                            )
+
+                            }
+                        </BoxTbl> 
+                    </Grid>
+                </Grid>
+                <Grid cointainer align="right" mt={5}>
+                    <div>
+                        <Controls.Button
+                            text="guardar"
+                            endIcon={<SaveIcon/>} 
+                            // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
+                            onClick = {()=>setOpenGuardarPopup(true)}  
+                            />
+
+                    </div>
+                </Grid>
+            </Paper>
             <Popup
                 openPopup={openSolicitudDescarga}
                 setOpenPopup={setOpenSolicitudDescarga}

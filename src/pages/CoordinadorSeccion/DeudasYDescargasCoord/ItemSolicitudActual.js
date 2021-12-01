@@ -13,7 +13,10 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import ConfirmDialog from '../../../components/util/ConfirmDialog'
-
+import moment from 'moment'
+import 'moment/locale/es'
+import { DT } from '../../../components/DreamTeam/DT'
+moment.locale('es');
 
 const tableHeaders = [
     {
@@ -43,17 +46,21 @@ const tableHeaders = [
 ]
 
 export default function ItemProcesoActual(props) {
-    const { solicitudActual, setRecordForEdit, onDelete,
+    const { solicitudActual, setRecordForEdit, onDelete,procesoActual,
         setConfirmDialog,confirmDialog, addOrEdit } = props
     const [row, setRow] = React.useState(false)
     function getRow ({...props}){
         //setOpenDetalle(true)
         setRow(props)
     }
-
+    function formatoFecha(fecha){
+        if(fecha!=null){
+            return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
+        }
+    }
     return (
         <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
-            padding={2} mb={2}
+            px={2} mb={10} mt={2}
         >
              <TableRow>
                 <TableCell sx={{minWidth:"200px",borderBottom: "none"}}>
@@ -61,11 +68,14 @@ export default function ItemProcesoActual(props) {
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.fecha_enviado}
+                        {formatoFecha(solicitudActual.fecha_creacion)}
                     </Typography>
                     <div/>
-                    <Typography fontWeight='bold' fontSize={18}>
-                        {solicitudActual.asunto}
+                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        Proceso: {'\u00A0'} 
+                    </Typography>
+                    <Typography display="inline" fontWeight='bold' fontSize={16}>
+                        {solicitudActual.procesoDescarga.nombre}
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -79,57 +89,52 @@ export default function ItemProcesoActual(props) {
                         Autor: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.solicitador.fullName} 
+                        {solicitudActual.solicitador.nombres+ " " + solicitudActual.solicitador.apellidos} 
                     </Typography>
-                    <div/>
+                </TableCell>
+                <TableCell sx={{borderBottom: "none"}}>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Estado: {'\u00A0'} 
                     </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.estado} 
-                    </Typography>
+                    <DT.Etiqueta
+                            type={solicitudActual.resultado === 0 ? "pendiente" :
+                            "atendido"}
+                            sx={{ marginBottom:"4px"}}
+                        />
                 </TableCell>
-                <TableCell>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Nombre del proceso: {'\u00A0'} 
-                    </Typography>
-                    <Typography fontWeight='bold' fontSize={16}>
-                        {solicitudActual.proceso.nombre}
-                    </Typography>
-                </TableCell>
-                <TableCell>
+                <TableCell sx={{borderBottom: "none"}}>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes recibidas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.solicitudes_recibidas} 
+                        {solicitudActual.cantidad_recibidas} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes enviadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.solicitudes_enviadas} 
+                        {solicitudActual.cantidad_solicitada} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes aprobadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.solicitudes_aprobadas} 
+                        {solicitudActual.cantidad_aprobada} 
                     </Typography>
                 </TableCell>
-                <TableCell sx={{maxWidth:"200px",borderBottom: "none",borderBottom: "none"}}>
-                    <Link to ={{
+                <TableCell sx={{maxWidth:"300px",borderBottom: "none"}}>
+                     <Link to ={{
                         pathname:"/cord/solicitudes/deudasYDescargas/nuevaSolicitud",
                         state:{
-                            recordForEdit: solicitudActual
+                            recordForEdit: solicitudActual,
+                            procesoActual: procesoActual.id
                         }
                     }}  style={{ textDecoration: 'none' }}>
                         <Controls.ActionButton
                             color="warning"
-                            //onClick={ () => { setRecordForEdit(solicitudActual)}}
                         >
                             <EditOutlinedIcon fontSize="small" />
                         </Controls.ActionButton>
