@@ -6,6 +6,12 @@ import Divider from '../../../../components/controls/Divider';
 import { Box } from '@mui/system';
 import { TextField, Avatar } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import { Form, useForm } from '../../../../components/useForm';
+
+const initialFieldValues = {
+    justificacion: '',
+    aprobados: ''
+}
 
 export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
     const codigo = '23233421'
@@ -13,8 +19,39 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
 
     const [aprobados, setAprobados] = useState(0)
 
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues);
+
+    const validate = () => {
+        let temp = {...errors}
+        temp.nombre = values.nombre ? "" : "Campo requerido"
+        
+        setErrors({
+            ...temp
+        })
+
+        return Object.values(temp).every(x => x === "")
+        // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+    }
+
+    const handleSubmit = async e => {
+        /* e is a "default parameter" */
+        e.preventDefault()
+        if (validate()){
+
+        }
+            // addOrEdit(values, resetForm)
+    }
+
     return(
         <>
+        <Form onSubmit={handleSubmit}>
             <Typography fontWeight="550"  sx={{color:"primary.light"}}>
                 Código: {`${codigo}`}
             </Typography>
@@ -69,9 +106,9 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                     <div style={{ width: "150px", marginLeft: "2px", paddingTop:'10px' }}>
                             <Controls.Input
                                 // label="Buscar Solicitud por Nombre"
-                                defaultValue = {aprobados}
+                                value={values.aprobados}
+                                onChange={handleInputChange}
                                 sx={{ width: .4 }}
-                                onChange={(e)=>{setAprobados(e.target.value)}}
                             />
                     </div>
                 </div>
@@ -80,7 +117,8 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                 fullWidth
                 multiline
                 rows={6}
-                defaultValue={""}
+                defaultValue={values.justificacion}
+                onChange={handleInputChange}
                 sx={{
                     pl: "78px",
                     mb: "20px",
@@ -95,14 +133,10 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                 <Controls.Button
                     text="Guardar"
                     endIcon={<SaveIcon/>} 
-                    // disabled = {descargas !== solicitados}
-                    onClick={(e)=>{
-                        // guardarSolicitudActual()
-                        setOpenDetalle(false)
-                        // history.push("/cord/asignacionCarga/deudaYDescarga");
-                    }} 
+                    type="submit"
                     />
             </Grid>
+            </Form>
         </>
     )
 }
