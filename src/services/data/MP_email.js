@@ -87,7 +87,30 @@ export function soliEnviada(s) {
 Cordialmente,<br/>
 <b>Departamento Académico de Ciencias</b>
         </p>
-`
+    `
+    return pucpformat(actualcontent)
+}
+
+export function soliRevisada(s) {
+    let actualcontent = `<p>
+            Estimado:<br/>
+            ${s.solicitador.fullName}
+        </p>
+        <p>Su solicitud esta siendo revisada por Mesa de Partes,  gracias por su
+        gentil espera</p>
+        <p>
+            Solicitud Original: <b>${s.asunto}</b>
+        </p>
+        <blockquote>
+            <pre>${s.descripcion}</pre>
+        </blockquote>
+        <p>
+            Se le comunicará una vez más cuando su solicitud sea atendida.
+        </p>
+Cordialmente,<br/>
+<b>Departamento Académico de Ciencias</b>
+        </p>
+    `
     return pucpformat(actualcontent)
 }
 
@@ -113,7 +136,7 @@ export function soliDelegada(s) {
 Cordialmente,<br/>
 <b>Departamento Académico de Ciencias</b>
         </p>
-`
+    `
     return pucpformat(actualcontent)
 }
 

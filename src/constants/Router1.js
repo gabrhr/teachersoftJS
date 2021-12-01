@@ -266,9 +266,10 @@ export default function Router1(props) {
         <Route path="/invitado/atenderxemail/" render={() => <DelegadoExterno />} />
         <Route exact path="/login" render={() => <Login />}/>
         <Route exact path="/">
-          {user?.id>0? 
-            <Redirect to={generateRouteRol(rol)} /> 
-            : <Redirect to="/login"/> }
+          {user?.id>0
+            ? <Redirect to={generateRouteRol(rol)} /> 
+            : <Redirect to="/login"/> 
+          }
         </Route>
 
         <Route default render={() => <ErrorDireccionamiento />} />
