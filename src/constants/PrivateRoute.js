@@ -50,7 +50,9 @@ export default function PrivateRoute(props) {
                         case 5:
                             return history.push("/jd"); 
                         case 6:
-                            return history.push("/secretaria");    
+                            return history.push("/secretaria");   
+                        case 9:
+                            return history.push("/ai");   
                       default:
                           return history.push("/registro");
                           //return history.push("/noRoles");

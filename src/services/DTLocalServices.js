@@ -187,6 +187,7 @@ export function getAllRoles() {
         { id: 6, nombre: 'Secretario de Departamento' },
         { id: 7, nombre: 'Externo' },
         { id: 8, nombre: 'Nuevo Usuario' },
+        { id: 9, nombre: 'Asistente de Investigación' },
     ])
 }
 

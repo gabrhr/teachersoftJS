@@ -9,7 +9,7 @@ export default function ItemSinProcesoDocente() {
         >
             <Grid item xs= {12} rowSpacing={20} align = "center">
                 <Typography display="inline" align="center" fontWeight="550"  sx={{color:"primary.light"}}>
-                    No se tiene ningún proceso de Solicitud de Descargas Abierto
+                    No se tiene ningún proceso de Solicitud de Descargas abierto
                 </Typography>
             </Grid>
         </Box>

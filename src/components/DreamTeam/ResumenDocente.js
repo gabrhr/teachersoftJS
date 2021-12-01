@@ -58,7 +58,7 @@ export default function ResumenDocente(props) {
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Bonos que corresponde: {'\u00A0'} 
                     </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
+                    <Typography display="inline" sx={{color:"red"}}>
                         {docente.persona.tipo_bono===0? "Sin bonos": ""}
                     </Typography>
                     <div style={{marginTop:"8px"}}/>
