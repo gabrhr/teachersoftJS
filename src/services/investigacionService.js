@@ -72,7 +72,22 @@ const deleteDocumento = async (id) => {
         console.error(exception);
     }
 }
-
+const getAutores = async () => {
+    try{
+        const request = await axios.get(`${url}/persona/autores`, tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(except){
+        console.error(except);
+    }
+}
+const getIndicadoresAutores = async () => {
+    try{
+        const request = await axios.get(`${url}/persona/autores/indicadores`, tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(except){
+        console.error(except);
+    }
+}
 const buscarPorAnho = async (anho) => {
     try{
         
@@ -81,4 +96,4 @@ const buscarPorAnho = async (anho) => {
     }
 }
 
-export default { getDocumentos, getDocumentosAutor, getDocumentosPagina, contarTodos, getDocumento, registerDocumento, updateDocumento, deleteDocumento };
+export default { getDocumentos, getDocumentosAutor, getDocumentosPagina, contarTodos, getDocumento, registerDocumento, updateDocumento, deleteDocumento, getAutores, getIndicadoresAutores };
