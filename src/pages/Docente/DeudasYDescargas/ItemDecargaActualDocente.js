@@ -57,13 +57,13 @@ export default function ItemDecargaActualDocente(props) {
                 <TableCell  sx={{width:"150px",borderBottom: "none"}} align="center">
                     <Typography fontWeight="550" sx={{color:"primary.light"}}>
                         Resultado:{'\u00A0'}
-                </Typography>
-                <DT.Etiqueta
-                    type={item.resultado === 0 ? "pendienteDesc" :
-                    item.resultado === 1 ? "aprobadoDesc" :
-                    "desaprobadoDesc"}
-                    sx={{ marginBottom:"4px"}}
-                />
+                    </Typography>
+                    <DT.Etiqueta
+                        type={item.resultado === 0 ? "pendiente" :
+                        item.resultado === 1 ? "aprobado" :
+                        "desaprobado"}
+                        sx={{ marginBottom:"4px"}}
+                    />
                 </TableCell>
                 <TableCell sx={{width:"200px",borderBottom: "none"}}>
                     <Controls.Button
