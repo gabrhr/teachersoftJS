@@ -57,14 +57,26 @@ function getSecciones(setSeccion) {
 }
 
 function getPersonas(setRecords, rolID) {
-    PersonaService.getPersonasxTipo(rolID)
-        .then(data => {
-            data = data ?? []
-            data.forEach((x, i) => {
-                data[i] = MesaPartesService.b2fPersona(x)
+    let f
+    if (rolID === 0) {
+        PersonaService.getPersonas()
+            .then(data => {
+                data = data ?? []
+                data.forEach((x, i) => {
+                    data[i] = MesaPartesService.b2fPersona(x)
+                })
+                setRecords(data)
             })
-            setRecords(data)
-        })
+    } else {
+        PersonaService.getPersonasxTipo(rolID)
+            .then(data => {
+                data = data ?? []
+                data.forEach((x, i) => {
+                    data[i] = MesaPartesService.b2fPersona(x)
+                })
+                setRecords(data)
+            })
+    }
 }
 
 /* ================================== TABLE ================================= */
@@ -229,7 +241,7 @@ function DelegarInternoForm(props) {
     /* del delegado para asignar la solicitud */
     const initialFieldValues = {
         rolID: 0,
-        unidadID: 0,
+        unidadID: 1,        // FCI
         departamentoID: 0,
         seccionID: 0
     }
@@ -245,15 +257,12 @@ function DelegarInternoForm(props) {
 
     /* load personas by rol */
     React.useEffect(() => {
-        if (values.rolID === 0)
-            setRecords([])
-        else 
-            getPersonas(setRecords, values.rolID)
+        getPersonas(setRecords, values.rolID)
     }, [values.rolID])
 
     /* data de los comboboxes */
     const [disable, setDisable] = React.useState({
-        departamentoID: true,
+        departamentoID: false,  // Unidad has default value
         seccionID: true,
         temaTramiteID: true,
         tipoTramiteID: true

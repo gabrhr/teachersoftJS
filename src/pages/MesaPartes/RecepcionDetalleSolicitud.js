@@ -315,7 +315,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title={"Delegar a:"}
-
+                size={'md'}
             >
                 <DelegarForm
                     solicitud={solicitud}
