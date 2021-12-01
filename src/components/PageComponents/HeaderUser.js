@@ -24,8 +24,8 @@ import { MenuSecretaria } from "./MenuSecretaria";
 import { MenuCoordinadorSeccion } from "./MenuCoordinadorSeccion";
 import { MenuAsistenteDepartamento } from "./MenuAsistenteDepartamento";
 import { MenuJefeDepartamento } from "./MenuJefeDepartamento";
-import { MenuAsistenteInvestigacion } from "./MenuAsistenteInvestigacion"
 import { MenuExterno } from "./MenuExterno";
+import { MenuInvestigacion } from "./MenuInvestigacion";
 
 function BoxPadding(props) {
   return (
@@ -187,14 +187,14 @@ export default function HeaderUser(props) {
     rolName = "Secretaria de Departamento"
     listaMenu = MenuSecretaria
   } else if(rol == 7) {
-    rolName = "Invitado"  // arreglar
+    rolName = "Invitado" 
     listaMenu = MenuExterno
   } else if(rol == 8) {
     rolName = "Asistente de Sección"  // arreglar
     listaMenu =[]
-  } else if(rol == 9) {
-    rolName = "Asistente de Investigación" // Rol asignado por Sergio
-    listaMenu = MenuAsistenteInvestigacion
+  }else if(rol == 9) {
+    rolName = "Asistente de Investigación" 
+    listaMenu = MenuInvestigacion
   }
 
   return (

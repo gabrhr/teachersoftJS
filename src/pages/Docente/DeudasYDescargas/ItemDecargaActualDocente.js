@@ -54,19 +54,16 @@ export default function ItemDecargaActualDocente(props) {
                         {item.solicitador.nombres? item.solicitador.nombres: "" + " " + item.solicitador.apellidos? item.solicitador.apellidos:""} 
                     </Typography>
                 </TableCell>
-                <TableCell  sx={{width:"150px",borderBottom: "none"}}>
+                <TableCell  sx={{width:"150px",borderBottom: "none"}} align="center">
                     <Typography fontWeight="550" sx={{color:"primary.light"}}>
                         Resultado:{'\u00A0'}
-                    </Typography>
-                    <Typography>
-                        {item.resultado === 0 ? "Pendiente" :
-                         item.resultado === 1 ? "Aprobado" :
-                         "Desaprobado"}
-                         <DT.Etiqueta
-                                type={ "atendido"}
-                                sx={{marginRight:"10px", marginBottom:"4px"}}
-                            />
-                    </Typography>  
+                </Typography>
+                <DT.Etiqueta
+                    type={item.resultado === 0 ? "pendienteDesc" :
+                    item.resultado === 1 ? "aprobadoDesc" :
+                    "desaprobadoDesc"}
+                    sx={{ marginBottom:"4px"}}
+                />
                 </TableCell>
                 <TableCell sx={{width:"200px",borderBottom: "none"}}>
                     <Controls.Button

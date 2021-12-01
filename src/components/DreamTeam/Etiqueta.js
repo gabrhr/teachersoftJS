@@ -6,7 +6,7 @@ import NearMeOutlinedIcon from '@mui/icons-material/NearMeOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
-
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export default function Etiqueta(props) {
     let { text, type, sx, ...other } = props
@@ -41,6 +41,11 @@ export default function Etiqueta(props) {
         text="Aprobado"
         other.icon = (<TaskAltOutlinedIcon/>)
         other.color= "atendido"
+    }
+    else if(type="desaprobadoDesc"){ //Para descarga
+        text="Desaprobado"
+        other.icon = (<CancelOutlinedIcon/>)
+        other.color= "rechazado"
     }
 
     if (! ["error","info","success","warning"].includes(type)) type = "info"

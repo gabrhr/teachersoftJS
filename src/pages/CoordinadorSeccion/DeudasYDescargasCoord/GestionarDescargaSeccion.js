@@ -6,8 +6,8 @@ import Popup from '../../../components/util/Popup';
 import NuevaSolicitudForm from './NuevaSolicitudDescarga';
 import Notification from '../../../components/util/Notification';
 import {UserContext} from '../../../constants/UserContext';
-import ItemSolicitudActual from './ItemProcesoActual';
-import ItemSolicitudActualVacio from './ItemProcesoActualVacio';
+import ItemSolicitudActual from './ItemSolicitudActual';
+import ItemSolicitudActualVacio from './ItemSolicitudActualVacio';
 import ListaSolicitudesPasadasSeccion from "./ListaSolicitudesPasadasSeccion"
 
 
@@ -44,7 +44,7 @@ export default function GestionarDescargaSeccion() {
         <>
             {/* Proceso actual*/}
             <DT.Title size="medium"
-                text="Si existe solicitud ? Proceso de Solicitudes de Descarga Vigente : Nueva Proceso de Descargas  "
+                text={solicitudActual? "Solicitud de Descarga Actual" : "Nueva solicitud de Descarga"}
             />
             {/* logica para intercambiar si hay proceso actual */}
             {solicitudActual
