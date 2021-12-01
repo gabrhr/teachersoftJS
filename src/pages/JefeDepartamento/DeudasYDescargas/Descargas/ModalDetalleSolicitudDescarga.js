@@ -5,8 +5,9 @@ import ContentHeader from '../../../../components/AppMain/ContentHeader';
 import Divider from '../../../../components/controls/Divider';
 import { Box } from '@mui/system';
 import { TextField, Avatar } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
 
-export default function ModalDetalleSolicitudDescarga(){
+export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
     const codigo = '23233421'
     const solicitados = '10'
 
@@ -90,6 +91,18 @@ export default function ModalDetalleSolicitudDescarga(){
                     }
                 }}
             />
+            <Grid item align = "right" marginTop={5} >
+                <Controls.Button
+                    text="Guardar"
+                    endIcon={<SaveIcon/>} 
+                    // disabled = {descargas !== solicitados}
+                    onClick={(e)=>{
+                        // guardarSolicitudActual()
+                        setOpenDetalle(false)
+                        // history.push("/cord/asignacionCarga/deudaYDescarga");
+                    }} 
+                    />
+            </Grid>
         </>
     )
 }
