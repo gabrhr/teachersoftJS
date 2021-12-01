@@ -1,3 +1,7 @@
+/* Author: Mitsuo
+ *
+ * P: RecepcionDetalleSolicitud.js
+ */
 import { InsertEmoticonSharp } from '@mui/icons-material';
 import { InputAdornment, TableBody, TableCell, TableRow } from '@mui/material';
 import { Typography, Box, Grid } from '@mui/material';
