@@ -10,14 +10,12 @@ import { Form, useForm } from '../../../../components/useForm';
 
 const initialFieldValues = {
     justificacion: '',
-    aprobados: ''
+    aprobados: 0
 }
 
 export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
     const codigo = '23233421'
     const solicitados = '10'
-
-    const [aprobados, setAprobados] = useState(0)
 
     const {
         values,
@@ -30,7 +28,9 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
 
     const validate = () => {
         let temp = {...errors}
-        temp.nombre = values.nombre ? "" : "Campo requerido"
+        temp.aprobados = values.aprobados<0? "Debe ser número positivo"
+                        :values.aprobados<=solicitados? 
+                        "": "Puede aprobar máximo " + solicitados + " solicitados."
         
         setErrors({
             ...temp
@@ -79,16 +79,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                     </Typography>
                 </Grid>
             </Grid>
-            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20, marginBottom: 10 }}>
-                    <div style={{ width: "650px", marginRight: "50px" }}>
-                        <Box ml="75px">
-                            <Controls.DreamTitle
-                                title={'Justificación: '}
-                                size='20px'
-                                lineheight='300%'
-                            />
-                        </Box>
-                    </div>
+            <div style={{ display: "flex", paddingLeft: "165px", marginTop: 20, marginBottom: 10 }}>
                     <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
                             <Controls.DreamTitle
                                 title={`Solicitados: ${solicitados}`}
@@ -96,39 +87,24 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle}){
                                 lineheight='100%'
                                 />
                     </div>
-                    <div style={{ width: "120px", marginLeft: "50px", paddingTop:'25px' }}>
+                    <div style={{ width: "120px", marginLeft: "110px", paddingTop:'25px' }}>
                             <Controls.DreamTitle
                                 title={`Aprobados: `}
                                 size='20px'
                                 lineheight='100%'
                             />
                     </div>
-                    <div style={{ width: "150px", marginLeft: "2px", paddingTop:'10px' }}>
+                    <div style={{ width: "150px", marginLeft: "2px", paddingTop:'3px' }}>
                             <Controls.Input
-                                // label="Buscar Solicitud por Nombre"
+                                name="aprobados"
                                 value={values.aprobados}
+                                type="number"
                                 onChange={handleInputChange}
                                 sx={{ width: .4 }}
+                                error={errors.aprobados}
                             />
                     </div>
                 </div>
-            <TextField
-                id="outlined-multiline-static"
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={values.justificacion}
-                onChange={handleInputChange}
-                sx={{
-                    pl: "78px",
-                    mb: "20px",
-                    width: "95%",
-                    /* magia negra de gabs */
-                    ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-                        WebkitTextFillColor: "black"
-                    }
-                }}
-            />
             <Grid item align = "right" marginTop={5} >
                 <Controls.Button
                     text="Guardar"

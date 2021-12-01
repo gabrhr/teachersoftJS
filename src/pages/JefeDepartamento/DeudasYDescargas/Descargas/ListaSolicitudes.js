@@ -171,7 +171,7 @@ export default function ListaSolicitudes({seccion}){
                 openPopup={openDetalle}
                 setOpenPopup={setOpenDetalle}
                 title= {`Nueva solicitud de descarga - Sección ${seccion}`}
-                // size = "m"
+                size = "md"
             >
                <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} /*guardarSolicitud = {guardarSolicitud}*//>
             </Popup>
