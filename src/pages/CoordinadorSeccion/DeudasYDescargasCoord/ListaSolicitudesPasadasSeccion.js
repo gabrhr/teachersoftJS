@@ -146,12 +146,15 @@ export default function ListaProcesosPasadosSeccion(props) {
           * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
-              /* no search text */
-              return items
-            else
-              return items.filter(x => x.nombre.toLowerCase()
+            if (target.value == ""){
+                /* no search text */
+                return items
+            }
+            else{
+                console.log("Items: ", items)
+                return items.filter(x => x.solicitador.nombres.toLowerCase()
                   .includes(target.value.toLowerCase()))
+            }
           }
         })
     }
