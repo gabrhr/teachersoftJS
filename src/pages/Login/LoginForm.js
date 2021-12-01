@@ -64,6 +64,8 @@ const Login = () => {
         history.push("/ad");
       case 5:
         history.push("/sd");
+      case 9:
+        history.push("/ai");
       default:
         return history.push("/");
       }
@@ -84,6 +86,8 @@ const Login = () => {
           history.push("/ad");
         case 5:
           history.push("/sd");
+          case 9:
+            history.push("/ai");
         default:
           return history.push("/");
       }
