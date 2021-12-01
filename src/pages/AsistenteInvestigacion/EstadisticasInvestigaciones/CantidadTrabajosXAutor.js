@@ -2,7 +2,7 @@
 
  
 import React, {useState,useEffect, Component } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Paper } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import InvestigacionService from '../../../services/investigacionService';
 import BarChartAutores from '../../../components/PageComponents/BarCharts';
@@ -36,13 +36,20 @@ export default function CantidadTrabajosXAutor(){
         });
     }, [])
     
+    const SubtitulosTable = { display: "flex" }
+    const PaperStyle = { borderRadius: '20px', pb: 1, pt: 1, px: 1, color: "primary.light", elevatio: 0 }
+
     return(
 
         <div>
             <Typography variant="body1" color={"#00008B"} my={.5}>
                 Investigadores con mayor record de publicaciones
             </Typography>
-            {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+            <Paper variant="outlined" sx={PaperStyle}>
+                <Grid item xs={8}>
+                {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+                </Grid>
+            </Paper>
         </div>
 
     )
