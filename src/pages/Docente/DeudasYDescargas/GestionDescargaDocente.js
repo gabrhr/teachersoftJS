@@ -40,6 +40,9 @@ export default function GestionDescargaDocente() {
         let resultado, newTramite, editTramite;
         if(!recordForEdit){
             newTramite = {
+                "ciclo": {
+                    "id": window.localStorage.getItem("ciclo"),
+                },
                 "observacion": values.observacion,
                 "procesoDescarga": {
                     "id": procesoActivo[0].id,
@@ -58,6 +61,9 @@ export default function GestionDescargaDocente() {
         }else{
             editTramite = {
                 "id": values.id,
+                "ciclo": {
+                    "id": window.localStorage.getItem("ciclo"),
+                },
                 "observacion": values.observacion,
                 "procesoDescarga": {
                     "id": procesoActivo[0].id,
