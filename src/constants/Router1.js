@@ -109,7 +109,7 @@ const privateroutes = [
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
-  { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
+  { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudasYDescargaCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
   { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: MisSolicitudes },
@@ -120,7 +120,6 @@ const privateroutes = [
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
-  { requireRoles: [3, 8], path: "/cord/solicitudes/deudasYDescargas", page: DeudasYDescargaCoord  },
   { requireRoles: [3, 8], path: "/cord/solicitudes/deudasYDescargas/nuevaSolicitud", page: NuevaSolicitudDescarga  },
 
 

@@ -44,8 +44,8 @@ const tableHeaders = [
 export default function NuevoProcesoForm() {
     const history = useHistory()
     const handleClick = e =>{
-        history.push("/cord/solicitudes/deudasYDescargas")
-      }
+        window.history.back();
+    }
 
     const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
