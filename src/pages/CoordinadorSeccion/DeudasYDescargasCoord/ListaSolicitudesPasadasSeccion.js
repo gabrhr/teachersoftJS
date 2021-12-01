@@ -4,7 +4,8 @@ import { Link} from 'react-router-dom';
 import TrackinDescarga from '../../../components/DreamTeam/TrackinDescarga'
 import useTable from '../../../components/useTable'
 import { Controls } from '../../../components/controls/Controls'
-
+import Popup from '../../../components/util/Popup'
+import ModalAprobados from './ModalAprobados'
 /* icons */
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -37,7 +38,7 @@ const tableHeaders = [
 
 
 function Item(props){
-    const {item,getRow,setRecordForEdit} = props
+    const {item,getRow,setOpenAprobados} = props
     return (
         <>
             <TableRow>
@@ -107,6 +108,11 @@ function Item(props){
                     <Controls.Button
                         text="Detalle"
                     />
+                    <div/>
+                    <Controls.Button
+                        text="Aprobados"
+                        onClick={()=>{setOpenAprobados(true)}} 
+                    />
                 </TableCell>
             </TableRow>
         </>
@@ -118,6 +124,8 @@ export default function ListaProcesosPasadosSeccion(props) {
     const { records, setRecordForEdit } = props
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
+    const [openAprobados, setOpenAprobados] = useState(false)
+
 
     const {
         TblContainer,
@@ -171,7 +179,7 @@ export default function ListaProcesosPasadosSeccion(props) {
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                             <Item key={index} item={item} getRow= {getRow}
-                                setRecordForEdit={setRecordForEdit}
+                                setOpenAprobados={setOpenAprobados}
                             />
                         ))
                     }
@@ -179,6 +187,14 @@ export default function ListaProcesosPasadosSeccion(props) {
                 </TblContainer>
                 <TblPagination />
             </BoxTbl> 
+            <Popup
+                openPopup={openAprobados}
+                setOpenPopup={setOpenAprobados}
+                title="Aprobados"
+                // size = "m"
+            >
+               <ModalAprobados setOpenAprobados = {setOpenAprobados} /*guardarSolicitud = {guardarSolicitud}*//>
+            </Popup>
         </div>
     )
 }

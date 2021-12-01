@@ -18,6 +18,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import ModalGuardarSolicitudActual from './ModalGuardarSolicitudActual'
 import {useHistory} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ModalGuardarAprobados from './ModalGuardarAprobados'
 
 const tableHeaders = [
     
@@ -41,26 +42,35 @@ const tableHeaders = [
     },
 ]
 
-export default function NuevoProcesoForm() {
-    const history = useHistory()
-    const handleClick = e =>{
-        window.history.back();
-    }
+export default function ModalAprobados({setOpenAprobados}){
 
-    const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
-    const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
-    
     const [records, setRecords] = useState([
         {
             nombre: 'Perez',
             correo: '@perez.com',
             justificacion: 'Por favor',
-            seleccionado: false
+            seleccionado: true
+        },
+        {
+            nombre: 'José',
+            correo: '@gmail.com',
+            justificacion: 'Por favor1',
+            seleccionado: true
+        },
+        {
+            nombre: 'Otro José',
+            correo: '@puke.com',
+            justificacion: 'Por favor2',
+            seleccionado: true
         }
     ])
 
-    const [row, setRow] = React.useState(false)
-    const [solicitados, setSolicitados] = React.useState(0)
+    const [solicitados, setSolicitados] = React.useState(2)
+    const [descargas, setDescargas] = React.useState(records.length)
+    
+
+    
+
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
 
     const {
@@ -89,86 +99,23 @@ export default function NuevoProcesoForm() {
         })
     }
 
-    const codigo = '1342221'
+    const history = useHistory()
 
     const addDocente = (docente) => {
         docente.seleccionado = !docente.seleccionado
-        if(docente.seleccionado === true) setSolicitados(solicitados + 1)
-        else setSolicitados(solicitados - 1)
+        if(docente.seleccionado === true) setDescargas(descargas + 1)
+        else setDescargas(descargas - 1)
         console.log(docente.seleccionado)
         console.log(solicitados)
     }
 
     return (
-        <Form>
-            <ContentHeader
-                text="Nueva solicitud de descarga"
-                cbo={false}
-            />
-            <Controls.Button
-                variant="outlined"
-                text="Regresar"
-                size="small"
-                startIcon={<ArrowBackIcon />}
-                onClick={(e) => {handleClick(e)}}
-            />
-            <Divider/>
-            <Typography fontWeight="550"  sx={{color:"primary.light"}}>
-                Código: {`${codigo}`}
-            </Typography>
-            <Divider/>
-            <Grid container spacing={{ xs: "10px" }} >
-                <Grid item sx={{mt:"10px", mb:"10px", ml:1}}>
-                    {/* <Avatar sx={{ width: 50, height: 50}} src={soli}/> */}
-                    <Avatar sx={{ width: 50, height: 50}}/>
-                </Grid>
-                <Grid item sx={{mt:"9px"}}>
-                    <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        {"De: "}
-                    </Typography>
-                    <Typography variant="h4"   display="inline">
-                        {/* Nombre del docente solicitador */}
-                        Docente PUCP (correo)
-                    </Typography>
-                    <div/>
-                    <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        {"Para: \xa0"}
-                    </Typography>
-                    <Typography variant="body1"  display="inline">
-                        {/* Seccion que pertenece */}
-                        Seccion
-                    </Typography>
-                </Grid>
-            </Grid>
-            <Box ml="75px">
-                <Controls.DreamTitle
-                    title={'Justificación: '}
-                    size='20px'
-                    lineheight='300%'
-                    />
-            </Box>
-            <TextField
-                id="outlined-multiline-static"
-                fullWidth
-                multiline
-                rows={6}
-                defaultValue={""}
-                sx={{
-                    pl: "78px",
-                    mb: "20px",
-                    width: "62.5%",
-                    /* magia negra de gabs */
-                    ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-                        WebkitTextFillColor: "black"
-                    }
-                }}
-            />
-            <Grid container>
-                <Grid item >
+        <>
                 <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                    <div style={{ width: "500px", marginRight: "50px" }}>
+                    <div style={{ width: "700px", marginRight: "50px" }}>
                         <Controls.Input
                                 label="Buscar Solicitud por Nombre"
+                                
                                 InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -176,26 +123,26 @@ export default function NuevoProcesoForm() {
                                     </InputAdornment>
                                 )
                                 }}
-                                sx={{ width: .2 }}
+                                sx={{ width: .75 }}
                                 onChange={handleSearch}
                                 type="search"
                             />
                     </div>
-                    <div style={{ width: "140px", marginLeft: "850px", paddingTop:'25px' }}>
+                    <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
                             <Controls.DreamTitle
                                 title={`Solicitados: ${solicitados}`}
                                 size='20px'
                                 lineheight='100%'
                                 />
                     </div>
+                    <div style={{ width: "150px", marginLeft: "50px", paddingTop:'25px' }}>
+                            <Controls.DreamTitle
+                                title={`N° Descargas: ${descargas}`}
+                                size='20px'
+                                lineheight='100%'
+                                />
+                    </div>
                 </div>
-                </Grid>
-                <Grid>
-                    
-                </Grid>
-                
-                
-            </Grid>
             
             <BoxTbl>
                 <TblContainer>
@@ -212,12 +159,12 @@ export default function NuevoProcesoForm() {
                             <TableCell sx = {{width: '1200px'}}>
                                 {item.nombre}
                             </TableCell>
-                            <TableCell> 
+                            {/* <TableCell> 
                                 <Controls.Button
                                     text="Detalle"
                                     onClick = {()=>{setOpenSolicitudDescarga(true)}}
                                 />
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                         ))
                     }
@@ -226,30 +173,19 @@ export default function NuevoProcesoForm() {
                 <TblPagination />
             </BoxTbl> 
             <Grid conteiner >
-                <Grid item align = "right" marginX = {20} marginTop={5} >
+                <Grid item align = "right" marginTop={5} >
                     <Controls.Button
-                        text="guardar"
+                        text="Aprobar descargas"
                         endIcon={<SaveIcon/>} 
-                        // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
-                        onClick = {()=>setOpenGuardarPopup(true)}  
+                        disabled = {descargas !== solicitados}
+                        onClick={(e)=>{
+                            // guardarSolicitudActual()
+                            setOpenAprobados(false)
+                            // history.push("/cord/asignacionCarga/deudaYDescarga");
+                        }} 
                         />
                 </Grid>
             </Grid>
-            <Popup
-                openPopup={openSolicitudDescarga}
-                setOpenPopup={setOpenSolicitudDescarga}
-                title="Búsqueda de docentes para prácticas"
-            >
-                <SolicitudDescargaForm />
-            </Popup>
-            <Popup  
-                openPopup={openGuardarPopup}
-                setOpenPopup={setOpenGuardarPopup}
-                title="Guardar"
-                size = "sm"
-            >
-               <ModalGuardarSolicitudActual setOpenGuardarPopup = {setOpenGuardarPopup} /*guardarSolicitud = {guardarSolicitud}*//>
-            </Popup>
-        </Form>
+        </>
     )
 }
