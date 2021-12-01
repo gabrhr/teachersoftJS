@@ -1,20 +1,61 @@
-import React from 'react'
+import React from 'react';
+import {HorizontalBar} from 'react-chartjs-2';
 
-import {Bar} from 'react-chartjs-2'
-import { Bluetooth } from '@mui/icons-material'
+function separarAutores(arr){
+    let autores=[]
+    arr.forEach(element => autores.push(element[0]));
+    return autores
+}
 
-export default function BarraDocumentosXAutor (){
+function separarNumPublicaciones(arr){
+    let numPublicaciones=[]
+    arr.forEach(element => numPublicaciones.push(element[1]));
+    return numPublicaciones
+}
+
+function BarChartAutores(cabecera, arr){
+    const data = {
+        labels: separarAutores(arr),
+        datasets: [{
+            label: cabecera,
+            data: separarAutores(arr),
+            backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
+            borderWidth: 1,
+        }],
+    }
     return (
-        <Bar
-            data={{
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
-            }}
-            height={400}
-            width={600}
-        />
-
+        <div>
+            <HorizontalBar data={data}/>
+        </div>
     );
     
 }
 
+/*  Colores pastel con transparencia
+    Red: rgba(255, 99, 132, 0.2)
+    Blue: rgba(54, 162, 235, 0.2)
+    Yellow: rgba(255, 206, 86, 0.2)
+    Green: rgba(75, 192, 192, 0.2)
+    Purple: rgba(153, 102, 255, 0.2)
+    Orange: rgba(255, 159, 64, 0.2)
+*/
+
+function PieChartTipoDocente(cantidadTC, cantidadTPC, cantidadTPA) {
+    Chart.register(ArcElement);
+    const data = {
+        labels: ["Tiempo completo", "Tiempo parcial convencional", "Tiempo parcial por asignaturas"],
+        datasets: [{
+            data: [cantidadTC, cantidadTPC, cantidadTPA],
+            backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(255, 206, 86, 0.2)"],
+            borderWidth: 1,
+        }],
+    }
+    return (
+        <div>
+            <Pie data={data}/>
+        </div>
+    )
+}
+
+export default {}
  

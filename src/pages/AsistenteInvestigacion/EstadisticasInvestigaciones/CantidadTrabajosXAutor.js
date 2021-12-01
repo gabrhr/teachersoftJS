@@ -13,7 +13,6 @@ export default function CantidadTrabajosXAutor(){
         <div>
 
         
-                <BarraDocumentosXAutor/>
     
 
         </div>
