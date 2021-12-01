@@ -9,7 +9,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import { Link} from 'react-router-dom';
 
 export default function ItemProcesoActualVacio(props) {
-    const {  } = props
+    const { } = props
     return (
         <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
             padding={2} mb={2}
@@ -22,12 +22,12 @@ export default function ItemProcesoActualVacio(props) {
                     <Link to ={{
                         pathname:"/cord/solicitudes/deudasYDescargas/nuevaSolicitud",
                         state:{
-                            // procesoinit: item
+                            recordForEdit: null
                         }
                     }}  style={{ textDecoration: 'none' }}>
 
                         <Controls.Button
-                        text="Iniciar Nueva Solicitud"
+                        text="Nueva Solicitud"
                         />
                     </Link>
                     

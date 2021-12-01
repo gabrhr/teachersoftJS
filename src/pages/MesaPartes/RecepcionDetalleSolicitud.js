@@ -1,7 +1,9 @@
-/* Author: Manuel
+/* Author: Manuel (orig), Gabs (UI/UX), Mitsuo (email)
  *
  * Detalle de una solicitud.
  * URL: localhost:3000/doc/solicitudDetalle
+ * P: DetalleSoliOrganism.js   (en realidad no es su padre pero el lo
+ *    redirecciona)
  */
 import { Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 import React, { useContext } from 'react'
@@ -26,29 +28,6 @@ import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
 import personaService from '../../services/personaService';
 import userService from '../../services/userService'
-
-function sendEmailNotification(solicitud, tipo) {
-    console.log(solicitud)
-    if (tipo === 'atendidoMP') 
-        EmailService.emailSolicitor2(solicitud)
-            .then(data => {
-                return data
-            })
-            .catch(err => {
-                console.error(err)
-            })
-    else if (tipo === 'delegado')
-        EmailService.emailDelegado(solicitud)
-            .then(data => {
-                console.log("email delegado: ", data)
-                return data
-            })
-            .catch(err => {
-                console.error(err)
-            })
-    else 
-        console.error("tipo invalido", tipo)
-}
 
 function accionesSegunResultado (s, atender, setAtender,
         submitAtencion, setOpenPopup
@@ -140,7 +119,8 @@ export default function RecepcionDetalleSolicitudFuncion() {
                     })
                     setAtender(false)
                     /* Send notification to solicitador */
-                    sendEmailNotification(solicitud, 'atendidoMP')
+                    // sendEmailNotification(solicitud, 'atendidoMP')
+                    EmailService.sendemailMP(solicitud, 'MP,atiende')
                 })
                 .catch(err => {
                     /* error :( */
@@ -164,7 +144,8 @@ export default function RecepcionDetalleSolicitudFuncion() {
                     })
                     setAtender(false)
                     /* Send notification to solicitador */
-                    sendEmailNotification(solicitud, 'delegado')
+                    // sendEmailNotification(solicitud, 'delegado')
+                    EmailService.sendemailMP(solicitud, 'MP,delega')
                     setOpenPopup(false)
                 })
                 .catch(err => {
@@ -196,6 +177,9 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 /* only for FrontEnd */
                 cambioEstado: true
             }))
+            // sendEmailNotification(solicitud, 'revisado')
+            EmailService.sendemailMP(solicitud, 'MP,revisa')
+            console.log("soliiiiii: ", solicitud)
         }
         // console.log('hola', solicitud)
     }, [])
@@ -331,7 +315,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title={"Delegar a:"}
-
+                size={'md'}
             >
                 <DelegarForm
                     solicitud={solicitud}

@@ -35,42 +35,58 @@ function sendEmail(dataemail) {
         })
 }
 
-/* al recien enviar la solicitud
- * s: solicitud */
-export function emailConfirmacionEnvio(s) {
-    return sendEmail(dataemail(
-        s.delegado.correo,
-        `Acaba de enviar una solicitud a Mesa Partes`,
-        MP_email.soliEnviada(s)
-    ))
-}
+/* input:
+ * - s: solicitud
+ * - type: "agent,trigger[,recimpient]" 
+ * 
+ * Self-documenting code, lg!
+ */
+export function sendemailMP(s, type) {
+    let recipient = ''
+    let subject = ''
+    let content = ''
 
-/* al ser **delegado** por Mesa Partes
- * s:  solicitud */
-export function emailDelegado(s) {
-    return sendEmail(dataemail(
-        s.delegado.correo,
-        `Tiene una solicitud de Mesa Partes pendiente`,
-        MP_email.soliDelegada(s)
-    ))
-}
+    console.log("emailService: solicitud: ", s)
+    if (type === "solicitador,envia") {
+        recipient = s.solicitador.correo
+        subject   = `Acaba de enviar una solicitud a Mesa Partes`
+        content   = MP_email.soliEnviada(s)
+    }
+    else if (type === "MP,revisa") {
+        /* used in RecepcionDetalleSolicitud.js */
+        recipient = s.solicitador.correo
+        subject   = `Su solicitud a Mesa de Partes esta siendo revisada`
+        content   = MP_email.soliRevisada(s)
+    }
+    else if (type === "MP,delega") {
+        /* used in RecepcionDetalleSolicitud.js */
+        recipient = s.delegado.correo
+        subject   = `Tiene una solicitud de Mesa Partes pendiente`
+        content   = MP_email.soliDelegada(s)
+    }
+    else if (type === "delegado,atiende") {
+        /* used in DelegadoSolicitudDetalle.js */
+        /* used in ExternoAtenderSolicitud.js */
+        recipient = s.solicitador.correo
+        subject   = `Su solicitud fue atendida por ${s.delegado.fullName}`
+        content   = MP_email.soliAtendida(s)
+    }
+    else if (type === "MP,atiende") {
+        /* used in RecepcionDetalleSolicitud.js */
+        recipient = s.solicitador.correo
+        subject   = `Su solicitud fue atendida por Mesa de Partes`
+        content   = MP_email.soliAtendida(s)
+    }
+    else {
+        console.error("emailService: emailMP(): invalid type: ", type)
+        return 
+    }
 
-/* al ser **atendido** por el Delegado
- * s:  solicitud */
-export function emailSolicitor1(s) {
-    return sendEmail(dataemail(
-        s.solicitador.correo,
-        `Su solicitud fue atendida por ${s.delegado.fullName}`,
-        MP_email.soliAtendida(s)
-    ))
-}
-
-/* al ser **atendido** por Mesa Partes
- * s:  solicitud */
-export function emailSolicitor2(s) {
-    return sendEmail(dataemail(
-        s.solicitador.correo,
-        `Su solicitud fue atendida por Mesa de Partes`,
-        MP_email.soliAtendida(s)
-    ))
+    sendEmail(dataemail(
+        recipient,
+        subject,
+        content
+    )).catch(err => {
+        console.error(err)
+    })
 }

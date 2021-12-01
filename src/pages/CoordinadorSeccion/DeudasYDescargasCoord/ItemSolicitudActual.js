@@ -8,11 +8,11 @@ import useTable from '../../../components/useTable'
 import { Controls } from '../../../components/controls/Controls'
 
 /* icons */
-import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '../../../components/controls/IconButton';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Link } from 'react-router-dom'
+import ConfirmDialog from '../../../components/util/ConfirmDialog'
 
 
 const tableHeaders = [
@@ -43,7 +43,8 @@ const tableHeaders = [
 ]
 
 export default function ItemProcesoActual(props) {
-    const { solicitudActual, setRecordForEdit, setOpenPopup } = props
+    const { solicitudActual, setRecordForEdit, onDelete,
+        setConfirmDialog,confirmDialog, addOrEdit } = props
     const [row, setRow] = React.useState(false)
     function getRow ({...props}){
         //setOpenDetalle(true)
@@ -119,7 +120,40 @@ export default function ItemProcesoActual(props) {
                         {solicitudActual.solicitudes_aprobadas} 
                     </Typography>
                 </TableCell>
+                <TableCell sx={{maxWidth:"200px",borderBottom: "none",borderBottom: "none"}}>
+                    <Link to ={{
+                        pathname:"/cord/solicitudes/deudasYDescargas/nuevaSolicitud",
+                        state:{
+                            recordForEdit: solicitudActual
+                        }
+                    }}  style={{ textDecoration: 'none' }}>
+                        <Controls.ActionButton
+                            color="warning"
+                            //onClick={ () => { setRecordForEdit(solicitudActual)}}
+                        >
+                            <EditOutlinedIcon fontSize="small" />
+                        </Controls.ActionButton>
+                    </Link>
+                    <IconButton aria-label="delete">
+                            <DeleteIcon
+                            color="warning"
+                            onClick={() => {
+                            
+                            setConfirmDialog({
+                                isOpen: true,
+                                title: '¿Eliminar la solicitud permanentemente?',
+                                subTitle: 'No es posible deshacer esta accion',
+                                onConfirm: () => {onDelete(solicitudActual.id)}
+                            })
+                            }}/>
+                    </IconButton>
+                </TableCell> 
             </TableRow>
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                />
         </Box>
+
     )
 }

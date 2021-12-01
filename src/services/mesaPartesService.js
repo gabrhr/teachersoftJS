@@ -480,7 +480,7 @@ export function registerSolicitud(soli) {
     })
         .then(res => {
             // console.log("MPservice: registerSoli:", res)
-            return res.data.id
+            return b2fSolicitud(res.data)
         })
     // .catch(err => console.error(err));
 }
