@@ -236,9 +236,9 @@ export default function GestionCiclo() {
                      recordsAfterPagingAndSorting().map(item => (
 
                         <StyledTableRow key={item.id}>
-                          <StyledTableCell align="center-left">{item.anho}</StyledTableCell>
-                          <StyledTableCell align="center">{item.periodo}</StyledTableCell>
-                          <StyledTableCell align="center-left">
+                          <StyledTableCell >{item.anho}</StyledTableCell>
+                          <StyledTableCell >{item.periodo}</StyledTableCell>
+                          <StyledTableCell >
                               {
                                 item.fechaInicio.slice(8,10)
                                 +'/'
@@ -247,7 +247,7 @@ export default function GestionCiclo() {
                                 +item.fechaInicio.slice(0,4)
                               }
                           </StyledTableCell>
-                          <StyledTableCell align="center-left">
+                          <StyledTableCell>
                               {
                                 item.fechaFin.slice(8,10)
                                 +'/'
@@ -256,7 +256,7 @@ export default function GestionCiclo() {
                                 +item.fechaFin.slice(0,4)
                               }
                           </StyledTableCell>
-                          <StyledTableCell>
+                          <StyledTableCell align = "right">
                           <Controls.ActionButton
                             color="warning"
                             onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}

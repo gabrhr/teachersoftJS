@@ -145,7 +145,7 @@ export default function GestionUsuarios() {
           /* no search text */
           return items
         else
-          return items.filter(x => x.nombre.toLowerCase()
+          return items.filter(x => `${x.nombre.toLowerCase()} ${x.apellidoPaterno.toLowerCase()} ${x.apellidoMaterno.toLowerCase()}`
             .includes(target.value.toLowerCase()))
       }
     })
@@ -190,10 +190,11 @@ export default function GestionUsuarios() {
         correo_pucp: usuario.correo,
         numero_documento: usuario.DNI,
         tipo_persona: usuario.rol,
-        seccion: {
+        ...(usuario.seccion  && 
+        {seccion: {
           id: usuario.seccion.id,
           nombre: usuario.seccion.nombre
-        },
+        }}),
         departamento: {
           id: usuario.departamento.id,
           nombre: usuario.departamento.nombre
@@ -210,10 +211,11 @@ export default function GestionUsuarios() {
       correo_pucp: usuario.correo,
       numero_documento: usuario.DNI,
       tipo_persona: usuario.rol,
-      seccion: {
+      ...(usuario.seccion  && 
+      {seccion: {
         id: usuario.seccion.id,
         nombre: usuario.seccion.nombre
-      },
+      }}),
       departamento: {
         id: usuario.departamento.id,
         nombre: usuario.departamento.nombre

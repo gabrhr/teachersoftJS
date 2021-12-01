@@ -46,7 +46,6 @@ const initialFieldValues = {
     id: '',
     nombre: ''
   },
-  foto_URL: ''
 }
 /*
 const FillDepartamentos = async () =>{
@@ -85,9 +84,9 @@ const getDepartamento = async () => {
   return departamentos;
 }
 
-const getSecciones = async () => {
+const getSecciones = async (departmentId) => {
 
-  const dataSecc = await SeccionService.getSecciones();
+  const dataSecc = await SeccionService.getSeccionxDepartamento(departmentId);
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   const secciones = [];
   dataSecc.map(seccion => (
@@ -164,11 +163,11 @@ export default function GestionUsuariosForm(props) {
         temp.departmentId = values.departmentId !== 0 ? "":defaultError;
       }  
 
-      if(recordForEdit){
-        temp.idSeccion = values.idSeccion !== 0 ? "" : defaultError;
-      } else{
-        temp.seccionId = values.seccionId !== 0 ? "":defaultError;
-      }  
+      // if(recordForEdit){
+      //   temp.idSeccion = values.idSeccion !== 0 ? "" : defaultError;
+      // } else{
+      //   temp.seccionId = values.seccionId !== 0 ? "":defaultError;
+      // }  
     setErrors({
       ...temp
     })
@@ -198,8 +197,7 @@ export default function GestionUsuariosForm(props) {
 
       if (values.id) {
         const user = UserService.getUsuario(values.id);
-        console.log(user);
-        console.log(user.data);
+
         fechaCreacion = user.fecha_creacion;
       }
 
@@ -216,18 +214,19 @@ export default function GestionUsuariosForm(props) {
           id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId),
           nombre: null,
         },
-        seccion: {
+        ...(values.idSeccion  && 
+        {seccion: {
           id: recordForEdit ? parseInt(values.idSeccion) : parseInt(values.seccionId),
           nombre: null,
-        },
+        }}),
         fecha_creacion: fechaCreacion,
         fecha_modificacion: null,
         foto: fotoPerfil ? fotoPerfil : values.foto_URL,
         //file: archivo
         //~~~foto: --queda pendiente
       }
-      console.log(newUsr);
 
+      console.log(values);
       addOrEdit(newUsr, resetForm)
     }
   }
@@ -261,9 +260,9 @@ export default function GestionUsuariosForm(props) {
   }, [recordForEdit])
 
   useEffect(() => {
-    getSecciones()
+    getSecciones(values.departmentId)
       .then(newSecc => {
-        setSecciones(prevSecc => prevSecc.concat(newSecc));
+        setSecciones(newSecc);
 
         //console.log(newSeccion);
 
@@ -276,7 +275,7 @@ export default function GestionUsuariosForm(props) {
       })
     }
 
-  }, [recordForEdit])
+  }, [values.departmentId])
 
   /*useEffect(() => {
     getSecciones()
@@ -382,16 +381,26 @@ export default function GestionUsuariosForm(props) {
               }
               error={recordForEdit ? errors.idDepartamento : errors.departmentId}
             />
-            <Controls.Select
-              name={recordForEdit ? "idSeccion" : "seccionId"}
-              label="Seccion Principal"
-              value={recordForEdit ? values.idSeccion : values.seccionId}
+            {seccion.length ?
+              <Controls.Select
+                name={recordForEdit ? "idSeccion" : "seccionId"}
+                label="Seccion Principal"
+                value={recordForEdit ? values.idSeccion : values.seccionId}
+                onChange={handleInputChange}
+                options={seccion}
+                options={[{ id: 0, nombre: "Seleccionar" }]
+                .concat(seccion)
+                }
+                error={recordForEdit ? errors.idSeccion : errors.seccionId}
+              />
+              : <> </>
+            }
+            <Controls.Input
+              name="foto_URL"
+              label="Enlace para Foto"
+              value={values.foto_URL}
               onChange={handleInputChange}
-              options={seccion}
-              options={[{ id: 0, nombre: "Seleccionar" }]
-              .concat(seccion)
-              }
-              error={recordForEdit ? errors.idSeccion : errors.seccionId}
+              error={errors.foto_URL}
             />
 
           </Grid>
