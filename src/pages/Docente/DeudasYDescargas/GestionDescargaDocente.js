@@ -177,7 +177,7 @@ export default function GestionDescargaDocente() {
                 title= {"Solicitud de Descarga"}
                 size="md"
             >
-                <SolicitudDescargaForm/>
+                <SolicitudDescargaForm recordForView = {recordForEdit}/>
             </Popup>
             <Notification
               notify={notify}

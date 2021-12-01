@@ -87,7 +87,7 @@ export default function ItemDecargaActualDocente(props) {
                         <Controls.Button
                             text="Ver Solicitud"
                             type="submit"
-                            onClick={() => { getRow(item); setOpenPopupDetalle(true) }}
+                            onClick={() => { setRecordForEdit(item); setOpenPopupDetalle(true) }}
                             />
                     </TableCell>
                     {
