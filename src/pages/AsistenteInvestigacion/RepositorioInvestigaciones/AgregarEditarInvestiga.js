@@ -57,6 +57,7 @@ const initialFieldValues = {
 
   idAutor:  '',
   nombreAutor: '',
+ 
 }
 
 
@@ -78,11 +79,11 @@ export default function AgregarEditarInvestiga(props) {
         let temp = {...errors}
         let defaultError = "Este campo es requerido"
         if ('titulo' in fieldValues)
-            temp.titulo = fieldValues.nombre ? "" : "Este campo es requerido"
+            temp.titulo = fieldValues.titulo ? "" : "Este campo es requerido"
         if ('anho_publicacion' in fieldValues)
-            temp.anho_publicacion = fieldValues.nombre ? "" : "Este campo es requerido"
+            temp.anho_publicacion = fieldValues.anho_publicacion ? "" : "Este campo es requerido"
         if ('codigo_publicacion' in fieldValues)
-            temp.codigo_publicacion = fieldValues.nombre ? "" : "Este campo es requerido"
+            temp.codigo_publicacion = fieldValues.codigo_publicacion ? "" : "Este campo es requerido"
         if ('correo' in fieldValues)
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""

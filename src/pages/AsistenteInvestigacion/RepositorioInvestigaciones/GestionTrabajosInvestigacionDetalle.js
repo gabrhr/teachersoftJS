@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { IconButton, Box, Divider, Paper, TableBody, Grid, TableRow, TableCell,Typography, InputAdornment } from '@mui/material';
+import { IconButton, Box, Divider, Paper, TableBody, Grid, TableRow, TableCell,Typography, InputAdornment, Avatar } from '@mui/material';
 import { Controls } from '../../../components/controls/Controls'
 import { StyledTableCell, StyledTableRow } from '../../../components/controls/StyledTable';
 import { useForm, Form } from '../../../components/useForm';
@@ -51,6 +51,8 @@ const initialFieldValues = {
 
     idAutor:  '',
     nombreAutor: '',
+    foto_url: '',
+    codigo_pucp: '20160500',
 }
 
 
@@ -81,9 +83,9 @@ export default function GestionTrabajosInvestigacionDetalle(props){
     
     const stylish = {
         
-        borderBottom: "1px solid gray",
-        display: "flex",
-        justifyContent: "space-between",
+      //  borderTop: "1px solid gray",
+        borderBottom: "2px solid gray",
+ 
     }
 
     
@@ -102,42 +104,78 @@ export default function GestionTrabajosInvestigacionDetalle(props){
   
     
       
-
-
     return(
         <>
             
             <Paper variant="outlined" sx={PaperStyle}>
-                <StyleDictionary title="Código:" text={values.codigo_publicacion}/>
-                <StyleDictionary title="Título:" text={values.titulo}/>
-                <StyleDictionary title="Tipo:" text={values.tipo_publicacion}/>
-                <StyleDictionary title="Indicador de calidad:" text={values.indicador_calidad == 0 ? "Indizada" :
-                                       values.indicador_calidad == 1 ? "Arbitrada" : "No Arbitrada"}/>
-                <StyleDictionary title="Subtipo:" text={values.subtipo_publicacion == 0 ? "Académica" :
-                           values.subtipo_publicacion == 1 ? "Profesional" : "Otros"}/>
-                <StyleDictionary title="Año de Producción:" text={values.anho_publicacion}/>
-                <StyleDictionary title="Responsabilidad:" text={values.responsabilidad == 0 ? "Autor" :
+                <div style={stylish}>
+                    < Typography variant="h4" mb={2} > Información del Autor: </Typography>
+                    <Grid align="center">   
+                        <Avatar src={values.foto_url} sx={{ width: 200, height: 200, mb: 2 }} />
+                    </Grid>
+                    <StyleDictionary title="Código:" text={values.codigo_pucp}/>
+                    <StyleDictionary title="Nombre Completo:" text={values.nombreAutor}/>
+                    <StyleDictionary title="Responsabilidad:" text={values.responsabilidad == 0 ? "Autor" :
                                   values.responsabilidad == 1 ? "Editor": "Autor de la parte"}/>
-                <StyleDictionary title="Divulgación:" text={values.divulgacion}/>
-                <StyleDictionary title="Editorial:" text={values.editorial}/>
-                <StyleDictionary title="Idioma:" text={values.idioma}/>
-                <StyleDictionary title="Volumen:" text={values.volumen}/>
-                <StyleDictionary title="Edición:" text={values.edicion}/>
-                <StyleDictionary title="Base de datos:" text={values.motor_busqueda}/>
+                </div>
+                <br />
+                <div style={stylish}>
+                    <Typography variant="h4" mb={2} > Información General de la Publicación: </Typography>
+                    <StyleDictionary title="Código:" text={values.codigo_publicacion}/>
+                    <StyleDictionary title="Título:" text={values.titulo}/>
+                    <StyleDictionary title="Tipo:" text={values.tipo_publicacion}/>
+                    <StyleDictionary title="Año de Producción:" text={values.anho_publicacion}/>
+                    <StyleDictionary title="Idioma:" text={values.idioma}/>
+                    <StyleDictionary title="Ciudad:" text={values.ciudad}/>
+                    <StyleDictionary title="País:" text={values.pais}/>
+                    <StyleDictionary title="URL:" text={values.url_repositorio} url={values.url_repositorio}/>
+                    
+                    
+                </div>
                 
-                <StyleDictionary title="Ciudad:" text={values.ciudad}/>
-                <StyleDictionary title="País:" text={values.pais}/>
-                <StyleDictionary title="ISBN:" text={values.isbn}/>
-                
-                <StyleDictionary title="ISSN:" text={values.issn}/>
-                <StyleDictionary title="DOI:" text={values.doi}/>
-                <StyleDictionary title="Medio de publicación:" text={values.medio_publicacion}/>
-                <StyleDictionary title="Filiación PUCP:" text={values.filiacion == 1 ? "Si" : "No"}/>
-                <StyleDictionary title="Especialidad Unesco:" text={values.especialidad_unesco}/>
-                
-                
-
-                
+                <br />
+                <div style={stylish}>
+                    <Typography variant="h4" mb={2} > Información de Identificación de la publicación: </Typography>
+                    <StyleDictionary title="ISBN:" text={values.isbn}/>
+                    <StyleDictionary title="ISSN:" text={values.issn}/>
+                    <StyleDictionary title="DOI:" text={values.doi} url={values.doi}/>
+                </div>
+                <br />
+                <div style={stylish}>
+                    <Typography variant="h4" mb={2} > Información del Medio de Publicación: </Typography>
+                    <StyleDictionary title="Medio de publicación:" text={values.medio_publicacion}/>
+                    <StyleDictionary title="Divulgación:" text={values.divulgacion}/>
+                    <StyleDictionary title="Editorial:" text={values.editorial}/>
+                    <StyleDictionary title="Edición:" text={values.edicion}/>
+                    <StyleDictionary title="Volumen:" text={values.volumen}/>
+                    <StyleDictionary title="N° Revista:" text={values.nro_revista}/>
+                    <StyleDictionary title="Páginas:" text={"p. " + values.pagina_inicial + "-" + values.pagina_final + " ( " + 
+                                                            (Math.abs(values.pagina_final - values.pagina_inicial)) + " páginas )"}/>
+                    <StyleDictionary title="Base de datos:" text={values.motor_busqueda}/>
+                    <StyleDictionary title="Especialidad Unesco:" text={values.especialidad_unesco}/>
+                </div>
+                <br />
+                <div style={stylish}>
+                    <Typography variant="h4" mb={2} >Información PUCP de la publicación: </Typography>
+                    <StyleDictionary title="Filiación PUCP:" text={values.filiacion == 1 ? "Si" : "No"}/>
+                    <StyleDictionary title="Tipo Referencia:" text={values.tipo_referencia == 1 ? "Por Docente" : "Terceros"}/>
+                    <StyleDictionary title="Indicador de calidad:" text={values.indicador_calidad == 0 ? "Indizada" :
+                                       values.indicador_calidad == 1 ? "Arbitrada" : "No Arbitrada"}/>
+                    <StyleDictionary title="Identificador de Producción:" text={values.identificador_produccion}/>
+                             
+                    <StyleDictionary title="Publicación Validada:" text={values.validacion_preliminar == 1 ? "Si" : "No"}/>
+                    <StyleDictionary title="Código de Validación:" 
+                            text={values.codigo_validacion == 0 ? "A1" :
+                                  values.codigo_validacion == 1 ? "L1" : 
+                                  values.codigo_validacion == 2 ? "L2" : 
+                                  values.codigo_validacion == 3 ? "P1" : 
+                                  values.codigo_validacion == 4 ? "A2" : 
+                                  values.codigo_validacion == 5 ? "L3" : 
+                                  values.codigo_validacion == 6 ? "P2" : 
+                                  "*SIN VALIDAR*"
+                                  }/>
+                </div>
+ 
             </Paper>
         </>
     );

@@ -77,6 +77,8 @@ const initialFieldValues = {
 
   idAutor:  '',
   nombreAutor: '',
+  foto_url: '',
+  codigo_pucp: '',
 }
 
 const useStyles = makeStyles(theme => ({
@@ -185,7 +187,9 @@ const getDocumentos = async () => {
                 //autor
                 //utor: trabajo.autor,
                 idAutor: trabajo.autor.id,
-                nombreAutor: trabajo.autor.nombres + ' ' + trabajo.autor.apellidos
+                nombreAutor: trabajo.autor.nombres + ' ' + trabajo.autor.apellidos,
+                foto_url: trabajo.autor.foto_URL,
+                codigo_pucp: trabajo.autor.codigo_pucp
             })
         ));
     }
