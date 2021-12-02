@@ -23,6 +23,7 @@ export default function ItemProcesoActual(props) {
         setConfirmDialog,confirmDialog, addOrEdit } = props
     const [openAprobados, setOpenAprobados] = useState(false)
 
+    console.log("La solicitud actual es", solicitudActual)
     
     function formatoFecha(fecha){
         if(fecha!=null){
@@ -117,7 +118,7 @@ export default function ItemProcesoActual(props) {
                         pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
                         state:{
                             recordForEdit: solicitudActual,
-                            procesoActual: procesoActual.id
+                            procesoActual: procesoActual
                         }
                     }}  style={{ textDecoration: 'none' }}>
                         <Controls.Button
@@ -145,7 +146,8 @@ export default function ItemProcesoActual(props) {
                 title="Validar Lista de Descargas"
                 size = "md"
             >
-               <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual}/>
+               <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual}
+               cantAprobada = {solicitudActual.cantidad_aprobada} solicitudActual = {solicitudActual} resultado = {0}/>
         </Popup>
         </>
     )
