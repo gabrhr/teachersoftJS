@@ -58,7 +58,7 @@ const tableHeaders = [
 
     const SubtitulosTable={display:"flex"}
 
-export default function ModalDocenteClasesAsignados({records, setRecords, tipo_dictado, setTipoDic, sesion, recordsBusq, setRecordsBusq , setRecordsDel, recordsDel}){
+export default function ModalDocenteClasesAsignados({records, setRecords, tipo_dictado, setTipoDic, sesion, recordsBusq, setRecordsBusq , setRecordsDel, recordsDel, horas}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [selectedRow, setSelectedRow] = useState(records.length+1)
     const [borrarDisabled, setBorrarDisabled] = useState(true)
@@ -302,16 +302,21 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                           />
                       </Grid>
                     </>
-                  : <Grid cointainer align="right" mt={2.5} />    
+                  : <Grid item xs={9.5} />    
                 }
                 
                 {records.length ? 
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                       <Typography color = "secondary">
                         Para cambiar el tipo de dictado, se deben eliminar primero a todos los docentes
                       </Typography>
                     </Grid> 
-                : <Grid item xs={12}></Grid>}
+                : <Grid item xs={6}></Grid>}
+                <Grid item xs={6} align = "right">
+                    <Typography color = "primary">
+                      Se requieren: {sesion} horas 
+                    </Typography>
+                </Grid>
                 </Grid>
                 </>
     )
