@@ -19,6 +19,7 @@ import EliminarTodosLosCursos from './EliminarTodosLosCursos'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditarHorarioCurso from './EditarHorarioCurso'
 import { UserContext } from '../../../constants/UserContext';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const initialFieldValues = {
     searchText: ''
@@ -177,6 +178,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
+    const [horariosCargados, setHorariosCargados] = useState(false)
+
     const {
         TblContainer,
         TblHead,
@@ -193,12 +196,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     //Le pasamos los horarios
 
     React.useEffect(() => {
+      setHorariosCargados(false);
       //Obtenemos las secciones
       fillHorarios(ciclo)
       .then (newHorarios =>{
         //setRecordsX(newHorarios); //Se quiere actualizar todo
         setRecords(newHorarios);
         setCargaH(records);
+        setHorariosCargados(true);
       });
       console.log("El rol es", rol)
     }, [openPopupEdit])
@@ -330,51 +335,58 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 </Grid>
             </Grid>
             <BoxTbl>
+                    {horariosCargados ? (
                 <TblContainer>
-                    <TblHead />
+                <TblHead />
                     <TableBody>
-                    {/* {console.log(records)} */}
-                    {records.length > 0 ? 
-                        recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id}>
-                            {/*<TableCell
-                            align="right"
-                            >
-                            {item.clave}
-                            </TableCell>*/}
-                            <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
-                            <TableCell>{item.horas_semanales}</TableCell>
-                            <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
-                            <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
-                            <TableCell>{item.codigo}</TableCell>
-                            <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
-                            <TableCell>{item.sesiones.hora_sesion}</TableCell>
-                            <TableCell>
-                              {/* Accion editar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {handleEdit(item)}}
+                      {/* {console.log(records)} */}
+                      {records.length > 0 ? 
+                          recordsAfterPagingAndSorting().map(item => (
+                          <TableRow key={item.id}>
+                              {/*<TableCell
+                              align="right"
                               >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              {/* Accion eliminar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {guardarIndex(item)}}
-                              >
-                                <DeleteOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                            </TableCell>
-                        </TableRow>
-                        ))
-                        :   (
-                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
-                                No hay elementos en la tabla. 
-                            </Typography>  
-                            )
-                    }
-                    </TableBody>
-                </TblContainer>
+                              {item.clave}
+                              </TableCell>*/}
+                              <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
+                              <TableCell>{item.horas_semanales}</TableCell>
+                              <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
+                              <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
+                              <TableCell>{item.codigo}</TableCell>
+                              <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
+                              <TableCell>{item.sesiones.hora_sesion}</TableCell>
+                              <TableCell>
+                                {/* Accion editar */}
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {handleEdit(item)}}
+                                >
+                                  <EditOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                                {/* Accion eliminar */}
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {guardarIndex(item)}}
+                                >
+                                  <DeleteOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                              </TableCell>
+                          </TableRow>
+                          ))
+                          :   (
+                              <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
+                                  No hay elementos en la tabla. 
+                              </Typography>  
+                              )
+                      }
+                      </TableBody>
+                      </TblContainer>
+                    ) : (
+                      <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                      </Box>
+                    )}
+                    
                 <TblPagination />
             </BoxTbl>
                 {/* <Controls.Button

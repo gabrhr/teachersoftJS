@@ -20,6 +20,7 @@ import {useHistory} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { UserContext } from '../../../constants/UserContext';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const tableHeaders = [
     
@@ -48,6 +49,7 @@ export default function NuevoProcesoForm() {
     const handleClick = e =>{
         window.history.back();
     }
+    const [profesoresCargados, setProfesoresCargados] = useState(false)
 
     const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
@@ -104,9 +106,11 @@ export default function NuevoProcesoForm() {
         console.log(request)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
+        setProfesoresCargados(true)
     }
 
     React.useEffect(() => {
+        setProfesoresCargados(false)
         getTramitesDescargasSeccion()
     }, [openSolicitudDescarga, openSolicitudDescarga])
 
@@ -235,7 +239,8 @@ export default function NuevoProcesoForm() {
             </Grid>
             
             <BoxTbl>
-                <TblContainer>
+                {profesoresCargados ? (
+                    <TblContainer>
                     <TblHead/>
                     <TableBody>
                     {
@@ -260,6 +265,12 @@ export default function NuevoProcesoForm() {
                     }
                     </TableBody>
                 </TblContainer>
+                ) : (
+                    <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                      </Box>
+                )}
+                
                 <TblPagination />
             </BoxTbl> 
             <Grid conteiner >

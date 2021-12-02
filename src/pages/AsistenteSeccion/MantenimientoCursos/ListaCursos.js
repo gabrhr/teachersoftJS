@@ -22,6 +22,7 @@ import EliminarCurso from './EliminarCurso'
 import EliminarCursos from './EliminarCursos'
 import AgregarCurso from './AgregarCurso.js'
 import EditarCurso from './EditarCurso.js'
+import LinearProgress from '@mui/material/LinearProgress';
 
 const initialFieldValues = {
     searchText: ''
@@ -90,6 +91,7 @@ export default function ListaCursos({records, setRecords}) {
     const [openAllPopup, setOpenAllPopup] = useState(false)
     const [indexDelete, setIndexDelete] = useState(-1)
     const [indexEdit, setIndexEdit] = useState(-1)
+    const [cursosCargados, setCursosCargados] = useState(false)
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
     color:"primary.light", elevatio:0}
@@ -107,9 +109,11 @@ export default function ListaCursos({records, setRecords}) {
     } = useForm(initialFieldValues);
 
     React.useEffect(() => {
+      setCursosCargados(false)
       fillCursos()
       .then (newCur =>{
         setRecords(newCur);
+        setCursosCargados(true)
         console.log(newCur);
       });
     }, [])
@@ -227,58 +231,65 @@ export default function ListaCursos({records, setRecords}) {
                 </Grid>
             </Grid>
             <BoxTbl>
+              {cursosCargados ? (
                 <TblContainer>
-                    <TblHead />
-                    <colgroup>
-                      <col style={{ width: '10%' }} />
-                      <col style={{ width: '30%' }} />
-                      <col style={{ width: '20%' }} />
-                      <col style={{ width: '5%' }} />
-                      <col style={{ width: '15%' }} />
-                      <col style={{ width: '10%' }} />
-                    </colgroup>
-                    <TableBody>
-                    {/*console.log(records)*/}
-                    {records.length > 0 ? 
-                        recordsAfterPagingAndSorting().map(item => (
-                        <StyledTableRow key={item.id}>
-                            {/*<TableCell
-                            align="right"
-                            >
-                            {item.clave}
-                            </TableCell>*/}
-                            <StyledTableCell>{item.codigo}</StyledTableCell>
-                            <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.seccion.departamento ? item.seccion.departamento.unidad.nombre : facu}</StyledTableCell>
-                            <StyledTableCell>{item.creditos}</StyledTableCell>
-                            <StyledTableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</StyledTableCell>
-                            <StyledTableCell>
-                              {/* Accion editar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {guardarIndexforEdit(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              {/* Accion eliminar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                
-                                onClick={ () => {guardarIndex(item)}}
-                              >
-                                <DeleteOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                            </StyledTableCell>
-                        </StyledTableRow>
-                        ))
-                        :   (
-                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
-                                No hay elementos en la tabla. 
-                            </Typography>  
-                            )
-                    }
-                    </TableBody>
-                </TblContainer>
+                <TblHead />
+                <colgroup>
+                  <col style={{ width: '10%' }} />
+                  <col style={{ width: '30%' }} />
+                  <col style={{ width: '20%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '15%' }} />
+                  <col style={{ width: '10%' }} />
+                </colgroup>
+                <TableBody>
+                {/*console.log(records)*/}
+                {records.length > 0 ? 
+                    recordsAfterPagingAndSorting().map(item => (
+                    <StyledTableRow key={item.id}>
+                        {/*<TableCell
+                        align="right"
+                        >
+                        {item.clave}
+                        </TableCell>*/}
+                        <StyledTableCell>{item.codigo}</StyledTableCell>
+                        <StyledTableCell>{item.nombre}</StyledTableCell>
+                        <StyledTableCell>{item.seccion.departamento ? item.seccion.departamento.unidad.nombre : facu}</StyledTableCell>
+                        <StyledTableCell>{item.creditos}</StyledTableCell>
+                        <StyledTableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</StyledTableCell>
+                        <StyledTableCell>
+                          {/* Accion editar */}
+                          <Controls.ActionButton
+                            color="warning"
+                            onClick={ () => {guardarIndexforEdit(item)}}
+                          >
+                            <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          {/* Accion eliminar */}
+                          <Controls.ActionButton
+                            color="warning"
+                            
+                            onClick={ () => {guardarIndex(item)}}
+                          >
+                            <DeleteOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                        </StyledTableCell>
+                    </StyledTableRow>
+                    ))
+                    :   (
+                        <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
+                            No hay elementos en la tabla. 
+                        </Typography>  
+                        )
+                }
+                </TableBody>
+            </TblContainer>
+              ) : (
+                      <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                      </Box>
+              )}
+                
                 <TblPagination />
             </BoxTbl>
             {/*}

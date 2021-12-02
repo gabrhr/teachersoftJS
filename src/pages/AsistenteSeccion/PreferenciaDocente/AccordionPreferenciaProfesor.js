@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccordionDetailsPreferenciaProfesor from './AccordionDetailsPreferenciaProfesor'
 import { Grid, Divider, Avatar } from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const headers = [
     { id: '1', title: 'Preferencias de dictado de la unidad por curso' }
@@ -92,7 +93,7 @@ function generateRows(profesores) {
     )
 } 
 
-export default function TestPage({profesores}) {
+export default function     TestPage({profesores, preferenciaCargados}) {
     // console.log(profesores)
     return (
         <>
@@ -103,7 +104,13 @@ export default function TestPage({profesores}) {
                     <HeaderBoxs headers={headers} />
                 </AccordionSummary>
             </Accordion>
-            {generateRows(profesores)}
+            {preferenciaCargados ? (
+              generateRows(profesores)
+            ) : (
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress/>
+              </Box>
+            )}
         </>
     )
 }

@@ -16,6 +16,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Link } from '@mui/material';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,

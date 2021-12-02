@@ -26,6 +26,7 @@ import Fab from '@mui/material/Fab';
 import CheckIcon from '@mui/icons-material/Check';
 import Popup from '../../../components/util/Popup';
 import ModalValidarYEnviarSolicitud from './ModalValidarYEnviarSolicitud';
+import LinearProgress from '@mui/material/LinearProgress';
 
 import HorarioService from '../../../services/horarioService';
 
@@ -175,6 +176,7 @@ export default function CargaDocente() {
   const [records, setRecord] = useState([])
   const [horarios, setHorarios] = useState(false)   // Mostrar la tabla horarios
   const [row, setRow] = useState(false) //Sacamos la linea seleccionada
+  const [cursosCargados, setCursosCargados] = useState(false)
   
   // en lugar de la de cursos
   const PaperStyle = { borderRadius: '20px', pb: 4, pt: 2, px: 2, color: "primary.light", elevatio: 0 }
@@ -198,10 +200,12 @@ export default function CargaDocente() {
   } = useTable(records, tableHeaders, filterFn);
 
     React.useEffect(() => {
+      setCursosCargados(false)
       fillCursos(ciclo)
       .then (newCur =>{
         if(newCur)
           setRecord(newCur);
+          setCursosCargados(true)
         //console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: ", newCur);
       });
     }, [ciclo])
@@ -284,7 +288,8 @@ export default function CargaDocente() {
               Carga Docente por Cursos
             </Typography>
             <BoxTbl>
-              <TblContainer>
+              {cursosCargados ? (
+                <TblContainer>
                 <TblHead />
                   <colgroup>
                     <col style={{ width: '5%' }} />
@@ -326,6 +331,12 @@ export default function CargaDocente() {
                   }
                 </TableBody>
               </TblContainer>
+              ) : (
+                      <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                      </Box>
+              )}
+              
               <TblPagination />
             </BoxTbl>
           </>

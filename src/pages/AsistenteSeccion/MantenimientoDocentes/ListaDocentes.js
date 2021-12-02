@@ -13,6 +13,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LinearProgress from '@mui/material/LinearProgress';
+import { Box } from '@mui/material';
 
 const tableHeaders = [
     {
@@ -55,6 +57,7 @@ export default function ListaDocentes({openPopup}) {
     const [recordForDel, setRecordForDel] = useState(null)
     const [openDelOnePopup, setDelOnePopup] = useState(false)
     const [openDelAllPopup, setDelAllPopup] = useState(false)
+    const [profesoresCargados, setProfesoresCargados] = useState(false)
     
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -67,6 +70,7 @@ export default function ListaDocentes({openPopup}) {
     } = useTable(records, tableHeaders, filterFn);
     
     useEffect(() => {
+      setProfesoresCargados(false)
         getProfesores()
       }, [openPopupEdit, openDelOnePopup, openPopupAdd, openPopup])
 
@@ -98,6 +102,7 @@ export default function ListaDocentes({openPopup}) {
         const request = await personaService.getPersonasxTipo(1);
         const recordsX = transformarDocentes(request)
         setRecords(recordsX)
+        setProfesoresCargados(true)
     }
 
     const eliminarDocentes = async () =>{
@@ -175,76 +180,82 @@ export default function ListaDocentes({openPopup}) {
                 </Grid>
             </Grid>
             <BoxTbl>
+              {profesoresCargados ? (
                 <TblContainer>
-                    <TblHead />
-                    <TableBody>
-                    {
-                       recordsAfterPagingAndSorting().map(item => (
-                        <TableRow key={item.id} >
-                            <TableCell>
-                            <Grid container>
-                                <Grid item pl={.5}>
-                                <Avatar>
-                                    {item.url_foto !== ("static/images/avatar/1.jpg" || "")
-                                      ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
-                                        src={item.url_foto}></img>
-                                      :  <AccountCircleIcon/>}
-                                </Avatar>
-                                </Grid>
-                                <Grid item sm>
-                                    <Typography sx={{paddingLeft:2.5}}>
-                                        {`${item.apellidos}, ${item.nombres}`}
-                                    </Typography>
-                                    <div style={{paddingLeft:20}}>
-                                        Código PUCP: {item.codigo}
-                                    </div>
-                                    <div style={{paddingLeft:20}}>
-                                        DNI: {item.numero_documento}
-                                    </div>
-                                </Grid>
+                <TblHead />
+                <TableBody>
+                {
+                   recordsAfterPagingAndSorting().map(item => (
+                    <TableRow key={item.id} >
+                        <TableCell>
+                        <Grid container>
+                            <Grid item pl={.5}>
+                            <Avatar>
+                                {item.url_foto !== ("static/images/avatar/1.jpg" || "")
+                                  ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                                    src={item.url_foto}></img>
+                                  :  <AccountCircleIcon/>}
+                            </Avatar>
                             </Grid>
-                            </TableCell>
-                            <TableCell>
-                                <Typography >
-                                    {item.especialidad}
+                            <Grid item sm>
+                                <Typography sx={{paddingLeft:2.5}}>
+                                    {`${item.apellidos}, ${item.nombres}`}
                                 </Typography>
-                                <div >
-                                    {(item.tipo_docente === 0) ? "No asignado" : 
-                                     (item.tipo_docente === 1) ? "Docencia a tiempo completo" :
-                                     (item.tipo_docente === 2) ? "Docencia a tiempo parcial convencional" :
-                                                                 "Docencia a tiempo parcial por asignaturas"
-                                    }
+                                <div style={{paddingLeft:20}}>
+                                    Código PUCP: {item.codigo}
                                 </div>
-                            </TableCell>
-                            <TableCell>
-                                <Typography >
-                                    Correo: {item.correo}
-                                </Typography>
-                                <div >
-                                    Teléfono: {item.telefono}
+                                <div style={{paddingLeft:20}}>
+                                    DNI: {item.numero_documento}
                                 </div>
-                            </TableCell>
-                            {/* <TableCell>{item.bono}</TableCell> */}
-                            <TableCell>
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {handleEdit(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              {/* Accion eliminar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {handleDelete(item)}}
-                              >
-                                <DeleteOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                            </TableCell>
-                        </TableRow>
-                        ))
-                    }
-                    </TableBody>
-                </TblContainer>
+                            </Grid>
+                        </Grid>
+                        </TableCell>
+                        <TableCell>
+                            <Typography >
+                                {item.especialidad}
+                            </Typography>
+                            <div >
+                                {(item.tipo_docente === 0) ? "No asignado" : 
+                                 (item.tipo_docente === 1) ? "Docencia a tiempo completo" :
+                                 (item.tipo_docente === 2) ? "Docencia a tiempo parcial convencional" :
+                                                             "Docencia a tiempo parcial por asignaturas"
+                                }
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            <Typography >
+                                Correo: {item.correo}
+                            </Typography>
+                            <div >
+                                Teléfono: {item.telefono}
+                            </div>
+                        </TableCell>
+                        {/* <TableCell>{item.bono}</TableCell> */}
+                        <TableCell>
+                          <Controls.ActionButton
+                            color="warning"
+                            onClick={ () => {handleEdit(item)}}
+                          >
+                            <EditOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                          {/* Accion eliminar */}
+                          <Controls.ActionButton
+                            color="warning"
+                            onClick={ () => {handleDelete(item)}}
+                          >
+                            <DeleteOutlinedIcon fontSize="small" />
+                          </Controls.ActionButton>
+                        </TableCell>
+                    </TableRow>
+                    ))
+                }
+                </TableBody>
+            </TblContainer>
+              ) : (
+                <Box sx={{ width: '100%' }}>
+                  <LinearProgress />
+                </Box>
+              )}
                 <TblPagination />
             </BoxTbl>
                 {/* <Controls.Button
