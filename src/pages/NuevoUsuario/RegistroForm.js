@@ -8,19 +8,16 @@
  */
 
 import React from 'react'
-import { IconButton, Typography, Box, Alert, Grid, 
+import { Typography, Box, Alert, Grid, 
     FormHelperText } from '@mui/material';
 import { useForm, Form } from '../../components/useForm';
 import { Controls } from '../../components/controls/Controls';
 import { UserContext } from '../../constants/UserContext';
-import { DT } from '../../components/DreamTeam/DT'
 import ReCAPTCHA from 'react-google-recaptcha';
 /* fake BackEnd */
-import * as employeeService from '../../services/employeeService';
 import * as DTLocalServices from '../../services/DTLocalServices'
 /* ICONS */
 import SendIcon from '@mui/icons-material/Send';
-import AddIcon from '@mui/icons-material/Add';
 
 const radioGroupValues = [
     { id: 0, title: 'Masculino' },
@@ -65,15 +62,14 @@ function printValues(values) {
 
 export default function RegistroForm(props) {
     const { submitValues } = props
-    const { user, rol } = React.useContext(UserContext);
+    const { user } = React.useContext(UserContext);
     const captcha = React.useRef(null);   /* referencia al Componente */
     const {
         values,
         setValues,
         errors,
         setErrors,
-        handleInputChange,
-        resetForm
+        handleInputChange
     } = useForm(initialFieldValues);
 
     React.useEffect(() => {

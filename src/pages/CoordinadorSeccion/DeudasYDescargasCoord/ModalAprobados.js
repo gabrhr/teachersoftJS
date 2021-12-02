@@ -20,10 +20,21 @@ import {useHistory} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ModalGuardarAprobados from './ModalGuardarAprobados'
 import { Alert } from '@mui/material';
+import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
+import procesoDescargaService from '../../../services/procesoDescargaService';
+import { UserContext } from '../../../constants/UserContext';
+
 const tableHeaders = [
     
     {
         id: 'seleccionar',
+        label: '',
+        numeric: false,
+        sortable: false
+    },
+    {
+        id: 'foto',
         label: '',
         numeric: false,
         sortable: false
@@ -36,42 +47,22 @@ const tableHeaders = [
     },
     {
         id: 'justificacion',
-        label: 'Justificación',
+        label: 'Bono Solicitado',
         numeric: false,
         sortable: false
     },
 ]
 
-export default function ModalAprobados({setOpenAprobados}){
-
-    const [records, setRecords] = useState([
-        {
-            nombre: 'Perez',
-            correo: '@perez.com',
-            justificacion: 'Por favor',
-            seleccionado: true,
-            tipo_bono: 1
-        },
-        {
-            nombre: 'José',
-            correo: '@gmail.com',
-            justificacion: 'Por favor1',
-            seleccionado: true,
-            tipo_bono: 2
-        },
-        {
-            nombre: 'Otro José',
-            correo: '@puke.com',
-            justificacion: 'Por favor2',
-            seleccionado: true,
-            tipo_bono: 1
-        }
-    ])
-
-    const [solicitados, setSolicitados] = React.useState(2)
-    const [descargas, setDescargas] = React.useState(records.length)
+export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, 
+    solicitudActual, resultado = 4}){
     
+        console.log("resultado?",resultado)
+    const [records, setRecords] = useState([])
 
+    const [aprobados, setAprobados] = React.useState(null)
+    const [descargas, setDescargas] = React.useState(0)
+    
+    const { user } = React.useContext(UserContext)
     
 
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
@@ -84,7 +75,23 @@ export default function ModalAprobados({setOpenAprobados}){
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
-    
+    const guardarSolicitudActual = async() =>{
+        for(let i = 0; i < records.length; i++){
+            if(records[i].seleccionado){
+                records[i].resultado = 1
+                records[i].solicitador.tipo_bono = records[i].tipo_bono
+            }else{
+                records[i].resultado = 2
+                records[i].tramiteSeccionDescarga = null
+            }
+            await tramiteDescargaService.updateTramiteDescarga(records[i])
+            console.log("ID: de tramite modificado", records[i].id)
+        }
+        //Se actualiza el estado tracking
+        solicitudActual.estado_tracking = 2
+        await tramiteSeccionDescargaService.updateTramitesSeccionDescarga(solicitudActual)
+        console.log("Records modificado ", records)
+    }
 
     const handleSearch = e => {
         let target = e.target;
@@ -102,6 +109,40 @@ export default function ModalAprobados({setOpenAprobados}){
         })
     }
 
+    const agregarCampo = (request) =>{
+        for(let i = 0; i < request.length; i++){
+            request[i]["seleccionado"] = true
+        }
+        /*for(let i = 0; i < request.length; i++){
+            delete request[i].seleccionado
+        }Mausequerramienta misteriosa*/
+        //setDescargas(request.length)
+        return request
+    }
+
+    const getTramitesDescargasDocentes = async() =>{
+        //console.log(user.persona.departamento.id)
+        //let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        let request
+        if(resultado === 4){
+            const rq1 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 1);
+            const rq2 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 2);
+            request = rq1.concat(rq2)
+        }else{
+            request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, resultado);
+        }
+        console.log(request)
+        setDescargas(request.length)
+        setAprobados(cantAprobada)
+        const requestTransformado = agregarCampo(request)
+        setRecords(requestTransformado)
+    } 
+
+    React.useEffect(() => {
+        //listar todos tramites
+        getTramitesDescargasDocentes()
+    }, [aprobados])
+
     const history = useHistory()
 
     const addDocente = (docente) => {
@@ -109,43 +150,50 @@ export default function ModalAprobados({setOpenAprobados}){
         if(docente.seleccionado === true) setDescargas(descargas + 1)
         else setDescargas(descargas - 1)
         console.log(docente.seleccionado)
-        console.log(solicitados)
+        console.log(aprobados)
     }
 
     return (
         <>
-                <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                    <div style={{ width: "480px", marginRight: "1px" }}>
-                        <Controls.Input
-                                label="Buscar Solicitud por Nombre"
-                                
-                                InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                )
-                                }}
-                                sx={{ width: .9 }}
-                                onChange={handleSearch}
-                                type="search"
-                            />
-                    </div>
-                    <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
-                            <Controls.DreamTitle
-                                title={`Solicitados: ${solicitados}`}
-                                size='20px'
-                                lineheight='100%'
-                                />
-                    </div>
-                    <div style={{ width: "150px", marginLeft: "50px", paddingTop:'25px' }}>
-                            <Controls.DreamTitle
-                                title={`N° Descargas: ${descargas}`}
-                                size='20px'
-                                lineheight='100%'
-                                />
-                    </div>
+            {resultado!==1 && 
+                <Typography variant="h4"  fontWeight="550"  sx={{color:"primary.light"}}>
+                    Debe validar el N° de Descargas con el valor aprobado por el Departamento
+                </Typography>
+            }
+            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                <div style={{ width: "480px", marginRight: "1px" }}>
+                    <Controls.Input
+                            label="Buscar Solicitud por Nombre"
+                            
+                            InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            )
+                            }}
+                            sx={{ width: .9 }}
+                            onChange={handleSearch}
+                            type="search"
+                        />
                 </div>
+                <div style={{ width: "140px", marginLeft: "50x", paddingTop:'10px' }}>
+                        <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                            Aprobados: {'\u00A0'}
+                        </Typography>
+                        <Typography display="inline"  fontWeight="560" sx={{color:"#2EBD59"}}>
+                            {aprobados}
+                        </Typography>
+                </div>
+                <div style={{ width: "150px", marginLeft: "40px", paddingTop:'10px' }}>
+                        <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                            N° Descargas: {'\u00A0'}
+                        </Typography>
+                        <Typography display="inline"  fontWeight="560" sx={descargas!==aprobados?{color:"red"}:{color:"#2EBD59"}}>
+                            {descargas}
+                        </Typography>
+                </div>
+            </div>
             
             <BoxTbl>
                 <TblContainer>
@@ -154,13 +202,18 @@ export default function ModalAprobados({setOpenAprobados}){
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                         <TableRow>
-                            <TableCell sx = {{width: '70px'}}>
+                            <TableCell sx = {{width: '60px'}}>
+                                { resultado!==1 &&
                                 <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
                                     <EditOutlinedIcon fontSize="small" />
                                 </Controls.RowCheckBox>
+                                }
                             </TableCell>
-                            <TableCell sx = {{width: '533px'}}>
-                                {item.nombre}
+                            <TableCell>
+                                <Avatar src={item.solicitador.foto_URL}/>
+                            </TableCell>
+                            <TableCell sx = {{width: '460px'}}>
+                                {item.solicitador.nombres + " " + item.solicitador.apellidos}
                             </TableCell>
                             <TableCell> 
                                 <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
@@ -177,17 +230,20 @@ export default function ModalAprobados({setOpenAprobados}){
                 <TblPagination />
             </BoxTbl> 
             <Grid conteiner >
+                
                 <Grid item align = "right" marginTop={5} >
+                    {resultado!==1 &&
                     <Controls.Button
                         text="Aprobar descargas"
                         endIcon={<SaveIcon/>} 
-                        disabled = {descargas !== solicitados}
+                        disabled = {descargas !== aprobados}
                         onClick={(e)=>{
-                            // guardarSolicitudActual()
+                            guardarSolicitudActual()
                             setOpenAprobados(false)
-                            // history.push("/cord/asignacionCarga/deudaYDescarga");
+                            history.push("/cord/asignacionCarga/deudaYDescarga");
                         }} 
                         />
+                    } 
                 </Grid>
             </Grid>
         </>

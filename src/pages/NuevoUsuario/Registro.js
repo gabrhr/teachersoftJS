@@ -48,7 +48,7 @@ export default function Registro() {
         message: '', 
         type: ''
     })
-    const {user, setUser, rol, setRol } = React.useContext(UserContext)
+    const {setUser, setRol } = React.useContext(UserContext)
 
     
     /* Con valores de registro */

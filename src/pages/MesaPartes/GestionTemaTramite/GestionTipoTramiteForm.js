@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 // import ContentHeader from '../../../components/AppMain/ContentHeader'
-import ContentHeader from '../../../components/AppMain/ContentHeader'
-import { Avatar, Divider, Grid, Input, Stack, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
  
 import { Controls } from '../../../components/controls/Controls'
 import { useForm, Form } from '../../../components/useForm';
-import { useTheme } from '@mui/material/styles'
 /* fake BackEnd */
 import * as DTLocalServices from '../../../services/DTLocalServices';
  
@@ -61,7 +59,7 @@ export default function GestionTemaTramiteForm(props){
           ...temp
         })
     
-        if (fieldValues == values)
+        if (fieldValues === values)
           return Object.values(temp).every(x => x === "")
         // Ref:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
     }
