@@ -187,10 +187,10 @@ export default function Router1(props) {
              <Redirect to="/doc/misSolicitudes" />
         </PrivateRoute>
         <PrivateRoute exact path="/as" requireRoles={[2]}>
-             <Redirect to="/as/asignacionCarga/registroCursos" />
+             <Redirect to="/as/asignacionCarga/registroHorarios" />
         </PrivateRoute>
         <PrivateRoute exact path="/cord" requireRoles={[3]}>
-             <Redirect to="/cord/asignacionCarga/registroCursos" />
+             <Redirect to="/cord/asignacionCarga/registroHorarios" />
         </PrivateRoute>
         <PrivateRoute exact path="/ad" requireRoles={[4]}>
              <Redirect to="/ad/asignacionCarga/cargaDocente" />

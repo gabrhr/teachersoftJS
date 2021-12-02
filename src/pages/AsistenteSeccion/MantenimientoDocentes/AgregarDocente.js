@@ -43,7 +43,7 @@ const tipos_docente = [
 ]
 
 export default function EditarDocente(props) {
-    const {setOpenPopup} = props
+    const {setOpenPopup, records, setRecords, transformarDocentes, tipo } = props
 
     const [newNombre, setNombre] = useState('');
     const [errorNombre, setErrorNombre] = useState(false);
@@ -53,11 +53,9 @@ export default function EditarDocente(props) {
     
     const [newCodigo, setCodigo] = useState('');
     const [errorCodigo, setErrorCodigo] = useState(false);
-    
-    const [newEspecialidad, setEspecialidad] = useState('');
-    const [errorEspecialidad, setErrorEspecialidad] = useState(false);
-    
+        
     const [newTipoDoc, setTipoDoc] = useState(0);
+    const [errorTipoDoc, setErrorTipoDoc] = useState(false);
     
     const [newTelefono, setTelefono] = useState('');
     const [errorTelefono, setErrorTelefono] = useState(false);
@@ -95,10 +93,6 @@ export default function EditarDocente(props) {
             setErrorCodigo(true)
             errores++;
         }
-        if(newEspecialidad === ""){
-            setErrorEspecialidad(true)
-            errores++;
-        }
         if(!isNumeric(newTelefono) || newTelefono.length !== 9){
             setErrorTelefono(true)
             errores++;
@@ -112,6 +106,10 @@ export default function EditarDocente(props) {
         }
         if(!isNumeric(newDocumento) || newDocumento.length !== 8){
             setErrorDocumento(true)
+            errores++;
+        }
+        if(newTipoDoc  === 0){
+            setErrorTipoDoc(true)
             errores++;
         }
         if(errores){
@@ -132,6 +130,9 @@ export default function EditarDocente(props) {
     const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault();
+        //Obtenemos el id del docnete
+        const  user = JSON.parse(localStorage.getItem("user"))
+
         if (validate()){
           const newDoc = {
             "foto_URL": newURL ? newURL : 'static/images/avatar/1.jpg',
@@ -140,25 +141,31 @@ export default function EditarDocente(props) {
             "tipo_persona": 1,
             "tipo_docente": newTipoDoc,
             "seccion": {
-                "id": 3,
-                "nombre": newEspecialidad,
+                "id": user.persona.seccion.id,
             },
             "departamento": {
-                "id": 3,
-                "unidad": {
-                    "id": 1,
-                }
+                "id": user.persona.departamento.id,
             },
             "correo_pucp": newCorreo,
             "telefono": newTelefono,
             "codigo_pucp": newCodigo,
             "numero_documento": newDocumento,
-            "tipo_documento": 0
+            "tipo_documento": 0,
+            "deuda_docente": 0,
+            "cargaDocente": 0,
+            "tipo_bono": 0,
+            "fecha_ultimo_bono": null,
           }
           console.log(newDoc);
           const rpta = await personaService.registerPersona(newDoc);
           console.log(rpta);
-          setOpenPopup(false)
+          if(rpta){
+            const rptaArr = [rpta];
+            //Hacemos la insercion
+            const newDoc = transformarDocentes(rptaArr);
+            if (newDoc[0].tipo_docente === tipo )setRecords(prevRecords => prevRecords.concat(newDoc[0]));
+            setOpenPopup(false)
+          }
         }
     }
 
@@ -199,16 +206,6 @@ export default function EditarDocente(props) {
                             error = {errorCodigo}
                             helperText = {errorCodigo && "Este campo es incorrecto"}
                         />
-                        <Controls.Input
-                            name="especialidad"
-                            label="Especialidad"
-                            defaultValue=""
-                            onChange = {(e)=>{
-                                setEspecialidad(e.target.value)
-                            }}
-                            error = {errorEspecialidad}
-                            helperText = {errorEspecialidad && "Este campo está vacío"}
-                        />
                         <Controls.Select
                             name="tipo_doc"
                             label="Tipo Docente"
@@ -216,6 +213,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setTipoDoc(e.target.value)
                             }}
+                            error = {errorTipoDoc}
+                            helperText = {errorTipoDoc && "Debe seleccionar un tipo de docente"}
                             options = {tipos_docente}
                         />
                 </Grid>
@@ -253,14 +252,14 @@ export default function EditarDocente(props) {
                             error = {errorDocumento}
                             helperText = {errorDocumento && "Este campo es incorrecto"}
                         />
-                        <Controls.Input
+                        {/* <Controls.Input
                             name="url_foto"
                             label="URL Foto"
                             defaultValue=""
                             onChange = {(e)=>{
                                 setURL(e.target.value)
                             }}
-                        />
+                        /> */}
                 </Grid>
             </Grid>
             <Grid cointainer align="right" mt={5}>

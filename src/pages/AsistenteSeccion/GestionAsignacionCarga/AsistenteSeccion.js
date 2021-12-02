@@ -24,6 +24,7 @@ function createData(id, claveCurso, nombreCurso, cargaHoraria,
  }
 
 export default function AsistenteSeccion() {
+    const cicloActual = window.localStorage.getItem("ciclo");
 
     const [ciclo, setCiclo] = useState ();
     const [horario, setHorario] = useState([]);
@@ -101,26 +102,29 @@ export default function AsistenteSeccion() {
                         &nbsp;para subir la carga de horario de un determinado curso.
                     </Typography>
                 </Grid>
-                <Grid item xs={3} align="right" m={1}>
-                    <Controls.Button
-                        text="Importar"
-                        size="large"
-                        endIcon={<CloudUploadOutlinedIcon/>}
-                        onClick = {() => setOpenPopup(true)}
-                    />
-                     {/* <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
-                        endIcon={<CloudDownloadOutlinedIcon/>}/> */}
-                </Grid>
+                {cicloActual === ciclo ?
+                  <Grid item xs={3} align="right" m={1}>
+                      <Controls.Button
+                          text="Importar"
+                          size="large"
+                          endIcon={<CloudUploadOutlinedIcon/>}
+                          onClick = {() => setOpenPopup(true)}
+                      />
+                      {/* <ExportCSV csvData={cargaH} fileName={'Carga Horaria'} text="Exportar" size="large"
+                          endIcon={<CloudDownloadOutlinedIcon/>}/> */}
+                  </Grid>
+                  : <> </>
+                }
             </Grid>
             {/*LO DE GABRIELA*/}
             <Paper variant="outlined" sx={PaperStyle}>
                 <HorarioCursos records={records} setRecords={setRecords} setCargaH = {setCargaH} 
-                        cargaH = {cargaH} ciclo = {ciclo} setCiclo = {setCiclo}/>
+                        cargaH = {cargaH} ciclo = {ciclo} setCiclo = {setCiclo} cicloActual = {cicloActual}/>
             </Paper>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Carga Masiva de Cursos y Horarios"
+                title="Carga Masiva de Horarios"
             >
                {/*<ModalAsignacionCarga horario = {listHorario} getHorario = {getHorario}>
 

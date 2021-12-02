@@ -70,16 +70,30 @@ const fillCursos = async () => {
   const dataCur = await CursoService.getCursosxSeccionCodigoNombre(JSON.parse(window.localStorage.getItem("user")).persona.seccion.id,"");
   //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
   //const horarios = [];
+  
   if(!dataCur)  {
     console.error("No se puede traer la data del servidor de los cursos")
     return [];
   }
+  
+  const cursos = []
+  for(let cur of dataCur){
+    cursos.push({
+      id: cur.id,
+      codigo: cur.codigo,
+      creditos: cur.creditos,
+      nombre: cur.nombre,
+      seccion: cur.seccion,
+      fecha_modificacion: cur.fecha_modificacion,
+      unidad: (cur.unidad !== null) ? cur.unidad : {id: 0},
+      idUnidad: (cur.unidad !== null) ? cur.unidad.id : 0
+    });
+  }
 
-  return dataCur;
+  return cursos;
 }
 
 export default function ListaCursos({records, setRecords}) {
-    const facu = JSON.parse(window.localStorage.getItem("user")).persona.seccion.departamento.unidad.nombre;
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
     const [openAddPopup, setOpenAddPopup] = useState(false);
@@ -158,7 +172,16 @@ export default function ListaCursos({records, setRecords}) {
       if(rpta !== "Error") {
         console.log(rpta);
         const cursoNew = await CursoService.getCursosxCodigoNombre(newCurso.codigo);
-        setRecords(prevRecords => prevRecords.concat(cursoNew))
+        let newCursoX = {
+          "id": cursoNew[0].id,
+          "codigo": cursoNew[0].codigo,
+          "nombre": cursoNew[0].nombre,
+          "creditos": parseFloat(cursoNew[0].creditos),
+          "seccion": cursoNew[0].seccion,
+          "unidad": cursoNew[0].unidad,
+          "idUnidad": cursoNew[0].unidad.id
+        }
+        setRecords(prevRecords => prevRecords.concat(newCursoX))
       }
       setOpenAddPopup(false)
     }
@@ -168,10 +191,20 @@ export default function ListaCursos({records, setRecords}) {
       const rpta = await CursoService.updateCurso(editCurso);
       if(rpta !== "Error"){
         console.log(rpta);
-        records[indexEdit] = editCurso;
+        const cursoNew = await CursoService.getCursosxCodigoNombre(editCurso.codigo);
+        let newCurso = {
+          "id": cursoNew[0].id,
+          "codigo": cursoNew[0].codigo,
+          "nombre": cursoNew[0].nombre,
+          "creditos": parseFloat(cursoNew[0].creditos),
+          "seccion": cursoNew[0].seccion,
+          "unidad": cursoNew[0].unidad,
+          "idUnidad": cursoNew[0].unidad.id
+        }
+        records[indexEdit] = newCurso;
+        console.log(newCurso);
       }
       //setRecords(prevRecords => prevRecords.concat(editCurso))
-
       setOpenEditPopup(false)
       setIndexEdit(-1)
     }
@@ -249,7 +282,7 @@ export default function ListaCursos({records, setRecords}) {
                             </TableCell>*/}
                             <StyledTableCell>{item.codigo}</StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{item.seccion.departamento ? item.seccion.departamento.unidad.nombre : facu}</StyledTableCell>
+                            <StyledTableCell>{(item.unidad.id !== 0) ? item.unidad.nombre : '-'}</StyledTableCell>
                             <StyledTableCell>{item.creditos}</StyledTableCell>
                             <StyledTableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</StyledTableCell>
                             <StyledTableCell>

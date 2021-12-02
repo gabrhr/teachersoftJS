@@ -42,6 +42,7 @@ const guardarCursos = async (recordsAsig, recordsDelete) => {
             "ciclo":{
               "id": ciclo
             },
+            "estado_curso": 0,
             "cantidad_horarios": 0,
             "estado_tracking": 0
           }

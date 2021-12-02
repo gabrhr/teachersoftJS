@@ -44,7 +44,7 @@ const hallarDetalle = (sesiones) => {
   
   const actualizarCursoCiclo = async (curso_ciclo)=> {
   
-    if(curso_ciclo.cantidad_horarios !== 2){
+    if(curso_ciclo.estado_curso !== 2){
       const newCC = {
         "id": curso_ciclo.id,
         "ciclo": {
@@ -53,7 +53,8 @@ const hallarDetalle = (sesiones) => {
         "curso": {
           "id": curso_ciclo.curso.id,
         },
-        "cantidad_horarios": 2, //Se actualiza al nuevo estado
+        "estado_curso": 2, //Se actualiza al nuevo estado
+        "cantidad_horarios": curso_ciclo.cantidad_horarios,
         "estado_tracking": curso_ciclo.estado_tracking,
       }
       
@@ -104,6 +105,7 @@ const validateItems = (cursos) => {
         "curso": cur.curso,
         "ciclo": cur.ciclo,
         "estado_tracking": 1,
+        "estado_curso": cur.estado_curso,
         "cantidad_horarios": cur.cantidad_horarios,
       }
       console.log(cursocicloValidado);
