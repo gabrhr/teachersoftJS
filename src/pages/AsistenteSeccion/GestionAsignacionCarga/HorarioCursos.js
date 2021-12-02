@@ -269,7 +269,8 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       if(rol === 3){
         history.push("/cord/asignacionCarga/agregarHorario");
       }else{
-        history.push("/as/asignacionCarga/agregarHorario");
+        // history.push("/as/asignacionCarga/cursos");    // este era de Sergio
+        history.push("/as/asignacionCarga/agregarHorario");   // queda el de Lucas
       }
         
     };

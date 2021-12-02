@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Box, TableCell, TableRow, Typography, Divider } from '@mui/material'
+import { Box, TableCell, TableRow, Typography, Divider, Table } from '@mui/material'
 import { Controls } from '../../../components/controls/Controls'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,7 +12,7 @@ moment.locale('es');
 
 function formatoFecha(fecha){
     if(fecha!=null){
-        return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
+        return (moment.utc(fecha).format('DD MMM YYYY')) + " - " +(moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
     }
 }
 
@@ -28,12 +28,10 @@ export default function ItemDecargaActualDocente(props) {
         setOpenPopupDetalle, setConfirmDialog, confirmDialog, procesoActivo
     } = props
     const [row, setRow] = React.useState(false)
-    
 
     function getRow ({...props}){
         //setOpenDetalle(true)
         setRow(props)
-        console.log("Get rowww?", row)
     }
 
     let now = new Date()  
@@ -41,15 +39,27 @@ export default function ItemDecargaActualDocente(props) {
     return (
         <>
             <Typography sx={{color:"primary.light"}}>
-                <b>{procesoActivo.nombre}</b> vigente a partir de las {formatoFechaProceso(procesoActivo.fecha_inicio)} 
-                {'\u00A0'} hasta las {formatoFechaProceso(procesoActivo.fecha_fin_docente)}
+                <b>{procesoActivo.nombre}</b> 
+                {fechafin<=now || (
+                    " vigente a partir de las " + formatoFechaProceso(procesoActivo.fecha_inicio) +
+                    '\u00A0' + "hasta las " + formatoFechaProceso(procesoActivo.fecha_fin_docente))
+                }
             </Typography>
-            <Typography sx={{color:"primary.light"}}>
-                * Publicación de Resultados desde las {formatoFechaProceso(procesoActivo.fecha_fin)} 
-            </Typography>
+            {item.resultado===0 &&
+                <Typography sx={{color:"primary.light"}}>
+                    Publicación de Resultados desde las {formatoFechaProceso(procesoActivo.fecha_fin)} 
+                </Typography>
+            }
+            { fechafin<=now ||
+                <Typography  my={1} sx={{color:"primary.light"}}>
+                    * La solicitud generada se enviará automáticamente a las {formatoFechaProceso(procesoActivo.fecha_fin_docente)}
+                </Typography>
+            }
+
             <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
-                px={2} pl={2}  mb={10} mt={2}
+                px={2} mb={10} mt={2}
             >
+                <Table>
                 <TableRow align="center">
                     <TableCell sx={{width: "400px",borderBottom: "none"}}>
                         <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -68,7 +78,7 @@ export default function ItemDecargaActualDocente(props) {
                             Autor: {'\u00A0'} 
                         </Typography>
                         <Typography display="inline" sx={{color:"primary.light"}}>
-                            {item.solicitador.nombres? item.solicitador.nombres: "" + " " + item.solicitador.apellidos? item.solicitador.apellidos:""} 
+                            {item.solicitador.nombres + " " + item.solicitador.apellidos} 
                         </Typography>
                     </TableCell>
                     <TableCell  sx={{width:"180px",borderBottom: "none"}} align="center">
@@ -83,7 +93,7 @@ export default function ItemDecargaActualDocente(props) {
                         />
                     </TableCell>
                     
-                    <TableCell sx={{width:"250px",borderBottom: "none"}} align="right">
+                    <TableCell sx={{width:"220px",borderBottom: "none"}} align="right">
                         <Controls.Button
                             text="Ver Solicitud"
                             type="submit"
@@ -91,11 +101,7 @@ export default function ItemDecargaActualDocente(props) {
                             />
                     </TableCell>
                     {
-                        fechafin<=now? 
-                        <TableCell sx={{maxWidth:"200px",borderBottom: "none",borderBottom: "none"}}>
-                            <> </>
-                        </TableCell>:
-                        <>
+                        fechafin<=now || <>
                             <TableCell sx={{maxWidth:"200px",borderBottom: "none",borderBottom: "none"}}>
                                 <Controls.ActionButton
                                     color="warning"
@@ -120,6 +126,7 @@ export default function ItemDecargaActualDocente(props) {
                         </>
                     }
                 </TableRow>
+                </Table>
                 <ConfirmDialog
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}

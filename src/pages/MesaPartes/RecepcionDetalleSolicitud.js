@@ -212,7 +212,7 @@ export default function RecepcionDetalleSolicitudFuncion() {
     function submitDelegar(delegado) {
         let url = "http://front.teachersoft.solutions"
         let externo_msg = ""
-        if (true || delegado.options === 'delegadoExterno') {
+        if (delegado.options === 'delegadoExterno') {
             url = url + `/invitado/atenderxemail/`
                 + MesaPartesService._(`${solicitud.id}&${delegado.correo}`)
             externo_msg = "<p>El link expirará en 3 días.</p>"

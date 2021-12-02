@@ -54,14 +54,20 @@ export const MenuCoordinadorSeccion = [
         subNav: [
             {
                 text: 'Mis solicitudes',
-                path: '/cord/misSolicitudes',
+                path: '/cord/mesaPartes/misSolicitudes',
                 indice: 0,
             },
             {
                 text: 'Solicitudes delegadas a mí',
-                path: '/cord/misDelegados',
+                path: '/cord/mesaPartes/misDelegados',
                 indice: 1,
             }
         ]
+    },
+    {
+        text: 'Estadisticas',
+        path: '/cord/estadisticas',
+        icon: <InboxOutlinedIcon />,
+        indice: 1,
     }
 ];

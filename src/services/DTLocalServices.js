@@ -16,23 +16,23 @@ import { data } from "./data/curso-horario"
 
 export function getRolName(rolID) {
     let rolName
-    if (rolID == 0) {
+    if (rolID === 0) {
         rolName = "Administrador"
-    } else if (rolID == 1) {
+    } else if (rolID === 1) {
         rolName = "Docente"
-    } else if (rolID == 2) {
+    } else if (rolID === 2) {
         rolName = "Asistente de Sección"
-    } else if (rolID == 3) {
+    } else if (rolID === 3) {
         rolName = "Coordinador de Sección"
-    } else if (rolID == 4) {
+    } else if (rolID === 4) {
         rolName = "Asistente de Departamento"
-    } else if (rolID == 5) {
+    } else if (rolID === 5) {
         rolName = "Jefe de Departamento"
-    } else if (rolID == 6) {
+    } else if (rolID === 6) {
         rolName = "Secretaria de Departamento"
-    } else if (rolID == 7) {
+    } else if (rolID === 7) {
         rolName = "Usuario Externo"
-    } else if (rolID == 8) {
+    } else if (rolID === 8) {
         rolName = "Usuario Nuevo"
     } else if (rolID == 9) {
         rolName = "Asistente de Investigación"

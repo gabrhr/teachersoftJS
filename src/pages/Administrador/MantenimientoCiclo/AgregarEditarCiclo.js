@@ -35,8 +35,8 @@ const initialFieldValues = {
     id: 0,
     anho: thisYear.toString(),
     periodo: '1',
-    fechaInicio: defaultInitDate,
-    fechaFin: defaultEndDate,
+    fecha_inicio: defaultInitDate,
+    fecha_fin: defaultEndDate,
 }
 
 
@@ -58,11 +58,11 @@ export default function AgregarEditarCiclo(props) {
         if ('periodo' in fieldValues)
             temp.periodo = DTLocalServices.requiredField(fieldValues.periodo)
 
-        const fechaMin = new Date(fieldValues.fechaInicio);
-        const fechaMax = new Date(fieldValues.fechaFin);
+        const fechaMin = new Date(fieldValues.fecha_inicio);
+        const fechaMax = new Date(fieldValues.fecha_fin);
         if (fechaMin >= fechaMax){
-            temp.fechaInicio = "La fecha de Inicio debe ser menor a la fecha Fin";
-            temp.fechaFin = "La fecha de Fin debe ser mayor a la fecha de Inicio";
+            temp.fecha_inicio = "La fecha de Inicio debe ser menor a la fecha Fin";
+            temp.fecha_fin = "La fecha de Fin debe ser mayor a la fecha de Inicio";
         }
         if (fechaMin >= fechaMax){
             setOpen(true);
@@ -90,6 +90,9 @@ export default function AgregarEditarCiclo(props) {
     const handleSubmit = async e => {
         /* e is a "default parameter" */
         e.preventDefault();
+
+        
+
         let fechaCreacion= "";
         if (validate()){
           //window.alert('valid')
@@ -97,6 +100,10 @@ export default function AgregarEditarCiclo(props) {
             const ciclo = await CicloService.getCiclo(values.id);
             fechaCreacion = ciclo.fecha_creacion;
           }
+          let aux_fecha_inicio = new Date(values.fecha_inicio);
+          let aux_fecha_fin = new Date(values.fecha_fin);
+          aux_fecha_inicio.setDate(aux_fecha_inicio.getDate() - 1);
+          aux_fecha_fin.setDate(aux_fecha_fin.getDate() - 1);
           const newCiclo = {
             id: values.id,
             activo: 1,
@@ -104,11 +111,11 @@ export default function AgregarEditarCiclo(props) {
             fecha_modificacion: null,
             anho: values.anho,
             periodo: values.periodo,
-            fecha_inicio: values.fechaInicio,
-            fecha_fin: values.fechaFin,
+            fecha_inicio: aux_fecha_inicio,
+            fecha_fin: aux_fecha_fin,
           }
-          console.log("FECHA INICIO SUBMIT:",values.fechaInicio)
-        //   if(values.fechaInicio<values.fechaFin) console.log("CORRECTA COMPARACION")
+          console.log("FECHA INICIO SUBMIT:",values.fecha_inicio)
+        //   if(values.fecha_inicio<values.fecha_fin) console.log("CORRECTA COMPARACION")
         //   else console.log("INCORRECTA COMPARACION")
           addOrEdit(newCiclo,resetForm);
 
@@ -119,8 +126,19 @@ export default function AgregarEditarCiclo(props) {
 
           if (recordForEdit != null) {
               /* object is not empty */
+
+              let aux_fecha_inicio = new Date(recordForEdit.fecha_inicio);
+              let aux_fecha_fin = new Date(recordForEdit.fecha_fin);
+              aux_fecha_inicio.setDate(aux_fecha_inicio.getDate() + 1);
+              aux_fecha_fin.setDate(aux_fecha_fin.getDate() + 1);
+
               setValues({
-                  ...recordForEdit
+                id: recordForEdit.id,
+                anho: recordForEdit.anho,
+                periodo: recordForEdit.periodo,
+                fecha_inicio: aux_fecha_inicio.toString(),
+                fecha_fin: aux_fecha_fin.toString(),
+                  //...recordForEdit
               })
           }
     }, [recordForEdit]);
@@ -151,22 +169,22 @@ export default function AgregarEditarCiclo(props) {
                     />
                 </Grid>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
-                    {console.log("FECHA INICIO:",values.fechaInicio)}
+                    {console.log("FECHA INICIO:",values.fecha_inicio)}
                     <SimpleDatePicker
-                        name="fechaInicio"
+                        name="fecha_inicio"
                         label="Fecha Inicio"
-                        value={values.fechaInicio}
+                        value={values.fecha_inicio}
                         year={values.anho}
                         onChange={handleInputChange}
-                        error={errors.fechaInicio}
+                        error={errors.fecha_inicio}
                     />
                     <SimpleDatePicker
-                        name="fechaFin"
+                        name="fecha_fin" 
                         label="Fecha Fin"
-                        value={values.fechaFin}
+                        value={values.fecha_fin}
                         year={values.anho}
                         onChange={handleInputChange}
-                        error={errors.fechaFin}
+                        error={errors.fecha_fin}
                     />
                     <ValidationBox
                         open = {open}
