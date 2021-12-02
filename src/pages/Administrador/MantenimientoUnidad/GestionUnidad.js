@@ -276,6 +276,7 @@ export default function GestionUnidad() {
             openPopup={openPopup}
             setOpenPopup={setOpenPopup}
             title= {recordForEdit ? "Editar Facultad": "Nuevo Facultad"}
+            size="sm"
           >
               <AgregarEditarUnidad
                 recordForEdit={recordForEdit}

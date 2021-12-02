@@ -17,8 +17,6 @@ const getPreferencias =  async (ciclo) => {
   
   if(!dataPref) dataPref = [];
 
-
-  console.log(dataPref);
   const docentes = [];
   for(let doc of dataPref) {
     const preferencias = [];
@@ -33,7 +31,7 @@ const getPreferencias =  async (ciclo) => {
         "horario": newHor[0].codigo,
         "horas": doc.sesiones[i].horas,
         //"Horario": newHor[0],
-        //"Sesion": doc.sesiones[i],
+        "Sesion": doc.sesiones[i].secuencia ? "Laboratorio" : "Clase",
       })
     }
 
@@ -70,13 +68,29 @@ export default function SolPreferenciaDocentes(){
       if(newPref){
         setProfesoresMostrar(newPref);
         setPreferenciaCargados(true)
+        setRecords(newPref);
       }
     });
   }, [ciclo] )
   
     const handleSearch = e => {
-        const nuevosProfesores = profesoresMostrar.filter(x => x.nombres.toLowerCase().includes(e.target.value.toLowerCase()))
-        setProfesoresMostrar(nuevosProfesores)
+      let target = e.target;
+      /* React "state object" (useState()) doens't allow functions, only
+        * objects.  Thus the function needs to be inside an object. */
+      if (target.value === ""){
+        console.log("ingreso if")
+        setProfesoresMostrar(records)
+        return profesoresMostrar
+      }
+      else{
+        console.log("ingreso else")
+        const profMostrar = profesoresMostrar.filter(x => `${x.nombres.toLowerCase()}, ${x.apellidos.toLowerCase()}`
+          .includes(target.value.toLowerCase()))
+
+        console.log(profMostrar);
+        setProfesoresMostrar(profMostrar);
+        return profesoresMostrar;
+      }
     }
        
 

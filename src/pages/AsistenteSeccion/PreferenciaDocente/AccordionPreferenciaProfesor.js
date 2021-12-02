@@ -74,7 +74,6 @@ function generateRow(docente) {
 
 /* Generates a customized row with the data */
 function generateRows(profesores) {
-    console.log(profesores)
     return (
         profesores.map(docente => (
             <Accordion disableGutters>

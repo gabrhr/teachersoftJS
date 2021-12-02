@@ -185,14 +185,12 @@ export default function GestionCargaCursos() {
 
     const validate = () =>{
         if(errorHorario || errorHoraSesion || cantSes === 0){
-            console.log("Cagaste")
             return false
         }
-        console.log("No cagaste")
         return true;
     }
 
-    const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroCursos");
+    const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroHorarios");
 
     const guardarHorario = async () => {
       let arrayCadenas = dValuNombre.split(" ");

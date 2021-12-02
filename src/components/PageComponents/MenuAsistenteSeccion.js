@@ -16,7 +16,7 @@ export const MenuAsistenteSeccion = [
         subNav: [
             {
                 text: 'Registro de Horarios',
-                path: '/as/asignacionCarga/registroCursos',
+                path: '/as/asignacionCarga/registroHorarios',
                 indice: 0,
             },
             {
