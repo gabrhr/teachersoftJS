@@ -165,7 +165,9 @@ export default function GestionTrabajosInvestigacionDetalle(props){
                              
                     <StyleDictionary title="Publicación Validada:" text={values.validacion_preliminar == 1 ? "Si" : "No"}/>
                     <StyleDictionary title="Código de Validación:" 
-                            text={values.codigo_validacion == 0 ? "A1" :
+                            text={
+                                  values.validacion_preliminar == 0 ? "*SIN VALIDAR*" :
+                                  values.codigo_validacion == 0 ? "A1" :
                                   values.codigo_validacion == 1 ? "L1" : 
                                   values.codigo_validacion == 2 ? "L2" : 
                                   values.codigo_validacion == 3 ? "P1" : 
