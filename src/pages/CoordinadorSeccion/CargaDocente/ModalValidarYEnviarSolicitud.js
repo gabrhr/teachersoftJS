@@ -34,7 +34,7 @@ const hallarDetalle = (sesiones) => {
         }
       }
       //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
-      (sumaHorasdoc >= sesiones[0].horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+      (sumaHorasdoc >= ses.horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
   
       if(estado === "Faltan Horas") break;
     }
@@ -91,8 +91,8 @@ const hallarDetalle = (sesiones) => {
         })
         horTotal++;
     }
-    if(horTotal === horMoment && horTotal > 0)  
-        await actualizarCursoCiclo(dataHor[0].curso_ciclo);
+    // if(horTotal === horMoment && horTotal > 0)  
+    //     await actualizarCursoCiclo(dataHor[0].curso_ciclo);
   
     return dataHorarios;
   }
