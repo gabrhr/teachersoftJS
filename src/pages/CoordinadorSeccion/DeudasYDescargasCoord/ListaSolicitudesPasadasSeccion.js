@@ -43,14 +43,15 @@ const tableHeaders = [
 
 
 function Item(props){
-    const {item,getRow,setOpenAprobados} = props
+    const {item,getRow,setOpenAprobados,setProcesoActual} = props
     function formatoFecha(fecha){
         if(fecha!=null){
             return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
     console.log("item",item)
-    
+    setProcesoActual(item.procesoDescarga)
+    console.log("Proceso Descarga del item", item.procesoDescarga)
     return (
         <>
             <TableRow>
@@ -114,7 +115,7 @@ function Item(props){
                         pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
                         state:{
                             recordForEdit: item,
-                            procesoActual: item.procesoDescarga.id
+                            procesoActual: item.procesoDescarga
                         }
                     }}  style={{ textDecoration: 'none' }}>
                         <Controls.Button
@@ -133,12 +134,13 @@ function Item(props){
 }
 
 export default function ListaProcesosPasadosSeccion(props) {
-    const { records, procesoActual } = props
-    console.log("ifunciontem",procesoActual)
+    const {records} = props
+    
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
     const [openAprobados, setOpenAprobados] = useState(false)
-
+    const [procesoActual, setProcesoActual] = useState(null)
+    console.log("ifunciontem",procesoActual)
 
     const {
         TblContainer,
@@ -195,7 +197,7 @@ export default function ListaProcesosPasadosSeccion(props) {
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                             <Item key={index} item={item} getRow= {getRow}
-                                setOpenAprobados={setOpenAprobados} 
+                                setOpenAprobados={setOpenAprobados} setProcesoActual = {setProcesoActual}
                             />
                         ))
                     }
@@ -217,7 +219,7 @@ export default function ListaProcesosPasadosSeccion(props) {
                 title="Aprobados"
                 size = "md"
             >
-               <ModalAprobados setOpenAprobados = {setOpenAprobados} /*guardarSolicitud = {guardarSolicitud}*//>
+               <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual} resultado = {1}/>
             </Popup>
         </div>
     )

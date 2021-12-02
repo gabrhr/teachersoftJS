@@ -145,7 +145,20 @@ export default function NuevoProcesoForm() {
 
     const getTramitesDescargasSeccion = async() =>{
         //let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual, user.persona.seccion.id,0);
+        let request
+        
+        const rq1 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 0);
+        const rq2 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 1);
+        const rq3 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 2);
+
+        console.log("rq1 ", rq1)
+        console.log("rq2 ", rq2)
+
+        request = rq1.concat(rq2).concat(rq3)
+
+        console.log(procesoActual.id)
+        console.log(user.persona.seccion.id)
+        
         console.log(request)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)

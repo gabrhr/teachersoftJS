@@ -21,6 +21,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ModalGuardarAprobados from './ModalGuardarAprobados'
 import { Alert } from '@mui/material';
 import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { UserContext } from '../../../constants/UserContext';
 
@@ -46,7 +47,7 @@ const tableHeaders = [
     },
 ]
 
-export default function ModalAprobados({setOpenAprobados, procesoActual}){
+export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, solicitudActual, resultado = 4}){
 
     const [records, setRecords] = useState([/*
         {
@@ -88,7 +89,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual}){
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
-    const guardarSolicitudActual = () =>{
+    const guardarSolicitudActual = async() =>{
         for(let i = 0; i < records.length; i++){
             if(records[i].seleccionado){
                 records[i].resultado = 1
@@ -96,10 +97,13 @@ export default function ModalAprobados({setOpenAprobados, procesoActual}){
                 records[i].resultado = 2
                 records[i].tramiteSeccionDescarga = null
             }
-            tramiteDescargaService.updateTramiteDescarga(records[i])
+            await tramiteDescargaService.updateTramiteDescarga(records[i])
             console.log("ID: de tramite modificado", records[i].id)
         }
-        console.log("Records modificado", records)
+        //Se actualiza el estado tracking
+        solicitudActual.estado_tracking = 1
+        await tramiteSeccionDescargaService.updateTramitesSeccionDescarga(solicitudActual)
+        console.log("Records modificado ", records)
     }
 
     const handleSearch = e => {
@@ -132,10 +136,17 @@ export default function ModalAprobados({setOpenAprobados, procesoActual}){
     const getTramitesDescargasDocentes = async() =>{
         //console.log(user.persona.departamento.id)
         //let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
-        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 0);
+        let request
+        if(resultado === 4){
+            const rq1 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 1);
+            const rq2 = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 2);
+            request = rq1.concat(rq2)
+        }else{
+            request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, resultado);
+        }
         console.log(request)
         setDescargas(request.length)
-        setAprobados(request[0].tramiteSeccionDescarga.cantidad_aprobada)
+        setAprobados(cantAprobada)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
     } 
