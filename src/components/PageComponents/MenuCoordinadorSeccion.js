@@ -4,6 +4,7 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
+import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 
 export const MenuCoordinadorSeccion = [
     {
@@ -67,7 +68,7 @@ export const MenuCoordinadorSeccion = [
     {
         text: 'Estadisticas',
         path: '/cord/estadisticas',
-        icon: <InboxOutlinedIcon />,
+        icon: <ShowChartOutlinedIcon />,
         indice: 1,
     }
 ];

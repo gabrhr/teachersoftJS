@@ -286,7 +286,7 @@ export default function CargaDocenteCursos(){
                             <StyledTableCell align = "center">{item.cantidad_horarios}</StyledTableCell>
                             <StyledTableCell>
                             <Link to ={{
-                                pathname:`/ad/asignacionCarga/Cargadocente/horarios`,
+                                pathname:`/jd/asignacionCarga/Cargadocente/horarios`,
                                 state:{
                                     curso: item.curso
                                 }

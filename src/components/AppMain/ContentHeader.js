@@ -85,7 +85,7 @@ function CboCiclo (props) {
     },[values])
     
     React.useEffect(()=>{
-        window.localStorage.setItem('ciclo', JSON.stringify(parseInt(1))) //El ciclo fijo - actual
+        window.localStorage.setItem('ciclo', JSON.stringify(parseInt(2))) //El ciclo fijo - actual
     },[])
 
 

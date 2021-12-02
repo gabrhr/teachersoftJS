@@ -3,20 +3,6 @@ import {Document, Page, Text, View, Image} from '@react-pdf/renderer'
 import logoPUCP from '../../../assets/images/LogoPUCP.png'
 
 const Docentes = ({sesion_docentes}) => {
-  //   switch (docente.tipo_docente){
-  //   case 1:
-  //     tipoDoc = "TC"
-  //     break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
-  //   case 2:
-  //     tipoDoc = "TPC"
-  //     break;
-  //   case 3:
-  //     tipoDoc = "TPA"
-  //     break;
-  //   default:
-  //     tipoDoc = "No asignado";
-  //     break;  //Se pasa a otro mapeo - ya que no corresponde como profesor
-  // }
 
   return(
     sesion_docentes.map((sesion)=>
@@ -29,29 +15,29 @@ const Docentes = ({sesion_docentes}) => {
           alt = "random image"
           style = {{maxWidth: '240px', maxHeight: '280'}}
         /> */}
-        <View style={{flexDirection: 'row', paddingLeft:'9%', paddingTop:'1%'}} wrap={false}>
+        <View style={{flexDirection: 'row', paddingLeft:'70px', paddingTop:'5px'}} wrap={false}>
           <View style={{width: '250px'}}>
-            <Text style={{fontSize: '14px'}}>
+            <Text style={{fontSize: '12px'}}>
               {`${sesion.docente.apellidos}, ${sesion.docente.nombres}`}
             </Text>
-            <Text style={{fontSize: '12px'}}>
+            <Text style={{fontSize: '10px'}}>
               {`${sesion.docente.numero_documento}`}
             </Text> 
           </View>
           <View>
-            <Text style={{fontSize: '12px'}}>
+            <Text style={{fontSize: '10px'}}>
               {`${sesion.docente.seccion.nombre}`}
             </Text>
-            <Text style={{fontSize: '12px'}}>
+            <Text style={{fontSize: '10px'}}>
               {sesion.docente.tipo_docente === 1 ? "TC" : sesion.docente.tipo_docente === 2 ? "TPC" :
                sesion.docente.tipo_docente === 1 ? "TPA" : "No asignado"}
             </Text>
           </View>
-          <View style={{paddingLeft:'2%'}}>
-            <Text style={{fontSize: '12px'}}>
+          <View style={{paddingLeft:'25px'}}>
+            <Text style={{fontSize: '10px'}}>
               {`Carga del ciclo: ${sesion.docente.cargaDocente}`}
             </Text> 
-            <Text style={{fontSize: '12px'}}>
+            <Text style={{fontSize: '10px'}}>
               {`Deuda horaria: ${sesion.docente.deuda_docente}`}
             </Text>
           </View>
@@ -64,14 +50,21 @@ const Docentes = ({sesion_docentes}) => {
 const ImprimirDocentes = ({sesiones, cantDocClase}) => {
   const clase = sesiones.filter((ses)=>ses.secuencia===0)
   const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
-  // const cant = clase[0].sesion_docentes.length
 
   return(
     <>
-      {console.log("cLASE: ", clase.sesion_docentes)}
+      { ((clase.length ? clase[0].sesion_docentes.length ? true : false : false) || 
+        (laboratorio.length ? laboratorio[0].sesion_docentes.length ? true : false : false) ) ? (
+        <View style={{paddingTop: '10px', width: '100%', alignItems: 'center'}}>
+          <View style={{width:'500px', height: '0.6px', backgroundColor: 'black'}}/>
+        </View>
+      ) : (
+        <></>
+      )
+      }
        { clase.length ?
             <View wrap={false}>
-              <Text style={{paddingLeft: '8%', fontSize: '13.5px'}}>
+              <Text style={{paddingLeft: '56px', fontSize: '12px'}}>
                   {clase[0].sesion_docentes.length ? "\nLista de Docentes de Clases: " : ""}
               </Text>
               <Docentes sesion_docentes = {clase[0].sesion_docentes}/>
@@ -80,8 +73,8 @@ const ImprimirDocentes = ({sesiones, cantDocClase}) => {
         }
         { laboratorio.length ?
               <View wrap={false}>
-                {console.log(laboratorio[0])}
-                <Text style={{paddingLeft: '8%', fontSize: '13.5px'}}>
+                {/* {console.log(laboratorio[0])} */}
+                <Text style={{paddingLeft: '56px', fontSize: '12px'}}>
                     {laboratorio[0].sesion_docentes.length ? "\nLista de Docentes de Laboratorios: " : ""}
                 </Text>
                 <Docentes sesion_docentes = {laboratorio[0].sesion_docentes}/>
@@ -124,12 +117,13 @@ const Horarios = ({horarios}) => {
     horarios.map(horario=>
       <>
       {/* {console.log("POR FAVOR: ", horarios)} */}
-        <View style={{flexDirection: 'row'}} wrap={false}>
+        <View style={{flexDirection: 'row'}} /*wrap={false}*/>
           <View>
             <View style={{flexDirection: 'row'}}>
               <View><Text style={{paddingTop: '12px', paddingLeft: '49px', fontSize: '16px'}}>{`Horario ${horario.codigo}`}</Text></View>
               <View style = {{paddingTop: '14px', paddingLeft: '10px'}}>
-                <Text style={horario.estado==='Horas Asignadas'?
+                {console.log(horario.estado)}
+                <Text style={horario.estado === "Horas Asignadas" ?
                             {fontSize: '12px', color: 'green'}:
                             {fontSize: '12px', color: 'red'}}>
                   {`(${horario.estado})`}

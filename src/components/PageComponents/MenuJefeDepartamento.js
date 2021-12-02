@@ -7,8 +7,8 @@ import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 
 export const MenuJefeDepartamento = [
     {
-        text: 'Asignación de Carga',
-        path: '/jd/asignacionCarga',
+        text: 'Carga del Ciclo',
+        path: '/jd/asignacionCarga/Cargadocente',
         icon: <CalendarTodayOutlinedIcon />,
         indice: 0,
     },
