@@ -87,7 +87,7 @@ function updatePersona2(persona) {
 const deletePersona = async (id) => {
   try{
     const request = await axios.delete(`${url}/persona/${id}`, tokenService.GetTokenPrueba(), id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
     return false;
@@ -164,7 +164,7 @@ const updatePreferencia = async (newObject) => {
 const deletePreferencia = async (id) => {
   try{
     const request = await axios.delete(`${url}/preferencia/${id}`, tokenService.GetTokenPrueba(), id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
     return false;

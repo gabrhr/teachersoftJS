@@ -110,6 +110,7 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/asignacionCarga/registroHorarios", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudasYDescargaCoord },
+  { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/asignacionCarga/agregarHorario", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
   { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: MisSolicitudes },
@@ -199,7 +200,7 @@ export default function Router1(props) {
              <Redirect to="/doc/preferenciaDocente" />
         </PrivateRoute>
         <PrivateRoute exact path="/as" requireRoles={[2]}>
-             <Redirect to="/as/asignacionCarga/registroCursos" />
+             <Redirect to="/as/asignacionCarga/registroHorarios" />
         </PrivateRoute>
         <PrivateRoute exact path="/cord" requireRoles={[3]}>
              <Redirect to="/cord/asignacionCarga/registroHorarios" />
@@ -266,9 +267,10 @@ export default function Router1(props) {
         <Route path="/invitado/atenderxemail/" render={() => <DelegadoExterno />} />
         <Route exact path="/login" render={() => <Login />}/>
         <Route exact path="/">
-          {user?.id>0? 
-            <Redirect to={generateRouteRol(rol)} /> 
-            : <Redirect to="/login"/> }
+          {user?.id>0
+            ? <Redirect to={generateRouteRol(rol)} /> 
+            : <Redirect to="/login"/> 
+          }
         </Route>
 
         <Route default render={() => <ErrorDireccionamiento />} />

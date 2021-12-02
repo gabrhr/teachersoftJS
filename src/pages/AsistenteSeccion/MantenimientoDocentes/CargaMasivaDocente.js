@@ -14,6 +14,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { set } from 'date-fns';
 import personaService from '../../../services/personaService';
 import cursoService from '../../../services/cursoService';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 const tableHeaders = [
     {
@@ -74,28 +76,30 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
 
     const datosDocente = listDocentes => {
       //const dataSesiones = defragmentarSesiones(listHorarios);
+      const  user = JSON.parse(localStorage.getItem("user"))
+
       const docentes = []
       listDocentes.map(doc => (
         docentes.push({
-          "foto_URL": doc.foto_URL ? doc.foto_URL : 'static/images/avatar/1.jpg',
-          "nombres": doc.nombres,
-          "apellidos": doc.apellidos,
+          "foto_URL": 'static/images/avatar/1.jpg',
+          "nombres": doc.Nombres,
+          "apellidos": doc.Apellidos,
           "tipo_persona": 1,
-          "tipo_docente": doc.tipo_docente ? doc.tipo_docente: 0, //Agregar al excel
+          "tipo_docente": doc.Tipo_Docente === "TC" ? 1 : (doc.Tipo_Docente === "TPC" ? 2 : (doc.Tipo_Docente === "TPA" ? 3 : 0)) , //Agregar al excel
           "seccion": {
-              "id": 3,
-              "nombre": doc.seccion_nombre,
+              "id": user.persona.seccion.id,
+              "nombre": doc.Sección,
           },
           "departamento": {
-              "id": 3,
+              "id": user.persona.departamento.id,
               "unidad": {
                   "id": 1,
               }
           },
-          "correo_pucp": doc.correo_pucp,
-          "telefono": doc.telefono,
-          "codigo_pucp": doc.codigo_pucp,
-          "numero_documento": doc.numero_documento,
+          "correo_pucp": doc.Correo,
+          "telefono": doc.Teléfono,
+          "codigo_pucp": doc.Código,
+          "numero_documento": doc.Documento,
           "tipo_documento": 0
         
       })
@@ -113,31 +117,31 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
     } 
 
     const validate = (obj) => {
-      if(obj.nombres === ""){
-        alert("Error en la plantilla - Campo nombres")
+      if(obj.Nombres === ""){
+        alert("Error en la plantilla - Campo Nombres")
         return false
       }
-      if(obj.apellidos === ""){
-        alert("Error en la plantilla - Campo apellidos")
+      if(obj.Apellidos === ""){
+        alert("Error en la plantilla - Campo Apellidos")
         return false
       }
-      if(obj.seccion_nombre === ""){
-        alert("Error en la plantilla - Campo seccion_nombre")
+      if(obj.Sección === ""){
+        alert("Error en la plantilla - Campo Sección")
         return false
       }
-      if (!validateEmail(obj.correo_pucp) || obj.correo_pucp === "") {
-        alert("Error en la plantilla - Campo correo_pucp")
+      if (!validateEmail(obj.Correo) || obj.Correo === "") {
+        alert("Error en la plantilla - Campo Correo")
         return false
       }
-      if(!isNumeric(obj.codigo_pucp) || obj.codigo_pucp.length !== 8 || obj.codigo_pucp === ""){
-        alert("Error en la plantilla - Campo codigo_pucp")
+      if(!isNumeric(obj.Código) || obj.Código.length !== 8 || obj.Código === ""){
+        alert("Error en la plantilla - Campo Código")
         return false
       }
-      if(!isNumeric(obj.numero_documento) || obj.numero_documento.length !== 8 || obj.numero_documento === ""){
+      if(!isNumeric(obj.Documento) || obj.Documento.length !== 8 || obj.Documento === ""){
         alert("Error en la plantilla - Campo numero_documento")
         return false
       }
-      if(!isNumeric(obj.telefono) || (obj.telefono.length !== 9 && obj.telefono.length !== 7) || obj.telefono === ""){
+      if(!isNumeric(obj.Teléfono) || (obj.Teléfono.length !== 9 && obj.Teléfono.length !== 7) || obj.telefono === ""){
         alert("Error en la plantilla - Campo telefono")
         return false
       }
@@ -230,14 +234,16 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
             console.log(error);
         }
     };
+    let permission = 1; //Tenemos el permiso de registrar nuevo horario
 
     const actualizarDatos = async e => { 
-      let permission = 1;
+      permission = 0;
       //Servicio para cargar los docentes
-      console.log("Lista de docentes del excel")
+      console.log("Lista de docentes del excel:", recordsX)
       for (let doc of recordsX) {
           if(personaService.registerPersona(doc))
-            permission = 0;
+            permission = 1;
+
       };
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       if(permission)  {
@@ -294,7 +300,9 @@ export default function CargaMasivaDocente({setOpenPopUp, records, setRecords, s
                             <Grid container>
                                 <Grid item pl={.5}>
                                 <Avatar>
-                                    <img height = "125%" width = "125%" text-align ="center" src={item.foto_URL} alt=""></img>
+                                    {item.foto_URL !== ("static/images/avatar/1.jpg" || "") 
+                                      ? <img height = "125%" width = "125%" text-align ="center" src={item.foto_URL} alt=""></img>
+                                      :  <AccountCircleIcon/>}
                                 </Avatar>
                                 </Grid>
                                 <Grid item sm>

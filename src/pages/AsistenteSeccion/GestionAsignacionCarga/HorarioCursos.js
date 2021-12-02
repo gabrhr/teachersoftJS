@@ -162,7 +162,7 @@ const fillHorarios = async (ciclo) => {
 }
 
 const actualizarCursoCiclo = async (curso_ciclo)=> {
-  if(curso_ciclo.cantidad_horarios !== 0){
+  if(curso_ciclo.estado_curso !== 0){
     const horarios = await horarioService.listarPorCursoCiclo(curso_ciclo.curso.id, curso_ciclo.ciclo.id) 
     if(!horarios.length){
       const newCC = {
@@ -173,7 +173,22 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
         "curso": {
           "id": curso_ciclo.curso.id,
         },
-        "cantidad_horarios": 0, //Se actualiza al nuevo estado - con horarios
+        "estado_curso": 0, //Se actualiza al nuevo estado - con horarios
+        "cantidad_horarios": 0, //Como se eliminaron los horarios - se queda en cero
+        "estado_tracking": curso_ciclo.estado_tracking,
+      }
+      const request = await cursoService.updateCursoCiclo(newCC);
+    }else{
+      const newCC = {
+        "id": curso_ciclo.id,
+        "ciclo": {
+          "id": curso_ciclo.ciclo.id,
+        },
+        "curso": {
+          "id": curso_ciclo.curso.id,
+        },
+        "estado_curso": 1, //Se actualiza al nuevo estado - con horarios
+        "cantidad_horarios": curso_ciclo.cantidad_horarios -1, //Como se eliminaron los horarios - se queda en cero
         "estado_tracking": curso_ciclo.estado_tracking,
       }
       const request = await cursoService.updateCursoCiclo(newCC);
@@ -182,7 +197,7 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
   }
 }
 
-export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo}) {
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo, cicloActual}) {
   console.log(ciclo);
 
     //let hors = (window.localStorage.getItem('listHorario'))
@@ -350,66 +365,71 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 </Grid>
                 <Grid item xs={5}/>
                 {/* FIX:  left align */}
-                <Grid item xs={2} align="right">
-                    {/* FIX:  DT IconButton */}
-                    <Controls.Button 
-                        title="Agregar Nuevo Horario"
-                        variant="text+icon"
-                        text = "Agregar Nuevo Horario"
-                        onClick = {(event) => handleClick(event)}
-                    />
-                </Grid>
+                {cicloActual === ciclo ?
+                  <Grid item xs={2} align="right">
+                      {/* FIX:  DT IconButton */}
+                      <Controls.Button 
+                          title="Agregar Nuevo Horario"
+                          variant="text+icon"
+                          text = "Agregar Nuevo Horario"
+                          onClick = {(event) => handleClick(event)}
+                      />
+                  </Grid>
+                : <> </>}
             </Grid>
             <BoxTbl>
                     {horariosCargados ? (
                       <>
                         <TblContainer>
-                              <colgroup>
-                                <col style={{ width: '5%' }} />
-                                <col style={{ width: '30%' }} />
-                                <col style={{ width: '25%' }} />
-                                <col style={{ width: '5%' }} />
-                                <col style={{ width: '8%' }} />
-                                <col style={{ width: '15%' }} />
-                                <col style={{ width: '5%' }} />
-                                <col style={{ width: '7%' }} />
-                              </colgroup>
-                            <TblHead />
-                            <TableBody>
-                            {/* {console.log(records)} */}
-                            { recordsAfterPagingAndSorting().map(item => (
-                                <TableRow key={item.id}>
-                                    {/*<TableCell
-                                    align="right"
-                                    >
-                                    {item.clave}
-                                    </TableCell>*/}
-                                    <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
-                                    <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
-                                    <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
-                                    <TableCell align = "center">{item.curso_ciclo.curso.creditos}</TableCell>
-                                    <TableCell align = "center">{item.codigo}</TableCell>
-                                    <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
-                                    <TableCell align = "center">{item.sesiones.hora_sesion}</TableCell>
-                                    <TableCell>
-                                      {/* Accion editar */}
-                                      <Controls.ActionButton
-                                        color="warning"
-                                        onClick={ () => {handleEdit(item)}}
-                                      >
-                                        <EditOutlinedIcon fontSize="small" />
-                                      </Controls.ActionButton>
-                                      {/* Accion eliminar */}
-                                      <Controls.ActionButton
-                                        color="warning"
-                                        onClick={ () => {guardarIndex(item)}}
-                                      >
-                                        <DeleteOutlinedIcon fontSize="small" />
-                                      </Controls.ActionButton>
-                                    </TableCell>
-                                </TableRow>
-                                ))
-
+                        <colgroup>
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '30%' }} />
+                          <col style={{ width: '25%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '8%' }} />
+                          <col style={{ width: '15%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '7%' }} />
+                      </colgroup>
+                    <TblHead />
+                    <TableBody>
+                    {/* {console.log(records)} */}
+                    { recordsAfterPagingAndSorting().map(item => (
+                        <TableRow key={item.id}>
+                            {/*<TableCell
+                            align="right"
+                            >
+                            {item.clave}
+                            </TableCell>*/}
+                            <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
+                            <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
+                            <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
+                            <TableCell align = "center">{item.curso_ciclo.curso.creditos}</TableCell>
+                            <TableCell align = "center">{item.codigo}</TableCell>
+                            <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
+                            <TableCell align = "center">{item.sesiones.hora_sesion}</TableCell>
+                            <TableCell>
+                            {cicloActual === ciclo ?
+                              <>
+                                {/* Accion editar */}
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {handleEdit(item)}}
+                                >
+                                  <EditOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                                {/* Accion eliminar */}
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {guardarIndex(item)}}
+                                >
+                                  <DeleteOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                              </>
+                              : <></>}
+                            </TableCell>
+                        </TableRow>
+                        ))
                             }
                             </TableBody>
                         </TblContainer>
@@ -441,7 +461,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
             <Popup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
-                title= {"Editar Horario"}
+                title= {`Editar Horario | Curso: ${recordForEdit ? recordForEdit.curso_ciclo.curso.nombre : ''}`}
                 size = "sm"
             >
               <EditarHorarioCurso

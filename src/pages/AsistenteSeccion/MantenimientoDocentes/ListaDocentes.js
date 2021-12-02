@@ -1,20 +1,23 @@
-import { Avatar, Grid, InputAdornment, ListItem, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { Avatar, Grid, InputAdornment, ListItem, TableBody, TableCell, TableRow, Typography, Box } from '@mui/material'
 import React, { useState, useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls'
 import useTable from '../../../components/useTable'
+import { Form, useForm } from '../../../components/useForm';
 import personaService from '../../../services/personaService';
 import Popup from '../../../components/util/Popup'
 import EditarDocente from './EditarDocente'
 import AgregarDocente from './AgregarDocente'
 import EliminarDocente from './EliminarDocente'
 import EliminarDocentes from './EliminarDocentes'
+import { useTheme } from '@mui/material/styles'
+
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LinearProgress from '@mui/material/LinearProgress';
-import { Box } from '@mui/material';
+import { SettingsPowerSharp } from '@mui/icons-material';
 
 const tableHeaders = [
     {
@@ -33,13 +36,13 @@ const tableHeaders = [
       id: 'datos',
       label: 'Datos',
       numeric: false,
-      sortable: true
+      sortable: false
     },
     {
       id: 'acciones',
       label: 'Acciones',
       numeric: false,
-      sortable: true
+      sortable: false
     }
     /* {
       id: 'bono',
@@ -48,16 +51,25 @@ const tableHeaders = [
       sortable: false
     } */
 ]
+
+const initialFieldValues = {
+    id: -1,
+    title: ''
+}
   
 export default function ListaDocentes({openPopup}) {
 
+    const [tipos, setTipos] = useState([])
     const [openPopupAdd, setOpenPopupAdd] = useState(false)
     const [openPopupEdit, setOpenPopupEdit] = useState(false)
     const [recordForEdit, setRecordForEdit] = useState(null)
+    const [editIndex, setEditIndex] = useState(); //No tenemos nada al inicio - debemos seleccionar un indice
     const [recordForDel, setRecordForDel] = useState(null)
     const [openDelOnePopup, setDelOnePopup] = useState(false)
     const [openDelAllPopup, setDelAllPopup] = useState(false)
     const [profesoresCargados, setProfesoresCargados] = useState(false)
+    const theme= useTheme();
+
     
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -68,11 +80,47 @@ export default function ListaDocentes({openPopup}) {
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
+
+    const {
+      values,
+      setValues,
+      handleInputChange
+    } = useForm(initialFieldValues);
     
     useEffect(() => {
+      setTipos([
+        {
+          id: -1,
+          title: "Todos los tipos"
+        },
+        {
+          id: 0,
+          title: "No Asignado"
+        },
+        {
+          id: 1,
+          title: "TC"
+        },
+        {
+          id: 2,
+          title: "TPC"
+        },
+        {
+          id: 3,
+          title: "TPA"
+        },
+      ]);
+      setValues({
+        id: -1,
+        title: "Todos los tipos"
+      });
+    }, [])
+
+    useEffect(() => {
       setProfesoresCargados(false)
-        getProfesores()
-      }, [openPopupEdit, openDelOnePopup, openPopupAdd, openPopup])
+      console.log(values.id);
+      getProfesores(values.id)
+    }, [values])
 
     function transformarDocentes (request){
         const recordsX = []
@@ -80,7 +128,7 @@ export default function ListaDocentes({openPopup}) {
           if(doc.codigo_pucp)
             recordsX.push({
                 "id": doc.id,
-                "url_foto": doc.foto_URL ? doc.foto_URL : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
+                "url_foto": doc.foto_URL,
                 "nombres": doc.nombres,
                 "apellidos": doc.apellidos,
                 "especialidad": doc.seccion.nombre,
@@ -93,16 +141,25 @@ export default function ListaDocentes({openPopup}) {
                 "id_departamento": doc.departamento.id,
                 "id_unidad": doc.departamento.unidad.id,
                 "numero_documento": doc.numero_documento,
+                "deuda_docente": doc.deuda_docente,
+                "cargaDocente": doc.cargaDocente,
+                "tipo_bono": doc.tipo_bono,
+                "fecha_ultimo_bono": doc.fecha_ultimo_bono,
             })
         })
         return recordsX;
     }
 
-    const getProfesores = async () =>{
-        const request = await personaService.getPersonasxTipo(1);
-        const recordsX = transformarDocentes(request)
-        setRecords(recordsX)
-        setProfesoresCargados(true)
+    const getProfesores = async (tipo_doc = -1) =>{
+      //if (!tipo_doc) tipo_doc = -1;
+      const request = await personaService.getPersonasxTipo(1);
+      const recordsX = transformarDocentes(request);
+      if(tipo_doc >= 0){
+        const filterX = recordsX.filter(x => x.tipo_docente === tipo_doc);
+        setRecords(filterX);
+      } 
+      else  setRecords(recordsX);
+      setProfesoresCargados(true)
     }
 
     const eliminarDocentes = async () =>{
@@ -135,26 +192,38 @@ export default function ListaDocentes({openPopup}) {
 
     const handleDeleteAll = () =>{
         setDelAllPopup(true)
-        console.log("Esto debería funcionar")
     }
 
-    const handleDelete = async item => {
-        console.log(item)
-        setRecordForDel(item)
-        setDelOnePopup(true)
+    const handleDelete = async (index, item) => {
+      setEditIndex(index)
+      setRecordForDel(item)
+      setDelOnePopup(true)
     }
 
-    const handleEdit = item => {
-       console.log(item)
+    const handleEdit = (index, item) => {
+       setEditIndex(index)
        setRecordForEdit(item)
        setOpenPopupEdit(true)
     }
-    console.log(records);
+
     return (
-        <>
+        <Form>
             <Grid container >
-                <Grid item xs={5}>
+                <Grid item xs = {2}>
                 {/* <Toolbar> */}
+                <Box  sx={{width: "10vw", align: "Right"}}> 
+                    <Controls.Select
+                        name="id"
+                        label="Tipo Docente"
+                        value={values.id}
+                        onChange={handleInputChange}
+                        options={tipos}
+                        type="contained"
+                    />
+                </Box>
+                </Grid>
+                <Grid item xs={0.5}> </Grid>
+                <Grid item xs={5.5}>
                 <Controls.Input
                     label="Buscar Docentes por Nombre"
                     InputProps={{
@@ -169,7 +238,7 @@ export default function ListaDocentes({openPopup}) {
                     type="search"
                 />
                 </Grid>
-                <Grid item xs={5}> </Grid>
+                <Grid item xs={2}> </Grid>
                 {/* FIX:  left align */}
                 <Grid item xs={2} align="right">
                 <Controls.Button
@@ -182,34 +251,34 @@ export default function ListaDocentes({openPopup}) {
             <BoxTbl>
               {profesoresCargados ? (
                 <TblContainer>
-                <TblHead />
-                <TableBody>
-                {
-                   recordsAfterPagingAndSorting().map(item => (
-                    <TableRow key={item.id} >
-                        <TableCell>
-                        <Grid container>
-                            <Grid item pl={.5}>
-                            <Avatar>
-                                {item.url_foto !== ("static/images/avatar/1.jpg" || "")
-                                  ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
-                                    src={item.url_foto}></img>
-                                  :  <AccountCircleIcon/>}
-                            </Avatar>
+                    <TblHead />
+                    <TableBody>
+                    {
+                       recordsAfterPagingAndSorting().map((item, index) => (
+                        <TableRow key={item.id}>
+                            <TableCell>
+                                <Grid container>
+                                    <Grid item pl={.5}>
+                                      <Avatar>
+                                          {item.url_foto !== ("static/images/avatar/1.jpg" || "")
+                                            ? <img height = "125%" width = "125%" text-align ="center" alt = "" 
+                                              src={item.url_foto}></img>
+                                            :  <AccountCircleIcon/>}
+                                      </Avatar>
+                                    </Grid>
+                                    <Grid item sm>
+                                        <Typography sx={{paddingLeft:2.5}}>
+                                            {`${item.apellidos}, ${item.nombres}`}
+                                        </Typography>
+                                        <div style={{paddingLeft:20}}>
+                                            Código PUCP: {item.codigo}
+                                        </div>
+                                        <div style={{paddingLeft:20}}>
+                                            DNI: {item.numero_documento}
+                                        </div>
+                                    </Grid>
                             </Grid>
-                            <Grid item sm>
-                                <Typography sx={{paddingLeft:2.5}}>
-                                    {`${item.apellidos}, ${item.nombres}`}
-                                </Typography>
-                                <div style={{paddingLeft:20}}>
-                                    Código PUCP: {item.codigo}
-                                </div>
-                                <div style={{paddingLeft:20}}>
-                                    DNI: {item.numero_documento}
-                                </div>
-                            </Grid>
-                        </Grid>
-                        </TableCell>
+                          </TableCell>
                         <TableCell>
                             <Typography >
                                 {item.especialidad}
@@ -230,32 +299,33 @@ export default function ListaDocentes({openPopup}) {
                                 Teléfono: {item.telefono}
                             </div>
                         </TableCell>
-                        {/* <TableCell>{item.bono}</TableCell> */}
-                        <TableCell>
-                          <Controls.ActionButton
-                            color="warning"
-                            onClick={ () => {handleEdit(item)}}
-                          >
-                            <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          {/* Accion eliminar */}
-                          <Controls.ActionButton
-                            color="warning"
-                            onClick={ () => {handleDelete(item)}}
-                          >
-                            <DeleteOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                        </TableCell>
-                    </TableRow>
+                            {/* <TableCell>{item.bono}</TableCell> */}
+                            <TableCell>
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {handleEdit(index, item)}}
+                              >
+                                <EditOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                              {/* Accion eliminar */}
+                              <Controls.ActionButton
+                                color="warning"
+                                onClick={ () => {handleDelete(index, item)}}
+                              >
+                                <DeleteOutlinedIcon fontSize="small" />
+                              </Controls.ActionButton>
+                            </TableCell>
+                      </TableRow>
                     ))
                 }
                 </TableBody>
             </TblContainer>
-              ) : (
-                <Box sx={{ width: '100%' }}>
-                  <LinearProgress />
-                </Box>
-              )}
+            ) : (
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress />
+              </Box>
+            )}
+              
                 <TblPagination />
             </BoxTbl>
                 {/* <Controls.Button
@@ -273,16 +343,26 @@ export default function ListaDocentes({openPopup}) {
               <EditarDocente
                 recordForEdit={recordForEdit}
                 setOpenPopup={setOpenPopupEdit}
+                records={records}
+                setRecords={setRecords}
+                transformarDocentes={transformarDocentes}
+                editIndex = {editIndex}
+                setEditIndex = {setEditIndex}
+                tipo = {values.id}
               />        
             </Popup>
 
             <Popup
                 openPopup={openPopupAdd}
                 setOpenPopup={setOpenPopupAdd}
-                title= {"Editar Docente"}
+                title= {"Agregar Docente"}
             >
               <AgregarDocente
                 setOpenPopup={setOpenPopupAdd}
+                records={records}
+                setRecords={setRecords}
+                transformarDocentes={transformarDocentes}
+                tipo = {values.id}
               />        
             </Popup>
 
@@ -295,6 +375,10 @@ export default function ListaDocentes({openPopup}) {
               <EliminarDocente 
                     setOpenOnePopup = {setDelOnePopup}
                     recordForDel = {recordForDel} 
+                    records={records}
+                    setRecords={setRecords}
+                    editIndex = {editIndex}
+                    setEditIndex = {setEditIndex}
                 />
             </Popup>
             <Popup
@@ -308,6 +392,6 @@ export default function ListaDocentes({openPopup}) {
                     eliminarDocentes = {eliminarDocentes} 
                 />
             </Popup>
-        </>
+        </Form>
     )
 }

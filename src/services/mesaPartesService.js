@@ -164,7 +164,7 @@ export function solicitudInit() {
     }
 }
 
-function b2fSolicitud(x) {
+export function b2fSolicitud(x) {
     const { id, nombre: tipoTramite, ...other } = b2fTipoTramite(
         x.tipoTramiteMesaDePartes)
     return {
@@ -480,7 +480,7 @@ export function registerSolicitud(soli) {
     })
         .then(res => {
             // console.log("MPservice: registerSoli:", res)
-            return res.data.id
+            return b2fSolicitud(res.data)
         })
     // .catch(err => console.error(err));
 }

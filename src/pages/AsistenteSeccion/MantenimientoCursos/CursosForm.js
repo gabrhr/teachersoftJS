@@ -17,6 +17,7 @@ import * as FileSaver from 'file-saver';
 import { Link } from '@mui/material';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LinearProgress from '@mui/material/LinearProgress';
+import Fab from '@mui/material/Fab';
 
 
 function createData(id, claveCurso, nombreCurso, cargaHoraria,
@@ -80,27 +81,26 @@ export default function CursosForm() {
                 cbo= {false}
             />
             <Grid container spacing={0} maxWidth={1}>
-                {/*<Grid item xs>
+                <Grid item xs>
                     <Typography variant="body1"> Puedes&nbsp;
-                        <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
+                        <Link style={{ fontSize: '15px', color:"#41B9E4"}} 
+                        href="#" 
+                        underline = "hover" 
+                        variant="button" 
+                        onClick = {() => window.open("https://docs.google.com/spreadsheets/d/1Yk3DVw5xUSW9mIRX9HHjNOu1IJ3y-jqQ/edit?usp=sharing&ouid=111673383186909937899&rtpof=true&sd=true")}>
                         descargar la plantilla en Excel
                         </Link>
                         &nbsp;para subir los cursos.
                     </Typography>
-                </Grid>*/}
-                <Grid item xs={12} align="right" m={1}>
+                </Grid>
+                <Grid item xs={2} align="right" m={1}>
                     <Controls.Button
                         text="Importar"
                         size="large"
                         endIcon={<CloudUploadOutlinedIcon/>}
                         onClick = {() => setOpenPopup(true)}
                     />
-                    <Controls.Button
-                        text="Asignar"
-                        size="large"
-                        endIcon={<CompareArrowsIcon/>}
-                        onClick = {() => setOpenAsignarPopup(true)}
-                    />
+
                     {/* <Controls.Button
                         text="Exportar"
                         size="large"
@@ -114,10 +114,19 @@ export default function CursosForm() {
                 <ListaCursos records={records} setRecords={setRecords} setCargaH = {setCargaH} 
                 cargaH = {cargaH}/>
             </Paper>
+              <Fab color="primary" aria-label="add" variant = "extended" 
+                    sx={{position:'fixed',
+                    height:'40px',
+                    bottom:'20px',
+                    right:'40px',
+                    textAlign: 'center'}} onClick = {()=>{setOpenAsignarPopup(true)}}>
+                Asignar
+                <CompareArrowsIcon />
+              </Fab>
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Carga Masiva de Cursos y Horarios"
+                title="Carga Masiva de Cursos"
             >
                {/*<ModalAsignacionCarga horario = {listHorario} getHorario = {getHorario}>
 

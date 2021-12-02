@@ -99,7 +99,7 @@ const getEstadoCollection = [
 const verificarEstado = (cur) =>{
   let resultado = []  //0 - estado - 1 tipo
 
-  switch (cur.cantidad_horarios) {
+  switch (cur.estado_curso) {
     case 0:
       resultado[0] = "Sin horarios"; resultado[1] = "error";
       break;
@@ -153,6 +153,7 @@ const fillCursos = async (ciclo) => {
       "ciclo": cur.ciclo,
       "id_cursociclo":cur.id,
       "estado_tracking": cur.estado_tracking,
+      "estado_curso": cur.estado_curso,
       "cantidad_horarios": cur.cantidad_horarios,
     })
 

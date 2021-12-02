@@ -13,8 +13,8 @@ export default function ModalGuardarHorarioCurso({guardarSolicitudActual, setOpe
             <Controls.Button
                 text="Sí"
                 onClick={(e)=>{
-                    // guardarSolicitudActual()
-                    // setOpenGuardarPopup(false)
+                    guardarSolicitudActual()
+                    setOpenGuardarPopup(false)
                     history.push("/cord/asignacionCarga/deudaYDescarga");
                 }}
             />

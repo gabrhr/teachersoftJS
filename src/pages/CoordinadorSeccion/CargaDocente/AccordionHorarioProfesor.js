@@ -181,7 +181,7 @@ const hallarEstado = (sesiones) => {
 
 const actualizarCursoCiclo = async (curso_ciclo)=> {
 
-  if(curso_ciclo.cantidad_horarios !== 2){
+  if(curso_ciclo.estado_curso !== 2){
     const newCC = {
       "id": curso_ciclo.id,
       "ciclo": {
@@ -190,7 +190,8 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
       "curso": {
         "id": curso_ciclo.curso.id,
       },
-      "cantidad_horarios": 2, //Se actualiza al nuevo estado
+      "estado_curso": 2, //Se actualiza al nuevo estado
+      "cantidad_horarios": curso_ciclo.cantidad_horarios, 
       "estado_tracking": curso_ciclo.estado_tracking,
     }
     
