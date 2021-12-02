@@ -6,6 +6,11 @@ import { Grid, Typography, Paper } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import InvestigacionService from '../../../services/investigacionService';
 import BarChartAutores from '../../../components/PageComponents/BarCharts';
+import ContentHeader from '../../../components/AppMain/ContentHeader';
+import BigStatistics from '../../../components/DreamTeam/BigStatistic';
+import SemiDonutChart from '../../../components/PageComponents/SemiDonutChart';
+
+let indicadores = [];
 
 const autoresIndicadores = async () => {
     let indicadoresAutores = await InvestigacionService.getIndicadoresAutores();
@@ -25,6 +30,39 @@ const estandarizarAutoresInd = (arr) => {
     return arrEstandarizado;
 }
 
+const maxAutor = (arr) => {
+    
+
+    let maxNombre = '*NO DETERMINADO*'
+    let index = 0;
+    let maxCantidad = 0;
+    let totalCantiad = 0;
+    
+    indicadores[0] = maxNombre;
+    indicadores[1] = maxCantidad;
+    indicadores[2] = totalCantiad;
+    try{
+    for (let i = 0; i < arr.length; i++){
+        totalCantiad += arr[i][1];
+        if (maxCantidad < arr[i][1]){
+            maxCantidad = arr[i][1];
+            index = i;
+        }
+    }
+
+    maxNombre =  arr[index][0].nombres + ' ' +  arr[index][0].apellidos;
+    }
+    catch{
+
+    }
+
+    indicadores[0] = maxNombre;
+    indicadores[1] = maxCantidad;
+    indicadores[2] = totalCantiad;
+
+ 
+}
+
 export default function CantidadTrabajosXAutor(){
 
     const [autoresInd, setAutoresInd] = useState([]);
@@ -36,21 +74,70 @@ export default function CantidadTrabajosXAutor(){
         });
     }, [])
     
-    const SubtitulosTable = { display: "flex" }
-    const PaperStyle = { borderRadius: '20px', pb: 1, pt: 1, px: 1, color: "primary.light", elevatio: 0 }
+    const SubtitulosTable = { display: "flex", align: 'center' }
+    const PaperStyle = { borderRadius: '20px', pb: 2, pt:1, px: 2, color: "primary.light", elevatio: 0 }
 
     return(
 
-        <div>
-            <Typography variant="body1" color={"#00008B"} my={.5}>
-                Investigadores con mayor record de publicaciones
-            </Typography>
-            <Paper variant="outlined" sx={PaperStyle}>
-                <Grid item xs={8}>
-                {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+        <>
+            {maxAutor(autoresInd)}
+            <ContentHeader
+                text="Investigadores con mayor record de publicaciones"
+                cbo={false}
+            />
+            <Grid container spacing={2} >
+                <Grid item xs={6}>
+                    <Paper variant="outlined" sx={PaperStyle}>
+                        <Typography variant="h4" style={SubtitulosTable} >
+                            TOP 10 Autores con la mayor cantidad de investigaciones
+                        </Typography>
+                        {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+                        <Grid align="center" justify="center">
+                            Cantidad de Documentos
+                        </Grid>
+                    </Paper>
                 </Grid>
-            </Paper>
-        </div>
+                <Grid item xs={6}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <BigStatistics  
+                                    variantText="h3"
+                                    title={"Autor(a) con más publicaciones"} 
+                                    text={indicadores[0]}
+                                    />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <BigStatistics  
+                                    title={"Cantidad Máxima de publicaciones de un Autor(a)"} 
+                                    text={indicadores[1]}
+                                />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                    <br/>
+                    
+                    <br/>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <BigStatistics  
+                                    title={"Cantidad total de publicaciones "} 
+                                    text={indicadores[2]}
+                                />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <SemiDonutChart Cantidad={indicadores[1]} CantidadTotal={indicadores[2]}/>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </>
 
     )
     

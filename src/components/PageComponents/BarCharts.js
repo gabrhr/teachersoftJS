@@ -38,10 +38,16 @@ export default function BarChartAutores(arr){
     }
     const options = {
         indexAxis: 'y',
+        legend: {
+            display: false
+         },
+         tooltips: {
+            enabled: false
+         }
     }
     return (
         <div>
-            <Bar data={data} options={options}/>
+            <Bar data={data} options={options} />
         </div>
     );
 }
