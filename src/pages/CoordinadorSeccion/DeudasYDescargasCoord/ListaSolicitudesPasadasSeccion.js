@@ -118,7 +118,6 @@ function Item(props){
                     <Controls.Button
                         text="Detalle"
                     />
-                    <div/>
                     <Controls.Button
                         text="Aprobados"
                         onClick={()=>{setOpenAprobados(true)}} 
