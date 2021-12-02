@@ -321,7 +321,7 @@ export default function NuevoProcesoForm() {
                                         {
                                             recordsAfterPagingAndSorting().map((item,index) => (
                                                 <TableRow
-                                                 sx={item.tramiteSeccionDescarga?.id? {backgroundColor: '#43DB7F45'}: {backgroundColor: '#fff'}}
+                                                 sx={item.persona_seccion? {backgroundColor: '#43DB7F45'}: {backgroundColor: '#fff'}}
                                                 >
                                                 <TableCell sx = {{width: '70px'}}>
                                                 { !recordForEdit &&
