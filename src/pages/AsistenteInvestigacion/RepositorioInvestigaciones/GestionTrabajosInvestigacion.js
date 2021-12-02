@@ -5,7 +5,8 @@ import { Controls } from '../../../components/controls/Controls'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Link, LBox, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { Input, Link, LBox, Backdrop, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useForm, Form } from '../../../components/useForm';
 import { makeStyles } from '@mui/styles'
 import * as XLSX from 'xlsx';
@@ -29,7 +30,7 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import { DT } from '../../../components/DreamTeam/DT';
 import { ContactPage } from '@mui/icons-material';
 import AgregarEditarInvestiga from './AgregarEditarInvestiga'
-
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import GestionTrabajosInvestigacionDetalle from './GestionTrabajosInvestigacionDetalle';
 
 
@@ -201,7 +202,7 @@ const getDocumentos = async () => {
 
 export default function GestionTrabajosInvestigacion() {
 	const [openPopup, setOpenPopup] = useState(false);
-  const [openPopupCargaMasiva, setOpenPopupCargaMasiva] = useState(false);
+  // const [openPopupCargaMasiva, setOpenPopupCargaMasiva] = useState(false);
   const [deleteData, setDeleteData] = useState(false);
   const [createData, setCreateData] = useState(false);
   const [updateData, setUpdateData] = useState(false);
@@ -444,11 +445,16 @@ export default function GestionTrabajosInvestigacion() {
         })
     }
 
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+      setOpen(false);
+    }
+
     const handleSubmit = e => {
       e.preventDefault();
       setRecords(records);
       handleClose();
-      setOpenPopupCargaMasivaup(false);
+      setOpenPopup(false);
     }
 
     useEffect(() => {
@@ -550,6 +556,11 @@ export default function GestionTrabajosInvestigacion() {
 
 
   }
+
+  const onInputClick = (event) => {
+    event.target.value = ''
+  }
+
   /*Styles*/
   const PaperStyle = { borderRadius: '20x', pb: 4, pt:0.7, px: 0.7, color: "primary.light", elevatio: 0 }
   const SubtitulosTable = { display: "flex" }
@@ -688,8 +699,8 @@ export default function GestionTrabajosInvestigacion() {
         />
       </Popup>
       <Popup
-        openPopup={openPopupCargaMasiva}
-        setOpenPopup={setOpenPopupCargaMasiva}
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
         title="Carga masiva de trabajos de investigación">
 
 
@@ -741,20 +752,41 @@ export default function GestionTrabajosInvestigacion() {
                         <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item => (
-                            <TableRow>
-                                {/*<TableCell
-                                align="right"
+                              <StyledTableRow key={item.id}>
+                              <StyledTableCell >{item.codigo_publicacion}</StyledTableCell>
+                              <StyledTableCell >{item.titulo}</StyledTableCell>
+                              <StyledTableCell >{item.nombreAutor}</StyledTableCell>
+                              <StyledTableCell >{item.anho_publicacion}</StyledTableCell>
+                              <StyledTableCell component="a" href={item.url_repositorio.indexOf("http") == 0 ? item.url_repositorio : "http://" + item.url_repositorio }>{item.url_repositorio}</StyledTableCell>
+                              <StyledTableCell>
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
                                 >
-                             
-                                {item.id}
-                                </TableCell>*/}
-                                <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
-                                <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
-                                <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
-                                <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
-                                <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
-                                {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
-                            </TableRow>
+                                  <EditOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                                  <IconButton aria-label="delete">
+                                    <DeleteIcon
+                                      color="warning"
+                                      onClick={() => {
+                                      setConfirmDialog({
+                                              isOpen: true,
+                                              title: '¿Eliminar este trabajo permanentemente?',
+                                              subTitle: 'No es posible deshacer esta accion',
+                                              onConfirm: () => {onDelete(item.id)}
+                                      })
+                                    }}/>
+                                    </IconButton>
+                                    <IconButton aria-label="view">
+                                      <ContactPage
+                                        color="warning"
+                                        onClick={() => {
+                                          handleChange(item.id);
+                                          onView(item, item.id);
+                                      }}/>
+                                </IconButton>
+                                  </StyledTableCell>
+                                  </StyledTableRow>
                             ))
                         }
                         </TableBody>
@@ -776,7 +808,7 @@ export default function GestionTrabajosInvestigacion() {
                         // size="large"
                         text="Cargar Datos"
                         /* type="submit" */
-                        onClick={actualizarDatos}
+                        // onClick={actualizarDatos}
                     />
                     
                 </div>
