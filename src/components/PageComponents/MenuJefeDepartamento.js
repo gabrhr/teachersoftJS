@@ -19,16 +19,10 @@ export const MenuJefeDepartamento = [
         indice: 1,
     },
     {
-        text: 'Panel de Indicadores',
-        path: '/jd/panelIndicadores',
-        icon: <ShowChartOutlinedIcon />,
-        indice: 2,
-    },
-    {
         text: 'Mesa de Partes',
         path: '',
         icon: <InboxOutlinedIcon />,
-        indice: 3,
+        indice: 2,
         subNav: [
             {
                 text: 'Mis solicitudes',
@@ -45,7 +39,7 @@ export const MenuJefeDepartamento = [
     {
         text: 'Estadisticas',
         path: '/jd/estadisticas',
-        icon: <InboxOutlinedIcon />,
-        indice: 1,
+        icon: <ShowChartOutlinedIcon />,
+        indice: 3,
     }
 ];

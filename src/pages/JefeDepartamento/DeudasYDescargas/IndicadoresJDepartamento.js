@@ -291,7 +291,7 @@ export default function IndicadoresADepartamento() {
                 text="Dashboard"
                 cbo={false}
             />
-            <Grid container xs spacing = {4}>
+            <Grid container xs spacing = {4} pr={2}>
             {/* <Stack direction="row" spacing = {4}> */}
                 <Grid item xs={6} sx = {{paddingLeft: 3}}>
                     <Typography variant="body1" color={"#00008B"} my={2}>
