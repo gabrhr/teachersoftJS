@@ -32,7 +32,7 @@ export default function BarChartAutores(arr){
         datasets: [{
             label: "Número de publicaciones emitidas",
             data: separarNumPublicaciones(arr),
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
             borderWidth: 1,
         }],
     }
