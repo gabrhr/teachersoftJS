@@ -115,8 +115,6 @@ Cordialmente,<br/>
 }
 
 export function soliDelegada(s) {
-    let externo_msg = ""
-
     let actualcontent = `<p>
             Estimado:<br/>
             ${s.delegado.fullName}
@@ -134,7 +132,7 @@ export function soliDelegada(s) {
         <p>
             Por favor atienda esta solicitud ingresando a nuestro sistema
             <a href=${s.url ?? "http://front.teachersoft.solutions"}>TeacherSoft</a>.
-            ${externo_msg}
+            ${s.externo_msg}
         </p>
 Cordialmente,<br/>
 <b>Departamento Académico de Ciencias</b>
