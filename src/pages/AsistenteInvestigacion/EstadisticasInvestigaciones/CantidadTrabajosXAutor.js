@@ -82,7 +82,7 @@ export default function CantidadTrabajosXAutor(){
         <>
             {maxAutor(autoresInd)}
             <ContentHeader
-                text="Investigadores con mayor record de publicaciones"
+                text="Investigadores con mayor récord de publicaciones"
                 cbo={false}
             />
             <Grid container spacing={2} >
@@ -130,7 +130,8 @@ export default function CantidadTrabajosXAutor(){
                                 <SemiDonutChart Cantidad={indicadores[1]} CantidadTotal={indicadores[2]}/>
                                 <br/>
                                 <Typography  align="center" variant={"h6"}  sx={{color:"primary.light"}} > 
-                                    Es el porcentaje de documentos que le pertenece al autor con más documentos
+                                    {/* Es el porcentaje de documentos que le pertenece al autor con más documentos */}
+                                    Porcentaje de aporte del autor con más publicaciones
                                 </Typography>
                             </Paper>
                         </Grid>
