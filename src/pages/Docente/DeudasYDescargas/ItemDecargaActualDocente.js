@@ -45,9 +45,11 @@ export default function ItemDecargaActualDocente(props) {
                     '\u00A0' + "hasta las " + formatoFechaProceso(procesoActivo.fecha_fin_docente))
                 }
             </Typography>
-            <Typography sx={{color:"primary.light"}}>
-                Publicación de Resultados desde las {formatoFechaProceso(procesoActivo.fecha_fin)} 
-            </Typography>
+            {item.resultado===0 &&
+                <Typography sx={{color:"primary.light"}}>
+                    Publicación de Resultados desde las {formatoFechaProceso(procesoActivo.fecha_fin)} 
+                </Typography>
+            }
             { fechafin<=now ||
                 <Typography  my={1} sx={{color:"primary.light"}}>
                     * La solicitud generada se enviará automáticamente a las {formatoFechaProceso(procesoActivo.fecha_fin_docente)}

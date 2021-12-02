@@ -206,7 +206,7 @@ export default function NuevoProcesoForm() {
     return (
         <Form>
             <ContentHeader
-                text="Nueva solicitud de descarga"
+                text={recordForEdit?"Detalle de Solicitud":"Nueva solicitud de descarga"}
                 cbo={false}
             />
             <Controls.Button
@@ -268,7 +268,7 @@ export default function NuevoProcesoForm() {
                 {/* Buscador y #solicitados */}
                 <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
                    <b> {recordForEdit? "Lista de Descargas de Docentes Solicitadas":
-                            "Lista de Solicitudes de Descarga de los Docentes"
+                            "Lista de Descarga de Docentes Recibidas"
                         }
                    </b>
                 </Typography>

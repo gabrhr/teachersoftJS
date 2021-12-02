@@ -34,6 +34,12 @@ const tableHeaders = [
         sortable: false
     },
     {
+        id: 'foto',
+        label: '',
+        numeric: false,
+        sortable: false
+    },
+    {
         id: 'nombre',
         label: 'Nombre del docente',
         numeric: false,
@@ -41,7 +47,7 @@ const tableHeaders = [
     },
     {
         id: 'justificacion',
-        label: 'Justificación',
+        label: 'Bono Solicitado',
         numeric: false,
         sortable: false
     },
@@ -148,38 +154,45 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
 
     return (
         <>
-                <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
-                    <div style={{ width: "480px", marginRight: "1px" }}>
-                        <Controls.Input
-                                label="Buscar Solicitud por Nombre"
-                                
-                                InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                )
-                                }}
-                                sx={{ width: .9 }}
-                                onChange={handleSearch}
-                                type="search"
-                            />
-                    </div>
-                    <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
-                            <Controls.DreamTitle
-                                title={`Aprobados: ${aprobados}`}
-                                size='20px'
-                                lineheight='100%'
-                                />
-                    </div>
-                    <div style={{ width: "150px", marginLeft: "50px", paddingTop:'25px' }}>
-                            <Controls.DreamTitle
-                                title={`N° Descargas: ${descargas}`}
-                                size='20px'
-                                lineheight='100%'
-                                />
-                    </div>
+            {resultado!==1 && 
+                <Typography variant="h4"  fontWeight="550"  sx={{color:"primary.light"}}>
+                    Debe validar el N° de Descargas con el valor aprobado por el Departamento
+                </Typography>
+            }
+            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                <div style={{ width: "480px", marginRight: "1px" }}>
+                    <Controls.Input
+                            label="Buscar Solicitud por Nombre"
+                            
+                            InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            )
+                            }}
+                            sx={{ width: .9 }}
+                            onChange={handleSearch}
+                            type="search"
+                        />
                 </div>
+                <div style={{ width: "140px", marginLeft: "50x", paddingTop:'10px' }}>
+                        <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                            Aprobados: {'\u00A0'}
+                        </Typography>
+                        <Typography display="inline"  fontWeight="560" sx={{color:"#2EBD59"}}>
+                            {aprobados}
+                        </Typography>
+                </div>
+                <div style={{ width: "150px", marginLeft: "40px", paddingTop:'10px' }}>
+                        <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                            N° Descargas: {'\u00A0'}
+                        </Typography>
+                        <Typography display="inline"  fontWeight="560" sx={descargas!==aprobados?{color:"red"}:{color:"#2EBD59"}}>
+                            {descargas}
+                        </Typography>
+                </div>
+            </div>
             
             <BoxTbl>
                 <TblContainer>
@@ -188,14 +201,17 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                         <TableRow>
-                            <TableCell sx = {{width: '70px'}}>
+                            <TableCell sx = {{width: '60px'}}>
                                 { resultado!==1 &&
                                 <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
                                     <EditOutlinedIcon fontSize="small" />
                                 </Controls.RowCheckBox>
                                 }
                             </TableCell>
-                            <TableCell sx = {{width: '533px'}}>
+                            <TableCell>
+                                <Avatar src={item.solicitador.foto_URL}/>
+                            </TableCell>
+                            <TableCell sx = {{width: '460px'}}>
                                 {item.solicitador.nombres + " " + item.solicitador.apellidos}
                             </TableCell>
                             <TableCell> 
