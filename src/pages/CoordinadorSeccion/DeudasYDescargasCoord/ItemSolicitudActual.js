@@ -55,7 +55,7 @@ export default function ItemProcesoActual(props) {
         <Typography sx={{color:"primary.light"}}>
             Publicación de Resultados desde las {formatoFechaProceso(procesoActual.fecha_fin,0)} 
         </Typography>
-        {solicitudActual.estado_tracking===0 && solicitudActual.resultado === 0  &&
+        {solicitudActual.estado_tracking===0 && solicitudActual.resultado === 1  &&
             <Typography sx={{color:"red"}}>
                 Debe validar la lista final de aprobados hasta <b> {formatoFechaProceso(procesoActual.fecha_fin,1)} </b>
             </Typography>
@@ -126,7 +126,7 @@ export default function ItemProcesoActual(props) {
                         pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
                         state:{
                             recordForEdit: solicitudActual,
-                            procesoActual: procesoActual
+                            procesoActual: procesoActual.id
                         }
                     }}  style={{ textDecoration: 'none' }}>
                         <Controls.Button
