@@ -81,7 +81,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
             console.log("ID: de tramite modificado", records[i].id)
         }
         //Se actualiza el estado tracking
-        solicitudActual.estado_tracking = 1
+        solicitudActual.estado_tracking = 2
         await tramiteSeccionDescargaService.updateTramitesSeccionDescarga(solicitudActual)
         console.log("Records modificado ", records)
     }

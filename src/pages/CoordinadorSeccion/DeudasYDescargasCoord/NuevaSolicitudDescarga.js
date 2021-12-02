@@ -112,7 +112,7 @@ export default function NuevoProcesoForm() {
         //console.log("El iprocesoActivoNewd del proceso activo es ", procesoActivoNew[0].id)
         const newTramiteSeccion = {
             "observacion": justificacion,
-            "estado_tracking": 0,
+            "estado_tracking": 1,
             "resultado": 0,
             "seccion": {
                 "id": user.persona.seccion.id,
