@@ -104,8 +104,8 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                 await tramiteDescargaService.updateTramiteDescarga(records[i])
             }
             //Se realizan los cambios ^^
+            setOpenDetalle(false)
         }
-        setOpenDetalle(false)
             // addOrEdit(values, resetForm)
     }
 
