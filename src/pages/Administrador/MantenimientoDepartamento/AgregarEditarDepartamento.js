@@ -154,7 +154,7 @@ export default function AgregarEditarDepartamento(props) {
                   sx={{
                     gridTemplateColumns: "1fr 1fr ",
                   }}>
-                 <Grid item xs={6} sx={styles.columnGridItem}>
+                 <Grid item xs={12} sx={styles.columnGridItem}>
                     < Typography variant="h4" mb={2} >
                            DATOS GENERALES
                     </Typography>
@@ -173,11 +173,6 @@ export default function AgregarEditarDepartamento(props) {
                             onChange = {handleInputChange}
                             error={errors.correo}
                         />
-                </Grid>
-                <Grid item xs={6} sx={styles.columnGridItem}>
-                < Typography variant="h4" mb={2} >
-       
-                    </Typography>
                   <Controls.Select
                     name={recordForEdit ? "idUnidad" : "unidadId"}
                     label="Facultad"
