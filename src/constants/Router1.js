@@ -120,7 +120,7 @@ const privateroutes = [
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },
-  { requireRoles: [3, 8], path: "/cord/solicitudes/deudasYDescargas/nuevaSolicitud", page: NuevaSolicitudDescarga  },
+  { requireRoles: [3, 8], path: "/cord/solicitudes/deudasYDescargas/solicitud", page: NuevaSolicitudDescarga  },
 
 
   /* AD */
