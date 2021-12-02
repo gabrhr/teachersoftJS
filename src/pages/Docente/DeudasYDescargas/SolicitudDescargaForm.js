@@ -11,8 +11,7 @@ export default function SolicitudDescargaForm(props) {
         <div>
             <Grid container spacing={{ xs: "10px" }} >
                 <Grid item sx={{mt:"10px", mb:"10px", ml:1}}>
-                    {/* <Avatar sx={{ width: 50, height: 50}} src={soli}/> */}
-                    <Avatar sx={{ width: 50, height: 50}}/>
+                    <Avatar sx={{ width: 50, height: 50}} src={recordForView.solicitador.foto_URL}/>
                 </Grid>
                 <Grid item sx={{mt:"9px"}}>
                     <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -33,7 +32,8 @@ export default function SolicitudDescargaForm(props) {
                     </Typography>
                     <Typography variant="body1">
                         Fecha de envio: {'\u00A0'}
-                        {moment.utc(recordForView.fecha_creacion).format('DD MMM YYYY [-] h:mm a')
+                        { (moment.utc(recordForView.fecha_creacion).format('DD MMM YYYY')) + " - " +
+                            (moment.utc(recordForView.fecha_creacion).subtract(5, 'hours').format('h:mm a'))
                         }
                     </Typography>
                 </Grid>

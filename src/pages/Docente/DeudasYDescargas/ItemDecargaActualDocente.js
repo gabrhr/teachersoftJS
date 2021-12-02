@@ -12,7 +12,7 @@ moment.locale('es');
 
 function formatoFecha(fecha){
     if(fecha!=null){
-        return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
+        return (moment.utc(fecha).format('DD MMM YYYY')) + " - " +(moment.utc(fecha).subtract(5, 'hours').format('h:mm a'))
     }
 }
 
@@ -28,12 +28,10 @@ export default function ItemDecargaActualDocente(props) {
         setOpenPopupDetalle, setConfirmDialog, confirmDialog, procesoActivo
     } = props
     const [row, setRow] = React.useState(false)
-    
 
     function getRow ({...props}){
         //setOpenDetalle(true)
         setRow(props)
-        console.log("Get rowww?", row)
     }
 
     let now = new Date()  
@@ -78,7 +76,7 @@ export default function ItemDecargaActualDocente(props) {
                             Autor: {'\u00A0'} 
                         </Typography>
                         <Typography display="inline" sx={{color:"primary.light"}}>
-                            {item.solicitador.nombres? item.solicitador.nombres: "" + " " + item.solicitador.apellidos? item.solicitador.apellidos:""} 
+                            {item.solicitador.nombres + " " + item.solicitador.apellidos} 
                         </Typography>
                     </TableCell>
                     <TableCell  sx={{width:"180px",borderBottom: "none"}} align="center">
