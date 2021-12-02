@@ -366,7 +366,7 @@ export default function NuevoProcesoForm() {
                     </Grid>
                 </Grid>
                 <Grid cointainer align="right" mt={5}>
-                    {recordForEdit.estado_tracking===0 &&
+                    {!recordForEdit &&
                         <div>
                             <Controls.Button
                                 text="guardar"
