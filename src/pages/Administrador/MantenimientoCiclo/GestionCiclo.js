@@ -124,8 +124,8 @@ export default function GestionCiclo() {
               /* no search text */
               return items
             else
-              return items.filter(x => x.nombre.toLowerCase()
-                  .includes(target.value.toLowerCase()))
+              return items.filter(x => x.anho.toString()
+                  .includes(target.value.toString()))
           }
         })
     }
@@ -236,23 +236,33 @@ export default function GestionCiclo() {
 
                         <StyledTableRow key={item.id}>
                           <StyledTableCell align="center-left">{item.anho}</StyledTableCell>
-                          <StyledTableCell align="center">{item.periodo}</StyledTableCell>
+                          <StyledTableCell align="center-left">
+                            {
+                              item.periodo == 0 ? "Verano" : 
+                              item.periodo == 1 ? "Primero" : "Segundo"
+                            }
+                          </StyledTableCell>
                           <StyledTableCell align="center-left">
                               {
-                                item? item.fecha_inicio.slice(8,10):""
+                                item.fecha_inicio != null ?
+                                item.fecha_inicio.slice(8,10)
                                 +'/'
-                                +item? item.fecha_inicio.slice(5,7):""
+                                +item.fecha_inicio.slice(5,7)
                                 +'/'
-                                +item? item.fecha_inicio.slice(0,4):""
+                                +item.fecha_inicio.slice(0,4)
+                                : " "
                               }
                           </StyledTableCell>
                           <StyledTableCell align="center-left">
                               {
+                                item.fecha_fin != null ?
+
                                 item.fecha_fin.slice(8,10)
                                 +'/'
                                 +item.fecha_fin.slice(5,7)
                                 +'/'
                                 +item.fecha_fin.slice(0,4)
+                                : " "
                               }
                           </StyledTableCell>
                           <StyledTableCell>
