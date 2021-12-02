@@ -24,7 +24,35 @@ function separarNumPublicaciones(arr){
     Orange: rgba(255, 159, 64, 0.2)
 */
 
-export default function BarChartAutores(arr){
+function BarChartGeneric(labels, dataset, colors) {
+    Chart.register(CategoryScale);
+    const data = {
+        labels: labels,
+        datasets: [{
+            
+            data: dataset,
+            backgroundColor: colors,
+            borderWidth: 1,
+        }],
+    }
+    const options = {
+ 
+         yAxes: [
+            {
+              ticks: {
+                precision: 0,
+              },
+            },
+          ]
+    }
+    return (
+        <div>
+            <Bar data={data} options={options} />
+        </div>
+    )
+}
+
+function BarChartAutores(arr){
     Chart.register(CategoryScale);
     console.log("Data para BarChart: ",arr);
     const data = {
@@ -43,7 +71,14 @@ export default function BarChartAutores(arr){
          },
          tooltips: {
             enabled: false
-         }
+         },
+         yAxes: [
+            {
+              ticks: {
+                precision: 0,
+              },
+            },
+          ]
     }
     return (
         <div>
@@ -52,3 +87,4 @@ export default function BarChartAutores(arr){
     );
 }
  
+export default {BarChartGeneric, BarChartAutores}

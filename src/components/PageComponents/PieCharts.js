@@ -62,4 +62,22 @@ function PieChartInvestigadores(cantidadDocentes, cantidadInvestigadores) {
     )
 }
 
-export default {PieChartTipoDocente, PieChartDeuda, PieChartInvestigadores}
+function PieChartGeneric(labels, dataset, colors) {
+    Chart.register(ArcElement);
+    const data = {
+        labels: labels,
+        datasets: [{
+            data: dataset,
+            backgroundColor: colors,
+            borderWidth: 1,
+        }],
+    }
+    return (
+        <div>
+            <Pie data={data}/>
+        </div>
+    )
+}
+
+
+export default {PieChartGeneric, PieChartTipoDocente, PieChartDeuda, PieChartInvestigadores}

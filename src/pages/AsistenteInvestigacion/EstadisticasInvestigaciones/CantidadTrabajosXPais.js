@@ -1,36 +1,60 @@
-//link: http://localhost:3000/ai/publicacionesPorAutor
+//link: http://localhost:3000/ai/publicacionesPorPais
 
  
 import React, {useState,useEffect, Component } from 'react';
-import { Grid, Typography, Paper } from '@mui/material';
+import { Grid, Typography,Box, Paper, Divider } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import InvestigacionService from '../../../services/investigacionService';
-import BarCharts from '../../../components/PageComponents/BarCharts';
+import BarChartPaises from '../../../components/PageComponents/BarCharts';
 import ContentHeader from '../../../components/AppMain/ContentHeader';
 import BigStatistics from '../../../components/DreamTeam/BigStatistic';
 import SemiDonutChart from '../../../components/PageComponents/SemiDonutChart';
+import  PieCharts from '../../../components/PageComponents/PieCharts';
+import StyleDictionary from '../../../components/DreamTeam/StyleDictionary';
 
 let indicadores = [];
+/*  Colores pastel con transparencia
+    Red: rgba(255, 99, 132, 0.8)
+    Blue: rgba(54, 162, 235, 0.8)
+    Yellow: rgba(255, 206, 86, 0.8)
+    Green: rgba(75, 192, 192, 0.8)
+    Purple: rgba(153, 102, 255, 0.8)
+    Orange: rgba(255, 159, 64, 0.8)
+*/
+const listColors = [
+    "rgba(54, 162, 235, 0.8)",
+    "rgba(255, 99, 132, 0.8)",
+    "rgba(75, 192, 192, 0.8)",
+    "rgba(255, 206, 86, 0.8)",
+    "rgba(153, 102, 255, 0.8)"
+]
 
-const autoresIndicadores = async () => {
-    let indicadoresAutores = await InvestigacionService.getIndicadoresAutores();
-    console.log(indicadoresAutores)
-    return indicadoresAutores;
+let indicadoresPaises =[];
+
+const paisesIndicadores = async () => {
+    let dataindicadoresPaises = await InvestigacionService.documentsByCountry();
+    indicadoresPaises = dataindicadoresPaises;
+    return dataindicadoresPaises;
 }
 
-const estandarizarAutoresInd = (arr) => {
+
+const getLabels = (arr) => {
     let arrEstandarizado=[];
     arr.forEach(element => {
-        let primerNombre=(element[0].nombres.split(" "))[0];
-        primerNombre=primerNombre[0].toUpperCase() + primerNombre.slice(1).toLowerCase();
-        let primerApellido=(element[0].apellidos.split(" "))[0];
-        primerApellido=primerApellido[0].toUpperCase() + primerApellido.slice(1).toLowerCase();
-        arrEstandarizado.push([primerNombre+" "+primerApellido,element[1]]);
+        arrEstandarizado.push(element[0]);
     });
     return arrEstandarizado;
 }
 
-const maxAutor = (arr) => {
+const getQuantities = (arr) => {
+    let arrEstandarizado=[];
+    arr.forEach(element => {
+        arrEstandarizado.push(element[1]);
+    });
+    return arrEstandarizado;
+}
+
+const maxPais = (arr) => {
     
 
     let maxNombre = '*NO DETERMINADO*'
@@ -50,7 +74,7 @@ const maxAutor = (arr) => {
         }
     }
 
-    maxNombre =  arr[index][0].nombres + ' ' +  arr[index][0].apellidos;
+    maxNombre =  arr[index][0];
     }
     catch{
 
@@ -63,14 +87,14 @@ const maxAutor = (arr) => {
  
 }
 
-export default function CantidadTrabajosXAutor(){
+export default function CantidadTrabajosXPais(){
 
-    const [autoresInd, setAutoresInd] = useState([]);
+    const [paisesInd, setPaisesInd] = useState([]);
 
     useEffect(() => {
-        autoresIndicadores()
-        .then(newAutorIndicador => {
-            setAutoresInd(newAutorIndicador);
+        paisesIndicadores()
+        .then(newPaisIndicador => {
+            setPaisesInd(newPaisIndicador);
         });
     }, [])
     
@@ -80,18 +104,18 @@ export default function CantidadTrabajosXAutor(){
     return(
 
         <>
-            {maxAutor(autoresInd)}
+            {maxPais(paisesInd)}
             <ContentHeader
-                text="Investigadores con mayor record de publicaciones"
+                text="Países con mayor record de publicaciones"
                 cbo={false}
             />
             <Grid container spacing={2} >
-                <Grid item xs={7}>
+                <Grid item sx={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Typography variant="h4" style={SubtitulosTable} >
-                            TOP 10 Autores con la mayor cantidad de investigaciones
+                            TOP 5 Paises con la mayor cantidad de investigaciones
                         </Typography>
-                        {BarCharts.BarChartAutores(estandarizarAutoresInd(autoresInd))}
+                        {PieCharts.PieChartGeneric(getLabels(paisesInd), getQuantities(paisesInd), listColors)}
                         <Grid align="center" justify="center">
                             Cantidad de Documentos
                         </Grid>
@@ -103,15 +127,15 @@ export default function CantidadTrabajosXAutor(){
                         <Grid item xs={6}>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <BigStatistics  
-                                    variantText="h4"
-                                    title={"Autor(a) con más publicaciones"} 
+                                    variantText="h2"
+                                    title={"Pais con más publicaciones"} 
                                     text={indicadores[0]}
                                     />
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <BigStatistics  
-                                    title={"Cantidad Máxima de publicaciones de un Autor(a)"} 
+                                    title={"Cantidad Máxima de publicaciones de un Pais"} 
                                     text={indicadores[1]}
                                 />
                             </Paper>
@@ -125,12 +149,12 @@ export default function CantidadTrabajosXAutor(){
                         </Grid>
                         <Grid item xs={6}>
                         <Paper variant="outlined" sx={PaperStyle}>
-                            <Typography  align="center" variant={"h1"} fontWeight={"550"}  sx={{color:"primary.light"}} > {(indicadores[1]/indicadores[2] * 100).toFixed(2)   + "%" } </Typography>
+                            <Typography  align="center" variant={"h1"} fontWeight={"550"}  sx={{color:"primary.light"}} > {(indicadores[1]/indicadores[2] * 100).toFixed(2) + "%" } </Typography>
                                 
                                 <SemiDonutChart Cantidad={indicadores[1]} CantidadTotal={indicadores[2]}/>
                                 <br/>
                                 <Typography  align="center" variant={"h6"}  sx={{color:"primary.light"}} > 
-                                    Es el porcentaje de documentos que le pertenece al autor con más documentos
+                                    Es el porcentaje de documentos que le pertenece al pais con más documentos
                                 </Typography>
                             </Paper>
                         </Grid>
@@ -140,6 +164,21 @@ export default function CantidadTrabajosXAutor(){
                     <br/>
                     
                 </Grid>
+                <Grid item sx={6} xs={2.5}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                            <Typography  variant = "h4">Países con sus publicaciones:</Typography>
+                            <Divider/>
+                    {
+                        indicadoresPaises.map(element => ( 
+                      <>
+                                <Typography  variant = "h4" fontWeight="550" my={1}  sx={{color:"primary.light"}} > {element[0] } </Typography>
+                          
+                             
+                                <Typography align="right"   my={1}  sx={{color:"primary.light"}} > {element[1] == 1 ? element[1]  + " publicación" : element[1]  + " publicaciones" } </Typography>
+                              </>
+                        )  )
+                    }
+                 </Paper></Grid>
             </Grid>
         </>
 

@@ -20,8 +20,25 @@ export const MenuInvestigacion = [
                 text: 'Publicaciones por autor',
                 path: '/ai/publicacionesPorAutor',
                 indice: 0,
+            },
+            {
+                text: 'Publicaciones por pais',
+                path: '/ai/publicacionesPorPais',
+                indice: 0,
+            },
+            {
+                text: 'Publicaciones por idioma',
+                path: '/ai/publicacionesPorIdioma',
+                indice: 0,
+            },
+            {
+                text: 'Publicaciones por calidad',
+                path: '/ai/publicacionesPorCalidad',
+                indice: 0,
             }
  
         ]
     }
 ];
+
+//link: http://localhost:3000/ai/publicacionesPorPais
