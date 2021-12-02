@@ -315,7 +315,7 @@ export default function IndicadoresASeccion() {
                 
             </Grid>
             </Paper>
-            <Grid item xs={7}>
+            <Grid display="flex" item xs={7} justifyContent="center" my={2}>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Typography variant="h4" >
                             TOP 5 Profesores con mayor deuda
@@ -325,7 +325,7 @@ export default function IndicadoresASeccion() {
                             Cantidad de Deudas
                         </Grid>
                     </Paper>
-                </Grid>
+            </Grid>
             <Paper variant="outlined" sx={PaperStyle}>
             <Grid container spacing={1} ml={".3px"} >
             
@@ -374,9 +374,7 @@ export default function IndicadoresASeccion() {
                         Top 10 Investigadores con mayor record de publicaciones
                     </Typography>
                     <Paper variant="outlined" sx={PaperStyle}>
-                        <Grid item xs={8}>
                         <CantidadTrabajosXAutor/>
-                        </Grid>
                     </Paper>
                 </Grid>
             </Grid>

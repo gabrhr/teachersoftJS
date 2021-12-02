@@ -106,7 +106,7 @@ export default function CantidadTrabajosXPais(){
         <>
             {maxPais(paisesInd)}
             <ContentHeader
-                text="Países con mayor record de publicaciones"
+                text="Países con mayor récord de publicaciones"
                 cbo={false}
             />
             <Grid container spacing={2} >
@@ -154,7 +154,7 @@ export default function CantidadTrabajosXPais(){
                                 <SemiDonutChart Cantidad={indicadores[1]} CantidadTotal={indicadores[2]}/>
                                 <br/>
                                 <Typography  align="center" variant={"h6"}  sx={{color:"primary.light"}} > 
-                                    Es el porcentaje de documentos que le pertenece al pais con más documentos
+                                    Es el porcentaje de documentos que le pertenece al país con más documentos
                                 </Typography>
                             </Paper>
                         </Grid>

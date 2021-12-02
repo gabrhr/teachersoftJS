@@ -51,7 +51,7 @@ export const MenuAsistenteSeccion = [
         indice: 1,
     },
     {
-        text: 'Estadisticas',
+        text: 'Estadísticas',
         path: '/as/estadisticas',
         icon: <ShowChartOutlinedIcon />,
         indice: 1,

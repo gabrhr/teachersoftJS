@@ -107,7 +107,7 @@ export default function CantidadTrabajosXIdioma(){
         <>
             {maxIdioma(idiomasInd)}
             <ContentHeader
-                text="Idiomas con mayor record de publicaciones"
+                text="Idiomas con mayor récord de publicaciones"
                 cbo={false}
             />
             <Grid container spacing={2} >

@@ -33,7 +33,7 @@ let indicadoresCalidades =[];
 const calidadesIndicadores = async () => {
     let dataindicadoresCalidades = await InvestigacionService.documentsByIndicator();
     indicadoresCalidades =[];
-    indicadoresCalidades.push(['Indazada', 0])
+    indicadoresCalidades.push(['Indizada', 0])
     indicadoresCalidades.push(['Arbitrada', 0])
     indicadoresCalidades.push(['No Arbitrada', 0])
     dataindicadoresCalidades.forEach(element=>{
