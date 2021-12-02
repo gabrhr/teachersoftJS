@@ -95,5 +95,34 @@ const buscarPorAnho = async (anho) => {
 
     }
 }
+const documentsByCountry = async () => {
+    try{
+        const request = await axios.get(`${url}/documento/pais/`,
+            tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(except) {
+        console.error(except);
+    }
+}
 
-export default { getDocumentos, getDocumentosAutor, getDocumentosPagina, contarTodos, getDocumento, registerDocumento, updateDocumento, deleteDocumento, getAutores, getIndicadoresAutores };
+const documentsByLang = async () => {
+    try{
+        const request = await axios.get(`${url}/documento/idioma/`,
+            tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(except) {
+        console.error(except);
+    }
+}
+
+const documentsByIndicator = async() => {
+    try{
+        const request = await axios.get(`${url}/documento/indicadorcalidad/`,
+            tokenService.GetTokenPrueba());
+        return request.data;
+    } catch(exception){
+        console.error(exception)
+    }
+}
+
+export default { documentsByCountry, documentsByLang, documentsByIndicator, getDocumentos, getDocumentosAutor, getDocumentosPagina, contarTodos, getDocumento, registerDocumento, updateDocumento, deleteDocumento, getAutores, getIndicadoresAutores };
