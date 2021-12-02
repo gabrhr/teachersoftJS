@@ -47,7 +47,9 @@ import RecepcionDetalleSolicitud from '../pages/MesaPartes/RecepcionDetalleSolic
 import DelegadoSolicitudDetalle from '../pages/MesaPartes/DelegadoSolicitudDetalle';
 import NuevaSolicitudForm from '../pages/MesaPartes/NuevaSolicitudForm';
 import CargaDocenteCursos from '../pages/AsistenteDepartamento/CargaDocente/cargaDocenteCursos';
+import CargaDocenteCursosJd from '../pages/JefeDepartamento/CargaDocente/cargaDocenteCursos';
 import CargaDocenteHorariosAd from '../pages/AsistenteDepartamento/CargaDocente/CargaDocenteCursoHorarios';
+import CargaDocenteHorariosJd from '../pages/JefeDepartamento/CargaDocente/CargaDocenteCursoHorarios';
 import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
@@ -151,7 +153,8 @@ const privateroutes = [
   { requireRoles: [4], path: "/ad/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
   { requireRoles: [4], path: "/ad/estadisticas", page: IndicadoresADepartamento },  
   /* JD */
-  { requireRoles: [5], path: "/jd/asignacionCarga", page: CargaDocenteCursos },
+  { requireRoles: [5], path: "/jd/asignacionCarga/Cargadocente", page: CargaDocenteCursosJd },
+  { requireRoles: [5], path: "/jd/asignacionCarga/Cargadocente/horarios", page: CargaDocenteHorariosJd},
   { requireRoles: [5], path: "/jd/docentes", page: Vacio },
   { requireRoles: [5], path: "/jd/panelIndicadores", page: Vacio },
   { requireRoles: [5], path: "/jd/mesaPartes/misSolicitudes", page: MisSolicitudes },

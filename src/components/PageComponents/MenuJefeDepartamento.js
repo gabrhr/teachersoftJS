@@ -7,8 +7,8 @@ import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 
 export const MenuJefeDepartamento = [
     {
-        text: 'Asignación de Carga',
-        path: '/jd/asignacionCarga',
+        text: 'Carga del Ciclo',
+        path: '/jd/asignacionCarga/Cargadocente',
         icon: <CalendarTodayOutlinedIcon />,
         indice: 0,
     },
@@ -18,12 +18,12 @@ export const MenuJefeDepartamento = [
         icon: <AccountBoxOutlinedIcon />,
         indice: 1,
     },
-    {
-        text: 'Panel de Indicadores',
-        path: '/jd/panelIndicadores',
-        icon: <ShowChartOutlinedIcon />,
-        indice: 2,
-    },
+    // {
+    //     text: 'Panel de Indicadores',
+    //     path: '/jd/panelIndicadores',
+    //     icon: <ShowChartOutlinedIcon />,
+    //     indice: 2,
+    // },
     {
         text: 'Mesa de Partes',
         path: '',
@@ -45,7 +45,7 @@ export const MenuJefeDepartamento = [
     {
         text: 'Estadisticas',
         path: '/jd/estadisticas',
-        icon: <InboxOutlinedIcon />,
+        icon: <ShowChartOutlinedIcon />,
         indice: 1,
     }
 ];
