@@ -379,7 +379,9 @@ export default function GestionTrabajosInvestigacion() {
             text="Gestión del repositorio de investigación"
             cbo={false}
       />
+      
       <Grid container spacing={2} maxWidth={1}>
+        {/*
         <Grid item xs>
           <Typography variant="body1"> Puedes&nbsp;
             <Link 
@@ -402,7 +404,9 @@ export default function GestionTrabajosInvestigacion() {
             onClick = {() => setOpenPopup(true)}
           />
         </Grid>
+      */}
       </Grid>
+      
       <Paper variant="outlined" sx={PaperStyle}>
         <Grid container spacing={2} >
             <Grid item xs={isViewActivityMode ? 6 :12} className={classes.collapsible} >

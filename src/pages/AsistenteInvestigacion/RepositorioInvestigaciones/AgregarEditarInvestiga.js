@@ -106,11 +106,14 @@ const initialFieldValues = {
   responsabilidad:  0,
   subtipo_publicacion:  0,
   tipo_publicacion:  0,
+  filiacion: 0,
   tipo_referencia:  0,
   titulo:  '',
   url_repositorio:  '',
   validacion_preliminar:  0,
+  indicador_calidad: 0,
   volumen:  '',
+  //valoresValidacion:0,
   
   //autor
 
@@ -164,15 +167,63 @@ export default function AgregarEditarInvestiga(props) {
         let temp = {...errors}
         let defaultError = "Este campo es requerido"
         if ('titulo' in fieldValues)
-            temp.titulo = fieldValues.titulo ? "" : "Este campo es requerido"
+            temp.titulo = fieldValues.titulo ? "" : "Este campo es requeridos"
         if ('anho_publicacion' in fieldValues)
             temp.anho_publicacion = fieldValues.anho_publicacion ? "" : "Este campo es requerido"
+        if (fieldValues.anho_publicacion)
+            if (!isNaN(fieldValues.anho_publicacion))
+                temp.anho_publicacion = ""
+            else
+                temp.anho_publicacion = "Año de Publicación tiene que ser un número"
         if ('codigo_publicacion' in fieldValues)
             temp.codigo_publicacion = fieldValues.codigo_publicacion ? "" : "Este campo es requerido"
+        if(fieldValues.codigo_publicacion){
+            if(isNaN(fieldValues.codigo_publicacion)){
+                temp.url_repositorio = (/^[0-9]{3}(-){1}[a-zA-Z]{3}$/).test(fieldValues.url_repositorio) ? "" : "Este URL no es válido"
+                temp.codigo_publicacion = ""
+            } else {
+            temp.codigo_publicacion = "Tiene que tener el formato: 123-ABC"
+            }
+        }
+        if ('tipo_publicacion' in fieldValues)
+            temp.tipo_publicacion = fieldValues.tipo_publicacion ? "" : "Este campo es requerido"
+        if ('idioma' in fieldValues)
+            temp.idioma = fieldValues.idioma ? "" : "Este campo es requerido"
+        if (fieldValues.idioma)
+            if (isNaN(fieldValues.idioma))
+                temp.idioma = ""
+            else
+                temp.idioma = "Idioma no puede ser un número"
+        if ('ciudad' in fieldValues)
+            if (fieldValues.ciudad){
+                if (isNaN(fieldValues.ciudad))
+                    temp.ciudad = ""
+                else
+                    temp.ciudad = "Ciudad no puede ser un número"
+            }else{
+                temp.ciudad = "Este campo es requerido"
+            }
+        if ('pais' in fieldValues)
+            temp.pais = fieldValues.pais ? "" : "Este campo es requerido"
+        if ('url_repositorio' in fieldValues)
+            temp.url_repositorio = fieldValues.url_repositorio ? "" : "Este campo es obligatorio"
+        if (fieldValues.url_repositorio)
+            temp.url_repositorio = (/^(ftp|http|https):\/\/[^ "]+$/).test(fieldValues.url_repositorio) ? "" : "Este URL no es válido"
+        if ('divulgacion' in fieldValues)
+            temp.divulgacion = fieldValues.divulgacion ? "" : "Este campo es obligatorio"
+        if ('pagina_inicial' in fieldValues)
+            temp.pagina_inicial = fieldValues.pagina_inicial ? "" : "Este campo es obligatorio"
+        if ('pagina_final' in fieldValues)
+            temp.pagina_final = fieldValues.pagina_final ? "" : "Este campo es obligatorio"
+        if(fieldValues.pagina_inicial && fieldValues.pagina_final)
+            temp.pagina_final = (fieldValues.pagina_final>=fieldValues.pagina_inicial) ? "" : "La página final deber ser mayor a la página inicial"
         if ('correo' in fieldValues)
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido."
+        if(!fieldValues.isbn && !fieldValues.issn)
+            temp.isbn = "Se requiere al menos ISBN o ISSN"
+            
         // temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError
         if(recordForEdit){
           temp.idAutor = values.autorId !== 0 ? "" : defaultError;
