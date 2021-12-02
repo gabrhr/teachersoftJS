@@ -14,9 +14,9 @@ import { ExportCSV } from '../../../components/PageComponents/ExportCSV';
 import Popup from '../../../components/util/Popup'
 import Notification from '../../../components/util/Notification';
 import ConfirmDialog from '../../../components/util/ConfirmDialog';
-/*IMPORTS LOCALES*/ 
+/*IMPORTS LOCALES*/
 import TrabajosInvestigacion from './TrabajosInvestigacion'
-/* SERVICES */ 
+/* SERVICES */
 import TrabajoService from '../../../services/investigacionService';
 /*ICONS*/
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -72,9 +72,7 @@ const initialFieldValues = {
   url_repositorio:  '',
   validacion_preliminar:  '',
   volumen:  '',
-  
-  //autor
-
+  // Autor
   idAutor:  '',
   nombreAutor: '',
   foto_url: '',
@@ -100,34 +98,34 @@ const tableHeaders = [
 //**falta agregar headers
     {
       id: 'codigo_publicacion',
-      label: 'Código',
+      label: 'Codigo',
       numeric: false,
       sortable: true
     },
     {
       id: 'titulo',
-      label: 'Título',
+      label: 'Titulo',
       numeric: false,
       sortable: true
     },
     {
-        id: 'nombreAutor',
-        label: 'Autor',
-        numeric: false,
-        sortable: true
+      id: 'nombreAutor',
+      label: 'Autor',
+      numeric: false,
+      sortable: true
     },
     {
-        id: 'anho_publicacion',
-        label: 'Año',
-        numeric: false,
-        sortable: false
+      id: 'anho_publicacion',
+      label: 'Periodo',
+      numeric: false,
+      sortable: false
     },
 
     {
-        id: 'url_repositorio',
-        label: 'Texto Completo',
-        numeric: false,
-        sortable: false
+      id: 'url_repositorio',
+      label: 'URL',
+      numeric: false,
+      sortable: false
     },
     {
       id: 'actions',
@@ -139,9 +137,9 @@ const tableHeaders = [
 
 
 const getDocumentos = async () => {
-    
+
     const trabajos = [];
-    
+
     let dataTrabajo = await TrabajoService.getDocumentos();
     dataTrabajo = dataTrabajo ?? [];
     if (dataTrabajo){
@@ -182,8 +180,8 @@ const getDocumentos = async () => {
                 titulo: trabajo.titulo,
                 url_repositorio: trabajo.url_repositorio,
                 validacion_preliminar: trabajo.validacion_preliminar,
-                volumen: trabajo.volumen,           
-                
+                volumen: trabajo.volumen,
+
                 //autor
                 //utor: trabajo.autor,
                 idAutor: trabajo.autor.id,
@@ -193,61 +191,242 @@ const getDocumentos = async () => {
             })
         ));
     }
-    else console.log("No existen datos en Trabajos de investigación");  
+    else console.log("No existen datos en Trabajos de investigación");
     window.localStorage.setItem('listTrabajos',trabajos);
-    
+
     return trabajos;
 }
- 
+
 
 
 export default function GestionTrabajosInvestigacion() {
-	
-    const [openPopup, setOpenPopup] = useState(false);
-    const [deleteData, setDeleteData] = useState(false);
-    const [createData, setCreateData] = useState(false);
-    const [updateData, setUpdateData] = useState(false);
-    const [records, setRecords] = useState([]);
-    const [record, setRecord] = useState(null);
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const [recordForEdit, setRecordForEdit] = useState(null);
-    const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
-	  const [detail, setDetail] = useState(false);
-    const [isViewActivityMode, setIsViewActivityMode] = useState(true);
-    const [isVisible, setIsVisible] = useState(true);
-    const [selectedRow, setSelectedRow] = useState(50) //Se tiene que cambiar
+	const [openPopup, setOpenPopup] = useState(false);
+  const [openPopupCargaMasiva, setOpenPopupCargaMasiva] = useState(false);
+  const [deleteData, setDeleteData] = useState(false);
+  const [createData, setCreateData] = useState(false);
+  const [updateData, setUpdateData] = useState(false);
+  const [records, setRecords] = useState([]);
+  // const [record, setRecord] = useState(null);
+  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
+  const [recordForEdit, setRecordForEdit] = useState(null);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
+  const [detail, setDetail] = useState(false);
+  const [isViewActivityMode, setIsViewActivityMode] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
 
-    //CSV components
-    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    const fileExtension = '.xlsx';
-    const exportToCSV = (csvData, fileName) => {
-      const ws = XLSX.utils.json_to_sheet(csvData);
-      const wb = { Sheets: { 'Trabajo_Investigacion': ws }, SheetNames: ['Trabajo_Investigacion'] };
-      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-      const data = new Blob([excelBuffer], {type: fileType});
-      FileSaver.saveAs(data, fileName + fileExtension);
+  // const [selectedRow, setSelectedRow] = useState(50);
+
+  const [columns, setColumns] = useState([]);
+  const [data, setData] = useState([]);
+
+  const vacio = [{
+    "COD_FINAL_PUBLICACION": " ",
+    "COD_DOCENTE": " ",
+    "APELLIDOS_NOMBRES": " ",
+    "DES_TIPO": " ",
+    "TIPO_REFERENCIA": " ",
+    "DES_INDICADOR_CALIDAD": " ",
+    "DES_SUBTIPO": " ",
+    "ANIO_PRODUCCION": " ",
+    "RESPONSABILIDAD": " ",
+    "TITULO": " ",
+    "DES_DIVULGACION": " ",
+    "PUB_EDITORIAL": " ",
+    "DES_IDIOMA": " ",
+    "PUB_EDICION": " ",
+    "DES_CIUDAD": " ",
+    "DES_PAIS": " ",
+    "PUB_ISBN": " ",
+    "PUB_ISSN": " ",
+    "PUB_DOI": " ",
+    "MED_PUBLICACION": " ",
+    "PALABRAS_CLAVE": " ",
+    "TEXTO_COMPLETO": " ",
+    "PUBLICACION_FILIACION_PUCP": " ",
+    "ESPECIALIDAD_UNESCO": " ",
+    "PUB_VOLUMEN": " ",
+    "PUB_NRO_REVISTA": " ",
+    "PAGINA_INI_ARTICULO_REVISTA": " ",
+    "PAGINA_FIN_ARTICULO_REVISTA": " ",
+    "MOTOR_BUSQUEDA": " ",
+    "IDENTIFICADOR_PRODUCCION": " ",
+    "VALIDACION_PRELIMINAR_PUBLICACION": " ",
+    "COD_PUBLICACION_VALIDADA": " ",
+    "OBSERVACIONES_PARA_DPTO_ACADEMICO": " ",
+    "OBSERVACIONES_DE_DPTO_ACADEMICO": " ",
+    "URL": " "
+  }];
+
+  // CSV components
+  const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  const fileExtension = '.xlsx';
+  const exportToCSV = (csvData, fileName) => {
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'Trabajo_Investigacion': ws }, SheetNames: ['Trabajo_Investigacion'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], {type: fileType});
+    FileSaver.saveAs(data, fileName + fileExtension);
+  }
+
+  const validate = columnas => {
+    // COD_FINAL_PUBLICACION esta compuesto de 123-ABC, es necesario verificar cada parte
+    let codigo=columnas.Codigo.split("-");
+    let numPublicacion = codigo[0];
+    let codRevisor = codigo[1];
+    let codRevisorLength=3;
+    if(columnas.Codigo === "" || codigo.length === columnas.Codigo.length || isNaN(numPublicacion) || codRevisor.length != codRevisorLength){
+      if(columnas.Codigo === "") alert("Error en la plantilla: COD_FINAL_PUBLICACION - Campo vacío");
+      else if(codigo.length === columnas.Codigo.length) alert("Error en la plantilla: COD_FINAL_PUBLICACION - No existe ningún guión de separación");
+      else if(isNaN(numPublicacion)) alert("Error en la plantilla: COD_FINAL_PUBLICACION - Primer fragmento no numérico");
+      else alert("Error en la plantilla: COD_FINAL_PUBLICACION - Segundo fragmento no contiene la longitud esperada");
+      return false
     }
-    
-    
+    if(columnas.Titulo === ""){
+      alert("Error en la plantilla: TITULO - Campo vacío")
+      return false
+    }
+    // El autor es dado en el formato APELLIDO, NOMBRE
+    let autor=columnas.Codigo.split(",");
+    if(columnas.Autor === "" || autor.length === columnas.Autor.length){
+      if(columnas.Autor === "") alert("Error en la plantilla: APELLIDOS_NOMBRES - Campo vacío")
+      else alert("Error en la plantilla: APELLIDOS_NOMBRES - No existe una separación entre apellido y nombre")
+      return false
+    }
+    if(columnas.Periodo === "" || isNaN(columnas.Periodo)){
+      if(columnas.Periodo === "") alert("Error en la plantilla: ANIO_PRODUCCION - Campo vacío")
+      else alert("Error en la plantilla: ANIO_PRODUCCION - No es un número")
+      return false
+    }
+    // Una URL posee una extension, en caso no se haya asignado, debe de colocarse el enunciado "Sin imagen"
+    let extension = (columnas.URL.split('.')).pop();
+    let extensionMaxLength = 4;
+    // Consultar sobre si existirá la posibilidad de que por defecto si no se asigna un pdf se guarda como Sin imagen
+    if(columnas.URL === "" || extension > extensionMaxLength){
+      if(columnas.URL === "") alert("Error en la plantilla: URL - Campo vacío");
+      else alert("Error en la plantilla: URL - Extensión inválida")
+      return false
+    }
+    return true
+  }
+
+  // FALTA IMPLEMENTAR
+  const datosPublicaciones = listaPublicaciones => {
+    const publicaciones = []
+    listaPublicaciones.map(hor => (
+      publicaciones.push({
+      "codigo": hor.Horario,
+      "tipo": hor.Tipo === "Clase" ? 0 : 1, //Si es clase es 0 - si es laboratorio 1
+      "horas_semanales": hor.Horas, //Horas_semanales: cargaHoraria
+      ciclo:{
+        //"id":AGARRADO DESDE LA SELECCION DE CICLOS - SU ID
+        "id": parseInt(window.localStorage.getItem('ciclo')),
+      },
+      curso:{
+        "codigo": hor.Clave, //INF...
+        "nombre": hor.Nombre, //NOMBRE DEL CURSO
+        //"creditos": hor.Creditos, //Creditos del Curso
+        //"unidad": hor.Unidad, //Creditos del Curso
+        //"carga": hor.Carga_Horaria, //Creditos del Curso
+      },
+      //El backend manejo esta sesion - como si un horario - tiene un arreglo de horas y tipos:
+      profesor: {}, //Se llenará cuando se cargen los profesores al curso - item 3
+      //"sesiones_excel": hor.Hora_Sesion
+        //AQUI SOLO SE CONSIDERARÁ LAS HORAS DE LA HORA_SESION  - Como String - sesiones ya no va
+      /*LOS PROFESORES SE AÑADEN LUEGO TODAVÍA*/
+      //claveCurso	nombreCurso	cargaHoraria	horario	tipoSesion	horaSesion
+    })
+    ));
+    //horario = horarios;
+    return publicaciones;
+  }
+
+  const processData = dataString => {
+    const dataStringLines = dataString.split(/\r\n|\n/);
+    const headers = dataStringLines[0].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
+
+    let list = [];
+    for (let i = 1; i < dataStringLines.length; i++) {
+      const row = dataStringLines[i].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
+      if (headers && row.length === headers.length) {
+        const obj = {};
+        for (let j = 0; j < headers.length; j++) {
+          let d = row[j];
+          if (d.length > 0) {
+            if (d[0] === '"') d = d.substring(1, d.length - 1);
+            if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
+          }
+          if (headers[j]) {
+              obj[headers[j]] = d;
+          }
+        }
+        console.log(obj)
+        if(!validate(obj)){
+          return
+        }
+        if (Object.values(obj).filter(x => x).length > 0) {
+          list.push(obj);
+        }
+      }
+    }
+
+    const columns = headers.map(c => ({
+        name: c,
+        selector: c
+    }));
+
+    setData(list);
+    setColumns(columns);
+
+    let listaCorrectos = []
+    for (let i = 0; i < list.length; i++) {
+        listaCorrectos.push(list[i])
+    }
+
+    //Hacemos el paso de los datos a un objeto
+    const publicaciones = datosPublicaciones(listaCorrectos)
+
+    setRecords(prevRecords => prevRecords.concat(publicaciones));
+  };
+
+  const handleUploadFile = e => {
+    try{
+      const file = e.target.files[0];
+      let extension = (file.name.split('.')).pop();
+      if(extension !== "xlsx" && extension !== "xls"){
+        alert("Solo se pueden importar archivos .xlsx y .xls");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = evt => {
+        const bstr = evt.target.result;
+        const wb = XLSX.read(bstr, {type: "binary"});
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_csv(ws, {header: 1});
+        processData(data);
+      }
+      reader.readAsBinaryString(file);
+    } catch(error){
+      console.log(error);
+    }
+  }
+
     const {values, setValues} = useForm(initialFieldValues);
 
     const classes = {
       ...useStyles()
     };
-    
+
     const [confirmDialog, setConfirmDialog] = useState(
-        { isOpen: false, title: '', subtitle: '' });   
-		
-	  const {	
+        { isOpen: false, title: '', subtitle: '' });
+
+	  const {
         TblContainer,
         TblHead,
         TblPagination,
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records, tableHeaders, filterFn);
-    
- 
-
 
     const handleSearch = e => {
         let target = e.target;
@@ -264,7 +443,14 @@ export default function GestionTrabajosInvestigacion() {
           }
         })
     }
-    
+
+    const handleSubmit = e => {
+      e.preventDefault();
+      setRecords(records);
+      handleClose();
+      setOpenPopupCargaMasivaup(false);
+    }
+
     useEffect(() => {
         getDocumentos()
         .then (newTrabjo =>{
@@ -287,12 +473,12 @@ export default function GestionTrabajosInvestigacion() {
       else if (id_trabajo == localStorage.getItem("id_trabajo")){
         setIsVisible(prev => !prev);
       }
-      
+
     };
 
     const addOrEdit = (trabajo, resetForm) => {
       //puede que se modifique, revisar Gestion USuario
-      
+
       recordForEdit
       ? TrabajoService.updateDocumento(trabajo,trabajo.id)
       : TrabajoService.registerDocumento(trabajo)
@@ -301,7 +487,7 @@ export default function GestionTrabajosInvestigacion() {
           setRecordForEdit(null);
           setUpdateData(true);}
       })
-      
+
       setOpenPopup(false)
       resetForm()
       setCreateData(true);
@@ -337,17 +523,17 @@ export default function GestionTrabajosInvestigacion() {
         const nuevaTabla = records.filter(trabajoPorEliminar => trabajoPorEliminar.id !== idTrabajo)
         console.log(nuevaTabla)
         //TrabajoService.deleteTrabajo(idTrabajo);
- 
+
         setNotify({
           isOpen: true,
           message: 'Borrado Exitoso',
           type: 'success'
         })
-        
+
     }
 
     const onView = async (trabajo, id_trabajo) => {
-      
+
       //
       selectedID = id_trabajo;
       //await localStorage.setItem("localTrabajo", trabajo);
@@ -356,15 +542,15 @@ export default function GestionTrabajosInvestigacion() {
       setValues({
         ...trabajo
       })
-      //let auxTema = await temaTramiteService.getTemaTramites();  
-      
+      //let auxTema = await temaTramiteService.getTemaTramites();
+
       setDetail(true);
       //this.forceUpdate();
         //tematramiteService.deleteTemaTramite(id_tramite);
-      
- 
+
+
   }
-  /*Styles*/ 
+  /*Styles*/
   const PaperStyle = { borderRadius: '20x', pb: 4, pt:0.7, px: 0.7, color: "primary.light", elevatio: 0 }
   const SubtitulosTable = { display: "flex" }
 
@@ -377,12 +563,12 @@ export default function GestionTrabajosInvestigacion() {
       <Grid container spacing={2} maxWidth={1}>
         <Grid item xs>
           <Typography variant="body1"> Puedes&nbsp;
-            <Link 
-                style={{ fontSize: '15px', color:"#41B9E4"}} 
-                href="#" 
-                underline = "hover" 
-                variant="button" 
-                //onClick = {() => exportToCSV(vacio, 'trabajo_investigacion')}
+            <Link
+                style={{ fontSize: '15px', color:"#41B9E4"}}
+                href="#"
+                underline = "hover"
+                variant="button"
+                onClick = {() => exportToCSV(vacio, 'Modelo_TrabajoInvestigacion')}
             >
                 descargar la plantilla en Excel
             </Link>
@@ -401,7 +587,7 @@ export default function GestionTrabajosInvestigacion() {
       <Paper variant="outlined" sx={PaperStyle}>
         <Grid container spacing={2} >
             <Grid item xs={isViewActivityMode ? 6 :12} className={classes.collapsible} >
-            
+
                   <Typography variant="h4" style={SubtitulosTable}>
                         Repositorio de Investigación
                   </Typography>
@@ -427,8 +613,8 @@ export default function GestionTrabajosInvestigacion() {
                       />
                         {/* </Toolbar> */}
                   </div>
-           
-              <BoxTbl>  
+
+              <BoxTbl>
               <TblContainer>
                 <TblHead />
                   <TableBody>
@@ -453,7 +639,7 @@ export default function GestionTrabajosInvestigacion() {
                                 onClick={() => {
                                 setConfirmDialog({
                                         isOpen: true,
-                                        title: '¿Eliminar ciclo permanentemente?',
+                                        title: '¿Eliminar este trabajo permanentemente?',
                                         subTitle: 'No es posible deshacer esta accion',
                                         onConfirm: () => {onDelete(item.id)}
                                 })
@@ -475,7 +661,7 @@ export default function GestionTrabajosInvestigacion() {
                 </TblContainer>
 
                 </BoxTbl>
-            
+
             </Grid>
             <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
             <Grid item xs={5.5} className={isVisible ? classes.visible : classes.hidden} >
@@ -488,29 +674,148 @@ export default function GestionTrabajosInvestigacion() {
                 <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
                 <GestionTrabajosInvestigacionDetalle values = {values} detail = {detail} setDetail = {setDetail}/>
             </Grid>
-        </Grid>            
+        </Grid>
 		  </Paper>
       <Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
-            >
-              <AgregarEditarInvestiga
-                addOrEdit={addOrEdit}
-                recordForEdit={recordForEdit}
-                setOpenPopup={setOpenPopup}
-              />
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
+      >
+        <AgregarEditarInvestiga
+          addOrEdit={addOrEdit}
+          recordForEdit={recordForEdit}
+          setOpenPopup={setOpenPopup}
+        />
+      </Popup>
+      <Popup
+        openPopup={openPopupCargaMasiva}
+        setOpenPopup={setOpenPopupCargaMasiva}
+        title="Carga masiva de trabajos de investigación">
 
-              {/*  <AgregarEditarInvestiga/> */}
-            </Popup>
-            <Notification
-              notify={notify}
-              setNotify={setNotify}
-            />
-            <ConfirmDialog
-              confirmDialog={confirmDialog}
-              setConfirmDialog={setConfirmDialog}
-            />
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        <Form onSubmit={handleSubmit}>
+            <Grid align="right">
+                <label htmlFor="contained-button-file" >
+                    <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
+                        type="file" sx={{display: 'none'}} 
+                        onChange={handleUploadFile}
+                        onClick={onInputClick}
+                    />
+                    <Controls.Button
+                        text="Subir archivo"
+                        endIcon={<AttachFileIcon />}
+                        size="medium"
+                        component="span"
+                        align="right"
+                    />
+                </label>
+            </Grid>
+            <Paper variant="outlined" sx={PaperStyle}>
+                <Typography variant="h4"
+                    color="primary.light" style={SubtitulosTable}
+                >
+                    Vista Previa
+                </Typography>
+                <BoxTbl>
+                    <TblContainer>
+                      <colgroup>
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '50%' }} />
+                        <col style={{ width: '10%' }} />
+                        <col style={{ width: '20%' }} />
+                        <col style={{ width: '10%' }} />
+                      </colgroup>
+                        <TblHead />
+                        <TableBody>
+                        {
+                            recordsAfterPagingAndSorting().map(item => (
+                            <TableRow>
+                                {/*<TableCell
+                                align="right"
+                                >
+                             
+                                {item.id}
+                                </TableCell>*/}
+                                <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.curso.nombre : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.codigo : item.codigo}</TableCell>
+                                <TableCell>{recordsX ? item.tipo === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
+                                <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                                {/*<TableCell>{recordsX ? item.sesiones_excel : item.sesiones_excel}</TableCell>*/}
+                            </TableRow>
+                            ))
+                        }
+                        </TableBody>
+                    </TblContainer>
+                    <TblPagination />
+                </BoxTbl>
+            </Paper>
+            <Grid cointainer align="right" mt={5}>
+                <div>
+                    <Controls.Button
+                        // disabled={true}
+                        variant="disabled"
+                        text="Cancelar"
+                        /* onClick={resetForm} */
+                        />
+                    <Controls.Button
+                        // variant="contained"
+                        // color="primary"
+                        // size="large"
+                        text="Cargar Datos"
+                        /* type="submit" */
+                        onClick={actualizarDatos}
+                    />
+                    
+                </div>
+            </Grid>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={open}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </Form>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </Popup>
+      <Notification
+        notify={notify}
+        setNotify={setNotify}
+      />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
 		</>
 	);
 }
