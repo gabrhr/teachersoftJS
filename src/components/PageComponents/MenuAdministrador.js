@@ -40,11 +40,6 @@ export const MenuAdministrador = [
             indice: 4,
             }
         ]
-    },
-    {
-        text: 'Estadisticas',
-        path: '/admin/estadisticas',
-        icon: <InboxOutlinedIcon />,
-        indice: 1,
     }
+
 ];

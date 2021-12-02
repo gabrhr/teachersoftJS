@@ -5,7 +5,58 @@ import { Controls } from '../../components/controls/Controls'
 import IndicadoresService from '../../services/indicadoresService';
 import PieCharts from '../../components/PageComponents/PieCharts';
 import InvestigacionService from '../../services/investigacionService';
-import BarChartAutores from '../../components/PageComponents/BarCharts';
+import BarCharts from '../../components/PageComponents/BarCharts';
+import CantidadTrabajosXAutor from '../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
+
+let indicadores = [];
+/*  Colores pastel con transparencia
+    Red: rgba(255, 99, 132, 0.8)
+    Blue: rgba(54, 162, 235, 0.8)
+    Yellow: rgba(255, 206, 86, 0.8)
+    Green: rgba(75, 192, 192, 0.8)
+    Purple: rgba(153, 102, 255, 0.8)
+    Orange: rgba(255, 159, 64, 0.8)
+*/
+const listColors = [
+    "rgba(54, 162, 235, 0.8)",
+    "rgba(255, 99, 132, 0.8)",
+    "rgba(75, 192, 192, 0.8)",
+    "rgba(255, 206, 86, 0.8)",
+    "rgba(153, 102, 255, 0.8)"
+]
+
+
+
+
+const getLabels = (arr) => {
+    let arrEstandarizado=[];
+    try{
+        arr.forEach(element => {
+            arrEstandarizado.push(element.nombres + ' ' + element.apellidos);
+        });
+        }
+    catch{
+
+    }
+    return arrEstandarizado;
+}
+
+const getQuantities = (arr) => {
+    let arrEstandarizado=[];
+    try{
+        arr.forEach(element => {
+            arrEstandarizado.push(element.deuda_docente);
+        });
+    }
+    catch {}
+    return arrEstandarizado;
+}
+
+const fillProfesoresConDeuda = async (id_seccion) => {
+    let profesorConDeuda = await IndicadoresService.getTopProfesoresDeuda(id_seccion);
+    
+    return profesorConDeuda;
+}
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
     let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
@@ -72,7 +123,7 @@ export default function IndicadoresASeccion() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
-    
+    const [profesores, setProfesores] = useState([]);
     
     const [profesorTC, setProfesorTC] = useState([]);
 
@@ -80,6 +131,11 @@ export default function IndicadoresASeccion() {
         fillProfesorTC(user.persona.seccion.id,cicloAct)
         .then(newProfTC => {
             setProfesorTC(newProfTC);
+            
+        });
+        fillProfesoresConDeuda(user.persona.seccion.id)
+        .then (newProf => {
+            setProfesores(newProf);
             
         });
     }, [])
@@ -150,17 +206,23 @@ export default function IndicadoresASeccion() {
         });
     }, [])
 
+    
+
     return (
         <>
             <ContentHeader
                 text="Dashboard"
                 cbo={false}
             />
+            
+            <Paper variant="outlined" sx={PaperStyle}>
             <Typography variant="body1" color={"#00008B"} my={2}>
                 DATA ACTUAL DEL CICLO
             </Typography>
-            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
+            <Grid container spacing={1} ml={".3px"} >
+            
                 <Grid item xs={3.5}>
+                <Paper variant="outlined" sx={PaperStyle}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Número de Profesores TC: {profesorTC.cantidad_docentes}
                     </Typography>
@@ -186,10 +248,12 @@ export default function IndicadoresASeccion() {
                     <div>
                         {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
                     </div>
+                    </Paper>
                 </Grid>
                 <Grid item xs={0.25}/>
-                <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+            
                 <Grid item xs={3.5}>
+                <Paper variant="outlined" sx={PaperStyle}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Número de Profesores TC con Deuda: {profesorDeudaTC.cantidad_deudores}
                     </Typography>
@@ -215,10 +279,12 @@ export default function IndicadoresASeccion() {
                     <div>
                         {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
                     </div>
+                    </Paper >
                 </Grid>
                 <Grid item xs={0.25}/>
-                <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+                
                 <Grid item xs={3.5}>
+                    <Paper variant="outlined" sx={PaperStyle}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Número de Profesores TC con Sobrecarga: {profesorSobrecargaTC.cantidad_deudores}
                     </Typography>
@@ -244,13 +310,25 @@ export default function IndicadoresASeccion() {
                     <div>
                         {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
                     </div>
+                    </Paper >
                 </Grid>
+                
             </Grid>
-            <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-            <Typography variant="body1" color={"#00008B"} my={.5}>
+            </Paper>
+            <Grid item xs={7}>
+                    <Paper variant="outlined" sx={PaperStyle}>
+                        <Typography variant="h4" >
+                            TOP 5 Profesores con mayor deuda
+                        </Typography>
+                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                        <Grid align="center" justify="center">
+                            Cantidad de Deudas
+                        </Grid>
+                    </Paper>
+                </Grid>
+            <Paper variant="outlined" sx={PaperStyle}>
+            <Grid container spacing={1} ml={".3px"} >
             
-            </Typography>
-            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={3.5}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Número de Profesores: {profesorTC.cantidad_docentes+profesorTPC.cantidad_docentes+profesorTPA.cantidad_docentes}
@@ -260,7 +338,7 @@ export default function IndicadoresASeccion() {
                     </Typography>
                 </Grid>
                 <Grid item xs={0.25}/>
-                <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+                
                 <Grid item xs={3.5}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Número de Profesores con Deuda: {profesorDeudaTC.cantidad_deudores+profesorDeudaTPC.cantidad_deudores+profesorDeudaTPA.cantidad_deudores}
@@ -270,7 +348,7 @@ export default function IndicadoresASeccion() {
                     </Typography>
                 </Grid>
                 <Grid item xs={0.25}/>
-                <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+                
                 <Grid item xs={3.5}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Número de Profesores con Sobrecarga: {profesorSobrecargaTC.cantidad_deudores+profesorSobrecargaTPC.cantidad_deudores+profesorSobrecargaTPA.cantidad_deudores}
@@ -279,12 +357,15 @@ export default function IndicadoresASeccion() {
                     Promedio de Sobrecarga: {profesorSobrecargaTC.promedio_deuda*-1+profesorSobrecargaTPC.promedio_deuda*-1+profesorSobrecargaTPA.promedio_deuda*-1}
                     </Typography>
                 </Grid>
+                
             </Grid>
-            <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+            </Paper>
+           
             <Typography variant="body1" color={"#00008B"} my={.5}>
             
             </Typography>
-            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
+            <Paper variant="outlined" sx={PaperStyle}>
+            <Grid container spacing={1} ml={".3px"} >
                 <Grid item xs={12}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Número de Investigadores: {autores.length}
@@ -294,11 +375,12 @@ export default function IndicadoresASeccion() {
                     </Typography>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Grid item xs={8}>
-                        {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+                        <CantidadTrabajosXAutor/>
                         </Grid>
                     </Paper>
                 </Grid>
             </Grid>
+            </Paper>
         </>
     )
 }

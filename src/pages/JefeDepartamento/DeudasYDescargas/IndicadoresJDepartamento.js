@@ -6,8 +6,51 @@ import IndicadoresService from '../../../services/indicadoresService';
 import PieCharts from '../../../components/PageComponents/PieCharts';
 import InvestigacionService from '../../../services/investigacionService';
 import SeccionService from "../../../services/seccionService";
-import BarChartAutores from '../../../components/PageComponents/BarCharts';
+import BarCharts from '../../../components/PageComponents/BarCharts';
 import { useForm, Form } from "../../../components/useForm" 
+import CantidadTrabajosXAutor from '../../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
+
+
+
+const getLabels = (arr) => {
+    let arrEstandarizado=[];
+    try{
+        arr.forEach(element => {
+            arrEstandarizado.push(element.nombres + ' ' + element.apellidos);
+        });
+        }
+    catch{
+
+    }
+    return arrEstandarizado;
+}
+
+const listColors = [
+    "rgba(54, 162, 235, 0.8)",
+    "rgba(255, 99, 132, 0.8)",
+    "rgba(75, 192, 192, 0.8)",
+    "rgba(255, 206, 86, 0.8)",
+    "rgba(153, 102, 255, 0.8)"
+]
+
+const getQuantities = (arr) => {
+    let arrEstandarizado=[];
+    try{
+        arr.forEach(element => {
+            arrEstandarizado.push(element.deuda_docente);
+        });
+    }
+    catch {}
+    return arrEstandarizado;
+}
+
+
+const fillProfesoresConDeuda = async (id_seccion) => {
+    let profesorConDeuda = await IndicadoresService.getTopProfesoresDeuda(id_seccion);
+    
+    return profesorConDeuda;
+}
+
 
 const getSeccionCollection =  async () => {
     //{ id: '1', title: 'Todas las Secciones' },
@@ -89,7 +132,7 @@ const estandarizarAutoresInd = (arr) => {
 */
 
 export default function IndicadoresADepartamento() {
-
+    
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
@@ -100,7 +143,9 @@ export default function IndicadoresADepartamento() {
     const [changeDeuda, setChangeDeuda] = useState(false)
     const [changeSobrecarga, setChangeSobrecarga] = useState(false)
     const [secciones, setSecciones] = useState([]);
+    const [profesores, setProfesores] = useState([]);
     const [seccion, setSeccion] = useState(0);
+
 
     const initialFieldValues = {
         id: '',
@@ -115,6 +160,15 @@ export default function IndicadoresADepartamento() {
     } = useForm(initialFieldValues);
 
     const [profesorTC, setProfesorTC] = useState([]);
+
+
+    useEffect(() => {
+        fillProfesoresConDeuda(seccion)
+        .then (newProf => {
+            setProfesores(newProf);
+            
+        });
+    }, [seccion])
 
     useEffect(() => {
         setChangeTC(false)
@@ -260,7 +314,8 @@ export default function IndicadoresADepartamento() {
             <Typography variant="body1" color={"#00008B"} my={2}>
             
             </Typography>
-            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
+            <Paper variant="outlined" sx={PaperStyle}>
+            <Grid container spacing={1} ml={".3px"} >
                 <Grid item xs={3.5}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Número de Profesores TC: {profesorTC.cantidad_docentes}
@@ -347,11 +402,20 @@ export default function IndicadoresADepartamento() {
                     </div>
                 </Grid>
             </Grid>
-            <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-            <Typography variant="body1" color={"#00008B"} my={.5}>
-            
-            </Typography>
-            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
+            </Paper>
+            <Grid item xs={7}>
+                    <Paper variant="outlined" sx={PaperStyle}>
+                        <Typography variant="h4" >
+                            TOP 5 Profesores con mayor deuda
+                        </Typography>
+                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                        <Grid align="center" justify="center">
+                            Cantidad de Deudas
+                        </Grid>
+                    </Paper>
+                </Grid>
+            <Paper variant="outlined" sx={PaperStyle}>
+            <Grid container spacing={1} ml={".3px"}  >
                 <Grid item xs={3.5}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Número de Profesores: {profesorTC.cantidad_docentes+profesorTPC.cantidad_docentes+profesorTPA.cantidad_docentes}
@@ -381,6 +445,7 @@ export default function IndicadoresADepartamento() {
                     </Typography>
                 </Grid>
             </Grid>
+            </Paper>
             <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
             <Typography variant="body1" color={"#00008B"} my={.5}>
             
@@ -388,7 +453,8 @@ export default function IndicadoresADepartamento() {
             <Typography variant="body1" color={"#00008B"} my={2}>
                         INVESTIGACIONES REALIZADAS
             </Typography>
-            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
+            <Paper variant="outlined" sx={PaperStyle}>
+            <Grid container spacing={1} ml={".3px"} >
                 <Grid item xs={12}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Número de Investigadores: {autores.length}
@@ -398,11 +464,12 @@ export default function IndicadoresADepartamento() {
                     </Typography>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Grid item xs={8}>
-                        {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+                            <CantidadTrabajosXAutor/>
                         </Grid>
                     </Paper>
                 </Grid>
             </Grid>
+            </Paper>
         </>
     )
 }

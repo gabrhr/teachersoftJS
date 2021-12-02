@@ -7,8 +7,9 @@ import PieCharts from '../../components/PageComponents/PieCharts';
 import InvestigacionService from '../../services/investigacionService';
 import SeccionService from "../../services/seccionService";
 import DepartamentoService from '../../services/departamentoService';
-import BarChartAutores from '../../components/PageComponents/BarCharts';
+import BarCharts from '../../components/PageComponents/BarCharts';
 import { useForm, Form } from "../../components/useForm"
+import CantidadTrabajosXAutor from '../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
 
 const getDepartamentos = async () => {
     //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
@@ -420,7 +421,7 @@ export default function IndicadoresAdministrador() {
                     </Typography>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Grid item xs={8}>
-                        {BarChartAutores(estandarizarAutoresInd(autoresInd))}
+                            <CantidadTrabajosXAutor/>
                         </Grid>
                     </Paper>
                 </Grid>
