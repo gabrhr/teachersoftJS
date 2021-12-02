@@ -293,7 +293,7 @@ export default function AgregarEditarInvestiga(props) {
             observaciones_para_departamento: values.observaciones_para_departamento,
             observaciones_de_departamento: values.observaciones_de_departamento,
             validacion_preliminar: values.validacion_preliminar,
-            codigo_validacion: values.codigo_validacion,
+            codigo_validacion: (values.validacion_preliminar != 0 ?  values.codigo_validacion : 0),
             issn: values.issn,
             doi: values.url_repositorio,
             isbn: values.isbn
