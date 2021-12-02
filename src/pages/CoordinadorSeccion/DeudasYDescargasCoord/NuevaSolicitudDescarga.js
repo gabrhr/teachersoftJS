@@ -366,15 +366,18 @@ export default function NuevoProcesoForm() {
                     </Grid>
                 </Grid>
                 <Grid cointainer align="right" mt={5}>
-                    <div>
-                        <Controls.Button
-                            text="guardar"
-                            endIcon={<SaveIcon/>} 
-                            // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
-                            onClick = {()=>setOpenGuardarPopup(true)}  
-                            />
+                    {recordForEdit.estado_tracking===0 &&
+                        <div>
+                            <Controls.Button
+                                text="guardar"
+                                endIcon={<SaveIcon/>} 
+                                // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
+                                onClick = {()=>setOpenGuardarPopup(true)}  
+                                />
 
-                    </div>
+                        </div>
+
+                    }
                 </Grid>
             </Paper>
             <Popup
