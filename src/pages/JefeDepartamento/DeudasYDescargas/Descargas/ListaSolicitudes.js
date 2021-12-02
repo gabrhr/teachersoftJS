@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import useTable from '../../../../components/useTable'
-import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider } from '@mui/material'
+import { Grid, InputAdornment, Box, TableBody, TableCell, TableRow, Typography, Divider, Autocomplete, TextField } from '@mui/material'
 import { Controls } from '../../../../components/controls/Controls'
 import Popup from '../../../../components/util/Popup'
 import ModalDetalleSolicitudDescarga from './ModalDetalleSolicitudDescarga'
 import Notification from '../../../../components/util/Notification'
 import SearchIcon from '@mui/icons-material/Search';
 import tramiteSeccionDescargaService from '../../../../services/tramiteSeccionDescargaService'
+import seccionService from '../../../../services/seccionService'
 import moment from 'moment'
 import 'moment/locale/es'
 import { DT } from '../../../../components/DreamTeam/DT'
@@ -115,6 +116,7 @@ function Item(props){
 export default function ListaSolicitudes({seccion}){
     const [recordForView, setRecordForView] = useState(null)
     const [records, setRecords] = useState([])
+    const [secciones, setSecciones] = useState([])
 
     const [openDetalle, setOpenDetalle] = useState(false)
     const [recordForEdit, setRecordForEdit] = useState(null)
@@ -143,7 +145,6 @@ export default function ListaSolicitudes({seccion}){
 
     const addOrEdit = async (values, resetForm) => {
         //Service
-        let ciclo, procesoNew, procesoEdit;
         
         if(recordForEdit === null){
             console.log("Se crea un ")
@@ -161,7 +162,9 @@ export default function ListaSolicitudes({seccion}){
 
     const getTramitesSeccionActivos = async() => {
         const request = await tramiteSeccionDescargaService.getTramitesSeccionDescarga()
+        const secciones = await seccionService.getSecciones()
         console.log(request)
+        setSecciones(secciones)
         setRecords(request)
     }
 
@@ -206,7 +209,7 @@ export default function ListaSolicitudes({seccion}){
         })
     }, [valueFecha])
 
-    const handleSearchTemas = e =>{
+    const handleSearchSeccion = e =>{
         let target = e.target;
           /* React "state object" (useState()) doens't allow functions, only
             * objects.  Thus the function needs to be inside an object. */
@@ -221,6 +224,17 @@ export default function ListaSolicitudes({seccion}){
           }
         })
       }    
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+            },
+        },
+    };
 
     return(
         <>
@@ -252,10 +266,11 @@ export default function ListaSolicitudes({seccion}){
                         name="seccionID"
                         label="Sección"
                         value={values.seccionID}
-                        onChange={handleSearchTemas}
-                        options={[{id: 0, nombre: "Todos las secciones"}]}
-                            // .concat(comboData.temaTramite
-                            // .sort((x1, x2) => x1.nombre - x2.nombre))}
+                        onChange={handleSearchSeccion}
+                        options={[{id: 0, nombre: "Todos las secciones"}]
+                            .concat(secciones
+                             .sort((x1, x2) => x1.nombre - x2.nombre))}
+                        MenuProps={MenuProps}
                     />
             </div>
             <Grid>
