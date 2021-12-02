@@ -403,17 +403,17 @@ export default function IndicadoresADepartamento() {
                 </Grid>
             </Grid>
             </Paper>
-            <Grid item xs={7}>
-                    <Paper variant="outlined" sx={PaperStyle}>
-                        <Typography variant="h4" >
-                            TOP 5 Profesores con mayor deuda
-                        </Typography>
-                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
-                        <Grid align="center" justify="center">
-                            Cantidad de Deudas
-                        </Grid>
-                    </Paper>
-                </Grid>
+            <Box display="flex" width="100%" my={2} justifyContent="center">
+                <Paper variant="outlined" width="50%" sx={PaperStyle}>
+                    <Typography variant="h4" >
+                        TOP 5 Profesores con mayor deuda
+                    </Typography>
+                    {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                    <Grid align="center" justify="center">
+                        Cantidad de Deudas
+                    </Grid>
+                </Paper>
+            </Box>
             <Paper variant="outlined" sx={PaperStyle}>
             <Grid container spacing={1} ml={".3px"}  >
                 <Grid item xs={3.5}>
@@ -463,9 +463,7 @@ export default function IndicadoresADepartamento() {
                         Top 10 Investigadores con mayor record de publicaciones
                     </Typography>
                     <Paper variant="outlined" sx={PaperStyle}>
-                        <Grid item xs={8}>
-                            <CantidadTrabajosXAutor/>
-                        </Grid>
+                        <CantidadTrabajosXAutor/>
                     </Paper>
                 </Grid>
             </Grid>
