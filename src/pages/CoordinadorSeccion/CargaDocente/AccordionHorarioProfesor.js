@@ -16,7 +16,6 @@ import AccordionDetailsHorarioProfesor from './AccordionDetailsHorarioProfesor'
 import HorarioService from '../../../services/horarioService';
 import CursoService from '../../../services/cursoService';
 
-
 import { Controls } from '../../../components/controls/Controls';
 
 const headers = [
@@ -44,6 +43,7 @@ function HeaderBoxs(props) {
 function chompDocentes(sesiones) {
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
+
     return (
         <>
           { clase.length ?
@@ -72,6 +72,19 @@ function chompDocentes(sesiones) {
 
 function chompDetalles(sesiones) {
 
+  const horasClase = (clase) => {
+    return(
+      <>
+      <Typography display="inline" whiteSpace="pre">
+          {"Horas de Clase: "}
+      </Typography>
+      <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
+        {clase.horas}{"\n"}
+      </Typography>
+      </>
+    )
+  }
+
   const horasLaboratorio = (laboratorio) => {
     return(
       <>
@@ -79,7 +92,7 @@ function chompDetalles(sesiones) {
           {"Horas de Laboratorio: "}
       </Typography>
       <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-        {laboratorio.horas}
+        {laboratorio.horas} {"\n"}
       </Typography>
       </>
     )
@@ -91,13 +104,9 @@ function chompDetalles(sesiones) {
     console.log("clase: ", clase, "laboratorio: ", laboratorio);
     return (
         <>
-            <Typography display="inline" whiteSpace="pre">
-                {"Horas de Clase: "}
-            </Typography>
-            <Typography display="inline" whiteSpace="pre" color="blue" fontWeight={600}>
-                {clase[0].horas} {"\n"}
-            </Typography>
-            {laboratorio[0] ? horasLaboratorio(laboratorio[0]) : ""}
+            {clase[0] ? horasClase(clase[0]) : "\n"}
+            <></>
+            {laboratorio[0] ? horasLaboratorio(laboratorio[0]) : "\n"}
         </>
     )
 }
@@ -130,7 +139,7 @@ function generateRow(horario) {
 }
 
 /* Generates a customized row with the data */
-function generateRows(records) {
+function generateRows(records, recordForEdit) {
     return (
         records.map(horario => (
             <Accordion disableGutters>
@@ -142,7 +151,7 @@ function generateRows(records) {
                 <AccordionDetails>
                     {/* HERE GOES CLASS & LAB PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
-                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario}/>
+                    <AccordionDetailsHorarioProfesor sesiones={horario.sesiones} horario = {horario} curso = {recordForEdit}/>
                 </AccordionDetails>
             </Accordion>
         ))
@@ -171,35 +180,13 @@ const hallarEstado = (sesiones) => {
       }
     }
     //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
-    (sumaHorasdoc >= sesiones[0].horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
+    (sumaHorasdoc >= ses.horas) ? estado = "Horas Asignadas"  : estado = "Faltan Horas"
 
     if(estado === "Faltan Horas") break;
   }
 
   return estado;
 }
-
-const actualizarCursoCiclo = async (curso_ciclo)=> {
-
-  if(curso_ciclo.estado_curso !== 2){
-    const newCC = {
-      "id": curso_ciclo.id,
-      "ciclo": {
-        "id": curso_ciclo.ciclo.id,
-      },
-      "curso": {
-        "id": curso_ciclo.curso.id,
-      },
-      "estado_curso": 2, //Se actualiza al nuevo estado
-      "cantidad_horarios": curso_ciclo.cantidad_horarios, 
-      "estado_tracking": curso_ciclo.estado_tracking,
-    }
-    
-    const request = await CursoService.updateCursoCiclo(newCC);
-
-  }
-}
-
 
 const fillHorarios = async (curso) => {
 
@@ -229,21 +216,18 @@ const fillHorarios = async (curso) => {
       })
       horTotal++;
   }
-  if(horTotal === horMoment && horTotal > 0)  
-      await actualizarCursoCiclo(dataHor[0].curso_ciclo);
 
   return dataHorarios;
 }
 
 
-export default function TestPage(recordForEdit, setRecordForEdit) {
+export default function TestPage(recordForEdit, setRecordForEdit, curso) {
     const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
 
     React.useEffect(() => {
       fillHorarios(recordForEdit.recordForEdit)
         .then(horarios => {
-          setRecords(horarios);
-          console.log("horariossssfFFFFFFFF: ", horarios)        
+          setRecords(horarios);        
         });  
     }, [])
 
@@ -256,7 +240,7 @@ export default function TestPage(recordForEdit, setRecordForEdit) {
                     <HeaderBoxs headers={headers} />
                 </AccordionSummary>
             </Accordion>
-            {generateRows(records)}
+            {generateRows(records, recordForEdit.recordForEdit)}
         </>
     )
 }

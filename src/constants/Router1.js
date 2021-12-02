@@ -52,7 +52,8 @@ import CargaArchivos from '../pages/MesaPartes/CargaArchivos';
 import GestionTemaTramite from '../pages/MesaPartes/GestionTemaTramite/GestionTemaTramite';
 import CargaDocenteCoord from '../pages/CoordinadorSeccion/CargaDocente/CargaDocente';
 import SolPreferenciaDocentes from '../pages/AsistenteSeccion/PreferenciaDocente/SolPreferenciaDocentes';
-import ModalDocenteClases from '../pages/AsistenteSeccion/CargaDocente/ModalDocenteClases'
+import ModalDocenteClases from '../pages/AsistenteSeccion/CargaDocente/ModalDocenteClases';
+import ModalDocenteClasesCoord from '../pages/CoordinadorSeccion/CargaDocente/ModalDocenteClases';
 //import NoAsignado from './NoAsignado'
 import DragDropArchivos from '../pages/MesaPartes/DragDropArchivos';
 import PreferenciaDocenteForm from '../pages/Docente/PreferenciaDocente/PreferenciaDocenteForm'
@@ -118,6 +119,7 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
+  { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClasesCoord},
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/preferencia", page: SolPreferenciaDocentes  },

@@ -224,7 +224,7 @@ export default function GestionCargaCursos() {
                         "horas": parseFloat(records[1].sesion),
                 })
             }
-
+            console.log(postHorario);
             horarioService.registerHorario(postHorario)
             .then(requestHor  => {
               if(requestHor){

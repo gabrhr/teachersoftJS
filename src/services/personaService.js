@@ -105,6 +105,15 @@ export const getPreferencias = async () => {
   }
 }
 
+export const listarHorariosNoPreferencias = async (id_seccion,id_docente,id_ciclo) => {
+  try {
+    const request = await axios.get(`${url}/horario/preferencia/unasigned/idseccion=${id_seccion}/iddocente=${id_docente}/idciclo=${id_ciclo}`, tokenService.GetTokenPrueba(), id_seccion, id_docente, id_ciclo);
+    return request.data;  //Es un dato.
+  } catch (exception) {
+    console.error(exception);
+  }
+}
+
 const getPreferencia = async (id) => {
   try{
     const request = await axios.get(`${url}/preferencia/${id}`, id, tokenService.GetTokenPrueba());
@@ -171,6 +180,6 @@ const deletePreferencia = async (id) => {
   }
 }
 
-export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, updatePersona2, deletePersona,
+export default {listarHorariosNoPreferencias, getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, updatePersona2, deletePersona,
   getPreferencias, getPreferencia, listarPorDocente, getPreferenciasxSeccion, getPreferenciasxDepartamento, 
   registerPreferencia, updatePreferencia, deletePreferencia}

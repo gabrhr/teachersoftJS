@@ -14,7 +14,7 @@ import Popup from '../../../components/util/Popup'
 import ModalBusquedaDocente from './ModalBusquedaDocente'
 import ModalDocenteClases from './ModalDocenteClases'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import { Link } from 'react-router-dom';
 
 function generateRow(docente) {
   let tipoDoc = 1;
@@ -76,11 +76,13 @@ function generateRow(docente) {
 }
 
 export default function AccordionDetailsHorarioProfesor(props) {
-    let { sesiones , horario} = props;
+    let { sesiones , horario, curso} = props;
     sesiones = horario.sesiones;
     const [openEditarClasesPopup, setOpenEditarClasesPopup] = useState(false)
     const [openEditarPracticasPopup, setOpenEditarPracticasPopup] = useState(false)
     const [actHorario, setActHorario] = useState(horario);
+
+    const setearActHorario = (horo) => {setActHorario(horo)}
 
     const seleccionarDocentesP = seleccionadosP => {
         console.log(seleccionadosP)
@@ -94,8 +96,10 @@ export default function AccordionDetailsHorarioProfesor(props) {
     return (
         <>
             <Paper elevation={1} sx={{p: 1}}>
+              {clase[0] ?
                 <Grid container>
-                    <Grid item xs={10}>
+                    <Grid item xs={0.2}/>
+                    <Grid item xs={9.8}>
                         <Typography
                             variant="h4"
                             py="4px"
@@ -105,19 +109,35 @@ export default function AccordionDetailsHorarioProfesor(props) {
                         </Typography>
                     </Grid>
                     <Grid item xs align = "right">
-                      <Controls.Button
-                          variant="outlined"
-                          text="Editar"
-                          size="small"
-                          endIcon={<EditOutlinedIcon />}
-                          onClick={() => {setOpenEditarClasesPopup(true)}}
-                      />
+                        <Link to ={{
+                              pathname:`/cord/asignacionCarga/registroCarga/horarios/editar`,
+                              state:{
+                                docentesAsig: clase[0] ? clase[0].sesion_docentes.map(sesion_dic => sesion_dic) : [], 
+                                horario: horario, 
+                                tipo: 0,
+                                curso: curso
+                              }
+                          }}  style={{ textDecoration: 'none' }}>
+                            <Controls.Button
+                                variant="outlined"
+                                text="Editar"
+                                size="small"
+                                endIcon={<EditOutlinedIcon />}
+                                onClick={() => {}}
+                            />
+                        </Link>
+                    <Grid item xs = {12}/>
                     </Grid>
+                    <Controls.Divider/>
+
                 </Grid>
-                {clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente))}
+                : <Grid container></Grid> }
+                {clase[0] ? clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)) : []}
+
                 {laboratorio[0] ?
                   <Grid container>
-                      <Grid item xs={10}>
+                      <Grid item xs={0.2}/>
+                      <Grid item xs={9.8}>
                           <Typography
                               variant="h4"
                               py="4px"
@@ -127,34 +147,29 @@ export default function AccordionDetailsHorarioProfesor(props) {
                           </Typography>
                       </Grid>
                       <Grid item xs align = "right">
-                        <Controls.Button
-                            variant="outlined"
-                            text="Editar"
-                            size="small"
-                            endIcon={<EditOutlinedIcon />}
-                            onClick={() => {setOpenEditarPracticasPopup(true)}}
-                        />
+                      <Link to ={{
+                              pathname:`/cord/asignacionCarga/registroCarga/horarios/editar`,
+                              state:{
+                                docentesAsig: laboratorio[0] ? laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic) : [], 
+                                horario: horario, 
+                                tipo: 1,
+                                curso: curso
+                              }
+                          }}  style={{ textDecoration: 'none' }}>
+                            <Controls.Button
+                                variant="outlined"
+                                text="Editar"
+                                size="small"
+                                endIcon={<EditOutlinedIcon />}
+                                onClick={() => {}}
+                            />
+                        </Link>
                       </Grid>
+                      <Controls.Divider/>
                   </Grid>
                   : <Grid container></Grid> }
                   {laboratorio[0] ? laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)) : []}
               </Paper>
-            <Popup
-            openPopup={openEditarClasesPopup}
-            setOpenPopup={setOpenEditarClasesPopup}
-            title="Búsqueda de docentes para clases"
-            >
-                <ModalDocenteClases docentesAsig={clase[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {0} actHorario = {actHorario} setActHorario = {setActHorario}
-                            openPopUp = {openEditarClasesPopup} setOpenPopUp = {setOpenEditarClasesPopup}/>
-            </Popup>
-            <Popup
-            openPopup={openEditarPracticasPopup}
-            setOpenPopup={setOpenEditarPracticasPopup}
-            title="Búsqueda de docentes para prácticas"
-            >
-                <ModalDocenteClases docentesAsig={laboratorio[0].sesion_docentes.map(sesion_dic => sesion_dic)} horario = {horario} tipo = {1}  actHorario = {actHorario} setActHorario = {setActHorario}
-                            openPopUp = {openEditarPracticasPopup} setOpenPopUp = {setOpenEditarPracticasPopup}/>
-            </Popup>
         </>
     )
 }
