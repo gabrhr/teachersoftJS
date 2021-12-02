@@ -177,14 +177,9 @@ export default function AgregarEditarInvestiga(props) {
                 temp.anho_publicacion = "Año de Publicación tiene que ser un número"
         if ('codigo_publicacion' in fieldValues)
             temp.codigo_publicacion = fieldValues.codigo_publicacion ? "" : "Este campo es requerido"
-        if(fieldValues.codigo_publicacion){
-            if(isNaN(fieldValues.codigo_publicacion)){
-                temp.url_repositorio = (/^[0-9]{3}(-){1}[a-zA-Z]{3}$/).test(fieldValues.url_repositorio) ? "" : "Este URL no es válido"
-                temp.codigo_publicacion = ""
-            } else {
-            temp.codigo_publicacion = "Tiene que tener el formato: 123-ABC"
-            }
-        }
+        if(fieldValues.codigo_publicacion)
+                temp.codigo_publicacion = (/^[0-9]{3}(-){1}[a-zA-Z]{3}$/).test(fieldValues.codigo_publicacion) ? "" : "Tiene que tener el formato: 123-ABC"
+        
         if ('tipo_publicacion' in fieldValues)
             temp.tipo_publicacion = fieldValues.tipo_publicacion ? "" : "Este campo es requerido"
         if ('idioma' in fieldValues)
