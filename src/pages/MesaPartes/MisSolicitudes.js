@@ -5,7 +5,7 @@
  * - Ver detalle de una solicitud.
  * "/doc/misSolicitudes"
  */
-import React, { useState,useContext, useRef } from 'react'
+import React, { useState,useContext } from 'react'
 import { UserContext } from '../../constants/UserContext';
 //Iconos Mesa de Partes
 import DashboardSoli from './DashboardSoli'
@@ -63,7 +63,7 @@ export default function MisSolicitudes() {
     const {user, rol} = useContext(UserContext);
     //let isRendered = useRef(false)
     // const usuarioLogeado=JSON.parse(localStorage.getItem("user"))
-    console.log("ya entre aqui jeje")
+    // console.log("ya entre aqui jeje")
     /* Retrieve initial data from  Back API on first component render */
     React.useEffect(() => {
         let isRendered=false;

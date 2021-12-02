@@ -235,6 +235,11 @@ export default function GestionCiclo() {
                      recordsAfterPagingAndSorting().map(item => (
 
                         <StyledTableRow key={item.id}>
+                          NO SE SI ESTO ERA NECESARIO (MERGE CONFLICT MANUEL->DEVELOP) Dec02
+                        
+                          {/* <StyledTableCell >{item.anho}</StyledTableCell>
+                          <StyledTableCell >{item.periodo}</StyledTableCell> */}
+                          {/* <StyledTableCell > */}
                           <StyledTableCell align="center-left">{item.anho}</StyledTableCell>
                           <StyledTableCell align="center-left">
                             {
@@ -253,7 +258,7 @@ export default function GestionCiclo() {
                                 : " "
                               }
                           </StyledTableCell>
-                          <StyledTableCell align="center-left">
+                          <StyledTableCell>
                               {
                                 item.fecha_fin != null ?
 
@@ -265,7 +270,7 @@ export default function GestionCiclo() {
                                 : " "
                               }
                           </StyledTableCell>
-                          <StyledTableCell>
+                          <StyledTableCell align = "right">
                           <Controls.ActionButton
                             color="warning"
                             onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}

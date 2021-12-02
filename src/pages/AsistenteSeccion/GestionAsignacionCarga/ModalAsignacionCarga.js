@@ -51,22 +51,11 @@ const tableHeaders = [
 async function llenarDatosHorarios (otroHorario, postHorario, hor) {
   if(otroHorario === 1){  //Si otorHorario = 1 - entonces si es nuevo horario
     //const dataSes = await horarioService.convertStringtoSesion(hor.sesiones_excel);
-    console.log(hor.curso.codigo)
     await cursoService.getCursoCicloxCicloxCodigoNombre(hor.ciclo.id, hor.curso.codigo)
       .then(request => {
         postHorario = {
           "codigo": hor.codigo,
-          "curso_ciclo":{
-            "id": request[0].id,
-            "ciclo": {
-              "id": request[0].ciclo.id,
-            },
-            "curso": {
-              "id": request[0].curso.id,
-            },
-            "cantidad_horarios": request[0].cantidad_horarios, //Se actualiza al nuevo estado
-            "estado_tracking": request[0].estado_tracking,
-          },
+          "curso_ciclo": request[0],
           sesiones:[{
             "secuencia": hor.tipo,
             "horas": parseFloat(hor.horas_semanales), //Hora del tipo de sesion [clase - 3 horas: teorico]
@@ -85,13 +74,11 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
       })
     otroHorario = 1;  //El siguiente item a leer si será otro Horario
   }
-  console.log(postHorario);
   return [otroHorario, postHorario];
 }
 
 const actualizarCursoCiclo = async (curso_ciclo)=> {
 
-  if(curso_ciclo.cantidad_horarios !== 1){
     const newCC = {
       "id": curso_ciclo.id,
       "ciclo": {
@@ -100,19 +87,85 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
       "curso": {
         "id": curso_ciclo.curso.id,
       },
-      "cantidad_horarios": 1, //Se actualiza al nuevo estado - con horarios
+      "estado_curso": 1, //Se actualiza al nuevo estado - con horarios
+      "cantidad_horarios": curso_ciclo.cantidad_horarios +1, //Se actualiza al nuevo estado - con horarios
       "estado_tracking": curso_ciclo.estado_tracking,
     }
     
     const request = await cursoService.updateCursoCiclo(newCC);
 
-  }
 }
+
+const horDataRecords = (dataHor) => {
+  const horarios = [];
+  for (let hor of dataHor){
+      if(hor.curso_ciclo){
+      horarios.push({
+        "id": hor.id,
+        "codigo": hor.codigo,
+        "tipo": hor.sesiones[0].secuencia,
+        "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
+        "curso_ciclo":{
+          "id": hor.curso_ciclo.id,
+          ciclo:{
+            "id": hor.curso_ciclo.ciclo.id,
+          },
+          curso:{
+            "id": hor.curso_ciclo.curso.id,
+            "codigo": hor.curso_ciclo.curso.codigo,
+            "nombre": hor.curso_ciclo.curso.nombre,
+            "creditos": hor.curso_ciclo.curso.creditos,
+            "unidad": hor.curso_ciclo.curso.unidad,
+            "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
+          },
+        },
+        sesiones:{
+          "secuencia": hor.sesiones[0].secuencia,
+          "sesiones_dictado": [],
+          "hora_sesion": hor.sesiones[0].horas,
+        },
+      })
+      //Si existe un segundo horario - lo vamos a meter - no pueden haber más de 2 horarios.
+      if(hor.sesiones[1]){
+        //const sesion2 = await HorarioService.convertSesiontoString(hor.sesiones[1].dia_semana,  hor.sesiones[1].hora_inicio, hor.sesiones[1].media_hora_inicio,  hor.sesiones[1].hora_fin, hor.sesiones[1].media_hora_fin);
+        //console.log(sesion2);
+        horarios.push({
+          "id": hor.id,
+          "codigo": hor.codigo,
+          "tipo": hor.sesiones[0].secuencia,
+          "horas_semanales": hor.sesiones[1] ? hor.sesiones[0].horas + hor.sesiones[1].horas: hor.sesiones[0].horas, 
+          "curso_ciclo":{
+            "id": hor.curso_ciclo.id,
+            ciclo:{
+              "id": hor.curso_ciclo.ciclo.id,
+            },
+            curso:{
+              "id": hor.curso_ciclo.curso.id,
+              "codigo": hor.curso_ciclo.curso.codigo,
+              "nombre": hor.curso_ciclo.curso.nombre,
+              "creditos": hor.curso_ciclo.curso.creditos,
+              "unidad": hor.curso_ciclo.curso.unidad,
+              "facultad": (hor.curso_ciclo.curso.seccion.departamento.unidad) ? hor.curso_ciclo.curso.seccion.departamento.unidad.nombre : '-',
+            },
+          },
+          sesiones:{
+            "secuencia": hor.sesiones[1].secuencia,
+            "sesiones_dictado": [],
+            "hora_sesion": hor.sesiones[1].horas,
+          },
+        })
+      }
+    }//FIN DE LA VERIFICACION
+  }
+  console.log(horarios);
+  return horarios;
+}
+
 
 
 export default function ModalAsignacionCarga({setOpenPopup, records, setRecords, setCargaH, cargaH}) {
     let auxHorario
-    //const {horario, getHorario, isNewFile } = props
+    //const {horario, getHorario, isNewFile } = props    
     const [xFile, setXFile] = useState('');
     const [recordsX, setRecordsX] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -125,6 +178,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     const [usuarios, setUsuarios] = useState(null)
     const [usuariosIncorrectos, setUsuariosIncorrectos] = useState(null)
     
+    let permission = 1; //Tenemos el permiso de registrar nuevo horario
+
     const [open, setOpen] = useState(false);
     const handleClose = () => {
       setOpen(false);
@@ -258,7 +313,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         obj[headers[j]] = d;
                     }
                 }
-                console.log(obj)
+                
                 if(!validate(obj)){
                   return
                 }
@@ -322,8 +377,10 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     };
 
     const actualizarDatos = async e => { 
+      e.preventDefault();
+      permission = 0;
       let otroHorario = 1;
-      let permission = 1;
+      let newRecords = [];
       let postHorario = {}; //Para poder usar el horario en una segunda vuelta
       //Servicio para cargar los horarios
       for (let hor of recordsX) {
@@ -333,19 +390,27 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //Loop finished
         
         if(otroHorario === 1)  {
-          if(horarioService.registerHorario(postHorario)){
+          console.log(postHorario);
+          const resultado = await horarioService.registerHorario(postHorario)
+          if(resultado){
+            console.log("Todo bien");
             await actualizarCursoCiclo(postHorario.curso_ciclo);
-            permission = 0;
           }
+          newRecords.push(resultado);
         }
-      };
+      }
+      permission = 1;
       //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
       if(permission)  {
-        setRecords(recordsX);
-        setCargaH(records);
+        setOpenPopup(false);
+        newRecords = await horDataRecords(newRecords);
+        console.log(newRecords);
+        for(let nr of newRecords){
+          await setRecords(oldRecords => [...oldRecords, nr]);
+        }
+        console.log(records);
+        await setCargaH(records);
       }
-      setOpenPopup(false) 
-      console.log(postHorario);
        /*  setRecords(employeeService.getAllEmployees()) */
     }
     
@@ -433,6 +498,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         // size="large"
                         text="Cargar Datos"
                         /* type="submit" */
+                        disabled = {permission && recordsX.length ? false : true}
                         onClick={actualizarDatos}
                     />
                     

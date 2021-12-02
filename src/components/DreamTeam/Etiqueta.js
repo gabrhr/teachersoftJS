@@ -13,6 +13,7 @@ export default function Etiqueta(props) {
 
     /* Carga Docente */
     if (type === "pendiente") {
+        text="Pendiente"
         other.icon = (<AccessTimeOutlinedIcon/>)
         other.color= "pendiente"
     }
@@ -33,16 +34,12 @@ export default function Etiqueta(props) {
         text="Atendido" 
         other.icon = (<TaskAltOutlinedIcon/>)
         other.color= "atendido"
-    }else if(type="pendienteDesc"){ //Para descarga
-        text="Pendiente"
-        other.icon = (<AccessTimeOutlinedIcon/>)
-        other.color= "pendiente"
-    }else if(type="aprobadoDesc"){ //Para descarga
+    }else if(type==="aprobado"){ //Para descarga
         text="Aprobado"
         other.icon = (<TaskAltOutlinedIcon/>)
         other.color= "atendido"
     }
-    else if(type="desaprobadoDesc"){ //Para descarga
+    else if(type==="desaprobado"){ //Para descarga
         text="Desaprobado"
         other.icon = (<CancelOutlinedIcon/>)
         other.color= "rechazado"

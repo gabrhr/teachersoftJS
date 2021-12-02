@@ -14,7 +14,7 @@ export const MenuCoordinadorSeccion = [
         subNav: [
             {
                 text: 'Registro de Cursos',
-                path: '/cord/asignacionCarga/registroCursos',
+                path: '/cord/asignacionCarga/registroHorarios',
                 indice: 0,
             },
             {
@@ -54,12 +54,12 @@ export const MenuCoordinadorSeccion = [
         subNav: [
             {
                 text: 'Mis solicitudes',
-                path: '/cord/misSolicitudes',
+                path: '/cord/mesaPartes/misSolicitudes',
                 indice: 0,
             },
             {
                 text: 'Solicitudes delegadas a mí',
-                path: '/cord/misDelegados',
+                path: '/cord/mesaPartes/misDelegados',
                 indice: 1,
             }
         ]

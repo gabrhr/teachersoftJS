@@ -17,16 +17,6 @@ import * as EmailService from '../../services/emailService'
 import { UserContext } from '../../constants/UserContext'
 import Notification from '../../components/util/Notification'
 
-function sendEmailNotification(solicitud) {
-    EmailService.emailSolicitor2(solicitud)
-        .then(data => {
-            return data
-        })
-        .catch(err => {
-            console.error(err)
-        })
-}
-
 export default function ExternoAtenderSolicitud(props) {
     const { solicitud, setSolicitud } = props
     
@@ -43,9 +33,8 @@ export default function ExternoAtenderSolicitud(props) {
     }, [])
 
     React.useEffect(() => {
-        // console.log("actualizada: ", solicitud)
+        console.log("solicitud actualizada: ", solicitud)
         if (solicitud.estado === '3' && solicitud.cambioEstado) {
-            /* secretario responde en lugar del delegado */
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
                     setNotify({
@@ -55,7 +44,8 @@ export default function ExternoAtenderSolicitud(props) {
                     })
                     setAtender(false)
                     /* Send notification to solicitador */
-                    sendEmailNotification(solicitud)
+                    // sendEmailNotification(solicitud)
+                    EmailService.sendemailMP(solicitud, 'delegado,atiende')
                 })
                 .catch(err => {
                     /* error :( */
@@ -72,7 +62,7 @@ export default function ExternoAtenderSolicitud(props) {
     }, [solicitud])
     
     function submitAtencion(atencion) {
-        // console.log("antes", solicitud)
+        // console.log("submitAtencion", solicitud, atencion)
         setSolicitud(solicitud => ({
             ...solicitud, 
             /* data faltante de la respuesta de soli por Secretario Dpto. */
@@ -94,7 +84,6 @@ export default function ExternoAtenderSolicitud(props) {
             /* only for FrontEnd */
             cambioEstado: true
         }))
-        // console.log("despues", solicitud)
     }
 
     return (

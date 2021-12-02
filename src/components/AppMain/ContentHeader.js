@@ -32,7 +32,7 @@ const fillCiclos = async () => {
       id: cic.id.toString(),
       title: cic.anho + '-' +cic.periodo
     })
-    if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
+    if(cic.anho === 2021 && cic.periodo === 1){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
       cicloActual = {
         id: cic.id.toString(),
         title: cic.anho + '-' + cic.periodo
@@ -85,7 +85,7 @@ function CboCiclo (props) {
     },[values])
     
     React.useEffect(()=>{
-        window.localStorage.setItem('ciclo', JSON.stringify(parseInt(2))) //El ciclo fijo - actual
+        window.localStorage.setItem('ciclo', JSON.stringify(parseInt(1))) //El ciclo fijo - actual
     },[])
 
 

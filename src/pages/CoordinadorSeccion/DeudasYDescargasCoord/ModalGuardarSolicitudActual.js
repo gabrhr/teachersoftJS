@@ -8,20 +8,23 @@ export default function ModalGuardarHorarioCurso({guardarSolicitudActual, setOpe
     return(
         <>
             < Typography variant="h4" mb={2} >
-                ¿Está seguro de guardar la solicitud?
+                ¿Está seguro de guardar la solicitud? <br/>
+                Esta acción es irreversible
             </Typography>
-            <Controls.Button
-                text="Sí"
-                onClick={(e)=>{
-                    // guardarSolicitudActual()
-                    // setOpenGuardarPopup(false)
-                    history.push("/cord/solicitudes/deudasYDescargas");
-                }}
-            />
-            <Controls.Button
-                text="No"
-                onClick={()=>{setOpenGuardarPopup(false)}}
-            />
+            <Grid cointainer align="right" mt={3}>
+                <Controls.Button
+                    text="Sí"
+                    onClick={(e)=>{
+                        guardarSolicitudActual()
+                        setOpenGuardarPopup(false)
+                        history.push("/cord/asignacionCarga/deudaYDescarga");
+                    }}
+                />
+                <Controls.Button
+                    text="No"
+                    onClick={()=>{setOpenGuardarPopup(false)}}
+                />
+            </Grid>
         </>
     )
 } 

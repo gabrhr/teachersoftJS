@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles'
 import { Controls} from "../../../components/controls/Controls"
 /* fake BackEnd */
 import DepartamentoService from '../../../services/departamentoService.js';
+import UnidadService from '../../../services/unidadService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
@@ -15,11 +16,29 @@ const initialFieldValues = {
     nombre: '',
     codigo: '',
     creditos: '',
+    idFacultad: 0,
 }
+
+const fillFacultades = async () =>{
+  const dataUn = await UnidadService.getUnidades();
+  const unidades = []
+
+  //if(dataDep) setDepartamentos(dataDep);
+  dataUn.map(dep => (
+    unidades.push({
+      id: dep.id.toString(),
+      nombre: dep.nombre,
+    })
+  ));
+
+  //console.log(departamentos);
+  return unidades;
+}
+
 
 export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
 
-    const [departamento, setDepartamentos] = useState([]);
+    const [facultades, setFacultades] = useState([]);
 
     const theme = useTheme();
     const ColumnGridItemStyle = {
@@ -27,14 +46,25 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
         align:"left",
 
     }
+
+    React.useEffect(() => {
+      fillFacultades()
+      .then (newFac =>{
+        setFacultades(newFac);
+      });
+
+    }, [])
+
     const validate = (fieldValues = values) => {
         let temp = {...errors}
+        if ('idFacultad' in fieldValues)
+            temp.idFacultad = fieldValues.idFacultad !== 0 ? "" : "Este campo es requerido."
         if ('nombre' in fieldValues)
             temp.nombre = fieldValues.nombre ? "" : "Este campo es requerido."
         if ('codigo' in fieldValues)
             temp.codigo = fieldValues.codigo ? "" : "Este campo es requerido."
-        if ('créditos' in fieldValues)
-            temp.clave = fieldValues.créditos ? "" : "Este campo es requerido."
+        if ('creditos' in fieldValues)
+            temp.creditos = fieldValues.creditos ? "" : "Este campo es requerido."
         setErrors({
             ...temp
         })
@@ -57,16 +87,18 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
       e.preventDefault();
       if (validate()){
         const seccion = JSON.parse(window.localStorage.getItem("user"));
-        console.log(seccion);
         const curso = {
           "codigo": values.codigo,
           "nombre": values.nombre,
-          "creditos": parseInt(values.creditos),
+          "creditos": parseFloat(values.creditos),
           "seccion": {
             "id": seccion.persona.seccion.id,
+          },
+          "unidad": {
+            "id": values.idFacultad
           }
         }
-
+        
         agregarCurso(curso);
       }
     }
@@ -74,11 +106,22 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
-                <Grid item sx={6} style={ColumnGridItemStyle}>
+                <Grid item xs={12}>
                     < Typography variant="h4" mb={2} >
                            DATOS DEL CURSO
                     </Typography>
-
+                      <Controls.Select
+                      name={"idFacultad"}
+                      label="Facultad"
+                      value={values.idFacultad}
+                      onChange={handleInputChange}
+                      options={facultades}
+                      options={[{ id: 0, nombre: "Seleccionar" }]
+                        .concat(facultades)
+                      }
+                      error={errors.idFacultad}
+                      />
+                        <Grid item xs = {5}>  
                         <Controls.Input
                             name="codigo"
                             label="Clave"
@@ -86,6 +129,7 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
                             onChange = {handleInputChange}
                             error={errors.codigo}
                         />
+                        </Grid>
                         <Controls.Input
                             name="nombre"
                             label="Nombre"
@@ -93,14 +137,16 @@ export default function AgregarCurso ({setOpenAddPopup, agregarCurso}) {
                             onChange = {handleInputChange}
                             error={errors.nombre}
                         />
-                        <Controls.NumberPicker
-                            name="creditos"
-                            label="Créditos"
-                            type= "number"
-                            value={values.creditos}
-                            onChange = {handleInputChange}
-                            error={errors.creditos}
-                        />
+                        <Grid item xs = {5}>  
+                                <Controls.NumberPicker
+                                    name="creditos"
+                                    label="Créditos"
+                                    value={values.creditos}
+                                    type="number"
+                                    onChange = {handleInputChange}
+                                    error={errors.creditos}
+                                />
+                        </Grid>
                 </Grid>
 
             </Grid>

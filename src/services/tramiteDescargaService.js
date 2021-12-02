@@ -32,7 +32,15 @@ export const getTramitesDescargaHistoricoxDocentexCiclo = async (id_docente, id_
   }
 }
 
-
+export const getTramitesDescargaPendientesxProcesoxSeccion = async (id_proceso, id_seccion, result) => {
+  try{
+    //debugger;
+    const request= await axios.get(`${url}/tramitedescarga/idproceso=${id_proceso}/idseccion=${id_seccion}/result=${result}`, tokenService.GetTokenPrueba())
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
 
 export const getTramiteDescarga = async (id) => {
     try{
@@ -74,4 +82,5 @@ const deleteTramiteDescarga = async (id) => {
   }
 
   export default {getTramitesDescarga, getTramiteDescarga, registerTramiteDescarga, updateTramiteDescarga, 
-    deleteTramiteDescarga, getTramitesDescargaHistoricoxDocente, getTramitesDescargaHistoricoxDocentexCiclo}
+    deleteTramiteDescarga, getTramitesDescargaHistoricoxDocente, getTramitesDescargaHistoricoxDocentexCiclo,
+    getTramitesDescargaPendientesxProcesoxSeccion}

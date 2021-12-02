@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { InputAdornment } from '@mui/material'
 
 import PersonaService from '../../../services/personaService';
+import { Box, Paper, TableBody, TableRow, TableCell } from '@mui/material';
 
 
 const getPreferencias =  async (ciclo) => {
@@ -16,8 +17,6 @@ const getPreferencias =  async (ciclo) => {
   
   if(!dataPref) dataPref = [];
 
-
-  console.log(dataPref);
   const docentes = [];
   for(let doc of dataPref) {
     const preferencias = [];
@@ -32,7 +31,7 @@ const getPreferencias =  async (ciclo) => {
         "horario": newHor[0].codigo,
         "horas": doc.sesiones[i].horas,
         //"Horario": newHor[0],
-        //"Sesion": doc.sesiones[i],
+        "Sesion": doc.sesiones[i].secuencia ? "Laboratorio" : "Clase",
       })
     }
 
@@ -60,19 +59,38 @@ export default function SolPreferenciaDocentes(){
   const [records, setRecords] = useState([]);
   const [ciclo, setCiclo] = useState();
   const [profesoresMostrar, setProfesoresMostrar] = useState([])
+  const [preferenciaCargados, setPreferenciaCargados] = useState(false)
   
   React.useEffect(() => {
+    setPreferenciaCargados(false)
     getPreferencias(ciclo)
     .then (newPref =>{
       if(newPref){
         setProfesoresMostrar(newPref);
+        setPreferenciaCargados(true)
+        setRecords(newPref);
       }
     });
   }, [ciclo] )
   
     const handleSearch = e => {
-        const nuevosProfesores = profesoresMostrar.filter(x => x.nombres.toLowerCase().includes(e.target.value.toLowerCase()))
-        setProfesoresMostrar(nuevosProfesores)
+      let target = e.target;
+      /* React "state object" (useState()) doens't allow functions, only
+        * objects.  Thus the function needs to be inside an object. */
+      if (target.value === ""){
+        console.log("ingreso if")
+        setProfesoresMostrar(records)
+        return profesoresMostrar
+      }
+      else{
+        console.log("ingreso else")
+        const profMostrar = profesoresMostrar.filter(x => `${x.nombres.toLowerCase()}, ${x.apellidos.toLowerCase()}`
+          .includes(target.value.toLowerCase()))
+
+        console.log(profMostrar);
+        setProfesoresMostrar(profMostrar);
+        return profesoresMostrar;
+      }
     }
        
 
@@ -97,7 +115,7 @@ export default function SolPreferenciaDocentes(){
             onChange={handleSearch}
             type="search"
           />
-            <AccordionPreferenciaProfesor profesores = {profesoresMostrar}/>
+            <AccordionPreferenciaProfesor profesores = {profesoresMostrar} preferenciaCargados = {preferenciaCargados}/>
         </>
     )
 }

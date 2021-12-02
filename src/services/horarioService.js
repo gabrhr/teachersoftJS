@@ -174,4 +174,4 @@ const convertSesiontoString = async (dia_semana, hora_ini, media_horaini, hora_f
   return str;
 }
 
-export default { listarPorDocenteCiclo, buscarPorCiclo, convertSesiontoString, convertStringtoSesion, getHorarios, getHorario, listarPorCursoCiclo, registerHorario, updateHorario, deleteHorario}
+export default {listarPorDocenteCiclo, buscarPorCiclo, convertSesiontoString, convertStringtoSesion, getHorarios, getHorario, listarPorCursoCiclo, registerHorario, updateHorario, deleteHorario}

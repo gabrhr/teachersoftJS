@@ -54,7 +54,6 @@ const tipo = [
 
 const actualizarCursoCiclo = async (curso_ciclo)=> {
 
-  if(curso_ciclo.cantidad_horarios !== 1){
     const newCC = {
       "id": curso_ciclo.id,
       "ciclo": {
@@ -63,13 +62,13 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
       "curso": {
         "id": curso_ciclo.curso.id,
       },
-      "cantidad_horarios": 1, //Se actualiza al nuevo estado - con horarios
+      "estado_curso": 1, //Se actualiza al nuevo estado - con horarios
+      "cantidad_horarios": curso_ciclo.cantidad_horarios + 1, //Inicialmente en cero  -se actualiza para que este en +1
       "estado_tracking": curso_ciclo.estado_tracking,
     }
     
     const request = await cursoService.updateCursoCiclo(newCC);
 
-  }
 }
 
 export default function GestionCargaCursos() {
@@ -185,14 +184,12 @@ export default function GestionCargaCursos() {
 
     const validate = () =>{
         if(errorHorario || errorHoraSesion || cantSes === 0){
-            console.log("Cagaste")
             return false
         }
-        console.log("No cagaste")
         return true;
     }
 
-    const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroCursos");
+    const regresarPantalla = (e) => history.push("/as/asignacionCarga/registroHorarios");
 
     const guardarHorario = async () => {
       let arrayCadenas = dValuNombre.split(" ");
@@ -212,6 +209,7 @@ export default function GestionCargaCursos() {
                 "curso": {
                   "id": request[0].curso.id,
                 },
+                "estado_curso": request[0].estado_curso, 
                 "cantidad_horarios": request[0].cantidad_horarios, 
                 "estado_tracking": request[0].estado_tracking,
               },
@@ -226,7 +224,7 @@ export default function GestionCargaCursos() {
                         "horas": parseFloat(records[1].sesion),
                 })
             }
-
+            console.log(postHorario);
             horarioService.registerHorario(postHorario)
             .then(requestHor  => {
               if(requestHor){

@@ -4,9 +4,15 @@ import { Link} from 'react-router-dom';
 import TrackinDescarga from '../../../components/DreamTeam/TrackinDescarga'
 import useTable from '../../../components/useTable'
 import { Controls } from '../../../components/controls/Controls'
-
+import Popup from '../../../components/util/Popup'
+import ModalAprobados from './ModalAprobados'
 /* icons */
 import SearchIcon from '@mui/icons-material/Search';
+import { DT } from '../../../components/DreamTeam/DT';
+import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es');
+
 
 const tableHeaders = [
     {
@@ -37,21 +43,34 @@ const tableHeaders = [
 
 
 function Item(props){
-    const {item,getRow,setRecordForEdit} = props
+    const {item,getRow} = props
+    function formatoFecha(fecha){
+        if(fecha!=null){
+            return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
+        }
+    }
+    const [openAprobados, setOpenAprobados] = useState(false)
+    console.log("item",item)
+    //setProcesoActual(item.procesoDescarga)
+    console.log("Proceso Descarga del item", item.procesoDescarga)
     return (
         <>
             <TableRow>
-                <TableCell sx={{minWidth:"200px"}}>
+                <TableCell sx={{minWidth:"150px"}}>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Fecha: {'\u00A0'}
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.fecha_enviado}
+                        {formatoFecha(item.fecha_creacion)}
                     </Typography>
                     <div/>
-                    <Typography fontWeight='bold' fontSize={18}>
-                        {item.asunto}
+                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        Proceso: {'\u00A0'} 
                     </Typography>
+                    <Typography display="inline" fontWeight='bold' fontSize={16}>
+                        {item.procesoDescarga.nombre}
+                    </Typography>
+                    <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Seccion: {'\u00A0'} 
                     </Typography>
@@ -59,65 +78,78 @@ function Item(props){
                         {item.seccion.nombre}
                     </Typography>
                     <div/>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Autor: {'\u00A0'} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitador.fullName} 
-                    </Typography>
-                    <div/>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Estado: {'\u00A0'} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.estado} 
-                    </Typography>
                 </TableCell>
                 <TableCell>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Nombre del proceso: {'\u00A0'} 
+                        Estado: {'\u00A0'} 
                     </Typography>
-                    <Typography fontWeight='bold' fontSize={16}>
-                        {item.proceso.nombre}
-                    </Typography>
+                    <DT.Etiqueta
+                            type={item.resultado === 0 ? "pendiente" :
+                            "atendido"}
+                            sx={{ marginBottom:"4px"}}
+                        />
                 </TableCell>
                 <TableCell>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes recibidas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_recibidas} 
+                        {item.cantidad_recibidas} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes enviadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_enviadas} 
+                        {item.cantidad_solicitada} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes aprobadas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitudes_aprobadas} 
+                        {item.cantidad_aprobada} 
                     </Typography>
                 </TableCell>
-                <TableCell sx={{maxWidth:"300px"}}> 
+                <TableCell  align="center"> 
+                    <Link to ={{
+                        pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
+                        state:{
+                            recordForEdit: item,
+                            procesoActual: item.procesoDescarga
+                        }
+                    }}  style={{ textDecoration: 'none' }}>
+                        <Controls.Button
+                            text="Detalle"
+                        />
+                    </Link>
                     <Controls.Button
-                        text="Detalle"
+                        text="Aprobados"
+                        onClick={()=>{setOpenAprobados(true);}} 
                     />
                 </TableCell>
             </TableRow>
+
+            <Popup
+                openPopup={openAprobados}
+                setOpenPopup={setOpenAprobados}
+                title="Lista de Aprobados"
+                size = "md"
+            >
+               <ModalAprobados setOpenAprobados = {setOpenAprobados} cantAprobada={item.cantidad_aprobada}
+                    procesoActual = {item.procesoDescarga} resultado = {1} solicitudActual={item}/>
+            </Popup>
         </>
 
     );
 }
 
 export default function ListaProcesosPasadosSeccion(props) {
-    const { records, setRecordForEdit } = props
+    const {records} = props
+    
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
+    //console.log("ifunciontem",procesoActual)
 
     const {
         TblContainer,
@@ -138,12 +170,15 @@ export default function ListaProcesosPasadosSeccion(props) {
           * objects.  Thus the function needs to be inside an object. */
         setFilterFn({
           fn: items => {
-            if (target.value == "")
-              /* no search text */
-              return items
-            else
-              return items.filter(x => x.nombre.toLowerCase()
+            if (target.value == ""){
+                /* no search text */
+                return items
+            }
+            else{
+                console.log("Items: ", items)
+                return items.filter(x => x.solicitador.nombres.toLowerCase()
                   .includes(target.value.toLowerCase()))
+            }
           }
         })
     }
@@ -171,14 +206,22 @@ export default function ListaProcesosPasadosSeccion(props) {
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                             <Item key={index} item={item} getRow= {getRow}
-                                setRecordForEdit={setRecordForEdit}
                             />
                         ))
                     }
                     </TableBody>
                 </TblContainer>
-                <TblPagination />
+                {records.length !== 0 && <TblPagination /> }
+                {records.length === 0 &&
+                    <Typography 
+                        variant="h4" 
+                        color="secondary"
+                        textAlign="center"
+                        children="Aún no se presenta un histórico de solicitudes"
+                    />
+                }
             </BoxTbl> 
+            
         </div>
     )
 }

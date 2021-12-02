@@ -1,4 +1,5 @@
 import { Form } from "../../../components/useForm"
+import { Redirect,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
 import { Input, Grid, Stack, Paper, TableBody, TableCell, TableRow, InputAdornment } from '@mui/material';
 import { Typography } from '@mui/material'
 import { Controls } from '../../../components/controls/Controls'
@@ -13,6 +14,63 @@ import ModalDocenteClasesBusqueda from "./ModalDocenteClasesBusqueda"
 import HorarioService from '../../../services/horarioService';
 import CursoService from '../../../services/cursoService';
 import PersonaService from '../../../services/personaService';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ContentHeader from '../../../components/AppMain/ContentHeader'
+import { Link } from 'react-router-dom';
+
+
+const actualizarCursoCiclo = async (curso_ciclo)=> {
+
+  if(curso_ciclo.estado_curso !== 2){
+    const newCC = {
+      "id": curso_ciclo.id,
+      "ciclo": {
+        "id": curso_ciclo.ciclo.id,
+      },
+      "curso": {
+        "id": curso_ciclo.curso.id,
+      },
+      "estado_curso": 2, //Se actualiza al nuevo estado
+      "cantidad_horarios": curso_ciclo.cantidad_horarios,
+      "estado_tracking": curso_ciclo.estado_tracking,
+    }
+    
+    const request = await CursoService.updateCursoCiclo(newCC);
+
+  }
+}
+
+
+const verificarActualizacion  = async (curso) => {
+
+  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , window.localStorage.getItem("ciclo"));
+  
+  let cant_horarios = 0;
+  for(let hor of dataHor){
+    let cant_sesiones = 0;
+    for (let ses of hor.sesiones) {
+      let sumaHorasdoc = 0;
+      if(ses.sesion_docentes){
+        for (let docente of ses.sesion_docentes){
+          sumaHorasdoc += docente.horas_dictado_docente_sesion; 
+        }
+      }
+      //En el caso de que sea mayor o igual - las horas se han cumplido - caso contrario o = 0.
+      if(sumaHorasdoc >= ses.horas)  cant_sesiones++
+      else  return;  //Si no cumple, entonces directamente se dice que no se llenaron los horarios
+    }
+    if(cant_sesiones === hor.sesiones.length){
+      console.log("Ambas sesiones si cumplen")
+      cant_horarios ++;
+    }
+  }
+  if(cant_horarios === dataHor.length){
+    console.log("Todos los horaarios si cumplen")
+    await actualizarCursoCiclo(dataHor[0].curso_ciclo);
+  }
+
+}
+
 
 const fillDocentes = async() => {
   //Llamado del axios para llenar a los docentes - personas con id_rol = 1
@@ -33,21 +91,29 @@ const fillDocentes = async() => {
   return docentes
 }
 
-export default function ModalDocenteClases({docentesAsig, horario, tipo, actHorario, setActHorario, openPopUp, setOpenPopUp}){
+export default function ModalDocenteClases(){
+  
+  const location= useLocation()
+  const {docentesAsig, horario, tipo, curso} = location.state
+
+
     const [recordsBusq, setRecordsBusq] = useState([])
     const [recordsAsig, setRecordsAsig] = useState(docentesAsig)
-    const [tipoDic, setTipoDic] = useState(tipo ? horario.sesiones[1].tipo_dictado : horario.sesiones[0].tipo_dictado);
     const [recordsDel, setRecordsDel] = useState([])
-      //Conseguimos los indices del arreglo - se puede ingresar de manera errada
-      let iClase = horario.sesiones.findIndex( s => s.secuencia === 0);
-      let iLab = iClase ? 0 : 1;
+    //Conseguimos los indices del arreglo - se puede ingresar de manera errada
+    let iClase = horario.sesiones.findIndex( s => s.secuencia === 0);
+    let iLab = iClase ? 0 : 1;
 
-    
-    //console.log("Lista de asignación: ", recordsAsig);
+    const [tipoDic, setTipoDic] = useState(tipo ? horario.sesiones[iLab].tipo_dictado : horario.sesiones[iClase].tipo_dictado);
+
+    const history = useHistory()
+
+    console.log("Lista de asignación: ", recordsAsig);
     React.useEffect(() => {
       fillDocentes()
         .then(docentes => {
-          setRecordsBusq(docentes);        
+          const newRecBusq = docentes.filter(doc => !recordsAsig.some(ra => ra.docente.id === doc.id));
+          setRecordsBusq(newRecBusq);        
         });  
     }, [])
 
@@ -58,7 +124,7 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
 
       const datosSesion = []
 
-      datosSesion[0] = tipo ? horario.sesiones[1].horas : horario.sesiones[0].horas
+      datosSesion[0] = tipo ? horario.sesiones[iLab].horas : horario.sesiones[iClase].horas
       datosSesion[1] = tipoDic
       
       console.log(datosSesion);
@@ -109,19 +175,30 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
       //console.log(horario);
       //Ingresamos las sesiones - dependiendo del tiipo de secuencia
       if(tipo){ //Es 1 - laboratorio
-        sesionesActual = [{
-            "id": horario.sesiones[iClase].id,
-            "horas": horario.sesiones[iClase].horas,
-            "secuencia": horario.sesiones[iClase].secuencia,
-            "sesion_docentes": horario.sesiones[iClase].sesion_docentes,
-            "tipo_dictado": horario.sesiones[iClase].tipo_dictado,
-          }, {
-          "id": horario.sesiones[iLab].id,
-          "horas": horario.sesiones[iLab].horas,
-          "secuencia": horario.sesiones[iLab].secuencia,
-          "sesion_docentes": sesion_docente,
-          "tipo_dictado": tipoDic,
-        }]
+        if(horario.sesiones[iClase]){ //Si existe el iClase
+          sesionesActual = [{
+              "id": horario.sesiones[iClase].id,
+              "horas": horario.sesiones[iClase].horas,
+              "secuencia": horario.sesiones[iClase].secuencia,
+              "sesion_docentes": horario.sesiones[iClase].sesion_docentes,
+              "tipo_dictado": horario.sesiones[iClase].tipo_dictado,
+            }, {
+            "id": horario.sesiones[iLab].id,
+            "horas": horario.sesiones[iLab].horas,
+            "secuencia": horario.sesiones[iLab].secuencia,
+            "sesion_docentes": sesion_docente,
+            "tipo_dictado": tipoDic,
+          }]
+        }
+        else{ //Solo hay laboratorios
+          sesionesActual = [{
+            "id": horario.sesiones[iLab].id,
+            "horas": horario.sesiones[iLab].horas,
+            "secuencia": horario.sesiones[iLab].secuencia,
+            "sesion_docentes": sesion_docente,
+            "tipo_dictado": tipoDic,
+          }]
+        }
       }
       else{ //Es 0 - clase
         if(horario.sesiones[iLab]){
@@ -155,9 +232,7 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
       const horUpdate = {
         "id": horario.id,
         "codigo": horario.codigo,
-        "curso_ciclo": {
-          "id": horario.curso_ciclo.id,
-        },
+        "curso_ciclo": horario.curso_ciclo,
         "sesiones": sesionesActual
       }
 
@@ -171,15 +246,36 @@ export default function ModalDocenteClases({docentesAsig, horario, tipo, actHora
         console.log(dataPer);
       }
 
-      if(dataHor){
-        setActHorario(dataHor);
-        setOpenPopUp(false)
-      } 
+      verificarActualizacion(dataHor.curso_ciclo.curso);
+      //ACTUALIZAMOS EL ESTADO DE CURSOS EN CASO SEA NECESARIO
+
+      // if(dataHor){
+      //   setActHorario(dataHor);
+      //   setOpenPopUp(false)
+      // } 
     }
 
     return(
         
         <Form onSubmit={handleSubmit}>
+           <Link to ={{
+                  pathname:`/cord/asignacionCarga/registroCarga/horarios`,
+                  state:{
+                      curso: horario.curso_ciclo.curso
+                  }
+              }}  style={{ textDecoration: 'none' }}>
+            <Controls.Button
+              variant="outlined"
+              text="Regresar"
+              size="small"
+              startIcon={<ArrowBackIcon />}
+              onClick={(e) => {}}
+            />
+          </Link>
+            <ContentHeader
+              text={`Registro de Carga Docente - Docentes | ${horario.curso_ciclo.curso.nombre} - ${horario.codigo}`}
+              cbo={false}
+            />
             <Paper> 
                 <ModalDocenteClasesAsignados records = {recordsAsig} setRecords = {setRecordsAsig} tipo_dictado = {tipoDic} setTipoDic = {setTipoDic}
                                 sesion = {tipo ? horario.sesiones[iLab].horas : horario.sesiones[iClase].horas} recordsBusq = {recordsBusq} setRecordsBusq = {setRecordsBusq}

@@ -1,3 +1,8 @@
+/* Author: Gabs
+ *
+ * Antes habia la opcion de ingresar usuario y contrasenna,  pero ahora solo
+ * es un Google Button Login.  Eso maneja la redireccion y todo.
+ */
 import { Typography } from '@mui/material';
 import React from 'react'
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
@@ -96,48 +101,8 @@ const Login = () => {
     }
   }
   return (
-    <Form onSubmit={handleSubmit} >
-      {/* <Controls.Input
-        name="username"
-        label="Usuario"
-        value={values.username}
-        onChange={handleInputChange}
-        fullWidth
-        size='small'
-      />
-      <Controls.Input
-        name="password"
-        label="Contraseña"
-        value={values.password}
-        onChange={handleInputChange}
-        type='password'
-        size='small'
-        fullWidth
-        type="password"
-      />
-      <Controls.Checkbox
-        name="isPersistentLogin"
-        label="Recuérdame"
-        value={values.isPersistentLogin}
-        onChange={handleInputChange}
-      />
-      <Controls.Button
-        type='submit'
-        color='DTButton'
-        fullWidth
-        size='small'
-        text="Iniciar Sesión"
-      />
-      <Typography align="center">
-        o
-      </Typography> */}
+    <Form>
       <GoogleLoginButton/>
-      {/* <Typography paddingTop="20px" >
-        <Link to="#" >
-          Recuperar contraseña
-        </Link>
-      </Typography> */}
-      {/* </Grid> */}
     </Form>
   )
 }

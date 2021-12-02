@@ -276,6 +276,7 @@ export default function GestionSeccion() {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
+                size = "sm"
                 title={recordForEdit ? "Editar Seccion": "Nueva Seccion"}
             >
               <AgregarEditarSeccion

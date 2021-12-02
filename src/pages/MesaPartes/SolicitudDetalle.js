@@ -3,17 +3,14 @@
  * Detalle de una solicitud.
  * URL: localhost:3000/doc/solicitudDetalle
  */
-import { Grid, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Grid, Paper} from '@mui/material';
 import React, {useContext} from 'react'
 import { useLocation } from 'react-router';
-import { Link } from 'react-router-dom';
 import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Controls } from '../../components/controls/Controls';
 import { UserContext } from '../../constants/UserContext';
 import DetalleSoliOrganism from './DetalleSoliOrganism';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box } from '@mui/system';
-import { DT } from '../../components/DreamTeam/DT';
 import ResultadoSolicitud from './ResultadoSolicitud';
 
 

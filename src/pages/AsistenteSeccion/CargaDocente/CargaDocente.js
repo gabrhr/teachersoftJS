@@ -101,7 +101,7 @@ function GetRow({ ...props }) {
 const verificarEstado = (cur) =>{
   let resultado = []  //0 - estado - 1 tipo
 
-  switch (cur.cantidad_horarios) {
+  switch (cur.estado_curso) {
     case 0:
       resultado[0] = "Sin horarios"; resultado[1] = "error";
       break;

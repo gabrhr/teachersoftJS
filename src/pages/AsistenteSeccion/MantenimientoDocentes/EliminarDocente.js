@@ -2,16 +2,20 @@ import { Grid , Input,Divider, Stack,Typography, Avatar} from '@mui/material';
 import { Controls } from '../../../components/controls/Controls';
 import personaService from '../../../services/personaService';
 
-export default function EliminarUnDocente({setOpenOnePopup, recordForDel}){
+export default function EliminarUnDocente({setOpenOnePopup, recordForDel, records, setRecords, editIndex, setEditIndex}){
     
     const eliminarDocente = async () =>{
         const rpta = await personaService.deletePersona(recordForDel.id);
-        console.log(rpta)
-        console.log(recordForDel.id)
-        //setRecords(); 
+        
+        const newRecords = records;
+        newRecords.splice(editIndex,1);
+        setRecords(newRecords);
+        setEditIndex(); 
         setOpenOnePopup(false)
-    }
 
+        //setRecords(); 
+    }
+    
     return(
         <>
         < Typography variant="h4" mb={2} >

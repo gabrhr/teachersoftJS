@@ -25,7 +25,7 @@ function getSolicitudes(setRecords, departamentoID) {
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
-    const {user, rol} = React.useContext(UserContext);
+    const {user} = React.useContext(UserContext);
     const [recordsCargados, setRecordsCargados] = useState(false)
     React.useEffect(() => {
         setRecordsCargados(false)

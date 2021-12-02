@@ -12,6 +12,16 @@ export const getTramitesSeccionDescarga = async () => {
     }
 }
 
+export const getTramitesSeccionDescargaxSeccion = async (id_seccion) => {
+  try{
+    //debugger;
+    const request= await axios.get(`${url}/tramitesecciondescarga/idseccion=${id_seccion}`, tokenService.GetTokenPrueba())
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 export const getTramiteSeccionDescarga = async (id) => {
     try{
       //debugger;
@@ -52,4 +62,4 @@ const deleteTramitesSeccionDescarga = async (id) => {
   }
 
 export default {getTramitesSeccionDescarga, getTramiteSeccionDescarga, registerTramitesSeccionDescarga,
-    updateTramitesSeccionDescarga, deleteTramitesSeccionDescarga}
+    updateTramitesSeccionDescarga, deleteTramitesSeccionDescarga, getTramitesSeccionDescargaxSeccion}

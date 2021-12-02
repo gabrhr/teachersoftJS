@@ -11,9 +11,8 @@
  */
 import React from 'react'
 import useTable from "../../components/useTable"
-import { TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@mui/material';
+import { TableBody} from '@mui/material';
 import { StyledTableCell, StyledTableRow } from '../../components/controls/StyledTable';
-import * as employeeService from '../../services/employeeService'
 
 /* headers and row data */
 const tableHeaders = [

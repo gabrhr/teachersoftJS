@@ -146,7 +146,7 @@ export default function AgregarEditarCiclo(props) {
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
-                <Grid item sx={6} style={ColumnGridItemStyle}>
+                <Grid item xs={6} style={ColumnGridItemStyle}>
                     
                     {populateYearList()}
                     <Controls.Select
@@ -156,7 +156,9 @@ export default function AgregarEditarCiclo(props) {
                         onChange={handleInputChange}
                         options={yearList}
                         error={errors.anho}
-                    />
+                        />
+                </Grid>
+                <Grid item xs={6} style={ColumnGridItemStyle}>
                     <Controls.Select
                         name="periodo"
                         label="Periodo del Ciclo"
@@ -165,7 +167,6 @@ export default function AgregarEditarCiclo(props) {
                         options={[{id: '0', nombre: '0'},{id: '1', nombre: '1'},{id: '2',nombre: '2'}]}
                         error={errors.periodo}
                     />
-                    
                 </Grid>
                 <Grid item sx={6} style={ColumnGridItemStyle}>
                     {console.log("FECHA INICIO:",values.fecha_inicio)}

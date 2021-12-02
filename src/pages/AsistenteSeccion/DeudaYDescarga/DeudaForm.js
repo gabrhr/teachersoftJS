@@ -6,6 +6,8 @@ import personaService from '../../../services/personaService';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 /* ICONS */
 import SearchIcon from '@mui/icons-material/Search';
+import LinearProgress from '@mui/material/LinearProgress';
+import { Box, Paper} from '@mui/material';
 
 const tableHeaders = [
     {
@@ -40,6 +42,7 @@ const tableHeaders = [
 ]
   
 export default function DeudaForm() {
+    const [profesoresCargados, setProfesoresCargados] = useState(false)
     const [records, setRecords] = useState([])
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const {
@@ -52,9 +55,9 @@ export default function DeudaForm() {
     
     useEffect(() => {
         //Obtenemos las secciones
-        
+        setProfesoresCargados(false)
         getProfesores();
-  
+        setProfesoresCargados(true)
       }, [])
 
       function transformarDocentes (request){
@@ -116,7 +119,8 @@ export default function DeudaForm() {
                 />
             </div>
             <BoxTbl>
-                <TblContainer>
+                {profesoresCargados ? (
+                    <TblContainer>
                     <TblHead />
                     <TableBody>
                     {
@@ -170,6 +174,11 @@ export default function DeudaForm() {
                     }
                     </TableBody>
                 </TblContainer>
+                ) : (
+                    <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                      </Box>
+                )}
                 <TblPagination />
             </BoxTbl>
         </>

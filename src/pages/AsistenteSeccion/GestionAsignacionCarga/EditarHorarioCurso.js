@@ -63,10 +63,8 @@ export default function EditarHorarioCurso(props) {
             const updtHor ={
                 "id": recordForEdit.id,
                 "codigo": newCodigo,
-                "curso_ciclo":{
-                  "id": recordForEdit.curso_ciclo.id,
-                },
-                sesiones: [{
+                "curso_ciclo": recordForEdit.curso_ciclo,
+                "sesiones": [{
                   "id": recordForEdit.sesiones[0].id,
                   "secuencia": recordForEdit.sesiones[0].secuencia,
                   "sesion_docentes": recordForEdit.sesiones[0].sesion_docentes,

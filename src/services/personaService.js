@@ -87,7 +87,7 @@ function updatePersona2(persona) {
 const deletePersona = async (id) => {
   try{
     const request = await axios.delete(`${url}/persona/${id}`, tokenService.GetTokenPrueba(), id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
     return false;
@@ -101,6 +101,15 @@ export const getPreferencias = async () => {
     const request = await axios.get(`${url}/preferencia/`, tokenService.GetTokenPrueba());
     return request.data;
   }catch(exception){
+    console.error(exception);
+  }
+}
+
+export const listarHorariosNoPreferencias = async (id_seccion,id_docente,id_ciclo) => {
+  try {
+    const request = await axios.get(`${url}/horario/preferencia/unasigned/idseccion=${id_seccion}/iddocente=${id_docente}/idciclo=${id_ciclo}`, tokenService.GetTokenPrueba(), id_seccion, id_docente, id_ciclo);
+    return request.data;  //Es un dato.
+  } catch (exception) {
     console.error(exception);
   }
 }
@@ -164,13 +173,13 @@ const updatePreferencia = async (newObject) => {
 const deletePreferencia = async (id) => {
   try{
     const request = await axios.delete(`${url}/preferencia/${id}`, tokenService.GetTokenPrueba(), id);
-    return request.then(response => response.data) //Es un valor de true o no
+    return request.data; //Es un valor de true o no
   }catch(exception){
     console.error(exception);
     return false;
   }
 }
 
-export default {getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, updatePersona2, deletePersona,
+export default {listarHorariosNoPreferencias, getPersonas, getPersonasxTipo, getPersonasxSeccionTipo, getPersona, registerPersona, updatePersona, updatePersona2, deletePersona,
   getPreferencias, getPreferencia, listarPorDocente, getPreferenciasxSeccion, getPreferenciasxDepartamento, 
   registerPreferencia, updatePreferencia, deletePreferencia}
