@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react'
-import { Grid , Input, Divider, Stack,Typography, Avatar} from '@mui/material';
+import esLocale from 'date-fns/locale/es';
+import { Grid , Input, Divider, Stack,Typography, TextField, Avatar} from '@mui/material';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 import { useForm, Form } from '../../../components/useForm';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useTheme } from '@mui/material/styles'
@@ -11,14 +15,69 @@ import UnidadService from '../../../services/unidadService.js';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { useRadioGroup } from '@mui/material/RadioGroup';
+import SimpleDatePicker from '../../../components/DreamTeam/SimpleDatePicker';
+import SimpleYearPicker from '../../../components/DreamTeam/SimpleYearPicker';
+import { populateCountryList, populateYearList } from '../../../components/auxFunctions';
+import UserService from '../../../services/userService';
+
+/*Items selectbox */ 
+let countryList = []; 
+let yearList = []; 
+
+const listCodVal = [
+
+    {id: 0, title: 'A1'},
+    {id: 1, title: 'L1'},
+    {id: 2, title: 'L2'},
+    {id: 3, title: 'P1'},
+    {id: 4, title: 'A2'},
+    {id: 5, title: 'L3'},
+    {id: 6, title: 'P2'}
+
+]
+
+const radioYesNo = [
+    {id: 0, title: 'No'},
+    {id: 1, title: 'Si'},
+]
+
+const radioReferencia = [
+    {id: 0, title: 'Terceros'},
+    {id: 1, title: 'Por Docente'},
+]
+
+const radioCalidad = [
+    {id: 0, title: 'Indizada'},
+    {id: 1, title: 'Arbitrada'},
+    {id: 2, title: 'No Arbitrada'},
+]
 
 
+const valoresValidacion = [
+    {id: 0, title: 'Terceros'},
+    {id: 1, title: 'Por Docente'},
+]
+
+
+function populateThings(){
+    yearList = populateYearList();
+    countryList = populateCountryList();
+}
+
+const styles = {
+    columnGridItem: {
+      padding: 2
+    }
+  }
+  
 let selectedID = 0;
+
+
 
 const initialFieldValues = {
   id: 0,
   activo: 0,
-  anho_publicacion: '',
+  anho_publicacion:  new Date().getFullYear().toString(),
   ciudad:  '',
   codigo_publicacion:  '',
   codigo_validacion:  '',
@@ -42,7 +101,7 @@ const initialFieldValues = {
   observaciones_para_departamento:  '',
   pagina_final:  '',
   pagina_inicial:  '',
-  pais:  '',
+  pais:  'Perú',
   palabras_clave:  '',
   responsabilidad:  '',
   subtipo_publicacion:  '',
@@ -50,16 +109,57 @@ const initialFieldValues = {
   tipo_referencia:  '',
   titulo:  '',
   url_repositorio:  '',
-  validacion_preliminar:  '',
+  validacion_preliminar:  0,
   volumen:  '',
   
   //autor
 
   idAutor:  '',
   nombreAutor: '',
+  codigo_pucp: '',
  
 }
 
+const getUsuario = async () => {
+
+    let usuario = await UserService.getUsuarios();
+    usuario = usuario ?? []
+    console.log(usuario)
+    var str, std, stl, ape1, ape2
+    let roles = DTLocalServices.getAllRoles();
+    const usuarios = [];
+  
+    usuario.map(usr => (
+      ape1 = '',
+      ape2 = '',
+      str = usr.persona.apellidos ? usr.persona.apellidos : -1,
+      std = str != -1 ? str.indexOf(' ') : -1,
+      stl = std >= 0 ? usr.persona.apellidos.split(" ") : -1,
+      stl != -1 ? (ape1 = stl[0], ape2 = stl[1]) : (ape1 = usr.persona.apellidos, ape2 = ''),
+      usuarios.push({
+        idAutor: usr.id.toString(),
+        
+        id: usr.id.toString(),
+        idPersona: usr.persona.id.toString(),
+        nombre: usr.persona.nombres,
+        apellidoPaterno: ape1,
+        apellidoMaterno: ape2,
+        nombreAutor:  usr.persona.nombres + ' ' + ape1 + ' ' + ape2,
+        documento: usr.persona.numero_documento,
+        correo: usr.persona.correo_pucp,
+        rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
+        rol: usr.persona.tipo_persona,
+        idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : '',
+        nombreDepartamento: usr.persona.departamento ? usr.persona.departamento.nombre : '',
+        idSeccion: usr.persona.seccion ? usr.persona.seccion.id : '',
+        nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
+        foto_URL: usr.persona.foto_URL
+      })
+    ));
+    //console.log(usuarios)
+    window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
+    return usuarios;
+}
 
 
 export default function AgregarEditarInvestiga(props) {
@@ -69,6 +169,7 @@ export default function AgregarEditarInvestiga(props) {
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [departamento, setDepartamentos] = React.useState([]);
+    const [enableValidation, setEnableValidation] = React.useState(false);
 
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
@@ -127,7 +228,7 @@ export default function AgregarEditarInvestiga(props) {
           //Este pasa como la nueva seccion o la seccion editada
           const newTrabjo = {
             id: values.id,
-            cod_publicacion: values.cod_publicacion,
+            codigo_publicacion: values.codigo_publicacion,
             titulo:values.titulo,
             anho_publicacion: values.anho_publicacion,
             doi: values.doi,
@@ -165,6 +266,14 @@ export default function AgregarEditarInvestiga(props) {
       return departamentos;
     }
 
+
+
+    useEffect(() => {
+
+        setEnableValidation(false)
+     }, [enableValidation])
+    
+
     useEffect(() => {
       FillDepartamentos()
       .then (newDep =>{
@@ -172,249 +281,33 @@ export default function AgregarEditarInvestiga(props) {
       });
       if (recordForEdit != null) {
           /* object is not empty - esto que hace?*/
+
+
           setValues({
               ...recordForEdit
           })
+
+          
       }
     }, [recordForEdit])
 
+    const convertToDefaultEventParameter = (name, value) => ({
+        target: {
+            name, value
+        }
+    })
+    const PaperStyle = { borderRadius: '20x', pb: 4, pt:0.7, px: 0.7, color: "primary.light", elevatio: 0 }
+    const SubtitulosTable = { display: "flex", color: "primary.light" }
     return (
 
       <Form onSubmit={handleSubmit}>
 
-            <Grid container spacing={8}>
+    
+                {populateThings()}
                 <Grid item sx={6}>
-                    < Typography variant="h4" mb={2} >
-                           DATOS GENERALES
+                    <Typography variant="h4" style={SubtitulosTable}>
+                           Información General de la Publicación:
                     </Typography>
-                    <Controls.Input
-                        name="anho_publicacion"
-                        label="Año de Publicación"
-                        value={values.anho_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.anho_publicacion}
-                    />
-                    <Controls.Input
-                        name="ciudad"
-                        label="Ciudad"
-                        value={values.ciudad}
-                        onChange = {handleInputChange}
-                        error={errors.ciudad}
-                    />
-                    <Controls.Input
-                        name="codigo_publicacion"
-                        label="Código de Publicación"
-                        value={values.cod_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.cod_publicacion}
-                    />
-
-                    <Controls.Input
-                        name="codigo_validacion"
-                        label="Código de Validación"
-                        value={values.cod_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.cod_publicacion}
-                    />
-                    <Controls.Input
-                        name="divulgacion"
-                        label="Divulgación"
-                        value={values.divulgacion}
-                        onChange = {handleInputChange}
-                        error={errors.divulgacion}
-                    />
-                    <Controls.Input
-                        name="doi"
-                        label="DOI"
-                        value={values.doi}
-                        onChange = {handleInputChange}
-                        error={errors.doi}
-                    />
-                    <Controls.Input
-                        name="edicion"
-                        label="Edición"
-                        value={values.edicion}
-                        onChange = {handleInputChange}
-                        error={errors.edicion}
-                    />
-                    <Controls.Input
-                        name="editorial"
-                        label="Editorial"
-                        value={values.editorial}
-                        onChange = {handleInputChange}
-                        error={errors.editorial}
-                    />
-                    <Controls.Input
-                        name="especialidad_unesco"
-                        label="Especialidad Unesco"
-                        value={values.especialidad_unesco}
-                        onChange = {handleInputChange}
-                        error={errors.especialidad_unesco}
-                    />
-
-                    <Controls.Input
-                        name="edicion"
-                        label="Edición"
-                        value={values.edicion}
-                        onChange = {handleInputChange}
-                        error={errors.edicion}
-                    />
-                    {/*    
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Filiacion</FormLabel>
-                        <RadioGroup
-                            aria-label="filiacion"
-                            defaultValue="female"
-                            name="radio-buttons-group"
-                        >
-                        <FormControlLabel value="si" control={<Radio />} label="Female" />
-                        <FormControlLabel value="no" control={<Radio />} label="Male" />
-                        
-                        </RadioGroup>
-                    </FormControl>
-                    */}
-
-                    <Controls.Input
-                        name="identificador_produccion"
-                        label="Identificador de Produccion"
-                        value={values.identificador_produccion}
-                        onChange = {handleInputChange}
-                        error={errors.identificador_produccion}
-                    />
-
-                    <Controls.Input
-                        name="idioma"
-                        label="Idioma"
-                        value={values.idioma}
-                        onChange = {handleInputChange}
-                        error={errors.idioma}
-                    />
-
-                    <Controls.Input
-                        name="indicador_calidad"
-                        label="Indicador de Calidad"
-                        value={values.indicador_calidad}
-                        onChange = {handleInputChange}
-                        error={errors.indicador_calidad}
-                    />
-                     <Controls.Input
-                        name="isbn"
-                        label="ISBN"
-                        value={values.isbn}
-                        onChange = {handleInputChange}
-                        error={errors.isbn}
-                    />                 
-                    <Controls.Input
-                        name="issn"
-                        label="ISSN"
-                        value={values.issn}
-                        onChange = {handleInputChange}
-                        error={errors.issn}
-                    /> 
-
-                    <Controls.Input
-                        name="medio_publicacion"
-                        label="Medio de Publicacion"
-                        value={values.medio_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.medio_publicacion}
-                    /> 
-
-                    <Controls.Input
-                        name="motor_nusqueda"
-                        label="Motor de Busqueda"
-                        value={values.motor_busqueda}
-                        onChange = {handleInputChange}
-                        error={errors.motor_busqueda}
-                    /> 
-
-                    <Controls.Input
-                        name="nro_revista"
-                        label="Nro de Revista"
-                        value={values.nro_revista}
-                        onChange = {handleInputChange}
-                        error={errors.nro_revista}
-                    /> 
-            
-                    <Controls.Input
-                        name="observaciones_de_departamento"
-                        label="Observaciones de Departamento"
-                        value={values.observaciones_de_departamento}
-                        onChange = {handleInputChange}
-                        error={errors.observaciones_de_departamento}
-                    />
-
-                    <Controls.Input
-                        name="observaciones_para_departamento"
-                        label="Observaciones para Departamento"
-                        value={values.observaciones_para_departamento}
-                        onChange = {handleInputChange}
-                        error={errors.observaciones_para_departamento}
-                    /> 
-
-                    <Controls.Input
-                        name="pagina_final"
-                        label="Pagina Final"
-                        value={values.pagina_final}
-                        onChange = {handleInputChange}
-                        error={errors.pagina_final}
-                    /> 
-
-                    <Controls.Input
-                        name="pagina_inicial"
-                        label="Pagina Inicial"
-                        value={values.pagina_inicial}
-                        onChange = {handleInputChange}
-                        error={errors.pagina_inicial}
-                    /> 
-
-                    <Controls.Input
-                        name="pais"
-                        label="Pais"
-                        value={values.pais}
-                        onChange = {handleInputChange}
-                        error={errors.pais}
-                    />
-                    <Controls.Input
-                        name="palabras_clave"
-                        label="Palabras Clave"
-                        value={values.palabras_clave}
-                        onChange = {handleInputChange}
-                        error={errors.palabras_clave}
-                    />
-
-                    <Controls.Input
-                        name="responsabilidad"
-                        label="Responsabilidad"
-                        value={values.responsabilidad}
-                        onChange = {handleInputChange}
-                        error={errors.responsabilidad}
-                    />
-
-                    <Controls.Input
-                        name="subtipo_publicacion"
-                        label="Subtipo de Publicacion"
-                        value={values.subtipo_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.subtipo_publicacion}
-                    />
-
-                    <Controls.Input
-                        name="tipo_publicacion"
-                        label="Tipo de Publicacion"
-                        value={values.tipo_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.tipo_publicacion}
-                    />
-
-                    <Controls.Input
-                        name="tipo_referencia"
-                        label="Tipo de Referencia"
-                        value={values.tipo_referencia}
-                        onChange = {handleInputChange}
-                        error={errors.tipo_referencia}
-                    />
-
                     <Controls.Input
                         name="titulo"
                         label="Titulo"
@@ -422,77 +315,242 @@ export default function AgregarEditarInvestiga(props) {
                         onChange = {handleInputChange}
                         error={errors.titulo}
                     />
+                    <Grid container sx={{ gridTemplateColumns: "1fr 1fr 1fr ",}}>
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.Input
+                                name="codigo_publicacion"
+                                label="Código de Publicación"
+                                value={values.codigo_publicacion}
+                                onChange = {handleInputChange}
+                                error={errors.codigo_publicacion}
+                            />
+                            <Controls.Input
+                                name="tipo_publicacion"
+                                label="Tipo de Publicación"
+                                value={values.tipo_publicacion}
+                                onChange = {handleInputChange}
+                                error={errors.tipo_publicacion}
+                            />
+                            <Controls.Select
+                                name="anho_publicacion"
+                                label="Año de publicación"
+                                value={values.anho_publicacion ? values.anho_publicacion : yearList[0]}
+                                onChange={handleInputChange}
+                                options={yearList}
+                                error={errors.anho_publicacion}
+                            />
+           
+                        </Grid>
+                        <Grid item xs={3} sx={styles.columnGridItem}/>
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.Input
+                                name="idioma"
+                                label="Idioma"
+                                value={values.idioma}
+                                onChange = {handleInputChange}
+                                error={errors.idioma}
+                            />
+                            <Controls.Input
+                                name="ciudad"
+                                label="Ciudad"
+                                value={values.ciudad}
+                                onChange = {handleInputChange}
+                                error={errors.ciudad}
+                            />
+                            <Controls.Select
+                                name="pais"
+                                label="País"
+                                value={values.pais ? values.pais : countryList[0]}
+                                onChange={handleInputChange}
+                                options={countryList}
+                                error={errors.pais}
+                            />
+                        </Grid>
 
-                    <Controls.Input
-                        name="tipo_publicacion"
-                        label="Tipo de Publicacion"
-                        value={values.tipo_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.tipo_publicacion}
-                    />
-                    
-                    <Controls.Input
-                        name="tipo_referencia"
-                        label="Tipo de Referencia"
-                        value={values.tipo_referencia}
-                        onChange = {handleInputChange}
-                        error={errors.tipo_referencia}
-                    />
+                    </Grid>
+                    <Divider      />   
+                    <Typography variant="h4" style={SubtitulosTable}>
+                        Información de Identificación de la publicación:
+                    </Typography>
 
+                    <Grid container sx={{ gridTemplateColumns: "1fr 1fr"}}>
                     <Controls.Input
-                        name="url_repositorio"
-                        label="URL Repositorio"
-                        value={values.url_repositorio}
-                        onChange = {handleInputChange}
-                        error={errors.url_repositorio}
-                    />
+                            name="url_repositorio"
+                            label="DOI (URL del documento)"
+                            value={values.url_repositorio}
+                            onChange = {handleInputChange}
+                            error={errors.url_repositorio}
+                        />
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.Input
+                            name="isbn"
+                            label="ISBN"
+                            value={values.isbn}
+                            onChange = {handleInputChange}
+                            error={errors.isbn}
+                        />
+                        </Grid>
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.Input
+                                name="issn"
+                                label="ISSN"
+                                value={values.issn}
+                                onChange = {handleInputChange}
+                                error={errors.issn}
+                            /> 
+                        </Grid>
 
+                    </Grid>           
 
-                    <Controls.Input
-                        name="validacion_preliminar"
-                        label="Validación Preliminar"
-                        value={values.validacion_preliminar}
-                        onChange = {handleInputChange}
-                        error={errors.validacion_preliminar}
-                    />
+                    <Divider      />   
+                    <Typography variant="h4" style={SubtitulosTable}>
+                        Información del Medio de Publicación:
+                    </Typography>
+                    <Grid container sx={{ gridTemplateColumns: "1fr 1fr"}}>
+                        <Controls.Input
+                            name="divulgacion"
+                            label="Divulgación"
+                            multiline
+                            rows={2}
+                            value={values.divulgacion}
+                            onChange = {handleInputChange}
+                            error={errors.divulgacion}
+                        />
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.Input
+                                name="medio_publicacion"
+                                label="Medio de Publicación"
+                                value={values.medio_publicacion}
+                                onChange = {handleInputChange}
+                                error={errors.medio_publicacion}
+                            />
+                            <Controls.Input
+                                name="motor_busqueda"
+                                label="Base de datos"
+                                value={values.motor_busqueda}
+                                onChange = {handleInputChange}
+                                error={errors.motor_busqueda}
+                            />
+                            <Controls.Input
+                                name="especialidad_unesco"
+                                label="Especialidad Unesco"
+                                value={values.especialidad_unesco}
+                                onChange = {handleInputChange}
+                                error={errors.especialidad_unesco}
+                            />
+                            <Controls.Input
+                                name="editorial"
+                                label="Editorial"
+                                value={values.editorial}
+                                onChange = {handleInputChange}
+                                error={errors.editorial}
+                            />
+                        </Grid>
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.Input
+                                name="edicion"
+                                label="Edicion"
+                                value={values.edicion}
+                                onChange = {handleInputChange}
+                                error={errors.edicion}
+                            /> 
+                            <Controls.Input
+                                name="volumen"
+                                label="Volumen"
+                                value={values.volumen}
+                                onChange = {handleInputChange}
+                                error={errors.volumen}
+                            /> 
+                            <Controls.Input
+                                name="nro_revista"
+                                label="N° Revista"
+                                value={values.nro_revista}
+                                onChange = {handleInputChange}
+                                error={errors.nro_revista}
+                            /> 
+                            <Grid container spacing={2}>
+                                <Grid item  xs={5}>
+                                    <Controls.Input
+                                        name="pagina_inicial"
+                                        label="Pág. Inicial"
+                                        value={values.pagina_inicial}
+                                        onChange = {handleInputChange}
+                                        error={errors.pagina_inicial}
+                                    />     
+                                </Grid>
+                                
+                                <Grid item  xs={5}>
+                                    <Controls.Input
+                                        name="pagina_final"
+                                        label="Pág. Final"
+                                        value={values.pagina_final}
+                                        onChange = {handleInputChange}
+                                        error={errors.pagina_final}
+                                    />     
+                                </Grid>
+                                </Grid>
+                        </Grid>
 
-                    <Controls.Input
-                        name="volumen"
-                        label="Volumen"
-                        value={values.volumen}
-                        onChange = {handleInputChange}
-                        error={errors.volumen}
-                    />
-                    {/*
-                    <Controls.Select
-                        name="rolID"
-                        label="Rol del delegado"
-                        value={values.rolID}
-                        onChange={handleInputChange}
-                        options={getDocentes()}
-                        error={errors.rolID} 
-                    />
-                    */}
-                    <Controls.Input
-                        name="id_autor"
-                        label="ID Autor"
-                        value={values.idAutor}
-                        onChange = {handleInputChange}
-                        error={errors.idAutor}
-                    />
+                    </Grid>        
+                    <Divider      />   
+                    <Typography variant="h4" style={SubtitulosTable}>
+                        Información PUCP de la publicación:
+                    </Typography>
+                    <Grid container sx={{ gridTemplateColumns: "1fr 1fr"}}>
+                        <Grid item xs={4} sx={styles.columnGridItem}>
+                            <Controls.RadioGroup
+                                name="filiacion"
+                                label="Filiación PUCP"
+                                value={values.filiacion}
+                                onChange={handleInputChange}
+                                items={radioYesNo}
+                            />
+                            <Controls.RadioGroup
+                                name="tipo_referencia"
+                                label="Tipo Referencia"
+                                value={values.tipo_referencia}
+                                onChange={handleInputChange}
+                                items={radioReferencia}
+                            />
+                            <Controls.RadioGroup
+                                name="validacion_preliminar"
+                                label="Publicación Validada"
+                                value={values.validacion_preliminar}
+                                onChange={handleInputChange}
+                                items={radioYesNo}
+                            />
+                        </Grid>
+                        <Grid item xs={6} sx={styles.columnGridItem}>
+                            <Controls.RadioGroup
+                                name="indicador_calidad"
+                                label="Calidad"
+                                value={values.indicador_calidad}
+                                onChange={handleInputChange}
+                                items={radioCalidad}
+                            /> 
+                            <Controls.Input
+                                name="identificador_produccion"
+                                label="Identificador de Producción"
+                                value={values.identificador_produccion}
+                                onChange = {() => {
+                                    handleInputChange();
+                                    setEnableValidation(true);
+                                }}
+                                error={errors.identificador_produccion}
+                            />     
+                           <Controls.Select
+                                name="codigo_validacion"
+                                label="Código de Validación"
+                                value={values.codigo_validacion}
+                                onChange={handleInputChange}
+                                disabled={values.validacion_preliminar == '0' ? true : false}
+                                options={listCodVal}
+                                error={errors.codigo_validacion}
+                            />
+                        </Grid>
 
-                    <Controls.Input
-                        name="tipo_publicacion"
-                        label="Tipo de Publicacion"
-                        value={values.tipo_publicacion}
-                        onChange = {handleInputChange}
-                        error={errors.tipo_publicacion}
-                    />
-                </Grid>
-                {/*
-                <Divider orientation="vertical" flexItem sx={{mt: 9,mb:2, ml:9, mr:5}} />
-                <Grid item sx={5} style={ColumnGridItemStyle} align="center">
-                </Grid> */}
+                    </Grid>       
+
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>
