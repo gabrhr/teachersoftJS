@@ -249,7 +249,6 @@ export default function NuevoProcesoForm() {
                     fullWidth
                     multiline
                     rows={6}
-                    value={recordForEdit? recordForEdit.observacion: ""}
                     defaultValue={recordForEdit? recordForEdit.observacion:justificacion}
                     disabled = {recordForEdit? true: false}
                     onChange={(e) => {setJustificacion(e.target.value)}}
@@ -266,7 +265,7 @@ export default function NuevoProcesoForm() {
                 {/* Buscador y #solicitados */}
                 <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
                    <b> {recordForEdit? "Lista de Descargas de Docentes Solicitadas":
-                            "Lista de Solicitudes de Descarga de los Docentes"
+                            "null"
                         }
                    </b>
                 </Typography>
