@@ -219,6 +219,7 @@ export default function ModalValidarYEnviarSolicitud({solicitud, asunto, setAsun
                             ¿Está seguro?
                         </Typography>
                         <PDFDownloadLink document = {<ReporteCargaHorarios cursos={cursosHorarios}/>} fileName = "Reporte-de-horarios.pdf">
+                          {console.log(cursosHorarios[1])}
                           <Controls.Button
                               text="Sí"
                               onClick={() => {}}

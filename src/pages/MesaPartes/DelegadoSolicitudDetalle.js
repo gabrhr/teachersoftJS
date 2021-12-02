@@ -23,17 +23,6 @@ import * as MesaPartesService from '../../services/mesaPartesService'
 import * as DTLocalServices from '../../services/DTLocalServices'
 import * as EmailService from '../../services/emailService'
 
-function sendEmailNotification(solicitud) {
-    EmailService.emailSolicitor2(solicitud)
-        .then(data => {
-            return data
-        })
-        .catch(err => {
-            console.error(err)
-        })
-}
-
-
 
 export default function RecepcionDetalleSolicitud() {
     const location= useLocation()
@@ -61,7 +50,8 @@ export default function RecepcionDetalleSolicitud() {
                     })
                     setAtender(false)
                     /* Send notification to solicitador */
-                    sendEmailNotification(solicitud)
+                    // sendEmailNotification(solicitud)
+                    EmailService.sendemailMP(solicitud, 'delegado,atiende')
                 })
                 .catch(err => {
                     /* error :( */

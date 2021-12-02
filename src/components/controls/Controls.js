@@ -13,7 +13,7 @@ import RowCheckBox from "./RowCheckBox"
 import RangeTimePicker from "./RangeTimePicker"
 import NumberPicker from "./NumberPicker"
 import MinusButton from "./MinusButton"
-
+import DateTimePickerv2 from "./DateTimePickerv2";
 export const Controls = {
     Input,
     RadioGroup,
@@ -28,6 +28,7 @@ export const Controls = {
     DreamTitle,
     RowCheckBox,
     RangeTimePicker,
+    DateTimePickerv2,
     NumberPicker,
     MinusButton
 }

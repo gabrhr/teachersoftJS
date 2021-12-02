@@ -26,9 +26,11 @@ function getSolicitudes(setRecords, departamentoID) {
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
     const {user, rol} = React.useContext(UserContext);
+    const [recordsCargados, setRecordsCargados] = useState(false)
     React.useEffect(() => {
-        console.log(user)
+        setRecordsCargados(false)
         getSolicitudes(setRecords, user.persona.departamento.id)
+        setRecordsCargados(true)
     }, [user])
 
     return (
@@ -36,6 +38,7 @@ export default function MisSolicitudes() {
             delegado={true} 
             records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
             user={user}    /* FIXME */
+            recordsCargados={recordsCargados} setRecordsCargados ={setRecordsCargados}
         />
     )
 }
