@@ -336,3 +336,4 @@ export function getAllCursos() {
         estado: "Pendiente"     // Atendido o Pendiente
     }))
 }
+  

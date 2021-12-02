@@ -12,6 +12,10 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es');
+
 
 const tableHeaders = [
     {
@@ -54,7 +58,7 @@ const tableHeaders = [
 
     const SubtitulosTable={display:"flex"}
 
-export default function ModalDocenteClasesAsignados({records, setRecords, tipo_dictado, setTipoDic, sesion, recordsBusq, setRecordsBusq , setRecordsDel, recordsDel}){
+export default function ModalDocenteClasesAsignados({records, setRecords, tipo_dictado, setTipoDic, sesion, recordsBusq, setRecordsBusq , setRecordsDel, recordsDel, horas}){
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [selectedRow, setSelectedRow] = useState(records.length+1)
     const [borrarDisabled, setBorrarDisabled] = useState(true)
@@ -120,25 +124,31 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
             maximoHoras = 6;
             break;
         }
+
+        const curDate = moment().format("LLL");
+          //curDate.setFullYear(curDate.getFullYear() - 1);  // Le quitamos 1 año - para comparar con el del docente
+          if(prof.docente.tipo_bono) 
+            if(curDate <= moment(prof.docente.fecha_ultimo_bono).add('year',1).format("LLL"))  maximoHoras = maximoHoras - 2;
+
         setMaxHoras(maximoHoras);
     }
 
     const changeCarga = (e) => {
-        const pattern = /^[0-9]*$/;   
+        const pattern = /^[0-9.]*$/;   
         
         //Verificacion de que sea numero
         if (!pattern.test(e.target.value)) {
-          e.target.value = e.target.value.replace(/[^0-9]/g, "");
+          e.target.value = e.target.value.replace(/[^0-9.]/g, "");
           // invalid character, prevent input
 
         }
         let valueAnt = horasAsig; 
         setHorasAsig(`${e.target.value}`)
-        records[selectedRow].horas_dictado_docente_sesion = parseInt(e.target.value===''?0: e.target.value)
-        records[selectedRow].docente.cargaDocente = parseInt(cargaHorIni)-parseInt(horasAsigIni ? horasAsigIni : 0) + records[selectedRow].horas_dictado_docente_sesion
+        records[selectedRow].horas_dictado_docente_sesion = parseFloat(e.target.value===''?0: e.target.value)
+        records[selectedRow].docente.cargaDocente = parseFloat(cargaHorIni)-parseFloat(horasAsigIni ? horasAsigIni : 0) + records[selectedRow].horas_dictado_docente_sesion
         setCargaHor(records[selectedRow].docente.cargaDocente)
 
-        records[selectedRow].docente.deuda_docente = parseInt(deudaHorIni) + ( (records[selectedRow].docente.cargaDocente>= maxHoras ) ? (maxHoras - records[selectedRow].docente.cargaDocente) : 0)
+        records[selectedRow].docente.deuda_docente = parseFloat(deudaHorIni) + ( (records[selectedRow].docente.cargaDocente>= maxHoras ) ? (maxHoras - records[selectedRow].docente.cargaDocente) : 0)
         setDeudaHor(records[selectedRow].docente.deuda_docente)
 
         console.log(records[selectedRow])
@@ -160,8 +170,8 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
         setRecords(items)
         let newListProf = [];
         for(let prof of profFil){
-          prof.docente.cargaDocente = parseInt(cargaHorIni)-parseInt(horasAsigIni)
-          prof.docente.deuda_docente = parseInt(deudaHorIni) + ( (prof.docente.cargaDocente>= maxHoras ) ? (maxHoras - prof.docente.cargaDocente) : 0)
+          prof.docente.cargaDocente = parseFloat(cargaHorIni)-parseFloat(horasAsigIni)
+          prof.docente.deuda_docente = parseFloat(deudaHorIni) + ( (prof.docente.cargaDocente>= maxHoras ) ? (maxHoras - prof.docente.cargaDocente) : 0)
           
           newListProf.push(prof.docente)
         }
@@ -198,7 +208,7 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
     return(
         <>
             <Grid container>
-                <Grid item xs = {9.5}>
+                <Grid item xs = {10}>
                 <Grid cointainer align="right" mt={2.5} />  
                     <Typography variant="h3" color="primary.light" style={SubtitulosTable} >
                         Lista de docentes asignados
@@ -244,8 +254,9 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                     </TblContainer>
                     <TblPagination/>
                 </BoxTbl>
-                <Grid container>
+                <Grid container xs = {12}>
                   <Grid item xs={0.2}></Grid>
+                  <Grid item xs = {1.8}>
                   <FormGroup>
                     <FormControlLabel 
                       control={
@@ -257,8 +268,8 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                       />} 
                         label= { tipo_dictado ? "Co-Dictado" : "Compartido"} 
                     />
-
                   </FormGroup>
+                  </Grid>
                   {isSelected ? 
                     <>
                       <Grid item xs={2.5}></Grid>
@@ -291,8 +302,21 @@ export default function ModalDocenteClasesAsignados({records, setRecords, tipo_d
                           />
                       </Grid>
                     </>
-                  : <Grid cointainer align="right" mt={2.5} />    
+                  : <Grid item xs={9.5} />    
                 }
+                
+                {records.length ? 
+                    <Grid item xs={6}>
+                      <Typography color = "secondary">
+                        Para cambiar el tipo de dictado, se deben eliminar primero a todos los docentes
+                      </Typography>
+                    </Grid> 
+                : <Grid item xs={6}></Grid>}
+                <Grid item xs={6} align = "right">
+                    <Typography color = "primary">
+                      Se requieren: {sesion} horas 
+                    </Typography>
+                </Grid>
                 </Grid>
                 </>
     )

@@ -61,16 +61,18 @@ const Docentes = ({sesion_docentes}) => {
   )
 }
 
-const ImprimirDocentes = ({sesiones}) => {
+const ImprimirDocentes = ({sesiones, cantDocClase}) => {
   const clase = sesiones.filter((ses)=>ses.secuencia===0)
   const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
+  // const cant = clase[0].sesion_docentes.length
 
   return(
     <>
-       { clase[0].sesion_docentes.length ?
+      {console.log("cLASE: ", clase.sesion_docentes)}
+       { clase.length ?
             <View wrap={false}>
               <Text style={{paddingLeft: '8%', fontSize: '13.5px'}}>
-                  {"\nLista de Docentes de Clases: "}
+                  {clase[0].sesion_docentes.length ? "\nLista de Docentes de Clases: " : ""}
               </Text>
               <Docentes sesion_docentes = {clase[0].sesion_docentes}/>
             </View>
@@ -80,7 +82,7 @@ const ImprimirDocentes = ({sesiones}) => {
               <View wrap={false}>
                 {console.log(laboratorio[0])}
                 <Text style={{paddingLeft: '8%', fontSize: '13.5px'}}>
-                    {"\nLista de Docentes de Laboratorios: "}
+                    {laboratorio[0].sesion_docentes.length ? "\nLista de Docentes de Laboratorios: " : ""}
                 </Text>
                 <Docentes sesion_docentes = {laboratorio[0].sesion_docentes}/>
               </View>
@@ -95,10 +97,10 @@ const ChompDocentes = ({sesiones}) => {
   const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
     return (
         <>
-        <View style={{paddingTop: '2%'}}>
+        <View style={{paddingTop: '3px', paddingLeft: '49px'}}>
             { clase.length ?
               <>
-                <Text style={{paddingLeft: '8%', fontSize: '12px'}}>
+                <Text style={{fontSize: '10px'}}>
                     {`Docentes en Clase: ${clase[0].sesion_docentes ? clase[0].sesion_docentes.length : 0}\n`}
                 </Text>
               </>
@@ -106,7 +108,7 @@ const ChompDocentes = ({sesiones}) => {
             }
             { laboratorio.length ?
                 <>
-                  <Text style={{paddingLeft: '8%', fontSize: '12px'}}>
+                  <Text style={{fontSize: '10px'}}>
                     {`Docentes en Laboratorio: ${laboratorio[0].sesion_docentes ? laboratorio[0].sesion_docentes.length : 0}\n`}
                   </Text>
                 </>
@@ -125,11 +127,11 @@ const Horarios = ({horarios}) => {
         <View style={{flexDirection: 'row'}} wrap={false}>
           <View>
             <View style={{flexDirection: 'row'}}>
-              <View><Text style={{paddingTop: '2%', paddingLeft: '8%', fontSize: '16px'}}>{`Horario ${horario.codigo}`}</Text></View>
-              <View>
+              <View><Text style={{paddingTop: '12px', paddingLeft: '49px', fontSize: '16px'}}>{`Horario ${horario.codigo}`}</Text></View>
+              <View style = {{paddingTop: '14px', paddingLeft: '10px'}}>
                 <Text style={horario.estado==='Horas Asignadas'?
-                            {paddingTop: '2.2%', paddingLeft: '2%', fontSize: '12px', color: 'green'}:
-                            {paddingTop: '2.2%', paddingLeft: '2%', fontSize: '12px', color: 'red'}}>
+                            {fontSize: '12px', color: 'green'}:
+                            {fontSize: '12px', color: 'red'}}>
                   {`(${horario.estado})`}
                 </Text>
               </View>
@@ -138,14 +140,18 @@ const Horarios = ({horarios}) => {
             <ChompDocentes sesiones = {horario.sesiones}/>
           </View>
           
-          <View>
-            <Text style={{paddingTop: '1%', paddingLeft: '8%', fontSize: '11px'}}>
+          <View style={{paddingTop: '16px', paddingLeft: '140px'}}>
+            <Text style={{fontSize: '10px'}}>
               {`${horario.detalle}`}
             </Text>
           </View>
         </View>
-
-        <ImprimirDocentes sesiones = {horario.sesiones}/>
+        
+          {/* const clase = sesiones.filter((ses)=>ses.secuencia===0)
+          const laboratorio = sesiones.filter((ses)=>ses.secuencia===1) */}
+        
+        <ImprimirDocentes sesiones = {horario.sesiones} 
+                          cantDocClase = {horario.sesiones.filter((ses)=>ses.secuencia===0)[0]}/>
       </>
     )
   )
@@ -156,53 +162,56 @@ export default function ReporteCargaHorarios({cursos}) {
   return (
     <Document>
       <Page size="A4" wrap>
-            <View style={{width:'100%', height: '6%', backgroundColor: '#042354'}} fixed >
+            <View style={{width:'100%', height: '51.22px', backgroundColor: '#042354'}} fixed >
               <Image src = {logoPUCP} style={{position: "relative", height: "38px", width: '113.16px', top: '6px', left: '470px'}}></Image>
             </View>
             <View>
-                <Text variant="h4" style={{fontSize: '24px', paddingTop: '3%', paddingLeft: '25%'}} >
+                <Text variant="h4" style={{fontSize: '24px', paddingTop: '20px', paddingLeft: '25%'}} >
                 Carga Docente por Cursos
                 </Text>
-                <Text style={{fontWeight: '100', paddingTop: '4%', paddingLeft: '2%', fontSize: '16px'}}>
+                <Text style={{fontWeight: '100', paddingTop: '14px', paddingLeft: '2%', fontSize: '16px'}}>
                   Lista de cursos:
                 </Text>
                 {cursos.map((curso)=>
                   <>
                     <View wrap={false}>
-                      <Text style={{paddingTop: '4%', paddingLeft: '4%'}}>
+                      <Text style={{paddingTop: '20px', paddingLeft: '4%'}}>
                           {`${curso.curso.codigo} | ${curso.curso.nombre}`} 
                       </Text>
-                      <Text style={{paddingLeft: '4%', fontSize:'14px'}}>
+                      <Text style={{paddingTop: '2px', paddingLeft: '4%', fontSize:'11px'}}>
                         {`${curso.curso.seccion.departamento.nombre}`}
                       </Text>
-                      <Text style={{paddingLeft: '4%', fontSize:'14px'}}>
+                      <Text style={{paddingLeft: '4%', fontSize:'11px'}}>
                         Créditos: {`${curso.curso.creditos}`}
                       </Text>
                       <View style={{flexDirection: 'row'}}>
-                        <Text style={{paddingLeft: '4%', fontSize:'14px'}}>
+                        <Text style={{paddingLeft: '4%', fontSize:'11px'}}>
                           {"Estado: "}
                         </Text>
-                        <Text style={curso.curso.estado === 'Sin horarios'? {fontSize:'14px', color: 'red'}:
-                              (curso.curso.estado === 'Atendido'?{fontSize:'14px', color: 'green'}:
-                              {fontSize:'14px', color: 'orange'})}>
+                        <Text style={curso.curso.estado === 'Sin horarios'? {fontSize:'11px', color: 'red'}:
+                              (curso.curso.estado === 'Atendido'?{fontSize:'11px', color: 'green'}:
+                              {fontSize:'11px', color: 'orange'})}>
                           {`${curso.curso.estado}`}
                         </Text>
                       </View>
                     </View>
                     {curso.horarios.length !== 0 ? (
-                      <>
-                        <Text style={{paddingTop: '2%', paddingLeft: '6%', fontSize: '14px'}}>
+                      <View wrap = {false}>
+                        <View style={{paddingTop: '10px', width: '100%', alignItems: 'center'}}>
+                          <View style={{width:'533px', height: '0.6px', backgroundColor: 'black'}}/>
+                        </View>
+                        <Text style={{paddingTop: '8px', paddingLeft: '6%', fontSize: '14px'}}>
                           Lista de horarios del curso:
                         </Text>
                         <Horarios horarios = {curso.horarios}/>
-                      </>
+                      </View>
                     ) : <></>}
                     
                   </>
                 )}
             </View>
             {console.log("cantidad en reporte : ", cursos)}
-            <View style={{width:'100%', height: '6%'}} fixed/>
+            <View style={{width:'100%', height: '50px'}} fixed/>
         </Page>      
     </Document>
   )

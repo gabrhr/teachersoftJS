@@ -109,8 +109,6 @@ export default function ListaPreferenciaDocente({openPopup}) {
       const request = await personaService.listarPorDocente(user.persona.id, parseInt(window.localStorage.getItem("ciclo")));
       const recordsX = await transformarPreferencias(request)
       
-      console.log(recordsX);
-
       return recordsX
     }
 
@@ -132,7 +130,8 @@ export default function ListaPreferenciaDocente({openPopup}) {
 
     const handleDelete = () => {
       let resultado = 0;
-      let prefFil = records.filter((pref) => pref.selected===false)
+      console.log(records);
+      let prefFil = records.filter((pref) => (pref.selected===false || !pref.selected))
       const horarios = [], sesiones = [], cursoCiclos = [];
 
       for(let i = 0; i < prefFil.length; i++){
@@ -169,7 +168,6 @@ export default function ListaPreferenciaDocente({openPopup}) {
     }
 
     const handleAdd = (e) => {
-        console.log("Se agrega una preferencia")
         setOpenPopupAdd(true)
     }
 

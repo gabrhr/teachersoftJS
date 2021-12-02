@@ -79,7 +79,6 @@ async function llenarDatosHorarios (otroHorario, postHorario, hor) {
 
 const actualizarCursoCiclo = async (curso_ciclo)=> {
 
-  if(curso_ciclo.cantidad_horarios !== 1){
     const newCC = {
       "id": curso_ciclo.id,
       "ciclo": {
@@ -88,13 +87,13 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
       "curso": {
         "id": curso_ciclo.curso.id,
       },
-      "cantidad_horarios": 1, //Se actualiza al nuevo estado - con horarios
+      "estado_curso": 1, //Se actualiza al nuevo estado - con horarios
+      "cantidad_horarios": curso_ciclo.cantidad_horarios +1, //Se actualiza al nuevo estado - con horarios
       "estado_tracking": curso_ciclo.estado_tracking,
     }
     
     const request = await cursoService.updateCursoCiclo(newCC);
 
-  }
 }
 
 const horDataRecords = (dataHor) => {
@@ -391,6 +390,7 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         //Loop finished
         
         if(otroHorario === 1)  {
+          console.log(postHorario);
           const resultado = await horarioService.registerHorario(postHorario)
           if(resultado){
             console.log("Todo bien");

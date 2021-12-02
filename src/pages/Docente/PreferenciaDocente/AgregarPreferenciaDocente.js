@@ -95,8 +95,7 @@ const transformarHorarios = (request, user) => {
     const recordsX = []
     
     if(request){
-      for(let r of request){
-        for( let hor of r ) {
+      for(let hor of request){
           if(hor.sesiones && hor.curso_ciclo && hor.curso_ciclo.curso.seccion.id === user.persona.seccion.id){
             if(hor.sesiones[0]){
               recordsX.push({
@@ -130,7 +129,6 @@ const transformarHorarios = (request, user) => {
               })
             }
           }
-        }
       }
     }
     return recordsX;
@@ -140,30 +138,33 @@ const getHorario = async (seccion, secciones, user) => {
 
   const ciclo = await window.localStorage.getItem("ciclo");
   if(!seccion) seccion = 0;
-  let dataCur = [];
+  let dataHor = [];
 
   if(seccion === 0){
     for(let s of secciones){
-      const curSeccion = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), s.id);
+      let curSeccion = null;
+      if(s !== 0)
+        curSeccion = await personaService.listarHorariosNoPreferencias(s.id, user.persona.id, parseInt(ciclo));
 
-      if(curSeccion.length) dataCur.push(curSeccion);
+      if(curSeccion)
+        if(curSeccion.length) dataHor.push(curSeccion);
       
     }
   }
   else{
-    const curSeccion = await CursoService.listarPorCicloPorSeccion(parseInt(ciclo), seccion);
-    if(curSeccion.length) dataCur.push(curSeccion);
+    const curSeccion = await personaService.listarHorariosNoPreferencias(seccion, user.persona.id, parseInt(ciclo));
+    if(curSeccion)
+      if(curSeccion.length) dataHor.push(curSeccion);
   }
   
-  if(!dataCur) dataCur = [];
+  if(!dataHor) dataHor = [];
   const horarios = [];
-  for(let itemcur of dataCur){
-    for(let cur of itemcur) {
-      const request = await horarioService.listarPorCursoCiclo(cur.curso.id, parseInt(ciclo));
-      if(request.length) horarios.push(request);  //Esquivamos a los que aun no tienen horarios asignados
+  for(let itemhor of dataHor){
+    for(let hor of itemhor) {
+      horarios.push(hor);
     }
   }
-
+  console.log(horarios);
   const records = transformarHorarios(horarios, user)
 
   return records;
@@ -218,17 +219,12 @@ export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp, r
         BoxTbl
     } = useTable(recordsX, tableHeaders, filterFn);
     
-  React.useEffect(() => {
+
+    React.useEffect(() => {
     getHorario(seccion, secciones, user)
     .then (newHor =>{
       if(newHor){
-        //console.log("Horario: ", newHor ,"Records: ", records)
-        //Filtramos la lista de Horarios con la de records - para que no se enlisten los que ya están previamente en records
-        if(records){
-          const clase = newHor.filter(ses => !records.some(record => (record.Horario.id === ses.ID_Horario) && (record.Sesion.secuencia === ses.Tipo)));
-          setRecordsX(clase);
-        }
-        else  setRecordsX(newHor);
+          setRecordsX(newHor);
       }
 
     });
@@ -320,7 +316,7 @@ export default function AgregarPreferenciaDocente({openPopupAdd, setOpenPopUp, r
         }
 
         if(request.length)  resultado = await personaService.updatePreferencia(preferencia);
-        // else  resultado = await personaService.registerPreferencia(preferencia);
+        else  resultado = await personaService.registerPreferencia(preferencia);
         // resultado = personaService.registerPreferencia(preferencia);
         console.log(preferencia);
       }

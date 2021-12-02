@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { InputAdornment } from '@mui/material'
 
 import PersonaService from '../../../services/personaService';
+import { Box, Paper, TableBody, TableRow, TableCell } from '@mui/material';
 
 
 const getPreferencias =  async (ciclo) => {
@@ -58,13 +59,15 @@ export default function SolPreferenciaDocentes(){
   const [records, setRecords] = useState([]);
   const [ciclo, setCiclo] = useState();
   const [profesoresMostrar, setProfesoresMostrar] = useState([])
-
+  const [preferenciaCargados, setPreferenciaCargados] = useState(false)
   
   React.useEffect(() => {
+    setPreferenciaCargados(false)
     getPreferencias(ciclo)
     .then (newPref =>{
       if(newPref){
         setProfesoresMostrar(newPref);
+        setPreferenciaCargados(true)
         setRecords(newPref);
       }
     });
@@ -112,7 +115,7 @@ export default function SolPreferenciaDocentes(){
             onChange={handleSearch}
             type="search"
           />
-            <AccordionPreferenciaProfesor profesores = {profesoresMostrar}/>
+            <AccordionPreferenciaProfesor profesores = {profesoresMostrar} preferenciaCargados = {preferenciaCargados}/>
         </>
     )
 }

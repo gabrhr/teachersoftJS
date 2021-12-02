@@ -66,6 +66,7 @@ export default function NuevoProcesoForm() {
     const handleClick = e =>{
         window.history.back();
     }
+    const [profesoresCargados, setProfesoresCargados] = useState(false)
 
     const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
@@ -172,9 +173,11 @@ export default function NuevoProcesoForm() {
         console.log(request)
         if(request.length !== 0)requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
+        setProfesoresCargados(true)
     }
 
     React.useEffect(() => {
+        setProfesoresCargados(false)
         getTramitesDescargasSeccion()
     }, [openSolicitudDescarga])
 

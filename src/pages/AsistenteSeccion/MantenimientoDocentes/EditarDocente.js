@@ -31,29 +31,27 @@ const tipos_docente = [
 ]
 
 export default function EditarDocente(props) {
-    const {recordForEdit, setOpenPopup} = props
+    const {recordForEdit, setOpenPopup, records, setRecords, transformarDocentes, editIndex, setEditIndex, tipo} = props
     
-    const [newNombre, setNombre] = useState('');
+    const [newNombre, setNombre] = useState(recordForEdit.nombres);
     const [errorNombre, setErrorNombre] = useState(false);
     
-    const [newApellidos, setApellidos] = useState('');
+    const [newApellidos, setApellidos] = useState(recordForEdit.apellidos);
     const [errorApellidos, setErrorApellidos] = useState(false);
     
-    const [newCodigo, setCodigo] = useState('');
+    const [newCodigo, setCodigo] = useState(recordForEdit.codigo);
     const [errorCodigo, setErrorCodigo] = useState(false);
+        
+    const [newTipoDoc, setTipoDoc] = useState(recordForEdit.tipo_docente);
+    const [errorTipoDoc, setErrorTipoDoc] = useState(false);
     
-    const [newEspecialidad, setEspecialidad] = useState('');
-    const [errorEspecialidad, setErrorEspecialidad] = useState(false);
-    
-    const [newTipoDoc, setTipoDoc] = useState(0);
-    
-    const [newTelefono, setTelefono] = useState('');
+    const [newTelefono, setTelefono] = useState(recordForEdit.telefono);
     const [errorTelefono, setErrorTelefono] = useState(false);
     
-    const [newCorreo, setCorreo] = useState('');
+    const [newCorreo, setCorreo] = useState(recordForEdit.correo);
     const [errorCorreo, setErrorCorreo] = useState(false);
     
-    const [newDocumento, setDocumento] = useState('');
+    const [newDocumento, setDocumento] = useState(recordForEdit.dni);
     const [errorDocumento, setErrorDocumento] = useState(false);
     
     const [newURL, setURL] = useState('');
@@ -79,15 +77,11 @@ export default function EditarDocente(props) {
             setErrorApellidos(true)
             errores++;
         }
-        if(!isNumeric(newCodigo) || newCodigo.length != 8){
+        if(!isNumeric(newCodigo) || newCodigo.length !== 8){
             setErrorCodigo(true)
             errores++;
         }
-        if(newEspecialidad === ""){
-            setErrorEspecialidad(true)
-            errores++;
-        }
-        if(!isNumeric(newTelefono) || newTelefono.length != 9){
+        if(!isNumeric(newTelefono) || newTelefono.length !== 9){
             setErrorTelefono(true)
             errores++;
         }
@@ -98,8 +92,12 @@ export default function EditarDocente(props) {
         if(errorCorreo){
             errores++;
         }
-        if(!isNumeric(newDocumento) || newDocumento.length != 8){
+        if(!isNumeric(newDocumento) || newDocumento.length !== 8){
             setErrorDocumento(true)
+            errores++;
+        }
+        if(newTipoDoc  === 0){
+            setErrorTipoDoc(true)
             errores++;
         }
         if(errores){
@@ -115,31 +113,55 @@ export default function EditarDocente(props) {
         if (validate()){
           const editDoc = {
             "id": recordForEdit.id,
-            "foto_URL": newURL ? newURL : 'static/images/avatar/1.jpg',
+            "foto_URL": recordForEdit.url_foto,
             "nombres": newNombre,
             "apellidos": newApellidos,
             "tipo_persona": 1,
             "tipo_docente": newTipoDoc,
             "seccion": {
                 "id": recordForEdit.id_seccion,
-                "nombre": newEspecialidad,
             },
             "departamento": {
                 "id": recordForEdit.id_departamento,
-                "unidad": {
-                    "id": recordForEdit.id_departamento,
-                }
             },
             "correo_pucp": newCorreo,
             "telefono": newTelefono,
             "codigo_pucp": newCodigo,
             "numero_documento": newDocumento,
-            "tipo_documento": 0
+            "tipo_documento": 0,
+            "deuda_docente": recordForEdit.deuda_docente,
+            "cargaDocente": recordForEdit.cargaDocente,
+            "tipo_bono": recordForEdit.tipo_bono,
+            "fecha_ultimo_bono": recordForEdit.fecha_ultimo_bono,
           }
           console.log(editDoc);
           const rpta = await personaService.updatePersona(editDoc);
           console.log(rpta);
-          setOpenPopup(false)
+          if(rpta){
+            const rptaArr = [rpta];
+            //Hacemos la insercion
+            const newDoc = transformarDocentes(rptaArr);
+            if(newDoc[0].tipo_docente === tipo){
+              const newRecords = records;
+              newRecords[editIndex] =  newDoc[0];
+              setRecords(newRecords);
+              setEditIndex(); 
+            } else{
+              if(tipo !== -1){
+                const newRecords = records;
+                newRecords.splice(editIndex,1);
+                setRecords(newRecords);
+                setEditIndex(); 
+              }
+              else{ //Entonces es un listado de todos - nunca aparecerá
+                const newRecords = records;
+                newRecords[editIndex] =  newDoc[0];
+                setRecords(newRecords);
+                setEditIndex(); 
+              }
+            }
+            setOpenPopup(false)
+          }
         }
 //        if (validate())
 //            addOrEdit(values,resetForm)
@@ -182,16 +204,6 @@ export default function EditarDocente(props) {
                             error = {errorCodigo}
                             helperText = {errorCodigo && "Este campo es incorrecto"}
                         />
-                        <Controls.Input
-                            name="especialidad"
-                            label="Especialidad"
-                            defaultValue={recordForEdit.especialidad}
-                            onChange = {(e)=>{
-                                setEspecialidad(e.target.value)
-                            }}
-                            error = {errorEspecialidad}
-                            helperText = {errorEspecialidad && "Este campo está vacío"}
-                        />
                         <Controls.Select
                             name="tipo_doc"
                             label="Tipo Docente"
@@ -199,6 +211,8 @@ export default function EditarDocente(props) {
                             onChange = {(e)=>{
                                 setTipoDoc(e.target.value)
                             }}
+                            error = {errorTipoDoc}
+                            helperText = {errorTipoDoc && "Debe seleccionar un tipo de docente"}
                             options = {tipos_docente}
                         />
                 </Grid>
@@ -236,14 +250,14 @@ export default function EditarDocente(props) {
                             error = {errorDocumento}
                             helperText = {errorDocumento && "Este campo es incorrecto"}
                         />
-                        <Controls.Input
+                        {/* <Controls.Input
                             name="url_foto"
                             label="URL Foto"
                             defaultValue={recordForEdit.url_foto}
                             onChange = {(e)=>{
                                 setURL(e.target.value)
                             }}
-                        />
+                        /> */}
                 </Grid>
             </Grid>
             <Grid cointainer align="right" mt={5}>

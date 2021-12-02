@@ -19,6 +19,7 @@ import EliminarTodosLosCursos from './EliminarTodosLosCursos'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditarHorarioCurso from './EditarHorarioCurso'
 import { UserContext } from '../../../constants/UserContext';
+import LinearProgress from '@mui/material/LinearProgress';
 import cursoService from '../../../services/cursoService';
 import horarioService from '../../../services/horarioService';
 
@@ -161,7 +162,7 @@ const fillHorarios = async (ciclo) => {
 }
 
 const actualizarCursoCiclo = async (curso_ciclo)=> {
-  if(curso_ciclo.cantidad_horarios !== 0){
+  if(curso_ciclo.estado_curso !== 0){
     const horarios = await horarioService.listarPorCursoCiclo(curso_ciclo.curso.id, curso_ciclo.ciclo.id) 
     if(!horarios.length){
       const newCC = {
@@ -172,7 +173,22 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
         "curso": {
           "id": curso_ciclo.curso.id,
         },
-        "cantidad_horarios": 0, //Se actualiza al nuevo estado - con horarios
+        "estado_curso": 0, //Se actualiza al nuevo estado - con horarios
+        "cantidad_horarios": 0, //Como se eliminaron los horarios - se queda en cero
+        "estado_tracking": curso_ciclo.estado_tracking,
+      }
+      const request = await cursoService.updateCursoCiclo(newCC);
+    }else{
+      const newCC = {
+        "id": curso_ciclo.id,
+        "ciclo": {
+          "id": curso_ciclo.ciclo.id,
+        },
+        "curso": {
+          "id": curso_ciclo.curso.id,
+        },
+        "estado_curso": 1, //Se actualiza al nuevo estado - con horarios
+        "cantidad_horarios": curso_ciclo.cantidad_horarios -1, //Como se eliminaron los horarios - se queda en cero
         "estado_tracking": curso_ciclo.estado_tracking,
       }
       const request = await cursoService.updateCursoCiclo(newCC);
@@ -181,7 +197,7 @@ const actualizarCursoCiclo = async (curso_ciclo)=> {
   }
 }
 
-export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo}) {
+export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo, cicloActual}) {
   console.log(ciclo);
 
     //let hors = (window.localStorage.getItem('listHorario'))
@@ -201,7 +217,9 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     const history = useHistory()
     const SubtitulosTable={display:"flex"}
     const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-    color:"primary.light", elevation:0}
+    color:"primary.light", elevatio:0}
+    const [horariosCargados, setHorariosCargados] = useState(false)
+
     const {
         TblContainer,
         TblHead,
@@ -218,12 +236,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
     //Le pasamos los horarios
 
     React.useEffect(() => {
+      setHorariosCargados(false);
       //Obtenemos las secciones
       fillHorarios(ciclo)
       .then (newHorarios =>{
         //setRecordsX(newHorarios); //Se quiere actualizar todo
         setRecords(newHorarios);
         setCargaH(records);
+        setHorariosCargados(true);
       });
     }, [openPopupEdit, ciclo])
   
@@ -346,27 +366,31 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                 </Grid>
                 <Grid item xs={5}/>
                 {/* FIX:  left align */}
-                <Grid item xs={2} align="right">
-                    {/* FIX:  DT IconButton */}
-                    <Controls.Button 
-                        title="Agregar Nuevo Horario"
-                        variant="text+icon"
-                        text = "Agregar Nuevo Horario"
-                        onClick = {(event) => handleClick(event)}
-                    />
-                </Grid>
+                {cicloActual === ciclo ?
+                  <Grid item xs={2} align="right">
+                      {/* FIX:  DT IconButton */}
+                      <Controls.Button 
+                          title="Agregar Nuevo Horario"
+                          variant="text+icon"
+                          text = "Agregar Nuevo Horario"
+                          onClick = {(event) => handleClick(event)}
+                      />
+                  </Grid>
+                : <> </>}
             </Grid>
             <BoxTbl>
-                <TblContainer>
-                      <colgroup>
-                        <col style={{ width: '5%' }} />
-                        <col style={{ width: '30%' }} />
-                        <col style={{ width: '25%' }} />
-                        <col style={{ width: '5%' }} />
-                        <col style={{ width: '8%' }} />
-                        <col style={{ width: '15%' }} />
-                        <col style={{ width: '5%' }} />
-                        <col style={{ width: '7%' }} />
+                    {horariosCargados ? (
+                      <>
+                        <TblContainer>
+                        <colgroup>
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '30%' }} />
+                          <col style={{ width: '25%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '8%' }} />
+                          <col style={{ width: '15%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '7%' }} />
                       </colgroup>
                     <TblHead />
                     <TableBody>
@@ -386,33 +410,45 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                             <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
                             <TableCell align = "center">{item.sesiones.hora_sesion}</TableCell>
                             <TableCell>
-                              {/* Accion editar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {handleEdit(item)}}
-                              >
-                                <EditOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
-                              {/* Accion eliminar */}
-                              <Controls.ActionButton
-                                color="warning"
-                                onClick={ () => {guardarIndex(item)}}
-                              >
-                                <DeleteOutlinedIcon fontSize="small" />
-                              </Controls.ActionButton>
+                            {cicloActual === ciclo ?
+                              <>
+                                {/* Accion editar */}
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {handleEdit(item)}}
+                                >
+                                  <EditOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                                {/* Accion eliminar */}
+                                <Controls.ActionButton
+                                  color="warning"
+                                  onClick={ () => {guardarIndex(item)}}
+                                >
+                                  <DeleteOutlinedIcon fontSize="small" />
+                                </Controls.ActionButton>
+                              </>
+                              : <></>}
                             </TableCell>
                         </TableRow>
                         ))
-
-                    }
-                    </TableBody>
-                </TblContainer>
-                {records.length > 0 ? <> </> 
-                    :   (
-                            <Typography variant="body1" color="primary.light" align = "center"style={SubtitulosTable}>    
-                                No hay elementos en la tabla. 
-                            </Typography>  
-                            )
+                            }
+                            </TableBody>
+                        </TblContainer>
+                        <>
+                          {records.length > 0 ? <> </> 
+                              :   (
+                                      <Typography variant="body1" color="primary.light" align = "center"style={SubtitulosTable}>    
+                                          No hay elementos en la tabla. 
+                                      </Typography>  
+                                      )
+                          }
+                        </>
+                      </>
+                    ) : (
+                      <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                      </Box>
+                    ) 
                 }
                 <TblPagination />
             </BoxTbl>
@@ -426,7 +462,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
             <Popup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
-                title= {"Editar Horario"}
+                title= {`Editar Horario | Curso: ${recordForEdit ? recordForEdit.curso_ciclo.curso.nombre : ''}`}
                 size = "sm"
             >
               <EditarHorarioCurso

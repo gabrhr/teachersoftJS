@@ -96,7 +96,11 @@ export default function DocentesForm() {
             <Grid container spacing={2} maxWidth={1}>
                 <Grid item xs>
                     <Typography variant="body1"> Puedes&nbsp;
-                        <Link style={{ fontSize: '15px', color:"#41B9E4"}} href="#" underline = "hover" variant="button" onClick = {() => exportToCSV(vacio, 'plantilla')}>
+                        <Link style={{ fontSize: '15px', color:"#41B9E4"}} 
+                        href="#" 
+                        underline = "hover"
+                        variant="button"
+                        onClick = {() => window.open("https://docs.google.com/spreadsheets/d/1R1m-8gSLN6kdXdpvgTYpsYIhKyS3bqtN/edit?usp=sharing&ouid=111673383186909937899&rtpof=true&sd=true")}>
                         descargar la plantilla en Excel
                         </Link>
                         &nbsp;para subir los datos de los docentes.
