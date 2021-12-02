@@ -33,7 +33,7 @@ export default function GestionarDescargaSeccion() {
         }))
         //setRecords(tramites)
         const soli =  tramites.find(({procesoDescarga}) =>
-            procesoDescarga.id === procesoActivoNew[1].id
+            procesoDescarga.id === procesoActivoNew[0].id
         )
         setSolicitudActual(soli)
         await setProcesoActivo(procesoActivoNew)

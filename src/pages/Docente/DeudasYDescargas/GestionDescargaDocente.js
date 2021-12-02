@@ -121,7 +121,7 @@ export default function GestionDescargaDocente() {
             return sinplazo.setDate(sinplazo.getDate()+2) < now 
         })) 
         const desc =  tramites.find(({procesoDescarga}) =>
-            procesoDescarga.id === procesoActivoNew[1].id
+            procesoDescarga.id === procesoActivoNew[0].id
         )
         setDescargaActual(desc)
         await setProcesoActivo(procesoActivoNew)
