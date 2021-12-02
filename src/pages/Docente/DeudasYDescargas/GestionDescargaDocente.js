@@ -74,8 +74,12 @@ export default function GestionDescargaDocente() {
                 "departamento": {
                     "id": user.persona.departamento.id,
                 },
+                "seccion":{
+                    "id": user.persona.seccion.id,
+                },
                 "solicitador": {
                     "id": user.persona.id,
+                    "tipo_bono": values.tipo_bono
                 }
             }
             await tramiteDescargaService.updateTramiteDescarga(editTramite)
@@ -111,10 +115,11 @@ export default function GestionDescargaDocente() {
     const getTramitesDescargasDocente = async() => {
         procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         const tramites = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
-        setRecords(tramites)
-        //console.log("El proceso activo es ", procesoActivoNew)
-        //procesoDescarga.id === 10
-        console.log("tramitesss", tramites)
+        let now = new Date()    
+        setRecords(tramites.filter(x => {
+            const sinplazo= new Date(x.procesoDescarga.fecha_fin)
+            return sinplazo.setDate(sinplazo.getDate()+2) < now 
+        })) 
         const desc =  tramites.find(({procesoDescarga}) =>
             procesoDescarga.id === procesoActivoNew[0].id
         )

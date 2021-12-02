@@ -1,12 +1,12 @@
 import React from 'react'
-import { Grid, Stack, TextField, Typography } from '@mui/material'
+import { Stack, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { Controls } from '../../components/controls/Controls'
 import { DT } from '../../components/DreamTeam/DT'
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 
 function getColorIcon(resultado){
-    if(resultado==1)
+    if(resultado===1)
         return {color:"#43DB7F"} //Verde de aceptado
     return {color:"#DC395F"} //Verde de aceptado
 
@@ -26,7 +26,7 @@ function obtenerResultadoBox(resultado){
             <Stack direction="row" spacing={2} p={1} ml={2}>
                 <PanoramaFishEyeIcon sx={getColorIcon(resultado)}/>
                 <Typography variant="body2" style={{pt:"20px"}}>
-                    {resultado==1? "Aprobado":"Rechazado"}
+                    {resultado===1? "Aprobado":"Rechazado"}
                 </Typography> 
             </Stack>
         </Box> 
