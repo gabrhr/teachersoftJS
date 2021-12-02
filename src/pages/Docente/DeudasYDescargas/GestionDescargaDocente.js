@@ -115,11 +115,13 @@ export default function GestionDescargaDocente() {
     const getTramitesDescargasDocente = async() => {
         procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         const tramites = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
-        let now = new Date()     
-        setRecords(tramites.filter(x => new Date(x.procesoDescarga.fecha_fin) < now))
-        console.log("tramitesss", tramites)
+        let now = new Date()    
+        setRecords(tramites.filter(x => {
+            const sinplazo= new Date(x.procesoDescarga.fecha_fin)
+            return sinplazo.setDate(sinplazo.getDate()+2) < now 
+        })) 
         const desc =  tramites.find(({procesoDescarga}) =>
-            procesoDescarga.id === procesoActivoNew[0].id
+            procesoDescarga.id === procesoActivoNew[1].id
         )
         setDescargaActual(desc)
         await setProcesoActivo(procesoActivoNew)

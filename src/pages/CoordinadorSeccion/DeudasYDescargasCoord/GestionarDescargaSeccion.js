@@ -21,34 +21,19 @@ export default function GestionarDescargaSeccion() {
     const { user } = React.useContext(UserContext)
     const [procesoActivo, setProcesoActivo] = useState([])
     
-    const onDelete = (idTramite) => {
-        //Serviceeee
-        setConfirmDialog({
-          ...confirmDialog,
-          isOpen: false
-        })
-        
-        const nuevaTabla = records.filter(tramitePorEliminar => tramitePorEliminar.id !== idTramite)
-        setSolicitudActual(null)
-        setRecordForEdit(null)
-        setRecords(nuevaTabla)
-        tramiteSeccionDescargaService.deleteTramitesSeccionDescarga(idTramite);
-        //Solo se descomenta la línea de arriba
-        setNotify({
-            isOpen: true,
-            message: 'Borrado Exitoso',
-            type: 'success'
-        })
-    }
     
     const getTramitesDescargasSeccion = async () => {
         let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescargaxSeccion(user.persona.seccion.id);
-        let now = new Date()     
-        //setRecords(tramites.filter(x => new Date(x.procesoDescarga.fecha_fin) < now ))
+        console.log("activooooooo", procesoActivoNew)
+        let now = new Date() 
+        /* setRecords(tramites.filter(x => {
+            const sinplazo= new Date(x.procesoDescarga.fecha_fin)
+            return sinplazo.setDate(sinplazo.getDate()+2) < now 
+        })) */
         setRecords(tramites)
         const soli =  tramites.find(({procesoDescarga}) =>
-            procesoDescarga.id === procesoActivoNew[0].id
+            procesoDescarga.id === procesoActivoNew[1].id
         )
         setSolicitudActual(soli)
         await setProcesoActivo(procesoActivoNew)
@@ -70,8 +55,8 @@ export default function GestionarDescargaSeccion() {
                         <>
                             <DT.Title size="medium" text="Solicitud de Descarga Actual"/>
                             <ItemSolicitudActual
-                                solicitudActual={solicitudActual} setRecordForEdit={setRecordForEdit}
-                                onDelete={onDelete}  procesoActual={procesoActivo[0]} 
+                                solicitudActual={solicitudActual}
+                                 procesoActual={procesoActivo[0]} 
                                 setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
                             />
                         </>

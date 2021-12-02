@@ -19,7 +19,7 @@ import ModalAprobados from './ModalAprobados'
 moment.locale('es');
 
 export default function ItemProcesoActual(props) {
-    const { solicitudActual, setRecordForEdit, onDelete,procesoActual,
+    const { solicitudActual,procesoActual,
         setConfirmDialog,confirmDialog, addOrEdit } = props
     const [openAprobados, setOpenAprobados] = useState(false)
 

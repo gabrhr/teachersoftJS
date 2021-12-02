@@ -12,10 +12,13 @@ import moment from 'moment'
 import 'moment/locale/es'
 import { DT } from '../../../../components/DreamTeam/DT'
 import { useForm } from '../../../../components/useForm'
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 
 const initialFieldValues = {
     /* PROCESO */
-    seccionID: 0
+    seccionID: 0,
+    estadoID: 0
 }
 
 const tableHeaders = [
@@ -44,6 +47,13 @@ const tableHeaders = [
         sortable: false
     }
 ]
+function getEstadoSolicitud() {
+    return ([
+        { id: 0, title: 'Todos los estados', icon: <div style={{ mr: 2 }} /> },
+        { id: 1, title: 'Pendiente', icon: <AccessTimeOutlinedIcon sx={{ color: "#E9D630", mr: 2 }} /> },
+        { id: 2, title: 'Atendido', icon: <TaskAltOutlinedIcon sx={{ color: "#43DB7F", mr: 2 }} /> },
+    ])
+}
 
 function Item(props){
     const {item,setOpenDetalle, setRecordForView} = props
@@ -103,7 +113,7 @@ function Item(props){
                 </TableCell>
                 <TableCell sx={{maxWidth:"300px"}}>
                     <Controls.Button
-                        text="Detalle"
+                        text={item.resultado === 0 ?"Detalle":"Aprobar"}
                         onClick={()=>{setOpenDetalle(true);setRecordForView(item)}} 
                     />
                 </TableCell>
@@ -223,7 +233,23 @@ export default function ListaSolicitudes({seccion}){
   
           }
         })
-      }    
+      } 
+      const handleSearchEstados = e => {
+        let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
+        handleInputChange(e)
+        setFilterFn({
+          fn: items => {
+             if (target.value == 0 || items.length === 0)
+               /* no search text */
+               return items
+             else
+               return items.filter(x => x.resultado
+                   .includes(target.value))
+          }
+        })
+    }
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -244,12 +270,12 @@ export default function ListaSolicitudes({seccion}){
                         label="Buscar Solicitud por Nombre"
                         sx={{ width: 1 }}
                         InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
+                            startAdornment: (
+                                <InputAdornment position="start">
                                 <SearchIcon />
                             </InputAdornment>
                         ),
-                        }}
+                    }}
                         onChange={handleSearch}
                         type="search"
                     />
@@ -261,7 +287,8 @@ export default function ListaSolicitudes({seccion}){
                     /> 
                 </div>
             </div>
-            <div style={{ width: "360px", marginRight: "50px" }}>
+            <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                <div style={{ width: "360px", marginRight: "50px" }}>
                     <Controls.Select
                         name="seccionID"
                         label="Sección"
@@ -269,10 +296,21 @@ export default function ListaSolicitudes({seccion}){
                         onChange={handleSearchSeccion}
                         options={[{id: 0, nombre: "Todos las secciones"}]
                             .concat(secciones
-                             .sort((x1, x2) => x1.nombre - x2.nombre))}
+                            .sort((x1, x2) => x1.nombre - x2.nombre))}
                         MenuProps={MenuProps}
                     />
+                </div>
+                <div style={{ width: "260px", marginRight: "50px" }}>
+                    <Controls.Select
+                        name="estadoID"
+                        label="Estados"
+                        value={values.estadoID}
+                        onChange={handleSearchEstados}
+                        options={getEstadoSolicitud()}
+                    />
+                </div>
             </div>
+
             <Grid>
                 <Typography fontWeight="550" fontSize="20px" sx={{color:"primary.light", paddingTop: '1%'}}>
                     Solicitudes recibidas: {`${records.length}`}
