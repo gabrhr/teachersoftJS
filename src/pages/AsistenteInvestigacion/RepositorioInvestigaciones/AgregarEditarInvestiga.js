@@ -85,7 +85,7 @@ const initialFieldValues = {
   doi:  '',
   edicion:  '',
   editorial:  '',
-  especialidad_unesco:  '',
+  especialidad_UNESCO:  '',
   fecha_creacion:  '',
   fecha_modificacion:  '',
   filiacion:  '',
@@ -103,10 +103,10 @@ const initialFieldValues = {
   pagina_inicial:  '',
   pais:  'Perú',
   palabras_clave:  '',
-  responsabilidad:  '',
-  subtipo_publicacion:  '',
-  tipo_publicacion:  '',
-  tipo_referencia:  '',
+  responsabilidad:  0,
+  subtipo_publicacion:  0,
+  tipo_publicacion:  0,
+  tipo_referencia:  0,
   titulo:  '',
   url_repositorio:  '',
   validacion_preliminar:  0,
@@ -115,6 +115,7 @@ const initialFieldValues = {
   //autor
 
   idAutor:  '',
+  autorId: 0, 
   nombreAutor: '',
   codigo_pucp: '',
  
@@ -130,30 +131,13 @@ const getUsuario = async () => {
     const usuarios = [];
   
     usuario.map(usr => (
-      ape1 = '',
-      ape2 = '',
-      str = usr.persona.apellidos ? usr.persona.apellidos : -1,
-      std = str != -1 ? str.indexOf(' ') : -1,
-      stl = std >= 0 ? usr.persona.apellidos.split(" ") : -1,
-      stl != -1 ? (ape1 = stl[0], ape2 = stl[1]) : (ape1 = usr.persona.apellidos, ape2 = ''),
+    
+    
       usuarios.push({
-        idAutor: usr.id.toString(),
-        
         id: usr.id.toString(),
-        idPersona: usr.persona.id.toString(),
-        nombre: usr.persona.nombres,
-        apellidoPaterno: ape1,
-        apellidoMaterno: ape2,
-        nombreAutor:  usr.persona.nombres + ' ' + ape1 + ' ' + ape2,
-        documento: usr.persona.numero_documento,
-        correo: usr.persona.correo_pucp,
-        rolName: roles.find(r => r.id === usr.persona.tipo_persona).nombre,
-        rol: usr.persona.tipo_persona,
-        idDepartamento: usr.persona.departamento ? usr.persona.departamento.id : '',
-        nombreDepartamento: usr.persona.departamento ? usr.persona.departamento.nombre : '',
-        idSeccion: usr.persona.seccion ? usr.persona.seccion.id : '',
-        nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
-        foto_URL: usr.persona.foto_URL
+ 
+        nombre:  usr.persona.nombres + ' ' + usr.persona.apellidos,
+       
       })
     ));
     //console.log(usuarios)
@@ -168,7 +152,7 @@ export default function AgregarEditarInvestiga(props) {
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
-    const [departamento, setDepartamentos] = React.useState([]);
+    const [usuarios, setUsuarios] = React.useState([]);
     const [enableValidation, setEnableValidation] = React.useState(false);
 
     const ColumnGridItemStyle = {
@@ -218,29 +202,44 @@ export default function AgregarEditarInvestiga(props) {
         let fechaCreacion= "";
         //Definicio de validaciones
         if (validate()){
-            //console.log("Esto es sección");
-            /*if(values.id) {
-              const secc= await InvestigaService.getInvestiga(values.id);
-              fechaCreacion = secc.fecha_creacion;
-            }
-            */
-            //console.log(fechaCreacion);
-          //Este pasa como la nueva seccion o la seccion editada
+
           const newTrabjo = {
-            id: values.id,
-            codigo_publicacion: values.codigo_publicacion,
-            titulo:values.titulo,
-            anho_publicacion: values.anho_publicacion,
-            doi: values.doi,
             autor: {
-              id: recordForEdit ? parseInt(values.idDepartamento) : parseInt(values.departmentId) ,
-              nombre: recordForEdit ? parseInt(values.idDepartamento) : null,
+                id: recordForEdit ? parseInt(values.idAutor) : parseInt(values.autorId),
             },
-            fecha_creacion:fechaCreacion,
-            //foto: fotoPerfil,
-            fecha_modificacion: null,
-            fecha_fundacion: null
-            //~~~foto: --queda pendiente
+            codigo_publicacion: values.codigo_publicacion,
+            tipo_publicacion: values.tipo_publicacion,
+            tipo_referencia: values.tipo_referencia,
+            indicador_calidad: values.indicador_calidad,
+            subtipo_publicacion: values.subtipo_publicacion,
+            anho_publicacion: values.anho_publicacion,
+            responsabilidad: values.responsabilidad,
+            titulo: values.titulo,
+            divulgacion: values.divulgacion,
+            editorial: values.editorial,
+            idioma: values.idioma,
+            edicion: values.edicion,
+            ciudad: values.ciudad,
+            pais: values.pais,
+            medio_publicacion: values.medio_publicacion,
+            palabras_clave: null, //values.palabras_clave,
+            url_repositorio: values.url_repositorio,
+            filiacion: values.filiacion,
+            especialidad_UNESCO: values.especialidad_UNESCO,
+            volumen: values.volumen,
+            nro_revista: values.nro_revista,
+            pagina_inicial: values.pagina_inicial,
+            pagina_final: values.pagina_final,
+            motor_busqueda: values.motor_busqueda,
+            identificador_produccion: values.motor_busqueda,
+            observaciones_para_departamento: values.observaciones_para_departamento,
+            observaciones_de_departamento: values.observaciones_de_departamento,
+            validacion_preliminar: values.validacion_preliminar,
+            codigo_validacion: values.codigo_validacion,
+            issn: values.issn,
+            doi: values.url_repositorio,
+            isbn: values.isbn
+
           }
           console.log(newTrabjo);
           //const rpta = await SeccionService.registerSeccion(newSecc);
@@ -250,21 +249,7 @@ export default function AgregarEditarInvestiga(props) {
         }
     }
 
-    const FillDepartamentos = async () =>{
-      const dataDep = await DepartamentoService.getDepartamentos();
-      const departamentos = []
-
-      //if(dataDep) setDepartamentos(dataDep);
-      dataDep.map(dep => (
-        departamentos.push({
-          id: dep.id.toString(),
-          nombre: dep.nombre,
-        })
-      ));
-
-      //console.log(departamentos);
-      return departamentos;
-    }
+ 
 
 
 
@@ -275,9 +260,9 @@ export default function AgregarEditarInvestiga(props) {
     
 
     useEffect(() => {
-      FillDepartamentos()
-      .then (newDep =>{
-        setDepartamentos(prevDep => prevDep.concat(newDep));
+       getUsuario()
+      .then (newUsr =>{
+        setUsuarios(prevUsr => prevUsr.concat(newUsr));
       });
       if (recordForEdit != null) {
           /* object is not empty - esto que hace?*/
@@ -308,6 +293,17 @@ export default function AgregarEditarInvestiga(props) {
                     <Typography variant="h4" style={SubtitulosTable}>
                            Información General de la Publicación:
                     </Typography>
+                    <Controls.Select
+                        name={recordForEdit ? "idAutor" : "autorId"}
+                        label="Autor"
+                        value={recordForEdit ? values.idAutor : values.autorId}
+                        onChange={handleInputChange}
+                        options={usuarios}
+                        options={[{ id: 0, nombre: "Seleccionar" }]
+                        .concat(usuarios)
+                        }
+                        error={recordForEdit ? errors.idAutor : errors.autorId}
+                    />
                     <Controls.Input
                         name="titulo"
                         label="Titulo"
@@ -432,11 +428,11 @@ export default function AgregarEditarInvestiga(props) {
                                 error={errors.motor_busqueda}
                             />
                             <Controls.Input
-                                name="especialidad_unesco"
+                                name="especialidad_UNESCO"
                                 label="Especialidad Unesco"
-                                value={values.especialidad_unesco}
+                                value={values.especialidad_UNESCO}
                                 onChange = {handleInputChange}
-                                error={errors.especialidad_unesco}
+                                error={errors.especialidad_UNESCO}
                             />
                             <Controls.Input
                                 name="editorial"
@@ -532,10 +528,8 @@ export default function AgregarEditarInvestiga(props) {
                                 name="identificador_produccion"
                                 label="Identificador de Producción"
                                 value={values.identificador_produccion}
-                                onChange = {() => {
-                                    handleInputChange();
-                                    setEnableValidation(true);
-                                }}
+                                onChange={handleInputChange}
+                                /*setEnableValidation(true);*/
                                 error={errors.identificador_produccion}
                             />     
                            <Controls.Select
@@ -549,8 +543,29 @@ export default function AgregarEditarInvestiga(props) {
                             />
                         </Grid>
 
-                    </Grid>       
-
+                    </Grid>      
+                    <Divider      />   
+                    <Typography variant="h4" style={SubtitulosTable}>
+                        Observaciones:
+                    </Typography> 
+                    <Controls.Input
+                            name="observaciones_para_departamento"
+                            label="Observaciones para el Departamento"
+                            multiline
+                            rows={2}
+                            value={values.observaciones_para_departamento}
+                            onChange = {handleInputChange}
+                            error={errors.observaciones_para_departamento}
+                    />
+                    <Controls.Input
+                            name="observaciones_de_departamento"
+                            label="Observaciones del Departamento"
+                            multiline
+                            rows={2}
+                            value={values.observaciones_de_departamento}
+                            onChange = {handleInputChange}
+                            error={errors.observaciones_de_departamento}
+                    />
             </Grid>
             <Grid cointainer align="right" mt={5}>
                 <div>

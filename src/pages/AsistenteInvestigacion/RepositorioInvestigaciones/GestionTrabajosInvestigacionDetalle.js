@@ -20,7 +20,7 @@ const initialFieldValues = {
     doi:  '',
     edicion:  '',
     editorial:  '',
-    especialidad_unesco:  '',
+    especialidad_UNESCO:  '',
     fecha_creacion:  '',
     fecha_modificacion:  '',
     filiacion:  '',
@@ -152,7 +152,7 @@ export default function GestionTrabajosInvestigacionDetalle(props){
                     <StyleDictionary title="Páginas:" text={"p. " + values.pagina_inicial + "-" + values.pagina_final + " ( " + 
                                                             (Math.abs(values.pagina_final - values.pagina_inicial)) + " páginas )"}/>
                     <StyleDictionary title="Base de datos:" text={values.motor_busqueda}/>
-                    <StyleDictionary title="Especialidad Unesco:" text={values.especialidad_unesco}/>
+                    <StyleDictionary title="Especialidad Unesco:" text={values.especialidad_UNESCO}/>
                 </div>
                 <br />
                 <div style={stylish}>
