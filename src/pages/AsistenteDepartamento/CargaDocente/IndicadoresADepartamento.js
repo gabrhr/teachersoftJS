@@ -51,14 +51,14 @@ const fillProfesorTPA = async (id_ciclo, id_seccion) => {
     return profesorTPA;
 }
 
-const deudaProfesores = async () => {
-    let profesorDeuda = await IndicadoresService.getDataProfesoresDeuda();
+const deudaProfesores = async (id_seccion) => {
+    let profesorDeuda = await IndicadoresService.getDataProfesoresDeuda(id_seccion);
     
     return profesorDeuda;
 }
 
-const sobrecargaProfesores = async () => {
-    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecarga();
+const sobrecargaProfesores = async (id_seccion) => {
+    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecarga(id_seccion);
     
     return profesorSobrecarga;
 }
@@ -168,26 +168,26 @@ export default function IndicadoresADepartamento() {
     const [profesorDeudaTPA, setProfesorDeudaTPA] = useState([]);
 
     useEffect(() => {
-        deudaProfesores()
+        deudaProfesores(seccion)
         .then(newProfDeuda => {
             setProfesorDeudaTC(newProfDeuda.TC);
             setProfesorDeudaTPC(newProfDeuda.TPC);
             setProfesorDeudaTPA(newProfDeuda.TPA);
         });
-    }, [])
+    }, [values])
 
     const [profesorSobrecargaTC, setProfesorSobrecargaTC] = useState([]);
     const [profesorSobrecargaTPC, setProfesorSobrecargaTPC] = useState([]);
     const [profesorSobrecargaTPA, setProfesorSobrecargaTPA] = useState([]);
 
     useEffect(() => {
-        sobrecargaProfesores()
+        sobrecargaProfesores(seccion)
         .then(newProfSobrecarga => {
             setProfesorSobrecargaTC(newProfSobrecarga.TC);
             setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
             setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
         });
-    }, [])
+    }, [values])
 
     const [autoresInd, setAutoresInd] = useState([]);
 
