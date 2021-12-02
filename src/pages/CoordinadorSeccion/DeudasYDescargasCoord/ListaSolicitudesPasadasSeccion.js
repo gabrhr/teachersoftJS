@@ -49,6 +49,8 @@ function Item(props){
             return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
+    console.log("item",item)
+    
     return (
         <>
             <TableRow>
@@ -74,13 +76,6 @@ function Item(props){
                         {item.seccion.nombre}
                     </Typography>
                     <div/>
-                    {/* <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Autor: {'\u00A0'} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.solicitador.nombres+ " " + item.solicitador.apellidos}
-                    </Typography>
-                    <div/> */}
                 </TableCell>
                 <TableCell>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -115,9 +110,17 @@ function Item(props){
                     </Typography>
                 </TableCell>
                 <TableCell  align="center"> 
-                    <Controls.Button
-                        text="Detalle"
-                    />
+                    <Link to ={{
+                        pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
+                        state:{
+                            recordForEdit: item,
+                            procesoActual: item.procesoDescarga.id
+                        }
+                    }}  style={{ textDecoration: 'none' }}>
+                        <Controls.Button
+                            text="Detalle"
+                        />
+                    </Link>
                     <Controls.Button
                         text="Aprobados"
                         onClick={()=>{setOpenAprobados(true)}} 
@@ -130,7 +133,8 @@ function Item(props){
 }
 
 export default function ListaProcesosPasadosSeccion(props) {
-    const { records } = props
+    const { records, procesoActual } = props
+    console.log("ifunciontem",procesoActual)
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
     const [openAprobados, setOpenAprobados] = useState(false)
@@ -191,7 +195,7 @@ export default function ListaProcesosPasadosSeccion(props) {
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                             <Item key={index} item={item} getRow= {getRow}
-                                setOpenAprobados={setOpenAprobados}
+                                setOpenAprobados={setOpenAprobados} 
                             />
                         ))
                     }

@@ -114,7 +114,7 @@ export default function ItemProcesoActual(props) {
                 </TableCell>
                 <TableCell sx={{borderBottom: "none"}}> 
                     <Link to ={{
-                        pathname:"/cord/solicitudes/deudasYDescargas/nuevaSolicitud",
+                        pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
                         state:{
                             recordForEdit: solicitudActual,
                             procesoActual: procesoActual.id

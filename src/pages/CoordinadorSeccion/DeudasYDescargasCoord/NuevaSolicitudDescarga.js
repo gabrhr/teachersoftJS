@@ -220,7 +220,7 @@ export default function NuevoProcesoForm() {
                 <Box ml="75px">
                     <Controls.DreamTitle
                         title={'Justificación: '}
-                        size='20px'
+                        size='18px'
                         lineheight='300%'
                         />
                 </Box>
@@ -229,7 +229,9 @@ export default function NuevoProcesoForm() {
                     fullWidth
                     multiline
                     rows={6}
-                    defaultValue={justificacion}
+                    value={recordForEdit? recordForEdit.observacion: ""}
+                    defaultValue={recordForEdit? recordForEdit.observacion:justificacion}
+                    disabled = {recordForEdit? true: false}
                     onChange={(e) => {setJustificacion(e.target.value)}}
                     sx={{
                         pl: "78px",
@@ -243,7 +245,10 @@ export default function NuevoProcesoForm() {
                 />
                 {/* Buscador y #solicitados */}
                 <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
-                   <b> Lista de Solicitudes de Descarga de los Docentes </b>
+                   <b> {recordForEdit? "Lista de Descargas de Docentes Solicitadas":
+                            "Lista de Solicitudes de Descarga de los Docentes"
+                        }
+                   </b>
                 </Typography>
                 <Grid container ml="75px">
                     <Grid item >
@@ -268,7 +273,7 @@ export default function NuevoProcesoForm() {
                     <Grid item xs/>
                     <Grid item  align = "right" mr= {10} marginTop={5} >
                         <Typography variant="h4" sx={{color:"primary.light"}}>
-                            Solicitados: <b> {solicitados}</b>
+                            Solicitados: <b> {recordForEdit? recordForEdit.cantidad_solicitada : solicitados}</b>
                         </Typography>
                     </Grid>
                 </Grid>
@@ -284,11 +289,16 @@ export default function NuevoProcesoForm() {
                                         
                                         {
                                             recordsAfterPagingAndSorting().map((item,index) => (
-                                                <TableRow>
+                                                <TableRow
+                                                 sx={item.tramiteSeccionDescarga?.id? {backgroundColor: '#ADFDCC'}: {backgroundColor: '#fff'}}
+                                                >
                                                 <TableCell sx = {{width: '70px'}}>
-                                                    <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
-                                                        <EditOutlinedIcon fontSize="small" />
-                                                    </Controls.RowCheckBox>
+                                                { !recordForEdit &&
+                                                        <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
+                                                            <EditOutlinedIcon fontSize="small" />
+                                                        </Controls.RowCheckBox>
+
+}
                                                 </TableCell>
                                                 <TableCell sx = {{width: '70px'}}> 
                                                     <Avatar alt="profile pic" src={item.solicitador.foto_URL} />

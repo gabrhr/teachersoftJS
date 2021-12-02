@@ -13,6 +13,7 @@ import tramiteDescargaService from '../../../services/tramiteDescargaService'
 import procesoDescargaService from '../../../services/procesoDescargaService'
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService'
 import ItemSinProcesoDocente from '../../Docente/DeudasYDescargas/ItemSinProcesoDocente';
+import ItemSinProcesoSeccion from './ItemSinProcesoSeccion';
 
 export default function GestionarDescargaSeccion() {
     /* contiene los ProcesosDesgarga(Horaria) */
@@ -50,7 +51,7 @@ export default function GestionarDescargaSeccion() {
         const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescargaxSeccion(user.persona.seccion.id);
         setRecords(tramites)
         const soli =  tramites.find(({procesoDescarga}) =>
-        procesoDescarga.id === procesoActivoNew[0].id
+            procesoDescarga.id === procesoActivoNew[0].id
         )
         setSolicitudActual(soli)
         await setProcesoActivo(procesoActivoNew)
@@ -65,19 +66,23 @@ export default function GestionarDescargaSeccion() {
         <>
             {/* Proceso actual*/}
             { procesoActivo?.length===0?
-                <ItemSinProcesoDocente/>:            
-                solicitudActual? 
-                    <>
-                        <DT.Title size="medium" text="Solicitud de Descarga Actual"/>
-                        <ItemSolicitudActual
-                            solicitudActual={solicitudActual} setRecordForEdit={setRecordForEdit}
-                            onDelete={onDelete}  procesoActual={procesoActivo[0]} 
-                            setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
-                        />
-                    </>
-                   :<ItemSolicitudActualVacio
-                        proceso = {procesoActivo[0]}
-                   />
+                <ItemSinProcesoDocente/>: (
+                    new Date(procesoActivo[0].fecha_fin_docente) > new Date()?
+                        <ItemSinProcesoSeccion proceso = {procesoActivo[0]}/>:
+                    solicitudActual? 
+                        <>
+                            <DT.Title size="medium" text="Solicitud de Descarga Actual"/>
+                            <ItemSolicitudActual
+                                solicitudActual={solicitudActual} setRecordForEdit={setRecordForEdit}
+                                onDelete={onDelete}  procesoActual={procesoActivo[0]} 
+                                setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
+                            />
+                        </>
+                       :<ItemSolicitudActualVacio
+                            proceso = {procesoActivo[0]}
+                       />
+                )
+                           
             }
 
             {/* Procesos Pasados */}

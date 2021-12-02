@@ -5,9 +5,17 @@ import { Controls } from '../../../../components/controls/Controls'
 import Popup from '../../../../components/util/Popup'
 import ModalDetalleSolicitudDescarga from './ModalDetalleSolicitudDescarga'
 import Notification from '../../../../components/util/Notification'
+import SearchIcon from '@mui/icons-material/Search';
 import tramiteSeccionDescargaService from '../../../../services/tramiteSeccionDescargaService'
 import moment from 'moment'
 import 'moment/locale/es'
+import { DT } from '../../../../components/DreamTeam/DT'
+import { useForm } from '../../../../components/useForm'
+
+const initialFieldValues = {
+    /* PROCESO */
+    seccionID: 0
+}
 
 const tableHeaders = [
     {
@@ -49,9 +57,13 @@ function Item(props){
                         {moment.utc(item.fecha_creacion).format('DD MMM YYYY [-] h:mm a')}
                     </Typography>
                     <div/>
-                    {/*<Typography fontWeight='bold' fontSize={18}>
-                        {"ASUNTO? xd"}
-                    </Typography>*/}
+                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                        Proceso: {'\u00A0'} 
+                    </Typography>
+                    <Typography display="inline" fontWeight='bold' fontSize={16}>
+                        {item.procesoDescarga.nombre}
+                    </Typography>
+                    <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Seccion: {'\u00A0'} 
                     </Typography>
@@ -65,32 +77,15 @@ function Item(props){
                     <Typography display="inline" sx={{color:"primary.light"}}>
                         {item.solicitador.apellidos + ", " + item.solicitador.nombres} 
                     </Typography>
-                    <div/>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Estado: {'\u00A0'} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {item.resultado === 0 ? "Pendiente": 
-                         item.resultado === 1 ? "Aprobado":
-                         "Rechazado"} 
-                    </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Nombre del proceso: {'\u00A0'} 
-                    </Typography>
-                    <Typography fontWeight='bold' fontSize={16}>
-                        {item.procesoDescarga.nombre}
-                    </Typography>
+                    <DT.Etiqueta
+                        type={item.resultado === 0 ? "pendiente" :
+                        "atendido"}
+                        sx={{ marginBottom:"4px"}}
+                    />
                 </TableCell>
                 <TableCell>
-                    {/*<Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        Solicitudes recibidas: {'\u00A0'} 
-                    </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {"wadafá"} 
-                    </Typography>*/}
-                    <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes enviadas: {'\u00A0'} 
                     </Typography>
@@ -119,25 +114,7 @@ function Item(props){
 
 export default function ListaSolicitudes({seccion}){
     const [recordForView, setRecordForView] = useState(null)
-    const [records, setRecords] = useState([
-        /*{
-            fecha_enviado: '1/1/1',
-            asunto: 'AYUDA',
-            seccion: {
-                nombre: 'Ingeniería Informática'
-            },
-            solicitador: {
-                fullName: 'Yo'
-            },
-            estado: 'No atendido',
-            proceso: {
-                nombre: 'Proceso 1'
-            },
-            solicitudes_recibidas: 10,
-            solicitudes_enviadas: 8,
-            solicitudes_aprobadas: 1
-        }*/
-    ])
+    const [records, setRecords] = useState([])
 
     const [openDetalle, setOpenDetalle] = useState(false)
     const [recordForEdit, setRecordForEdit] = useState(null)
@@ -146,6 +123,15 @@ export default function ListaSolicitudes({seccion}){
     const [updateData, setUpdateData] = useState(false);
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues);
 
     const {
         TblContainer,
@@ -183,9 +169,95 @@ export default function ListaSolicitudes({seccion}){
         getTramitesSeccionActivos()
     }, [recordForEdit, createData, openDetalle])
 
+    const handleSearch = e => {
+        let target = e.target;
+        /* React "state object" (useState()) doens't allow functions, only
+          * objects.  Thus the function needs to be inside an object. */
+        setFilterFn({
+           fn: items => {
+             if (target.value == "" || items.length === 0)
+               /* no search text */
+               return items
+             else
+               return items.filter(x => x.procesoDescarga.nombre.toLowerCase()
+                   .includes(target.value.toLowerCase()))
+           }
+        })
+    }
+    const [valueFecha, setValueFecha] = React.useState([null, null]);
+
+    React.useEffect(() => {
+        const fechaIni = moment(valueFecha[0]).format('DD/MM/YYYY')
+        const fechaFin = moment(valueFecha[1]).format('DD/MM/YYYY')
+        setFilterFn({
+          fn: items => {
+            if (valueFecha[0]== null && valueFecha[1] == null)
+              return items
+            if (valueFecha[1]==null)
+              return items.filter(x => 
+                fechaIni <= moment(x.fecha_creacion).format('DD/MM/YYYY')
+              )
+            else{
+              return items.filter((x) => fechaIni <= moment(x.fecha_creacion).format('DD/MM/YYYY') &&
+                  moment(x.fecha_creacion).format('DD/MM/YYYY') <= fechaFin
+              )
+            }
+          }
+        })
+    }, [valueFecha])
+
+    const handleSearchTemas = e =>{
+        let target = e.target;
+          /* React "state object" (useState()) doens't allow functions, only
+            * objects.  Thus the function needs to be inside an object. */
+        handleInputChange(e)
+        setFilterFn({
+          fn: items => {
+             if (target.value == 0 || items.length === 0)
+               return items
+             else
+               return items.filter(x => x.solicitador.seccion.id == target.value)
+  
+          }
+        })
+      }    
 
     return(
         <>
+        <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}>
+                <div style={{ width: "650px", marginRight: "50px" }}>
+                    <Controls.Input
+                        label="Buscar Solicitud por Nombre"
+                        sx={{ width: 1 }}
+                        InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                        }}
+                        onChange={handleSearch}
+                        type="search"
+                    />
+                </div>
+                <div style={{ width: "360px", marginRight: "50px" }}>
+                    <Controls.RangeTimePicker 
+                        value = {valueFecha}
+                        setValue= {setValueFecha}
+                    /> 
+                </div>
+            </div>
+            <div style={{ width: "360px", marginRight: "50px" }}>
+                    <Controls.Select
+                        name="seccionID"
+                        label="Sección"
+                        value={values.seccionID}
+                        onChange={handleSearchTemas}
+                        options={[{id: 0, nombre: "Todos las secciones"}]}
+                            // .concat(comboData.temaTramite
+                            // .sort((x1, x2) => x1.nombre - x2.nombre))}
+                    />
+            </div>
             <Grid>
                 <Typography fontWeight="550" fontSize="20px" sx={{color:"primary.light", paddingTop: '1%'}}>
                     Solicitudes recibidas: {`${records.length}`}
@@ -209,7 +281,7 @@ export default function ListaSolicitudes({seccion}){
             <Popup
                 openPopup={openDetalle}
                 setOpenPopup={setOpenDetalle}
-                title= {`Solicitud de descarga - Sección ${seccion}`}
+                title= {`Solicitud de descarga - Sección ${recordForView?.solicitador?.seccion.nombre}`}
                 size="md"
             >
                <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} recordForView = {recordForView}/>
