@@ -129,7 +129,7 @@ function Item(props){
     const {item,getRow, setRecordForEdit, setConfirmDialog, onDelete, setOpenPopupDetalle} = props
     function formatoFecha(fecha){
         if(fecha!=null){
-            return (moment.utc(fecha).format('DD MMM YYYY [-] h:mm a'))
+            return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
     return (
@@ -155,13 +155,13 @@ function Item(props){
                     </Typography>
                 </TableCell>
                 <TableCell >
-                    <Typography >
-                        Resultado de Solicitud:{'\u00A0'}
+                    <Typography fontWeight="550" sx={{color:"primary.light"}}>
+                        Resultado de la solicitud:{'\u00A0'}
                     </Typography>
                     <DT.Etiqueta
-                        type={item.resultado === 0 ? "pendienteDesc" :
-                        item.resultado === 1 ? "aprobadoDesc" :
-                        "desaprobadoDesc"}
+                        type={item.resultado === 0 ? "pendiente" :
+                        item.resultado === 1 ? "aprobado" :
+                        "desaprobado"}
                         sx={{ marginBottom:"4px"}}
                     />
                 </TableCell>

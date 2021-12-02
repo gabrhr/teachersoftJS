@@ -13,11 +13,15 @@ import { TableBody } from '@mui/material';
 import { TableRow, TableCell } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import Popup from '../../../components/util/Popup'
-import SolicitudDescargaForm from '../../Docente/DeudasYDescargas/SolicitudDescargaForm';
+import SolicitudDescargaForm from './SolicitudDescargaForm';
 import SaveIcon from '@mui/icons-material/Save';
 import ModalGuardarSolicitudActual from './ModalGuardarSolicitudActual'
 import {useHistory} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { UserContext } from '../../../constants/UserContext';
+import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
+import procesoDescargaService from '../../../services/procesoDescargaService';
 
 const tableHeaders = [
     
@@ -49,13 +53,28 @@ export default function NuevoProcesoForm() {
 
     const [openSolicitudDescarga, setOpenSolicitudDescarga] = useState(false)
     const [openGuardarPopup, setOpenGuardarPopup] = useState(false)
-    
+    const { user } = React.useContext(UserContext)
+    const [recordForView, setRecordForView] = useState(null)
+    const [justificacion, setJustificacion] = useState("")
+
     const [records, setRecords] = useState([
         {
-            nombre: 'Perez',
-            correo: '@perez.com',
-            justificacion: 'Por favor',
-            seleccionado: false
+            "nombres": 'José',
+            "apellidos": 'Pérez',
+            "solicitador": {
+                "apellidos": 'Becerra Menacho',
+                "nombres": "Marcelo Martín",
+                "correo_pucp": "marcelo.becerra@pucp.edu.pe",
+                "seccion": {
+                    "nombre": "Ingeniería Informática"
+                }
+            },
+            "correo": '@perez.com',
+            "justificacion": 'Por favor',
+            "seleccionado": false,
+            "fecha_creacion": "2021-11-29T23:07:23.000+00:00",
+            "tipo_bono": 1,
+            "observacion": "Por favor funciona"
         }
     ])
 
@@ -71,10 +90,76 @@ export default function NuevoProcesoForm() {
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
-    function getRow ({...props}){
-        //setOpenDetalle(true)
-        setRow(props)
+    const guardarSolicitud = async() =>{
+        let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        console.log("El id del proceso activo es ", procesoActivoNew[0].id)
+        const newTramiteSeccion = {
+            "fecha_creacion": "2021-11-29T23:07:23.000+00:00",
+            "fecha_modificacion": "2021-11-29T23:07:23.000+00:00",
+            "fecha_recepcion": null,
+            "fecha_atencion": null,
+            "asunto": null,
+            "descripcion": null,
+            "observacion": justificacion,
+            "estado_tracking": 0,
+            "resultado": 0,
+            "seccion": null,
+            "ciclo": {
+                "id": window.localStorage.getItem("ciclo"),
+            },
+            "solicitador": {
+                "id": user.persona.id,
+            },
+            "procesoDescarga": {
+                "id": procesoActivoNew[0].id,
+            },
+            "cantidad_solicitada": solicitados,
+            "persona_departamento": null,
+            "departamento": null,
+        }
+        //console.log("El nuevo tramite seccion", newTramiteSeccion)
+        let resultado = 
+            await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
+        //console.log("El id del tramite seccion es", resultado.id)
+        for(let i = 0; i < records.length; i++){
+            if(records[i].seleccionado){
+                records[i].tramiteSeccionDescarga = {
+                    "id": resultado.id,
+                }
+                records[i].persona_seccion = {
+                    "id": user.persona.id,
+                }
+                /*Se agregan los datos del tramite de seccion*/
+            }else{
+                records[i].resultado = 2
+                /*Se rechaza la solicitud del docente*/
+            }
+            await tramiteDescargaService.updateTramiteDescarga(records[i])
+        }
+        console.log("Las filas modificadas", records)
     }
+
+    const agregarCampo = (request) =>{
+        for(let i = 0; i < request.length; i++){
+            request[i]["seleccionado"] = false
+        }
+        /*for(let i = 0; i < request.length; i++){
+            delete request[i].seleccionado
+        }Mausequerramienta misteriosa*/
+        return request
+    }
+
+    const getTramitesDescargasSeccion = async() =>{
+        let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActivoNew[0].id, user.persona.seccion.id);
+        console.log(request)
+        const requestTransformado = agregarCampo(request)
+        setRecords(requestTransformado)
+    }
+
+    React.useEffect(() => {
+        getTramitesDescargasSeccion()
+    }, [openSolicitudDescarga, openSolicitudDescarga])
 
     const handleSearch = e => {
         let target = e.target;
@@ -85,14 +170,15 @@ export default function NuevoProcesoForm() {
             if (target.value == "")
               /* no search text */
               return items
-            else
-              return items.filter(x => x.nombre.toLowerCase()
+            else{
+              return items.filter(x => x.solicitador.nombres.toLowerCase()
                   .includes(target.value.toLowerCase()))
+            }
           }
         })
     }
 
-    const codigo = '1342221'
+    const codigo = '20180000'
 
     const addDocente = (docente) => {
         docente.seleccionado = !docente.seleccionado
@@ -117,7 +203,7 @@ export default function NuevoProcesoForm() {
             />
             <Divider/>
             <Typography fontWeight="550"  sx={{color:"primary.light"}}>
-                Código: {`${codigo}`}
+                Código: {user.persona.codigo_pucp ? user.persona.codigo_pucp : `${codigo}`}
             </Typography>
             <Divider/>
             <Grid container spacing={{ xs: "10px" }} >
@@ -131,7 +217,7 @@ export default function NuevoProcesoForm() {
                     </Typography>
                     <Typography variant="h4"   display="inline">
                         {/* Nombre del docente solicitador */}
-                        Docente PUCP (correo)
+                        {user.persona.nombres + " " + user.persona.apellidos + " (" + user.persona.correo_pucp + ")"}
                     </Typography>
                     <div/>
                     <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -139,7 +225,7 @@ export default function NuevoProcesoForm() {
                     </Typography>
                     <Typography variant="body1"  display="inline">
                         {/* Seccion que pertenece */}
-                        Seccion
+                        {"Jefe de Departamento de " + user.persona.seccion.nombre}
                     </Typography>
                 </Grid>
             </Grid>
@@ -155,7 +241,8 @@ export default function NuevoProcesoForm() {
                 fullWidth
                 multiline
                 rows={6}
-                defaultValue={""}
+                defaultValue={justificacion}
+                onChange={(e) => {setJustificacion(e.target.value)}}
                 sx={{
                     pl: "78px",
                     mb: "20px",
@@ -213,12 +300,12 @@ export default function NuevoProcesoForm() {
                                 </Controls.RowCheckBox>
                             </TableCell>
                             <TableCell sx = {{width: '1200px'}}>
-                                {item.nombre}
+                                {item.solicitador.nombres + " " + item.solicitador.apellidos}
                             </TableCell>
                             <TableCell> 
                                 <Controls.Button
                                     text="Detalle"
-                                    onClick = {()=>{setOpenSolicitudDescarga(true)}}
+                                    onClick = {()=>{setOpenSolicitudDescarga(true);console.log(item);setRecordForView(item);}}
                                 />
                             </TableCell>
                         </TableRow>
@@ -241,17 +328,17 @@ export default function NuevoProcesoForm() {
             <Popup
                 openPopup={openSolicitudDescarga}
                 setOpenPopup={setOpenSolicitudDescarga}
-                title="Búsqueda de docentes para prácticas"
+                title="Detalle Solicitud"
             >
-                <SolicitudDescargaForm />
+                <SolicitudDescargaForm recordForView = {recordForView}/>
             </Popup>
-            <Popup
+            <Popup  
                 openPopup={openGuardarPopup}
                 setOpenPopup={setOpenGuardarPopup}
                 title="Guardar"
                 size = "sm"
             >
-               <ModalGuardarSolicitudActual setOpenGuardarPopup = {setOpenGuardarPopup} /*guardarSolicitud = {guardarSolicitud}*//>
+               <ModalGuardarSolicitudActual setOpenGuardarPopup = {setOpenGuardarPopup} guardarSolicitudActual = {guardarSolicitud}/>
             </Popup>
         </Form>
     )

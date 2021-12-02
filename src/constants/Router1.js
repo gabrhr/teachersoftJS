@@ -96,10 +96,10 @@ const privateroutes = [
   { requireRoles: [8], path: "/aea", page: CargaArchivos },
   
   /* AS */
-  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/registroHorarios", page: AsistenteSeccion },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga", page: CargaDocente },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/deudaYDescarga", page: DeudaYDescarga },
-  { requireRoles: [2, 8], path: "/as/asignacionCarga/cursos", page: GestionCargaCursos },
+  { requireRoles: [2, 8], path: "/as/asignacionCarga/agregarHorario", page: GestionCargaCursos },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/preferencia", page: SolPreferenciaDocentes },
   { requireRoles: [2, 8], path: "/as/docentes", page: DocentesForm },
   { requireRoles: [2, 8], path: "/as/cursos", page: CursosForm  },
@@ -111,10 +111,11 @@ const privateroutes = [
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
   { requireRoles: [2, 8], path: "/as/indicadores", page: IndicadoresSeccion},
   /* CS*/
-  { requireRoles: [3], path: "/cord/asignacionCarga/registroCursos", page: AsistenteSeccion },
+  { requireRoles: [3], path: "/cord/asignacionCarga/registroHorarios", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/deudaYDescarga", page: DeudasYDescargaCoord },
   { requireRoles: [3], path: "/cord/asignacionCarga/cursos", page: GestionCargaCursos },
+  { requireRoles: [3], path: "/cord/asignacionCarga/agregarHorario", page: GestionCargaCursos },
   { requireRoles: [3], path: "/cord/solicitudDocencia", page: Vacio },
   { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: MisSolicitudes },
   { requireRoles: [3], path: "/cord/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
@@ -275,9 +276,10 @@ export default function Router1(props) {
         <Route path="/invitado/atenderxemail/" render={() => <DelegadoExterno />} />
         <Route exact path="/login" render={() => <Login />}/>
         <Route exact path="/">
-          {user?.id>0? 
-            <Redirect to={generateRouteRol(rol)} /> 
-            : <Redirect to="/login"/> }
+          {user?.id>0
+            ? <Redirect to={generateRouteRol(rol)} /> 
+            : <Redirect to="/login"/> 
+          }
         </Route>
 
         <Route default render={() => <ErrorDireccionamiento />} />

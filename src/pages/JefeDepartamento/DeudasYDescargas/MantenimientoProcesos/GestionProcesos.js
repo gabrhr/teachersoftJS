@@ -33,7 +33,7 @@ export default function GestionProcesos() {
     const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
 
-    const addOrEdit = async (values, resetForm)=> {
+    const addOrEdit = async (values, resetForm) => {
         //Service
         let ciclo, procesoNew, procesoEdit;
         if(!ciclo) ciclo = await window.localStorage.getItem("ciclo");
@@ -43,10 +43,10 @@ export default function GestionProcesos() {
                 "ciclo":{
                     "id": ciclo
                 },
-                "fecha_inicio": values.fechaIniDocente,
-                "fecha_fin": values.fechaFinProceso ,
-                "fecha_fin_docente": values.fechaFinDocente,
-                "fecha_fin_seccion": values.fechaFinSeccion,
+                "fecha_inicio": values.fecha_inicio,
+                "fecha_fin": values.fecha_fin ,
+                "fecha_fin_docente": values.fecha_fin_docente,
+                "fecha_fin_seccion": values.fecha_fin_seccion,
                 "nombre": values.nombre,
                 "departamento":{
                     "id": user.persona.seccion.departamento.id
@@ -63,10 +63,10 @@ export default function GestionProcesos() {
                 "ciclo":{
                     "id": ciclo
                 },
-                "fecha_inicio": values.fechaIniDocente,
-                "fecha_fin": values.fechaFinProceso ,
-                "fecha_fin_docente": values.fechaFinDocente,
-                "fecha_fin_seccion": values.fechaFinSeccion,
+                "fecha_inicio": values.fecha_inicio,
+                "fecha_fin": values.fecha_fin ,
+                "fecha_fin_docente": values.fecha_fin_docente,
+                "fecha_fin_seccion": values.fecha_fin_seccion,
                 "nombre": values.nombre,
                 "departamento":{
                     "id": user.persona.seccion.departamento.id
@@ -145,7 +145,7 @@ export default function GestionProcesos() {
 
             {/* Procesos Pasados */}
             <DT.Title size="medium"
-                text="Lista de Procesos de Descarga Anteriores"
+                text="Histórico de Procesos de Descarga Anteriores"
             />
             <ListaProcesosPasados
                 records={records}

@@ -16,7 +16,7 @@ export const MenuAsistenteSeccion = [
         subNav: [
             {
                 text: 'Registro de Horarios',
-                path: '/as/asignacionCarga/registroCursos',
+                path: '/as/asignacionCarga/registroHorarios',
                 indice: 0,
             },
             {
@@ -50,22 +50,22 @@ export const MenuAsistenteSeccion = [
         indice: 1,
     },
     /* TIENE PROBLEMAS NO SE PORQUE */
-    // {
-    //     text: 'Mesa de Partes',
-    //     path: '',
-    //     icon: <InboxOutlinedIcon />,
-    //     indice: 2,
-    //     subNav: [
-    //         {
-    //             text: 'Mis solicitudes',
-    //             path: '/as/mesaPartes/misSolicitudes', 
-    //             indice: 0,
-    //         },
-    //         {
-    //             text: 'Solicitudes delegadas a mí',
-    //             path: '/as/mesaPartes/misDelegados',
-    //             indice: 1,
-    //         }
-    //     ]
-    // }
+    {
+        text: 'Mesa de Partes',
+        path: '',
+        icon: <InboxOutlinedIcon />,
+        indice: 2,
+        subNav: [
+            {
+                text: 'Mis solicitudes',
+                path: '/as/mesaPartes/misSolicitudes', 
+                indice: 0,
+            },
+            {
+                text: 'Solicitudes delegadas a mí',
+                path: '/as/mesaPartes/misDelegados',
+                indice: 1,
+            }
+        ]
+    }
 ];

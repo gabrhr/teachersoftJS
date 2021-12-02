@@ -23,20 +23,26 @@ const tableHeaders = [
     {
       id: 'carga',
       label: 'Créditos',
-      numeric: true,
-      sortable: true
+      numeric: false,
+      sortable: false
     },
     {
       id: 'horario',
       label: 'Horario',
       numeric: false,
-      sortable: true
+      sortable: false
+    },
+    {
+      id: 'sesion',
+      label: 'Sesion',
+      numeric: false,
+      sortable: false
     },
     {
       id: 'horas',
       label: 'Horas',
       numeric: true,
-      sortable: true
+      sortable: false
     }
 ]
 
@@ -67,8 +73,8 @@ const getPreferencias =  async (docente) => {
         "carga": newHor[0].curso_ciclo.curso.creditos,
         "horario": newHor[0].codigo,
         "horas": doc.sesiones[i].horas,
+        "Sesion": doc.sesiones[i],
         //"Horario": newHor[0],
-        //"Sesion": doc.sesiones[i],
       })
     }
   }
@@ -106,26 +112,32 @@ export default function ModalDetalleCursosDocente({docente}){
                   <TblContainer>
                   <TblHead />
                       <colgroup>
-                          <col style={{ width: '10%' }} />
-                          <col style={{ width: '70%' }} />
-                          <col style={{ width: '10%' }} />
                           <col style={{ width: '5%' }} />
+                          <col style={{ width: '50%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '15%' }} />
                           <col style={{ width: '5%' }} />
                       </colgroup>
                       <TableBody>
                       {
                       recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow>
-                          <StyledTableCell align="right">{item.clave}</StyledTableCell>
-                          <StyledTableCell>{item.nombre}</StyledTableCell>
+                          <StyledTableCell >{item.clave}</StyledTableCell>
+                          <StyledTableCell >{item.nombre}</StyledTableCell>
                           <StyledTableCell        align="center">{item.carga}</StyledTableCell>
                           <StyledTableCell        align="center">{item.horario}</StyledTableCell>
+                          <StyledTableCell >{item.Sesion.secuencia ? "Laboratorio" : "Clase"}</StyledTableCell>
                           <StyledTableCell        align="center">{item.horas}</StyledTableCell>
                       </StyledTableRow>
                       ))
                       }
                       </TableBody>
                   </TblContainer>
+                  {records.length ? <> </> : 
+                  <><Typography color = "secondary" align = "center">  
+                    El docente no registro sus preferencias.  
+                  </Typography></>}
                   <TblPagination />
               </BoxTbl>
           </>

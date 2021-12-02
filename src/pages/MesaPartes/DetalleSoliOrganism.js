@@ -1,3 +1,7 @@
+/* Author: Gabs (UI/UX), Mitsuo (conexion), Sergio (Files)
+ *
+ * P:  RecepcionDetalleSolicitud.js
+ */
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@mui/styles'
 import { Controls } from '../../components/controls/Controls'
@@ -90,7 +94,7 @@ export default function DetalleSoliOrganism(props) {
            setRecords(archivosAsignadosObj);
            console.log("records archivos",archivosAsignadosObj)
         });
-    }, [])
+    }, [solicitud])
 
     return (
         <>

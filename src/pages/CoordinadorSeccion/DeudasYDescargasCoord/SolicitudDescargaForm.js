@@ -4,8 +4,8 @@ import moment from 'moment'
 import 'moment/locale/es'
 moment.locale('es');
 
-export default function SolicitudDescargaForm(props) {
-    //const {soli} = props
+export default function SolicitudDescargaForm({recordForView}) {
+    console.log(recordForView)
     return (
         <div>
             <Grid container spacing={{ xs: "10px" }} >
@@ -19,19 +19,20 @@ export default function SolicitudDescargaForm(props) {
                     </Typography>
                     <Typography variant="h4"   display="inline">
                         {/* Nombre del docente solicitador */}
-                        Docente PUCP (correo)
+                        {recordForView.solicitador.apellidos + ", " + recordForView.solicitador.nombres + 
+                        "(" + recordForView.solicitador.correo_pucp + ")"}
                     </Typography>
                     <div/>
                     <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
-                        {"Para: \xa0"}
+                        {"Para: "}
                     </Typography>
                     <Typography variant="body1"  display="inline">
                         {/* Seccion que pertenece */}
-                        Seccion
+                        {"Coordinador de Sección de " + recordForView.solicitador.seccion.nombre}
                     </Typography>
                     <Typography variant="body1">
-                        Fecha de envio
-                        {//moment.utc(solicitud.tracking.fecha_atendido).format('DD MMM YYYY [-] h:mm a')
+                        Fecha de envio: {'\u00A0'}
+                        {moment.utc(recordForView.fecha_creacion).format('DD MMM YYYY [-] h:mm a')
                         }
                     </Typography>
                 </Grid>
@@ -43,8 +44,7 @@ export default function SolicitudDescargaForm(props) {
                 <div style={{marginTop:"8px"}}/>
                 <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
                     {
-                        //docente.persona.tipo_bono===1? "Bono de Investigación":"Bono de Docencia";
-                        "Bono de Investigación"
+                        recordForView.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"
                     }
                 </Alert>
                 <div style={{marginTop:"8px"}}/>
@@ -58,7 +58,7 @@ export default function SolicitudDescargaForm(props) {
                 multiline
                 rows={6}
                 disabled
-                defaultValue={"Justificacion de la solicitud ..."}
+                defaultValue={recordForView.observacion}
                 sx={{
                     pl: "66px",
                     mt: "5px",

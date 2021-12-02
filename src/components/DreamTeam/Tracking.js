@@ -105,7 +105,7 @@ function Item(props){
 
     return(
         <>
-        <Grid container align="center">
+        <Grid container>
             <Grid item xs={2}>
                 <Avatar sx={sxConditional(estado)}>
                     {iconEstado(estado)}

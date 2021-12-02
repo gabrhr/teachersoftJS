@@ -3,22 +3,23 @@ import React, {useEffect} from 'react'
 import { Controls } from '../../../components/controls/Controls';
 import { Form, useForm } from '../../../components/useForm';
 
+
 const initialFieldValues = {
     /* PROCESO */
     id: 0,
-    bonoId: 0,
-    justificacion:'',
+    tipo_bono: 0,
+    observacion:'',
 }
 
 const getBonos = [
-    {id: 0, bonoId:0, title: 'Seleccionar'},
-    {id: 1, bonoId:1,title: 'Bono de Investigación'},
-    {id: 2, bonoId:2,title: 'Bono de Docencia'}
+    {id: 0, tipo_bono:0, title: 'Seleccionar'},
+    {id: 1, tipo_bono:1,title: 'Bono de Investigación'},
+    {id: 2, tipo_bono:2,title: 'Bono de Docencia'}
 ]
 
 
 export default function NuevaDescargaDocente(props) {
-    const { addOrEdit, recordForEdit } = props
+    const { addOrEdit, recordForEdit} = props
     const {
         values,
         setValues,
@@ -36,7 +37,7 @@ export default function NuevaDescargaDocente(props) {
     }
 
     useEffect(() => {
-        if (recordForEdit != null) {
+        if (recordForEdit !== null) {
             /* object is not empty */
             setValues({
                 ...recordForEdit
@@ -46,8 +47,8 @@ export default function NuevaDescargaDocente(props) {
 
     const validate = () => {
         let temp = {...errors}
-        temp.bonoId = values.bonoId !=0 ? "" : "Este campo es requerido."
-        temp.justificacion = values.justificacion ? "" : "Este campo es requerido."
+        temp.tipo_bono = values.tipo_bono !=0 ? "" : "Este campo es requerido."
+        temp.observacion = values.observacion ? "" : "Este campo es requerido."
         
         setErrors({
             ...temp
@@ -64,19 +65,19 @@ export default function NuevaDescargaDocente(props) {
             <Grid container spacing={2} algin="center">
                 <Grid item xs={12}>
                     <Controls.Select
-                        name="bonoId"
+                        name="tipo_bono"
                         label="Bono solicitado"
-                        value={values.bonoId}
+                        value={values.tipo_bono}
                         onChange={handleInputChange}
                         options={getBonos}
-                        error={errors.bonoId}
+                        error={errors.tipo_bono}
                     />
                     <Controls.Input
-                        name="justificacion"
+                        name="observacion"
                         label="Justificacion"
-                        value={values.justificacion}
+                        value={values.observacion}
                         onChange={handleInputChange}
-                        error={errors.justificacion}
+                        error={errors.observacion}
                         multiline
                         minRows={6}
                         maxRows={6}
@@ -86,7 +87,7 @@ export default function NuevaDescargaDocente(props) {
             <Grid cointainer align="right" mt={3}>
                 <div>
                     <Controls.Button
-                        text="Enviar Solicitud"
+                        text={recordForEdit? "Guardar cambios":"Enviar Solicitud"}
                         type="submit"
                     />
 

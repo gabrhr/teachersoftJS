@@ -19,6 +19,8 @@ import EliminarTodosLosCursos from './EliminarTodosLosCursos'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditarHorarioCurso from './EditarHorarioCurso'
 import { UserContext } from '../../../constants/UserContext';
+import cursoService from '../../../services/cursoService';
+import horarioService from '../../../services/horarioService';
 
 const initialFieldValues = {
     searchText: ''
@@ -38,40 +40,40 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'cargaHoraria',
-      label: 'Carga',
-      numeric: false,
-      sortable: true
-    },
-    {
-        id: 'Facultad',
-        label: 'Facultad',
-        numeric: false,
-        sortable: true
-    },
-    {
       id: 'nombreCurso',
       label: 'Nombre',
       numeric: false,
       sortable: true
     },
     {
+      id: 'Facultad',
+      label: 'Facultad',
+      numeric: false,
+      sortable: false
+    },
+    {
+      id: 'creditos',
+      label: 'Créditos',
+      numeric: false,
+      sortable: false
+    },
+    {
         id: 'horario',
         label: 'Horario',
         numeric: false,
-        sortable: true
+        sortable: false
      },
      {
         id: 'tipoSesion',
         label: 'Tipo',
         numeric: false,
-        sortable: true
+        sortable: false
      },
      {
         id: 'horaSesion',
         label: 'Horas',
         numeric: false,
-        sortable: true
+        sortable: false
      },
      {
       id: 'actions',
@@ -153,11 +155,34 @@ const fillHorarios = async (ciclo) => {
       }
     }//FIN DE LA VERIFICACION
   }
+  console.log("Horarios del ciclo", horarios);
   return horarios;
 
 }
 
+const actualizarCursoCiclo = async (curso_ciclo)=> {
+  if(curso_ciclo.cantidad_horarios !== 0){
+    const horarios = await horarioService.listarPorCursoCiclo(curso_ciclo.curso.id, curso_ciclo.ciclo.id) 
+    if(!horarios.length){
+      const newCC = {
+        "id": curso_ciclo.id,
+        "ciclo": {
+          "id": curso_ciclo.ciclo.id,
+        },
+        "curso": {
+          "id": curso_ciclo.curso.id,
+        },
+        "cantidad_horarios": 0, //Se actualiza al nuevo estado - con horarios
+        "estado_tracking": curso_ciclo.estado_tracking,
+      }
+      const request = await cursoService.updateCursoCiclo(newCC);
+    }
+    
+  }
+}
+
 export default function HorarioCursos({records, setRecords, setCargaH, cargaH, ciclo, setCiclo}) {
+  console.log(ciclo);
 
     //let hors = (window.localStorage.getItem('listHorario'))
     //const {getHorario, horario, setHorario, isNewFile } = props
@@ -200,8 +225,7 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
         setRecords(newHorarios);
         setCargaH(records);
       });
-      console.log("El rol es", rol)
-    }, [openPopupEdit])
+    }, [openPopupEdit, ciclo])
   
     //console.log(records);
     //console.log(indexDelete);
@@ -223,9 +247,10 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
       }
     const handleClick = (e) => {
       if(rol === 3){
-        history.push("/cord/asignacionCarga/cursos");
+        history.push("/cord/asignacionCarga/agregarHorario");
       }else{
-        history.push("/as/asignacionCarga/cursos");
+        // history.push("/as/asignacionCarga/cursos");    // este era de Sergio
+        history.push("/as/asignacionCarga/agregarHorario");   // queda el de Lucas
       }
         
     };
@@ -278,12 +303,14 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
             "tipo_dictado": indexDelete.sesiones.secuencia ? hor.sesiones[1].tipo_dictado: hor.sesiones[0].tipo_dictado
           }],
         }
-        HorarioService.updateHorario(updtHor);
+        await HorarioService.updateHorario(updtHor);
       }
       else{
         //Se elimina
-        HorarioService.deleteHorario(indexDelete.id);
+        await HorarioService.deleteHorario(indexDelete.id);
+        actualizarCursoCiclo(hor.curso_ciclo);
       }
+
       setOpenOnePopup(false)
     }
 
@@ -331,11 +358,20 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
             </Grid>
             <BoxTbl>
                 <TblContainer>
+                      <colgroup>
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '30%' }} />
+                        <col style={{ width: '25%' }} />
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '8%' }} />
+                        <col style={{ width: '15%' }} />
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '7%' }} />
+                      </colgroup>
                     <TblHead />
                     <TableBody>
                     {/* {console.log(records)} */}
-                    {records.length > 0 ? 
-                        recordsAfterPagingAndSorting().map(item => (
+                    { recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
                             {/*<TableCell
                             align="right"
@@ -343,12 +379,12 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                             {item.clave}
                             </TableCell>*/}
                             <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
-                            <TableCell>{item.horas_semanales}</TableCell>
-                            <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
                             <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
-                            <TableCell>{item.codigo}</TableCell>
+                            <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
+                            <TableCell align = "center">{item.curso_ciclo.curso.creditos}</TableCell>
+                            <TableCell align = "center">{item.codigo}</TableCell>
                             <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
-                            <TableCell>{item.sesiones.hora_sesion}</TableCell>
+                            <TableCell align = "center">{item.sesiones.hora_sesion}</TableCell>
                             <TableCell>
                               {/* Accion editar */}
                               <Controls.ActionButton
@@ -367,14 +403,17 @@ export default function HorarioCursos({records, setRecords, setCargaH, cargaH, c
                             </TableCell>
                         </TableRow>
                         ))
-                        :   (
-                            <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
-                                No hay elementos en la tabla. 
-                            </Typography>  
-                            )
+
                     }
                     </TableBody>
                 </TblContainer>
+                {records.length > 0 ? <> </> 
+                    :   (
+                            <Typography variant="body1" color="primary.light" align = "center"style={SubtitulosTable}>    
+                                No hay elementos en la tabla. 
+                            </Typography>  
+                            )
+                }
                 <TblPagination />
             </BoxTbl>
                 {/* <Controls.Button

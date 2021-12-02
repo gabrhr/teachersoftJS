@@ -9,10 +9,10 @@ const initialFieldValues = {
     /* PROCESO */
     id: 0,
     nombre: '',
-    fechaIniDocente: defaultDate,
-    fechaFinDocente: defaultDate,
-    fechaFinSeccion: defaultDate,
-    fechaFinProceso: defaultDate,
+    fecha_inicio: defaultDate,
+    fecha_fin_docente: defaultDate,
+    fecha_fin_seccion: defaultDate,
+    fecha_fin: defaultDate,
 }
 
 
@@ -78,16 +78,16 @@ export default function NuevoProcesoForm(props) {
                     </Typography>
                     <Stack direction="row" align="left" spacing={4}>
                             <Controls.DateTimePickerv2
-                                name="fechaIniDocente"
+                                name="fecha_inicio "
                                 label="Fecha Inicio para Docentes"
-                                value={values.fechaIniDocente}
+                                value={values.fecha_inicio}
                                 onChange={handleInputChange}
                                 sx={{ width: "500px"}}
                                 />
                         <Controls.DateTimePickerv2
-                            name="fechaFinDocente"
+                            name="fecha_fin_docente"
                             label="Fecha Fin para Docentes"
-                            value={values.fechaFinDocente}
+                            value={values.fecha_fin_docente}
                             onChange={handleInputChange}
                             sx={{ width: "500px"}}
                             />
@@ -100,9 +100,9 @@ export default function NuevoProcesoForm(props) {
                     </Typography>
                     <div style={{ width: "545px", marginRight: "50px" }}>
                         <Controls.DateTimePickerv2
-                            name="fechaFinSeccion"
+                            name="fecha_fin_seccion"
                             label="Fecha Limite para Sección"
-                            value={values.fechaFinSeccion}
+                            value={values.fecha_fin_seccion}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -113,9 +113,9 @@ export default function NuevoProcesoForm(props) {
                     </Typography>
                     <div style={{ width: "545px", marginRight: "50px" }}>
                         <Controls.DateTimePickerv2
-                            name="fechaFinProceso"
+                            name="fecha_fin"
                             label="Fecha Limite para Departamento"
-                            value={values.fechaFinProceso}
+                            value={values.fecha_fin}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -124,7 +124,7 @@ export default function NuevoProcesoForm(props) {
             <Grid cointainer align="right" mt={5}>
                 <div>
                     <Controls.Button
-                        text="Iniciar Proceso"
+                        text={recordForEdit ? "Guardar Cambios" : "Iniciar Proceso"}
                         type="submit"
                     />
 
