@@ -124,8 +124,8 @@ export default function GestionCiclo() {
               /* no search text */
               return items
             else
-              return items.filter(x => x.nombre.toLowerCase()
-                  .includes(target.value.toLowerCase()))
+              return items.filter(x => x.anho.toString()
+                  .includes(target.value.toString()))
           }
         })
     }
@@ -207,7 +207,7 @@ export default function GestionCiclo() {
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
               {/* <Toolbar> */}
               <Controls.Input
-                label="Buscar Ciclos por Nombre"
+                label="Buscar por Ciclo"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -235,24 +235,39 @@ export default function GestionCiclo() {
                      recordsAfterPagingAndSorting().map(item => (
 
                         <StyledTableRow key={item.id}>
-                          <StyledTableCell >{item.anho}</StyledTableCell>
-                          <StyledTableCell >{item.periodo}</StyledTableCell>
-                          <StyledTableCell >
+                          NO SE SI ESTO ERA NECESARIO (MERGE CONFLICT MANUEL->DEVELOP) Dec02
+                        
+                          {/* <StyledTableCell >{item.anho}</StyledTableCell>
+                          <StyledTableCell >{item.periodo}</StyledTableCell> */}
+                          {/* <StyledTableCell > */}
+                          <StyledTableCell align="center-left">{item.anho}</StyledTableCell>
+                          <StyledTableCell align="center-left">
+                            {
+                              item.periodo == 0 ? "Verano" : 
+                              item.periodo == 1 ? "Primero" : "Segundo"
+                            }
+                          </StyledTableCell>
+                          <StyledTableCell align="center-left">
                               {
-                                item? item.fecha_inicio.slice(8,10):""
+                                item.fecha_inicio != null ?
+                                item.fecha_inicio.slice(8,10)
                                 +'/'
-                                +item? item.fecha_inicio.slice(5,7):""
+                                +item.fecha_inicio.slice(5,7)
                                 +'/'
-                                +item? item.fecha_inicio.slice(0,4):""
+                                +item.fecha_inicio.slice(0,4)
+                                : " "
                               }
                           </StyledTableCell>
                           <StyledTableCell>
                               {
+                                item.fecha_fin != null ?
+
                                 item.fecha_fin.slice(8,10)
                                 +'/'
                                 +item.fecha_fin.slice(5,7)
                                 +'/'
                                 +item.fecha_fin.slice(0,4)
+                                : " "
                               }
                           </StyledTableCell>
                           <StyledTableCell align = "right">

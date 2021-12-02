@@ -7,7 +7,6 @@ import PieCharts from '../../components/PageComponents/PieCharts';
 import InvestigacionService from '../../services/investigacionService';
 import BarCharts from '../../components/PageComponents/BarCharts';
 import CantidadTrabajosXAutor from '../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
-import BarChartAutores from '../../components/PageComponents/BarCharts';
 
 let indicadores = [];
 /*  Colores pastel con transparencia
@@ -25,6 +24,8 @@ const listColors = [
     "rgba(255, 206, 86, 0.8)",
     "rgba(153, 102, 255, 0.8)"
 ]
+
+
 
 
 const getLabels = (arr) => {
@@ -50,6 +51,7 @@ const getQuantities = (arr) => {
     catch {}
     return arrEstandarizado;
 }
+
 const fillProfesoresConDeuda = async (id_seccion) => {
     let profesorConDeuda = await IndicadoresService.getTopProfesoresDeuda(id_seccion);
     

@@ -63,5 +63,11 @@ export const MenuCoordinadorSeccion = [
                 indice: 1,
             }
         ]
+    },
+    {
+        text: 'Estadisticas',
+        path: '/cord/estadisticas',
+        icon: <InboxOutlinedIcon />,
+        indice: 1,
     }
 ];

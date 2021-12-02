@@ -49,6 +49,12 @@ export const MenuAsistenteSeccion = [
         icon: <LocalLibraryOutlinedIcon />,
         indice: 1,
     },
+    {
+        text: 'Estadisticas',
+        path: '/as/estadisticas',
+        icon: <InboxOutlinedIcon />,
+        indice: 1,
+    }
     /* TIENE PROBLEMAS NO SE PORQUE */
     {
         text: 'Mesa de Partes',
