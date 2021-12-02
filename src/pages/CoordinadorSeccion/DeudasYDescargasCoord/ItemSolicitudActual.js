@@ -30,8 +30,11 @@ export default function ItemProcesoActual(props) {
             return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
-    function formatoFechaProceso(fecha){
+    function formatoFechaProceso(fecha,plazo){
         if(fecha!=null){
+            if( plazo){
+                return (moment(fecha).add(2,'days').format('h:mm a [del] dddd DD MMM YYYY'))
+            }  
             return (moment(fecha).format('h:mm a [del] dddd DD MMM YYYY'))
         }
     }
@@ -45,13 +48,18 @@ export default function ItemProcesoActual(props) {
         <Typography sx={{color:"primary.light"}}>
                 <b>{procesoActual.nombre}</b> 
                 {fechafin<=now || (
-                    " vigente a partir de las " + formatoFechaProceso(procesoActual.fecha_fin_docente) +
-                    '\u00A0' + "hasta las " + formatoFechaProceso(procesoActual.fecha_fin_seccion))
+                    " vigente a partir de las " + formatoFechaProceso(procesoActual.fecha_fin_docente,0) +
+                    '\u00A0' + "hasta las " + formatoFechaProceso(procesoActual.fecha_fin_seccion,0))
                 }
         </Typography>
         <Typography sx={{color:"primary.light"}}>
-            Publicación de Resultados desde las {formatoFechaProceso(procesoActual.fecha_fin)} 
+            Publicación de Resultados desde las {formatoFechaProceso(procesoActual.fecha_fin,0)} 
         </Typography>
+        {solicitudActual.estado_tracking===0 && solicitudActual.resultado === 0  &&
+            <Typography sx={{color:"red"}}>
+                Debe validar la lista final de aprobados hasta <b> {formatoFechaProceso(procesoActual.fecha_fin,1)} </b>
+            </Typography>
+        }
         <Box border="solid 1px" borderColor="#D4D9EC" borderRadius="15px" 
             px={2}  mb={10} mt={2}
         >
