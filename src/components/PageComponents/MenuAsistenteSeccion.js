@@ -54,7 +54,7 @@ export const MenuAsistenteSeccion = [
         path: '/as/estadisticas',
         icon: <InboxOutlinedIcon />,
         indice: 1,
-    }
+    },
     /* TIENE PROBLEMAS NO SE PORQUE */
     {
         text: 'Mesa de Partes',
