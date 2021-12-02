@@ -55,7 +55,7 @@ export default function ItemProcesoActual(props) {
         <Typography sx={{color:"primary.light"}}>
             Publicación de Resultados desde las {formatoFechaProceso(procesoActual.fecha_fin,0)} 
         </Typography>
-        {solicitudActual.estado_tracking===0 && solicitudActual.resultado === 0  &&
+        {solicitudActual.estado_tracking===1 && solicitudActual.resultado===1  &&
             <Typography sx={{color:"red"}}>
                 Debe validar la lista final de aprobados hasta <b> {formatoFechaProceso(procesoActual.fecha_fin,1)} </b>
             </Typography>
@@ -133,9 +133,9 @@ export default function ItemProcesoActual(props) {
                             text="Detalle"
                             />
                     </Link>
-                    {solicitudActual.resultado>0 && (
+                    {solicitudActual.resultado>0 && solicitudActual.estado_tracking>=1 && (
                         <Controls.Button
-                            text={solicitudActual.estado_tracking===1?"Aprobados":"Validar"}
+                            text={solicitudActual.estado_tracking===2?"Aprobados":"Validar"}
                             onClick={()=>{setOpenAprobados(true)}} 
                         />)
                     }
@@ -152,12 +152,12 @@ export default function ItemProcesoActual(props) {
         <Popup
                 openPopup={openAprobados}
                 setOpenPopup={setOpenAprobados}
-                title={solicitudActual.estado_tracking===1?"Lista de Aprobados":"Validar Lista de Descargas"}
+                title={solicitudActual.estado_tracking===2?"Lista de Aprobados":"Validar Lista de Descargas"}
                 size = "md"
             >
                <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual}
                cantAprobada = {solicitudActual.cantidad_aprobada} solicitudActual = {solicitudActual}
-                resultado = {solicitudActual.estado_tracking===1? 1:0}/>
+                resultado = {solicitudActual.estado_tracking===2? 1:4}/>
         </Popup>
         </>
     )

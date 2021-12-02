@@ -268,7 +268,7 @@ export default function NuevoProcesoForm() {
                 {/* Buscador y #solicitados */}
                 <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
                    <b> {recordForEdit? "Lista de Descargas de Docentes Solicitadas":
-                            "null"
+                            "Lista de Solicitudes de Descarga de los Docentes"
                         }
                    </b>
                 </Typography>
@@ -294,8 +294,17 @@ export default function NuevoProcesoForm() {
                     </Grid>
                     <Grid item xs/>
                     <Grid item  align = "right" mr= {10} marginTop={5} >
-                        <Typography variant="h4" sx={{color:"primary.light"}}>
-                            Solicitados: <b> {recordForEdit? recordForEdit.cantidad_solicitada : solicitados}</b>
+                        <Typography display="inline" variant="h4" sx={{color:"primary.light"}}>
+                            {"Recibidas: "}
+                        </Typography>
+                        <Typography display="inline"  fontWeight="570" mr={2} sx={{color:"primary.light"}}>
+                            {`${records.length}`}
+                        </Typography>
+                        <Typography display="inline" variant="h4" sx={{color:"primary.light"}}>
+                            {"Solicitadas: "}
+                        </Typography>
+                        <Typography display="inline"  fontWeight="570" sx={{color:"#43DB7F"}}>
+                            {recordForEdit? recordForEdit.cantidad_solicitada : solicitados}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -312,7 +321,7 @@ export default function NuevoProcesoForm() {
                                         {
                                             recordsAfterPagingAndSorting().map((item,index) => (
                                                 <TableRow
-                                                 sx={item.tramiteSeccionDescarga?.id? {backgroundColor: '#ADFDCC'}: {backgroundColor: '#fff'}}
+                                                 sx={item.tramiteSeccionDescarga?.id? {backgroundColor: '#43DB7F45'}: {backgroundColor: '#fff'}}
                                                 >
                                                 <TableCell sx = {{width: '70px'}}>
                                                 { !recordForEdit &&
@@ -320,7 +329,7 @@ export default function NuevoProcesoForm() {
                                                             <EditOutlinedIcon fontSize="small" />
                                                         </Controls.RowCheckBox>
 
-}
+                                                }
                                                 </TableCell>
                                                 <TableCell sx = {{width: '70px'}}> 
                                                     <Avatar alt="profile pic" src={item.solicitador.foto_URL} />
@@ -357,15 +366,18 @@ export default function NuevoProcesoForm() {
                     </Grid>
                 </Grid>
                 <Grid cointainer align="right" mt={5}>
-                    <div>
-                        <Controls.Button
-                            text="guardar"
-                            endIcon={<SaveIcon/>} 
-                            // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
-                            onClick = {()=>setOpenGuardarPopup(true)}  
-                            />
+                    {recordForEdit.estado_tracking===0 &&
+                        <div>
+                            <Controls.Button
+                                text="guardar"
+                                endIcon={<SaveIcon/>} 
+                                // disabled = {(dValuNombre && dValuCreditos && dValuUnidad && dValuHorario) ? false : true}
+                                onClick = {()=>setOpenGuardarPopup(true)}  
+                                />
 
-                    </div>
+                        </div>
+
+                    }
                 </Grid>
             </Paper>
             <Popup
