@@ -5,7 +5,29 @@ import { Controls } from '../../../components/controls/Controls'
 import IndicadoresService from '../../../services/indicadoresService';
 import PieCharts from '../../../components/PageComponents/PieCharts';
 import InvestigacionService from '../../../services/investigacionService';
+import SeccionService from "../../../services/seccionService";
 import BarChartAutores from '../../../components/PageComponents/BarCharts';
+import { useForm, Form } from "../../../components/useForm" 
+
+const getSeccionCollection =  async () => {
+    //{ id: '1', title: 'Todas las Secciones' },
+    const user = JSON.parse(localStorage.getItem("user"))
+    let dataSecc = await SeccionService.getSeccionxDepartamento(user.persona.departamento.id);
+    
+    if(!dataSecc) dataSecc = [];
+  
+    const secciones = [];
+  
+    for(let sec of dataSecc) {
+      //Hacemos la creación y verificación de los estados
+      secciones.push({
+        "id": sec.id,
+        "nombre": sec.nombre,
+      })
+    }
+  
+    return secciones;
+}
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
     let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
@@ -25,14 +47,14 @@ const fillProfesorTPA = async (id_ciclo, id_seccion) => {
     return profesorTPA;
 }
 
-const deudaProfesores = async () => {
-    let profesorDeuda = await IndicadoresService.getDataProfesoresDeuda();
+const deudaProfesores = async (id_seccion) => {
+    let profesorDeuda = await IndicadoresService.getDataProfesoresDeudaSeccion(id_seccion);
     
     return profesorDeuda;
 }
 
-const sobrecargaProfesores = async () => {
-    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecarga();
+const sobrecargaProfesores = async (id_seccion) => {
+    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecargaSeccion(id_seccion);
     
     return profesorSobrecarga;
 }
@@ -66,69 +88,106 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresJDepartamento() {
+export default function IndicadoresADepartamento() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
-    
-    
+    const [changeTC, setChangeTC] = useState(false)
+    const [changeTPC, setChangeTPC] = useState(false)
+    const [changeTPA, setChangeTPA] = useState(false)
+    const [changeDeuda, setChangeDeuda] = useState(false)
+    const [changeSobrecarga, setChangeSobrecarga] = useState(false)
+    const [secciones, setSecciones] = useState([]);
+    const [seccion, setSeccion] = useState(0);
+
+    const initialFieldValues = {
+        id: '',
+        nombre: ''
+    }
+
+    const {
+        values,
+        setValues,
+        handleInputChange
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+    } = useForm(initialFieldValues);
+
     const [profesorTC, setProfesorTC] = useState([]);
 
     useEffect(() => {
-        fillProfesorTC(user.persona.seccion.id,cicloAct)
+        setChangeTC(false)
+        fillProfesorTC(seccion,cicloAct)
         .then(newProfTC => {
-            setProfesorTC(newProfTC);
+            if(newProfTC){
+                setProfesorTC(newProfTC);
+                setChangeTC(true)
+            }
             
         });
-    }, [])
+    }, [seccion])
 
     const [profesorTPC, setProfesorTPC] = useState([]);
 
     useEffect(() => {
-        fillProfesorTPC(user.persona.seccion.id,cicloAct)
+        setChangeTPC(false)
+        fillProfesorTPC(seccion,cicloAct)
         .then(newProfTPC => {
-            setProfesorTPC(newProfTPC);
+            if(newProfTPC){
+                setProfesorTPC(newProfTPC);
+                setChangeTPC(true)
+            }
             
         });
-    }, [])
+    }, [seccion])
 
     const [profesorTPA, setProfesorTPA] = useState([]);
 
     useEffect(() => {
-        fillProfesorTPA(user.persona.seccion.id,cicloAct)
+        setChangeTPA(false)
+        fillProfesorTPA(seccion,cicloAct)
         .then(newProfTPA => {
-            setProfesorTPA(newProfTPA);
-            
+            if(newProfTPA){
+                setProfesorTPA(newProfTPA);
+                setChangeTPA(true)
+            }
         });
-    }, [])
+    }, [seccion])
 
     const [profesorDeudaTC, setProfesorDeudaTC] = useState([]);
     const [profesorDeudaTPC, setProfesorDeudaTPC] = useState([]);
     const [profesorDeudaTPA, setProfesorDeudaTPA] = useState([]);
 
     useEffect(() => {
-        deudaProfesores()
+        setChangeDeuda(false)
+        deudaProfesores(seccion)
         .then(newProfDeuda => {
-            setProfesorDeudaTC(newProfDeuda.TC);
-            setProfesorDeudaTPC(newProfDeuda.TPC);
-            setProfesorDeudaTPA(newProfDeuda.TPA);
+            if(newProfDeuda){
+                setProfesorDeudaTC(newProfDeuda.TC);
+                setProfesorDeudaTPC(newProfDeuda.TPC);
+                setProfesorDeudaTPA(newProfDeuda.TPA);
+                setChangeDeuda(true)
+            }
         });
-    }, [])
+    }, [seccion])
 
     const [profesorSobrecargaTC, setProfesorSobrecargaTC] = useState([]);
     const [profesorSobrecargaTPC, setProfesorSobrecargaTPC] = useState([]);
     const [profesorSobrecargaTPA, setProfesorSobrecargaTPA] = useState([]);
 
     useEffect(() => {
-        sobrecargaProfesores()
+        setChangeSobrecarga(false)
+        sobrecargaProfesores(seccion)
         .then(newProfSobrecarga => {
-            setProfesorSobrecargaTC(newProfSobrecarga.TC);
-            setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
-            setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
+            if(newProfSobrecarga){
+                setProfesorSobrecargaTC(newProfSobrecarga.TC);
+                setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
+                setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
+                setChangeSobrecarga(true)
+            }
         });
-    }, [])
+    }, [seccion])
 
     const [autoresInd, setAutoresInd] = useState([]);
 
@@ -150,14 +209,56 @@ export default function IndicadoresJDepartamento() {
         });
     }, [])
 
+    
+
+    useEffect(() => {
+        getSeccionCollection()
+        .then (newSecc =>{
+          if(newSecc){
+            setSecciones(newSecc);
+            setValues(newSecc[0]);  //Para que se coja predeterminado dicho valor
+          }
+        });
+      }, [] )//Solo al inicio para la carga de secciones
+
+    useEffect(()=>{
+        if(values)  setSeccion(values.id);
+        else{
+            if (setValues) setSeccion(0) 
+            //Para indicar que se señalan a todas las secciones que le pertencen al departamento
+        }  
+    },[values]) //Cada que cambia los values para la seccion
+
+    console.log(seccion)
+
     return (
         <>
             <ContentHeader
                 text="Dashboard"
                 cbo={false}
             />
+            <Grid container xs spacing = {4}>
+            {/* <Stack direction="row" spacing = {4}> */}
+                <Grid item xs={6} sx = {{paddingLeft: 3}}>
+                    <Typography variant="body1" color={"#00008B"} my={2}>
+                        DATA ACTUAL DEL CICLO
+                    </Typography>
+                </Grid>
+                <Grid item xs={4}/>
+                <Grid item xs={2}>
+                    <Controls.Select
+                    name="id"
+                    label="Secciones"
+                    value={values.id}
+                    onChange={handleInputChange}
+                    options={secciones}
+                    type="contained"
+                    // displayNoneOpt
+                    />
+                </Grid>
+            </Grid>
             <Typography variant="body1" color={"#00008B"} my={2}>
-                DATA ACTUAL DEL CICLO
+            
             </Typography>
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={3.5}>
@@ -184,7 +285,7 @@ export default function IndicadoresJDepartamento() {
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -213,7 +314,7 @@ export default function IndicadoresJDepartamento() {
                         Promedio de Deuda TPA: {profesorDeudaTPA.promedio_deuda}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -242,7 +343,7 @@ export default function IndicadoresJDepartamento() {
                         Promedio de Sobrecarga TPA: {profesorSobrecargaTPA.promedio_deuda*-1}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
                     </div>
                 </Grid>
             </Grid>
@@ -283,6 +384,9 @@ export default function IndicadoresJDepartamento() {
             <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
             <Typography variant="body1" color={"#00008B"} my={.5}>
             
+            </Typography>
+            <Typography variant="body1" color={"#00008B"} my={2}>
+                        INVESTIGACIONES REALIZADAS
             </Typography>
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={12}>

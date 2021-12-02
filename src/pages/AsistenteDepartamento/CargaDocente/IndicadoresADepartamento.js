@@ -18,10 +18,6 @@ const getSeccionCollection =  async () => {
   
     const secciones = [];
   
-    secciones.push({
-      "id": 0,
-      "nombre": "Todas las secciones",
-    })
     for(let sec of dataSecc) {
       //Hacemos la creación y verificación de los estados
       secciones.push({
@@ -52,13 +48,13 @@ const fillProfesorTPA = async (id_ciclo, id_seccion) => {
 }
 
 const deudaProfesores = async (id_seccion) => {
-    let profesorDeuda = await IndicadoresService.getDataProfesoresDeuda(id_seccion);
+    let profesorDeuda = await IndicadoresService.getDataProfesoresDeudaSeccion(id_seccion);
     
     return profesorDeuda;
 }
 
 const sobrecargaProfesores = async (id_seccion) => {
-    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecarga(id_seccion);
+    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecargaSeccion(id_seccion);
     
     return profesorSobrecarga;
 }
@@ -98,7 +94,14 @@ export default function IndicadoresADepartamento() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
-    
+    const [changeTC, setChangeTC] = useState(false)
+    const [changeTPC, setChangeTPC] = useState(false)
+    const [changeTPA, setChangeTPA] = useState(false)
+    const [changeDeuda, setChangeDeuda] = useState(false)
+    const [changeSobrecarga, setChangeSobrecarga] = useState(false)
+    const [secciones, setSecciones] = useState([]);
+    const [seccion, setSeccion] = useState(0);
+
     const initialFieldValues = {
         id: '',
         nombre: ''
@@ -111,83 +114,80 @@ export default function IndicadoresADepartamento() {
       // eslint-disable-next-line react-hooks/rules-of-hooks
     } = useForm(initialFieldValues);
 
-    const [secciones, setSecciones] = useState([]);
-
-    useEffect(() => {
-        getSeccionCollection()
-        .then (newSecc =>{
-          if(newSecc){
-            setSecciones(newSecc);
-            setValues(newSecc[0]);  //Para que se coja predeterminado dicho valor
-          }
-        });
-      }, [] )//Solo al inicio para la carga de secciones
-
-    const [seccion, setSeccion] = useState(0);
-
-    useEffect(()=>{
-        if(values)  setSeccion(values.id);
-        else{
-            if (setValues) setSeccion(0) 
-            //Para indicar que se señalan a todas las secciones que le pertencen al departamento
-        }  
-    },[values]) //Cada que cambia los values para la seccion
-    
     const [profesorTC, setProfesorTC] = useState([]);
 
     useEffect(() => {
+        setChangeTC(false)
         fillProfesorTC(seccion,cicloAct)
         .then(newProfTC => {
-            setProfesorTC(newProfTC);
+            if(newProfTC){
+                setProfesorTC(newProfTC);
+                setChangeTC(true)
+            }
             
         });
-    }, [])
+    }, [seccion])
 
     const [profesorTPC, setProfesorTPC] = useState([]);
 
     useEffect(() => {
+        setChangeTPC(false)
         fillProfesorTPC(seccion,cicloAct)
         .then(newProfTPC => {
-            setProfesorTPC(newProfTPC);
+            if(newProfTPC){
+                setProfesorTPC(newProfTPC);
+                setChangeTPC(true)
+            }
             
         });
-    }, [])
+    }, [seccion])
 
     const [profesorTPA, setProfesorTPA] = useState([]);
 
     useEffect(() => {
+        setChangeTPA(false)
         fillProfesorTPA(seccion,cicloAct)
         .then(newProfTPA => {
-            setProfesorTPA(newProfTPA);
-            
+            if(newProfTPA){
+                setProfesorTPA(newProfTPA);
+                setChangeTPA(true)
+            }
         });
-    }, [])
+    }, [seccion])
 
     const [profesorDeudaTC, setProfesorDeudaTC] = useState([]);
     const [profesorDeudaTPC, setProfesorDeudaTPC] = useState([]);
     const [profesorDeudaTPA, setProfesorDeudaTPA] = useState([]);
 
     useEffect(() => {
+        setChangeDeuda(false)
         deudaProfesores(seccion)
         .then(newProfDeuda => {
-            setProfesorDeudaTC(newProfDeuda.TC);
-            setProfesorDeudaTPC(newProfDeuda.TPC);
-            setProfesorDeudaTPA(newProfDeuda.TPA);
+            if(newProfDeuda){
+                setProfesorDeudaTC(newProfDeuda.TC);
+                setProfesorDeudaTPC(newProfDeuda.TPC);
+                setProfesorDeudaTPA(newProfDeuda.TPA);
+                setChangeDeuda(true)
+            }
         });
-    }, [values])
+    }, [seccion])
 
     const [profesorSobrecargaTC, setProfesorSobrecargaTC] = useState([]);
     const [profesorSobrecargaTPC, setProfesorSobrecargaTPC] = useState([]);
     const [profesorSobrecargaTPA, setProfesorSobrecargaTPA] = useState([]);
 
     useEffect(() => {
+        setChangeSobrecarga(false)
         sobrecargaProfesores(seccion)
         .then(newProfSobrecarga => {
-            setProfesorSobrecargaTC(newProfSobrecarga.TC);
-            setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
-            setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
+            if(newProfSobrecarga){
+                setProfesorSobrecargaTC(newProfSobrecarga.TC);
+                setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
+                setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
+                setChangeSobrecarga(true)
+            }
         });
-    }, [values])
+    }, [seccion])
 
     const [autoresInd, setAutoresInd] = useState([]);
 
@@ -208,6 +208,26 @@ export default function IndicadoresADepartamento() {
             setAutores(newAutor);
         });
     }, [])
+
+    
+
+    useEffect(() => {
+        getSeccionCollection()
+        .then (newSecc =>{
+          if(newSecc){
+            setSecciones(newSecc);
+            setValues(newSecc[0]);  //Para que se coja predeterminado dicho valor
+          }
+        });
+      }, [] )//Solo al inicio para la carga de secciones
+
+    useEffect(()=>{
+        if(values)  setSeccion(values.id);
+        else{
+            if (setValues) setSeccion(0) 
+            //Para indicar que se señalan a todas las secciones que le pertencen al departamento
+        }  
+    },[values]) //Cada que cambia los values para la seccion
 
     console.log(seccion)
 
@@ -265,7 +285,7 @@ export default function IndicadoresADepartamento() {
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -294,7 +314,7 @@ export default function IndicadoresADepartamento() {
                         Promedio de Deuda TPA: {profesorDeudaTPA.promedio_deuda}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -323,7 +343,7 @@ export default function IndicadoresADepartamento() {
                         Promedio de Sobrecarga TPA: {profesorSobrecargaTPA.promedio_deuda*-1}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
                     </div>
                 </Grid>
             </Grid>
@@ -364,6 +384,9 @@ export default function IndicadoresADepartamento() {
             <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
             <Typography variant="body1" color={"#00008B"} my={.5}>
             
+            </Typography>
+            <Typography variant="body1" color={"#00008B"} my={2}>
+                        INVESTIGACIONES REALIZADAS
             </Typography>
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={12}>

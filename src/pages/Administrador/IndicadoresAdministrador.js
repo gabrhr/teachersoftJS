@@ -32,19 +32,15 @@ const getDepartamentos = async () => {
     return departamentos;
 }
 
-const getSeccionCollection =  async () => {
+const getSeccionCollection =  async (id_dep) => {
     //{ id: '1', title: 'Todas las Secciones' },
-    const user = JSON.parse(localStorage.getItem("user"))
-    let dataSecc = await SeccionService.getSeccionxDepartamento(user.persona.departamento.id);
+    //const user = JSON.parse(localStorage.getItem("user"))
+    let dataSecc = await SeccionService.getSeccionxDepartamento(id_dep);
     
     if(!dataSecc) dataSecc = [];
   
     const secciones = [];
   
-    secciones.push({
-      "id": 0,
-      "nombre": "Todas las secciones",
-    })
     for(let sec of dataSecc) {
       //Hacemos la creación y verificación de los estados
       secciones.push({
@@ -121,10 +117,13 @@ export default function IndicadoresAdministrador() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
+    const [secciones, setSecciones] = useState([]);
+    const [departamentos, setDepartamentos] = useState([])
+    const [departamento, setDepartamento] = useState(0);
+    const [changeSecc, setChangeSecc] = useState(false);
 
     const initialFieldValues = {
-        idDepartamento: '',
-        idSeccion: '',
+        id: '',
         nombre: ''
     }
 
@@ -135,38 +134,38 @@ export default function IndicadoresAdministrador() {
       // eslint-disable-next-line react-hooks/rules-of-hooks
     } = useForm(initialFieldValues);
     
-    const [departamento, setDepartamentos] = useState([])
+    
 
     useEffect(() => {
         getDepartamentos()
           .then(newDep => {
-            setDepartamentos(newDep);
-            setValues({...values, idDepartamento: newDep[0].id});//Para que se coja predeterminado dicho valor
+            if(newDep){
+                setDepartamentos(newDep);
+                setValues(newDep[0]);//Para que se coja predeterminado dicho valor
+            }
         });
         
     }, [])
 
-    const [secciones, setSecciones] = useState([]);
+    useEffect(()=>{
+        if(values)  setDepartamento(values.id);
+        else{
+            if (setValues) setDepartamento(0) 
+            //Para indicar que se señalan a todos los departamentos
+        }  
+    },[values]) //Cada que cambia los values para la seccion
 
     useEffect(() => {
-        getSeccionCollection()
+        setChangeSecc(false)
+        getSeccionCollection(departamento)
         .then (newSecc =>{
         if(newSecc){
             setSecciones(newSecc);
-            setValues({...values, idSeccion: newSecc[0].id});  //Para que se coja predeterminado dicho valor
+            setChangeSecc(true)
         }
         });
-    }, [] )//Solo al inicio para la carga de secciones
+    }, [departamento] )//Solo al inicio para la carga de secciones
 
-    const [seccion, setSeccion] = useState(0);
-
-    useEffect(()=>{
-        if(values)  setSeccion(values.id);
-        else{
-            if (setValues) setSeccion(0) 
-            //Para indicar que se señalan a todas las secciones que le pertencen al departamento
-        }  
-    },[values]) //Cada que cambia los values para la seccion
     
     const [profesorTC, setProfesorTC] = useState([]);
 
@@ -244,6 +243,8 @@ export default function IndicadoresAdministrador() {
         });
     }, [])
 
+    console.log(departamento)
+
     return (
         <Form>
             <ContentHeader
@@ -259,20 +260,20 @@ export default function IndicadoresAdministrador() {
                 </Grid>
                 <Grid item xs={4}>
                     <Controls.Select
-                    name="idDepartamento"
+                    name="id"
                     label="Departamentos"
-                    value={values.idDepartamento}
+                    value={values.id}
                     onChange={handleInputChange}
-                    options={departamento}
+                    options={departamentos}
                     type="contained"
                     // displayNoneOpt
                     />
                 </Grid>
                 <Grid item xs={4}>
                     <Controls.Select
-                    name="idSeccion"
+                    name="id"
                     label="Secciones"
-                    value={values.idSeccion}
+                    value={values.id}
                     onChange={handleInputChange}
                     options={secciones}
                     type="contained"

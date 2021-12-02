@@ -184,7 +184,7 @@ export default function IndicadoresASeccion() {
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -213,7 +213,7 @@ export default function IndicadoresASeccion() {
                         Promedio de Deuda TPA: {profesorDeudaTPA.promedio_deuda}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -242,7 +242,7 @@ export default function IndicadoresASeccion() {
                         Promedio de Sobrecarga TPA: {profesorSobrecargaTPA.promedio_deuda*-1}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
                     </div>
                 </Grid>
             </Grid>
