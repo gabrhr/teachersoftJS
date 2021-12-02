@@ -444,12 +444,12 @@ export default function GestionTrabajosInvestigacion() {
                   {
                     recordsAfterPagingAndSorting().map(item => (
                       <StyledTableRow key={item.id}>
-                        <StyledTableCell >{item.codigo_publicacion}</StyledTableCell>
-                        <StyledTableCell >{item.titulo}</StyledTableCell>
-                        <StyledTableCell >{item.nombreAutor}</StyledTableCell>
-                        <StyledTableCell >{item.anho_publicacion}</StyledTableCell>
-                        <StyledTableCell component="a" href={item.url_repositorio.indexOf("http") == 0 ? item.url_repositorio : "http://" + item.url_repositorio }>{item.url_repositorio}</StyledTableCell>
-                        <StyledTableCell>
+                        <StyledTableCell style={{width:'7.5%'}} >{item.codigo_publicacion}</StyledTableCell>
+                        <StyledTableCell style={{width:'20%'}} >{item.titulo}</StyledTableCell>
+                        <StyledTableCell style={{width:'20%'}} >{item.nombreAutor}</StyledTableCell>
+                        <StyledTableCell style={{width:'7.5%'}} >{item.anho_publicacion}</StyledTableCell>
+                        <StyledTableCell style={{width:'20%'}} component="a" href={item.url_repositorio.indexOf("http") == 0 ? item.url_repositorio : "http://" + item.url_repositorio }>{item.url_repositorio}</StyledTableCell>
+                        <StyledTableCell style={{width:'25%'}}>
                           <Controls.ActionButton
                             color="warning"
                             onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
@@ -482,8 +482,8 @@ export default function GestionTrabajosInvestigacion() {
                     }
                     </TableBody>
                 </TblContainer>
-
-                </BoxTbl>
+              <TblPagination/>
+              </BoxTbl>
             
             </Grid>
             <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
