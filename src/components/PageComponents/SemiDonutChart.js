@@ -1,5 +1,4 @@
 import React from 'react'
-import {Chart, ArcElement} from 'chart.js'
 import {Doughnut} from 'react-chartjs-2'
 
 /*  Colores pastel con transparencia
@@ -13,10 +12,11 @@ import {Doughnut} from 'react-chartjs-2'
 
 export default function SemiDonutChart(props) {
     
-    const {Cantidad, CantidadTotal} = props;
-
+    const {Cantidad, CantidadTotal, text} = props;
+    let percentage = (Cantidad/CantidadTotal * 100);
+    let text2 = percentage.toString();
     const data = {
-        labels: ["Tiempo completo"],
+        labels: [],
         datasets: [{
             data: [Cantidad/CantidadTotal * 100, (1 - Cantidad/CantidadTotal)*100],
             backgroundColor: ["rgb(4, 35, 84)", "rgb(132, 132, 153)"],
@@ -24,17 +24,18 @@ export default function SemiDonutChart(props) {
         }],
     }
     const options = {
-        legend: {
-            display: false
+        labels: {
+            display: false,
         },
         circumference: 60 * Math.PI,
         rotation: -30 * Math.PI
         
-        
     }
+ 
     return (
         <div>
-            <Doughnut data={data} options={options}/>
+            <Doughnut data={data} options={options} />
+            
         </div>
     )
 }

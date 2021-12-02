@@ -17,12 +17,10 @@ export default function BigStatistics(props){
             direction="column"
         >
         <Grid item >
-            <br/>
-            <br/>
+
             <Typography   variant={variantText ? variantText : "h1"} fontWeight={fontWeight ? fontWeight : "550"} my={1}  sx={{color:"primary.light"}} > {text } </Typography>
             <Typography   variant={variantTitle ? variantTitle : "h4"} my={1}  sx={{color:"primary.light"}} > {title } </Typography>
-            <br/>
-            <br/>
+   
         </Grid>
       </Grid>
 

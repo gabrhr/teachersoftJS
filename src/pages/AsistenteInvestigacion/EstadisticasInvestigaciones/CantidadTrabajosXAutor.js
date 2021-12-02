@@ -86,7 +86,7 @@ export default function CantidadTrabajosXAutor(){
                 cbo={false}
             />
             <Grid container spacing={2} >
-                <Grid item xs={6}>
+                <Grid item xs={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Typography variant="h4" style={SubtitulosTable} >
                             TOP 10 Autores con la mayor cantidad de investigaciones
@@ -97,31 +97,25 @@ export default function CantidadTrabajosXAutor(){
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item xs={6}>
-                    <Grid container spacing={2}>
+                <Grid item xs={5}>
+                    
+                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                         <Grid item xs={6}>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <BigStatistics  
-                                    variantText="h3"
+                                    variantText="h4"
                                     title={"Autor(a) con más publicaciones"} 
                                     text={indicadores[0]}
                                     />
                             </Paper>
-                        </Grid>
-                        <Grid item xs={6}>
+                            <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <BigStatistics  
                                     title={"Cantidad Máxima de publicaciones de un Autor(a)"} 
                                     text={indicadores[1]}
                                 />
                             </Paper>
-                        </Grid>
-                    </Grid>
-                    <br/>
-                    
-                    <br/>
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                            <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <BigStatistics  
                                     title={"Cantidad total de publicaciones "} 
@@ -130,11 +124,21 @@ export default function CantidadTrabajosXAutor(){
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>
-                            <Paper variant="outlined" sx={PaperStyle}>
+                        <Paper variant="outlined" sx={PaperStyle}>
+                            <Typography  align="center" variant={"h1"} fontWeight={"550"}  sx={{color:"primary.light"}} > {indicadores[1]/indicadores[2] * 100 + "%" } </Typography>
+                                
                                 <SemiDonutChart Cantidad={indicadores[1]} CantidadTotal={indicadores[2]}/>
+                                <br/>
+                                <Typography  align="center" variant={"h6"}  sx={{color:"primary.light"}} > 
+                                    Es el porcentaje de documentos que le pertenece al autor con más documentos
+                                </Typography>
                             </Paper>
                         </Grid>
                     </Grid>
+                    <br/>
+                    
+                    <br/>
+                    
                 </Grid>
             </Grid>
         </>
