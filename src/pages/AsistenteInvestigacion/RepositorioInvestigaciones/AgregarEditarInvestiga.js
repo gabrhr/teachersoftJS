@@ -24,6 +24,16 @@ import UserService from '../../../services/userService';
 let countryList = []; 
 let yearList = []; 
 
+
+const listTipos = [
+
+    {id: 0, title: 'Académica'},
+    {id: 1, title: 'Profesional'},
+    {id: 2, title: 'Otros'},
+    
+]
+
+
 const listCodVal = [
 
     {id: 0, title: 'A1'},
@@ -80,7 +90,7 @@ const initialFieldValues = {
   anho_publicacion:  new Date().getFullYear().toString(),
   ciudad:  '',
   codigo_publicacion:  '',
-  codigo_validacion:  '',
+  codigo_validacion:  0,
   divulgacion:  '',
   doi:  '',
   edicion:  '',
@@ -179,9 +189,10 @@ export default function AgregarEditarInvestiga(props) {
             temp.codigo_publicacion = fieldValues.codigo_publicacion ? "" : "Este campo es requerido"
         if(fieldValues.codigo_publicacion)
                 temp.codigo_publicacion = (/^[0-9]{3}(-){1}[a-zA-Z]{3}$/).test(fieldValues.codigo_publicacion) ? "" : "Tiene que tener el formato: 123-ABC"
-        
-        if ('tipo_publicacion' in fieldValues)
-            temp.tipo_publicacion = fieldValues.tipo_publicacion ? "" : "Este campo es requerido"
+        if(fieldValues.nro_revista)
+                temp.nro_revista = (/^\d+$/).test(fieldValues.nro_revista) ? "" : "Tiene que ser numérico"
+        if(fieldValues.volumen)
+            temp.volumen = (/^\d+$/).test(fieldValues.volumen) ? "" : "Tiene que ser numérico"
         if ('idioma' in fieldValues)
             temp.idioma = fieldValues.idioma ? "" : "Este campo es requerido"
         if (fieldValues.idioma)
@@ -216,8 +227,8 @@ export default function AgregarEditarInvestiga(props) {
             temp.correo = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                     .test(fieldValues.correo) ? ""
                     : "Este correo no es válido."
-        if(!fieldValues.isbn && !fieldValues.issn)
-            temp.isbn = "Se requiere al menos ISBN o ISSN"
+        //if(!fieldValues.isbn && !fieldValues.issn)
+        //    temp.isbn = "Se requiere al menos ISBN o ISSN"
             
         // temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError
         if(recordForEdit){
@@ -363,13 +374,15 @@ export default function AgregarEditarInvestiga(props) {
                                 onChange = {handleInputChange}
                                 error={errors.codigo_publicacion}
                             />
-                            <Controls.Input
+                            <Controls.Select
                                 name="tipo_publicacion"
                                 label="Tipo de Publicación"
-                                value={values.tipo_publicacion}
-                                onChange = {handleInputChange}
+                                value={values.tipo_publicacion  }
+                                onChange={handleInputChange}
+                                options={listTipos}
                                 error={errors.tipo_publicacion}
                             />
+ 
                             <Controls.Select
                                 name="anho_publicacion"
                                 label="Año de publicación"
