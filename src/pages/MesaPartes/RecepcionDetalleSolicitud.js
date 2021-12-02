@@ -210,7 +210,13 @@ export default function RecepcionDetalleSolicitudFuncion() {
 
     /* delegado (persona) */
     function submitDelegar(delegado) {
-        let s = MesaPartesService._(`${solicitud.id}&${delegado.correo}`)
+        let url = "http://front.teachersoft.solutions"
+        let externo_msg = ""
+        if (true || delegado.options === 'delegadoExterno') {
+            url = url + `/invitado/atenderxemail/`
+                + MesaPartesService._(`${solicitud.id}&${delegado.correo}`)
+            externo_msg = "<p>El link expirará en 3 días.</p>"
+        }
         setSolicitud(solicitud => ({
             ...solicitud,
             /* data que viene de DelegarForm */
@@ -230,35 +236,34 @@ export default function RecepcionDetalleSolicitudFuncion() {
             /* only for FrontEnd */
             cambioEstado: true,
             // email url 
-            url: delegado.options === 'delegadoExterno'
-                ? `http://front.teachersoft.solutions/invitado/atenderxemail/` + s
-                : null
+            url: url,
+            externo_msg: externo_msg
         }))
     }
 
     /* delegado Externo (crear nuevo solo si ya existe, postlogin se encarga) */
     function submitDelegarExterno(delegadofake) {
-        let datausuario = {
-            // id: null,
-            usuario: delegadofake.correo,       // Back lo lee?  creo que no
-            password: null,                     // Back lo lee?  ni se usa
-            persona: {
-                // id: null,
-                tipo_persona: 7,    // Usuario Externo
-                codigo_pucp: null,
-                correo_pucp: delegadofake.correo,
-                foto_URL: 'static/images/avatar/1.jpg',
-                nombres: delegadofake.nombre,
-                apellidos: '',
-                // fechaNac: new Date(),
-                // sexo: 0,
-                // tipo_documento: 0,
-                // numero_documento: "12345678",
-                // telefono: "123456789",
-                // seccion: {id: 3},
-                // departamento: {id: 3},      // (redundante en este caso)
-            }
-        }
+        // let datausuario = {
+        //     // id: null,
+        //     usuario: delegadofake.correo,       // Back lo lee?  creo que no
+        //     password: null,                     // Back lo lee?  ni se usa
+        //     persona: {
+        //         // id: null,
+        //         tipo_persona: 7,    // Usuario Externo
+        //         codigo_pucp: null,
+        //         correo_pucp: delegadofake.correo,
+        //         foto_URL: 'static/images/avatar/1.jpg',
+        //         nombres: delegadofake.nombre,
+        //         apellidos: '',
+        //         // fechaNac: new Date(),
+        //         // sexo: 0,
+        //         // tipo_documento: 0,
+        //         // numero_documento: "12345678",
+        //         // telefono: "123456789",
+        //         // seccion: {id: 3},
+        //         // departamento: {id: 3},      // (redundante en este caso)
+        //     }
+        // }
         MesaPartesService.lue(delegadofake)
             .then(data => {
                 console.log("lue", data)
