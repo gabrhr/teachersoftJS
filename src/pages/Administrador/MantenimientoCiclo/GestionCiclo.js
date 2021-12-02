@@ -207,7 +207,7 @@ export default function GestionCiclo() {
             <div style={{display: "flex", paddingRight: "5px", marginTop:20}}>
               {/* <Toolbar> */}
               <Controls.Input
-                label="Buscar Ciclos por Nombre"
+                label="Buscar por Ciclo"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
