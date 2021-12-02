@@ -1,6 +1,7 @@
 import React from 'react';
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -40,4 +41,10 @@ export const MenuAdministrador = [
             }
         ]
     },
+    {
+        text: 'Estadisticas',
+        path: '/admin/estadisticas',
+        icon: <InboxOutlinedIcon />,
+        indice: 1,
+    }
 ];

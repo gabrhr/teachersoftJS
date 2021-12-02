@@ -5,7 +5,52 @@ import { Controls } from '../../components/controls/Controls'
 import IndicadoresService from '../../services/indicadoresService';
 import PieCharts from '../../components/PageComponents/PieCharts';
 import InvestigacionService from '../../services/investigacionService';
+import SeccionService from "../../services/seccionService";
+import DepartamentoService from '../../services/departamentoService';
 import BarChartAutores from '../../components/PageComponents/BarCharts';
+import { useForm, Form } from "../../components/useForm"
+
+const getDepartamentos = async () => {
+    //SI USA GET - SI JALA LA DATA - ESTE SI LO JALA BIEN
+    let dataDep = await DepartamentoService.getDepartamentos();
+    console.log(dataDep)
+    dataDep = dataDep ?? []  /* (mitsuo) deberia avisar salir un mensaje de error */
+    //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
+    //console.log("AQUI ESTA EL DATASECC")
+    //console.log(dataDep)
+    
+    const departamentos = [];
+    for(let dep of dataDep) {
+        //Hacemos la creación y verificación de los estados
+        departamentos.push({
+          "id": dep.id,
+          "nombre": dep.nombre,
+        })
+    }
+    //console.log(secciones);
+    window.localStorage.setItem('listDeps',JSON.stringify(dataDep));
+    return departamentos;
+}
+
+const getSeccionCollection =  async (id_dep) => {
+    //{ id: '1', title: 'Todas las Secciones' },
+    //const user = JSON.parse(localStorage.getItem("user"))
+    let dataSecc = await SeccionService.getSeccionxDepartamento(id_dep);
+    
+    if(!dataSecc) dataSecc = [];
+  
+    const secciones = [];
+  
+    for(let sec of dataSecc) {
+      //Hacemos la creación y verificación de los estados
+      secciones.push({
+        "id": sec.id,
+        "nombre": sec.nombre,
+      })
+    }
+  
+    return secciones;
+}
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
     let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
@@ -25,14 +70,14 @@ const fillProfesorTPA = async (id_ciclo, id_seccion) => {
     return profesorTPA;
 }
 
-const deudaProfesores = async (id_seccion) => {
-    let profesorDeuda = await IndicadoresService.getDataProfesoresDeudaSeccion(id_seccion);
+const deudaProfesores = async () => {
+    let profesorDeuda = await IndicadoresService.getDataProfesoresDeuda();
     
     return profesorDeuda;
 }
 
-const sobrecargaProfesores = async (id_seccion) => {
-    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecargaSeccion(id_seccion);
+const sobrecargaProfesores = async () => {
+    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecarga();
     
     return profesorSobrecarga;
 }
@@ -66,13 +111,61 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresASeccion() {
+export default function IndicadoresAdministrador() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
+    const [secciones, setSecciones] = useState([]);
+    const [departamentos, setDepartamentos] = useState([])
+    const [departamento, setDepartamento] = useState(0);
+    const [changeSecc, setChangeSecc] = useState(false);
+
+    const initialFieldValues = {
+        id: '',
+        nombre: ''
+    }
+
+    const {
+        values,
+        setValues,
+        handleInputChange
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+    } = useForm(initialFieldValues);
     
+    
+
+    useEffect(() => {
+        getDepartamentos()
+          .then(newDep => {
+            if(newDep){
+                setDepartamentos(newDep);
+                setValues(newDep[0]);//Para que se coja predeterminado dicho valor
+            }
+        });
+        
+    }, [])
+
+    useEffect(()=>{
+        if(values)  setDepartamento(values.id);
+        else{
+            if (setValues) setDepartamento(0) 
+            //Para indicar que se señalan a todos los departamentos
+        }  
+    },[values]) //Cada que cambia los values para la seccion
+
+    useEffect(() => {
+        setChangeSecc(false)
+        getSeccionCollection(departamento)
+        .then (newSecc =>{
+        if(newSecc){
+            setSecciones(newSecc);
+            setChangeSecc(true)
+        }
+        });
+    }, [departamento] )//Solo al inicio para la carga de secciones
+
     
     const [profesorTC, setProfesorTC] = useState([]);
 
@@ -109,7 +202,7 @@ export default function IndicadoresASeccion() {
     const [profesorDeudaTPA, setProfesorDeudaTPA] = useState([]);
 
     useEffect(() => {
-        deudaProfesores(user.persona.seccion.id)
+        deudaProfesores()
         .then(newProfDeuda => {
             setProfesorDeudaTC(newProfDeuda.TC);
             setProfesorDeudaTPC(newProfDeuda.TPC);
@@ -122,7 +215,7 @@ export default function IndicadoresASeccion() {
     const [profesorSobrecargaTPA, setProfesorSobrecargaTPA] = useState([]);
 
     useEffect(() => {
-        sobrecargaProfesores(user.persona.seccion.id)
+        sobrecargaProfesores()
         .then(newProfSobrecarga => {
             setProfesorSobrecargaTC(newProfSobrecarga.TC);
             setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
@@ -150,14 +243,47 @@ export default function IndicadoresASeccion() {
         });
     }, [])
 
+    console.log(departamento)
+
     return (
-        <>
+        <Form>
             <ContentHeader
                 text="Dashboard"
                 cbo={false}
             />
+            <Grid container xs spacing = {4}>
+            {/* <Stack direction="row" spacing = {4}> */}
+                <Grid item xs={4} sx = {{paddingLeft: 3}}>
+                    <Typography variant="body1" color={"#00008B"} my={2}>
+                        DATA ACTUAL DEL CICLO
+                    </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    <Controls.Select
+                    name="id"
+                    label="Departamentos"
+                    value={values.id}
+                    onChange={handleInputChange}
+                    options={departamentos}
+                    type="contained"
+                    // displayNoneOpt
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <Controls.Select
+                    name="id"
+                    label="Secciones"
+                    value={values.id}
+                    onChange={handleInputChange}
+                    options={secciones}
+                    type="contained"
+                    // displayNoneOpt
+                    />
+                </Grid>
+                
+            </Grid>
             <Typography variant="body1" color={"#00008B"} my={2}>
-                DATA ACTUAL DEL CICLO
+            
             </Typography>
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={3.5}>
@@ -184,7 +310,7 @@ export default function IndicadoresASeccion() {
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+                        {PieCharts.PieChartTipoDocente(1,2,3)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -213,7 +339,7 @@ export default function IndicadoresASeccion() {
                         Promedio de Deuda TPA: {profesorDeudaTPA.promedio_deuda}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
+                        {PieCharts.PieChartTipoDocente(1,2,3)}
                     </div>
                 </Grid>
                 <Grid item xs={0.25}/>
@@ -242,7 +368,7 @@ export default function IndicadoresASeccion() {
                         Promedio de Sobrecarga TPA: {profesorSobrecargaTPA.promedio_deuda*-1}
                     </Typography>
                     <div>
-                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
+                        {PieCharts.PieChartTipoDocente(1,2,3)}
                     </div>
                 </Grid>
             </Grid>
@@ -299,6 +425,6 @@ export default function IndicadoresASeccion() {
                     </Paper>
                 </Grid>
             </Grid>
-        </>
+        </Form>
     )
 }

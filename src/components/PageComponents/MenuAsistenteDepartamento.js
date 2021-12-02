@@ -42,5 +42,11 @@ export const MenuAsistenteDepartamento = [
                 indice: 1,
             }
         ]
+    },
+    {
+        text: 'Estadisticas',
+        path: '/ad/estadisticas',
+        icon: <InboxOutlinedIcon />,
+        indice: 1,
     }
 ];
