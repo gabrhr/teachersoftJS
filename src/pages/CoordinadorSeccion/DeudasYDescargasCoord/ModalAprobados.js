@@ -20,6 +20,10 @@ import {useHistory} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ModalGuardarAprobados from './ModalGuardarAprobados'
 import { Alert } from '@mui/material';
+import tramiteDescargaService from '../../../services/tramiteDescargaService';
+import procesoDescargaService from '../../../services/procesoDescargaService';
+import { UserContext } from '../../../constants/UserContext';
+
 const tableHeaders = [
     
     {
@@ -42,9 +46,9 @@ const tableHeaders = [
     },
 ]
 
-export default function ModalAprobados({setOpenAprobados}){
+export default function ModalAprobados({setOpenAprobados, procesoActual}){
 
-    const [records, setRecords] = useState([
+    const [records, setRecords] = useState([/*
         {
             nombre: 'Perez',
             correo: '@perez.com',
@@ -65,13 +69,13 @@ export default function ModalAprobados({setOpenAprobados}){
             justificacion: 'Por favor2',
             seleccionado: true,
             tipo_bono: 1
-        }
+        }*/ 
     ])
 
-    const [solicitados, setSolicitados] = React.useState(2)
-    const [descargas, setDescargas] = React.useState(records.length)
+    const [aprobados, setAprobados] = React.useState(2)
+    const [descargas, setDescargas] = React.useState(0)
     
-
+    const { user } = React.useContext(UserContext)
     
 
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
@@ -84,7 +88,18 @@ export default function ModalAprobados({setOpenAprobados}){
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
-    
+    const guardarSolicitudActual = () =>{
+        for(let i = 0; i < records.length; i++){
+            if(records[i].seleccionado){
+                records[i].resultado = 1
+            }else{
+                records[i].tramiteSeccionDescarga = null
+            }
+            tramiteDescargaService.updateTramiteDescarga(records[i])
+            console.log("ID: de tramite modificado", records[i].id)
+        }
+        console.log("Records modificado", records)
+    }
 
     const handleSearch = e => {
         let target = e.target;
@@ -102,6 +117,33 @@ export default function ModalAprobados({setOpenAprobados}){
         })
     }
 
+    const agregarCampo = (request) =>{
+        for(let i = 0; i < request.length; i++){
+            request[i]["seleccionado"] = true
+        }
+        /*for(let i = 0; i < request.length; i++){
+            delete request[i].seleccionado
+        }Mausequerramienta misteriosa*/
+        //setDescargas(request.length)
+        return request
+    }
+
+    const getTramitesDescargasDocentes = async() =>{
+        //console.log(user.persona.departamento.id)
+        //let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
+        const request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, 0);
+        console.log(request)
+        setDescargas(request.length)
+        setAprobados(request[0].tramiteSeccionDescarga.cantidad_aprobada)
+        const requestTransformado = agregarCampo(request)
+        setRecords(requestTransformado)
+    } 
+
+    React.useEffect(() => {
+        //listar todos tramites
+        getTramitesDescargasDocentes()
+    }, [aprobados])
+
     const history = useHistory()
 
     const addDocente = (docente) => {
@@ -109,7 +151,7 @@ export default function ModalAprobados({setOpenAprobados}){
         if(docente.seleccionado === true) setDescargas(descargas + 1)
         else setDescargas(descargas - 1)
         console.log(docente.seleccionado)
-        console.log(solicitados)
+        console.log(aprobados)
     }
 
     return (
@@ -133,7 +175,7 @@ export default function ModalAprobados({setOpenAprobados}){
                     </div>
                     <div style={{ width: "140px", marginLeft: "50x", paddingTop:'25px' }}>
                             <Controls.DreamTitle
-                                title={`Solicitados: ${solicitados}`}
+                                title={`Aprobados: ${aprobados}`}
                                 size='20px'
                                 lineheight='100%'
                                 />
@@ -160,7 +202,7 @@ export default function ModalAprobados({setOpenAprobados}){
                                 </Controls.RowCheckBox>
                             </TableCell>
                             <TableCell sx = {{width: '533px'}}>
-                                {item.nombre}
+                                {item.solicitador.nombres + " " + item.solicitador.apellidos}
                             </TableCell>
                             <TableCell> 
                                 <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
@@ -181,11 +223,11 @@ export default function ModalAprobados({setOpenAprobados}){
                     <Controls.Button
                         text="Aprobar descargas"
                         endIcon={<SaveIcon/>} 
-                        disabled = {descargas !== solicitados}
+                        disabled = {descargas !== aprobados}
                         onClick={(e)=>{
-                            // guardarSolicitudActual()
+                            guardarSolicitudActual()
                             setOpenAprobados(false)
-                            // history.push("/cord/asignacionCarga/deudaYDescarga");
+                            history.push("/cord/asignacionCarga/deudaYDescarga");
                         }} 
                         />
                 </Grid>
