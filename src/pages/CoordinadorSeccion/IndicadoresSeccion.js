@@ -32,13 +32,14 @@ export default function IndicadoresSeccion() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
+    const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
     const [profesorTC, setProfesorTC] = useState([]);
     const [profesorTPC, setProfesorTPC] = useState([]);
     const [profesorTPA, setProfesorTPA] = useState([]);
     
     useEffect(() => {
-        fillProfesorTC(2,3)
+        fillProfesorTC(user.persona.seccion.id,cicloAct)
         .then(newProfTC => {
             setProfesorTC(newProfTC);
             
@@ -46,7 +47,7 @@ export default function IndicadoresSeccion() {
     }, [])
 
     useEffect(() => {
-        fillProfesorTPC(2,3)
+        fillProfesorTPC(user.persona.seccion.id,cicloAct)
         .then(newProfTPC => {
             setProfesorTPC(newProfTPC);
             
@@ -54,12 +55,15 @@ export default function IndicadoresSeccion() {
     }, [])
 
     useEffect(() => {
-        fillProfesorTPA(2,3)
+        fillProfesorTPA(user.persona.seccion.id,cicloAct)
         .then(newProfTPA => {
             setProfesorTPA(newProfTPA);
             
         });
     }, [])
+
+    console.log(user.persona.seccion.id)
+    console.log(cicloAct)
 
     return (
         <>
@@ -73,12 +77,12 @@ export default function IndicadoresSeccion() {
             <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
                 <Grid item xs={3}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Numero de Profesores TC: {profesorTC.cantidad_docentes}
+                        Número de Profesores TC: {profesorTC.cantidad_docentes}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={4}>
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Numero de Profesores TPC: {profesorTPC.cantidad_docentes}
+                        Número de Profesores TPC: {profesorTPC.cantidad_docentes}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Promedio de Horas TPC: {profesorTPC.promedio_horas}
@@ -86,37 +90,34 @@ export default function IndicadoresSeccion() {
                     <Typography variant="body1" color={"#00008B"} my={4}>
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Numero de Profesores TPA: {profesorTPA.cantidad_docentes}
+                        Número de Profesores TPA: {profesorTPA.cantidad_docentes}
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                         Promedio de Horas TPA: {profesorTPA.promedio_horas}
+                    </Typography>
+                </Grid>
+                <Grid item xs={0.75}/>
+                <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+                <Grid item xs={3}>
+                    <Typography variant="body1" color={"#00008B"} my={.5}>
+                    Número de Profesores con deuda:
                     </Typography>
                     <div>
                         {PieCharts.PieChartTipoDocente(1,2,3)}
                     </div>
                 </Grid>
-                <Grid item xs={0.75}/>
-                <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-                <Grid item xs={3.5}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Numero de Profesores con deuda:
-                    </Typography>
-                </Grid>
                 <Grid item xs={0.5}/>
                 <Divider orientation="vertical" flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
                 <Grid item xs={3}>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Numero de Investigadores:
+                    Número de Investigadores:
                     </Typography>
+                    <div>
+                        {PieCharts.PieChartTipoDocente(1,2,3)}
+                    </div>
                 </Grid>
             </Grid>
             <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
-            <ContentHeader
-                text=""
-                cbo={true}
-                records = {ciclo}
-                setRecords = {setCiclo}
-            />
             <Typography variant="body1" color={"#00008B"} my={.5}>
             
             </Typography>
@@ -127,6 +128,17 @@ export default function IndicadoresSeccion() {
                     </Typography>
                     <Typography variant="body1" color={"#00008B"} my={.5}>
                     Promedio de horas de Dictado:
+                    </Typography>
+                </Grid>
+            </Grid>
+            <Divider flexItem sx={{marginTop : '20px', mr:"10px", ml:"20px"}} />
+            <Typography variant="body1" color={"#00008B"} my={.5}>
+            
+            </Typography>
+            <Grid container spacing={1} ml={".3px"} style={{border: "1px solid grey"}}>
+                <Grid item xs={3}>
+                    <Typography variant="body1" color={"#00008B"} my={.5}>
+                    Número de Investigadores:
                     </Typography>
                 </Grid>
             </Grid>
