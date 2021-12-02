@@ -154,13 +154,20 @@ export default function NuevoProcesoForm() {
         console.log("rq1 ", rq1)
         console.log("rq2 ", rq2)
 
-        request = rq1.concat(rq2).concat(rq3)
+        if(typeof rq1 !== 'undefined' && rq2 !== 'undefined'){
+            request = rq1.concat(rq2).concat(rq3)
+        }else{
+            request = []
+        }
+        
 
         console.log(procesoActual.id)
         console.log(user.persona.seccion.id)
         
+        let requestTransformado = []
+
         console.log(request)
-        const requestTransformado = agregarCampo(request)
+        if(request.length !== 0)requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
     }
 
