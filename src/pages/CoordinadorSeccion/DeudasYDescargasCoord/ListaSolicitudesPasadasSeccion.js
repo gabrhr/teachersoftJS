@@ -52,7 +52,7 @@ function Item(props){
     return (
         <>
             <TableRow>
-                <TableCell sx={{minWidth:"200px"}}>
+                <TableCell sx={{minWidth:"150px"}}>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Fecha: {'\u00A0'}
                     </Typography>
@@ -74,13 +74,13 @@ function Item(props){
                         {item.seccion.nombre}
                     </Typography>
                     <div/>
-                    <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
+                    {/* <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Autor: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
                         {item.solicitador.nombres+ " " + item.solicitador.apellidos}
                     </Typography>
-                    <div/>
+                    <div/> */}
                 </TableCell>
                 <TableCell>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -114,11 +114,10 @@ function Item(props){
                         {item.cantidad_aprobada} 
                     </Typography>
                 </TableCell>
-                <TableCell sx={{maxWidth:"300px"}}> 
+                <TableCell  align="center"> 
                     <Controls.Button
                         text="Detalle"
                     />
-                    <div/>
                     <Controls.Button
                         text="Aprobados"
                         onClick={()=>{setOpenAprobados(true)}} 
