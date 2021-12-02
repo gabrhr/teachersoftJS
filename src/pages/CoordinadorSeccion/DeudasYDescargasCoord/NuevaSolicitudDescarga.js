@@ -88,6 +88,25 @@ export default function NuevoProcesoForm() {
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
 
+    const modificarTramitesDocente = async(resultado) =>{
+        for(let i = 0; i < records.length; i++){
+            if(records[i].seleccionado){
+                records[i].tramiteSeccionDescarga = {
+                    "id": resultado.id,
+                }
+                records[i].persona_seccion = {
+                    "id": user.persona.id,
+                }
+                /*Se agregan los datos del tramite de seccion*/
+            }else{
+                records[i].resultado = 2
+                /*Se rechaza la solicitud del docente*/
+            }
+            await tramiteDescargaService.updateTramiteDescarga(records[i])
+        }
+        console.log("Las filas modificadas", records)
+    }
+
     const guardarSolicitud = async() =>{
         //let  = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         //console.log("El iprocesoActivoNewd del proceso activo es ", procesoActivoNew[0].id)
@@ -112,25 +131,9 @@ export default function NuevoProcesoForm() {
             "departamento": null,
         }
         //console.log("El nuevo tramite seccion", newTramiteSeccion)
-        let resultado = 
-            await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
+        let resultado = await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
         //console.log("El id del tramite seccion es", resultado.id)
-        for(let i = 0; i < records.length; i++){
-            if(records[i].seleccionado){
-                records[i].tramiteSeccionDescarga = {
-                    "id": resultado.id,
-                }
-                records[i].persona_seccion = {
-                    "id": user.persona.id,
-                }
-                /*Se agregan los datos del tramite de seccion*/
-            }else{
-                records[i].resultado = 2
-                /*Se rechaza la solicitud del docente*/
-            }
-            await tramiteDescargaService.updateTramiteDescarga(records[i])
-        }
-        console.log("Las filas modificadas", records)
+        modificarTramitesDocente(resultado)
     }
 
     const agregarCampo = (request) =>{
@@ -162,7 +165,7 @@ export default function NuevoProcesoForm() {
         
 
         console.log(procesoActual)
-        console.log(user.persona.seccion.id)
+        console.log(user.persona.id)
         
         let requestTransformado = []
 

@@ -126,7 +126,7 @@ export default function ItemProcesoActual(props) {
                         pathname:"/cord/solicitudes/deudasYDescargas/solicitud",
                         state:{
                             recordForEdit: solicitudActual,
-                            procesoActual: procesoActual
+                            procesoActual: procesoActual.id
                         }
                     }}  style={{ textDecoration: 'none' }}>
                         <Controls.Button
