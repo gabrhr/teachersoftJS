@@ -1,15 +1,26 @@
-import { Typography, Grid } from "@mui/material";
+import { Link, Typography, Grid } from "@mui/material";
+
+const stylish = {
+        
+    borderBottom: "1px solid white",
+    //borderBottom: "2px white",
+    display: "flex",
+    justifyContent: "space-between",
+}
+
+function ConditionalTypography(props) {
+    let { text, url } = props;
+    if (url != null) {    
+        return <Link href={url.indexOf("http") == 0 ? url : "http://" + url } color="inherit">{text}</Link>;  
+    }  
+    return  <Typography style={{ wordWrap: "break-word" }} my={1} sx={{color:"primary.light"}}> {text} </Typography>
+
+}
 
 export default function StyleDictionary(props) {
-    let { title, text } = props;
+    let { title, text, url } = props;
 
-    const stylish = {
-        
-        borderBottom: "1px solid white",
-        //borderBottom: "2px white",
-        display: "flex",
-        justifyContent: "space-between",
-    }
+  
     const SubtitulosTable={display:"flex"  }
 
     return (
@@ -20,7 +31,8 @@ export default function StyleDictionary(props) {
             <Typography  fontWeight="550" my={1}  sx={{color:"primary.light"}} > {title } </Typography>
            </Grid> 
            <Grid item xs={8}>
-            <Typography style={{ wordWrap: "break-word" }} my={1} sx={{color:"primary.light"}}> {text} </Typography>
+                
+            <ConditionalTypography text={text} url={url} />
            </Grid> 
         {
         /* o es Typography o <p>

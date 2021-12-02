@@ -28,6 +28,7 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { DT } from '../../../components/DreamTeam/DT';
 import { ContactPage } from '@mui/icons-material';
+import AgregarEditarInvestiga from './AgregarEditarInvestiga'
 
 import GestionTrabajosInvestigacionDetalle from './GestionTrabajosInvestigacionDetalle';
 
@@ -76,6 +77,8 @@ const initialFieldValues = {
 
   idAutor:  '',
   nombreAutor: '',
+  foto_url: '',
+  codigo_pucp: '',
 }
 
 const useStyles = makeStyles(theme => ({
@@ -184,7 +187,9 @@ const getDocumentos = async () => {
                 //autor
                 //utor: trabajo.autor,
                 idAutor: trabajo.autor.id,
-                nombreAutor: trabajo.autor.nombres + ' ' + trabajo.autor.apellidos
+                nombreAutor: trabajo.autor.nombres + ' ' + trabajo.autor.apellidos,
+                foto_url: trabajo.autor.foto_URL,
+                codigo_pucp: trabajo.autor.codigo_pucp
             })
         ));
     }
@@ -287,16 +292,16 @@ export default function GestionTrabajosInvestigacion() {
 
     const addOrEdit = (trabajo, resetForm) => {
       //puede que se modifique, revisar Gestion USuario
-      /*
+      
       recordForEdit
-      ? TrabajoService.updateTrabajo(trabajo,trabajo.id)
-      : TrabajoService.registerTrabajo(trabajo)
+      ? TrabajoService.updateDocumento(trabajo,trabajo.id)
+      : TrabajoService.registerDocumento(trabajo)
       .then(idTrabajo=> {
         if(recordForEdit){
           setRecordForEdit(null);
           setUpdateData(true);}
       })
-      */
+      
       setOpenPopup(false)
       resetForm()
       setCreateData(true);
@@ -416,7 +421,7 @@ export default function GestionTrabajosInvestigacion() {
                       type="search"
                       />
                       <Controls.AddButton
-                        title="Añadir Trabajo de Investigación"
+                        title="Nuevo Trabajo de Investigación"
                         variant="iconoTexto"
                         onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
                       />
@@ -452,7 +457,7 @@ export default function GestionTrabajosInvestigacion() {
                                         subTitle: 'No es posible deshacer esta accion',
                                         onConfirm: () => {onDelete(item.id)}
                                 })
-                              }}/>  
+                              }}/>
                               </IconButton>
                               <IconButton aria-label="view">
                                 <ContactPage
@@ -478,14 +483,34 @@ export default function GestionTrabajosInvestigacion() {
                 <br></br>
                 <br></br>
                 <Typography variant="h4" style={SubtitulosTable} >
-                        Detalles del Trabajo de Investigación
+                        Detalles del Trabajo de Inpvestigación
                 </Typography>
                 <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
                 <GestionTrabajosInvestigacionDetalle values = {values} detail = {detail} setDetail = {setDetail}/>
-    
             </Grid>
         </Grid>            
 		  </Paper>
+      <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
+            >
+              <AgregarEditarInvestiga
+                addOrEdit={addOrEdit}
+                recordForEdit={recordForEdit}
+                setOpenPopup={setOpenPopup}
+              />
+
+              {/*  <AgregarEditarInvestiga/> */}
+            </Popup>
+            <Notification
+              notify={notify}
+              setNotify={setNotify}
+            />
+            <ConfirmDialog
+              confirmDialog={confirmDialog}
+              setConfirmDialog={setConfirmDialog}
+            />
 		</>
 	);
 }

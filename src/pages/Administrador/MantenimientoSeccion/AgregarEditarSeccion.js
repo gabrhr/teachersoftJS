@@ -149,7 +149,7 @@ export default function AgregarEditarSeccion(props) {
       return departamentos;
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
       FillDepartamentos()
       .then (newDep =>{
         setDepartamentos(prevDep => prevDep.concat(newDep));
