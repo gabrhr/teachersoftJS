@@ -33,7 +33,7 @@ export default function ExternoAtenderSolicitud(props) {
     }, [])
 
     React.useEffect(() => {
-        // console.log("actualizada: ", solicitud)
+        console.log("solicitud actualizada: ", solicitud)
         if (solicitud.estado === '3' && solicitud.cambioEstado) {
             MesaPartesService.updateSolicitud(solicitud)
                 .then(id => {
@@ -62,7 +62,7 @@ export default function ExternoAtenderSolicitud(props) {
     }, [solicitud])
     
     function submitAtencion(atencion) {
-        // console.log("antes", solicitud)
+        // console.log("submitAtencion", solicitud, atencion)
         setSolicitud(solicitud => ({
             ...solicitud, 
             /* data faltante de la respuesta de soli por Secretario Dpto. */
@@ -84,7 +84,6 @@ export default function ExternoAtenderSolicitud(props) {
             /* only for FrontEnd */
             cambioEstado: true
         }))
-        // console.log("despues", solicitud)
     }
 
     return (
