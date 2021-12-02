@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import ContentHeader from '../../components/AppMain/ContentHeader';
+import ContentHeader from '../../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
-import { Controls } from '../../components/controls/Controls'
-import IndicadoresService from '../../services/indicadoresService';
-import PieCharts from '../../components/PageComponents/PieCharts';
-import InvestigacionService from '../../services/investigacionService';
-import BarChartAutores from '../../components/PageComponents/BarCharts';
+import { Controls } from '../../../components/controls/Controls'
+import IndicadoresService from '../../../services/indicadoresService';
+import PieCharts from '../../../components/PageComponents/PieCharts';
+import InvestigacionService from '../../../services/investigacionService';
+import BarChartAutores from '../../../components/PageComponents/BarCharts';
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
     let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
@@ -25,14 +25,14 @@ const fillProfesorTPA = async (id_ciclo, id_seccion) => {
     return profesorTPA;
 }
 
-const deudaProfesores = async (id_seccion) => {
-    let profesorDeuda = await IndicadoresService.getDataProfesoresDeudaSeccion(id_seccion);
+const deudaProfesores = async () => {
+    let profesorDeuda = await IndicadoresService.getDataProfesoresDeuda();
     
     return profesorDeuda;
 }
 
-const sobrecargaProfesores = async (id_seccion) => {
-    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecargaSeccion(id_seccion);
+const sobrecargaProfesores = async () => {
+    let profesorSobrecarga = await IndicadoresService.getDataProfesoresSobrecarga();
     
     return profesorSobrecarga;
 }
@@ -66,7 +66,7 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresASeccion() {
+export default function IndicadoresJDepartamento() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
@@ -109,7 +109,7 @@ export default function IndicadoresASeccion() {
     const [profesorDeudaTPA, setProfesorDeudaTPA] = useState([]);
 
     useEffect(() => {
-        deudaProfesores(user.persona.seccion.id)
+        deudaProfesores()
         .then(newProfDeuda => {
             setProfesorDeudaTC(newProfDeuda.TC);
             setProfesorDeudaTPC(newProfDeuda.TPC);
@@ -122,7 +122,7 @@ export default function IndicadoresASeccion() {
     const [profesorSobrecargaTPA, setProfesorSobrecargaTPA] = useState([]);
 
     useEffect(() => {
-        sobrecargaProfesores(user.persona.seccion.id)
+        sobrecargaProfesores()
         .then(newProfSobrecarga => {
             setProfesorSobrecargaTC(newProfSobrecarga.TC);
             setProfesorSobrecargaTPC(newProfSobrecarga.TPC);

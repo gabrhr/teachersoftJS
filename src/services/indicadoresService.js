@@ -80,4 +80,22 @@ const getDataProfesoresSobrecarga = async () => {
   }
 }
 
-export default {getDataProfesoresTCPorSeccion, getDataProfesoresTPCPorSeccion, getDataProfesoresTPAPorSeccion, getDataProfesoresTCPorDepartamento, getDataProfesoresTPCPorDepartamento, getDataProfesoresTPAPorDepartamento, getDataProfesoresDeuda, getDataProfesoresSobrecarga}
+const getDataProfesoresDeudaSeccion = async (id_seccion) => {
+  try{
+    const request= await axios.get(`${url}/horario/deuda/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+const getDataProfesoresSobrecargaSeccion = async (id_seccion) => {
+  try{
+    const request= await axios.get(`${url}/horario/sobrecarga/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
+export default {getDataProfesoresTCPorSeccion, getDataProfesoresTPCPorSeccion, getDataProfesoresTPAPorSeccion, getDataProfesoresTCPorDepartamento, getDataProfesoresTPCPorDepartamento, getDataProfesoresTPAPorDepartamento, getDataProfesoresDeuda, getDataProfesoresSobrecarga, getDataProfesoresDeudaSeccion, getDataProfesoresSobrecargaSeccion}
