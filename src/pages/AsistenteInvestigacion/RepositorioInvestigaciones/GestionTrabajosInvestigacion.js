@@ -332,10 +332,14 @@ export default function GestionTrabajosInvestigacion() {
           ...confirmDialog,
           isOpen: false
         })
+        let pos = records.map(function(e) { return e.id; }).indexOf(idTrabajo);
+        records.splice(pos,1);
+        TrabajoService.deleteDocumento(idTrabajo);
+        setDeleteData(true);
 
         //console.log(id)
-        const nuevaTabla = records.filter(trabajoPorEliminar => trabajoPorEliminar.id !== idTrabajo)
-        console.log(nuevaTabla)
+        //const nuevaTabla = records.filter(trabajoPorEliminar => trabajoPorEliminar.id !== idTrabajo)
+        //console.log(nuevaTabla)
         //TrabajoService.deleteTrabajo(idTrabajo);
  
         setNotify({

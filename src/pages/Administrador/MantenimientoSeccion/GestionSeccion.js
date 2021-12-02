@@ -140,6 +140,7 @@ export default function GestionSeccion() {
             if(recordForEdit)
               setRecordForEdit(null);
         })
+      
       setOpenPopup(false)
       resetForm()
       setChangeData(true);

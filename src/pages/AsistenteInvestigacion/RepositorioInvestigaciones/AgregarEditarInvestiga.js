@@ -114,7 +114,7 @@ const initialFieldValues = {
   
   //autor
 
-  idAutor:  '',
+  //idAutor:  '',
   autorId: 0, 
   nombreAutor: '',
   codigo_pucp: '',
@@ -175,9 +175,9 @@ export default function AgregarEditarInvestiga(props) {
                     : "Este correo no es válido."
         // temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError
         if(recordForEdit){
-          temp.idAutor = values.idDepartamento !== 0 ? "" : defaultError;
+          temp.idAutor = values.autorId !== 0 ? "" : defaultError;
         } else{
-          temp.departmentId = values.departmentId !== 0 ? "":defaultError;
+          temp.autorId = values.autorId !== 0 ? "":defaultError;
         }    
         setErrors({
             ...temp
@@ -204,6 +204,7 @@ export default function AgregarEditarInvestiga(props) {
         if (validate()){
 
           const newTrabjo = {
+            id:values.id,
             autor: {
                 id: recordForEdit ? parseInt(values.idAutor) : parseInt(values.autorId),
             },
@@ -248,10 +249,6 @@ export default function AgregarEditarInvestiga(props) {
           //resetForm()
         }
     }
-
- 
-
-
 
     useEffect(() => {
 
