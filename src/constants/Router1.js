@@ -66,6 +66,16 @@ import GestionDescargas from '../pages/JefeDepartamento/DeudasYDescargas/Descarg
 import GestionDescargaDocente from '../pages/Docente/DeudasYDescargas/GestionDescargaDocente'
 import DeudasYDescargaCoord from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/DeudasYDescargaCoord'
 import NuevaSolicitudDescarga from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/NuevaSolicitudDescarga'
+import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacion';
+import CantidadTrabajosXAutor from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
+import IndicadoresSeccion from '../pages/CoordinadorSeccion/IndicadoresSeccion';
+import CantidadTrabajosXPais from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXPais';
+import CantidadTrabajosXIdioma from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXIdioma';
+import CantidadTrabajosXCalidad from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXCalidad';
+import IndicadoresASeccion from '../pages/AsistenteSeccion/IndicadoresASeccion';
+import IndicadoresAdministrador from '../pages/Administrador/IndicadoresAdministrador';
+import IndicadoresADepartamento from '../pages/AsistenteDepartamento/CargaDocente/IndicadoresADepartamento';
+import IndicadoresJDepartamento from '../pages/JefeDepartamento/DeudasYDescargas/IndicadoresJDepartamento';
 /* Todos menos el login que es especial porque settea al usuario */
 const privateroutes = [
   /* Admin */
@@ -78,6 +88,7 @@ const privateroutes = [
   { requireRoles: [0,1,2,3,4,5,6,7,8], path: "/admin/showcase", page: Showcase },
   { requireRoles: [0], path: "/admin/index", page: TestIndex },
   { requireRoles: [0], path: "/admin/employees", page: Employees },
+  { requireRoles: [0], path: "/admin/estadisticas", page: IndicadoresAdministrador },
   /* Docente */
   /* TODO: Remover rol 8 (acceso temporal) */
   { requireRoles: [1], path: "/doc/misSolicitudes", page: MisSolicitudes },
@@ -106,6 +117,7 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
+  { requireRoles: [2, 8], path: "/as/estadisticas", page: IndicadoresASeccion},
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroHorarios", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
@@ -116,7 +128,8 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/misSolicitudes", page: MisSolicitudes },
   { requireRoles: [3], path: "/cord/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
-  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
+  { requireRoles: [3], path: "/cord/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
+  { requireRoles: [3, 8], path: "/cord/estadisticas", page: IndicadoresSeccion},  
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
   { requireRoles: [3, 8], path: "/cord/cursos", page: CursosForm  },
@@ -133,7 +146,8 @@ const privateroutes = [
   { requireRoles: [4], path: "/ad/mesaPartes/misSolicitudes", page: MisSolicitudes },
   { requireRoles: [4], path: "/ad/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [4], path: "/ad/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
-  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
+  { requireRoles: [4], path: "/ad/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
+  { requireRoles: [4], path: "/ad/estadisticas", page: IndicadoresADepartamento },  
   /* JD */
   { requireRoles: [5], path: "/jd/asignacionCarga", page: CargaDocenteCursos },
   { requireRoles: [5], path: "/jd/docentes", page: Vacio },
@@ -143,7 +157,8 @@ const privateroutes = [
   { requireRoles: [5], path: "/jd/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
   { requireRoles: [5], path: "/jd/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },  
   { requireRoles: [5], path: "/jd/asignacionCarga/deudaYDescarga", page: DeudasYDescargasJefe },  
-  { requireRoles: [5], path: "/jd/asignacionCarga/proceso/descarga", page: GestionDescargas },  
+  { requireRoles: [5], path: "/jd/asignacionCarga/proceso/descarga", page: GestionDescargas },
+  { requireRoles: [5], path: "/jd/estadisticas", page: IndicadoresJDepartamento },  
   /* Secretario de D */
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudesGenerales", page: RecepcionSolicitud },
   { requireRoles: [6], path: "/secretaria/mesaPartes/solicitudDetalle", page: RecepcionDetalleSolicitud },
@@ -151,6 +166,14 @@ const privateroutes = [
   /* Externo */
   { requireRoles: [7], path: "/invitado/mesaPartes/misSolicitudes", page: MisSolicitudes},  
   { requireRoles: [7], path: "/invitado/mesaPartes/solicitudDetalle", page: SolicitudDetalle },  
+
+  /*AsistenteInvestigacion*/ 
+  { requireRoles: [9], path: "/ai/repoInvestigaciones", page: GestionTrabajosInvestigacion },  
+  { requireRoles: [9], path: "/ai/publicacionesPorAutor", page: CantidadTrabajosXAutor },  
+  { requireRoles: [9], path: "/ai/publicacionesPorPais", page: CantidadTrabajosXPais },  
+  { requireRoles: [9], path: "/ai/publicacionesPorIdioma", page: CantidadTrabajosXIdioma },  
+  { requireRoles: [9], path: "/ai/publicacionesPorCalidad", page: CantidadTrabajosXCalidad},  
+ 
 ]
 
 

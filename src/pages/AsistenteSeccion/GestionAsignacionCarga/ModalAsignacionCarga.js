@@ -16,12 +16,6 @@ import horarioService from '../../../services/horarioService';
 import cursoService from '../../../services/cursoService';
 
 const tableHeaders = [
-    /*{
-      id: 'id',
-      label: 'SeccionID',
-      numeric: true,
-      sortable: true
-    },*/
     {
       id: 'claveCurso',
       label: 'Clave',

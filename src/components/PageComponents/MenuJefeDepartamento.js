@@ -41,5 +41,11 @@ export const MenuJefeDepartamento = [
                 indice: 1,
             }
         ]
+    },
+    {
+        text: 'Estadisticas',
+        path: '/jd/estadisticas',
+        icon: <InboxOutlinedIcon />,
+        indice: 1,
     }
 ];
