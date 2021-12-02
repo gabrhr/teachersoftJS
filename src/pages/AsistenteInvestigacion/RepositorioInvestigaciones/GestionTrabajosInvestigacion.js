@@ -361,7 +361,8 @@ export default function GestionTrabajosInvestigacion() {
         ...trabajo
       })
       //let auxTema = await temaTramiteService.getTemaTramites();  
-      
+      const a = await TrabajoService.documentsByLang();
+      console.log(a);
       setDetail(true);
       //this.forceUpdate();
         //tematramiteService.deleteTemaTramite(id_tramite);
