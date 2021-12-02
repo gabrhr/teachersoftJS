@@ -157,7 +157,7 @@ export default function ItemProcesoActual(props) {
             >
                <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual}
                cantAprobada = {solicitudActual.cantidad_aprobada} solicitudActual = {solicitudActual}
-                resultado = {solicitudActual.estado_tracking===2? 1:4}/>
+                resultado = {solicitudActual.estado_tracking===2? 1:0}/>
         </Popup>
         </>
     )

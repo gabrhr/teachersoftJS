@@ -79,6 +79,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
         for(let i = 0; i < records.length; i++){
             if(records[i].seleccionado){
                 records[i].resultado = 1
+                records[i].solicitador.tipo_bono = records[i].tipo_bono
             }else{
                 records[i].resultado = 2
                 records[i].tramiteSeccionDescarga = null
