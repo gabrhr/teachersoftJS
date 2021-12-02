@@ -94,7 +94,7 @@ export default function DetalleSoliOrganism(props) {
            setRecords(archivosAsignadosObj);
            console.log("records archivos",archivosAsignadosObj)
         });
-    }, [])
+    }, [solicitud])
 
     return (
         <>

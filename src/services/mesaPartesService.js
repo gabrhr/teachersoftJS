@@ -164,7 +164,7 @@ export function solicitudInit() {
     }
 }
 
-function b2fSolicitud(x) {
+export function b2fSolicitud(x) {
     const { id, nombre: tipoTramite, ...other } = b2fTipoTramite(
         x.tipoTramiteMesaDePartes)
     return {
