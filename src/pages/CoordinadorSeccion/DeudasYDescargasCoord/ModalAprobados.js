@@ -93,6 +93,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual}){
             if(records[i].seleccionado){
                 records[i].resultado = 1
             }else{
+                records[i].resultado = 2
                 records[i].tramiteSeccionDescarga = null
             }
             tramiteDescargaService.updateTramiteDescarga(records[i])
