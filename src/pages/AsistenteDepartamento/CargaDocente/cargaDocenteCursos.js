@@ -218,7 +218,7 @@ export default function CargaDocenteCursos(){
               cbo= {true}
               records = {ciclo}
               setRecords = {setCiclo}
-            />(
+            />
             <Grid container xs spacing = {4}>
             {/* <Stack direction="row" spacing = {4}> */}
                 <Grid item xs={6} sx = {{paddingLeft: 3}}>

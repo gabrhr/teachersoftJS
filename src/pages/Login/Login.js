@@ -56,7 +56,7 @@ export default function Login() {
                     <Typography
                         variant="h2"
                         component="div"
-                        paddingTop="150px"
+                        paddingTop="60px"
                         paddingBottom="20px"
                         align="center"
                         fontWeight="500"

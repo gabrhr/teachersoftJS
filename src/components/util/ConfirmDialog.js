@@ -61,7 +61,7 @@ export default function ConfirmDialog(props) {
                     }}
                 />
                 <Controls.Button 
-                    text="Yes"
+                    text="Sí"
                     color="primary"
                     onClick={() => {
                         setConfirmDialog({ ...confirmDialog, isOpen: false })

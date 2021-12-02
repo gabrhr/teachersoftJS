@@ -58,15 +58,17 @@ function HeadNotification(props) {
 //Para todos los usuarios (excepto Secretaria con ROL = 6)
 export default function MisSolicitudes() {
     const [records, setRecords] = useState([])
+    const [recordsCargados, setRecordsCargados] = useState(false)
 
     const {user, rol} = useContext(UserContext);
     //let isRendered = useRef(false)
     // const usuarioLogeado=JSON.parse(localStorage.getItem("user"))
-
+    // console.log("ya entre aqui jeje")
     /* Retrieve initial data from  Back API on first component render */
     React.useEffect(() => {
         let isRendered=false;
         // getSolicitudes(setRecords, user) 
+        setRecordsCargados(false)
         MesaPartesService.getSolicitudesByIdSol(user.persona.id) 
         .then(data => {
             if(isRendered) return
@@ -74,7 +76,7 @@ export default function MisSolicitudes() {
             data.sort((x1, x2) => 
                 0 - (new Date(x1.tracking.fecha_enviado) - new Date(x2.tracking.fecha_enviado)))
             setRecords(data)
-            
+            setRecordsCargados(true)
         })
 
         return () => {
@@ -88,7 +90,8 @@ export default function MisSolicitudes() {
             <DashboardSoli title={"Mis solicitudes a Mesa de Partes"} 
                 delegado={false}
                 records={records} setRecords={setRecords} getSolicitudes={getSolicitudes}
-                user={user}
+                user={user} 
+                recordsCargados={recordsCargados} setRecordsCargados ={setRecordsCargados}
             />
         </>
     )

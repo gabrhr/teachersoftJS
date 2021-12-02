@@ -11,7 +11,6 @@ import ConfirmDialog from '../../../components/util/ConfirmDialog';
  /*services*/
  import CicloService from '../../../services/cicloService.js';
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
-import cicloService from '../../../services/cicloService';
 import * as employeeService from '../../../services/employeeService'
 import { Form } from '../../../components/useForm'
 
@@ -41,13 +40,13 @@ const tableHeaders = [
       sortable: true
     },
     {
-      id: 'fechaInicio',
+      id: 'fecha_inicio',
       label: 'Fecha de Inicio',
       numeric: false,
       sortable: false
     },
     {
-      id: 'fechaFin',
+      id: 'fecha_fin',
       label: 'Fecha Fin',
       numeric: false,
       sortable: false
@@ -77,8 +76,8 @@ const getCiclos = async () => {
                 fechaModificacion: ciclo.fecha_modificacion,
                 anho: ciclo.anho,
                 periodo: ciclo.periodo,
-                fechaInicio: ciclo.fecha_inicio,
-                fechaFin: ciclo.fecha_fin
+                fecha_inicio: ciclo.fecha_inicio,
+                fecha_fin: ciclo.fecha_fin
             })
         ));
     }
@@ -232,7 +231,7 @@ export default function GestionCiclo() {
               <TblContainer>
                 <TblHead />
                 <TableBody>
-                    {
+                {records.length > 0 ? 
                      recordsAfterPagingAndSorting().map(item => (
 
                         <StyledTableRow key={item.id}>
@@ -240,20 +239,20 @@ export default function GestionCiclo() {
                           <StyledTableCell >{item.periodo}</StyledTableCell>
                           <StyledTableCell >
                               {
-                                item.fechaInicio.slice(8,10)
+                                item? item.fecha_inicio.slice(8,10):""
                                 +'/'
-                                +item.fechaInicio.slice(5,7)
+                                +item? item.fecha_inicio.slice(5,7):""
                                 +'/'
-                                +item.fechaInicio.slice(0,4)
+                                +item? item.fecha_inicio.slice(0,4):""
                               }
                           </StyledTableCell>
                           <StyledTableCell>
                               {
-                                item.fechaFin.slice(8,10)
+                                item.fecha_fin.slice(8,10)
                                 +'/'
-                                +item.fechaFin.slice(5,7)
+                                +item.fecha_fin.slice(5,7)
                                 +'/'
-                                +item.fechaFin.slice(0,4)
+                                +item.fecha_fin.slice(0,4)
                               }
                           </StyledTableCell>
                           <StyledTableCell align = "right">
@@ -278,8 +277,13 @@ export default function GestionCiclo() {
                           </IconButton>
                         </StyledTableCell>
                         </StyledTableRow>
-                     ))
-                    }
+                     )):
+                     (
+                      <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
+                          No se han ingresado Ciclos 
+                      </Typography>  
+                      )
+                  }
                 </TableBody>
               </TblContainer>
             </BoxTbl>

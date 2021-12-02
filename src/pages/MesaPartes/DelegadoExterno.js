@@ -1,170 +1,145 @@
+/* Author: Mitsuo
+ * 
+ * Pantalla principal para un delegado externo de una Solicitud a MP.
+ */
 import React from 'react'
-import { Typography } from '@mui/material'
+import { getListSubheaderUtilityClass, Typography } from '@mui/material'
 //import { useParams } from "react-router";
 import { Controls } from '../../components/controls/Controls';
 import { UserContext } from '../../constants/UserContext';
 import ExternoAtenderSolicitud from './ExternoAtenderSolicitud';
 
+import axios from 'axios'
+import url from '../../config'
+
 /* SERVICES */
 import * as MesaPartesService from '../../services/mesaPartesService'
+// import personaService from '../../services/personaService'
 
-function getSolicitud(s, setSolicitud) {
+function getSolicitud(s, setData, data, setSolicitud) {
+    let solicitud = null
+    axios({
+        method: 'get',
+        url: `${url}/mesa/${s}`,
+        headers: {
+            Authorization: data.token
+        }
+    })
+        .then(res => {
+            solicitud = MesaPartesService.b2fSolicitud(res.data)
+            setData({
+                ...data,
+                /* "por si acasito" (solo para log) */
+                solicitud: solicitud,
+                loadingstatus: 'waiting...soli'
+            })
+            /* For some reason I can't detect changes in data.solicitud
+             * Maybe React only detects changes to the useState
+             * object but ignores their properties? Idk  */
+            setSolicitud({
+                ...solicitud,
+                doneloading: true
+            })
+        })
+        .catch(error => console.error(error))
 }
 
-/* 1. Login usuario externo
- * 2. Get solicitud
- * 3. Display
+/* Steps:
+ * 1. Login dummy user (limited time token)
+ * 2. Wait 'till token is available in "useContext"
+ * 3. Login usuario externo & get solicitud
  */
 function Lue({ e, s }) {
     const { user, setUser, rol, setRol, token, setToken } = React.useContext(UserContext)
+    // const [solicitud, setSolicitud] = React.useState(null)
     const [solicitud, setSolicitud] = React.useState({
+        /* just init values */
         ...MesaPartesService.solicitudInit(),
         doneloading: false
-        }
-    )
-    const [C, setC] = React.useState(() => <></>)
-    const [doneloading, setDoneloading] = React.useState(false)
+    })
     /* data holds the retrieved data from API, stupid useState doesn't return
      * Promises, depends on useEffect */
-    const [data, setData] = React.useState({loadingstatus: '0'})
+    const [data, setData] = React.useState({loadingstatus: 'init'})
 
-    function handleClick() {
-        MesaPartesService.lue(e)
-            .then(data => {
-                setUser(data.user)
-                setRol(data.user.persona.tipo_persona)
-                setToken(data.token)
-            })
-    }
+    const [C, setC] = React.useState(<></>)
 
-    async function logingetsoli() {
-        try {
-            let data = await MesaPartesService.lue(e).then()
-            await setUser(data.user)
-            await setRol(data.user.persona.tipo_persona)
-            await setToken(data.token)
-            let solicitud = await MesaPartesService.getSolicitud(s)
-            await setSolicitud(solicitud)
-            /* una vez que termina todo renderizar pantallita */
-            setC(() => <ExternoAtenderSolicitud solicitud={solicitud} setSolicitud={setSolicitud}/>)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-    
     React.useEffect(() => {
-        MesaPartesService.lue({})
-            .then(bundle => {
-                setData({
-                    ...data,
-                    user: bundle.user,
-                    rol: bundle.user.persona.tipo_persona,
-                    token: bundle.token,
-                    loadingstatus: '1'
-                })
+        if (typeof token === 'string')
+            setData({
+                ...data,
+                loadingstatus: 'has.token'
             })
-        setC(<></>)
-    }, [])
+    }, [token])
 
-    function getSolicitud() {
-        return MesaPartesService.getSolicitud(s)
-            .then((solicitudes) => {
-                console.log(s, solicitudes)
-                // if (solicitudes.length === 0)
-                //     throw new Error('id de solicitud invalido')
-                setData({
-                    ...data,
-                    solicitud: solicitudes[0],
-                    loadingstatus: '2'
-                })
-                // setSolicitud({
-                //     ...solicitudes[0],
-                // })
+    React.useEffect(() => {
+        if (solicitud.doneloading && data.loadingstatus === 'waiting...soli')
+            setData({
+                ...data,
+                loadingstatus: 'has.soli'
             })
-            .catch(error => console.error(error))
-    }
+    }, [solicitud])
 
     React.useEffect(() => {
         console.log("retriveddata", data)
-        /* TODO: */
-        /* move React.useEffect [] here with loadingstatus==='0' */
-        /* setUser con USER en lugar de con PERSONA */
-        if (data.loadingstatus === '1') {
-            /* dummy (tienen token) */
-            setToken(data.token)
-            setTimeout(() => {
-                /* delay para que termine de guardar en localstorage */
-                console.log('termine de escribir token?')
-                getSolicitud()
-            }, 1000)
-        } else if (data.loadingstatus === '2') {
-            /* tiene soli */
-            /* FIXME: si no hay soli RIP */
-            setUser(data.solicitud.delegado)
-            setRol(data.solicitud.delegado.tipo_persona)
-            setSolicitud(data.solicitud)
-            // setRol(data.solicitud.delegado.tipo_persona)
-            /* display it */
-            setC(
-                () => 
-                    <ExternoAtenderSolicitud 
-                        solicitud={data.solicitud} 
-                        setSolicitud={setSolicitud}
-                    />
-            )
+        console.log("token", token)
+        console.log("soli", solicitud)
+        if (data.loadingstatus === 'init') {
+            /* get dummy user */
+            MesaPartesService.lue({})
+                .then(bundle => {
+                    setData({
+                        ...data,
+                        user: bundle.user,
+                        rol: bundle.user.persona.tipo_persona,
+                        token: bundle.token,
+                        loadingstatus: 'waiting...token'
+                    })
+                    // localStorage.setItem('token', bundle.token)
+                    setToken(bundle.token)
+                    setRol(bundle.user.persona.tipo_persona)
+                    setUser(bundle.user.persona)
+                    /* causes bug in ExternoAtenderSolicitud...  ahi usan Back
+                     * fmt. */
+                    // setUser({persona: data.solicitud.delegado})
+                })
+        } else if (data.loadingstatus === 'has.token') {
+            /* logged in with dummy's user rol & token */
+            /* FIXME: needs reload */
+            getSolicitud(s, setData, data, setSolicitud)
+        } else if (data.loadingstatus === 'has.soli') {
+            // setC(
+            //     () => 
+            //         <ExternoAtenderSolicitud 
+            //             solicitud={solicitud} 
+            //             setSolicitud={setSolicitud}
+            //         />
+            // )
+            /* proper login */
+            MesaPartesService.lue({
+                /* De donde vienen estos? */
+                nombre: solicitud.delegado.nombre,
+                correo: solicitud.delegado.correo,
+            })  // logger
+                .then(bundle => {
+                    setData({
+                        ...data,
+                        user: bundle.user,
+                        rol: bundle.user.persona.tipo_persona,
+                        token: bundle.token,
+                        loadingstatus: 'yay'
+                    })
+                    setUser(bundle.user)
+                })
         }
     }, [data])
 
-    // React.useEffect(() => {
-    //     console.log("doneloading", doneloading)
-    //     console.log("token", token)
-    //     if (doneloading) {
-    //         console.log('done loading!')
-    //         console.log("doneloading", doneloading)
-    //         console.log("token", token)
-    //     }
-    // }, [token])
-
-    /* pruebita de Promise y useEffect.  useEffect [] ejecuta antes de render */
-    // React.useEffect(() => {
-    //     new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             window.alert()
-    //             resolve(true)
-    //         }, 100)
-    //     })
-    //         .then(() => {
-    //             setC(<>Hola mundo</>)
-    //         })
-    //     // logingetsoli()
-    // }, [])
-
-    // React.useEffect(() => {
-    //     handleClick()
-    // }, [])
-
-    // React.useEffect(() => {
-    //     if (user) {
-    //         console.log(user)
-    //         getSolicitud(s, setSolicitud)
-    //     }
-    // }, [user])
-
-    // React.useEffect(() => {
-    //     /* alldone, render ExternoAtenderSolicitud */
-    //     if(solicitud.doneloading)
-    //         setC(
-    //             () => 
-    //                 <ExternoAtenderSolicitud 
-    //                     solicitud={solicitud} 
-    //                     setSolicitud={setSolicitud}
-    //                 />
-    //         )
-    // }, [solicitud])
-
     return (
         <>
-            {C}
+            {/* {C} */}
+            <ExternoAtenderSolicitud 
+                solicitud={solicitud} 
+                setSolicitud={setSolicitud}
+            />
         </>
     )
 }
