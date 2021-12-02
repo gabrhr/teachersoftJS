@@ -13,7 +13,7 @@ export const MenuInvestigacion = [
     {
         text: 'Estadísticas',
         path: '',
-        icon: <InboxOutlinedIcon />,
+        icon: <ShowChartOutlinedIcon />,
         indice: 1,
         subNav: [
             {

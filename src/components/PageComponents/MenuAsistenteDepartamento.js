@@ -46,7 +46,7 @@ export const MenuAsistenteDepartamento = [
     {
         text: 'Estadisticas',
         path: '/ad/estadisticas',
-        icon: <InboxOutlinedIcon />,
+        icon: <ShowChartOutlinedIcon />,
         indice: 1,
     }
 ];
