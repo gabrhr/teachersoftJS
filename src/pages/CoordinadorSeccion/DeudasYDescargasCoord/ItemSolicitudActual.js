@@ -125,12 +125,13 @@ export default function ItemProcesoActual(props) {
                             text="Detalle"
                             />
                     </Link>
-                    {solicitudActual.resultado>0 && 
+                    {solicitudActual.resultado>0 && (
                         <Controls.Button
-                            text="Validar"
+                            text={solicitudActual.estado_tracking===1?"Aprobados":"Validar"}
                             onClick={()=>{setOpenAprobados(true)}} 
-                        />
+                        />)
                     }
+
                 </TableCell>
             </TableRow>
             </Table>
@@ -143,11 +144,12 @@ export default function ItemProcesoActual(props) {
         <Popup
                 openPopup={openAprobados}
                 setOpenPopup={setOpenAprobados}
-                title="Validar Lista de Descargas"
+                title={solicitudActual.estado_tracking===1?"Lista de Aprobados":"Validar Lista de Descargas"}
                 size = "md"
             >
                <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual}
-               cantAprobada = {solicitudActual.cantidad_aprobada} solicitudActual = {solicitudActual} resultado = {0}/>
+               cantAprobada = {solicitudActual.cantidad_aprobada} solicitudActual = {solicitudActual}
+                resultado = {solicitudActual.estado_tracking===1? 1:0}/>
         </Popup>
         </>
     )

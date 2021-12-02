@@ -43,14 +43,15 @@ const tableHeaders = [
 
 
 function Item(props){
-    const {item,getRow,setOpenAprobados,setProcesoActual} = props
+    const {item,getRow} = props
     function formatoFecha(fecha){
         if(fecha!=null){
             return (moment(fecha).format('DD MMM YYYY [-] h:mm a'))
         }
     }
+    const [openAprobados, setOpenAprobados] = useState(false)
     console.log("item",item)
-    setProcesoActual(item.procesoDescarga)
+    //setProcesoActual(item.procesoDescarga)
     console.log("Proceso Descarga del item", item.procesoDescarga)
     return (
         <>
@@ -124,10 +125,20 @@ function Item(props){
                     </Link>
                     <Controls.Button
                         text="Aprobados"
-                        onClick={()=>{setOpenAprobados(true)}} 
+                        onClick={()=>{setOpenAprobados(true);}} 
                     />
                 </TableCell>
             </TableRow>
+
+            <Popup
+                openPopup={openAprobados}
+                setOpenPopup={setOpenAprobados}
+                title="Lista de Aprobados"
+                size = "md"
+            >
+               <ModalAprobados setOpenAprobados = {setOpenAprobados} cantAprobada={item.cantidad_aprobada}
+                    procesoActual = {item.procesoDescarga} resultado = {1} solicitudActual={item}/>
+            </Popup>
         </>
 
     );
@@ -138,9 +149,7 @@ export default function ListaProcesosPasadosSeccion(props) {
     
     const [row, setRow] = React.useState(false)
     const [filterFn, setFilterFn] = React.useState({ fn: items => { return items; } })
-    const [openAprobados, setOpenAprobados] = useState(false)
-    const [procesoActual, setProcesoActual] = useState(null)
-    console.log("ifunciontem",procesoActual)
+    //console.log("ifunciontem",procesoActual)
 
     const {
         TblContainer,
@@ -197,7 +206,6 @@ export default function ListaProcesosPasadosSeccion(props) {
                     {
                        recordsAfterPagingAndSorting().map((item,index) => (
                             <Item key={index} item={item} getRow= {getRow}
-                                setOpenAprobados={setOpenAprobados} setProcesoActual = {setProcesoActual}
                             />
                         ))
                     }
@@ -213,14 +221,7 @@ export default function ListaProcesosPasadosSeccion(props) {
                     />
                 }
             </BoxTbl> 
-            <Popup
-                openPopup={openAprobados}
-                setOpenPopup={setOpenAprobados}
-                title="Aprobados"
-                size = "md"
-            >
-               <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual} resultado = {1}/>
-            </Popup>
+            
         </div>
     )
 }

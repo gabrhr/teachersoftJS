@@ -47,33 +47,13 @@ const tableHeaders = [
     },
 ]
 
-export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, solicitudActual, resultado = 4}){
+export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, 
+    solicitudActual, resultado = 4}){
+    
+        console.log("resultado?",resultado)
+    const [records, setRecords] = useState([])
 
-    const [records, setRecords] = useState([/*
-        {
-            nombre: 'Perez',
-            correo: '@perez.com',
-            justificacion: 'Por favor',
-            seleccionado: true,
-            tipo_bono: 1
-        },
-        {
-            nombre: 'José',
-            correo: '@gmail.com',
-            justificacion: 'Por favor1',
-            seleccionado: true,
-            tipo_bono: 2
-        },
-        {
-            nombre: 'Otro José',
-            correo: '@puke.com',
-            justificacion: 'Por favor2',
-            seleccionado: true,
-            tipo_bono: 1
-        }*/ 
-    ])
-
-    const [aprobados, setAprobados] = React.useState(2)
+    const [aprobados, setAprobados] = React.useState(null)
     const [descargas, setDescargas] = React.useState(0)
     
     const { user } = React.useContext(UserContext)
@@ -209,9 +189,11 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
                        recordsAfterPagingAndSorting().map((item,index) => (
                         <TableRow>
                             <TableCell sx = {{width: '70px'}}>
+                                { resultado!==1 &&
                                 <Controls.RowCheckBox sx = '1' onClick = {()=>{addDocente(item)}} checked = {item.seleccionado}>
                                     <EditOutlinedIcon fontSize="small" />
                                 </Controls.RowCheckBox>
+                                }
                             </TableCell>
                             <TableCell sx = {{width: '533px'}}>
                                 {item.solicitador.nombres + " " + item.solicitador.apellidos}
@@ -231,7 +213,9 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
                 <TblPagination />
             </BoxTbl> 
             <Grid conteiner >
+                
                 <Grid item align = "right" marginTop={5} >
+                    {resultado!==1 &&
                     <Controls.Button
                         text="Aprobar descargas"
                         endIcon={<SaveIcon/>} 
@@ -242,6 +226,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
                             history.push("/cord/asignacionCarga/deudaYDescarga");
                         }} 
                         />
+                    } 
                 </Grid>
             </Grid>
         </>
