@@ -5,7 +5,7 @@
  * - Ver detalle de una solicitud.
  * "/doc/misSolicitudes"
  */
-import React, { useState,useContext, useRef } from 'react'
+import React, { useState,useContext } from 'react'
 import { UserContext } from '../../constants/UserContext';
 //Iconos Mesa de Partes
 import DashboardSoli from './DashboardSoli'

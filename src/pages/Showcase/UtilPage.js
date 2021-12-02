@@ -1,6 +1,6 @@
 /* Author: Mitsuo
  */
-import { Paper, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react'
 import { Controls } from '../../components/controls/Controls'
 import ConfirmDialog from '../../components/util/ConfirmDialog';

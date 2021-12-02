@@ -1,15 +1,10 @@
-import React, { useState, useContext } from 'react'
-import { Typography } from '@mui/material'
-import { Controls } from '../../../components/controls/Controls'
+import React, { useState} from 'react'
 import { DT } from '../../../components/DreamTeam/DT'
-import Popup from '../../../components/util/Popup';
-import NuevaSolicitudForm from './NuevaSolicitudDescarga';
 import Notification from '../../../components/util/Notification';
 import {UserContext} from '../../../constants/UserContext';
 import ItemSolicitudActual from './ItemSolicitudActual';
 import ItemSolicitudActualVacio from './ItemSolicitudActualVacio';
 import ListaSolicitudesPasadasSeccion from "./ListaSolicitudesPasadasSeccion"
-import tramiteDescargaService from '../../../services/tramiteDescargaService'
 import procesoDescargaService from '../../../services/procesoDescargaService'
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService'
 import ItemSinProcesoDocente from '../../Docente/DeudasYDescargas/ItemSinProcesoDocente';
@@ -49,6 +44,8 @@ export default function GestionarDescargaSeccion() {
     const getTramitesDescargasSeccion = async () => {
         let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescargaxSeccion(user.persona.seccion.id);
+        let now = new Date()     
+        //setRecords(tramites.filter(x => new Date(x.procesoDescarga.fecha_fin) < now ))
         setRecords(tramites)
         const soli =  tramites.find(({procesoDescarga}) =>
             procesoDescarga.id === procesoActivoNew[0].id
