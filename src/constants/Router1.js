@@ -237,7 +237,7 @@ export default function Router1(props) {
              <Redirect to="/ad/asignacionCarga/cargaDocente" />
         </PrivateRoute>
         <PrivateRoute exact path="/jd" requireRoles={[5]}>
-             <Redirect to="/jd/asignacionCarga" />
+             <Redirect to="/jd/asignacionCarga/cargaDocente" />
         </PrivateRoute>
         <PrivateRoute exact path="/secretaria" requireRoles={[6]}>
              <Redirect to="/secretaria/mesaPartes/solicitudesGenerales" />
