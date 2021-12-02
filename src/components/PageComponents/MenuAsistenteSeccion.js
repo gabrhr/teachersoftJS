@@ -6,6 +6,7 @@ import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import InboxIcon from '@mui/icons-material/Inbox';
 import CloseIcon from '@mui/icons-material/Close';
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
+import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 
 export const MenuAsistenteSeccion = [
     {
@@ -50,9 +51,9 @@ export const MenuAsistenteSeccion = [
         indice: 1,
     },
     {
-        text: 'Estadisticas',
+        text: 'Estadísticas',
         path: '/as/estadisticas',
-        icon: <InboxOutlinedIcon />,
+        icon: <ShowChartOutlinedIcon />,
         indice: 1,
     },
     /* TIENE PROBLEMAS NO SE PORQUE */
