@@ -145,7 +145,7 @@ export default function ItemProcesoActual(props) {
                 title="Validar Lista de Descargas"
                 size = "md"
             >
-               <ModalAprobados setOpenAprobados = {setOpenAprobados} /*guardarSolicitud = {guardarSolicitud}*//>
+               <ModalAprobados setOpenAprobados = {setOpenAprobados} procesoActual = {procesoActual}/>
         </Popup>
         </>
     )

@@ -79,6 +79,7 @@ export default function GestionDescargaDocente() {
                 },
                 "solicitador": {
                     "id": user.persona.id,
+                    "tipo_bono": values.tipo_bono
                 }
             }
             await tramiteDescargaService.updateTramiteDescarga(editTramite)
