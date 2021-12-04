@@ -123,7 +123,7 @@ function Item(props){
     );
 }
 
-export default function ListaSolicitudes({seccion}){
+export default function ListaSolicitudes({seccion, procesoId}){
     const [recordForView, setRecordForView] = useState(null)
     const [records, setRecords] = useState([])
     const [secciones, setSecciones] = useState([])
@@ -171,7 +171,7 @@ export default function ListaSolicitudes({seccion}){
     }
 
     const getTramitesSeccionActivos = async() => {
-        const request = await tramiteSeccionDescargaService.getTramitesSeccionDescarga()
+        const request = await tramiteSeccionDescargaService.getTramiteSeccionDescargaxProceso(procesoId)
         const secciones = await seccionService.getSecciones()
         console.log(request)
         setSecciones(secciones)
