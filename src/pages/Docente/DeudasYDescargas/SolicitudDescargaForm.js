@@ -2,6 +2,7 @@ import { Alert, Avatar, Grid, Typography, Stack, TextField } from '@mui/material
 import React from 'react'
 import moment from 'moment'
 import 'moment/locale/es'
+import { DT } from '../../../components/DreamTeam/DT';
 moment.locale('es');
 
 export default function SolicitudDescargaForm(props) {
@@ -43,11 +44,9 @@ export default function SolicitudDescargaForm(props) {
                             Bonos solicitado: {'\u00A0'} 
                 </Typography>
                 <div style={{marginTop:"8px"}}/>
-                <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
-                    {
-                        recordForView.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"
-                    }
-                </Alert>
+                <DT.Etiqueta type="bono"
+                    text= {recordForView.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                    />
                 <div style={{marginTop:"8px"}}/>
             </Stack> 
             <Typography display="inline" fontWeight="550"  ml={"66px"} mt={2} sx={{color:"primary.light"}}>

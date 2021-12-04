@@ -23,6 +23,7 @@ import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { useLocation } from 'react-router';
+import { DT } from '../../../components/DreamTeam/DT';
 
 const tableHeaders = [
     
@@ -347,14 +348,16 @@ export default function NuevoProcesoForm() {
                                                     {item.solicitador.nombres + " " + item.solicitador.apellidos}
                                                 </TableCell>
                                                 <TableCell sx = {{width: '250px'}}>
-                                                    <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
-                                                        {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
-                                                    </Alert>
+                                                    {/* <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}> */}
+                                                    <DT.Etiqueta type="bono"
+                                                       text= {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                                                       />
+                                                       {/*  </Alert> */}
                                                 </TableCell>
                                                 <TableCell sx = {{width: '250px'}}>
-                                                    <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
-                                                        {item.persona_seccion? "Seleccionado":"No Seleccionado"}
-                                                    </Alert>
+                                                    <DT.Etiqueta 
+                                                        type={item.persona_seccion? "seleccionado":"noSeleccionado"}
+                                                    />
                                                 </TableCell>
                                                 <TableCell sx = {{maxWidth: '200px'}}> 
                                                     <Controls.Button

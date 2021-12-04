@@ -44,6 +44,20 @@ export default function Etiqueta(props) {
         other.icon = (<CancelOutlinedIcon/>)
         other.color= "rechazado"
     }
+    else if(type==="noSeleccionado"){ //Para descarga
+        text="No seleccionado"
+        other.icon = (<CancelOutlinedIcon/>)
+        other.color= "rechazado"
+    }else if(type==="seleccionado"){ //Para descarga
+        text="Seleccionado"
+        other.icon = (<TaskAltOutlinedIcon/>)
+        other.color= "atendido"
+    }else if(type==="bono"){ //Para descarga
+        other.icon = false
+        other.color= "info"
+        other.variant="outlined"
+    }
+
 
     if (! ["error","info","success","warning"].includes(type)) type = "info"
 
@@ -65,7 +79,7 @@ export default function Etiqueta(props) {
                     height: "40px",
                     borderRadius: "20px",
 
-                    transform: "scale(.90)"
+                    transform: "scale(.93)"
                 }}
                 {...other}
             >

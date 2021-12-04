@@ -1,6 +1,7 @@
 import React from 'react'
 import { Alert, Avatar, Grid, Typography, typographyClasses } from '@mui/material'
 import { UserContext } from '../../constants/UserContext';
+import { DT } from './DT';
 
 export default function ResumenDocente(props) {
     let {docente} = props
@@ -63,10 +64,9 @@ export default function ResumenDocente(props) {
                     </Typography>
                     <div style={{marginTop:"8px"}}/>
                     {docente.persona.tipo_bono===0? <> </>:
-                        <Alert icon={false} variant="outlined" severity="info">
-                            {docente.persona.tipo_bono===1? "Bono de Investigación":
-                                "Bono de Docencia"}
-                        </Alert>
+                        <DT.Etiqueta type="bono"
+                            text= {docente.persona.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                        />
                     }
                     <div style={{marginTop:"8px"}}/>
                     <Typography fontWeight="550"  sx={{color:"#8B6EFE"}}>

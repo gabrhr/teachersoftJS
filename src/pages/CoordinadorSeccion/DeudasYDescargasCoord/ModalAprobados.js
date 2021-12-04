@@ -24,6 +24,7 @@ import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { UserContext } from '../../../constants/UserContext';
+import { DT } from '../../../components/DreamTeam/DT';
 
 const tableHeaders = [
     
@@ -216,11 +217,9 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
                                 {item.solicitador.nombres + " " + item.solicitador.apellidos}
                             </TableCell>
                             <TableCell> 
-                                <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
-                                    {
-                                        item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"
-                                    }
-                                </Alert>
+                                <DT.Etiqueta type="bono"
+                                    text= {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                                />
                             </TableCell>
                         </TableRow>
                         ))
