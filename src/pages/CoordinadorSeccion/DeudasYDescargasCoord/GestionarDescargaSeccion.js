@@ -27,16 +27,18 @@ export default function GestionarDescargaSeccion() {
         const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescargaxSeccion(user.persona.seccion.id);
         console.log("activooooooo", procesoActivoNew)
         let now = new Date() 
-        setRecords(tramites.filter(x => {
-            const sinplazo= new Date(x.procesoDescarga.fecha_fin)
-            return sinplazo.setDate(sinplazo.getDate()+2) < now 
-        }))
-        //setRecords(tramites)
-        const soli =  tramites.find(({procesoDescarga}) =>
-            procesoDescarga.id === procesoActivoNew[0].id
-        )
-        setSolicitudActual(soli)
-        await setProcesoActivo(procesoActivoNew)
+        if(procesoActivoNew.length > 0){
+            setRecords(tramites.filter(x => {
+                const sinplazo= new Date(x.procesoDescarga.fecha_fin)
+                return sinplazo.setDate(sinplazo.getDate()+2) < now 
+            }))
+            //setRecords(tramites)
+            const soli =  tramites.find(({procesoDescarga}) =>
+                procesoDescarga.id === procesoActivoNew[0].id
+            )
+            setSolicitudActual(soli)
+            await setProcesoActivo(procesoActivoNew)
+        }     
     }
 
     React.useEffect(() => {
