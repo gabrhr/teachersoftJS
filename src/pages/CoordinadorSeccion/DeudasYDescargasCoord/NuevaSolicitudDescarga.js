@@ -51,6 +51,12 @@ const tableHeaders = [
         sortable: true
     },
     {
+        id: 'estado',
+        label: 'Estado Solicitud',
+        numeric: false,
+        sortable: true
+    },
+    {
         id: 'justificacion',
         label: 'Justificación',
         numeric: false,
@@ -343,6 +349,11 @@ export default function NuevoProcesoForm() {
                                                 <TableCell sx = {{width: '250px'}}>
                                                     <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
                                                         {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                                                    </Alert>
+                                                </TableCell>
+                                                <TableCell sx = {{width: '250px'}}>
+                                                    <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
+                                                        {item.persona_seccion? "Seleccionado":"No Seleccionado"}
                                                     </Alert>
                                                 </TableCell>
                                                 <TableCell sx = {{maxWidth: '200px'}}> 

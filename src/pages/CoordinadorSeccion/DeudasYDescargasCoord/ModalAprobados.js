@@ -111,7 +111,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
 
     const agregarCampo = (request) =>{
         for(let i = 0; i < request.length; i++){
-            request[i]["seleccionado"] = true
+            request[i]["seleccionado"] = false
         }
         /*for(let i = 0; i < request.length; i++){
             delete request[i].seleccionado
@@ -132,7 +132,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
             request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, resultado);
         }
         console.log(request)
-        setDescargas(request.length)
+        setDescargas(request.length - 1)
         setAprobados(cantAprobada)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
