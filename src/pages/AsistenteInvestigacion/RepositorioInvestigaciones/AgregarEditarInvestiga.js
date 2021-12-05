@@ -24,18 +24,13 @@ import UserService from '../../../services/userService';
 let countryList = []; 
 let yearList = []; 
 
-
 const listTipos = [
-
     {id: 0, title: 'Académica'},
     {id: 1, title: 'Profesional'},
-    {id: 2, title: 'Otros'},
-    
+    {id: 2, title: 'Otros'},   
 ]
 
-
 const listCodVal = [
-
     {id: 0, title: 'A1'},
     {id: 1, title: 'L1'},
     {id: 2, title: 'L2'},
@@ -43,7 +38,6 @@ const listCodVal = [
     {id: 4, title: 'A2'},
     {id: 5, title: 'L3'},
     {id: 6, title: 'P2'}
-
 ]
 
 const radioYesNo = [
@@ -81,8 +75,6 @@ const styles = {
   }
   
 let selectedID = 0;
-
-
 
 const initialFieldValues = {
   id: 0,

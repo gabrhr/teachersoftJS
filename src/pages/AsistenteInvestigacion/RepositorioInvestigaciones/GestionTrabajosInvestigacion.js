@@ -405,6 +405,7 @@ export default function GestionTrabajosInvestigacion() {
             endIcon={<CloudUploadOutlinedIcon/>}
             onClick = {() => setOpenPopupCargaMasiva(true)}
           />
+          {console.log(openPopupCargaMasiva)}
         </Grid>
      
       </Grid>
@@ -514,10 +515,10 @@ export default function GestionTrabajosInvestigacion() {
       </Popup>
       <Popup
           openPopupCargaMasiva={openPopupCargaMasiva}
-          setOpenPopup={setOpenPopupCargaMasiva}
+          setOpenPopupCargaMasiva={setOpenPopupCargaMasiva}
           title="Carga masiva de trabajos de investigación"
       >
-          < TrabajosInvestigacion setOpenPopupCargaMasiva={setOpenPopupCargaMasiva} records={records} setRecords={setRecords} setCargaTrabajos = {setCargaTrabajos} 
+          <TrabajosInvestigacion setOpenPopupCargaMasiva={setOpenPopupCargaMasiva} records={records} setRecords={setRecords} setCargaTrabajos = {setCargaTrabajos} 
           cargaTrabajos = {cargaTrabajos}/>
       </Popup>  
       {/* <Notification
