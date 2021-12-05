@@ -151,7 +151,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
             request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, resultado);
         }
         console.log(request)
-        setDescargas(request.length - 1)
+        setDescargas(0)
         setAprobados(cantAprobada)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
