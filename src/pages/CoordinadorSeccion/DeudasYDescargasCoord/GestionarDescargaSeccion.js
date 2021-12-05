@@ -27,13 +27,16 @@ export default function GestionarDescargaSeccion() {
         const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescargaxSeccion(user.persona.seccion.id);
         console.log("activooooooo", procesoActivoNew)
         let now = new Date() 
+        const tramitesFiltrados = tramites.filter(x => {
+            return tramites.procesoDescarga
+        })
         if(procesoActivoNew.length > 0){
-            setRecords(tramites.filter(x => {
+            setRecords(tramitesFiltrados.filter(x => {
                 const sinplazo= new Date(x.procesoDescarga.fecha_fin)
                 return sinplazo.setDate(sinplazo.getDate()+2) < now 
             }))
             //setRecords(tramites)
-            const soli =  tramites.find(({procesoDescarga}) =>
+            const soli =  tramitesFiltrados.find(({procesoDescarga}) =>
                 procesoDescarga.id === procesoActivoNew[0].id
             )
             setSolicitudActual(soli)
@@ -49,7 +52,7 @@ export default function GestionarDescargaSeccion() {
     return (
         <>
             {/* Proceso actual*/}
-            { procesoActivo?.length===0?
+            { procesoActivo?.length===0 || new Date(procesoActivo[0]?.fecha_fin_seccion)<new Date()?
                 <ItemSinProcesoDocente/>: (
                     new Date(procesoActivo[0].fecha_fin_docente) > new Date()?
                         <ItemSinProcesoSeccion proceso = {procesoActivo[0]}/>:

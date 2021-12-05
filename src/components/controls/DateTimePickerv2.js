@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 import esLocale from 'date-fns/locale/es';
 
 export default function DateTimePickerv2(props) {
-    const {name, label, value, onChange, ...other } = props;
+    const {name, label, value, onChange, error, ...other } = props;
 
     /* same as in ./Checkbox */
     const convertToDefaultEventParameter = (name, value) => ({
@@ -19,8 +19,10 @@ export default function DateTimePickerv2(props) {
             <DateTimePicker
                 name={name}
                 //inputFormat="dd/MM/yyyy "
+                minDate = {new Date()}
                 label={label}
                 value={value}
+                error={error}
                 openTo="year"
                 views={['year', 'month', 'day', 'hours','minutes']}
                 onChange={date => onChange(convertToDefaultEventParameter(name, date))}

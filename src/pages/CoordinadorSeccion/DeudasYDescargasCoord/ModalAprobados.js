@@ -25,12 +25,17 @@ import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDesca
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { UserContext } from '../../../constants/UserContext';
 import { DT } from '../../../components/DreamTeam/DT';
+const addAllDocentes = () => {
+    
+}
 
 const tableHeaders = [
     
     {
         id: 'seleccionar',
-        label: '',
+        label: <Controls.RowCheckBox sx = '1' onClick = {()=>{addAllDocentes()}}>
+        <EditOutlinedIcon fontSize="small" />
+    </Controls.RowCheckBox>,
         numeric: false,
         sortable: false
     },
