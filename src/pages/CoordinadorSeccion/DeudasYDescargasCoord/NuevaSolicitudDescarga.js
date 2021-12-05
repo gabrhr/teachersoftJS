@@ -137,6 +137,7 @@ export default function NuevoProcesoForm() {
             "cantidad_solicitada": solicitados,
             "persona_departamento": null,
             "departamento": null,
+            "asunto": String(records.length)
         }
         //console.log("El nuevo tramite seccion", newTramiteSeccion)
         let resultado = await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
@@ -356,7 +357,7 @@ export default function NuevoProcesoForm() {
                                                 </TableCell>
                                                 <TableCell sx = {{width: '250px'}}>
                                                     <DT.Etiqueta 
-                                                        type={item.persona_seccion? "seleccionado":"noSeleccionado"}
+                                                        type={item.persona_seccion || item.seleccionado? "seleccionado":"noSeleccionado"}
                                                     />
                                                 </TableCell>
                                                 <TableCell sx = {{maxWidth: '200px'}}> 

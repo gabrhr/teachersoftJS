@@ -220,9 +220,12 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                 { !atendido &&
                     <Controls.Button
                         text="Guardar"
+                        disabled = {recordForView.cantidad_solicitada < values.aprobados || 
+                                        values.aprobados < 0
+                                    }
                         endIcon={<SaveIcon/>} 
                         type="submit"
-                        />
+                    />
                 }
             </Grid>
             <Popup

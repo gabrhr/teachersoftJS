@@ -65,7 +65,7 @@ export default function GestionarDescargaSeccion() {
     return (
         <>
             {/* Proceso actual*/}
-            { procesoActivo?.length===0 || new Date(procesoActivo[procesoActivo.length - 1]?.fecha_fin_seccion)<new Date()?
+            { procesoActivo?.length===0?
                 <ItemSinProcesoDocente/>: (
                     new Date(procesoActivo[procesoActivo.length - 1].fecha_fin_docente) > new Date()?
                         <ItemSinProcesoSeccion proceso = {procesoActivo[procesoActivo.length - 1]}/>:

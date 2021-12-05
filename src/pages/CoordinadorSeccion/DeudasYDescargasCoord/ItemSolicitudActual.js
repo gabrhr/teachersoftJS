@@ -104,7 +104,7 @@ export default function ItemProcesoActual(props) {
                         Solicitudes recibidas: {'\u00A0'} 
                     </Typography>
                     <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.cantidad_recibidas} 
+                        {parseInt(solicitudActual.asunto)} 
                     </Typography>
                     <div/>
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
