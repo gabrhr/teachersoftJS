@@ -2,64 +2,59 @@ import {useState, useContext, useEffect} from 'react'
 import { Grid, Stack, Typography, TableBody, TableRow, TableCell} from '@mui/material';
 import InvestigacionService from '../../../services/investigacionService';
 import { Controls } from '../../../components/controls/Controls'
-import { useForm, Form } from '../../../components/useForm';
-import Popup from '../../../components/util/Popup'
-import useTable from "../../../components/useTable"
-import { useHistory } from 'react-router-dom'
+import { Form } from '../../../components/useForm';
+import { useTable } from "../../../components/useTable"
 import { UserContext } from '../../../constants/UserContext';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EliminarUnTrabajoInvestigacion from './EliminarUnTrabajoInvestigacion'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditarTrabajoInvestigacion from './EditarTrabajoInvestigacion'
 
-const initialFieldValues = {
-    searchText: ''
-}
-
 const tableHeaders = [
-    {
-      id: 'cod_publicacion',
-      label: 'Codigo',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'titulo',
-      label: 'Titulo',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'nombre',
-      label: 'Autor',
-      numeric: false,
-      sortable: true
-    },
-    {
-      id: 'anho_publicacion',
-      label: 'Periodo',
-      numeric: false,
-      sortable: false
-    },
-    {
-      id: 'url',
-      label: 'URL',
-      numeric: false,
-      sortable: false
-    },
-    {
-      id: 'actions',
-      label: '',
-      numeric: false,
-      sortable: false
-    }
+  {
+    id: 'cod_publicacion',
+    label: 'Codigo',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'titulo',
+    label: 'Titulo',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'autor',
+    label: 'Autor',
+    numeric: false,
+    sortable: true
+  },
+  {
+    id: 'anho_publicacion',
+    label: 'Periodo',
+    numeric: false,
+    sortable: false
+  },
+  {
+    id: 'url',
+    label: 'URL',
+    numeric: false,
+    sortable: false
+  },
+  {
+    id: 'actions',
+    label: '',
+    numeric: false,
+    sortable: false
+  }
 ]
+
 const llenarTrabajos = async (anho) => {
-    //PREGUNTAR POR EL USO DEL WINDOW.LOCAL.STORAGE.GETITEM
-    if(!anho) anho = await window.localStorage.getItem("anho");
-    //------------------------------------------------------------
-    const dataInvestigaciones = await InvestigacionService.buscarPorAnho(anho);
-    const arrInvestigaciones = [];
+  //PREGUNTAR POR EL USO DEL WINDOW.LOCAL.STORAGE.GETITEM
+  if(!anho) anho = await window.localStorage.getItem("anho");
+  //------------------------------------------------------------
+  const dataInvestigaciones = await InvestigacionService.buscarPorAnho(anho);
+  const arrInvestigaciones = [];
   if(!dataInvestigaciones)  {
     console.error("No se puede traer la data del servidor de los trabajos de investigacion")
     return [];
@@ -125,7 +120,6 @@ const actualizarTrabajoAnho = async (trabajo_anho)=> {
 }
 
 export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records, setRecords, setCargaTrabajos, cargaTrabajos}) {
-  const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
   const [recordsX, setRecordsX] = useState([])
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const SubtitulosTable = {display:"flex"}
@@ -135,10 +129,10 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
   const [data, setData] = useState([]);
 
   let permission = 1; 
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenModal(false);
   }
 
   const {
@@ -160,11 +154,7 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
       
     })
     ));  
-    return trabahjos;
-  }
-
-  function isNumeric(num){
-    return !isNaN(num)
+    return trabajos;
   }
 
   const validate = obj => {
@@ -172,7 +162,6 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
   }
 
   const processData = dataString => {
-        
     const dataStringLines = dataString.split(/\r\n|\n/);
     const headers = dataStringLines[0].split(
         /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
@@ -180,81 +169,63 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
 
     let list = [];
     for (let i = 1; i < dataStringLines.length; i++) {
-        const row = dataStringLines[i].split(
-            /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
-        );
-        if (headers && row.length === headers.length) {
-            const obj = {};
-            for (let j = 0; j < headers.length; j++) {
-                let d = row[j];
-                if (d.length > 0) {
-                    if (d[0] === '"') d = d.substring(1, d.length - 1);
-                    if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
-                }
-                if (headers[j]) {
-                    obj[headers[j]] = d;
-                }
+      const row = dataStringLines[i].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
+      if (headers && row.length === headers.length) {
+        const obj = {};
+        for (let j = 0; j < headers.length; j++) {
+            let d = row[j];
+            if (d.length > 0) {
+              if (d[0] === '"') d = d.substring(1, d.length - 1);
+              if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
             }
-            
-            if(!validate(obj)){
-              return
+            if (headers[j]) {
+              obj[headers[j]] = d;
             }
-            // remove the blank rows
-            if (Object.values(obj).filter(x => x).length > 0) {
-                list.push(obj);
-            }
+        }  
+        if(!validate(obj)){
+          return
         }
-    }
-    
-        // prepare columns list from headers
-        const columns = headers.map(c => ({
-          name: c,
-          selector: c
-      }));
-
-      //console.log(list)
-      setData(list);
-      setColumns(columns);
-
-      //let listaIncorrectos = []
-      let listaCorrectos = []
-
-      for (let i = 0; i < list.length; i++) {
-          listaCorrectos.push(list[i])
+        if (Object.values(obj).filter(x => x).length > 0) {
+            list.push(obj);
+        }
       }
+    }
 
-      //Hacemos el paso de los datos a un objeto
-      const trabajos = datosTrabajos(listaCorrectos)
+    const columns = headers.map(c => ({name: c, selector: c}));
+    setData(list);
+    setColumns(columns);
 
-      setRecordsX(prevRecords => prevRecords.concat(trabajos));
+    let listaCorrectos = []
+    for (let i = 0; i < list.length; i++) {
+        listaCorrectos.push(list[i])
+    }
+
+    const trabajos = datosTrabajos(listaCorrectos)
+    setRecordsX(prevRecords => prevRecords.concat(trabajos));
   };
 
   const handleUploadFile = e => {
     try {
-        const file = e.target.files[0];
-        let extension = file.name.split('.')
-        if(extension[extension.length - 1] !== "xlsx" && extension[extension.length - 1] !== "xls"){
-          alert("Solo se pueden importar archivos .xlsx y .xls")
-          return
-        }
-        const reader = new FileReader();
-        reader.onload = evt => {
-            /* Parse data */
-            const bstr = evt.target.result;
-            const wb = XLSX.read(bstr, { type: 'binary' });
-            /* Get first worksheet */
-            const wsname = wb.SheetNames[0];
-            const ws = wb.Sheets[wsname];
-            /* Convert array of arrays */
-            const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-            processData(data);
-        };
-        reader.readAsBinaryString(file);
-
+      const file = e.target.files[0];
+      let extension = file.name.split('.')
+      if(extension[extension.length - 1] !== "xlsx" && extension[extension.length - 1] !== "xls"){
+        alert("Solo se pueden importar archivos .xlsx y .xls")
+        return
+      }
+      const reader = new FileReader();
+      reader.onload = evt => {
+          const bstr = evt.target.result;
+          const wb = XLSX.read(bstr, { type: 'binary' });
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+          processData(data);
+      };
+      reader.readAsBinaryString(file);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-};
+  };
 
 const actualizarDatos = async e => { 
   e.preventDefault();
@@ -282,90 +253,23 @@ const actualizarDatos = async e => {
   permission = 1;
   //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
   if(permission)  {
-    setOpenPopup(false);
+    setOpenPopupCargaMasiva(false);
     newRecords = await horDataRecords(newRecords);
     console.log(newRecords);
     for(let nr of newRecords){
       await setRecords(oldRecords => [...oldRecords, nr]);
     }
     console.log(records);
-    await setCargaH(records);
+    await setCargaTrabajos(records);
   }
-   /*  setRecords(employeeService.getAllEmployees()) */
 }
 
 const handleSubmit = e => {
   e.preventDefault()
   setRecords(recordsX)
   handleClose()
-  setOpenPopup(false)
+  setOpenPopupCargaMasiva(false)
 }
-
-
-  useEffect(() => {
-    llenarTrabajos(anho)
-    .then (nuevasInvestigaciones =>{
-      setRecords(nuevasInvestigaciones);
-      setInvestigaciones(records);
-    });
-  }, [openPopupEdit])
-
-  const handleSearch = e => {
-    let target = e.target;
-    setFilterFn({
-      fn: items => {
-        if (target.value === "")
-          return items
-        else
-          // CONSULTAR SOBRE QUE ALMACENA LA X PARA PODER ACCEDER
-          // CORRECTAMENTE A LOS VALORES DEL TRABAJO DE INVESTIGACION
-          // ---------------------------------------------------------------------
-          return items.filter(x => x.curso_ciclo.curso.nombre.toLowerCase()
-              .includes(target.value.toLowerCase()))
-      }
-    })
-  }
-
-  // CONSULTAR SOBRE POR QUE EN HorarioCursos.js SE TIENE UN IF ELSE SI EL ROL
-  // SE GARANTIZA AL ACCEDER PREVIAMENTE A LA PANTALLA POR DEFECTO
-  // ---------------------------------------------------------------------
-  const handleClick = e => {
-    // VERIFICAR COMO FUNCIONA HISTORY PUSH PARA REDIRIGIRME AL MODAL DE AGREGAR
-    // NO DEJAR PASAR
-    if(rol === 9){
-      history.push("/cord/asignacionCarga/cursos");
-    }else{
-      console.log("ERROR: NO POSEE EL ROL 9 PARA INGRESAR");
-    }
-  }
-
-  const guardarIndex = item => {
-    setIndexDelete(item)
-    setOpenOnePopup(true)
-  }
-
-  const eliminarInvestigaciones = () => {
-    records.map(item => {
-      InvestigacionService.deleteDocumento(item.id);
-    })
-    setRecords([]);
-    setOpenAllPopup(false);
-  }
-
-  const handleEdit = async item => {
-    const request = await InvestigacionService.getDocumento(item.id);
-    setRecordForEdit(request);
-    setOpenPopupEdit(true);
-  }
-
-  const eliminarInvestigacion = async () =>{
-    //Funcion para elimianr la INVESTIGACION seleccionado
-    let pos = records.map(function(e) { return e.id; }).indexOf(indexDelete.id);
-    records.splice(pos,1);
-    pos = 0;
-    InvestigacionService.deleteDocumento(indexDelete.id);
-    setOpenOnePopup(false)
-  }
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -391,61 +295,52 @@ const handleSubmit = e => {
         >
           Vista Previa
         </Typography>
-          <BoxTbl>
-            <TblContainer>
-              <colgroup>
-                <col style={{ width: '7.5%' }} />
-                <col style={{ width: '40%' }} />
-                <col style={{ width: '20%' }} />
-                <col style={{ width: '7.5%' }} />
-                <col style={{ width: '20%' }} />
-              </colgroup>
-                <TblHead />
-                <TableBody>
-                  {
-                    recordsAfterPagingAndSorting().map(item => (
-                    <TableRow>
-                      <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
-                      <TableCell>{recordsX ? item. : item.codigo}</TableCell>
-                      <TableCell>{recordsX ? item.id_autor : item.codigo}</TableCell>
-                      <TableCell>{recordsX ? item.anho_publicacion === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
-                      <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
-                    </TableRow>
-                    ))
-                  }
-                </TableBody>
-                  </TblContainer>
-                  <TblPagination />
-              </BoxTbl>
-          </Paper>
-          <Grid cointainer align="right" mt={5}>
-              <div>
-                  <Controls.Button
-                      // disabled={true}
-                      variant="disabled"
-                      text="Cancelar"
-                      /* onClick={resetForm} */
-                      />
-                  <Controls.Button
-                      // variant="contained"
-                      // color="primary"
-                      // size="large"
-                      text="Cargar Datos"
-                      /* type="submit" */
-                      disabled = {permission && recordsX.length ? false : true}
-                      onClick={actualizarDatos}
-                  />
-                  
-              </div>
-          </Grid>
-          <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={open}
-          >
-              <CircularProgress color="inherit" />
-          </Backdrop>
-      </Form>
-  )
-}
+        <BoxTbl>
+          <TblContainer>
+            <colgroup>
+              <col style={{ width: '7.5%' }} />
+              <col style={{ width: '40%' }} />
+              <col style={{ width: '20%' }} />
+              <col style={{ width: '7.5%' }} />
+              <col style={{ width: '20%' }} />
+            </colgroup>
+            <TblHead />
+            <TableBody>
+              {
+                recordsAfterPagingAndSorting().map(item => (
+                <TableRow>
+                  <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
+                  <TableCell>{recordsX ? item : item.codigo}</TableCell>
+                  <TableCell>{recordsX ? item.id_autor : item.codigo}</TableCell>
+                  <TableCell>{recordsX ? item.anho_publicacion === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
+                  <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                </TableRow>
+                ))
+              }
+            </TableBody>
+          </TblContainer>
+          <TblPagination />
+        </BoxTbl>
+      </Paper>
+      <Grid cointainer align="right" mt={5}>
+        <div>
+          <Controls.Button
+            text="Cancelar"
+            variant="disabled"
+          />
+          <Controls.Button
+            text="Cargar Datos"
+            disabled = {permission && recordsX.length ? false : true}
+            onClick={actualizarDatos}
+          />
+        </div>
+      </Grid>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        openModal={openModal}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </Form>
   )
 }
