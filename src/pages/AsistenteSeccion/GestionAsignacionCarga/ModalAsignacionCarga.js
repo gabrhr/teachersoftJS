@@ -250,6 +250,9 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
     } 
 
     const validate = (obj) => {
+      console.log("ENTRANDO A LA VALIDACION")
+      console.log("Objeto: ", obj);
+      console.log("Clave: ", obj.Clave);
       if(obj.Clave === "" || obj.Clave.length !== 6){
         alert("Error en la plantilla - Campo Clave")
         return false
@@ -313,7 +316,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         obj[headers[j]] = d;
                     }
                 }
-                
+                console.log("ANTES DE ENTRAR A LA VALIDACION");
+                console.log("obj: ", obj);
                 if(!validate(obj)){
                   return
                 }
