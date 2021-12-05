@@ -83,13 +83,13 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
         if(allChecked){
             for(let i = 0; i < records.length; i++){
                 records[i].seleccionado = true
-                setDescargas(records.length)
             }
+            setDescargas(records.length)
         }else{
             for(let i = 0; i < records.length; i++){
                 records[i].seleccionado = false
-                setDescargas(0)
             }
+            setDescargas(0)
         }
         
     }
