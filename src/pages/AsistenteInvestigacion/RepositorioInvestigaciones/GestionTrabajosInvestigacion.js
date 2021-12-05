@@ -204,6 +204,8 @@ const getDocumentos = async () => {
 export default function GestionTrabajosInvestigacion() {
 	
     const [openPopup, setOpenPopup] = useState(false);
+    const [openPopupCargaMasiva, setOpenPopupCargaMasiva] = useState(false);
+    const [cargaTrabajos, setCargaTrabajos] = useState([])
     const [deleteData, setDeleteData] = useState(false);
     const [createData, setCreateData] = useState(false);
     const [updateData, setUpdateData] = useState(false);
@@ -381,15 +383,15 @@ export default function GestionTrabajosInvestigacion() {
       />
       
       <Grid container spacing={2} maxWidth={1}>
-        {/*
+        
         <Grid item xs>
           <Typography variant="body1"> Puedes&nbsp;
             <Link 
                 style={{ fontSize: '15px', color:"#41B9E4"}} 
                 href="#" 
                 underline = "hover" 
-                variant="button" 
-                //onClick = {() => exportToCSV(vacio, 'trabajo_investigacion')}
+                variant="button"
+                onClick = {() => window.open("https://docs.google.com/spreadsheets/d/1icIuPsGBSd8k3eAF_lFy5x5pAmdVEO7U/edit?usp=sharing&ouid=100344065590955470663&rtpof=true&sd=true")}
             >
                 descargar la plantilla en Excel
             </Link>
@@ -404,7 +406,7 @@ export default function GestionTrabajosInvestigacion() {
             onClick = {() => setOpenPopup(true)}
           />
         </Grid>
-      */}
+     
       </Grid>
       
       <Paper variant="outlined" sx={PaperStyle}>
@@ -492,7 +494,7 @@ export default function GestionTrabajosInvestigacion() {
                 <br></br>
                 <br></br>
                 <Typography variant="h4" style={SubtitulosTable} >
-                        Detalles del Trabajo de Inpvestigación
+                        Detalles del Trabajo de Investigación
                 </Typography>
                 <div style={{ display: "flex", paddingRight: "5px", marginTop: 20 }}/>
                 <GestionTrabajosInvestigacionDetalle values = {values} detail = {detail} setDetail = {setDetail}/>
@@ -500,26 +502,32 @@ export default function GestionTrabajosInvestigacion() {
         </Grid>            
 		  </Paper>
       <Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
-            >
-              <AgregarEditarInvestiga
-                addOrEdit={addOrEdit}
-                recordForEdit={recordForEdit}
-                setOpenPopup={setOpenPopup}
-              />
-
-              {/*  <AgregarEditarInvestiga/> */}
-            </Popup>
-            <Notification
-              notify={notify}
-              setNotify={setNotify}
-            />
-            <ConfirmDialog
-              confirmDialog={confirmDialog}
-              setConfirmDialog={setConfirmDialog}
-            />
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
+      >
+        <AgregarEditarInvestiga
+          addOrEdit={addOrEdit}
+          recordForEdit={recordForEdit}
+          setOpenPopup={setOpenPopup}
+        />
+      </Popup>
+      <Popup
+          openPopupCargaMasiva={openPopupCargaMasiva}
+          setOpenPopup={setOpenPopupCargaMasiva}
+          title="Carga masiva de trabajos de investigación"
+      >
+          < TrabajosInvestigacion setOpenPopupCargaMasiva={setOpenPopupCargaMasiva} records={records} setRecords={setRecords} setCargaTrabajos = {setCargaTrabajos} 
+          cargaTrabajos = {cargaTrabajos}/>
+      </Popup>  
+      {/* <Notification
+        notify={notify}
+        setNotify={setNotify}
+      />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      /> */}
 		</>
 	);
 }

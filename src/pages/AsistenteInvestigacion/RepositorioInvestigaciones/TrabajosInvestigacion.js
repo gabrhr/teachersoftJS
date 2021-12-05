@@ -19,13 +19,13 @@ const initialFieldValues = {
 const tableHeaders = [
     {
       id: 'cod_publicacion',
-      label: 'Código',
+      label: 'Codigo',
       numeric: false,
       sortable: true
     },
     {
       id: 'titulo',
-      label: 'Título',
+      label: 'Titulo',
       numeric: false,
       sortable: true
     },
@@ -37,13 +37,13 @@ const tableHeaders = [
     },
     {
       id: 'anho_publicacion',
-      label: 'Año',
+      label: 'Periodo',
       numeric: false,
       sortable: false
     },
     {
       id: 'url',
-      label: 'Texto Completo',
+      label: 'URL',
       numeric: false,
       sortable: false
     },
@@ -54,7 +54,7 @@ const tableHeaders = [
       sortable: false
     }
 ]
-const fillInvestigaciones = async (anho) => {
+const llenarTrabajos = async (anho) => {
     //PREGUNTAR POR EL USO DEL WINDOW.LOCAL.STORAGE.GETITEM
     if(!anho) anho = await window.localStorage.getItem("anho");
     //------------------------------------------------------------
@@ -114,36 +114,200 @@ const fillInvestigaciones = async (anho) => {
   return arrInvestigaciones;
 }
 
-export default function TrabajosInvestigacion({records, setRecords, setInvestigaciones, investigaciones, anho, setAnho}) {
+const actualizarTrabajoAnho = async (trabajo_anho)=> {
+
+  const newTrabajoInvestigacion = {
+    
+  }
+  // FALTA IMPLEMENTAR
+  // const request = await InvestigacionService.updateDocumentoAnho(newTrabajoInvestigacion);
+
+}
+
+export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records, setRecords, setCargaTrabajos, cargaTrabajos}) {
   const {user, setUser, rol, setRol, setToken} = useContext(UserContext)
+  const [recordsX, setRecordsX] = useState([])
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-  const [openOnePopup, setOpenOnePopup] = useState(false)
-  const [openAllPopup, setOpenAllPopup] = useState(false)
-  const [indexDelete, setIndexDelete] = useState(0)
-  const [recordForEdit, setRecordForEdit] = useState(null)
-  const [openPopupEdit, setOpenPopupEdit] = useState(false)
-  const history = useHistory()
-  const SubtitulosTable={display:"flex"}
-  const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, 
-  color:"primary.light", elevation:0}
+  const SubtitulosTable = {display:"flex"}
+  const PaperStyle={ borderRadius: '20px', pb:4,pt:2, px:2, color:"primary.light", elevation:0}
+  
+  const [columns, setColumns] = useState([]);
+  const [data, setData] = useState([]);
+
+  let permission = 1; 
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
   const {
       TblContainer,
       TblHead,
       TblPagination,
       recordsAfterPagingAndSorting,
       BoxTbl
-  } = useTable(records, tableHeaders, filterFn);
-  const {
-      handleInputChange
-  } = useForm(initialFieldValues);
+  } = useTable(recordsX, tableHeaders, filterFn);
+
+  const onInputClick = (event) => {
+    event.target.value = ''
+  }
+
+  const datosTrabajos = trabajosInvestigacion => {
+    const trabajos = []
+    trabajosInvestigacion.map(trabajo => (
+      trabajos.push({
+      
+    })
+    ));  
+    return trabahjos;
+  }
+
+  function isNumeric(num){
+    return !isNaN(num)
+  }
+
+  const validate = obj => {
+    return true
+  }
+
+  const processData = dataString => {
+        
+    const dataStringLines = dataString.split(/\r\n|\n/);
+    const headers = dataStringLines[0].split(
+        /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+    );
+
+    let list = [];
+    for (let i = 1; i < dataStringLines.length; i++) {
+        const row = dataStringLines[i].split(
+            /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+        );
+        if (headers && row.length === headers.length) {
+            const obj = {};
+            for (let j = 0; j < headers.length; j++) {
+                let d = row[j];
+                if (d.length > 0) {
+                    if (d[0] === '"') d = d.substring(1, d.length - 1);
+                    if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
+                }
+                if (headers[j]) {
+                    obj[headers[j]] = d;
+                }
+            }
+            
+            if(!validate(obj)){
+              return
+            }
+            // remove the blank rows
+            if (Object.values(obj).filter(x => x).length > 0) {
+                list.push(obj);
+            }
+        }
+    }
+    
+        // prepare columns list from headers
+        const columns = headers.map(c => ({
+          name: c,
+          selector: c
+      }));
+
+      //console.log(list)
+      setData(list);
+      setColumns(columns);
+
+      //let listaIncorrectos = []
+      let listaCorrectos = []
+
+      for (let i = 0; i < list.length; i++) {
+          listaCorrectos.push(list[i])
+      }
+
+      //Hacemos el paso de los datos a un objeto
+      const trabajos = datosTrabajos(listaCorrectos)
+
+      setRecordsX(prevRecords => prevRecords.concat(trabajos));
+  };
+
+  const handleUploadFile = e => {
+    try {
+        const file = e.target.files[0];
+        let extension = file.name.split('.')
+        if(extension[extension.length - 1] !== "xlsx" && extension[extension.length - 1] !== "xls"){
+          alert("Solo se pueden importar archivos .xlsx y .xls")
+          return
+        }
+        const reader = new FileReader();
+        reader.onload = evt => {
+            /* Parse data */
+            const bstr = evt.target.result;
+            const wb = XLSX.read(bstr, { type: 'binary' });
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+            processData(data);
+        };
+        reader.readAsBinaryString(file);
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const actualizarDatos = async e => { 
+  e.preventDefault();
+  permission = 0;
+  let otroHorario = 1;
+  let newRecords = [];
+  let postHorario = {}; //Para poder usar el horario en una segunda vuelta
+  //Servicio para cargar los horarios
+  for (let hor of recordsX) {
+    const resultArray = await llenarDatosHorarios(otroHorario, postHorario, hor);
+    otroHorario = resultArray[0];
+    postHorario = resultArray[1];
+    //Loop finished
+    
+    if(otroHorario === 1)  {
+      console.log(postHorario);
+      const resultado = await horarioService.registerHorario(postHorario)
+      if(resultado){
+        console.log("Todo bien");
+        await actualizarCursoCiclo(postHorario.curso_ciclo);
+      }
+      newRecords.push(resultado);
+    }
+  }
+  permission = 1;
+  //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
+  if(permission)  {
+    setOpenPopup(false);
+    newRecords = await horDataRecords(newRecords);
+    console.log(newRecords);
+    for(let nr of newRecords){
+      await setRecords(oldRecords => [...oldRecords, nr]);
+    }
+    console.log(records);
+    await setCargaH(records);
+  }
+   /*  setRecords(employeeService.getAllEmployees()) */
+}
+
+const handleSubmit = e => {
+  e.preventDefault()
+  setRecords(recordsX)
+  handleClose()
+  setOpenPopup(false)
+}
+
 
   useEffect(() => {
-    fillInvestigaciones(anho)
+    llenarTrabajos(anho)
     .then (nuevasInvestigaciones =>{
       setRecords(nuevasInvestigaciones);
       setInvestigaciones(records);
     });
-    console.log("El rol es", rol)
   }, [openPopupEdit])
 
   const handleSearch = e => {
@@ -204,96 +368,84 @@ export default function TrabajosInvestigacion({records, setRecords, setInvestiga
   }
 
   return (
-    <Form>            
-      <Typography variant="h4" style={SubtitulosTable}>
-        Repositorio de Investigación
-      </Typography>
-      <Grid container>
-        <Grid item xs={5}>
-          <Stack direction="row" align="left" spacing={0}>
-            <Controls.Input
-              name="searchText"
-              label="Buscar trabajo de investigación por el nombre"
-              onChange={handleSearch}
-              type="search"
-              size="small"
-            />
-          </Stack>
-        </Grid>
-        <Grid item xs={5}/>
-        <Grid item xs={2} align="right">
-          <Controls.Button 
-            title="Agregar Trabajo de Investigación"
-            variant="text+icon"
-            text = "Agregar Trabajo de Investigación"
-            onClick = {event => handleClick(event)}
+    <Form onSubmit={handleSubmit}>
+      <Grid align="right">
+        <label htmlFor="contained-button-file" >
+          <Input accept=".csv,.xlsx,.xls" id="contained-button-file" 
+            type="file" sx={{display: 'none'}} 
+            onChange={handleUploadFile}
+            onClick={onInputClick}
           />
-        </Grid>
+          <Controls.Button
+              text="Subir archivo"
+              endIcon={<AttachFileIcon />}
+              size="medium"
+              component="span"
+              align="right"
+          />
+        </label>
       </Grid>
-      <BoxTbl>
-        <TblContainer>
-          <TblHead />
-          <TableBody>
-            {records.length > 0
-              ? 
-              recordsAfterPagingAndSorting().map(item => (
-                <TableRow key={item.id}>
-                  {/* <TableCell>{item.curso_ciclo.curso.codigo}</TableCell>
-                  <TableCell>{item.horas_semanales}</TableCell>
-                  <TableCell>{item.curso_ciclo.curso.facultad}</TableCell>
-                  <TableCell>{item.curso_ciclo.curso.nombre}</TableCell>
-                  <TableCell>{item.codigo}</TableCell>
-                  <TableCell>{item.sesiones.secuencia ? "Laboratorio":"Clase"}</TableCell>
-                  <TableCell>{item.sesiones.hora_sesion}</TableCell> */}
-                  <TableCell>
-                    <Controls.ActionButton
-                      color="warning"
-                      onClick={ () => {handleEdit(item)}}
-                    >
-                      <EditOutlinedIcon fontSize="small" />
-                    </Controls.ActionButton>
-                    {/* Accion eliminar */}
-                    <Controls.ActionButton
-                      color="warning"
-                      onClick={ () => {guardarIndex(item)}}
-                    >
-                      <DeleteOutlinedIcon fontSize="small" />
-                    </Controls.ActionButton>
-                  </TableCell>
-                </TableRow>
-              ))
-              :
-              (
-                <Typography variant="body1" color="primary.light" style={SubtitulosTable}>    
-                    No hay elementos en la tabla. 
-                </Typography>  
-              )
-            }
-          </TableBody>
-        </TblContainer>
-        <TblPagination />
-      </BoxTbl>
-      <Popup
-        openPopup={openPopupEdit}
-        setOpenPopup={setOpenPopupEdit}
-        title = {"Editar trabajo de investigación"}
-        size = "sm"
-      >
-        <EditarTrabajoInvestigacion
-          recordForEdit={recordForEdit}
-          setOpenPopup={setOpenPopupEdit}
-        />        
-      </Popup>
-      <Popup
-          openPopup={openOnePopup}
-          setOpenPopup={setOpenOnePopup}
-          title={"Eliminar trabajo de investigación"}
-      >
-        <EliminarUnTrabajoInvestigacion
-          setOpenOnePopup = {setOpenOnePopup}
-          eliminarInvestigacion = {eliminarInvestigacion}
-        />
-      </Popup>
-    </Form>
+      <Paper variant="outlined" sx={PaperStyle}>
+        <Typography variant="h4"
+            color="primary.light" style={SubtitulosTable}
+        >
+          Vista Previa
+        </Typography>
+          <BoxTbl>
+            <TblContainer>
+              <colgroup>
+                <col style={{ width: '7.5%' }} />
+                <col style={{ width: '40%' }} />
+                <col style={{ width: '20%' }} />
+                <col style={{ width: '7.5%' }} />
+                <col style={{ width: '20%' }} />
+              </colgroup>
+                <TblHead />
+                <TableBody>
+                  {
+                    recordsAfterPagingAndSorting().map(item => (
+                    <TableRow>
+                      <TableCell>{recordsX ? item.curso.codigo : item.codigo}</TableCell>
+                      <TableCell>{recordsX ? item. : item.codigo}</TableCell>
+                      <TableCell>{recordsX ? item.id_autor : item.codigo}</TableCell>
+                      <TableCell>{recordsX ? item.anho_publicacion === 0 ? "Clase":"Laboratorio" : item.tipo}</TableCell>
+                      <TableCell align = "center">{recordsX ? item.horas_semanales : item.horas_semanales}</TableCell>
+                    </TableRow>
+                    ))
+                  }
+                </TableBody>
+                  </TblContainer>
+                  <TblPagination />
+              </BoxTbl>
+          </Paper>
+          <Grid cointainer align="right" mt={5}>
+              <div>
+                  <Controls.Button
+                      // disabled={true}
+                      variant="disabled"
+                      text="Cancelar"
+                      /* onClick={resetForm} */
+                      />
+                  <Controls.Button
+                      // variant="contained"
+                      // color="primary"
+                      // size="large"
+                      text="Cargar Datos"
+                      /* type="submit" */
+                      disabled = {permission && recordsX.length ? false : true}
+                      onClick={actualizarDatos}
+                  />
+                  
+              </div>
+          </Grid>
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={open}
+          >
+              <CircularProgress color="inherit" />
+          </Backdrop>
+      </Form>
+  )
+}
   )
 }
