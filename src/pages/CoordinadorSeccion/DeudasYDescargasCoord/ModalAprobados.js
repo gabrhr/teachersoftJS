@@ -35,9 +35,9 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
     
         {
             id: 'seleccionar',
-            label: <Controls.RowCheckBox sx = '1' onClick = {()=>{setAllChecked(!allChecked);addAllDocentes();}}>
+            label: <Controls.RowCheckBox sx = '1'  checked = {!allChecked} onClick = {()=>{setAllChecked(!allChecked);addAllDocentes();}}>
             <EditOutlinedIcon fontSize="small" />
-        </Controls.RowCheckBox>,
+            </Controls.RowCheckBox>,
             numeric: false,
             sortable: false
         },
