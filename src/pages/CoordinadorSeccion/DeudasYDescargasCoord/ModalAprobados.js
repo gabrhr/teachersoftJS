@@ -25,44 +25,42 @@ import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDesca
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { UserContext } from '../../../constants/UserContext';
 import { DT } from '../../../components/DreamTeam/DT';
-const addAllDocentes = () => {
-    
-}
-
-const tableHeaders = [
-    
-    {
-        id: 'seleccionar',
-        label: <Controls.RowCheckBox sx = '1' onClick = {()=>{addAllDocentes()}}>
-        <EditOutlinedIcon fontSize="small" />
-    </Controls.RowCheckBox>,
-        numeric: false,
-        sortable: false
-    },
-    {
-        id: 'foto',
-        label: '',
-        numeric: false,
-        sortable: false
-    },
-    {
-        id: 'nombre',
-        label: 'Nombre del docente',
-        numeric: false,
-        sortable: true
-    },
-    {
-        id: 'justificacion',
-        label: 'Bono Solicitado',
-        numeric: false,
-        sortable: false
-    },
-]
 
 export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, 
     solicitudActual, resultado = 4}){
     
-        console.log("resultado?",resultado)
+    const [allChecked, setAllChecked] = useState(false)
+
+    const tableHeaders = [
+    
+        {
+            id: 'seleccionar',
+            label: <Controls.RowCheckBox sx = '1' onClick = {()=>{setAllChecked(!allChecked);addAllDocentes();}}>
+            <EditOutlinedIcon fontSize="small" />
+        </Controls.RowCheckBox>,
+            numeric: false,
+            sortable: false
+        },
+        {
+            id: 'foto',
+            label: '',
+            numeric: false,
+            sortable: false
+        },
+        {
+            id: 'nombre',
+            label: 'Nombre del docente',
+            numeric: false,
+            sortable: true
+        },
+        {
+            id: 'justificacion',
+            label: 'Bono Solicitado',
+            numeric: false,
+            sortable: false
+        },
+    ]    
+        
     const [records, setRecords] = useState([])
 
     const [aprobados, setAprobados] = React.useState(null)
@@ -80,6 +78,21 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
+
+    const addAllDocentes = () => {
+        if(allChecked){
+            for(let i = 0; i < records.length; i++){
+                records[i].seleccionado = true
+                setDescargas(records.length)
+            }
+        }else{
+            for(let i = 0; i < records.length; i++){
+                records[i].seleccionado = false
+                setDescargas(0)
+            }
+        }
+        
+    }
 
     const guardarSolicitudActual = async() =>{
         for(let i = 0; i < records.length; i++){
