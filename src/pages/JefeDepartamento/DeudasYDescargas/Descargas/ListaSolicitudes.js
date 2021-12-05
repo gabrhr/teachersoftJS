@@ -113,7 +113,7 @@ function Item(props){
                 </TableCell>
                 <TableCell sx={{maxWidth:"300px"}}>
                     <Controls.Button
-                        text={item.resultado === 0 ?"Detalle":"Aprobar"}
+                        text={item.resultado === 1 ?"Detalle":"Aprobar"}
                         onClick={()=>{setOpenDetalle(true);setRecordForView(item)}} 
                     />
                 </TableCell>
