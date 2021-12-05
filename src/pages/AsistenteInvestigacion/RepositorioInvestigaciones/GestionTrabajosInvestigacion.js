@@ -403,7 +403,7 @@ export default function GestionTrabajosInvestigacion() {
             text="Importar"
             size="large"
             endIcon={<CloudUploadOutlinedIcon/>}
-            onClick = {() => setOpenPopup(true)}
+            onClick = {() => setOpenPopupCargaMasiva(true)}
           />
         </Grid>
      

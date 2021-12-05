@@ -1,14 +1,13 @@
-import {useState, useContext, useEffect} from 'react'
-import { Grid, Stack, Typography, TableBody, TableRow, TableCell} from '@mui/material';
+import React, { useState } from 'react'
+import { Input, Paper, Grid, Typography, TableBody, TableRow, TableCell} from '@mui/material';
 import InvestigacionService from '../../../services/investigacionService';
 import { Controls } from '../../../components/controls/Controls'
 import { Form } from '../../../components/useForm';
-import { useTable } from "../../../components/useTable"
-import { UserContext } from '../../../constants/UserContext';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import EliminarUnTrabajoInvestigacion from './EliminarUnTrabajoInvestigacion'
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import EditarTrabajoInvestigacion from './EditarTrabajoInvestigacion'
+import useTable from "../../../components/useTable"
+import * as XLSX from 'xlsx'
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const tableHeaders = [
   {
@@ -49,7 +48,7 @@ const tableHeaders = [
   }
 ]
 
-const llenarTrabajos = async (anho) => {
+const llenarTrabajosInvestigacion = async (anho) => {
   //PREGUNTAR POR EL USO DEL WINDOW.LOCAL.STORAGE.GETITEM
   if(!anho) anho = await window.localStorage.getItem("anho");
   //------------------------------------------------------------
@@ -136,18 +135,18 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
   }
 
   const {
-      TblContainer,
-      TblHead,
-      TblPagination,
-      recordsAfterPagingAndSorting,
-      BoxTbl
+    TblContainer,
+    TblHead,
+    TblPagination,
+    recordsAfterPagingAndSorting,
+    BoxTbl
   } = useTable(recordsX, tableHeaders, filterFn);
 
   const onInputClick = (event) => {
     event.target.value = ''
   }
 
-  const datosTrabajos = trabajosInvestigacion => {
+  const datosTrabajosInvestigacion = trabajosInvestigacion => {
     const trabajos = []
     trabajosInvestigacion.map(trabajo => (
       trabajos.push({
@@ -157,8 +156,45 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
     return trabajos;
   }
 
-  const validate = obj => {
-    return true
+  const validate = columnas => {
+    // COD_FINAL_PUBLICACION esta compuesto de 123-ABC, es necesario verificar cada parte
+    let codigo=columnas.Codigo.split("-");
+    let numPublicacion = codigo[0];
+    let codRevisor = codigo[1];
+    let codRevisorLength=3;
+    if(columnas.Codigo === "" || codigo.length === columnas.Codigo.length || isNaN(numPublicacion) || codRevisor.length != codRevisorLength){
+      if(columnas.Codigo === "") alert("Error en la plantilla: COD_FINAL_PUBLICACION - Campo vacío");
+      else if(codigo.length === columnas.Codigo.length) alert("Error en la plantilla: COD_FINAL_PUBLICACION - No existe ningún guión de separación");
+      else if(isNaN(numPublicacion)) alert("Error en la plantilla: COD_FINAL_PUBLICACION - Primer fragmento no numérico");
+      else alert("Error en la plantilla: COD_FINAL_PUBLICACION - Segundo fragmento no contiene la longitud esperada");
+      return false
+    }
+    if(columnas.Titulo === ""){
+      alert("Error en la plantilla: TITULO - Campo vacío")
+      return false
+    }
+    // El autor es dado en el formato APELLIDO, NOMBRE
+    let autor=columnas.Codigo.split(",");
+    if(columnas.Autor === "" || autor.length === columnas.Autor.length){
+      if(columnas.Autor === "") alert("Error en la plantilla: APELLIDOS_NOMBRES - Campo vacío");
+      else alert("Error en la plantilla: APELLIDOS_NOMBRES - No existe una separación entre apellido y nombre");
+      return false
+    }
+    if(columnas.Periodo === "" || isNaN(columnas.Periodo)){
+      if(columnas.Periodo === "") alert("Error en la plantilla: ANIO_PRODUCCION - Campo vacío");
+      else alert("Error en la plantilla: ANIO_PRODUCCION - No es un número");
+      return false
+    }
+    // Una URL posee una extension, en caso no se haya asignado, debe de colocarse el enunciado "Sin imagen"
+    let extension = (columnas.URL.split('.')).pop();
+    let extensionMaxLength = 4;
+    // Consultar sobre si existirá la posibilidad de que por defecto si no se asigna un pdf se guarda como Sin imagen
+    if(columnas.URL === "" || extension > extensionMaxLength){
+      if(columnas.URL === "") alert("Error en la plantilla: URL - Campo vacío");
+      else alert("Error en la plantilla: URL - Extensión inválida");
+      return false;
+    }
+    return true;
   }
 
   const processData = dataString => {
@@ -200,7 +236,7 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
         listaCorrectos.push(list[i])
     }
 
-    const trabajos = datosTrabajos(listaCorrectos)
+    const trabajos = datosTrabajosInvestigacion(listaCorrectos)
     setRecordsX(prevRecords => prevRecords.concat(trabajos));
   };
 
@@ -227,41 +263,42 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
     }
   };
 
+// FALTA IMPLEMENTAR FUNCION ACTUALIZARDATOS
 const actualizarDatos = async e => { 
-  e.preventDefault();
-  permission = 0;
-  let otroHorario = 1;
-  let newRecords = [];
-  let postHorario = {}; //Para poder usar el horario en una segunda vuelta
-  //Servicio para cargar los horarios
-  for (let hor of recordsX) {
-    const resultArray = await llenarDatosHorarios(otroHorario, postHorario, hor);
-    otroHorario = resultArray[0];
-    postHorario = resultArray[1];
-    //Loop finished
+  // e.preventDefault();
+  // permission = 0;
+  // let otroHorario = 1;
+  // let newRecords = [];
+  // let postHorario = {}; //Para poder usar el horario en una segunda vuelta
+  // //Servicio para cargar los horarios
+  // for (let hor of recordsX) {
+  //   const resultArray = await llenarTrabajosInvestigacion(otroHorario, postHorario, hor);
+  //   otroHorario = resultArray[0];
+  //   postHorario = resultArray[1];
+  //   //Loop finished
     
-    if(otroHorario === 1)  {
-      console.log(postHorario);
-      const resultado = await horarioService.registerHorario(postHorario)
-      if(resultado){
-        console.log("Todo bien");
-        await actualizarCursoCiclo(postHorario.curso_ciclo);
-      }
-      newRecords.push(resultado);
-    }
-  }
-  permission = 1;
-  //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
-  if(permission)  {
-    setOpenPopupCargaMasiva(false);
-    newRecords = await horDataRecords(newRecords);
-    console.log(newRecords);
-    for(let nr of newRecords){
-      await setRecords(oldRecords => [...oldRecords, nr]);
-    }
-    console.log(records);
-    await setCargaTrabajos(records);
-  }
+  //   if(otroHorario === 1)  {
+  //     console.log(postHorario);
+  //     const resultado = await horarioService.registerHorario(postHorario)
+  //     if(resultado){
+  //       console.log("Todo bien");
+  //       await actualizarCursoCiclo(postHorario.curso_ciclo);
+  //     }
+  //     newRecords.push(resultado);
+  //   }
+  // }
+  // permission = 1;
+  // //LOADING - BLOQUEO DE ACTIVIDAD - CLICK BOTON CARGAR DATOS SE CAMBIA EL MODAL Y SE PONE UN LAODER...
+  // if(permission)  {
+  //   setOpenPopupCargaMasiva(false);
+  //   newRecords = await horDataRecords(newRecords);
+  //   console.log(newRecords);
+  //   for(let nr of newRecords){
+  //     await setRecords(oldRecords => [...oldRecords, nr]);
+  //   }
+  //   console.log(records);
+  //   await setCargaTrabajos(records);
+  // }
 }
 
 const handleSubmit = e => {
