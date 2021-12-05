@@ -45,7 +45,7 @@ export default function GestionDescargaDocente() {
                 },
                 "observacion": values.observacion,
                 "procesoDescarga": {
-                    "id": procesoActivo[0].id,
+                    "id": procesoActivo[procesoActivo.length - 1].id,
                 },
                 "tipo_bono": values.tipo_bono,
                 "persona_seccion": null,
@@ -66,7 +66,7 @@ export default function GestionDescargaDocente() {
                 },
                 "observacion": values.observacion,
                 "procesoDescarga": {
-                    "id": procesoActivo[0].id,
+                    "id": procesoActivo[procesoActivo.length - 1].id,
                 },
                 "tipo_bono": values.tipo_bono,
                 "persona_seccion": null,
@@ -112,23 +112,38 @@ export default function GestionDescargaDocente() {
           type: 'success'
         })
     }
+
+    const filtrarTramites = (tramites) =>{
+        const filtered = []
+        for(let i = 0; i < tramites.length; i++){
+            if(tramites[i].procesoDescarga){
+                filtered.push(tramites[i])
+            }
+            console.log("tramites[i].procesoDescarga ", tramites[i].procesoDescarga)
+        }
+        return filtered
+    }
+
     const getTramitesDescargasDocente = async() => {
         procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         const tramites = await tramiteDescargaService.getTramitesDescargaHistoricoxDocente(user.persona.id);
         let now = new Date()
         console.log("tramites ", tramites)
-        const tramitesFiltrados = tramites.filter(x => {
+        const tramitesFiltrados = filtrarTramites(tramites)
+        /*const tramitesFiltrados = tramites.filter(x => {
             return tramites.procesoDescarga
-        })
-        console.log("TramitesFiltrados", tramitesFiltrados)
+        })*/
+        console.log("Proceso Activo", procesoActivoNew)
+        console.log("Tramites Descarga", tramitesFiltrados)
         if(procesoActivoNew.length > 0){
             setRecords(tramitesFiltrados.filter(x => {
                 const sinplazo= new Date(x.procesoDescarga.fecha_fin)
                 return sinplazo.setDate(sinplazo.getDate()+2) < now 
             })) 
             const desc =  tramitesFiltrados.find(({procesoDescarga}) =>
-                procesoDescarga.id === procesoActivoNew[0].id
+                procesoDescarga.id === procesoActivoNew[procesoActivoNew.length - 1].id
             )
+            console.log(desc)
             setDescargaActual(desc)
             await setProcesoActivo(procesoActivoNew)
         }    
@@ -144,7 +159,7 @@ export default function GestionDescargaDocente() {
             {/* Solicitud actual del año */}
             <Grid container>
                 <Grid item xs={8}>
-                    {   procesoActivo?.length===0 ||new Date(procesoActivo[0]?.fecha_fin_docente)<new Date() ? 
+                    {   procesoActivo?.length===0 ||new Date(procesoActivo[procesoActivo.length - 1]?.fecha_fin_docente)<new Date() ? 
                         <ItemSinProcesoDocente/>:                    
                         descargaActual? 
                         <>
@@ -152,12 +167,12 @@ export default function GestionDescargaDocente() {
                             <ItemDescargaActualDocente
                                 item={descargaActual} setRecordForEdit={setRecordForEdit}
                                 setOpenPopup={setOpenPopup} setOpenPopupDetalle={setOpenPopupDetalle} 
-                                onDelete={onDelete} procesoActivo={procesoActivo[0]}
+                                onDelete={onDelete} procesoActivo={procesoActivo[procesoActivo.length - 1]}
                                 setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
                             /> 
                         </>
                         :<ItemDecargaVaciaDocente
-                            proceso={procesoActivo[0]}
+                            proceso={procesoActivo[procesoActivo.length - 1]}
                             addOrEdit={addOrEdit}
                             setOpenPopup={setOpenPopup}
                         />
