@@ -26,6 +26,8 @@ export default function GestionDescargas() {
     }
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
+    console.log("Proceso: ", procesoinit)
+
     const {
         values,
         setValues,
@@ -107,7 +109,7 @@ export default function GestionDescargas() {
                     <Grid item xs={3}/>
                     </Grid>
                 <Paper variant="outlined" sx={PaperStyle}>
-                    <ListaSolicitudes seccion = ""/>
+                    <ListaSolicitudes seccion = "" procesoId = {procesoinit.id}/>
                     <Grid conteiner >
                     
                 </Grid>
