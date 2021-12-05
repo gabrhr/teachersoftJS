@@ -144,7 +144,7 @@ export default function GestionDescargaDocente() {
             {/* Solicitud actual del año */}
             <Grid container>
                 <Grid item xs={8}>
-                    {   procesoActivo?.length===0? 
+                    {   procesoActivo?.length===0 ||new Date(procesoActivo[0]?.fecha_fin_docente)<new Date() ? 
                         <ItemSinProcesoDocente/>:                    
                         descargaActual? 
                         <>
