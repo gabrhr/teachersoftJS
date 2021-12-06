@@ -9,7 +9,7 @@ import tokenService from './tokens.js';
 // Axios para envio de data de cada tipo de profesor por seccion
 const getDataProfesoresTCPorSeccion = async (id_ciclo,id_seccion) => {
     try{
-      const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/idseccion=${id_seccion}/tipodocente=1`, tokenService.GetTokenPrueba())
+      const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/idseccion=${parseInt(id_seccion)}/tipodocente=1`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
       console.error(exception);
@@ -18,7 +18,7 @@ const getDataProfesoresTCPorSeccion = async (id_ciclo,id_seccion) => {
 
 const getDataProfesoresTPCPorSeccion = async (id_ciclo,id_seccion) => {
     try{
-      const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/idseccion=${id_seccion}/tipodocente=2`, tokenService.GetTokenPrueba())
+      const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/idseccion=${parseInt(id_seccion)}/tipodocente=2`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
       console.error(exception);
@@ -27,7 +27,7 @@ const getDataProfesoresTPCPorSeccion = async (id_ciclo,id_seccion) => {
 
 const getDataProfesoresTPAPorSeccion = async (id_ciclo,id_seccion) => {
     try{
-      const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/idseccion=${id_seccion}/tipodocente=3`, tokenService.GetTokenPrueba())
+      const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/idseccion=${parseInt(id_seccion)}/tipodocente=3`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
       console.error(exception);
@@ -37,7 +37,7 @@ const getDataProfesoresTPAPorSeccion = async (id_ciclo,id_seccion) => {
 // Axios para envio de data de cada tipo de profesor por departamento
 const getDataProfesoresTCPorDepartamento = async (id_ciclo,id_departamento) => {
     try{
-      const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/iddepartamento=${id_departamento}/tipodocente=1`, tokenService.GetTokenPrueba())
+      const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/iddepartamento=${parseInt(id_departamento)}/tipodocente=1`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
       console.error(exception);
@@ -46,7 +46,7 @@ const getDataProfesoresTCPorDepartamento = async (id_ciclo,id_departamento) => {
 
 const getDataProfesoresTPCPorDepartamento = async (id_ciclo,id_departamento) => {
     try{
-      const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/iddepartamento=${id_departamento}/tipodocente=2`, tokenService.GetTokenPrueba())
+      const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/iddepartamento=${parseInt(id_departamento)}/tipodocente=2`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
       console.error(exception);
@@ -55,7 +55,7 @@ const getDataProfesoresTPCPorDepartamento = async (id_ciclo,id_departamento) => 
 
 const getDataProfesoresTPAPorDepartamento = async (id_ciclo,id_departamento) => {
     try{
-      const request= await axios.get(`${url}/horario/promhoras/idciclo=${id_ciclo}/iddepartamento=${id_departamento}/tipodocente=3`, tokenService.GetTokenPrueba())
+      const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/iddepartamento=${parseInt(id_departamento)}/tipodocente=3`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
       console.error(exception);
@@ -82,7 +82,7 @@ const getDataProfesoresSobrecarga = async () => {
 
 const getDataProfesoresDeudaSeccion = async (id_seccion) => {
   try{
-    const request= await axios.get(`${url}/horario/deuda/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+    const request= await axios.get(`${url}/horario/deuda/idseccion=${parseInt(id_seccion)}`, tokenService.GetTokenPrueba(), id_seccion)
     return request.data;  
   }catch(exception){
     console.error(exception);
@@ -91,7 +91,7 @@ const getDataProfesoresDeudaSeccion = async (id_seccion) => {
 
 const getDataProfesoresSobrecargaSeccion = async (id_seccion) => {
   try{
-    const request= await axios.get(`${url}/horario/sobrecarga/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+    const request= await axios.get(`${url}/horario/sobrecarga/idseccion=${parseInt(id_seccion)}`, tokenService.GetTokenPrueba(), id_seccion)
     return request.data;  
   }catch(exception){
     console.error(exception);
@@ -100,7 +100,7 @@ const getDataProfesoresSobrecargaSeccion = async (id_seccion) => {
 
 const getTopProfesoresDeuda = async (id_seccion) => {
   try{
-    const request= await axios.get(`${url}/horario/deuda/top5/idseccion=${id_seccion}`, tokenService.GetTokenPrueba(), id_seccion)
+    const request= await axios.get(`${url}/horario/deuda/top5/idseccion=${parseInt(id_seccion)}`, tokenService.GetTokenPrueba(), id_seccion)
     return request.data;
   }catch(exception){
     console.error(exception);
