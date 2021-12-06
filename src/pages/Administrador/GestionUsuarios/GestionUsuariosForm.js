@@ -30,7 +30,7 @@ const initialFieldValues = {
   correo: '',
 
   //Originalmente, rol aparecía con '', se cambió para que aparezca al menos uno seleccionado
-  
+  codigo_pucp: '',
   rol: 1,
  
   foto_URL: '',
@@ -207,6 +207,7 @@ export default function GestionUsuariosForm(props) {
         id: values.id,
         idPersona: values.idPersona,
         nombre: values.nombre.toUpperCase(),
+        codigo_pucp: values.codigo_pucp,
         apellidoPaterno: values.apellidoPaterno.toUpperCase(),
         apellidoMaterno: values.apellidoMaterno.toUpperCase(),
         correo: values.correo,
@@ -349,11 +350,19 @@ export default function GestionUsuariosForm(props) {
               onChange={handleInputChange}
               error={errors.correo}
             />
+            <Controls.Input
+              name="codigo_pucp"
+              label="Código PUCP"
+              value={values.codigo_pucp}
+              onChange={handleInputChange}
+              error={errors.codigo_pucp}
+            />
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mt: 9, mb: 2, mx: 1 }} />
 
           {/* Restricciones */}
           <Grid item xs={4} sx={styles.columnGridItem} >
+
             <Typography variant="h4" marginBottom={2} >
               RESTRICCIONES
             </Typography>

@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import ContentHeader from '../../../components/AppMain/ContentHeader';
+import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
-import { Controls } from '../../../components/controls/Controls'
-import IndicadoresService from '../../../services/indicadoresService';
-import PieCharts from '../../../components/PageComponents/PieCharts';
-import InvestigacionService from '../../../services/investigacionService';
-import SeccionService from "../../../services/seccionService";
-import BarCharts from '../../../components/PageComponents/BarCharts';
-import { useForm, Form } from "../../../components/useForm" 
-import CantidadTrabajosXAutor from '../../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
-import BigStatistics from '../../../components/DreamTeam/BigStatistic';
+import { Controls } from '../../components/controls/Controls'
+import IndicadoresService from '../../services/indicadoresService';
+import PieCharts from '../../components/PageComponents/PieCharts';
+import InvestigacionService from '../../services/investigacionService';
+import SeccionService from "../../services/seccionService";
+import { useForm, Form } from "../../components/useForm" 
+import BigStatistics from '../../components/DreamTeam/BigStatistic';
 
 const getLabels = (arr) => {
     let arrEstandarizado=[];
@@ -130,7 +128,7 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresADepartamento() {
+export default function IndicadoresDepartamento() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});

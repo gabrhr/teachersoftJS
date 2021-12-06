@@ -1,15 +1,53 @@
 import React, {useState, useEffect} from 'react'
-import ContentHeader from '../../../components/AppMain/ContentHeader';
+import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
-import { Controls } from '../../../components/controls/Controls'
-import IndicadoresService from '../../../services/indicadoresService';
-import PieCharts from '../../../components/PageComponents/PieCharts';
-import InvestigacionService from '../../../services/investigacionService';
-import SeccionService from "../../../services/seccionService";
-import BarCharts from '../../../components/PageComponents/BarCharts';
-import { useForm, Form } from "../../../components/useForm" 
-import CantidadTrabajosXAutor from '../../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
-import BigStatistics from '../../../components/DreamTeam/BigStatistic';
+import { Controls } from '../../components/controls/Controls'
+import IndicadoresService from '../../services/indicadoresService';
+
+import InvestigacionService from '../../services/investigacionService';
+import SeccionService from "../../services/seccionService";
+import { useForm, Form } from "../../components/useForm" 
+import BigStatistics from '../../components/DreamTeam/BigStatistic';
+
+import BarCharts from '../../components/PageComponents/BarCharts';
+ 
+
+ 
+
+let indicadores = [];
+
+const maxAutor = (arr) => {
+    
+
+    let maxNombre = '*NO DETERMINADO*'
+    let index = 0;
+    let maxCantidad = 0;
+    let totalCantiad = 0;
+    
+    indicadores[0] = maxNombre;
+    indicadores[1] = maxCantidad;
+    indicadores[2] = totalCantiad;
+    try{
+    for (let i = 0; i < arr.length; i++){
+        totalCantiad += arr[i].deuda_docente;
+        if (maxCantidad < arr[i].deuda_docente){
+            maxCantidad = arr[i].deuda_docente;
+            index = i;
+        }
+    }
+
+    maxNombre =  arr[index].nombres + ' ' +  arr[index].apellidos;
+    }
+    catch{
+
+    }
+
+    indicadores[0] = maxNombre;
+    indicadores[1] = maxCantidad;
+    indicadores[2] = totalCantiad;
+
+ 
+}
 
 const getLabels = (arr) => {
     let arrEstandarizado=[];
@@ -23,6 +61,7 @@ const getLabels = (arr) => {
     }
     return arrEstandarizado;
 }
+
 
 const listColors = [
     "rgba(54, 162, 235, 0.8)",
@@ -130,7 +169,7 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresADepartamento() {
+export default function IndicadoresDepartamento4() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
@@ -286,12 +325,12 @@ export default function IndicadoresADepartamento() {
 
     return (
         <>
- 
+            {maxAutor(profesores)}
             <Grid container xs spacing = {4}>
             {/* <Stack direction="row" spacing = {4}> */}
                 <Grid item xs={6} sx = {{paddingLeft: 3}}>
                 <ContentHeader
-                text="  Cantidad de Docentes según Sección con carga horaria"
+                 text="Profesores con mayor Deuda por Sección"
                 cbo={false}
             />
                 </Grid>
@@ -310,89 +349,54 @@ export default function IndicadoresADepartamento() {
             </Grid>
             <br/>
       
-           
             <Grid container spacing={2} >
                 <Grid item xs={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
-            
-                            {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
-               
+                        <Typography variant="body1" color={"#00008B"} my={.5}>
+                            TOP 5 Profesores con mayor deuda
+                        </Typography>
+                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                        <Grid align="center" justify="center">
+                            Cantidad de Deudas
+                        </Grid>
                     </Paper>
                 </Grid>
                 <Grid item xs={5}>
-                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={6}>
+                  
+                        
                             <Paper variant="outlined" sx={PaperStyle}>
-                                <br/>
-                                <br/>
+                        
                                 <BigStatistics  
-                                    title={"Número de Profesores TC"} 
-                                    text={profesorTC.cantidad_docentes}
+                                    variantText="h4"
+                                    title={"Profesor con mayor deuda"} 
+                                    text={indicadores[0]}
                                     />
-                                <br/>
                                 <br/>
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
-                                <br/>
-                                <br/>
+                      
+                  
                                 <BigStatistics  
-                                    title={"Número de Profesores TPC"} 
-                                    text={profesorTPC.cantidad_docentes}
+                                    title={"Máxima cantidad de deuda"} 
+                                    text={indicadores[1]}
                                     />
-                                <br/>
-                                <br/>
+                         
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
-                                <br/>
-                                <br/>
+                        
                                  <BigStatistics  
-                                    title={"Número de Profesores TPA"} 
-                                    text={profesorTPA.cantidad_docentes}
+                                    title={"Cantidad Profesores Evaluados"} 
+                                    text={indicadores[2]}
                                     />
                                 <br/>
-                                <br/>
+                     
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Paper variant="outlined" sx={PaperStyle}>
-                                <br/>
-                                <br/>
-                                <BigStatistics  
-                                    title={"Promedio de Horas TC "} 
-                                    text={profesorTC.promedio_horas}
-                                    />
-                                <br/>
-                                <br/>
-                            </Paper>
-                            <br/>
-                            <Paper variant="outlined" sx={PaperStyle}>
-                                <br/>
-                                <br/>
-                                <BigStatistics  
-                                    title={"Promedio de Horas TC"} 
-                                    text={profesorTPC.promedio_horas}
-                                    />
-                                <br/>
-                                <br/>
-                            </Paper>
-                            <br/>
-                            <Paper variant="outlined" sx={PaperStyle}>
-                                <br/>
-                                <br/>
-                                 <BigStatistics  
-                                    title={"Promedio de Horas TA"} 
-                                    text={profesorTPA.promedio_horas}
-                                    />
-                                <br/>
-                                <br/>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                    </Grid>
-                    </Grid>
-           
-        </>
-    )
+                       
+                       
+              
+            </Grid>
+        </>);
 }

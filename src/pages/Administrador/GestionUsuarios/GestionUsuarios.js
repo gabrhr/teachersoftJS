@@ -106,7 +106,8 @@ const getUsuario = async () => {
       nombreDepartamento: usr.persona.departamento ? usr.persona.departamento.nombre : '',
       idSeccion: usr.persona.seccion ? usr.persona.seccion.id : 0,
       nombreSeccion: usr.persona.seccion ? usr.persona.seccion.nombre : '',
-      foto_URL: usr.persona.foto_URL
+      foto_URL: usr.persona.foto_URL,
+      codigo_pucp: usr.persona.codigo_pucp
     })
   ));
   //console.log(usuarios)
@@ -189,6 +190,7 @@ export default function GestionUsuarios() {
         nombres: usuario.nombre,
         apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
         correo_pucp: usuario.correo,
+        codigo_pucp: usuario.codigo_pucp,
         numero_documento: usuario.DNI,
         tipo_persona: usuario.rol,
         ...(usuario.seccion  && 
@@ -210,6 +212,7 @@ export default function GestionUsuarios() {
       nombres: usuario.nombre,
       apellidos: usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno,
       correo_pucp: usuario.correo,
+      codigo_pucp: usuario.codigo_pucp,
       numero_documento: usuario.DNI,
       tipo_persona: usuario.rol,
       ...(usuario.seccion  && 
