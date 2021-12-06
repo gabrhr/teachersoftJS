@@ -130,7 +130,7 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresADepartamento() {
+export default function IndicadoresADepartamento3() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
@@ -291,7 +291,7 @@ export default function IndicadoresADepartamento() {
             {/* <Stack direction="row" spacing = {4}> */}
                 <Grid item xs={6} sx = {{paddingLeft: 3}}>
                 <ContentHeader
-                text="  Cantidad de Docentes según Sección con carga horaria"
+                text="Sobrecarga de los docentes según Sección"
                 cbo={false}
             />
                 </Grid>
@@ -310,12 +310,15 @@ export default function IndicadoresADepartamento() {
             </Grid>
             <br/>
       
-           
             <Grid container spacing={2} >
                 <Grid item xs={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
-            
-                            {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+                        <Typography variant="body1" color={"#00008B"} my={.5}>
+                            Cantidad de Profesores según su tipo
+                        </Typography>
+
+       
+                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
                
                     </Paper>
                 </Grid>
@@ -326,33 +329,33 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Número de Profesores TC"} 
-                                    text={profesorTC.cantidad_docentes}
+                                    title={"Número de Profesores TC con Sobrecarga"} 
+                                    text={profesorSobrecargaTC.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                              
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Número de Profesores TPC"} 
-                                    text={profesorTPC.cantidad_docentes}
+                                    title={"Número de Profesores TPC con Sobrecarga"} 
+                                    text={profesorSobrecargaTPC.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                              
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <br/>
                                 <br/>
                                  <BigStatistics  
-                                    title={"Número de Profesores TPA"} 
-                                    text={profesorTPA.cantidad_docentes}
+                                    title={"Número de Profesores TPA con Sobrecarga"} 
+                                    text={profesorSobrecargaTPA.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                               
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>
@@ -360,8 +363,8 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Promedio de Horas TC "} 
-                                    text={profesorTC.promedio_horas}
+                                    title={"Promedio de Sobrecargas TC "} 
+                                    text={profesorSobrecargaTC.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -371,8 +374,8 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Promedio de Horas TC"} 
-                                    text={profesorTPC.promedio_horas}
+                                    title={"Promedio de Sobrecargas TC"} 
+                                    text={profesorSobrecargaTPC.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -382,17 +385,16 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                  <BigStatistics  
-                                    title={"Promedio de Horas TA"} 
-                                    text={profesorTPA.promedio_horas}
+                                    title={"Promedio de Sobrecargas TA"} 
+                                    text={profesorSobrecargaTPA.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
                             </Paper>
                         </Grid>
                     </Grid>
-                    </Grid>
-                    </Grid>
-           
+                </Grid>
+            </Grid>
         </>
     )
 }

@@ -246,7 +246,7 @@ export default function IndicadoresASeccion4() {
         <>
             {maxAutor(profesores)}
             <ContentHeader
-                text="Sobrecarga de los Docentes en la Sección"
+                text="Profesores con mayor Deuda en la Sección"
                 cbo={false}
             />
             <Grid container spacing={2} >
@@ -255,7 +255,7 @@ export default function IndicadoresASeccion4() {
                         <Typography variant="h4" >
                             TOP 5 Profesores con mayor deuda
                         </Typography>
-                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors, "Docentes")}
                         <Grid align="center" justify="center">
                             Cantidad de Deudas
                         </Grid>

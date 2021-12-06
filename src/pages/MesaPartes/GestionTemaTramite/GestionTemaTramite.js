@@ -396,6 +396,7 @@ export default function GestionTemaTramite() {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
         title={recordForEdit ? "Editar Tema Trámite": "Registrar Tema Trámite"}
+        size={"sm"}
       >
         {/* <EmployeeForm /> */}
         <GestionTemaTramiteForm

@@ -14,7 +14,7 @@ import cicloService from "../../services/cicloService";
 import {useState, useEffect} from 'react'
 import { DT } from '../../components/DreamTeam/DT'
 
-const fillCiclos = async () => {
+const fillCiclos = async (cicloActualAxios) => {
   //const dataCic = await cicloService.getCiclos();
   //console.log("Este es el dataCiclo: ", dataCic);
   let dataCic = await cicloService.getCiclos();
@@ -32,7 +32,7 @@ const fillCiclos = async () => {
       id: cic.id.toString(),
       title: cic.anho + '-' +cic.periodo
     })
-    if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
+    if(cic.id === cicloActualAxios[0].id){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
       cicloActual = {
         id: cic.id.toString(),
         title: cic.anho + '-' + cic.periodo
@@ -54,6 +54,7 @@ function CboCiclo (props) {
     const records = props.records;
     const setRecords = props.setRecords;
     const theme= useTheme();
+    let cicloActualAxios;
 
     const {
       values,
@@ -62,9 +63,14 @@ function CboCiclo (props) {
     } = useForm(initialFieldValues);  
 
     React.useEffect(() => {
-      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(2))) //El ciclo fijo - actual
+      cicloService.cicloActual()
+      .then(c => {
+          cicloActualAxios = c
+      });
+      if(!cicloActualAxios) cicloActualAxios = [{id: '2', title: '2021-2'}];
+      window.localStorage.setItem('ciclo', JSON.stringify(cicloActualAxios[0].id)) //El ciclo fijo - actual
 
-      fillCiclos()
+      fillCiclos(cicloActualAxios)
       .then (newCiclo => {
         setCiclos(newCiclo[0]);
         setCicloActual(newCiclo[1]);
