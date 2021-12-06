@@ -9,12 +9,6 @@ function separarAutores(arr){
     return autores
 }
 
-function separarNombres(arr){
-    let autores=[]
-    arr.forEach(element => autores.push(element[0]));
-    return autores
-}
-
 function separarNumPublicaciones(arr){
     let numPublicaciones=[]
     arr.forEach(element => numPublicaciones.push(element[1]));
@@ -30,12 +24,12 @@ function separarNumPublicaciones(arr){
     Orange: rgba(255, 159, 64, 0.2)
 */
 
-function BarChartGeneric(labels, dataset, colors) {
+function BarChartGeneric(labels, dataset, colors, singleLabel) {
     Chart.register(CategoryScale);
     const data = {
         labels: labels,
         datasets: [{
-            label: separarNombres(labels),
+            label: singleLabel,
             data: dataset,
             backgroundColor: colors,
             borderWidth: 1,
