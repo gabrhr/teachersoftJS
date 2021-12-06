@@ -174,7 +174,7 @@ export default function GestionTemaTramiteForm(props){
                      {/* Datos Personales */}
                     <Grid item xs={12} sx={styles.columnGridItem}>
                         <Typography variant="h4" mb={2}>
-                            DAATOS DEL TEMA TRÁMITE
+                            DATOS DEL TEMA TRÁMITE
                         </Typography>
                         <Controls.Input
                         name="nombre"

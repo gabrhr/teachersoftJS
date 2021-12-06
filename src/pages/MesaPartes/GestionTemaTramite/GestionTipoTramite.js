@@ -288,6 +288,7 @@ const getTipoTramite = async (id_tema) => {
             openPopup={openPopup}
             setOpenPopup={setOpenPopup}
             title={recordForEdit ? "Editar Tipo de Trámite": "Registrar Tipo de Trámite"}
+            size={"sm"}
           >
             <GestionTipoTramiteForm
               recordForEdit={recordForEdit}
