@@ -36,7 +36,7 @@ const initialFieldValues = {
 
     /* EXTRA (solo se utilizan en este componente) */
     unidadID: 1,        // FCI
-    departamentoID: 3,  // Ingenieria
+    departamentoID: 1,  // Ingenieria
     seccionID: 0,
     temaTramiteID: 0,
     /* extra extra (no se usan aqui pero se listan para mantener un orden) */
