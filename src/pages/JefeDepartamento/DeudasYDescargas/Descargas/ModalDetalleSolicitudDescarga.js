@@ -242,7 +242,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                             <TblPagination />
                         </>
                     ):
-                        <LinearProgress/>
+                       recordForView.cantidad_solicitada>0 && <LinearProgress/>
                     }
                 </BoxTbl>
              </Grid>
