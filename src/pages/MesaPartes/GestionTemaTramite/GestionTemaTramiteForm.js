@@ -35,39 +35,6 @@ const initialFieldValues = {
     }
 }
 
-const getSecciones = async () => {
-
-    const dataSecc = await seccionService.getSecciones();
-    const secciones = []
-    dataSecc.map(secc=> (
-      secciones.push({
-      id:secc.id.toString(),
-      nombre:secc.nombre,
-      })
-    ));                 
-    /*
-    const dataSecc = await SeccionService.getSecciones();
-    //dataSecc → id, nombre,  fechaFundacion, fechaModificacion,nombreDepartamento
-    const secciones = [];
-    dataSecc.map(seccion => (
-      secciones.push({
-        id: seccion.id.toString(),
-        nombre: seccion.nombre,
-        fechaFundacion: seccion.fecha_fundacion,
-        fechaModificacion: seccion.fecha_modificacion,
-        departamento: {
-          id: seccion.departamento.id,
-          nombre: seccion.departamento.nombre
-        },
-        correo: seccion.correo,
-        foto: seccion.foto
-      })
-    ));
-    //console.log(secciones);
-    */
-    return secciones;
-}
-
 export default function GestionTemaTramiteForm(props){
 
     const { recordForEdit, addOrEdit, setOpenPopup } = props
@@ -146,15 +113,14 @@ export default function GestionTemaTramiteForm(props){
         }
     }
 
+    const getSecciones = async () => {
+
+      const dataSecc = await seccionService.getSecciones();
+      setSecciones(dataSecc?? [])
+  }
+
     useEffect(() => {
         getSecciones()
-          .then(newSecc => {
-            setSecciones(prevSecc => prevSecc.concat(newSecc));
-    
-            //console.log(newSeccion);
-    
-    
-          });
         if (recordForEdit != null) {
           /* object is not empty */
           setValues({
@@ -174,7 +140,7 @@ export default function GestionTemaTramiteForm(props){
                      {/* Datos Personales */}
                     <Grid item xs={12} sx={styles.columnGridItem}>
                         <Typography variant="h4" mb={2}>
-                            DAATOS DEL TEMA TRÁMITE
+                            DATOS DEL TEMA TRÁMITE
                         </Typography>
                         <Controls.Input
                         name="nombre"
