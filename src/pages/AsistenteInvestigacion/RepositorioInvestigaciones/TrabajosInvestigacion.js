@@ -9,6 +9,8 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+//Aparentemente no se implementará
+
 const tableHeaders = [
   {
     id: 'cod_publicacion',
