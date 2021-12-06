@@ -292,39 +292,6 @@ export default function GestionTrabajosInvestigacion() {
       
     };
 
-    const addOrEdit = (trabajo, resetForm) => {
-      //puede que se modifique, revisar Gestion USuario
-      
-      recordForEdit
-      ? TrabajoService.updateDocumento(trabajo,trabajo.id)
-      : TrabajoService.registerDocumento(trabajo)
-      .then(idTrabajo=> {
-        if(recordForEdit){
-          setRecordForEdit(null);
-          setUpdateData(true);}
-      })
-      
-      setOpenPopup(false)
-      resetForm()
-      setCreateData(true);
-      console.log(updateData);
-      console.log(createData);
-      if(!updateData){
-        setNotify({
-          isOpen: true,
-          message: 'Cambios Guardados Exitosamente',
-          type: 'success'
-        });
-        setUpdateData(false);
-      } else {
-        setNotify({
-          isOpen: true,
-          message: 'Registro de Trabajo Exitoso',
-          type: 'success'
-        });
-        setUpdateData(false);
-      }
-    }
 
     const onDelete = (idTrabajo) => {
         // if (!window.confirm('Are you sure to delete this record?'))
@@ -376,19 +343,6 @@ export default function GestionTrabajosInvestigacion() {
   const SubtitulosTable = { display: "flex" }
 
  
-  const handleLinkClick = (e, idInvest = -1) => {
-
-    localStorage.setItem('id_trabajo', idInvest);
-    history.push({
-      pathname: './repoInvestigacionesForm',
-      state: { 
-        addOrEdit : idInvest
-      }
-    });
-  }
-   
-
-
 	return (
 		<>
 		  <ContentHeader
@@ -422,11 +376,12 @@ export default function GestionTrabajosInvestigacion() {
         </Grid>
       */}
       </Grid>
-      
+      <br/>
+
       <Paper variant="outlined" sx={PaperStyle}>
         <Grid container spacing={2} >
             <Grid item xs={isViewActivityMode ? 6 :12} className={classes.collapsible} >
-            
+
                   <Typography variant="h4" style={SubtitulosTable}>
                         Repositorio de Investigación
                   </Typography>
@@ -445,15 +400,21 @@ export default function GestionTrabajosInvestigacion() {
                       onChange={handleSearch}
                       type="search"
                       />
-
-                      <Controls.AddButton
-                        title="Nuevo Trabajo de Investigación"
-                        variant="iconoTexto"
-                        onClick = {(event) => {handleLinkClick(event); }}
-                      />
-                       
-                  </div>
+                        </div>
            
+                      <Link to ={{
+                        pathname: "/ai/repoInvestigacionesForm",
+                        state:{
+                          addOrEdit: -1,
+                        }
+                        }}  style={{ textDecoration: 'none' }}>  
+                        <Controls.AddButton
+                          title="Añadir Investigación"
+                          variant="iconoTexto"
+                        />
+                      </Link >
+                      
+                
               <BoxTbl>  
               <TblContainer>
                 <TblHead />
@@ -524,19 +485,7 @@ export default function GestionTrabajosInvestigacion() {
             </Grid>
         </Grid>            
 		  </Paper>
-      <Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
-            >
-              <AgregarEditarInvestiga
-                addOrEdit={addOrEdit}
-                recordForEdit={recordForEdit}
-                setOpenPopup={setOpenPopup}
-              />
-
-              {/*  <AgregarEditarInvestiga/> */}
-            </Popup>
+ 
             <Notification
               notify={notify}
               setNotify={setNotify}

@@ -314,18 +314,21 @@ export default function AgregarEditarInvestiga(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
+    } = useForm(addOrEdit > 0 ? recordForEdit : initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
         e.preventDefault();
         let fechaCreacion= "";
         //Definicio de validaciones
+        if (values.autorId > 0)
+        values.idAutor = values.autorId;
         if (validate()){
 
           const newTrabjo = {
-            id: ( addOrEdit < 1 ? '' :   values.id ),
+
+            id: (  values.id ),
             autor: {
-                id: values.idAutor,
+                id: values.idAutor ,
             },
             codigo_publicacion: values.codigo_publicacion,
             tipo_publicacion: values.tipo_publicacion,
@@ -426,7 +429,7 @@ export default function AgregarEditarInvestiga(props) {
 
     useEffect(() => {
 
-        
+        if (addOrEdit > 0)
         setValues({
             ...recordForEdit
         })
@@ -461,6 +464,9 @@ export default function AgregarEditarInvestiga(props) {
                         }
                         error={recordForEdit ? errors.idAutor : errors.autorId}
                     />
+ 
+
+                    
                     <Controls.Input
                         name="titulo"
                         label="Titulo"

@@ -17,7 +17,7 @@ import SeccionService from '../../../services/seccionService.js';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { Box } from '@mui/system';
 import AgregarEditarInvestiga from  './AgregarEditarInvestiga';
-import logout from "../../../assets/images/log-out.png";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 /* SERVICES */ 
 import TrabajoService from '../../../services/investigacionService';
 import Notification from '../../../components/util/Notification'
@@ -52,11 +52,11 @@ export default function GestionTrabajosInvestigacionDetalle(props){
     return(
       <>
         <Controls.Button
-          title="Regresar"
-          text="Regresar"
-          
-          startIcon={<img src={logout} />}
-          //startIcon={<DeleteIcon />}
+            
+            variant="outlined"
+            text="Regresar"
+            size="small"
+            startIcon={<ArrowBackIcon />}
           onClick = {() => {handleLinkClick(); }}
         />
         <AgregarEditarInvestiga

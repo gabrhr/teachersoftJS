@@ -73,6 +73,9 @@ import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/Reposi
 import GestionTrabajosInvestigacionForm from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacionForm';
 import CantidadTrabajosXAutor from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
 import IndicadoresSeccion from '../pages/CoordinadorSeccion/IndicadoresSeccion';
+import IndicadoresSeccion2 from '../pages/CoordinadorSeccion/IndicadoresSeccion2';
+import IndicadoresSeccion3 from '../pages/CoordinadorSeccion/IndicadoresSeccion3';
+import IndicadoresSeccion4 from '../pages/CoordinadorSeccion/IndicadoresSeccion4';
 import CantidadTrabajosXPais from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXPais';
 import CantidadTrabajosXIdioma from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXIdioma';
 import CantidadTrabajosXCalidad from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXCalidad';
@@ -133,7 +136,10 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
-  { requireRoles: [3, 8], path: "/cord/estadisticas", page: IndicadoresSeccion},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/docentes", page: IndicadoresSeccion},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/deuda", page: IndicadoresSeccion2},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/sobrecarga", page: IndicadoresSeccion3},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/mayorDeuda", page: IndicadoresSeccion4},  
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClasesCoord},
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
