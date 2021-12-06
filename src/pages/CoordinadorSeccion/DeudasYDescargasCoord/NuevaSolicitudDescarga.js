@@ -141,11 +141,7 @@ export default function NuevoProcesoForm() {
             "asunto": String(records.length)
         }
         //console.log("El nuevo tramite seccion", newTramiteSeccion)
-        if (solicitados > 0){
-            resultado = await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
-        }else{
-            resultado = 0
-        }
+        resultado = await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
         //console.log("El id del tramite seccion es", resultado.id)
         modificarTramitesDocente(resultado)
     }
