@@ -70,12 +70,19 @@ import GestionDescargaDocente from '../pages/Docente/DeudasYDescargas/GestionDes
 import DeudasYDescargaCoord from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/DeudasYDescargaCoord'
 import NuevaSolicitudDescarga from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/NuevaSolicitudDescarga'
 import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacion';
+import GestionTrabajosInvestigacionForm from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacionForm';
 import CantidadTrabajosXAutor from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
 import IndicadoresSeccion from '../pages/CoordinadorSeccion/IndicadoresSeccion';
+import IndicadoresSeccion2 from '../pages/CoordinadorSeccion/IndicadoresSeccion2';
+import IndicadoresSeccion3 from '../pages/CoordinadorSeccion/IndicadoresSeccion3';
+import IndicadoresSeccion4 from '../pages/CoordinadorSeccion/IndicadoresSeccion4';
 import CantidadTrabajosXPais from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXPais';
 import CantidadTrabajosXIdioma from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXIdioma';
 import CantidadTrabajosXCalidad from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXCalidad';
 import IndicadoresASeccion from '../pages/AsistenteSeccion/IndicadoresASeccion';
+import IndicadoresASeccion2 from '../pages/AsistenteSeccion/IndicadoresASeccion2';
+import IndicadoresASeccion3 from '../pages/AsistenteSeccion/IndicadoresASeccion3';
+import IndicadoresASeccion4 from '../pages/AsistenteSeccion/IndicadoresASeccion4';
 import IndicadoresAdministrador from '../pages/Administrador/IndicadoresAdministrador';
 import IndicadoresADepartamento from '../pages/AsistenteDepartamento/CargaDocente/IndicadoresADepartamento';
 import IndicadoresJDepartamento from '../pages/JefeDepartamento/DeudasYDescargas/IndicadoresJDepartamento';
@@ -120,7 +127,10 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
-  { requireRoles: [2, 8], path: "/as/estadisticas", page: IndicadoresASeccion},
+  { requireRoles: [2, 8], path: "/as/estadisticas/docentes", page: IndicadoresASeccion},
+  { requireRoles: [2, 8], path: "/as/estadisticas/deuda", page: IndicadoresASeccion2},
+  { requireRoles: [2, 8], path: "/as/estadisticas/sobrecarga", page: IndicadoresASeccion3},
+  { requireRoles: [2, 8], path: "/as/estadisticas/mayorDeuda", page: IndicadoresASeccion4},
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroHorarios", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },
@@ -132,7 +142,10 @@ const privateroutes = [
   { requireRoles: [3], path: "/cord/mesaPartes/solicitudDetalle", page: SolicitudDetalle },
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados", page: SolicitudesDelegadasAMi },  
   { requireRoles: [3], path: "/cord/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
-  { requireRoles: [3, 8], path: "/cord/estadisticas", page: IndicadoresSeccion},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/docentes", page: IndicadoresSeccion},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/deuda", page: IndicadoresSeccion2},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/sobrecarga", page: IndicadoresSeccion3},  
+  { requireRoles: [3, 8], path: "/cord/estadisticas/mayorDeuda", page: IndicadoresSeccion4},  
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorariosCoord},
   { requireRoles: [3, 8], path: "/cord/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClasesCoord},
   { requireRoles: [3, 8], path: "/cord/docentes", page: DocentesForm },
@@ -174,10 +187,12 @@ const privateroutes = [
 
   /*AsistenteInvestigacion*/ 
   { requireRoles: [9], path: "/ai/repoInvestigaciones", page: GestionTrabajosInvestigacion },  
+  { requireRoles: [9], path: "/ai/repoInvestigacionesForm", page: GestionTrabajosInvestigacionForm},  
   { requireRoles: [9], path: "/ai/publicacionesPorAutor", page: CantidadTrabajosXAutor },  
   { requireRoles: [9], path: "/ai/publicacionesPorPais", page: CantidadTrabajosXPais },  
   { requireRoles: [9], path: "/ai/publicacionesPorIdioma", page: CantidadTrabajosXIdioma },  
-  { requireRoles: [9], path: "/ai/publicacionesPorCalidad", page: CantidadTrabajosXCalidad},  
+  { requireRoles: [9], path: "/ai/publicacionesPorCalidad", page: CantidadTrabajosXCalidad}, 
+  
  
 ]
 

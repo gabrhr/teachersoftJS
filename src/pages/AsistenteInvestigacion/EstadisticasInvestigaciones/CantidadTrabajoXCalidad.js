@@ -182,7 +182,7 @@ export default function CantidadTrabajosXCalidad(){
                 </Grid>
                 <Grid item sx={6} xs={2.5}>
                             <Paper variant="outlined" sx={PaperStyle}>
-                            <Typography  variant = "h4">Países con sus publicaciones:</Typography>
+                            <Typography  variant = "h4">Indicadores con sus publicaciones:</Typography>
                             <Divider/>
                     {
                         indicadoresCalidades.map(element => ( 

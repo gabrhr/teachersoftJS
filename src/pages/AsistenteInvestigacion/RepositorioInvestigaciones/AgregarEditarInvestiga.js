@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+
+import React, { useEffect , useState} from 'react'
 import esLocale from 'date-fns/locale/es';
 import { Grid , Input, Divider, Stack,Typography, TextField, Avatar} from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -12,13 +13,14 @@ import { Controls } from "../../../components/controls/Controls"
 import * as DTLocalServices from '../../../services/DTLocalServices';
 import DepartamentoService from '../../../services/departamentoService.js';
 import UnidadService from '../../../services/unidadService.js';
-
+import Notification from '../../../components/util/Notification';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { useRadioGroup } from '@mui/material/RadioGroup';
 import SimpleDatePicker from '../../../components/DreamTeam/SimpleDatePicker';
 import SimpleYearPicker from '../../../components/DreamTeam/SimpleYearPicker';
 import { populateCountryList, populateYearList } from '../../../components/auxFunctions';
 import UserService from '../../../services/userService';
+import InvestigacionService from '../../../services/investigacionService';
 
 /*Items selectbox */ 
 let countryList = []; 
@@ -83,7 +85,6 @@ const styles = {
 let selectedID = 0;
 
 
-
 const initialFieldValues = {
   id: 0,
   activo: 0,
@@ -128,11 +129,19 @@ const initialFieldValues = {
   //autor
 
   //idAutor:  '',
-  autorId: 0, 
+  
+  autorId: 0,
   nombreAutor: '',
   codigo_pucp: '',
  
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+let initialDocumento = initialFieldValues;
 
 const getUsuario = async () => {
 
@@ -156,18 +165,69 @@ const getUsuario = async () => {
     //console.log(usuarios)
     window.localStorage.setItem('listUsuarios', JSON.stringify(usuario));
     return usuarios;
+
+}
+
+const getDocumento = async (id) => {
+
+    let auxDocumento = await InvestigacionService.getDocumento(id);
+
+    const documento = {
+        id: auxDocumento.id,
+        
+        codigo_publicacion: auxDocumento.codigo_publicacion,
+        tipo_publicacion: auxDocumento.tipo_publicacion,
+        tipo_referencia: auxDocumento.tipo_referencia,
+        indicador_calidad: auxDocumento.indicador_calidad,
+        subtipo_publicacion: auxDocumento.subtipo_publicacion,
+        anho_publicacion: auxDocumento.anho_publicacion,
+        responsabilidad: auxDocumento.responsabilidad,
+        titulo: auxDocumento.titulo,
+        divulgacion: auxDocumento.divulgacion,
+        editorial: auxDocumento.editorial,
+        idioma: auxDocumento.idioma,
+        edicion: auxDocumento.edicion,
+        ciudad: auxDocumento.ciudad,
+        pais: auxDocumento.pais,
+        medio_publicacion: auxDocumento.medio_publicacion,
+        palabras_clave: null, //auxDocumento.palabras_clave,
+        url_repositorio: auxDocumento.url_repositorio,
+        filiacion: auxDocumento.filiacion,
+        especialidad_UNESCO: auxDocumento.especialidad_UNESCO,
+        volumen: auxDocumento.volumen,
+        nro_revista: auxDocumento.nro_revista,
+        pagina_inicial: auxDocumento.pagina_inicial,
+        pagina_final: auxDocumento.pagina_final,
+        motor_busqueda: auxDocumento.motor_busqueda,
+        identificador_produccion: auxDocumento.motor_busqueda,
+        observaciones_para_departamento: auxDocumento.observaciones_para_departamento,
+        observaciones_de_departamento: auxDocumento.observaciones_de_departamento,
+        validacion_preliminar: auxDocumento.validacion_preliminar,
+        codigo_validacion: (auxDocumento.validacion_preliminar != 0 ?  auxDocumento.codigo_validacion : 0),
+        issn: auxDocumento.issn,
+        doi: auxDocumento.url_repositorio,
+        isbn: auxDocumento.isbn,
+  
+        idAutor: auxDocumento.autor.id, 
+        nombreAutor: auxDocumento.autor.nombre,
+        
+    }
+    initialDocumento = documento
+    return documento;
 }
 
 
 export default function AgregarEditarInvestiga(props) {
-    const {addOrEdit, recordForEdit, setOpenPopup} = props
+
+    const {addOrEdit, recordForEdit, handleLinkClick, change, notify, setNotify} = props
     const theme = useTheme();
     const [fotoPerfil, setFotoPerfil] = React.useState(null);
     const [fileFoto, setFileFoto] = React.useState(null);
     const [cambio, setCambio] = React.useState(false);
     const [usuarios, setUsuarios] = React.useState([]);
     const [enableValidation, setEnableValidation] = React.useState(false);
-
+    
+    
     const ColumnGridItemStyle = {
         padding: theme.spacing(2),
         align:"left",
@@ -231,11 +291,13 @@ export default function AgregarEditarInvestiga(props) {
         //    temp.isbn = "Se requiere al menos ISBN o ISSN"
             
         // temp.idDepartamento = values.departmentId !== 0 ? "" : defaultError
+        /*
         if(recordForEdit){
           temp.idAutor = values.autorId !== 0 ? "" : defaultError;
         } else{
           temp.autorId = values.autorId !== 0 ? "":defaultError;
-        }    
+        } 
+        */   
         setErrors({
             ...temp
         })
@@ -252,18 +314,21 @@ export default function AgregarEditarInvestiga(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(recordForEdit ? recordForEdit : initialFieldValues, true, validate);
+    } = useForm(addOrEdit > 0 ? recordForEdit : initialFieldValues, true, validate);
 
     const handleSubmit = async e => {
         e.preventDefault();
         let fechaCreacion= "";
         //Definicio de validaciones
+        if (values.autorId > 0)
+        values.idAutor = values.autorId;
         if (validate()){
 
           const newTrabjo = {
-            id:values.id,
+
+            id: (  values.id ),
             autor: {
-                id: recordForEdit ? parseInt(values.idAutor) : parseInt(values.autorId),
+                id: values.idAutor ,
             },
             codigo_publicacion: values.codigo_publicacion,
             tipo_publicacion: values.tipo_publicacion,
@@ -300,9 +365,49 @@ export default function AgregarEditarInvestiga(props) {
 
           }
           console.log(newTrabjo);
-          //const rpta = await SeccionService.registerSeccion(newSecc);
+          let rpta
+
+          if (addOrEdit < 1){
+            try {
+                rpta = await InvestigacionService.registerDocumento(newTrabjo);
+                setNotify({
+                    isOpen: true,
+                    message: 'Registro de Documento Éxitoso',
+                    type: 'success'
+                });
+                await sleep(2000);
+                handleLinkClick()
+            }
+            catch(excep){
+                setNotify({
+                    isOpen: true,
+                    message: 'Error en el ingreso de datos:  ' + rpta.toString(),
+                    type: 'error'
+                });
+            }
+          }
+          else {
+            try {
+                rpta = await InvestigacionService.updateDocumento(newTrabjo, addOrEdit);
+                setNotify({
+                    isOpen: true,
+                    message: 'Cambios Guardados Exitosamente',
+                    type: 'success'
+                });
+                await sleep(2000);
+                handleLinkClick()
+            }
+            catch(excep){
+                setNotify({
+                    isOpen: true,
+                    message: 'Error en la modificación de datos:  ' + rpta.toString(),
+                    type: 'error'
+                });
+            }
+          }
+          
           //console.log(rpta);
-          addOrEdit(newTrabjo,resetForm)
+          
           //resetForm()
         }
     }
@@ -318,17 +423,18 @@ export default function AgregarEditarInvestiga(props) {
       .then (newUsr =>{
         setUsuarios(prevUsr => prevUsr.concat(newUsr));
       });
-      if (recordForEdit != null) {
-          /* object is not empty - esto que hace?*/
+      
 
+     }, [addOrEdit, recordForEdit])
 
-          setValues({
-              ...recordForEdit
-          })
+    useEffect(() => {
 
-          
-      }
-    }, [recordForEdit])
+        if (addOrEdit > 0)
+        setValues({
+            ...recordForEdit
+        })
+
+    }, [change])
 
     const convertToDefaultEventParameter = (name, value) => ({
         target: {
@@ -358,6 +464,9 @@ export default function AgregarEditarInvestiga(props) {
                         }
                         error={recordForEdit ? errors.idAutor : errors.autorId}
                     />
+ 
+
+                    
                     <Controls.Input
                         name="titulo"
                         label="Titulo"
@@ -629,7 +738,7 @@ export default function AgregarEditarInvestiga(props) {
                         // disabled={true}
                         variant="disabled"
                         text="Cancelar"
-                        onClick={()=> setOpenPopup(false)}
+                        onClick={()=> handleLinkClick()}
                         />
                     <Controls.Button
                         text="Guardar Cambios"
@@ -638,6 +747,7 @@ export default function AgregarEditarInvestiga(props) {
 
                 </div>
             </Grid>
+
         </Form>
     );
 }

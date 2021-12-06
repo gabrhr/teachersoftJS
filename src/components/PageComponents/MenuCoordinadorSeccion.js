@@ -67,8 +67,31 @@ export const MenuCoordinadorSeccion = [
     },
     {
         text: 'Estadisticas',
-        path: '/cord/estadisticas',
+        path: '',
         icon: <ShowChartOutlinedIcon />,
-        indice: 1,
-    }
+        indice: 3,
+        subNav: [
+            {
+                text: 'Docentes',
+                path: '/cord/estadisticas/docentes',
+                indice: 0,
+            },
+            {
+                text: 'Deuda Docente',
+                path: '/cord/estadisticas/deuda',
+                indice: 1,
+            },
+            {
+                text: 'Sobrecarga Docente',
+                path: '/cord/estadisticas/sobrecarga',
+                indice: 2,
+            },
+            {
+                text: 'Profesores con más Deuda',
+                path: '/cord/estadisticas/mayorDeuda',
+                indice: 3,
+            }
+        ]
+    },
+ 
 ];

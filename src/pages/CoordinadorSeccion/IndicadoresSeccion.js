@@ -8,6 +8,8 @@ import InvestigacionService from '../../services/investigacionService';
 import BarCharts from '../../components/PageComponents/BarCharts';
 import CantidadTrabajosXAutor from '../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
 import BarChartAutores from '../../components/PageComponents/BarCharts';
+import BigStatistics from '../../components/DreamTeam/BigStatistic';
+
 
 let indicadores = [];
 /*  Colores pastel con transparencia
@@ -25,6 +27,7 @@ const listColors = [
     "rgba(255, 206, 86, 0.8)",
     "rgba(153, 102, 255, 0.8)"
 ]
+
 
 
 const getLabels = (arr) => {
@@ -209,176 +212,95 @@ export default function IndicadoresASeccion() {
     return (
         <>
             <ContentHeader
-                text="Dashboard"
+                text="Cantidad de Docentes en la Sección"
                 cbo={false}
             />
-            
-            <Paper variant="outlined" sx={PaperStyle}>
-            <Typography variant="body1" color={"#00008B"} my={2}>
-                DATA ACTUAL DEL CICLO
-            </Typography>
-            <Grid container spacing={1} ml={".3px"} >
-            
-                <Grid item xs={3.5}>
-                <Paper variant="outlined" sx={PaperStyle}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TC: {profesorTC.cantidad_docentes}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Horas TC: {profesorTC.promedio_horas}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={2}>
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TPC: {profesorTPC.cantidad_docentes}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Horas TPC: {profesorTPC.promedio_horas}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={2}>
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TPA: {profesorTPA.cantidad_docentes}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Horas TPA: {profesorTPA.promedio_horas}
-                    </Typography>
-                    <div>
-                        {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
-                    </div>
-                    </Paper>
-                </Grid>
-                <Grid item xs={0.25}/>
-            
-                <Grid item xs={3.5}>
-                <Paper variant="outlined" sx={PaperStyle}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TC con Deuda: {profesorDeudaTC.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Deuda TC: {profesorDeudaTC.promedio_deuda}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={2}>
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TPC con Deuda: {profesorDeudaTPC.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Deuda TPC: {profesorDeudaTPC.promedio_deuda}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={2}>
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TPA con Deuda: {profesorDeudaTPA.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Deuda TPA: {profesorDeudaTPA.promedio_deuda}
-                    </Typography>
-                    <div>
-                        {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
-                    </div>
-                    </Paper >
-                </Grid>
-                <Grid item xs={0.25}/>
-                
-                <Grid item xs={3.5}>
+            <Grid container spacing={2} >
+                <Grid item xs={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TC con Sobrecarga: {profesorSobrecargaTC.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Sobrecarga TC: {profesorSobrecargaTC.promedio_deuda*-1}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={2}>
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TPC con Sobrecarga: {profesorSobrecargaTPC.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Sobrecarga TPC: {profesorSobrecargaTPC.promedio_deuda*-1}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={2}>
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Número de Profesores TPA con Sobrecarga: {profesorSobrecargaTPA.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Promedio de Sobrecarga TPA: {profesorSobrecargaTPA.promedio_deuda*-1}
-                    </Typography>
-                    <div>
-                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
-                    </div>
-                    </Paper >
-                </Grid>
-                
-            </Grid>
-            </Paper>
-            <Grid item xs={7}>
-                    <Paper variant="outlined" sx={PaperStyle}>
-                        <Typography variant="h4" >
-                            TOP 5 Profesores con mayor deuda
+                        <Typography variant="body1" color={"#00008B"} my={.5}>
+                            Cantidad de Profesores según su tipo
                         </Typography>
-                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
-                        <Grid align="center" justify="center">
-                            Cantidad de Deudas
-                        </Grid>
+
+       
+                            {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+               
                     </Paper>
                 </Grid>
-            <Paper variant="outlined" sx={PaperStyle}>
-            <Grid container spacing={1} ml={".3px"} >
-            
-                <Grid item xs={3.5}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Número de Profesores: {profesorTC.cantidad_docentes+profesorTPC.cantidad_docentes+profesorTPA.cantidad_docentes}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Promedio de horas de Dictado: {profesorTC.promedio_horas+profesorTPC.promedio_horas+profesorTPA.promedio_horas}
-                    </Typography>
-                </Grid>
-                <Grid item xs={0.25}/>
-                
-                <Grid item xs={3.5}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Número de Profesores con Deuda: {profesorDeudaTC.cantidad_deudores+profesorDeudaTPC.cantidad_deudores+profesorDeudaTPA.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Promedio de Deuda: {profesorDeudaTC.promedio_deuda+profesorDeudaTPC.promedio_deuda+profesorDeudaTPA.promedio_deuda}
-                    </Typography>
-                </Grid>
-                <Grid item xs={0.25}/>
-                
-                <Grid item xs={3.5}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Número de Profesores con Sobrecarga: {profesorSobrecargaTC.cantidad_deudores+profesorSobrecargaTPC.cantidad_deudores+profesorSobrecargaTPA.cantidad_deudores}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Promedio de Sobrecarga: {profesorSobrecargaTC.promedio_deuda*-1+profesorSobrecargaTPC.promedio_deuda*-1+profesorSobrecargaTPA.promedio_deuda*-1}
-                    </Typography>
-                </Grid>
-                
-            </Grid>
-            </Paper>
-           
-            <Typography variant="body1" color={"#00008B"} my={.5}>
-            
-            </Typography>
-            <Paper variant="outlined" sx={PaperStyle}>
-            <Grid container spacing={1} ml={".3px"} >
-                <Grid item xs={12}>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                    Número de Investigadores: {autores.length}
-                    </Typography>
-                    <Typography variant="body1" color={"#00008B"} my={.5}>
-                        Top 10 Investigadores con mayor record de publicaciones
-                    </Typography>
-                    <Paper variant="outlined" sx={PaperStyle}>
-                        <Grid item xs={8}>
-                        <CantidadTrabajosXAutor/>
+                <Grid item xs={5}>
+                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                        <Grid item xs={6}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <br/>
+                                <br/>
+                                <BigStatistics  
+                                    title={"Número de Profesores TC"} 
+                                    text={profesorTC.cantidad_docentes}
+                                    />
+                                <br/>
+                                <br/>
+                            </Paper>
+                            <br/>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <br/>
+                                <br/>
+                                <BigStatistics  
+                                    title={"Número de Profesores TPC"} 
+                                    text={profesorTPC.cantidad_docentes}
+                                    />
+                                <br/>
+                                <br/>
+                            </Paper>
+                            <br/>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <br/>
+                                <br/>
+                                 <BigStatistics  
+                                    title={"Número de Profesores TPA"} 
+                                    text={profesorTPA.cantidad_docentes}
+                                    />
+                                <br/>
+                                <br/>
+                            </Paper>
                         </Grid>
-                    </Paper>
+                        <Grid item xs={6}>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <br/>
+                                <br/>
+                                <BigStatistics  
+                                    title={"Promedio de Horas TC "} 
+                                    text={profesorTC.promedio_horas}
+                                    />
+                                <br/>
+                                <br/>
+                            </Paper>
+                            <br/>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <br/>
+                                <br/>
+                                <BigStatistics  
+                                    title={"Promedio de Horas TC"} 
+                                    text={profesorTPC.promedio_horas}
+                                    />
+                                <br/>
+                                <br/>
+                            </Paper>
+                            <br/>
+                            <Paper variant="outlined" sx={PaperStyle}>
+                                <br/>
+                                <br/>
+                                 <BigStatistics  
+                                    title={"Promedio de Horas TA"} 
+                                    text={profesorTPA.promedio_horas}
+                                    />
+                                <br/>
+                                <br/>
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
-            </Paper>
-        </>
+
+       </>
     )
 }

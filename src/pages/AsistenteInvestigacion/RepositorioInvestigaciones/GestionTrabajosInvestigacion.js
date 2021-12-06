@@ -1,11 +1,13 @@
 //link: localhost:3000/ai/repoInvestigaciones
 
 import React, {useState, useEffect} from 'react';
+import { Link,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
 import { Controls } from '../../../components/controls/Controls'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Link, LBox, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { LBox, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+
 import { useForm, Form } from '../../../components/useForm';
 import { makeStyles } from '@mui/styles'
 import * as XLSX from 'xlsx';
@@ -198,7 +200,6 @@ const getDocumentos = async () => {
     
     return trabajos;
 }
- 
 
 
 export default function GestionTrabajosInvestigacion() {
@@ -216,7 +217,8 @@ export default function GestionTrabajosInvestigacion() {
     const [isViewActivityMode, setIsViewActivityMode] = useState(true);
     const [isVisible, setIsVisible] = useState(true);
     const [selectedRow, setSelectedRow] = useState(50) //Se tiene que cambiar
-
+    const history = useHistory();
+    const location = useLocation();
     //CSV components
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
@@ -290,39 +292,6 @@ export default function GestionTrabajosInvestigacion() {
       
     };
 
-    const addOrEdit = (trabajo, resetForm) => {
-      //puede que se modifique, revisar Gestion USuario
-      
-      recordForEdit
-      ? TrabajoService.updateDocumento(trabajo,trabajo.id)
-      : TrabajoService.registerDocumento(trabajo)
-      .then(idTrabajo=> {
-        if(recordForEdit){
-          setRecordForEdit(null);
-          setUpdateData(true);}
-      })
-      
-      setOpenPopup(false)
-      resetForm()
-      setCreateData(true);
-      console.log(updateData);
-      console.log(createData);
-      if(!updateData){
-        setNotify({
-          isOpen: true,
-          message: 'Cambios Guardados Exitosamente',
-          type: 'success'
-        });
-        setUpdateData(false);
-      } else {
-        setNotify({
-          isOpen: true,
-          message: 'Registro de Trabajo Exitoso',
-          type: 'success'
-        });
-        setUpdateData(false);
-      }
-    }
 
     const onDelete = (idTrabajo) => {
         // if (!window.confirm('Are you sure to delete this record?'))
@@ -373,6 +342,7 @@ export default function GestionTrabajosInvestigacion() {
   const PaperStyle = { borderRadius: '20x', pb: 4, pt:0.7, px: 0.7, color: "primary.light", elevatio: 0 }
   const SubtitulosTable = { display: "flex" }
 
+ 
 	return (
 		<>
 		  <ContentHeader
@@ -406,11 +376,12 @@ export default function GestionTrabajosInvestigacion() {
         </Grid>
       */}
       </Grid>
-      
+      <br/>
+
       <Paper variant="outlined" sx={PaperStyle}>
         <Grid container spacing={2} >
             <Grid item xs={isViewActivityMode ? 6 :12} className={classes.collapsible} >
-            
+
                   <Typography variant="h4" style={SubtitulosTable}>
                         Repositorio de Investigación
                   </Typography>
@@ -429,14 +400,21 @@ export default function GestionTrabajosInvestigacion() {
                       onChange={handleSearch}
                       type="search"
                       />
-                      <Controls.AddButton
-                        title="Nuevo Trabajo de Investigación"
-                        variant="iconoTexto"
-                        onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
-                      />
-                        {/* </Toolbar> */}
-                  </div>
+                        </div>
            
+                      <Link to ={{
+                        pathname: "/ai/repoInvestigacionesForm",
+                        state:{
+                          addOrEdit: -1,
+                        }
+                        }}  style={{ textDecoration: 'none' }}>  
+                        <Controls.AddButton
+                          title="Añadir Investigación"
+                          variant="iconoTexto"
+                        />
+                      </Link >
+                      
+                
               <BoxTbl>  
               <TblContainer>
                 <TblHead />
@@ -450,12 +428,20 @@ export default function GestionTrabajosInvestigacion() {
                         <StyledTableCell style={{width:'7.5%'}} >{item.anho_publicacion}</StyledTableCell>
                         <StyledTableCell style={{width:'20%'}} component="a" href={item.url_repositorio.indexOf("http") == 0 ? item.url_repositorio : "http://" + item.url_repositorio }>{item.url_repositorio}</StyledTableCell>
                         <StyledTableCell style={{width:'25%'}}>
-                          <Controls.ActionButton
-                            color="warning"
-                            onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
-                          >
-                            <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
+                        <Link to ={{
+                              pathname: "/ai/repoInvestigacionesForm",
+                              state:{
+                                  recordForEdit: item,
+                                  addOrEdit: item.id,
+                              }
+                          }}  style={{ textDecoration: 'none' }}>  
+                      <Controls.ActionButton
+                        color="warning"
+                        
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </Controls.ActionButton>
+                          </Link>
                             <IconButton aria-label="delete">
                               <DeleteIcon
                                 color="warning"
@@ -499,19 +485,7 @@ export default function GestionTrabajosInvestigacion() {
             </Grid>
         </Grid>            
 		  </Paper>
-      <Popup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title={recordForEdit ? "Editar Trabajo Investigación": "Nueva Trabajo Investigación"}
-            >
-              <AgregarEditarInvestiga
-                addOrEdit={addOrEdit}
-                recordForEdit={recordForEdit}
-                setOpenPopup={setOpenPopup}
-              />
-
-              {/*  <AgregarEditarInvestiga/> */}
-            </Popup>
+ 
             <Notification
               notify={notify}
               setNotify={setNotify}

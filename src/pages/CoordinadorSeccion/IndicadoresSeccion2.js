@@ -29,7 +29,6 @@ const listColors = [
 ]
 
 
-
 const getLabels = (arr) => {
     let arrEstandarizado=[];
     try{
@@ -118,7 +117,7 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresASeccion() {
+export default function IndicadoresSeccion2() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
@@ -211,8 +210,9 @@ export default function IndicadoresASeccion() {
 
     return (
         <>
-            <ContentHeader
-                text="Cantidad de Docentes en la Sección"
+           
+           <ContentHeader
+                text="Deuda de los Docentes en la Sección"
                 cbo={false}
             />
             <Grid container spacing={2} >
@@ -223,7 +223,7 @@ export default function IndicadoresASeccion() {
                         </Typography>
 
        
-                            {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+                        {PieCharts.PieChartTipoDocente(profesorDeudaTC.cantidad_deudores,profesorDeudaTPC.cantidad_deudores,profesorDeudaTPA.cantidad_deudores)}
                
                     </Paper>
                 </Grid>
@@ -234,33 +234,33 @@ export default function IndicadoresASeccion() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Número de Profesores TC"} 
-                                    text={profesorTC.cantidad_docentes}
+                                    title={"Número de Profesores TC con Deuda"} 
+                                    text={profesorDeudaTC.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                              
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Número de Profesores TPC"} 
-                                    text={profesorTPC.cantidad_docentes}
+                                    title={"Número de Profesores TPC con Deuda"} 
+                                    text={profesorDeudaTPC.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                              
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <br/>
                                 <br/>
                                  <BigStatistics  
-                                    title={"Número de Profesores TPA"} 
-                                    text={profesorTPA.cantidad_docentes}
+                                    title={"Número de Profesores TPA con Deuda"} 
+                                    text={profesorDeudaTPA.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                               
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>
@@ -268,8 +268,8 @@ export default function IndicadoresASeccion() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Promedio de Horas TC "} 
-                                    text={profesorTC.promedio_horas}
+                                    title={"Promedio de Deudas TC "} 
+                                    text={profesorDeudaTC.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -279,8 +279,8 @@ export default function IndicadoresASeccion() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Promedio de Horas TC"} 
-                                    text={profesorTPC.promedio_horas}
+                                    title={"Promedio de Deudas TC"} 
+                                    text={profesorDeudaTPC.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -290,8 +290,8 @@ export default function IndicadoresASeccion() {
                                 <br/>
                                 <br/>
                                  <BigStatistics  
-                                    title={"Promedio de Horas TA"} 
-                                    text={profesorTPA.promedio_horas}
+                                    title={"Promedio de Deudas TA"} 
+                                    text={profesorDeudaTPA.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -300,7 +300,6 @@ export default function IndicadoresASeccion() {
                     </Grid>
                 </Grid>
             </Grid>
-
-       </>
+        </>
     )
 }
