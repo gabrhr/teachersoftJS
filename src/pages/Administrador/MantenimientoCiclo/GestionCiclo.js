@@ -141,13 +141,16 @@ export default function GestionCiclo() {
     }, [recordForEdit, deleteData, createData])
 
     const addOrEdit = (ciclo, resetForm) => {
+
+      try{
         recordForEdit
         ? CicloService.updateCiclo(ciclo,ciclo.id)
         : CicloService.registerCiclo(ciclo)
         .then(idCiclo=> {
           if(recordForEdit){
             setRecordForEdit(null);
-            setUpdateData(true);}
+            setUpdateData(true);
+          }
         })
         //window.location.replace('');
         setOpenPopup(false)
@@ -170,6 +173,17 @@ export default function GestionCiclo() {
           });
           setUpdateData(false);
         }
+      }
+      catch(error){
+        setNotify({
+          isOpen: true,
+          message: 'Cambios Guardados Exitosamente',
+          type: 'error'
+        });
+        setUpdateData(false);
+        setOpenPopup(false)
+      }
+       
     }
 
     const onDelete = (idCiclo) => {

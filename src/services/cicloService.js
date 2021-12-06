@@ -38,7 +38,8 @@ const registerCiclo = async newObject => {
   try{
     const request = await axios.post(`${url}/ciclo/`, newObject, tokenService.GetTokenPrueba());
     return request.data;   }catch(exception){
-    console.error(exception);
+      console.error(exception);
+      throw new Error.UserException(exception);
   }
 }
 
@@ -46,7 +47,8 @@ const updateCiclo = async (newObject, {id}) => {
   try{
     const request = await axios.put(`${url}/ciclo/`, newObject, tokenService.GetTokenPrueba());
     return request.data;   }catch(exception){
-    console.error(exception);
+      console.error(exception);
+      throw new Error.UserException(exception);
   }
 }
 
