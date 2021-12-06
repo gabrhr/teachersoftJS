@@ -120,7 +120,7 @@ export default function CursosForm() {
                     bottom:'20px',
                     right:'40px',
                     textAlign: 'center'}} onClick = {()=>{setOpenAsignarPopup(true)}}>
-                Asignar
+                Asignar al Ciclo 
                 <CompareArrowsIcon />
               </Fab>
             <Popup

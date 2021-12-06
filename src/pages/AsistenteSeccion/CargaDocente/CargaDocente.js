@@ -56,6 +56,12 @@ const tableHeaders = [
     sortable: true
   },
   {
+    id: 'horarios',
+    label: 'Horarios',
+    numeric: false,
+    sortable: true
+  },
+  {
     id: 'estado',
     label: 'Estado',
     numeric: false,
@@ -149,7 +155,14 @@ const fillCursos = async (ciclo) => {
         }
       },
       "estado": estado,
-      "type": tipo
+      "type": tipo,
+
+      "curso": cur.curso,
+      "ciclo": cur.ciclo,
+      "id_cursociclo":cur.id,
+      "estado_tracking": cur.estado_tracking,
+      "estado_curso": cur.estado_curso,
+      "cantidad_horarios": cur.cantidad_horarios,
     })
 
   }
@@ -218,7 +231,6 @@ export default function CargaDocente() {
     setHorarios(true)
   }
 
-
   return (
     <Form>
       <ContentHeader 
@@ -280,6 +292,7 @@ export default function CargaDocente() {
                     <col style={{ width: '5%' }} />
                     <col style={{ width: '30%' }} />
                     <col style={{ width: '30%' }} />
+                    <col style={{ width: '5%' }} />
                     <col style={{ width: '10%' }} />
                     <col style={{ width: '20%' }} />
                   </colgroup>
@@ -291,9 +304,11 @@ export default function CargaDocente() {
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell>{item.seccion ? item.seccion.departamento.nombre : ""}</StyledTableCell>
                         <StyledTableCell align = "center">{item.creditos}</StyledTableCell>  
-                        <StyledTableCell align = "left">
+                        <StyledTableCell align = "center">{item.cantidad_horarios}</StyledTableCell>  
+                        <StyledTableCell>
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
+                        <StyledTableCell align = "center">{}</StyledTableCell> 
                         {item.estado !== "Sin horarios" ?
                           <StyledTableCell>
                             <Link to ={{

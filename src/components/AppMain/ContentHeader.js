@@ -32,7 +32,7 @@ const fillCiclos = async () => {
       id: cic.id.toString(),
       title: cic.anho + '-' +cic.periodo
     })
-    if(cic.anho === 2021 && cic.periodo === 1){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
+    if(cic.anho === 2021 && cic.periodo === 2){ //PARA QUE SEA EL AÑO ACTUAL - LUEGO HACERLO AUTOMATIZADO
       cicloActual = {
         id: cic.id.toString(),
         title: cic.anho + '-' + cic.periodo
@@ -59,10 +59,11 @@ function CboCiclo (props) {
       values,
       setValues,
       handleInputChange
-    } = useForm(initialFieldValues);
-    //console.log(values);
+    } = useForm(initialFieldValues);  
 
     React.useEffect(() => {
+      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(2))) //El ciclo fijo - actual
+
       fillCiclos()
       .then (newCiclo => {
         setCiclos(newCiclo[0]);
@@ -83,11 +84,6 @@ function CboCiclo (props) {
         }  
         window.localStorage.setItem('cicloSeleccionado', JSON.stringify(parseInt(values.id)))
     },[values])
-    
-    React.useEffect(()=>{
-        window.localStorage.setItem('ciclo', JSON.stringify(parseInt(2))) //El ciclo fijo - actual
-    },[])
-
 
     if (cbo) {
 

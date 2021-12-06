@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import { Paper, Typography, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import { DT } from '../../../components/DreamTeam/DT'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccordionDetailsPreferenciaProfesor from './AccordionDetailsPreferenciaProfesor'
@@ -8,12 +8,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LinearProgress from '@mui/material/LinearProgress';
 
 const headers = [
-    { id: '1', title: 'Preferencias de dictado de la unidad por curso' }
+    { id: '1', title: 'Preferencias de dictado de los docentes' }
 ]
 
 function HeaderBoxs(props) {
     const { headers } = props
-    return (
+    return (  
         headers.map(x => (
             <Box
                 width="100%"
@@ -85,7 +85,21 @@ function generateRows(profesores) {
                 <AccordionDetails>
                     {/* HERE GOES PREFERENCIA PROF LIST */}
                     {/* <Box bgcolor="darkGrey" width="100%" height="100px" /> */}
+                    {docente.preferencia.length ? 
                     <AccordionDetailsPreferenciaProfesor preferencia={docente.preferencia}/>
+                    :
+                      <Box
+                          width="100%"
+                          fontSize="20px" fontWeight="500"    // table header style
+                          color="#042354"
+                      >  
+                      <Paper elevation={1} sx={{p: 5}}>
+                        <Typography variant="body2" color="secondary" align = "center">
+                          El docente vacío su lista de preferencias en el ciclo.
+                       </Typography>
+                      </Paper>
+                      </Box>   
+                    }
                 </AccordionDetails>
             </Accordion>
         ))

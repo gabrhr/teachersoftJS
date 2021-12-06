@@ -101,7 +101,6 @@ function chompDetalles(sesiones) {
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     const laboratorio = sesiones.filter((ses)=>ses.secuencia===1)
     //if(!laboratorio) laboratorio = []
-    console.log("clase: ", clase, "laboratorio: ", laboratorio);
     return (
         <>
             {clase[0] ? horasClase(clase[0]) : "\n"}
@@ -190,7 +189,7 @@ const hallarEstado = (sesiones) => {
 
 const fillHorarios = async (curso) => {
 
-  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , window.localStorage.getItem("ciclo"));
+  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , curso.ciclo.id);
 
   const dataHorarios = [];
   let horMoment = 0, horTotal = 0;
@@ -223,7 +222,7 @@ const fillHorarios = async (curso) => {
 
 export default function TestPage(recordForEdit, setRecordForEdit, curso) {
     const [records, setRecords] = React.useState([]);  //Lo usaremos para pasar data modificada
-
+    console.log(recordForEdit.recordForEdit);
     React.useEffect(() => {
       fillHorarios(recordForEdit.recordForEdit)
         .then(horarios => {
