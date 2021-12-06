@@ -94,15 +94,27 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
             recordForView.persona_departamento = {
                 "id": user.persona.id
             }
-            recordForView.resultado = 1
+            if(values.aprobados > 0){
+                recordForView.resultado = 1
+                for(let i = 0; i < records.length; i++){
+                    records[i].persona_departamento = {
+                        "id": user.persona.id
+                    }
+                    await tramiteDescargaService.updateTramiteDescarga(records[i])
+                }
+            }
+            else {
+                recordForView.resultado = 2
+                for(let i = 0; i < records.length; i++){
+                    records[i].persona_departamento = {
+                        "id": user.persona.id
+                    }
+                    records[i].resultado = 2
+                    await tramiteDescargaService.updateTramiteDescarga(records[i])
+                }
+            }
             await tramiteSeccionDescargaService.updateTramitesSeccionDescarga(recordForView)
             //Se modifican los tramites docente
-            for(let i = 0; i < records.length; i++){
-                records[i].persona_departamento = {
-                    "id": user.persona.id
-                }
-                await tramiteDescargaService.updateTramiteDescarga(records[i])
-            }
             //Se realizan los cambios ^^
             setOpenDetalle(false)
         }

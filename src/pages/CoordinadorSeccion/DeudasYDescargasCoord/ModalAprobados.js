@@ -167,7 +167,10 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
     const addDocente = (docente) => {
         docente.seleccionado = !docente.seleccionado
         if(docente.seleccionado === true) setDescargas(descargas + 1)
-        else setDescargas(descargas - 1)
+        else {
+            setDescargas(descargas - 1)
+            setAllChecked(false)
+        }
         if(solicitudActual?.cantidad_solicitada === descargas)
             setAllChecked(true)
         console.log(docente.seleccionado)
