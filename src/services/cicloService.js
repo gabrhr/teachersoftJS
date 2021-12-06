@@ -25,6 +25,15 @@ const getCiclo = async (id) => {
   }
 }
 
+const cicloActual = async () => {
+  try{
+    const request = await axios.get(`${url}/ciclo/actual`, tokenService.GetTokenPrueba());
+    return request.data; 
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 const registerCiclo = async newObject => {
   try{
     const request = await axios.post(`${url}/ciclo/`, newObject, tokenService.GetTokenPrueba());
@@ -49,4 +58,4 @@ const deleteCiclo = async (id) => {
   }
 }
 
-export default {getCiclos, getCiclo, registerCiclo, updateCiclo, deleteCiclo}
+export default {cicloActual, getCiclos, getCiclo, registerCiclo, updateCiclo, deleteCiclo}
