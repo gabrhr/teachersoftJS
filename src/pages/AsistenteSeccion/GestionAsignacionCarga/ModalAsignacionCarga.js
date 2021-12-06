@@ -249,47 +249,15 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
       return !isNaN(num)
     } 
 
-    const validate = (obj) => {
-      console.log("ENTRANDO A LA VALIDACION")
-      console.log("Objeto: ", obj);
-      console.log("Clave: ", obj.Clave);
-      if(obj.Clave === "" || obj.Clave.length !== 6){
-        alert("Error en la plantilla - Campo Clave")
-        return false
-      }
-      if(obj.Horario === "" || obj.Horario.length !== 4){
-        alert("Error en la plantilla - Campo Horario")
-        return false
-      }
-      if(!isNumeric(obj.Horas) || obj.Horas === ""){
-        alert("Error en la plantilla - Campo Horas")
-        return false
-      }
-      if(obj.Nombre === ""){
-        alert("Error en la plantilla - Campo Nombre")
-        return false
-      }
-      if(obj.Tipo === ""){
-        alert("Error en la plantilla - Campo Tipo")
-        return false
-      }
-      /*if(obj.Unidad === ""){
-        alert("Error en la plantilla - Campo Unidad")
-        return false
-      }
-      if(obj.Unidad === ""){
-        alert("Error en la plantilla - Campo Unidad")
-        return false
-      }
-      if(!isNumeric(obj.Creditos) || obj.Creditos === ""){
-        alert("Error en la plantilla - Campo Creditos")
-        return false
-      }
-      if(!isNumeric(obj.Carga_Horaria) || obj.Carga_Horaria === ""){
-        alert("Error en la plantilla - Campo Carga_Horaria")
-        return false
-      }*/
-      return true
+    const validate = obj => {
+      // console.log(obj);
+      let observaciones = [];
+      if(obj.Clave === "" || obj.Clave.length !== 6) observaciones.push("Clave");
+      if(obj.Horario === "" || obj.Horario.length !== 4) observaciones.push("Horario");
+      if(!isNumeric(obj.Horas) || obj.Horas === "") observaciones.push("Horas");
+      if(obj.Nombre === "") observaciones.push("Nombre");
+      if(obj.Tipo === "") observaciones.push("Tipo");
+      return observaciones;
     }
 
     const processData = dataString => {
@@ -298,8 +266,8 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         const headers = dataStringLines[0].split(
             /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
         );
-          //PROCESAMIENTO DE LA DATA EN LA TABLA
-        let list = [];
+        //PROCESAMIENTO DE LA DATA EN LA TABLA
+        let list = [], rowWithData = [];
         for (let i = 1; i < dataStringLines.length; i++) {
             const row = dataStringLines[i].split(
                 /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
@@ -316,28 +284,40 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                         obj[headers[j]] = d;
                     }
                 }
-                console.log("ANTES DE ENTRAR A LA VALIDACION");
-                console.log("obj: ", obj);
-                if(!validate(obj)){
-                  return
-                }
-                // remove the blank rows
                 if (Object.values(obj).filter(x => x).length > 0) {
                     list.push(obj);
+                    // console.log(list);
+                    rowWithData.push(i+1);
                 }
             }
         }
 
-        // prepare columns list from headers
         const columns = headers.map(c => ({
             name: c,
             selector: c
         }));
 
+        let reporteIncidencias=[], indexErrors = [];
+        let filaIncidencias;
+        for(let j = 0; j < list.length; j++){
+          filaIncidencias = validate(list[j]);
+          if(filaIncidencias.length > 0){
+            console.log(`Error en fila ${rowWithData[j]} en los siguientes campos: ${filaIncidencias}`)
+            reporteIncidencias.push(`Error en fila ${rowWithData[j]} en los siguientes campos: ${filaIncidencias}`);
+            indexErrors.push(j);
+          }
+        }
+        // Creamos un arreglo con los objetos a eliminar
+        let listObjIncidencias = indexErrors.map(i => list[i]);
+        // Filtramos los datos de la lista de objetos
+        list = list.filter(n => !listObjIncidencias.includes(n));
+        console.log("Reporte de incidencias: ", reporteIncidencias);
+
         //console.log(list)
         setData(list);
         setColumns(columns);
 
+        //PARA QUE SIRVE ESTO???????????????????????? NO BASTARIA CON LIST?????
         //let listaIncorrectos = []
         let listaCorrectos = []
 
@@ -369,8 +349,6 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
                 const ws = wb.Sheets[wsname];
                 /* Convert array of arrays */
                 const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-                 
-                
                 processData(data);
             };
             reader.readAsBinaryString(file);
