@@ -293,8 +293,8 @@ export function lue(p) {
                 foto_URL: "static/images/avatar/1.jpg",
                 tipo_persona: 7,                    // Usuario Externo
                 /* por si acasito */
-                seccion: {id: 3},
-                departamento: {id: 3}
+                seccion: {id: 1},
+                departamento: {id: 1}
             }
         },
         ...config,
