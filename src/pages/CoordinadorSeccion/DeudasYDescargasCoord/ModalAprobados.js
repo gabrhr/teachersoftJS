@@ -29,7 +29,7 @@ import { DT } from '../../../components/DreamTeam/DT';
 export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, 
     solicitudActual, resultado = 4}){
     
-    const [allChecked, setAllChecked] = useState(false)
+    const [allChecked, setAllChecked] = useState(true)
 
     const tableHeaders = [
     
@@ -167,7 +167,10 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
     const addDocente = (docente) => {
         docente.seleccionado = !docente.seleccionado
         if(docente.seleccionado === true) setDescargas(descargas + 1)
-        else setDescargas(descargas - 1)
+        else {
+            setDescargas(descargas - 1)
+            setAllChecked(false)
+        }
         console.log(docente.seleccionado)
         console.log(aprobados)
     }
