@@ -117,8 +117,10 @@ export default function ItemProcesoActual(props) {
                     <Typography display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                         Solicitudes aprobadas: {'\u00A0'} 
                     </Typography>
-                    <Typography display="inline" sx={{color:"primary.light"}}>
-                        {solicitudActual.cantidad_aprobada} 
+                    <Typography display="inline" sx={solicitudActual.resultado===0? {color:"primary.light"}:
+                        solicitudActual.resultado===1? {color:"#2EBD59"} : {color:"red"}
+                    }>
+                        {solicitudActual.resultado>0? solicitudActual.cantidad_aprobada: "-"} 
                     </Typography>
                 </TableCell>
                 <TableCell sx={{borderBottom: "none"}}> 

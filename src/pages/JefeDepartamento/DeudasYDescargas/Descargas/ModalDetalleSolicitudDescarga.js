@@ -210,7 +210,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                     }}
                 />
                 <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
-                   {recordForView.cantidad_solicitada>0? <b> Lista de Descargas de Docentes Solicitadas </b>: ""}
+                   {recordForView.cantidad_aprobada>0? <b> Lista de Descargas de Docentes Solicitadas </b>: ""}
                 </Typography>
                 <Grid container pl="75px"> 
                     <Grid item xs={12}>
@@ -242,7 +242,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                             <TblPagination />
                         </>
                     ):
-                       recordForView.cantidad_solicitada>0 && <LinearProgress/>
+                       recordForView.cantidad_aprobada>0 && <LinearProgress/>
                     }
                 </BoxTbl>
              </Grid>
