@@ -80,6 +80,9 @@ import CantidadTrabajosXPais from '../pages/AsistenteInvestigacion/EstadisticasI
 import CantidadTrabajosXIdioma from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXIdioma';
 import CantidadTrabajosXCalidad from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajoXCalidad';
 import IndicadoresASeccion from '../pages/AsistenteSeccion/IndicadoresASeccion';
+import IndicadoresASeccion2 from '../pages/AsistenteSeccion/IndicadoresASeccion2';
+import IndicadoresASeccion3 from '../pages/AsistenteSeccion/IndicadoresASeccion3';
+import IndicadoresASeccion4 from '../pages/AsistenteSeccion/IndicadoresASeccion4';
 import IndicadoresAdministrador from '../pages/Administrador/IndicadoresAdministrador';
 import IndicadoresADepartamento from '../pages/AsistenteDepartamento/CargaDocente/IndicadoresADepartamento';
 import IndicadoresJDepartamento from '../pages/JefeDepartamento/DeudasYDescargas/IndicadoresJDepartamento';
@@ -124,7 +127,10 @@ const privateroutes = [
   { requireRoles: [2], path: "/as/mesaPartes/misDelegados/solicitudDetalle", page: DelegadoSolicitudDetalle },
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios", page: CargaDocenteHorarios},
   { requireRoles: [2, 8], path: "/as/asignacionCarga/registroCarga/horarios/editar", page: ModalDocenteClases},
-  { requireRoles: [2, 8], path: "/as/estadisticas", page: IndicadoresASeccion},
+  { requireRoles: [2, 8], path: "/as/estadisticas/docentes", page: IndicadoresASeccion},
+  { requireRoles: [2, 8], path: "/as/estadisticas/deuda", page: IndicadoresASeccion2},
+  { requireRoles: [2, 8], path: "/as/estadisticas/sobrecarga", page: IndicadoresASeccion3},
+  { requireRoles: [2, 8], path: "/as/estadisticas/mayorDeuda", page: IndicadoresASeccion4},
   /* CS*/
   { requireRoles: [3], path: "/cord/asignacionCarga/registroHorarios", page: AsistenteSeccion },
   { requireRoles: [3], path: "/cord/asignacionCarga/registroCarga", page: CargaDocenteCoord },

@@ -151,7 +151,7 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresSeccion3() {
+export default function IndicadoresSeccion4() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
