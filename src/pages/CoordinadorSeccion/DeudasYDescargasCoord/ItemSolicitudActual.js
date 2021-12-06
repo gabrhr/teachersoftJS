@@ -136,7 +136,7 @@ export default function ItemProcesoActual(props) {
                             />
                     </Link>
                     {solicitudActual.resultado === 1 && solicitudActual.estado_tracking>=1 
-                    && solicitudActual.cantidad_solicitada>0(
+                    && solicitudActual.cantidad_solicitada>0 &&(
                         <Controls.Button
                             text={solicitudActual.estado_tracking===2?"Aprobados":"Validar"}
                             onClick={()=>{setOpenAprobados(true)}} 
