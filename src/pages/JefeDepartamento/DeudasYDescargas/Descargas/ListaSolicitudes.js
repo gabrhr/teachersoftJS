@@ -174,7 +174,8 @@ export default function ListaSolicitudes({seccion, procesoId}){
         const request = await tramiteSeccionDescargaService.getTramiteSeccionDescargaxProceso(procesoId)
         const secciones = await seccionService.getSecciones()
         console.log(request)
-        setSecciones(secciones)
+
+        setSecciones(secciones?? [])
         setRecords(request)
     }
 
