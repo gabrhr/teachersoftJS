@@ -335,7 +335,6 @@ export default function ListaSolicitudes({seccion, procesoId}){
                 openPopup={openDetalle}
                 setOpenPopup={setOpenDetalle}
                 title= {`Solicitud de descarga - Sección ${recordForView?.solicitador?.seccion.nombre}`}
-                size="md"
             >
                <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} recordForView = {recordForView}/>
             </Popup>

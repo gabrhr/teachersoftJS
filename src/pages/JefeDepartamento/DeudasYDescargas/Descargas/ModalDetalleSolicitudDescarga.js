@@ -146,7 +146,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                     <Typography variant="h4"   display="inline">
                         {/* Nombre del docente solicitador */}
                         {recordForView.solicitador.apellidos + ", " + recordForView.solicitador.nombres + 
-                        "(" + recordForView.solicitador.correo_pucp + ")"}
+                        " (" + recordForView.solicitador.correo_pucp + ")"}
                     </Typography>
                     <div/>
                     <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
@@ -159,7 +159,7 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                     </Typography>
                 </Grid>
             </Grid>
-            <div style={{ display: "flex", paddingLeft: "160px", alignContent:"center",marginTop: 10, marginBottom: 10 }}>
+            <div style={{ display: "flex", paddingLeft: "350px", alignContent:"center",marginTop: 10, marginBottom: 10 }}>
                     <div style={{ width: "140px", marginLeft: "50px", paddingTop:'25px' }}>
                             <Typography variant="h4" display="inline" fontWeight="550"  sx={{color:"primary.light"}}>
                                 Solicitadas: {'\u00A0'}
@@ -191,7 +191,26 @@ export default function ModalDetalleSolicitudDescarga({setOpenDetalle, recordFor
                     }
                 </div>
                 <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
-                   <b> Lista de Descargas de Docentes Solicitadas </b>
+                   <b> Justificación </b>
+                </Typography>
+                <TextField
+                    id="outlined-multiline-static"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    disabled
+                    defaultValue={recordForView.observacion}
+                    sx={{
+                        pl: "66px",
+                        mt: "5px",
+                        /* magia negra de gabs */
+                        ".css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+                            WebkitTextFillColor: "black"
+                        }
+                    }}
+                />
+                <Typography variant="h4" sx={{color:"primary.light", ml:"75px", mt:3}}>
+                   {recordForView.cantidad_solicitada>0? <b> Lista de Descargas de Docentes Solicitadas </b>: ""}
                 </Typography>
                 <Grid container pl="75px"> 
                     <Grid item xs={12}>
