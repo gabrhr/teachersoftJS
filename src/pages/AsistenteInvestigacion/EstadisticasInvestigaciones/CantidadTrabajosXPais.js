@@ -113,7 +113,7 @@ export default function CantidadTrabajosXPais(){
                 <Grid item sx={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Typography variant="h4" style={SubtitulosTable} >
-                            TOP 5 Paises con la mayor cantidad de investigaciones
+                            TOP 5 Países con la mayor cantidad de investigaciones
                         </Typography>
                         {PieCharts.PieChartGeneric(getLabels(paisesInd), getQuantities(paisesInd), listColors)}
                         <Grid align="center" justify="center">
@@ -127,8 +127,8 @@ export default function CantidadTrabajosXPais(){
                         <Grid item xs={6}>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <BigStatistics  
-                                    variantText="h2"
-                                    title={"Pais con más publicaciones"} 
+                                    variantText="h4"
+                                    title={"País con más publicaciones"} 
                                     text={indicadores[0]}
                                     />
                             </Paper>
