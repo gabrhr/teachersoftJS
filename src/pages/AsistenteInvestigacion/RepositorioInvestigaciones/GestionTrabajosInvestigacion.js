@@ -1,11 +1,13 @@
 //link: localhost:3000/ai/repoInvestigaciones
 
 import React, {useState, useEffect} from 'react';
+import { Link,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
 import { Controls } from '../../../components/controls/Controls'
 import { StyledTableRow, StyledTableCell } from '../../../components/controls/StyledTable';
 import useTable from "../../../components/useTable"
 import ContentHeader from '../../../components/AppMain/ContentHeader';
-import { Link, LBox, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+import { LBox, Divider, Grid, Typography, Paper, TableBody, TableRow, TableCell,InputAdornment } from '@mui/material';
+
 import { useForm, Form } from '../../../components/useForm';
 import { makeStyles } from '@mui/styles'
 import * as XLSX from 'xlsx';
@@ -198,7 +200,6 @@ const getDocumentos = async () => {
     
     return trabajos;
 }
- 
 
 
 export default function GestionTrabajosInvestigacion() {
@@ -218,7 +219,8 @@ export default function GestionTrabajosInvestigacion() {
     const [isViewActivityMode, setIsViewActivityMode] = useState(true);
     const [isVisible, setIsVisible] = useState(true);
     const [selectedRow, setSelectedRow] = useState(50) //Se tiene que cambiar
-
+    const history = useHistory();
+    const location = useLocation();
     //CSV components
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
@@ -375,6 +377,20 @@ export default function GestionTrabajosInvestigacion() {
   const PaperStyle = { borderRadius: '20x', pb: 4, pt:0.7, px: 0.7, color: "primary.light", elevatio: 0 }
   const SubtitulosTable = { display: "flex" }
 
+ 
+  const handleLinkClick = (e, idInvest = -1) => {
+
+    localStorage.setItem('id_trabajo', idInvest);
+    history.push({
+      pathname: './repoInvestigacionesForm',
+      state: { 
+        addOrEdit : idInvest
+      }
+    });
+  }
+   
+
+
 	return (
 		<>
 		  <ContentHeader
@@ -432,12 +448,13 @@ export default function GestionTrabajosInvestigacion() {
                       onChange={handleSearch}
                       type="search"
                       />
+
                       <Controls.AddButton
                         title="Nuevo Trabajo de Investigación"
                         variant="iconoTexto"
-                        onClick = {() => {setOpenPopup(true); setRecordForEdit(null)}}
+                        onClick = {(event) => {handleLinkClick(event); }}
                       />
-                        {/* </Toolbar> */}
+                       
                   </div>
            
               <BoxTbl>  
@@ -453,12 +470,20 @@ export default function GestionTrabajosInvestigacion() {
                         <StyledTableCell style={{width:'7.5%'}} >{item.anho_publicacion}</StyledTableCell>
                         <StyledTableCell style={{width:'20%'}} component="a" href={item.url_repositorio.indexOf("http") == 0 ? item.url_repositorio : "http://" + item.url_repositorio }>{item.url_repositorio}</StyledTableCell>
                         <StyledTableCell style={{width:'25%'}}>
-                          <Controls.ActionButton
-                            color="warning"
-                            onClick={ () => {setOpenPopup(true);setRecordForEdit(item)}}
-                          >
-                            <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
+                        <Link to ={{
+                              pathname: "/ai/repoInvestigacionesForm",
+                              state:{
+                                  recordForEdit: item,
+                                  addOrEdit: item.id,
+                              }
+                          }}  style={{ textDecoration: 'none' }}>  
+                      <Controls.ActionButton
+                        color="warning"
+                        
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </Controls.ActionButton>
+                          </Link>
                             <IconButton aria-label="delete">
                               <DeleteIcon
                                 color="warning"

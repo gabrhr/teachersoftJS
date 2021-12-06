@@ -50,6 +50,7 @@ const registerDocumento = async newObject => {
         return request.data;
     } catch(except) {
         console.error(except)
+        return (except)
     }
 }
 
@@ -61,6 +62,7 @@ const updateDocumento = async (newObject,id) => {
         return request.data;
     } catch(exception){
         console.error(exception)
+        return (exception)
     }
 }
 const deleteDocumento = async (id) => {
