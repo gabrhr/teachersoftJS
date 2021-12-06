@@ -100,7 +100,10 @@ const llenarTrabajosInvestigacion = async (anho) => {
         "titulo": trabajoInvestigacion.titulo,
         "validacion_preliminar": trabajoInvestigacion.validacion_preliminar,
         "volumen": trabajoInvestigacion.volumen,
-        "id_autor": trabajoInvestigacion.id_autor,
+        autor:{
+          "id_autor": trabajoInvestigacion.id_autor,
+        },
+        
         "codigo_publicacion": trabajoInvestigacion.codigo_publicacion,
       })
     }
@@ -158,43 +161,23 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
 
   const validate = columnas => {
     // COD_FINAL_PUBLICACION esta compuesto de 123-ABC, es necesario verificar cada parte
+    let observaciones = [];
     let codigo=columnas.Codigo.split("-");
     let numPublicacion = codigo[0];
     let codRevisor = codigo[1];
     let codRevisorLength=3;
-    if(columnas.Codigo === "" || codigo.length === columnas.Codigo.length || isNaN(numPublicacion) || codRevisor.length != codRevisorLength){
-      if(columnas.Codigo === "") alert("Error en la plantilla: COD_FINAL_PUBLICACION - Campo vacío");
-      else if(codigo.length === columnas.Codigo.length) alert("Error en la plantilla: COD_FINAL_PUBLICACION - No existe ningún guión de separación");
-      else if(isNaN(numPublicacion)) alert("Error en la plantilla: COD_FINAL_PUBLICACION - Primer fragmento no numérico");
-      else alert("Error en la plantilla: COD_FINAL_PUBLICACION - Segundo fragmento no contiene la longitud esperada");
-      return false
-    }
-    if(columnas.Titulo === ""){
-      alert("Error en la plantilla: TITULO - Campo vacío")
-      return false
-    }
+    if(columnas.Codigo === "" || codigo.length === columnas.Codigo.length || isNaN(numPublicacion) || codRevisor.length != codRevisorLength) observaciones.push("Codigo");
+    if(columnas.Titulo === "") observaciones.push("Titulo");
     // El autor es dado en el formato APELLIDO, NOMBRE
     let autor=columnas.Codigo.split(",");
-    if(columnas.Autor === "" || autor.length === columnas.Autor.length){
-      if(columnas.Autor === "") alert("Error en la plantilla: APELLIDOS_NOMBRES - Campo vacío");
-      else alert("Error en la plantilla: APELLIDOS_NOMBRES - No existe una separación entre apellido y nombre");
-      return false
-    }
-    if(columnas.Periodo === "" || isNaN(columnas.Periodo)){
-      if(columnas.Periodo === "") alert("Error en la plantilla: ANIO_PRODUCCION - Campo vacío");
-      else alert("Error en la plantilla: ANIO_PRODUCCION - No es un número");
-      return false
-    }
+    if(columnas.Autor === "" || autor.length === columnas.Autor.length) observaciones.push("Autor");
+    if(columnas.Periodo === "" || isNaN(columnas.Periodo)) observaciones.push("Periodo");
     // Una URL posee una extension, en caso no se haya asignado, debe de colocarse el enunciado "Sin imagen"
     let extension = (columnas.URL.split('.')).pop();
     let extensionMaxLength = 4;
     // Consultar sobre si existirá la posibilidad de que por defecto si no se asigna un pdf se guarda como Sin imagen
-    if(columnas.URL === "" || extension > extensionMaxLength){
-      if(columnas.URL === "") alert("Error en la plantilla: URL - Campo vacío");
-      else alert("Error en la plantilla: URL - Extensión inválida");
-      return false;
-    }
-    return true;
+    if(columnas.URL === "" || extension > extensionMaxLength) observaciones.push("URL");
+    return observaciones;
   }
 
   const processData = dataString => {
@@ -203,31 +186,50 @@ export default function TrabajosInvestigacion({setOpenPopupCargaMasiva, records,
         /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
     );
 
-    let list = [];
+    let list = [], rowWithData = [];
     for (let i = 1; i < dataStringLines.length; i++) {
-      const row = dataStringLines[i].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
+      const row = dataStringLines[i].split(
+          /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
+      );
       if (headers && row.length === headers.length) {
         const obj = {};
         for (let j = 0; j < headers.length; j++) {
-            let d = row[j];
-            if (d.length > 0) {
-              if (d[0] === '"') d = d.substring(1, d.length - 1);
-              if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
-            }
-            if (headers[j]) {
-              obj[headers[j]] = d;
-            }
-        }  
-        if(!validate(obj)){
-          return
+          let d = row[j];
+          if (d.length > 0) {
+            if (d[0] === '"') d = d.substring(1, d.length - 1);
+            if (d[d.length - 1] === '"') d = d.substring(d.length - 2, 1);
+          }
+          if (headers[j]) {
+            obj[headers[j]] = d;
+          }
         }
         if (Object.values(obj).filter(x => x).length > 0) {
-            list.push(obj);
+          list.push(obj);
+          rowWithData.push(i+1);
         }
       }
     }
 
     const columns = headers.map(c => ({name: c, selector: c}));
+
+    let reporteIncidencias=[], indexErrors = [];
+    let filaIncidencias;
+
+    for(let j = 0; j < list.length; j++){
+      filaIncidencias = validate(list[j]);
+      if(filaIncidencias.length > 0){
+        reporteIncidencias.push(`Error en fila ${rowWithData[j]} en los siguientes campos: ${filaIncidencias}`);
+        indexErrors.push(j);
+      }
+    }
+    // Creamos un arreglo con los objetos a eliminar
+    let listObjIncidencias = indexErrors.map(i => list[i]);
+    // Filtramos los datos de la lista de objetos
+    list = list.filter(n => !listObjIncidencias.includes(n));
+    console.log("Lista de horarios a subir", list);
+    console.log("Reporte de incidencias: ", reporteIncidencias);
+
+    
     setData(list);
     setColumns(columns);
 

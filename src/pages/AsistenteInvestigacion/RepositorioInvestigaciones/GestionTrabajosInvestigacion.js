@@ -539,8 +539,8 @@ export default function GestionTrabajosInvestigacion() {
         />
       </Popup>
       <Popup
-          openPopupCargaMasiva={openPopupCargaMasiva}
-          setOpenPopupCargaMasiva={setOpenPopupCargaMasiva}
+          openPopup={openPopupCargaMasiva}
+          setOpenPopup={setOpenPopupCargaMasiva}
           title="Carga masiva de trabajos de investigación"
       >
           <TrabajosInvestigacion setOpenPopupCargaMasiva={setOpenPopupCargaMasiva} records={records} setRecords={setRecords} setCargaTrabajos = {setCargaTrabajos} 
