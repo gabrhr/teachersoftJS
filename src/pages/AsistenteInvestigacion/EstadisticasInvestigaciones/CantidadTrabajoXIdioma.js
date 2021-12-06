@@ -114,9 +114,9 @@ export default function CantidadTrabajosXIdioma(){
                 <Grid item xs={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
                         <Typography variant="h4" style={SubtitulosTable} >
-                            TOP 5 Idiomas con la mayor cantidad de investigaciones
+                            TOP 3 Idiomas con la mayor cantidad de investigaciones
                         </Typography>
-                        {BarCharts.BarChartGeneric(getLabels(idiomasInd), getQuantities(idiomasInd), listColors)}
+                        {BarCharts.BarChartGeneric(getLabels(idiomasInd), getQuantities(idiomasInd), listColors, "Idiomas")}
                         <Grid align="center" justify="center">
                             Cantidad de Documentos
                         </Grid>

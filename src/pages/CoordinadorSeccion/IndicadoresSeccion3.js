@@ -1,15 +1,33 @@
 import React, {useState, useEffect} from 'react'
-import ContentHeader from '../../../components/AppMain/ContentHeader';
+import ContentHeader from '../../components/AppMain/ContentHeader';
 import { Box, Paper, Divider, TableRow, TableCell, InputAdornment, Grid, Typography, TextField, Stack } from '@mui/material';
-import { Controls } from '../../../components/controls/Controls'
-import IndicadoresService from '../../../services/indicadoresService';
-import PieCharts from '../../../components/PageComponents/PieCharts';
-import InvestigacionService from '../../../services/investigacionService';
-import SeccionService from "../../../services/seccionService";
-import BarCharts from '../../../components/PageComponents/BarCharts';
-import { useForm, Form } from "../../../components/useForm" 
-import CantidadTrabajosXAutor from '../../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
-import BigStatistics from '../../../components/DreamTeam/BigStatistic';
+import { Controls } from '../../components/controls/Controls'
+import IndicadoresService from '../../services/indicadoresService';
+import PieCharts from '../../components/PageComponents/PieCharts';
+import InvestigacionService from '../../services/investigacionService';
+import BarCharts from '../../components/PageComponents/BarCharts';
+import CantidadTrabajosXAutor from '../AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
+import BarChartAutores from '../../components/PageComponents/BarCharts';
+import BigStatistics from '../../components/DreamTeam/BigStatistic';
+
+
+let indicadores = [];
+/*  Colores pastel con transparencia
+    Red: rgba(255, 99, 132, 0.8)
+    Blue: rgba(54, 162, 235, 0.8)
+    Yellow: rgba(255, 206, 86, 0.8)
+    Green: rgba(75, 192, 192, 0.8)
+    Purple: rgba(153, 102, 255, 0.8)
+    Orange: rgba(255, 159, 64, 0.8)
+*/
+const listColors = [
+    "rgba(54, 162, 235, 0.8)",
+    "rgba(255, 99, 132, 0.8)",
+    "rgba(75, 192, 192, 0.8)",
+    "rgba(255, 206, 86, 0.8)",
+    "rgba(153, 102, 255, 0.8)"
+]
+
 
 const getLabels = (arr) => {
     let arrEstandarizado=[];
@@ -24,14 +42,6 @@ const getLabels = (arr) => {
     return arrEstandarizado;
 }
 
-const listColors = [
-    "rgba(54, 162, 235, 0.8)",
-    "rgba(255, 99, 132, 0.8)",
-    "rgba(75, 192, 192, 0.8)",
-    "rgba(255, 206, 86, 0.8)",
-    "rgba(153, 102, 255, 0.8)"
-]
-
 const getQuantities = (arr) => {
     let arrEstandarizado=[];
     try{
@@ -42,33 +52,10 @@ const getQuantities = (arr) => {
     catch {}
     return arrEstandarizado;
 }
-
 const fillProfesoresConDeuda = async (id_seccion) => {
     let profesorConDeuda = await IndicadoresService.getTopProfesoresDeuda(id_seccion);
     
     return profesorConDeuda;
-}
-
-
-
-const getSeccionCollection =  async () => {
-    //{ id: '1', title: 'Todas las Secciones' },
-    const user = JSON.parse(localStorage.getItem("user"))
-    let dataSecc = await SeccionService.getSeccionxDepartamento(user.persona.departamento.id);
-    
-    if(!dataSecc) dataSecc = [];
-  
-    const secciones = [];
-  
-    for(let sec of dataSecc) {
-      //Hacemos la creación y verificación de los estados
-      secciones.push({
-        "id": sec.id,
-        "nombre": sec.nombre,
-      })
-    }
-  
-    return secciones;
 }
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
@@ -130,117 +117,74 @@ const estandarizarAutoresInd = (arr) => {
     promedio_horas: ...,
 */
 
-export default function IndicadoresADepartamento() {
+export default function IndicadoresSeccion3() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
     const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
     const [records, setRecords] = useState([])
-    const [changeTC, setChangeTC] = useState(false)
-    const [changeTPC, setChangeTPC] = useState(false)
-    const [changeTPA, setChangeTPA] = useState(false)
-    const [changeDeuda, setChangeDeuda] = useState(false)
-    const [changeSobrecarga, setChangeSobrecarga] = useState(false)
-    const [secciones, setSecciones] = useState([]);
     const [profesores, setProfesores] = useState([]);
-    const [seccion, setSeccion] = useState(0);
-
-
-    const initialFieldValues = {
-        id: '',
-        nombre: ''
-    }
-
-    const {
-        values,
-        setValues,
-        handleInputChange
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-    } = useForm(initialFieldValues);
-
+    
     const [profesorTC, setProfesorTC] = useState([]);
 
-
     useEffect(() => {
-        fillProfesoresConDeuda(seccion)
+        fillProfesorTC(user.persona.seccion.id,cicloAct)
+        .then(newProfTC => {
+            setProfesorTC(newProfTC);
+            
+        });
+        fillProfesoresConDeuda(user.persona.seccion.id)
         .then (newProf => {
             setProfesores(newProf);
             
         });
-    }, [seccion])
-
-    useEffect(() => {
-        setChangeTC(false)
-        fillProfesorTC(seccion,cicloAct)
-        .then(newProfTC => {
-            if(newProfTC){
-                setProfesorTC(newProfTC);
-                setChangeTC(true)
-            }
-            
-        });
-    }, [seccion])
+    }, [])
 
     const [profesorTPC, setProfesorTPC] = useState([]);
 
     useEffect(() => {
-        setChangeTPC(false)
-        fillProfesorTPC(seccion,cicloAct)
+        fillProfesorTPC(user.persona.seccion.id,cicloAct)
         .then(newProfTPC => {
-            if(newProfTPC){
-                setProfesorTPC(newProfTPC);
-                setChangeTPC(true)
-            }
+            setProfesorTPC(newProfTPC);
             
         });
-    }, [seccion])
+    }, [])
 
     const [profesorTPA, setProfesorTPA] = useState([]);
 
     useEffect(() => {
-        setChangeTPA(false)
-        fillProfesorTPA(seccion,cicloAct)
+        fillProfesorTPA(user.persona.seccion.id,cicloAct)
         .then(newProfTPA => {
-            if(newProfTPA){
-                setProfesorTPA(newProfTPA);
-                setChangeTPA(true)
-            }
+            setProfesorTPA(newProfTPA);
+            
         });
-    }, [seccion])
+    }, [])
 
     const [profesorDeudaTC, setProfesorDeudaTC] = useState([]);
     const [profesorDeudaTPC, setProfesorDeudaTPC] = useState([]);
     const [profesorDeudaTPA, setProfesorDeudaTPA] = useState([]);
 
     useEffect(() => {
-        setChangeDeuda(false)
-        deudaProfesores(seccion)
+        deudaProfesores(user.persona.seccion.id)
         .then(newProfDeuda => {
-            if(newProfDeuda){
-                setProfesorDeudaTC(newProfDeuda.TC);
-                setProfesorDeudaTPC(newProfDeuda.TPC);
-                setProfesorDeudaTPA(newProfDeuda.TPA);
-                setChangeDeuda(true)
-            }
+            setProfesorDeudaTC(newProfDeuda.TC);
+            setProfesorDeudaTPC(newProfDeuda.TPC);
+            setProfesorDeudaTPA(newProfDeuda.TPA);
         });
-    }, [seccion])
+    }, [])
 
     const [profesorSobrecargaTC, setProfesorSobrecargaTC] = useState([]);
     const [profesorSobrecargaTPC, setProfesorSobrecargaTPC] = useState([]);
     const [profesorSobrecargaTPA, setProfesorSobrecargaTPA] = useState([]);
 
     useEffect(() => {
-        setChangeSobrecarga(false)
-        sobrecargaProfesores(seccion)
+        sobrecargaProfesores(user.persona.seccion.id)
         .then(newProfSobrecarga => {
-            if(newProfSobrecarga){
-                setProfesorSobrecargaTC(newProfSobrecarga.TC);
-                setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
-                setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
-                setChangeSobrecarga(true)
-            }
+            setProfesorSobrecargaTC(newProfSobrecarga.TC);
+            setProfesorSobrecargaTPC(newProfSobrecarga.TPC);
+            setProfesorSobrecargaTPA(newProfSobrecarga.TPA);
         });
-    }, [seccion])
+    }, [])
 
     const [autoresInd, setAutoresInd] = useState([]);
 
@@ -264,58 +208,21 @@ export default function IndicadoresADepartamento() {
 
     
 
-    useEffect(() => {
-        getSeccionCollection()
-        .then (newSecc =>{
-          if(newSecc){
-            setSecciones(newSecc);
-            setValues(newSecc[0]);  //Para que se coja predeterminado dicho valor
-          }
-        });
-      }, [] )//Solo al inicio para la carga de secciones
-
-    useEffect(()=>{
-        if(values)  setSeccion(values.id);
-        else{
-            if (setValues) setSeccion(0) 
-            //Para indicar que se señalan a todas las secciones que le pertencen al departamento
-        }  
-    },[values]) //Cada que cambia los values para la seccion
-
-    console.log(seccion)
-
     return (
         <>
- 
-            <Grid container xs spacing = {4}>
-            {/* <Stack direction="row" spacing = {4}> */}
-                <Grid item xs={6} sx = {{paddingLeft: 3}}>
-                <ContentHeader
-                text="  Cantidad de Docentes según Sección con carga horaria"
+                   <ContentHeader
+                text="Sobrecarga de los Docentes en la Sección"
                 cbo={false}
             />
-                </Grid>
-                <Grid item xs={4}/>
-                <Grid item xs={2}>
-                    <Controls.Select
-                    name="id"
-                    label="Secciones"
-                    value={values.id}
-                    onChange={handleInputChange}
-                    options={secciones}
-                    type="contained"
-                    // displayNoneOpt
-                    />
-                </Grid>
-            </Grid>
-            <br/>
-      
-           
             <Grid container spacing={2} >
                 <Grid item xs={7}>
                     <Paper variant="outlined" sx={PaperStyle}>
-            
-                            {PieCharts.PieChartTipoDocente(profesorTC.cantidad_docentes,profesorTPC.cantidad_docentes,profesorTPA.cantidad_docentes)}
+                        <Typography variant="body1" color={"#00008B"} my={.5}>
+                            Cantidad de Profesores según su tipo
+                        </Typography>
+
+       
+                        {PieCharts.PieChartTipoDocente(profesorSobrecargaTC.cantidad_deudores,profesorSobrecargaTPC.cantidad_deudores,profesorSobrecargaTPA.cantidad_deudores)}
                
                     </Paper>
                 </Grid>
@@ -326,33 +233,33 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Número de Profesores TC"} 
-                                    text={profesorTC.cantidad_docentes}
+                                    title={"Número de Profesores TC con Sobrecarga"} 
+                                    text={profesorSobrecargaTC.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                              
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Número de Profesores TPC"} 
-                                    text={profesorTPC.cantidad_docentes}
+                                    title={"Número de Profesores TPC con Sobrecarga"} 
+                                    text={profesorSobrecargaTPC.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                              
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                                 <br/>
                                 <br/>
                                  <BigStatistics  
-                                    title={"Número de Profesores TPA"} 
-                                    text={profesorTPA.cantidad_docentes}
+                                    title={"Número de Profesores TPA con Sobrecarga"} 
+                                    text={profesorSobrecargaTPA.cantidad_deudores}
                                     />
                                 <br/>
-                                <br/>
+                               
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>
@@ -360,8 +267,8 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Promedio de Horas TC "} 
-                                    text={profesorTC.promedio_horas}
+                                    title={"Promedio de Sobrecargas TC "} 
+                                    text={profesorSobrecargaTC.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -371,8 +278,8 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                 <BigStatistics  
-                                    title={"Promedio de Horas TC"} 
-                                    text={profesorTPC.promedio_horas}
+                                    title={"Promedio de Sobrecargas TC"} 
+                                    text={profesorSobrecargaTPC.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
@@ -382,17 +289,16 @@ export default function IndicadoresADepartamento() {
                                 <br/>
                                 <br/>
                                  <BigStatistics  
-                                    title={"Promedio de Horas TA"} 
-                                    text={profesorTPA.promedio_horas}
+                                    title={"Promedio de Sobrecargas TA"} 
+                                    text={profesorSobrecargaTPA.promedio_deuda}
                                     />
                                 <br/>
                                 <br/>
                             </Paper>
                         </Grid>
                     </Grid>
-                    </Grid>
-                    </Grid>
-           
+                </Grid>
+            </Grid>
         </>
     )
 }

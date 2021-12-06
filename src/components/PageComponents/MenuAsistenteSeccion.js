@@ -50,12 +50,7 @@ export const MenuAsistenteSeccion = [
         icon: <LocalLibraryOutlinedIcon />,
         indice: 1,
     },
-    {
-        text: 'Estadísticas',
-        path: '/as/estadisticas',
-        icon: <ShowChartOutlinedIcon />,
-        indice: 1,
-    },
+ 
     /* TIENE PROBLEMAS NO SE PORQUE */
     {
         text: 'Mesa de Partes',
@@ -74,5 +69,33 @@ export const MenuAsistenteSeccion = [
                 indice: 1,
             }
         ]
-    }
+    },
+    {
+        text: 'Estadisticas',
+        path: '',
+        icon: <ShowChartOutlinedIcon />,
+        indice: 3,
+        subNav: [
+            {
+                text: 'Docentes',
+                path: '/as/estadisticas/docentes',
+                indice: 0,
+            },
+            {
+                text: 'Deuda Docente',
+                path: '/as/estadisticas/deuda',
+                indice: 1,
+            },
+            {
+                text: 'Sobrecarga Docente',
+                path: '/as/estadisticas/sobrecarga',
+                indice: 2,
+            },
+            {
+                text: 'Profesores con más Deuda',
+                path: '/as/estadisticas/mayorDeuda',
+                indice: 3,
+            }
+        ]
+    },
 ];

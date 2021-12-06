@@ -1,4 +1,8 @@
+
+//localhost:3000/ai/repoInvestigacionesForm
 import React, { useEffect, useState } from 'react'
+import { Redirect,useLocation, useHistory, useRouteMatch } from 'react-router-dom'
+
 // import ContentHeader from '../../../components/AppMain/ContentHeader'
 import ContentHeader from '../../../components/AppMain/ContentHeader'
 import { Avatar, Divider, Grid, Input, Stack, Typography } from '@mui/material'
@@ -12,9 +16,11 @@ import DepartamentoService from '../../../services/departamentoService';
 import SeccionService from '../../../services/seccionService.js';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { Box } from '@mui/system';
-
+import AgregarEditarInvestiga from  './AgregarEditarInvestiga';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 /* SERVICES */ 
 import TrabajoService from '../../../services/investigacionService';
+import Notification from '../../../components/util/Notification'
 
 const styles = {
     columnGridItem: {
@@ -23,33 +29,49 @@ const styles = {
 }
 
 
-const initialFieldValues = {
-    id: 0,
-    
-    nombre: '',
-    apellidoMaterno: '',
-    apellidoPaterno: '',
-    DNI: '',
-    correo: '',
-  
-    //Originalmente, rol aparecía con '', se cambió para que aparezca al menos uno seleccionado
-    
-    rol: 1,
-   
-    foto_URL: '',
-    departmentId: 0,
-    nombreDepartamento: '',
-    seccionId: 0,
-    nombreSeccion: '',
-    departamento: {
-      id: '',
-      nombre: ''
-    },
-    seccion: {
-      id: '',
-      nombre: ''
-    },
-    foto_URL: ''
-}
+export default function GestionTrabajosInvestigacionDetalle(props){
 
-  
+    
+    const location = useLocation();
+    const {recordForEdit, addOrEdit} = location.state;
+    const [recordEdit, setRecordEdit] = useState(null);
+    const history = useHistory();
+    const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
+    const [change, setChange] = useState(false);
+ 
+    const handleLinkClick = () => {
+
+      history.push({
+        pathname: './repoInvestigaciones',
+ 
+      });
+    }
+     
+
+
+    return(
+      <>
+        <Controls.Button
+            
+            variant="outlined"
+            text="Regresar"
+            size="small"
+            startIcon={<ArrowBackIcon />}
+          onClick = {() => {handleLinkClick(); }}
+        />
+        <AgregarEditarInvestiga
+          addOrEdit={addOrEdit}    
+          recordForEdit={recordForEdit}
+          handleLinkClick={handleLinkClick}
+          notify={notify}
+          setNotify={setNotify}
+          change={change}
+        />
+        <Notification
+          notify={notify}
+          setNotify={setNotify}
+        />
+      </>
+    )
+
+}

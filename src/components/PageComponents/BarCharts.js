@@ -24,12 +24,12 @@ function separarNumPublicaciones(arr){
     Orange: rgba(255, 159, 64, 0.2)
 */
 
-function BarChartGeneric(labels, dataset, colors) {
+function BarChartGeneric(labels, dataset, colors, singleLabel) {
     Chart.register(CategoryScale);
     const data = {
         labels: labels,
         datasets: [{
-            
+            label: singleLabel,
             data: dataset,
             backgroundColor: colors,
             borderWidth: 1,
