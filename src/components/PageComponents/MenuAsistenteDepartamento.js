@@ -45,8 +45,31 @@ export const MenuAsistenteDepartamento = [
     },
     {
         text: 'Estadisticas',
-        path: '/ad/estadisticas',
+        path: '',
         icon: <ShowChartOutlinedIcon />,
-        indice: 1,
-    }
+        indice: 4,
+        subNav: [
+            {
+                text: 'Docentes',
+                path: '/ad/estadisticas/docentes',
+                indice: 0,
+            },
+            {
+                text: 'Deuda Docente',
+                path: '/ad/estadisticas/deuda',
+                indice: 1,
+            },
+            {
+                text: 'Sobrecarga Docente',
+                path: '/ad/estadisticas/sobrecarga',
+                indice: 2,
+            },
+            {
+                text: 'Profesores con mayor Deuda',
+                path: '/ad/estadisticas/mayorDeuda',
+                indice: 3,
+			}
+        ]
+    },
+ 
 ];

@@ -246,7 +246,7 @@ export default function IndicadoresASeccion4() {
         <>
             {maxAutor(profesores)}
             <ContentHeader
-                text="Sobrecarga de los Docentes en la Sección"
+                text="Profesores con mayor Deuda en la Sección"
                 cbo={false}
             />
             <Grid container spacing={2} >

@@ -38,8 +38,30 @@ export const MenuJefeDepartamento = [
     },
     {
         text: 'Estadisticas',
-        path: '/jd/estadisticas',
+        path: '',
         icon: <ShowChartOutlinedIcon />,
         indice: 3,
-    }
+        subNav: [
+            {
+                text: 'Docentes',
+                path: '/jd/estadisticas/docentes',
+                indice: 0,
+            },
+            {
+                text: 'Deuda Docente',
+                path: '/jd/estadisticas/deuda',
+                indice: 1,
+            },
+            {
+                text: 'Sobrecarga Docente',
+                path: '/jd/estadisticas/sobrecarga',
+                indice: 2,
+            },
+            {
+                text: 'Profesores con mayor Deuda',
+                path: '/jd/estadisticas/mayorDeuda',
+                indice: 3,
+			}
+        ]
+    },
 ];
