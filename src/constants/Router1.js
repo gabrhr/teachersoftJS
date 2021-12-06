@@ -70,6 +70,7 @@ import GestionDescargaDocente from '../pages/Docente/DeudasYDescargas/GestionDes
 import DeudasYDescargaCoord from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/DeudasYDescargaCoord'
 import NuevaSolicitudDescarga from '../pages/CoordinadorSeccion/DeudasYDescargasCoord/NuevaSolicitudDescarga'
 import GestionTrabajosInvestigacion from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacion';
+import GestionTrabajosInvestigacionForm from '../pages/AsistenteInvestigacion/RepositorioInvestigaciones/GestionTrabajosInvestigacionForm';
 import CantidadTrabajosXAutor from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXAutor';
 import IndicadoresSeccion from '../pages/CoordinadorSeccion/IndicadoresSeccion';
 import CantidadTrabajosXPais from '../pages/AsistenteInvestigacion/EstadisticasInvestigaciones/CantidadTrabajosXPais';
@@ -174,10 +175,12 @@ const privateroutes = [
 
   /*AsistenteInvestigacion*/ 
   { requireRoles: [9], path: "/ai/repoInvestigaciones", page: GestionTrabajosInvestigacion },  
+  { requireRoles: [9], path: "/ai/repoInvestigacionesForm", page: GestionTrabajosInvestigacionForm},  
   { requireRoles: [9], path: "/ai/publicacionesPorAutor", page: CantidadTrabajosXAutor },  
   { requireRoles: [9], path: "/ai/publicacionesPorPais", page: CantidadTrabajosXPais },  
   { requireRoles: [9], path: "/ai/publicacionesPorIdioma", page: CantidadTrabajosXIdioma },  
-  { requireRoles: [9], path: "/ai/publicacionesPorCalidad", page: CantidadTrabajosXCalidad},  
+  { requireRoles: [9], path: "/ai/publicacionesPorCalidad", page: CantidadTrabajosXCalidad}, 
+  
  
 ]
 
