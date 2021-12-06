@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import AccordionHorarioProfesor from '../../AsistenteSeccion/CargaDocente/AccordionHorarioProfesor'
+import AccordionHorarioProfesor from '../AccordionHorarioProfesor'
 import { useLocation } from 'react-router';
 import { Form, useForm } from '../../../components/useForm';
 import ContentHeader from '../../../components/AppMain/ContentHeader'

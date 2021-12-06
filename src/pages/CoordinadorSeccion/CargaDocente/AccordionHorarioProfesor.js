@@ -190,7 +190,7 @@ const hallarEstado = (sesiones) => {
 
 const fillHorarios = async (curso) => {
 
-  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , window.localStorage.getItem("ciclo"));
+  const dataHor = await HorarioService.listarPorCursoCiclo(curso.id , curso.ciclo.id);
 
   const dataHorarios = [];
   let horMoment = 0, horTotal = 0;

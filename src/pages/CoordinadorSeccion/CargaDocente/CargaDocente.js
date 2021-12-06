@@ -62,6 +62,12 @@ const tableHeaders = [
     sortable: true
   },
   {
+    id: 'horarios',
+    label: 'Horarios',
+    numeric: false,
+    sortable: true
+  },
+  {
     id: 'estado',
     label: 'Estado',
     numeric: false,
@@ -296,6 +302,7 @@ export default function CargaDocente() {
                     <col style={{ width: '5%' }} />
                     <col style={{ width: '30%' }} />
                     <col style={{ width: '30%' }} />
+                    <col style={{ width: '5%' }} />
                     <col style={{ width: '10%' }} />
                     <col style={{ width: '20%' }} />
                   </colgroup>
@@ -306,16 +313,19 @@ export default function CargaDocente() {
                         <StyledTableCell>{item.codigo}</StyledTableCell>
                         <StyledTableCell>{item.nombre}</StyledTableCell>
                         <StyledTableCell>{item.seccion ? item.seccion.departamento.nombre : ""}</StyledTableCell>
-                        <StyledTableCell>{item.creditos}</StyledTableCell>  
+                        <StyledTableCell align = "center">{item.creditos}</StyledTableCell>  
+                        <StyledTableCell align = "center">{item.cantidad_horarios}</StyledTableCell>  
                         <StyledTableCell>
                           <DT.Etiqueta type={item.type} text={item.estado} />
                         </StyledTableCell>
+                        <StyledTableCell align = "center">{}</StyledTableCell>  
                         {item.estado !== "Sin horarios" ?
                           <StyledTableCell>
                             <Link to ={{
                                 pathname:`/cord/asignacionCarga/registroCarga/horarios`,
                                 state:{
-                                    curso: item
+                                    curso: item,
+                                    ciclo: ciclo
                                 }
                             }}  style={{ textDecoration: 'none' }}>
                               <IconButton size="small"

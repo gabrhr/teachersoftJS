@@ -16,7 +16,6 @@ export default function CargaDocenteHorarios() {
   const {curso} = location.state
 
   const [recordForEdit, setRecordForEdit] = useState(curso)
-
   const handleClick = e =>{
     history.push("/as/asignacionCarga/registroCarga")
   }
@@ -42,7 +41,7 @@ export default function CargaDocenteHorarios() {
           />
         </div> */}
         <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}/>
-        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit} curso = {curso}/>
+        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit} curso = {curso} />
         {console.log("cursefwerwerwo: ",curso)}
       </Form>
   )

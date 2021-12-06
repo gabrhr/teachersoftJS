@@ -35,6 +35,7 @@ function generateRow(docente) {
     return (
         <Grid >
             <Grid container>
+                <Grid item xs={0.2}/>
                 <Grid item xs={1}>
                   <Avatar>
                       {docente.foto_URL !== ("static/images/avatar/1.jpg" || "")
@@ -43,7 +44,7 @@ function generateRow(docente) {
                         :  <AccountCircleIcon/>}
                   </Avatar>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <Typography>
                         {`${docente.nombres}, ${docente.apellidos}`}
                     </Typography>
@@ -51,7 +52,7 @@ function generateRow(docente) {
                         {docente.codigo_pucp}
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3.8}>
                     <Typography >
                         {docente.seccion.nombre}
                     </Typography>
@@ -59,7 +60,7 @@ function generateRow(docente) {
                         {tipoDoc}
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Typography display="inline">
                         Carga del ciclo: {"\n"}
                     </Typography>
@@ -85,8 +86,10 @@ export default function AccordionDetailsHorarioProfesor(props) {
     const setearActHorario = (horo) => {setActHorario(horo)}
 
     const seleccionarDocentesP = seleccionadosP => {
-        console.log(seleccionadosP)
+        //console.log(seleccionadosP)
     }
+
+    let cicloCoincide = (parseInt(window.localStorage.getItem("ciclo")) === horario.ciclo.id)
 
     const clase = sesiones.filter((ses)=>ses.secuencia===0)
     //if(!clase.sesion_docentes) clase.sesion_docentes = []
@@ -109,6 +112,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
                         </Typography>
                     </Grid>
                     <Grid item xs align = "right">
+                      {cicloCoincide ? 
                         <Link to ={{
                               pathname:`/as/asignacionCarga/registroCarga/horarios/editar`,
                               state:{
@@ -126,6 +130,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
                                 onClick={() => {}}
                             />
                         </Link>
+                      : <></>}
                     <Grid item xs = {12}/>
                     </Grid>
                     <Controls.Divider/>
@@ -147,6 +152,7 @@ export default function AccordionDetailsHorarioProfesor(props) {
                           </Typography>
                       </Grid>
                       <Grid item xs align = "right">
+                      {cicloCoincide ? 
                       <Link to ={{
                               pathname:`/as/asignacionCarga/registroCarga/horarios/editar`,
                               state:{
@@ -163,7 +169,8 @@ export default function AccordionDetailsHorarioProfesor(props) {
                                 endIcon={<EditOutlinedIcon />}
                                 onClick={() => {}}
                             />
-                        </Link>
+                      </Link>
+                      : <></>}
                       </Grid>
                       <Controls.Divider/>
                   </Grid>
