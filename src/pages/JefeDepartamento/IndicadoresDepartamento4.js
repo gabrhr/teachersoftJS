@@ -355,7 +355,7 @@ export default function IndicadoresDepartamento4() {
                         <Typography variant="body1" color={"#00008B"} my={.5}>
                             TOP 5 Profesores con mayor deuda
                         </Typography>
-                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors, "Docentes")}
                         <Grid align="center" justify="center">
                             Cantidad de Deudas
                         </Grid>

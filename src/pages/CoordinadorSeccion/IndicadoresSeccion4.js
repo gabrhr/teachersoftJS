@@ -255,7 +255,7 @@ export default function IndicadoresSeccion4() {
                         <Typography variant="h4" >
                             TOP 5 Profesores con mayor deuda
                         </Typography>
-                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors)}
+                        {BarCharts.BarChartGeneric(getLabels(profesores), getQuantities(profesores), listColors, "Docentes")}
                         <Grid align="center" justify="center">
                             Cantidad de Deudas
                         </Grid>
