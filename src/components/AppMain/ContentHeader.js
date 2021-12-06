@@ -67,8 +67,8 @@ function CboCiclo (props) {
       .then(c => {
           cicloActualAxios = c
       });
-      if(!cicloActualAxios) cicloActualAxios = [{id: '2', title: '2021-2'}];
-      window.localStorage.setItem('ciclo', JSON.stringify(cicloActualAxios[0].id)) //El ciclo fijo - actual
+      if(!cicloActualAxios) cicloActualAxios = [{id: 2, title: '2021-2'}];
+      window.localStorage.setItem('ciclo', JSON.stringify(parseInt(cicloActualAxios[0].id))) //El ciclo fijo - actual
 
       fillCiclos(cicloActualAxios)
       .then (newCiclo => {

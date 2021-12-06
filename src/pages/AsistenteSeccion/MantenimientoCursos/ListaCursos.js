@@ -287,7 +287,7 @@ export default function ListaCursos({records, setRecords}) {
                             </TableCell>*/}
                             <StyledTableCell>{item.codigo}</StyledTableCell>
                             <StyledTableCell>{item.nombre}</StyledTableCell>
-                            <StyledTableCell>{(item.unidad.id !== 0) ? item.unidad.nombre : '-'}</StyledTableCell>
+                            <StyledTableCell>{item.unidad ? ((item.unidad.id !== 0) ? item.unidad.nombre : '-') : '-'}</StyledTableCell>
                             <StyledTableCell>{item.creditos}</StyledTableCell>
                             <StyledTableCell>{moment(item.fecha_modificacion).format('DD MMM, YYYY - HH:MM.SS')}</StyledTableCell>
                             <StyledTableCell>
