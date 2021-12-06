@@ -13,7 +13,7 @@ import {useHistory} from 'react-router-dom'
 export default function CargaDocenteHorariosCoord() {
   const history = useHistory()
   const location= useLocation()
-  const {curso} = location.state
+  const {curso, ciclo} = location.state
 
   const [recordForEdit, setRecordForEdit] = useState(curso)
 
@@ -42,7 +42,7 @@ export default function CargaDocenteHorariosCoord() {
           />
         </div> */}
         <div style={{ marginLeft: 3, marginTop: 20, marginBottom: 20 }}/>
-        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit}/>
+        <AccordionHorarioProfesor recordForEdit = {recordForEdit} setRecordForEdit = {setRecordForEdit} ciclo = {ciclo}/>
       </Form>
   )
 }

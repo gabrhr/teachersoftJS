@@ -117,22 +117,26 @@ const fillCursos = async (ciclo, seccion, secciones) => {
     for(let cur of itemcur) {
       if(cur.estado_tracking){
         cursos.push({
-          "curso":{
-            "id": cur.curso.id,
-            "nombre": cur.curso.nombre,
-            "codigo": cur.curso.codigo,
-            "creditos": cur.curso.creditos,
-            "seccion": {
-              "id": cur.curso.seccion.id,
-              "nombre": cur.curso.seccion.nombre,
-              "departamento":{
-                "id":cur.curso.seccion.departamento.id,
-                "nombre":cur.curso.seccion.departamento.nombre,
-              }
+          "id": cur.curso.id,
+          "nombre": cur.curso.nombre,
+          "codigo": cur.curso.codigo,
+          "creditos": cur.curso.creditos,
+          "seccion": {
+            "id": cur.curso.seccion.id,
+            "nombre": cur.curso.seccion.nombre,
+            "departamento":{
+              "id":cur.curso.seccion.departamento.id,
+              "nombre":cur.curso.seccion.departamento.nombre,
             }
           },
-          "cantidad_horarios": cur.cantidad_horarios
+          "curso": cur.curso,
+          "ciclo": cur.ciclo,
+          "id_cursociclo":cur.id,
+          "estado_tracking": cur.estado_tracking,
+          "estado_curso": cur.estado_curso,
+          "cantidad_horarios": cur.cantidad_horarios,
         })
+
       }
     }
   }
@@ -288,11 +292,11 @@ export default function CargaDocenteCursos(){
                             <Link to ={{
                                 pathname:`/ad/asignacionCarga/Cargadocente/horarios`,
                                 state:{
-                                    curso: item.curso
+                                    curso: item
                                 }
                             }}  style={{ textDecoration: 'none' }}>
                             <IconButton size="small"
-                              onClick={() => { getRow(item.curso) }}
+                              onClick={() => { getRow(item) }}
                             >
                                 <ArrowForwardIosIcon fontSize="small" />
 

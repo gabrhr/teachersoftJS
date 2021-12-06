@@ -30,6 +30,7 @@ function generateRow(docente) {
     return (
         <Grid >
             <Grid container>
+                <Grid item xs={0.2}/>
                 <Grid item xs={1}>
                   <Avatar>
                       {docente.foto_URL !== ("static/images/avatar/1.jpg" || "")
@@ -38,7 +39,7 @@ function generateRow(docente) {
                         :  <AccountCircleIcon/>}
                   </Avatar>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <Typography>
                         {`${docente.nombres}, ${docente.apellidos}`}
                     </Typography>
@@ -46,7 +47,7 @@ function generateRow(docente) {
                         {docente.codigo_pucp}
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3.8}>
                     <Typography >
                         {docente.seccion.nombre}
                     </Typography>
@@ -54,7 +55,7 @@ function generateRow(docente) {
                         {tipoDoc}
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Typography display="inline">
                         Carga del ciclo: {"\n"}
                     </Typography>
@@ -91,7 +92,8 @@ export default function AccordionDetailsHorarioProfesor(props) {
             <Paper elevation={1} sx={{p: 1}}>
               {clase[0] ?
                 <Grid container>
-                    <Grid item xs={10}>
+                    <Grid item xs={0.2}/>
+                    <Grid item xs={9.8}>
                         <Typography
                             variant="h4"
                             py="4px"
@@ -100,12 +102,18 @@ export default function AccordionDetailsHorarioProfesor(props) {
                             Lista de Docentes de Clases
                         </Typography>
                     </Grid>
+                    <Grid item xs align = "right">
+                    <Grid item xs = {12}/>
+                    </Grid>
+                    <Controls.Divider/>
+
                 </Grid>
-              : <Grid container></Grid> }
+                : <Grid container></Grid> }
               {clase[0] ? clase[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)): []}
                 {laboratorio[0] ?
                   <Grid container>
-                      <Grid item xs={10}>
+                      <Grid item xs={0.2}/>
+                      <Grid item xs={9.8}>
                           <Typography
                               variant="h4"
                               py="4px"
@@ -114,6 +122,9 @@ export default function AccordionDetailsHorarioProfesor(props) {
                               Lista de Docentes de Laboratorios
                           </Typography>
                       </Grid>
+                      <Grid item xs align = "right">
+                      </Grid>
+                      <Controls.Divider/>
                   </Grid>
                   : <Grid container></Grid> }
                   {laboratorio[0] ? laboratorio[0].sesion_docentes.map(sesion_dic => generateRow(sesion_dic.docente)) : []}

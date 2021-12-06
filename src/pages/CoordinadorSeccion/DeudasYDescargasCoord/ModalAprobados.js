@@ -24,39 +24,43 @@ import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { UserContext } from '../../../constants/UserContext';
-
-const tableHeaders = [
-    
-    {
-        id: 'seleccionar',
-        label: '',
-        numeric: false,
-        sortable: false
-    },
-    {
-        id: 'foto',
-        label: '',
-        numeric: false,
-        sortable: false
-    },
-    {
-        id: 'nombre',
-        label: 'Nombre del docente',
-        numeric: false,
-        sortable: true
-    },
-    {
-        id: 'justificacion',
-        label: 'Bono Solicitado',
-        numeric: false,
-        sortable: false
-    },
-]
+import { DT } from '../../../components/DreamTeam/DT';
 
 export default function ModalAprobados({setOpenAprobados, procesoActual, cantAprobada = 0, 
     solicitudActual, resultado = 4}){
     
-        console.log("resultado?",resultado)
+    const [allChecked, setAllChecked] = useState(true)
+
+    const tableHeaders = [
+    
+        {
+            id: 'seleccionar',
+            label: <Controls.RowCheckBox sx = '1'  checked = {!allChecked} onClick = {()=>{setAllChecked(!allChecked);addAllDocentes();}}>
+            <EditOutlinedIcon fontSize="small" />
+            </Controls.RowCheckBox>,
+            numeric: false,
+            sortable: false
+        },
+        {
+            id: 'foto',
+            label: '',
+            numeric: false,
+            sortable: false
+        },
+        {
+            id: 'nombre',
+            label: 'Nombre del docente',
+            numeric: false,
+            sortable: true
+        },
+        {
+            id: 'justificacion',
+            label: 'Bono Solicitado',
+            numeric: false,
+            sortable: false
+        },
+    ]    
+        
     const [records, setRecords] = useState([])
 
     const [aprobados, setAprobados] = React.useState(null)
@@ -74,6 +78,21 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
         recordsAfterPagingAndSorting,
         BoxTbl
     } = useTable(records,tableHeaders, filterFn);
+
+    const addAllDocentes = () => {
+        if(allChecked){
+            for(let i = 0; i < records.length; i++){
+                records[i].seleccionado = true
+            }
+            setDescargas(records.length)
+        }else{
+            for(let i = 0; i < records.length; i++){
+                records[i].seleccionado = false
+            }
+            setDescargas(0)
+        }
+        
+    }
 
     const guardarSolicitudActual = async() =>{
         for(let i = 0; i < records.length; i++){
@@ -111,7 +130,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
 
     const agregarCampo = (request) =>{
         for(let i = 0; i < request.length; i++){
-            request[i]["seleccionado"] = true
+            request[i]["seleccionado"] = false
         }
         /*for(let i = 0; i < request.length; i++){
             delete request[i].seleccionado
@@ -132,7 +151,7 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
             request = await tramiteDescargaService.getTramitesDescargaPendientesxProcesoxSeccion(procesoActual.id, user.persona.seccion.id, resultado);
         }
         console.log(request)
-        setDescargas(request.length)
+        setDescargas(0)
         setAprobados(cantAprobada)
         const requestTransformado = agregarCampo(request)
         setRecords(requestTransformado)
@@ -148,7 +167,12 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
     const addDocente = (docente) => {
         docente.seleccionado = !docente.seleccionado
         if(docente.seleccionado === true) setDescargas(descargas + 1)
-        else setDescargas(descargas - 1)
+        else {
+            setDescargas(descargas - 1)
+            setAllChecked(false)
+        }
+        if(solicitudActual?.cantidad_solicitada === descargas)
+            setAllChecked(true)
         console.log(docente.seleccionado)
         console.log(aprobados)
     }
@@ -216,11 +240,9 @@ export default function ModalAprobados({setOpenAprobados, procesoActual, cantApr
                                 {item.solicitador.nombres + " " + item.solicitador.apellidos}
                             </TableCell>
                             <TableCell> 
-                                <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
-                                    {
-                                        item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"
-                                    }
-                                </Alert>
+                                <DT.Etiqueta type="bono"
+                                    text= {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                                />
                             </TableCell>
                         </TableRow>
                         ))
