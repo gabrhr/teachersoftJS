@@ -23,6 +23,7 @@ import tramiteDescargaService from '../../../services/tramiteDescargaService';
 import tramiteSeccionDescargaService from '../../../services/tramiteSeccionDescargaService';
 import procesoDescargaService from '../../../services/procesoDescargaService';
 import { useLocation } from 'react-router';
+import { DT } from '../../../components/DreamTeam/DT';
 
 const tableHeaders = [
     
@@ -47,6 +48,12 @@ const tableHeaders = [
     {
         id: 'bono',
         label: 'Bono solicitado',
+        numeric: false,
+        sortable: true
+    },
+    {
+        id: 'estado',
+        label: 'Estado Solicitud',
         numeric: false,
         sortable: true
     },
@@ -111,6 +118,7 @@ export default function NuevoProcesoForm() {
     const guardarSolicitud = async() =>{
         //let  = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         //console.log("El iprocesoActivoNewd del proceso activo es ", procesoActivoNew[0].id)
+        let resultado
         const newTramiteSeccion = {
             "observacion": justificacion,
             "estado_tracking": 1,
@@ -130,9 +138,10 @@ export default function NuevoProcesoForm() {
             "cantidad_solicitada": solicitados,
             "persona_departamento": null,
             "departamento": null,
+            "asunto": String(records.length)
         }
         //console.log("El nuevo tramite seccion", newTramiteSeccion)
-        let resultado = await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
+        resultado = await tramiteSeccionDescargaService.registerTramitesSeccionDescarga(newTramiteSeccion)
         //console.log("El id del tramite seccion es", resultado.id)
         modificarTramitesDocente(resultado)
     }
@@ -341,9 +350,16 @@ export default function NuevoProcesoForm() {
                                                     {item.solicitador.nombres + " " + item.solicitador.apellidos}
                                                 </TableCell>
                                                 <TableCell sx = {{width: '250px'}}>
-                                                    <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}>
-                                                        {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
-                                                    </Alert>
+                                                    {/* <Alert icon={false} variant="outlined" severity="info" sx={{borderRadius:"25px"}}> */}
+                                                    <DT.Etiqueta type="bono"
+                                                       text= {item.tipo_bono===1? "Bono de Investigación":"Bono de Docencia"}
+                                                       />
+                                                       {/*  </Alert> */}
+                                                </TableCell>
+                                                <TableCell sx = {{width: '250px'}}>
+                                                    <DT.Etiqueta 
+                                                        type={item.persona_seccion || item.seleccionado? "seleccionado":"noSeleccionado"}
+                                                    />
                                                 </TableCell>
                                                 <TableCell sx = {{maxWidth: '200px'}}> 
                                                     <Controls.Button

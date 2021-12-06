@@ -235,7 +235,7 @@ export default function GestionCiclo() {
                      recordsAfterPagingAndSorting().map(item => (
 
                         <StyledTableRow key={item.id}>
-                          NO SE SI ESTO ERA NECESARIO (MERGE CONFLICT MANUEL->DEVELOP) Dec02
+                          {/* NO SE SI ESTO ERA NECESARIO (MERGE CONFLICT MANUEL->DEVELOP) Dec02 */}
                         
                           {/* <StyledTableCell >{item.anho}</StyledTableCell>
                           <StyledTableCell >{item.periodo}</StyledTableCell> */}

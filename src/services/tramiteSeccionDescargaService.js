@@ -32,6 +32,16 @@ export const getTramiteSeccionDescarga = async (id) => {
     }
 }
 
+export const getTramiteSeccionDescargaxProceso = async (id) => {
+  try{
+    //debugger;
+    const request= await axios.get(`${url}/tramitesecciondescarga/idproceso=${id}`,tokenService.GetTokenPrueba(),id);
+    return request.data;  
+  }catch(exception){
+    console.error(exception);
+  }
+}
+
 const registerTramitesSeccionDescarga = async newObject => {
     try{           
       const request = await axios.post(`${url}/tramitesecciondescarga/`,newObject, tokenService.GetTokenPrueba());
@@ -62,4 +72,5 @@ const deleteTramitesSeccionDescarga = async (id) => {
   }
 
 export default {getTramitesSeccionDescarga, getTramiteSeccionDescarga, registerTramitesSeccionDescarga,
-    updateTramitesSeccionDescarga, deleteTramitesSeccionDescarga, getTramitesSeccionDescargaxSeccion}
+    updateTramitesSeccionDescarga, deleteTramitesSeccionDescarga, getTramitesSeccionDescargaxSeccion,
+    getTramiteSeccionDescargaxProceso}
