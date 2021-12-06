@@ -63,7 +63,11 @@ function CboCiclo (props) {
     } = useForm(initialFieldValues);  
 
     React.useEffect(() => {
-      cicloActualAxios = cicloService.cicloActual();
+      cicloService.cicloActual()
+      .then(c => {
+          cicloActualAxios = c
+      });
+      if(!cicloActualAxios) cicloActualAxios = [{id: '2', title: '2021-2'}];
       window.localStorage.setItem('ciclo', JSON.stringify(cicloActualAxios[0].id)) //El ciclo fijo - actual
 
       fillCiclos(cicloActualAxios)
