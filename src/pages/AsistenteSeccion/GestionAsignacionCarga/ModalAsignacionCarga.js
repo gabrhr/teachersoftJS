@@ -313,7 +313,6 @@ export default function ModalAsignacionCarga({setOpenPopup, records, setRecords,
         list = list.filter(n => !listObjIncidencias.includes(n));
         console.log("Reporte de incidencias: ", reporteIncidencias);
 
-        //console.log(list)
         setData(list);
         setColumns(columns);
 
