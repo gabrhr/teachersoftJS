@@ -12,6 +12,40 @@ import BigStatistics from '../../components/DreamTeam/BigStatistic';
 
 
 let indicadores = [];
+
+const maxAutor = (arr) => {
+    
+
+    let maxNombre = '*NO DETERMINADO*'
+    let index = 0;
+    let maxCantidad = 0;
+    let totalCantiad = 0;
+    
+    indicadores[0] = maxNombre;
+    indicadores[1] = maxCantidad;
+    indicadores[2] = totalCantiad;
+    try{
+    for (let i = 0; i < arr.length; i++){
+        totalCantiad += arr[i].deuda_docente;
+        if (maxCantidad < arr[i].deuda_docente){
+            maxCantidad = arr[i].deuda_docente;
+            index = i;
+        }
+    }
+
+    maxNombre =  arr[index].nombres + ' ' +  arr[index].apellidos;
+    }
+    catch{
+
+    }
+
+    indicadores[0] = maxNombre;
+    indicadores[1] = maxCantidad;
+    indicadores[2] = totalCantiad;
+
+ 
+}
+
 /*  Colores pastel con transparencia
     Red: rgba(255, 99, 132, 0.8)
     Blue: rgba(54, 162, 235, 0.8)
@@ -210,6 +244,7 @@ export default function IndicadoresSeccion3() {
 
     return (
         <>
+            {maxAutor(profesores)}
             <ContentHeader
                 text="Sobrecarga de los Docentes en la Sección"
                 cbo={false}
@@ -232,18 +267,19 @@ export default function IndicadoresSeccion3() {
                             <Paper variant="outlined" sx={PaperStyle}>
                         
                                 <BigStatistics  
-                                    title={"Número de Profesores TC"} 
-                                    text={profesorTC.cantidad_docentes}
+                                    variantText="h4"
+                                    title={"Profesor con mayor deuda"} 
+                                    text={indicadores[0]}
                                     />
-                       
+                                <br/>
                             </Paper>
                             <br/>
                             <Paper variant="outlined" sx={PaperStyle}>
                       
                   
                                 <BigStatistics  
-                                    title={"Número de Profesores TPC"} 
-                                    text={profesorTPC.cantidad_docentes}
+                                    title={"Máxima cantidad de deuda"} 
+                                    text={indicadores[1]}
                                     />
                          
                             </Paper>
@@ -251,8 +287,8 @@ export default function IndicadoresSeccion3() {
                             <Paper variant="outlined" sx={PaperStyle}>
                         
                                  <BigStatistics  
-                                    title={"Número de Profesores TPA"} 
-                                    text={profesorTPA.cantidad_docentes}
+                                    title={"Cantidad Profesores Evaluados"} 
+                                    text={indicadores[2]}
                                     />
                                 <br/>
                      

@@ -29,6 +29,7 @@ const listColors = [
 ]
 
 
+
 const getLabels = (arr) => {
     let arrEstandarizado=[];
     try{
@@ -298,10 +299,9 @@ export default function IndicadoresASeccion() {
                         </Grid>
                     </Grid>
                 </Grid>
-
-
-
             </Grid>
+
+
             <Paper variant="outlined" sx={PaperStyle}>
             <Grid container spacing={1} ml={".3px"} >
             
