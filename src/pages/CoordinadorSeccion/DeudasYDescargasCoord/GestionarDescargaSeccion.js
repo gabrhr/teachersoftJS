@@ -21,22 +21,40 @@ export default function GestionarDescargaSeccion() {
     const { user } = React.useContext(UserContext)
     const [procesoActivo, setProcesoActivo] = useState([])
     
-    
+    const filtrarTramites = (tramites) =>{
+        const filtered = []
+        for(let i = 0; i < tramites.length; i++){
+            if(tramites[i].procesoDescarga){
+                filtered.push(tramites[i])
+            }
+            console.log("tramites[i].procesoDescarga ", tramites[i].procesoDescarga)
+        }
+        return filtered
+    }
+
     const getTramitesDescargasSeccion = async () => {
         let procesoActivoNew = await procesoDescargaService.getProcesoDescargaActivoxDepartamento(user.persona.departamento.id)
         const tramites = await tramiteSeccionDescargaService.getTramitesSeccionDescargaxSeccion(user.persona.seccion.id);
         console.log("activooooooo", procesoActivoNew)
-        let now = new Date() 
-        setRecords(tramites.filter(x => {
-            const sinplazo= new Date(x.procesoDescarga.fecha_fin)
-            return sinplazo.setDate(sinplazo.getDate()+2) < now 
-        }))
-        //setRecords(tramites)
-        const soli =  tramites.find(({procesoDescarga}) =>
-            procesoDescarga.id === procesoActivoNew[0].id
-        )
-        setSolicitudActual(soli)
-        await setProcesoActivo(procesoActivoNew)
+        let now = new Date()
+        const tramitesFiltrados = filtrarTramites(tramites) 
+        /*const tramitesFiltrados = tramites.filter(x => {
+            return tramites.procesoDescarga
+        })*/
+        console.log("Tramites filtrados ", tramitesFiltrados)
+        if(procesoActivoNew.length > 0){
+            setRecords(tramitesFiltrados.filter(x => {
+                const sinplazo= new Date(x.procesoDescarga.fecha_fin)
+                return sinplazo.setDate(sinplazo.getDate()+2) < now 
+            }))
+            //setRecords(tramites)
+            const soli =  tramitesFiltrados.find(({procesoDescarga}) =>
+                procesoDescarga.id === procesoActivoNew[procesoActivoNew.length - 1].id
+            )
+            setSolicitudActual(soli)
+            console.log("Solicitud actual", soli)
+            await setProcesoActivo(procesoActivoNew)
+        }     
     }
 
     React.useEffect(() => {
@@ -49,19 +67,19 @@ export default function GestionarDescargaSeccion() {
             {/* Proceso actual*/}
             { procesoActivo?.length===0?
                 <ItemSinProcesoDocente/>: (
-                    new Date(procesoActivo[0].fecha_fin_docente) > new Date()?
-                        <ItemSinProcesoSeccion proceso = {procesoActivo[0]}/>:
+                    new Date(procesoActivo[procesoActivo.length - 1].fecha_fin_docente) > new Date()?
+                        <ItemSinProcesoSeccion proceso = {procesoActivo[procesoActivo.length - 1]}/>:
                     solicitudActual? 
                         <>
                             <DT.Title size="medium" text="Solicitud de Descarga Actual"/>
                             <ItemSolicitudActual
                                 solicitudActual={solicitudActual}
-                                 procesoActual={procesoActivo[0]} 
+                                 procesoActual={procesoActivo[procesoActivo.length - 1]} 
                                 setConfirmDialog={setConfirmDialog} confirmDialog={confirmDialog}
                             />
                         </>
                        :<ItemSolicitudActualVacio
-                            proceso = {procesoActivo[0]}
+                            proceso = {procesoActivo[procesoActivo.length - 1]}
                        />
                 )
                            

@@ -113,7 +113,7 @@ function Item(props){
                 </TableCell>
                 <TableCell sx={{maxWidth:"300px"}}>
                     <Controls.Button
-                        text={item.resultado === 0 ?"Detalle":"Aprobar"}
+                        text={item.resultado > 0 ?"Detalle":"Aprobar"}
                         onClick={()=>{setOpenDetalle(true);setRecordForView(item)}} 
                     />
                 </TableCell>
@@ -123,7 +123,7 @@ function Item(props){
     );
 }
 
-export default function ListaSolicitudes({seccion}){
+export default function ListaSolicitudes({seccion, procesoId}){
     const [recordForView, setRecordForView] = useState(null)
     const [records, setRecords] = useState([])
     const [secciones, setSecciones] = useState([])
@@ -171,10 +171,11 @@ export default function ListaSolicitudes({seccion}){
     }
 
     const getTramitesSeccionActivos = async() => {
-        const request = await tramiteSeccionDescargaService.getTramitesSeccionDescarga()
+        const request = await tramiteSeccionDescargaService.getTramiteSeccionDescargaxProceso(procesoId)
         const secciones = await seccionService.getSecciones()
         console.log(request)
-        setSecciones(secciones)
+
+        setSecciones(secciones?? [])
         setRecords(request)
     }
 
@@ -335,7 +336,6 @@ export default function ListaSolicitudes({seccion}){
                 openPopup={openDetalle}
                 setOpenPopup={setOpenDetalle}
                 title= {`Solicitud de descarga - Sección ${recordForView?.solicitador?.seccion.nombre}`}
-                size="md"
             >
                <ModalDetalleSolicitudDescarga setOpenDetalle = {setOpenDetalle} recordForView = {recordForView}/>
             </Popup>
