@@ -72,20 +72,21 @@ const getSeccionCollection =  async () => {
 }
 
 const fillProfesorTC = async (id_ciclo, id_seccion) => {
+    console.log("ciclo:", id_ciclo, "seccion:", id_seccion);
     let profesorTC = await IndicadoresService.getDataProfesoresTCPorSeccion(id_ciclo, id_seccion);
-    
+    console.log(profesorTC);
     return profesorTC;
 }
 
 const fillProfesorTPC = async (id_ciclo, id_seccion) => {
     let profesorTPC = await IndicadoresService.getDataProfesoresTPCPorSeccion(id_ciclo, id_seccion);
-    
+    console.log(profesorTPC);
     return profesorTPC;
 }
 
 const fillProfesorTPA = async (id_ciclo, id_seccion) => {
     let profesorTPA = await IndicadoresService.getDataProfesoresTPAPorSeccion(id_ciclo, id_seccion);
-    
+    console.log(profesorTPA);
     return profesorTPA;
 }
 
@@ -134,7 +135,7 @@ export default function IndicadoresADepartamento3() {
 
     const [ciclo, setCiclo] = useState();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {});
-    const [cicloAct, setCicloAct] = useState(window.localStorage.getItem("ciclo"));
+    const [cicloAct, setCicloAct] = useState(parseInt(window.localStorage.getItem("ciclo")));
     const [records, setRecords] = useState([])
     const [changeTC, setChangeTC] = useState(false)
     const [changeTPC, setChangeTPC] = useState(false)
@@ -171,7 +172,7 @@ export default function IndicadoresADepartamento3() {
 
     useEffect(() => {
         setChangeTC(false)
-        fillProfesorTC(seccion,cicloAct)
+        fillProfesorTC(cicloAct, seccion)
         .then(newProfTC => {
             if(newProfTC){
                 setProfesorTC(newProfTC);
@@ -185,7 +186,7 @@ export default function IndicadoresADepartamento3() {
 
     useEffect(() => {
         setChangeTPC(false)
-        fillProfesorTPC(seccion,cicloAct)
+        fillProfesorTPC(cicloAct, seccion)
         .then(newProfTPC => {
             if(newProfTPC){
                 setProfesorTPC(newProfTPC);
@@ -199,7 +200,7 @@ export default function IndicadoresADepartamento3() {
 
     useEffect(() => {
         setChangeTPA(false)
-        fillProfesorTPA(seccion,cicloAct)
+        fillProfesorTPA(cicloAct, seccion)
         .then(newProfTPA => {
             if(newProfTPA){
                 setProfesorTPA(newProfTPA);

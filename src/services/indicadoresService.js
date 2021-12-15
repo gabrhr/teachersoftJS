@@ -7,8 +7,10 @@ import tokenService from './tokens.js';
 // 3: TPA (tiempo parcial por asignaturas) ???
 
 // Axios para envio de data de cada tipo de profesor por seccion
+
 const getDataProfesoresTCPorSeccion = async (id_ciclo,id_seccion) => {
     try{
+      
       const request= await axios.get(`${url}/horario/promhoras/idciclo=${parseInt(id_ciclo)}/idseccion=${parseInt(id_seccion)}/tipodocente=1`, tokenService.GetTokenPrueba())
       return request.data;  
     }catch(exception){
