@@ -145,6 +145,9 @@ export default function IndicadoresADepartamento() {
     const [profesores, setProfesores] = useState([]);
     const [seccion, setSeccion] = useState(0);
 
+    console.log("AAAAAAAAAAA")
+    console.log(user)
+    console.log("AAAAAAAAAAAA")
 
     const initialFieldValues = {
         id: '',
@@ -171,7 +174,7 @@ export default function IndicadoresADepartamento() {
 
     useEffect(() => {
         setChangeTC(false)
-        fillProfesorTC(seccion,cicloAct)
+        fillProfesorTC(cicloAct,seccion)
         .then(newProfTC => {
             if(newProfTC){
                 setProfesorTC(newProfTC);
@@ -185,7 +188,7 @@ export default function IndicadoresADepartamento() {
 
     useEffect(() => {
         setChangeTPC(false)
-        fillProfesorTPC(seccion,cicloAct)
+        fillProfesorTPC(cicloAct,seccion)
         .then(newProfTPC => {
             if(newProfTPC){
                 setProfesorTPC(newProfTPC);
@@ -199,7 +202,7 @@ export default function IndicadoresADepartamento() {
 
     useEffect(() => {
         setChangeTPA(false)
-        fillProfesorTPA(seccion,cicloAct)
+        fillProfesorTPA(cicloAct,seccion)
         .then(newProfTPA => {
             if(newProfTPA){
                 setProfesorTPA(newProfTPA);

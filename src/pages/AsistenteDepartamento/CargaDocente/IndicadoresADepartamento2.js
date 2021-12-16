@@ -171,7 +171,7 @@ export default function IndicadoresADepartamento2() {
 
     useEffect(() => {
         setChangeTC(false)
-        fillProfesorTC(seccion,cicloAct)
+        fillProfesorTC(cicloAct,seccion)
         .then(newProfTC => {
             if(newProfTC){
                 setProfesorTC(newProfTC);
@@ -185,7 +185,7 @@ export default function IndicadoresADepartamento2() {
 
     useEffect(() => {
         setChangeTPC(false)
-        fillProfesorTPC(seccion,cicloAct)
+        fillProfesorTPC(cicloAct,seccion)
         .then(newProfTPC => {
             if(newProfTPC){
                 setProfesorTPC(newProfTPC);
@@ -199,7 +199,7 @@ export default function IndicadoresADepartamento2() {
 
     useEffect(() => {
         setChangeTPA(false)
-        fillProfesorTPA(seccion,cicloAct)
+        fillProfesorTPA(cicloAct,seccion)
         .then(newProfTPA => {
             if(newProfTPA){
                 setProfesorTPA(newProfTPA);
